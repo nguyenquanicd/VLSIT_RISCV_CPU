@@ -1,0 +1,75 @@
+{
+  "page_name": "FSM_CTRL",
+  "out_name": "ctrl_fsm.drawio",
+  "function": "ctrl",
+  "initial": "ENUM_ST_IDLE",
+  "state_pattern": "^ENUM_ST_[A-Z0-9_]+$",
+  "states": [
+    {
+      "name": "ENUM_ST_IDLE"
+    },
+    {
+      "name": "ENUM_ST_DECODE"
+    },
+    {
+      "name": "ENUM_ST_FETCH"
+    },
+    {
+      "name": "ENUM_ST_COMPUTE"
+    },
+    {
+      "name": "ENUM_ST_POST"
+    },
+    {
+      "name": "ENUM_ST_WRITEBACK"
+    },
+    {
+      "name": "ENUM_ST_ERROR"
+    }
+  ],
+  "transitions": [
+    {
+      "src": "ENUM_ST_IDLE",
+      "dst": "ENUM_ST_DECODE",
+      "label": "issue_valid and accept"
+    },
+    {
+      "src": "ENUM_ST_DECODE",
+      "dst": "ENUM_ST_FETCH",
+      "label": "decode done"
+    },
+    {
+      "src": "ENUM_ST_DECODE",
+      "dst": "ENUM_ST_ERROR",
+      "label": "illegal op"
+    },
+    {
+      "src": "ENUM_ST_FETCH",
+      "dst": "ENUM_ST_COMPUTE",
+      "label": "operands ready"
+    },
+    {
+      "src": "ENUM_ST_COMPUTE",
+      "dst": "ENUM_ST_POST",
+      "label": "tile complete"
+    },
+    {
+      "src": "ENUM_ST_POST",
+      "dst": "ENUM_ST_WRITEBACK",
+      "label": "post done"
+    },
+    {
+      "src": "ENUM_ST_WRITEBACK",
+      "dst": "ENUM_ST_IDLE",
+      "label": "result_ready"
+    },
+    {
+      "src": "ENUM_ST_ERROR",
+      "dst": "ENUM_ST_IDLE",
+      "label": "result_ready"
+    }
+  ],
+  "layout": {
+    "margin": 40
+  }
+}

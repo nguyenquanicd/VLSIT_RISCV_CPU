@@ -1,0 +1,77 @@
+{
+  "page_name": "CCU_PREPARE_CMO",
+  "out_name": "CCU_PREPARE_CMO.drawio",
+  "function": "CCU_PREPARE_CMO",
+  "initial": "ENUM_ST_PREP_START",
+  "state_pattern": "^[A-Z][A-Z0-9_]+$",
+  "states": [
+    {
+      "name": "ENUM_ST_ABORT_START"
+    },
+    {
+      "name": "ENUM_ST_CMO_FINISH"
+    },
+    {
+      "name": "ENUM_ST_CMO_PREPARED"
+    },
+    {
+      "name": "ENUM_ST_COMMIT_START"
+    },
+    {
+      "name": "ENUM_ST_PREP_START"
+    },
+    {
+      "name": "ENUM_ST_PREP_WAIT"
+    }
+  ],
+  "transitions": [
+    {
+      "src": "ENUM_ST_PREP_START",
+      "dst": "ENUM_ST_PREP_WAIT",
+      "label": "T13: prepare start",
+      "guard": "matching PREPARE phase accepted"
+    },
+    {
+      "src": "ENUM_ST_PREP_WAIT",
+      "dst": "ENUM_ST_CMO_PREPARED",
+      "label": "T14: CMO prepared",
+      "guard": "all PREPARE responses; source is CMO"
+    },
+    {
+      "src": "ENUM_ST_PREP_WAIT",
+      "dst": "ENUM_ST_ABORT_START",
+      "label": "T15: prepare error",
+      "guard": "PREPARE complete with error or missing dirty obligation"
+    },
+    {
+      "src": "ENUM_ST_PREP_WAIT",
+      "dst": "ENUM_ST_COMMIT_START",
+      "label": "T16: prepare OK",
+      "guard": "PREPARE complete and dirty obligation satisfied"
+    },
+    {
+      "src": "ENUM_ST_CMO_PREPARED",
+      "dst": "ENUM_ST_CMO_FINISH",
+      "label": "T17: CMO report",
+      "guard": "i_ccu_prepare_ready"
+    },
+    {
+      "src": "ENUM_ST_CMO_FINISH",
+      "dst": "ENUM_ST_COMMIT_START",
+      "label": "T18: finish commit",
+      "guard": "matching finish accepted; commit and no retained error"
+    },
+    {
+      "src": "ENUM_ST_CMO_FINISH",
+      "dst": "ENUM_ST_ABORT_START",
+      "label": "T19: finish abort",
+      "guard": "matching finish accepted; abort or retained error"
+    }
+  ],
+  "layout": {
+    "margin": 50,
+    "node_gap": 220,
+    "rank_gap": 220,
+    "max_columns": 3
+  }
+}

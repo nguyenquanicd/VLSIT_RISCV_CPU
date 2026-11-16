@@ -1,0 +1,121 @@
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "m_vlsit_riscv_pmu.drawio",
+  "layout": {
+    "gap_h": 120,
+    "gap_v": 110,
+    "margin": 80,
+    "block_h": 60
+  },
+  "top": {
+    "frame_label": [
+      "Component composition",
+      "(m_vlsit_riscv_pmu)"
+    ]
+  },
+  "frame_row": [
+    "m_vlsit_riscv_pmu",
+    "Integrate source event packing, scope selection, counters, atomic snapshots and aggregate overflow interrupt.",
+    "rtl/vlsit/m_vlsit_riscv_pmu.sv"
+  ],
+  "frame_interfaces": [],
+  "blocks": [
+    {
+      "key": "B0",
+      "label": [
+        "u_vlsit_pmu_aggregate",
+        "(m_vlsit_pmu_aggregate)"
+      ],
+      "width": 280,
+      "row": 0,
+      "col": 0,
+      "row_name": "u_vlsit_pmu_aggregate (m_vlsit_pmu_aggregate)",
+      "function": "Sum the same event indicator across active harts without discarding simultaneous occurrences.",
+      "source": "NEW; rtl/vlsit/m_vlsit_pmu_aggregate.sv"
+    },
+    {
+      "key": "B1",
+      "label": [
+        "u_vlsit_pmu_cluster_evt",
+        "(m_vlsit_pmu_cluster_evt)"
+      ],
+      "width": 300,
+      "row": 0,
+      "col": 1,
+      "row_name": "u_vlsit_pmu_cluster_evt (m_vlsit_pmu_cluster_evt)",
+      "function": "Pack LLC single-bit indicators and CCU three-bit same-cycle occurrence counts into cluster event slots.",
+      "source": "NEW; rtl/vlsit/m_vlsit_pmu_cluster_evt.sv"
+    },
+    {
+      "key": "B2",
+      "label": [
+        "u_vlsit_pmu_cnt_bank",
+        "(m_vlsit_pmu_counter_bank)"
+      ],
+      "width": 300,
+      "row": 1,
+      "col": 0,
+      "row_name": "u_vlsit_pmu_cnt_bank (m_vlsit_pmu_counter_bank)",
+      "function": "Accumulate enabled event occurrence counts modulo the configured counter width and emit carry/overflow events.",
+      "source": "NEW; rtl/vlsit/m_vlsit_pmu_counter_bank.sv"
+    },
+    {
+      "key": "B3",
+      "label": [
+        "u_vlsit_pmu_evt_sel",
+        "(m_vlsit_pmu_event_select)"
+      ],
+      "width": 300,
+      "row": 1,
+      "col": 1,
+      "row_name": "u_vlsit_pmu_evt_sel (m_vlsit_pmu_event_select)",
+      "function": "Decode each software event ID and scope into an occurrence count for one counter.",
+      "source": "NEW; rtl/vlsit/m_vlsit_pmu_event_select.sv"
+    },
+    {
+      "key": "B4",
+      "label": [
+        "u_vlsit_pmu_hart_evt",
+        "(m_vlsit_pmu_hart_evt)"
+      ],
+      "width": 260,
+      "row": 2,
+      "col": 0,
+      "row_name": "u_vlsit_pmu_hart_evt (m_vlsit_pmu_hart_evt)",
+      "function": "Pack CVA6 and HPDcache source indicators into a stable per-hart catalog order.",
+      "source": "NEW; rtl/vlsit/m_vlsit_pmu_hart_evt.sv"
+    },
+    {
+      "key": "B5",
+      "label": [
+        "u_vlsit_pmu_irq",
+        "(m_vlsit_pmu_irq)"
+      ],
+      "width": 200,
+      "row": 2,
+      "col": 1,
+      "row_name": "u_vlsit_pmu_irq (m_vlsit_pmu_irq)",
+      "function": "Merge newly overflowing counters into retained raw causes and drive one aggregate level interrupt.",
+      "source": "NEW; rtl/vlsit/m_vlsit_pmu_irq.sv"
+    },
+    {
+      "key": "B6",
+      "label": [
+        "u_vlsit_pmu_snapshot",
+        "(m_vlsit_pmu_snapshot)"
+      ],
+      "width": 260,
+      "row": 3,
+      "col": 0,
+      "row_name": "u_vlsit_pmu_snapshot (m_vlsit_pmu_snapshot)",
+      "function": "Capture every live counter atomically and expose stable software low/high read words.",
+      "source": "NEW; rtl/vlsit/m_vlsit_pmu_snapshot.sv"
+    }
+  ],
+  "connectors": [],
+  "externals": [],
+  "interfaces": [],
+  "nets": [],
+  "legend_note": "Exact source-referenced children; generate multiplicity and active branches are specified in the component text. Containment denotes hierarchy, not invented signal connectivity. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.",
+  "library_sha256": "15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"
+}

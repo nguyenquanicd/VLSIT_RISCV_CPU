@@ -1,0 +1,54 @@
+{
+  "head": {
+    "text": "WF-021: Shared PMA and router address-region classification"
+  },
+  "signal": [
+    { "name": "i_clk_cluster", "wave": "p..." },
+    [
+      "Cacheable normal memory",
+      { "name": "i_req_valid", "wave": "0100" },
+      { "name": "i_req_ready", "wave": "1111" },
+      { "name": "i_phys_addr", "wave": "x=..", "data": ["0x80000000"] },
+      { "name": "route_class", "wave": "x=..", "data": ["CACHEABLE"] },
+      { "name": "memory_path_req", "wave": "0010" },
+      { "name": "mmio_path_req", "wave": "0000" },
+      { "name": "local_access_error", "wave": "0000" }
+    ],
+    [
+      "Normal uncached memory",
+      { "name": "i_req_valid", "wave": "0100" },
+      { "name": "i_req_ready", "wave": "1111" },
+      { "name": "i_phys_addr", "wave": "x=..", "data": ["0x100000100"] },
+      { "name": "route_class", "wave": "x=..", "data": ["NORMAL_UNCACHED"] },
+      { "name": "memory_path_req", "wave": "0010" },
+      { "name": "mmio_path_req", "wave": "0000" },
+      { "name": "local_access_error", "wave": "0000" }
+    ],
+    [
+      "Device/MMIO",
+      { "name": "i_req_valid", "wave": "0100" },
+      { "name": "i_req_ready", "wave": "1111" },
+      { "name": "i_phys_addr", "wave": "x=..", "data": ["0x40000100"] },
+      { "name": "route_class", "wave": "x=..", "data": ["MMIO"] },
+      { "name": "memory_path_req", "wave": "0000" },
+      { "name": "mmio_path_req", "wave": "0010" },
+      { "name": "local_access_error", "wave": "0000" }
+    ],
+    [
+      "Unmapped address",
+      { "name": "i_req_valid", "wave": "0100" },
+      { "name": "i_req_ready", "wave": "1111" },
+      { "name": "i_phys_addr", "wave": "x=..", "data": ["0xD0000000"] },
+      { "name": "route_class", "wave": "x=..", "data": ["NO_MATCH"] },
+      { "name": "memory_path_req", "wave": "0000" },
+      { "name": "mmio_path_req", "wave": "0000" },
+      { "name": "local_access_error", "wave": "0010" }
+    ]
+  ],
+  "foot": {
+    "text": "Each group is a separate example. Event spacing is illustrative; it defines neither latency nor throughput."
+  },
+  "config": {
+    "hscale": 2
+  }
+}

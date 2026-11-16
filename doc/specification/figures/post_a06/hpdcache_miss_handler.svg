@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="850" viewBox="440 340 900 850" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="440" y="340" width="900" height="850" fill="#FFFFFF"/>
+<rect x="470" y="370" width="840" height="790" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<rect x="550" y="510" width="300" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="536" text-anchor="middle">victim_way_encoder_i</text>
+<text x="700" y="558" text-anchor="middle">(hpdcache_1hot_to_binary)</text>
+<rect x="1010" y="510" width="180" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1100" y="536" text-anchor="middle">hpdcache_cbuf_i</text>
+<text x="1100" y="558" text-anchor="middle">(hpdcache_cbuf)</text>
+<rect x="570" y="680" width="260" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="706" text-anchor="middle">i_data_resize</text>
+<text x="700" y="728" text-anchor="middle">(hpdcache_data_resize)</text>
+<rect x="980" y="680" width="240" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1100" y="706" text-anchor="middle">victim_way_decoder_i</text>
+<text x="1100" y="728" text-anchor="middle">(hpdcache_decoder)</text>
+<rect x="590" y="850" width="220" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="876" text-anchor="middle">i_r_metadata_fifo</text>
+<text x="700" y="898" text-anchor="middle">(hpdcache_fifo_reg)</text>
+<rect x="970" y="850" width="260" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1100" y="876" text-anchor="middle">i_refill_core_rsp_buf</text>
+<text x="1100" y="898" text-anchor="middle">(hpdcache_fifo_reg)</text>
+<rect x="610" y="1020" width="180" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="1046" text-anchor="middle">hpdcache_mshr_i</text>
+<text x="700" y="1068" text-anchor="middle">(hpdcache_mshr)</text>
+<rect x="990" y="1020" width="220" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1100" y="1046" text-anchor="middle">data_read_rsp_mux_i</text>
+<text x="1100" y="1068" text-anchor="middle">(hpdcache_mux)</text>
+<text x="1288" y="411" text-anchor="end">Component composition</text>
+<text x="1288" y="433" text-anchor="end">(hpdcache_miss_handler)</text>
+</svg>

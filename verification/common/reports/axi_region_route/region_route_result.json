@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "top": "tb_m_vlsit_riscv_axi_route_region",
+  "dut": [
+    "m_vlsit_riscv_addr_decode",
+    "m_vlsit_riscv_axi_route"
+  ],
+  "simulator": "C:\\Tools\\oss-cad-suite\\bin\\verilator_bin.exe",
+  "cases": [
+    "AW cacheable routes to LLC memory path",
+    "AW normal-uncached routes to memory with bypass class",
+    "AW MMIO routes to external peripheral path",
+    "AR cacheable, normal-uncached, and MMIO route selection"
+  ],
+  "result": "PASS: shared region classifier drives cacheable, uncached, and MMIO AXI routes\n- C:\\HQuan\\102_MyGithub\\VLSIT_RISCV_CPU\\rtl\\verification\\axi_region_route\\tb_m_vlsit_riscv_axi_route_region.sv:316: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.053 devel\n- Verilator: $finish at 470ns; walltime 0.000 s; speed 0.000 s/s\n- Verilator: cpu 0.000 s on 1 threads; allocated 6 MB"
+}

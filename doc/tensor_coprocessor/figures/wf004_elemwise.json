@@ -1,0 +1,15 @@
+{
+  "head": {"text": "WF-004 Element-wise operation (success)"},
+  "signal": [
+    {"name": "i_clk_core", "wave": "p........."},
+    {"name": "i_xif_issue_valid", "wave": "01.0......"},
+    {"name": "o_xif_issue_ready", "wave": "01.0......"},
+    {"name": "i_xif_issue_req_instr[31:0]", "wave": "x=.xxxxxxx", "data": ["ELEM"]},
+    {"name": "o_xif_issue_resp_accept", "wave": "01.0......"},
+    {"name": "o_xif_result_valid", "wave": "0.....10.."},
+    {"name": "i_xif_result_ready", "wave": "0.....10.."},
+    {"name": "o_xif_result_we", "wave": "xxxxx=0xxx", "data": ["0"]}
+  ],
+  "foot": {"text": "The vector tile is written through IF-003; CV-X-IF result marks command completion."},
+  "config": {"hscale": 2}
+}

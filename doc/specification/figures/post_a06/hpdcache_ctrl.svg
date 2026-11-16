@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="680" viewBox="440 340 940 680" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="440" y="340" width="940" height="680" fill="#FFFFFF"/>
+<rect x="470" y="370" width="880" height="620" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<rect x="550" y="510" width="300" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="536" text-anchor="middle">dir_hit_way_encoder_i</text>
+<text x="700" y="558" text-anchor="middle">(hpdcache_1hot_to_binary)</text>
+<rect x="970" y="510" width="300" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1120" y="536" text-anchor="middle">refill_way_encoder_i</text>
+<text x="1120" y="558" text-anchor="middle">(hpdcache_1hot_to_binary)</text>
+<rect x="590" y="680" width="220" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="706" text-anchor="middle">hpdcache_ctrl_pe_i</text>
+<text x="700" y="728" text-anchor="middle">(hpdcache_ctrl_pe)</text>
+<rect x="1010" y="680" width="220" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1120" y="706" text-anchor="middle">hpdcache_memctrl_i</text>
+<text x="1120" y="728" text-anchor="middle">(hpdcache_memctrl)</text>
+<rect x="610" y="850" width="180" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="876" text-anchor="middle">hpdcache_rtab_i</text>
+<text x="700" y="898" text-anchor="middle">(hpdcache_rtab)</text>
+<text x="1328" y="411" text-anchor="end">Component composition</text>
+<text x="1328" y="433" text-anchor="end">(hpdcache_ctrl)</text>
+</svg>

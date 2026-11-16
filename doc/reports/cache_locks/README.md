@@ -1,0 +1,9 @@
+# Local cache line locks / Khóa line cache local
+
+Implemented `m_vlsit_riscv_cache_line_locks` and instantiated it in the tile adapter. The previous adapter is preserved under `baseline`. The generator now reproduces the lock-enabled version. / Đã tạo bảng khóa và nối vào adapter tile; bản trước lưu trong `baseline`, generator đã cập nhật.
+
+PREPARE acceptance reserves tag/physical line. A conflicting tag/line waits without a timeout. Same-tag/same-line acquisition is idempotent. Matching successful COMMIT/ABORT response acceptance releases the lock. PREPARE failure and stalled terminal responses retain it. Unknown or mismatched releases produce a diagnostic. Access/victim queries include a PREPARE accepted at that same edge. / Khóa giữ đến ACK terminal thành công; lỗi PREPARE hoặc stall ACK không nhả khóa. Query bao gồm PREPARE nhận cùng cạnh.
+
+Run `python scripts/lint_cmo_tile.py`. The adapter's real lock-table child is included in its lint closure. Twelve CMO/adapter configurations pass with zero errors/warnings, including five contexts. Mechanical checks on the lock table and adapter have zero errors and one documented functional-wrapper HIE-02 warning. These are lint results, not functional test results. / Lint có đủ module con thực; 12 cấu hình đạt không lỗi/cảnh báo. Rule check có một cảnh báo wrapper được giải thích; chưa phải kết quả kiểm chứng chức năng.
+
+Native HPDcache still needs physical-line query wiring at the decision/replay point, locked-victim exclusion, probe queue/execution, same-line refill stabilization and MESI metadata changes. Never gate admitted refill completion with the new-access lock query. The CCU/core/tile hierarchy remains incomplete; this report is not a TOP signoff. / Vẫn cần nối query vào HPDcache và hoàn tất probe/MESI/CCU/core/tile; không dùng query để chặn refill đã được cấp quyền. Chưa signoff TOP.

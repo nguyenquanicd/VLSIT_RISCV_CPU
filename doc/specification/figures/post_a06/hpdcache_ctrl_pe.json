@@ -1,0 +1,84 @@
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "hpdcache_ctrl_pe.drawio",
+  "layout": {
+    "gap_h": 120,
+    "gap_v": 110,
+    "margin": 80,
+    "block_h": 60
+  },
+  "top": {
+    "frame_label": [
+      "Component composition",
+      "(hpdcache_ctrl_pe)"
+    ]
+  },
+  "frame_row": [
+    "hpdcache_ctrl_pe",
+    "Native modified component; function and change contract are specified in Section 14.",
+    "rtl/common/modified/hpdcache/rtl/src/hpdcache_ctrl_pe.sv"
+  ],
+  "frame_interfaces": [
+    "IN",
+    "OUT"
+  ],
+  "blocks": [
+    {
+      "key": "B0",
+      "label": [
+        "component_boundary",
+        "(hpdcache_ctrl_pe)"
+      ],
+      "width": 220,
+      "row": 0,
+      "col": 0,
+      "row_name": "component_boundary (hpdcache_ctrl_pe)",
+      "function": "Hit/eviction pipeline execution",
+      "source": "MODIFY; rtl/common/modified/hpdcache/rtl/src/hpdcache_ctrl_pe.sv"
+    }
+  ],
+  "connectors": [],
+  "externals": [
+    {
+      "id": "IN",
+      "block": "B0",
+      "side": "L",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "IN",
+        "ports"
+      ]
+    },
+    {
+      "id": "OUT",
+      "block": "B0",
+      "side": "R",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "OUT",
+        "ports"
+      ]
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "IN",
+      "name": "Parent in ports",
+      "category": "custom",
+      "active": "in",
+      "signals": "core_req_valid_i, scrub_req_valid_i, rtab_req_valid_i, refill_req_valid_i, st0_req_is_error_i, st0_req_is_uncacheable_i, st0_req_need_rsp_i, st0_req_is_load_i, st0_req_is_scrub_i, st0_req_is_store_i, st0_req_is_amo_i, st0_req_is_cmo_fence_i, st0_req_is_cmo_inval_i, st0_req_is_cmo_flush_i, st0_req_is_cmo_prefetch_i, st0_req_is_partial_i, st1_req_valid_i, st1_req_abort_i, st1_req_rtab_i, st1_req_is_error_i, st1_req_is_uncacheable_i, st1_req_need_rsp_i, st1_req_is_load_i, st1_req_is_store_i, st1_req_is_amo_i, st1_req_is_amo_lr_i, st1_req_is_amo_sc_i, uc_lrsc_match_i, st1_req_is_cmo_inval_i, st1_req_is_cmo_inval_nline_i, st1_req_is_cmo_flush_i, st1_req_is_cmo_flush_nline_i, st1_req_is_cmo_flush_inval_nline_i, st1_req_is_cmo_fence_i, st1_req_is_cmo_prefetch_i, st1_req_is_partial_i, st1_req_nline_i, st1_victim_nline_i, st1_coh_line_locked_i, st1_dir_victim_locked_i, st1_req_wr_wt_i, st1_req_wr_wb_i, st1_req_wr_auto_i, st1_dir_hit_i, st1_dir_hit_wback_i, st1_dir_hit_dirty_i, st1_dir_hit_exclusive_i, st1_dir_hit_fetch_i, st1_dir_victim_unavailable_i, st1_dir_victim_valid_i, st1_dir_victim_wback_i, st1_dir_victim_dirty_i, st1_dir_err_cor_i, st1_dir_err_unc_i, st1_dat_err_cor_i, st1_dat_err_unc_i, st1_dat_err_unc_dirty_i, err_busy_i, err_wait_i, st1_mshr_alloc_ready_i, st1_mshr_hit_i, st1_mshr_full_i, st1_mshr_cbuf_full_i, st1_no_pend_trans_i, st2_mshr_alloc_i, st2_mshr_alloc_is_prefetch_i, st2_mshr_alloc_wback_i, st2_mshr_alloc_dirty_i, st2_mshr_alloc_exclusive_i, st2_dir_updt_i, st2_dir_updt_valid_i, st2_dir_updt_wback_i, st2_dir_updt_dirty_i, st2_dir_updt_fetch_i, rd_wr_conflict_i, rtab_full_i, rtab_fence_i, rtab_check_hit_i, cachedir_init_ready_i, refill_busy_i, refill_core_rsp_valid_i, wbuf_write_ready_i, wbuf_read_hit_i, flush_busy_i, ordinary_flush_hold_i, st1_flush_check_hit_i, st1_flush_alloc_ready_i, st2_flush_alloc_i, coh_probe_flush_pending_i, uc_busy_i, cmo_busy_i, cfg_prefetch_updt_plru_i, cfg_default_wb_i"
+    },
+    {
+      "id": "OUT",
+      "name": "Parent out ports",
+      "category": "custom",
+      "active": "out",
+      "signals": "core_req_ready_o, scrub_req_ready_o, rtab_req_ready_o, refill_req_ready_o, st0_req_mshr_check_o, st0_req_cachedir_read_o, st1_err_o, st1_req_valid_o, st1_rsp_valid_o, st1_rsp_error_o, st1_rsp_aborted_o, st1_req_cachedir_sel_victim_o, st1_req_cachedir_updt_sel_victim_o, st1_req_cachedata_write_o, st1_req_cachedata_write_enable_o, st1_req_cachedata_write_merge_o, st2_mshr_alloc_o, st2_mshr_alloc_cs_o, st2_mshr_alloc_need_rsp_o, st2_mshr_alloc_wback_o, st2_mshr_alloc_dirty_o, st2_mshr_alloc_exclusive_o, st2_mshr_alloc_probe_shared_o, st2_dir_updt_o, st2_dir_updt_valid_o, st2_dir_updt_wback_o, st2_dir_updt_dirty_o, st2_dir_updt_fetch_o, req_cachedata_read_o, rtab_check_o, st1_rtab_alloc_o, st1_rtab_alloc_and_link_o, st1_rtab_commit_o, st1_rtab_rback_o, st1_rtab_mshr_hit_o, st1_rtab_probe_lock_o, st1_rtab_probe_lock_nline_o, st1_rtab_mshr_full_o, st1_rtab_mshr_ready_o, st1_rtab_write_miss_o, st1_rtab_wbuf_hit_o, st1_rtab_wbuf_not_ready_o, st1_rtab_dir_unavailable_o, st1_rtab_dir_fetch_o, st1_rtab_flush_hit_o, st1_rtab_flush_not_ready_o, st1_rtab_pend_trans_o, wbuf_write_valid_o, wbuf_write_uncacheable_o, wbuf_read_flush_hit_o, wbuf_flush_all_o, st2_flush_alloc_o, uc_req_valid_o, uc_core_rsp_ready_o, cmo_req_valid_o, cmo_core_rsp_ready_o, evt_cache_write_miss_o, evt_cache_read_miss_o, evt_cache_dir_unc_err_o, evt_cache_dir_cor_err_o, evt_cache_dat_unc_err_o, evt_cache_dat_cor_err_o, evt_uncached_req_o, evt_cmo_req_o, evt_write_req_o, evt_read_req_o, evt_prefetch_req_o, evt_req_on_hold_o, evt_rtab_rollback_o, evt_stall_refill_o, evt_stall_o"
+    }
+  ],
+  "nets": [],
+  "legend_note": "A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.",
+  "library_sha256": "15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"
+}

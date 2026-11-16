@@ -1,0 +1,98 @@
+{
+  "page_name": "CCU_COMMIT_RELEASE",
+  "out_name": "CCU_COMMIT_RELEASE.drawio",
+  "function": "CCU_COMMIT_RELEASE",
+  "initial": "ENUM_ST_COMMIT_START",
+  "state_pattern": "^[A-Z][A-Z0-9_]+$",
+  "states": [
+    {
+      "name": "ENUM_ST_COMMIT_START"
+    },
+    {
+      "name": "ENUM_ST_COMMIT_WAIT"
+    },
+    {
+      "name": "ENUM_ST_DIR_CANCEL"
+    },
+    {
+      "name": "ENUM_ST_DIR_UPDATE"
+    },
+    {
+      "name": "ENUM_ST_GNT"
+    },
+    {
+      "name": "ENUM_ST_GNT_WAIT"
+    },
+    {
+      "name": "ENUM_ST_IDLE"
+    }
+  ],
+  "transitions": [
+    {
+      "src": "ENUM_ST_COMMIT_START",
+      "dst": "ENUM_ST_COMMIT_WAIT",
+      "label": "T20: commit start",
+      "guard": "matching COMMIT phase accepted"
+    },
+    {
+      "src": "ENUM_ST_COMMIT_WAIT",
+      "dst": "ENUM_ST_IDLE",
+      "label": "T21: victim release",
+      "guard": "victim COMMIT ACKs and immediate release"
+    },
+    {
+      "src": "ENUM_ST_COMMIT_WAIT",
+      "dst": "ENUM_ST_GNT_WAIT",
+      "label": "T22: victim hold",
+      "guard": "victim COMMIT ACKs; deferred release"
+    },
+    {
+      "src": "ENUM_ST_COMMIT_WAIT",
+      "dst": "ENUM_ST_DIR_CANCEL",
+      "label": "T23: CMO cancel",
+      "guard": "CMO COMMIT ACKs; no directory hit"
+    },
+    {
+      "src": "ENUM_ST_COMMIT_WAIT",
+      "dst": "ENUM_ST_DIR_UPDATE",
+      "label": "T24: publish",
+      "guard": "root COMMIT ACKs; publish metadata"
+    },
+    {
+      "src": "ENUM_ST_DIR_UPDATE",
+      "dst": "ENUM_ST_GNT",
+      "label": "T30: update",
+      "guard": "matching bank UPDATE accepted"
+    },
+    {
+      "src": "ENUM_ST_DIR_CANCEL",
+      "dst": "ENUM_ST_GNT",
+      "label": "T31: cancel",
+      "guard": "no reservation or matching CANCEL accepted"
+    },
+    {
+      "src": "ENUM_ST_GNT",
+      "dst": "ENUM_ST_GNT_WAIT",
+      "label": "T32: grant load",
+      "guard": "matching CPU grant loaded"
+    },
+    {
+      "src": "ENUM_ST_GNT",
+      "dst": "ENUM_ST_IDLE",
+      "label": "T33: CMO release",
+      "guard": "CMO response release accepted"
+    },
+    {
+      "src": "ENUM_ST_GNT_WAIT",
+      "dst": "ENUM_ST_IDLE",
+      "label": "T34: release",
+      "guard": "matching release accepted"
+    }
+  ],
+  "layout": {
+    "margin": 50,
+    "node_gap": 220,
+    "rank_gap": 220,
+    "max_columns": 3
+  }
+}

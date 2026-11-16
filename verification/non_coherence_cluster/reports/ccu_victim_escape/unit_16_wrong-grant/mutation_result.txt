@@ -1,0 +1,1 @@
+PASS: wrong-grant caught; native exit=1; expected=progress watchdog

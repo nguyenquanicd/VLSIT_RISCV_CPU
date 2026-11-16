@@ -1,0 +1,31 @@
+{
+  "source": "approved Plan V4 generated artifacts; no regeneration and no hand edits",
+  "workbook": "rtl_v019_delta\\doc\\VLSIT_RISCV_CPU_Cluster_CSR_v019.xlsx",
+  "workbook_sha256": "2ba9191655b0661170f01c9d07b182b53be92d190654bb9e4b022ede1739159d",
+  "artifacts": [
+    {
+      "path": "Debug/debug.json",
+      "sha256": "95102aeb6aa2e57c40b43f6219671bc92d601c875f55f8c639dc0ad125e17383"
+    },
+    {
+      "path": "RTL/filelist.f",
+      "sha256": "691a5361001f45d4cf07e6e6446485a34cbd58e06e50e662ffc9a66812e67c17"
+    },
+    {
+      "path": "RTL/m_vlsit_cpucl_csr.sv",
+      "sha256": "e07873759bccc11dbcee4a1192a4cb462389238acdf96cff651a7e41ddb68ae7"
+    },
+    {
+      "path": "RTL/models/m_csr_async_fifo.sv",
+      "sha256": "ad8f2934c1939154ab75194f7e2257ffb4702436d74fb0ccd68598219fc21fc0"
+    },
+    {
+      "path": "RTL/models/m_csr_sync.sv",
+      "sha256": "0285b754348e7a76b8ddbfeece24fa46a3b27026957f15d21c1201229cc7ab07"
+    },
+    {
+      "path": "RTL/models/m_csr_sync_fifo.sv",
+      "sha256": "f490f0dd81eb6da3e8e2bdcc6a3a9b34792947a761677908751f73a454401a20"
+    }
+  ]
+}

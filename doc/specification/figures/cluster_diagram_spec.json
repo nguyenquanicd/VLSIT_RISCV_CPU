@@ -1,0 +1,38 @@
+{
+ "page_name": "BLOCK_DIAGRAM",
+ "out_name": "block_diagram.drawio",
+ "table_suffix": "",
+ "layout": {
+  "gap_h": 100,
+  "gap_v": 90,
+  "margin": 40,
+  "block_h": 60
+ },
+ "top": {
+  "frame_label": [
+   "TOP",
+   "(m_vlsit_riscv_cluster_axi_top)"
+  ],
+  "block_label": [
+   "TOP",
+   "(m_vlsit_riscv_cluster_axi_top)"
+  ],
+  "block_row": [
+   "TOP (m_vlsit_riscv_cluster_axi_top)",
+   "Structural top.",
+   "Section 14.2"
+  ]
+ },
+ "frame_row": [
+  "TOP (m_vlsit_riscv_cluster_axi_top) frame",
+  "Structural top.",
+  "Section 14.2"
+ ],
+ "frame_interfaces": [],
+ "blocks": [],
+ "connectors": [],
+ "externals": [],
+ "nets": [],
+ "interfaces": [],
+ "legend_note": "The enclosing frame is the top module; blocks inside are its instances."
+}

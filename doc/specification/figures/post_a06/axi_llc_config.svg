@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="680" viewBox="470 340 820 680" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="470" y="340" width="820" height="680" fill="#FFFFFF"/>
+<rect x="500" y="370" width="760" height="620" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<rect x="600" y="510" width="200" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="536" text-anchor="middle">i_ar_addr_decode</text>
+<text x="700" y="558" text-anchor="middle">(addr_decode)</text>
+<rect x="960" y="510" width="200" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1060" y="536" text-anchor="middle">i_aw_addr_decode</text>
+<text x="1060" y="558" text-anchor="middle">(addr_decode)</text>
+<rect x="580" y="680" width="240" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="706" text-anchor="middle">i_flush_recv_counter</text>
+<text x="700" y="728" text-anchor="middle">(counter)</text>
+<rect x="940" y="680" width="240" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1060" y="706" text-anchor="middle">i_flush_send_counter</text>
+<text x="1060" y="728" text-anchor="middle">(counter)</text>
+<rect x="630" y="850" width="140" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="876" text-anchor="middle">i_lzc_flush</text>
+<text x="700" y="898" text-anchor="middle">(lzc)</text>
+<text x="1238" y="411" text-anchor="end">Component composition</text>
+<text x="1238" y="433" text-anchor="end">(axi_llc_config)</text>
+</svg>

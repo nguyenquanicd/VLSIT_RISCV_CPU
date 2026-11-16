@@ -1,0 +1,58 @@
+{
+  "signal": [
+    {
+      "name": "reset_n",
+      "wave": "0.1........0"
+    },
+    {
+      "name": "L1 fatal event",
+      "wave": "=.==........",
+      "data": [
+        "0x0",
+        "0x1",
+        "0x0"
+      ]
+    },
+    {
+      "name": "LLC fatal event",
+      "wave": "0.........10"
+    },
+    {
+      "name": "record status",
+      "wave": "=.=.......==",
+      "data": [
+        "0x0",
+        "0x1d",
+        "0x1f",
+        "0x0"
+      ]
+    },
+    {
+      "name": "source/hart/BRESP",
+      "wave": "=.=........=",
+      "data": [
+        "0x0",
+        "0x21",
+        "0x0"
+      ]
+    },
+    {
+      "name": "record address",
+      "wave": "=.=........=",
+      "data": [
+        "0x0",
+        "0x12345680001230",
+        "0x0"
+      ]
+    }
+  ],
+  "head": {
+    "text": "A-06 / TEST-054 measured first fault, later event, reset"
+  },
+  "foot": {
+    "text": "Actual samples 2 ns after rising edges; times (ns): 7,17,27,37,47,57,67,77,87,97,107,117. Not an AXI latency bound."
+  },
+  "config": {
+    "hscale": 2
+  }
+}

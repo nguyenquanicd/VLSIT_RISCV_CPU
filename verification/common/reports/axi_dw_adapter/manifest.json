@@ -1,0 +1,47 @@
+{
+  "passed": true,
+  "dut": "m_vlsit_riscv_axi_dw_adapter",
+  "testbench": "tb_m_vlsit_riscv_axi_dw_adapter",
+  "common_cells_revision": "db42769334b4589b4b3fc671b34513bdb98be565",
+  "axi_revision": "d436bd4936ba1c49cd87521df54580c5159114d3",
+  "rtl_sha256": "b9a5d4fdaef238a9ead3095a8c79623fd37e31d13c62083ab4df68f3ec24d015",
+  "testbench_sha256": "4d9941e5464a7babbdc0d0b75e337986baabbae62be65d457d1426ed9bbcc8f1",
+  "results": [
+    {
+      "width": 32,
+      "rtl_lint_errors": 0,
+      "rtl_lint_pass": true,
+      "simulation_pass": true,
+      "simulation_result": "PASS: AXI width conversion, channel payloads, and supported response checks; data_width=32\n- C:\\HQuan\\102_MyGithub\\VLSIT_RISCV_CPU\\rtl\\verification\\axi_dw_adapter\\tb_m_vlsit_riscv_axi_dw_adapter.sv:364: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.053 devel\n- Verilator: $finish at 260ns; walltime 0.002 s; speed 130.071 us/s\n- Verilator: cpu 0.000 s on 1 threads; allocated 6 MB",
+      "rtl_lint_log": "rtl/reports/axi_dw_adapter/32_bit/rtl_lint.log",
+      "simulation_log": "rtl/reports/axi_dw_adapter/32_bit/simulation.log"
+    },
+    {
+      "width": 64,
+      "rtl_lint_errors": 0,
+      "rtl_lint_pass": true,
+      "simulation_pass": true,
+      "simulation_result": "PASS: AXI width conversion, channel payloads, and supported response checks; data_width=64\n- C:\\HQuan\\102_MyGithub\\VLSIT_RISCV_CPU\\rtl\\verification\\axi_dw_adapter\\tb_m_vlsit_riscv_axi_dw_adapter.sv:364: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.053 devel\n- Verilator: $finish at 150ns; walltime 0.000 s; speed 0.000 s/s\n- Verilator: cpu 0.000 s on 1 threads; allocated 6 MB",
+      "rtl_lint_log": "rtl/reports/axi_dw_adapter/64_bit/rtl_lint.log",
+      "simulation_log": "rtl/reports/axi_dw_adapter/64_bit/simulation.log"
+    },
+    {
+      "width": 128,
+      "rtl_lint_errors": 0,
+      "rtl_lint_pass": true,
+      "simulation_pass": true,
+      "simulation_result": "PASS: AXI width conversion, channel payloads, and supported response checks; data_width=128\n- C:\\HQuan\\102_MyGithub\\VLSIT_RISCV_CPU\\rtl\\verification\\axi_dw_adapter\\tb_m_vlsit_riscv_axi_dw_adapter.sv:364: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.053 devel\n- Verilator: $finish at 240ns; walltime 0.001 s; speed 236.966 us/s\n- Verilator: cpu 0.000 s on 1 threads; allocated 6 MB",
+      "rtl_lint_log": "rtl/reports/axi_dw_adapter/128_bit/rtl_lint.log",
+      "simulation_log": "rtl/reports/axi_dw_adapter/128_bit/simulation.log"
+    },
+    {
+      "width": 256,
+      "rtl_lint_errors": 0,
+      "rtl_lint_pass": true,
+      "simulation_pass": true,
+      "simulation_result": "PASS: AXI width conversion, channel payloads, and supported response checks; data_width=256\n- C:\\HQuan\\102_MyGithub\\VLSIT_RISCV_CPU\\rtl\\verification\\axi_dw_adapter\\tb_m_vlsit_riscv_axi_dw_adapter.sv:364: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.053 devel\n- Verilator: $finish at 240ns; walltime 0.000 s; speed 0.000 s/s\n- Verilator: cpu 0.000 s on 1 threads; allocated 7 MB",
+      "rtl_lint_log": "rtl/reports/axi_dw_adapter/256_bit/rtl_lint.log",
+      "simulation_log": "rtl/reports/axi_dw_adapter/256_bit/simulation.log"
+    }
+  ]
+}

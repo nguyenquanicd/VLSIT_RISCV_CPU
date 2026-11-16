@@ -1,0 +1,9 @@
+{
+  "head": {
+    "text": "WF-009 pending detail"
+  },
+  "signal": [],
+  "foot": {
+    "text": "PMU snapshot register fields and exact request/done sequencing remain subject to CSR workbook review. This status card defines no signal timing."
+  }
+}

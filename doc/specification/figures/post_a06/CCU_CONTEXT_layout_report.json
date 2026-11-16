@@ -1,0 +1,28 @@
+{
+  "layout": "flow-tb-snake-4-g220",
+  "geometry": {
+    "minimum_gap": 220.0,
+    "worst_fit": 0.5700444444444445,
+    "fit_ok": true,
+    "crossings": 35,
+    "label_conflicts": 0,
+    "distinct_x": 19,
+    "distinct_y": 4,
+    "distribution_ok": true,
+    "linear": false,
+    "findings": []
+  },
+  "stats": {
+    "crossings": 35,
+    "node_hits": 1,
+    "bends": 16,
+    "length": 35027.591460101066,
+    "width": 3900.0,
+    "height": 900.0,
+    "overlaps": 0,
+    "label_conflicts": 0,
+    "distinct_x": 19,
+    "distinct_y": 4,
+    "linear": false
+  }
+}

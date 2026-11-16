@@ -1,0 +1,9 @@
+{
+  "head": {
+    "text": "WF-011 pending detail"
+  },
+  "signal": [],
+  "foot": {
+    "text": "The LLC flush CSR command/status mapping and pinned axi_llc sequencing remain to be closed. This status card defines no signal timing."
+  }
+}

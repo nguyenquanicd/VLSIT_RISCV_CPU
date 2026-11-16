@@ -1,0 +1,278 @@
+{
+  "page_name": "CCU_CONTEXT",
+  "out_name": "CCU_CONTEXT.drawio",
+  "function": "CCU_CONTEXT",
+  "initial": "ENUM_ST_IDLE",
+  "state_pattern": "^[A-Z][A-Z0-9_]+$",
+  "states": [
+    {
+      "name": "ENUM_ST_IDLE"
+    },
+    {
+      "name": "ENUM_ST_DIR_REQ"
+    },
+    {
+      "name": "ENUM_ST_DIR_WAIT"
+    },
+    {
+      "name": "ENUM_ST_EVICT_ALLOC"
+    },
+    {
+      "name": "ENUM_ST_EVICT_WAIT"
+    },
+    {
+      "name": "ENUM_ST_OWNER"
+    },
+    {
+      "name": "ENUM_ST_PREP_START"
+    },
+    {
+      "name": "ENUM_ST_PREP_WAIT"
+    },
+    {
+      "name": "ENUM_ST_COMMIT_START"
+    },
+    {
+      "name": "ENUM_ST_COMMIT_WAIT"
+    },
+    {
+      "name": "ENUM_ST_ABORT_START"
+    },
+    {
+      "name": "ENUM_ST_ABORT_WAIT"
+    },
+    {
+      "name": "ENUM_ST_DIR_UPDATE"
+    },
+    {
+      "name": "ENUM_ST_DIR_CANCEL"
+    },
+    {
+      "name": "ENUM_ST_GNT"
+    },
+    {
+      "name": "ENUM_ST_GNT_WAIT"
+    },
+    {
+      "name": "ENUM_ST_CMO_PREPARED"
+    },
+    {
+      "name": "ENUM_ST_CMO_FINISH"
+    },
+    {
+      "name": "ENUM_ST_RETRY_CANCEL"
+    }
+  ],
+  "transitions": [
+    {
+      "src": "ENUM_ST_IDLE",
+      "dst": "ENUM_ST_DIR_REQ",
+      "label": "T01: alloc root",
+      "guard": "root allocation accepted"
+    },
+    {
+      "src": "ENUM_ST_IDLE",
+      "dst": "ENUM_ST_OWNER",
+      "label": "T02: alloc victim",
+      "guard": "victim child allocation accepted"
+    },
+    {
+      "src": "ENUM_ST_IDLE",
+      "dst": "ENUM_ST_GNT",
+      "label": "T03: reject",
+      "guard": "rejected request allocation accepted"
+    },
+    {
+      "src": "ENUM_ST_DIR_REQ",
+      "dst": "ENUM_ST_DIR_WAIT",
+      "label": "T04: lookup",
+      "guard": "selected bank lookup accepted"
+    },
+    {
+      "src": "ENUM_ST_DIR_WAIT",
+      "dst": "ENUM_ST_EVICT_ALLOC",
+      "label": "T05: held victim",
+      "guard": "lookup miss and victim has holders; not CMO"
+    },
+    {
+      "src": "ENUM_ST_DIR_WAIT",
+      "dst": "ENUM_ST_OWNER",
+      "label": "T06: lookup result",
+      "guard": "matching lookup; no held-victim service needed"
+    },
+    {
+      "src": "ENUM_ST_EVICT_ALLOC",
+      "dst": "ENUM_ST_RETRY_CANCEL",
+      "label": "T07: victim busy",
+      "guard": "victim line already locked by another context"
+    },
+    {
+      "src": "ENUM_ST_RETRY_CANCEL",
+      "dst": "ENUM_ST_DIR_REQ",
+      "label": "T08: cancel retry",
+      "guard": "matching owner CANCEL accepted"
+    },
+    {
+      "src": "ENUM_ST_EVICT_ALLOC",
+      "dst": "ENUM_ST_EVICT_WAIT",
+      "label": "T09: alloc child",
+      "guard": "matching victim child allocated"
+    },
+    {
+      "src": "ENUM_ST_EVICT_WAIT",
+      "dst": "ENUM_ST_DIR_UPDATE",
+      "label": "T10: child commit",
+      "guard": "child COMMIT completes"
+    },
+    {
+      "src": "ENUM_ST_EVICT_WAIT",
+      "dst": "ENUM_ST_DIR_CANCEL",
+      "label": "T11: child abort",
+      "guard": "child ABORT completes"
+    },
+    {
+      "src": "ENUM_ST_OWNER",
+      "dst": "ENUM_ST_PREP_START",
+      "label": "T12: owner capture",
+      "guard": "matching owner metadata captured"
+    },
+    {
+      "src": "ENUM_ST_PREP_START",
+      "dst": "ENUM_ST_PREP_WAIT",
+      "label": "T13: prepare start",
+      "guard": "matching PREPARE phase accepted"
+    },
+    {
+      "src": "ENUM_ST_PREP_WAIT",
+      "dst": "ENUM_ST_CMO_PREPARED",
+      "label": "T14: CMO prepared",
+      "guard": "all PREPARE responses; source is CMO"
+    },
+    {
+      "src": "ENUM_ST_PREP_WAIT",
+      "dst": "ENUM_ST_ABORT_START",
+      "label": "T15: prepare error",
+      "guard": "PREPARE complete with error or missing dirty obligation"
+    },
+    {
+      "src": "ENUM_ST_PREP_WAIT",
+      "dst": "ENUM_ST_COMMIT_START",
+      "label": "T16: prepare OK",
+      "guard": "PREPARE complete and dirty obligation satisfied"
+    },
+    {
+      "src": "ENUM_ST_CMO_PREPARED",
+      "dst": "ENUM_ST_CMO_FINISH",
+      "label": "T17: CMO report",
+      "guard": "i_ccu_prepare_ready"
+    },
+    {
+      "src": "ENUM_ST_CMO_FINISH",
+      "dst": "ENUM_ST_COMMIT_START",
+      "label": "T18: finish commit",
+      "guard": "matching finish accepted; commit and no retained error"
+    },
+    {
+      "src": "ENUM_ST_CMO_FINISH",
+      "dst": "ENUM_ST_ABORT_START",
+      "label": "T19: finish abort",
+      "guard": "matching finish accepted; abort or retained error"
+    },
+    {
+      "src": "ENUM_ST_COMMIT_START",
+      "dst": "ENUM_ST_COMMIT_WAIT",
+      "label": "T20: commit start",
+      "guard": "matching COMMIT phase accepted"
+    },
+    {
+      "src": "ENUM_ST_COMMIT_WAIT",
+      "dst": "ENUM_ST_IDLE",
+      "label": "T21: victim release",
+      "guard": "victim COMMIT ACKs and immediate release"
+    },
+    {
+      "src": "ENUM_ST_COMMIT_WAIT",
+      "dst": "ENUM_ST_GNT_WAIT",
+      "label": "T22: victim hold",
+      "guard": "victim COMMIT ACKs; deferred release"
+    },
+    {
+      "src": "ENUM_ST_COMMIT_WAIT",
+      "dst": "ENUM_ST_DIR_CANCEL",
+      "label": "T23: CMO cancel",
+      "guard": "CMO COMMIT ACKs; no directory hit"
+    },
+    {
+      "src": "ENUM_ST_COMMIT_WAIT",
+      "dst": "ENUM_ST_DIR_UPDATE",
+      "label": "T24: publish",
+      "guard": "root COMMIT ACKs; publish metadata"
+    },
+    {
+      "src": "ENUM_ST_ABORT_START",
+      "dst": "ENUM_ST_ABORT_WAIT",
+      "label": "T25: abort start",
+      "guard": "matching ABORT phase accepted"
+    },
+    {
+      "src": "ENUM_ST_ABORT_WAIT",
+      "dst": "ENUM_ST_IDLE",
+      "label": "T26: victim release",
+      "guard": "victim ABORT ACKs and immediate release"
+    },
+    {
+      "src": "ENUM_ST_ABORT_WAIT",
+      "dst": "ENUM_ST_GNT_WAIT",
+      "label": "T27: victim hold",
+      "guard": "victim ABORT ACKs; deferred release"
+    },
+    {
+      "src": "ENUM_ST_ABORT_WAIT",
+      "dst": "ENUM_ST_DIR_CANCEL",
+      "label": "T28: cancel owner",
+      "guard": "root ABORT ACKs and reservation retained"
+    },
+    {
+      "src": "ENUM_ST_ABORT_WAIT",
+      "dst": "ENUM_ST_GNT",
+      "label": "T29: error grant",
+      "guard": "root ABORT ACKs without reservation"
+    },
+    {
+      "src": "ENUM_ST_DIR_UPDATE",
+      "dst": "ENUM_ST_GNT",
+      "label": "T30: update",
+      "guard": "matching bank UPDATE accepted"
+    },
+    {
+      "src": "ENUM_ST_DIR_CANCEL",
+      "dst": "ENUM_ST_GNT",
+      "label": "T31: cancel",
+      "guard": "no reservation or matching CANCEL accepted"
+    },
+    {
+      "src": "ENUM_ST_GNT",
+      "dst": "ENUM_ST_GNT_WAIT",
+      "label": "T32: grant load",
+      "guard": "matching CPU grant loaded"
+    },
+    {
+      "src": "ENUM_ST_GNT",
+      "dst": "ENUM_ST_IDLE",
+      "label": "T33: CMO release",
+      "guard": "CMO response release accepted"
+    },
+    {
+      "src": "ENUM_ST_GNT_WAIT",
+      "dst": "ENUM_ST_IDLE",
+      "label": "T34: release",
+      "guard": "matching release accepted"
+    }
+  ],
+  "layout": {
+    "margin": 50,
+    "node_gap": 220,
+    "rank_gap": 220,
+    "max_columns": 4
+  }
+}

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1060" height="510" viewBox="410 340 1060 510" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="410" y="340" width="1060" height="510" fill="#FFFFFF"/>
+<rect x="440" y="370" width="1000" height="450" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<rect x="520" y="510" width="360" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="536" text-anchor="middle">u_vlsit_riscv_cpu_tile_array</text>
+<text x="700" y="558" text-anchor="middle">(m_vlsit_riscv_cpu_tile_array)</text>
+<rect x="1020" y="510" width="320" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1180" y="536" text-anchor="middle">u_vlsit_riscv_cmo_arbiter</text>
+<text x="1180" y="558" text-anchor="middle">(m_vlsit_riscv_cmo_arbiter)</text>
+<rect x="600" y="680" width="200" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="706" text-anchor="middle">u_vlsit_axi_llc</text>
+<text x="700" y="728" text-anchor="middle">(m_vlsit_axi_llc)</text>
+<rect x="1000" y="680" width="360" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1180" y="706" text-anchor="middle">u_vlsit_riscv_cmo_controller</text>
+<text x="1180" y="728" text-anchor="middle">(m_vlsit_riscv_cmo_controller)</text>
+<text x="905" y="526" text-anchor="middle">CMD</text>
+<text x="1268" y="602" text-anchor="middle">TAKE</text>
+<text x="845" y="696" text-anchor="middle">MAINT</text>
+<text x="705" y="618" text-anchor="middle">CCU</text>
+<text x="1418" y="411" text-anchor="end">CLUSTER CMO FLOW</text>
+<text x="1418" y="433" text-anchor="end">(m_vlsit_riscv_cluster_core)</text>
+<path d="M 880 540 L 1020 540" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1020,540 1008,546 1008,534" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1230 570 L 1230 680" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1230,680 1224,668 1236,668" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1000 710 L 800 710" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="800,710 812,704 812,716" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1140 680 L 1140 590 L 700 590 L 700 570" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="700,570 706,582 694,582" fill="#000000" stroke="#000000" stroke-width="1"/>
+</svg>

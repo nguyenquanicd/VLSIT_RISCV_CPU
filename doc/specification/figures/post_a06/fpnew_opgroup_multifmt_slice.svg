@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="680" viewBox="450 340 940 680" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="450" y="340" width="940" height="680" fill="#FFFFFF"/>
+<rect x="480" y="370" width="880" height="620" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<rect x="590" y="510" width="220" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="536" text-anchor="middle">i_fpnew_cast_multi</text>
+<text x="700" y="558" text-anchor="middle">(fpnew_cast_multi)</text>
+<rect x="990" y="510" width="260" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1120" y="536" text-anchor="middle">i_fpnew_divsqrt_multi</text>
+<text x="1120" y="558" text-anchor="middle">(fpnew_divsqrt_multi)</text>
+<rect x="560" y="680" width="280" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="706" text-anchor="middle">i_fpnew_divsqrt_multi_th</text>
+<text x="700" y="728" text-anchor="middle">(fpnew_divsqrt_th_32)</text>
+<rect x="960" y="680" width="320" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1120" y="706" text-anchor="middle">i_fpnew_divsqrt_th_64_c910</text>
+<text x="1120" y="728" text-anchor="middle">(fpnew_divsqrt_th_64_multi)</text>
+<rect x="600" y="850" width="200" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="876" text-anchor="middle">i_fpnew_fma_multi</text>
+<text x="700" y="898" text-anchor="middle">(fpnew_fma_multi)</text>
+<text x="1338" y="411" text-anchor="end">Component composition</text>
+<text x="1338" y="433" text-anchor="end">(fpnew_opgroup_multifmt_slice)</text>
+</svg>

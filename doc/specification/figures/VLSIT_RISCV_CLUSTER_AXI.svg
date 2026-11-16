@@ -1,0 +1,383 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2460" height="2861" viewBox="70 270 2460 2861" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="70" y="270" width="2460" height="2861" fill="#FFFFFF"/>
+<rect x="520" y="400" width="1210" height="560" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<rect x="560" y="675" width="280" height="70" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="706" text-anchor="middle">CPU tile array</text>
+<text x="700" y="728" text-anchor="middle">(m_vlsit_riscv_cpu_tile)</text>
+<rect x="950" y="675" width="300" height="70" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1100" y="706" text-anchor="middle">Coherence fabric</text>
+<text x="1100" y="728" text-anchor="middle">(m_vlsit_riscv_coh_fabric)</text>
+<rect x="1400" y="675" width="240" height="70" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1520" y="706" text-anchor="middle">Shared LLC</text>
+<text x="1520" y="728" text-anchor="middle">(m_vlsit_axi_llc)</text>
+<rect x="1390" y="845" width="260" height="70" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1520" y="876" text-anchor="middle">AXI4 MMIO</text>
+<text x="1520" y="898" text-anchor="middle">(m_vlsit_riscv_axi_mmio)</text>
+<rect x="1360" y="505" width="320" height="70" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1520" y="536" text-anchor="middle">AXI-Lite decode and CSR</text>
+<text x="1520" y="558" text-anchor="middle">(m_vlsit_riscv_axil_decode)</text>
+<rect x="570" y="505" width="260" height="70" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="536" text-anchor="middle">Cluster PMU</text>
+<text x="700" y="558" text-anchor="middle">(m_vlsit_riscv_pmu)</text>
+<rect x="560" y="845" width="280" height="70" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="876" text-anchor="middle">Debug adapter</text>
+<text x="700" y="898" text-anchor="middle">(m_vlsit_riscv_cluster_core)</text>
+<text x="330" y="896" text-anchor="middle">DBG</text>
+<text x="330" y="918" text-anchor="middle">External DM request/status</text>
+<text x="1845" y="726" text-anchor="middle">MEM</text>
+<text x="1845" y="748" text-anchor="middle">AXI4 memory</text>
+<text x="1955" y="896" text-anchor="middle">MMIO</text>
+<text x="1955" y="918" text-anchor="middle">Non-coherent AXI4 peripheral path</text>
+<text x="345" y="536" text-anchor="middle">PMIRQ</text>
+<text x="345" y="558" text-anchor="middle">Aggregate PMU interrupt</text>
+<text x="750" y="321" text-anchor="middle">CLKR</text>
+<text x="750" y="343" text-anchor="middle">i_clk_cluster, i_rst_n_cluster</text>
+<text x="290" y="696" text-anchor="middle">IRQ</text>
+<text x="290" y="718" text-anchor="middle">Per-hart platform interrupt levels</text>
+<text x="1708" y="441" text-anchor="end">RISC-V CLUSTER</text>
+<text x="1708" y="463" text-anchor="end">(m_vlsit_riscv_cluster_axi_top)</text>
+<text x="1250" y="822" text-anchor="middle">LRES</text>
+<text x="880" y="686" text-anchor="middle">TREQ</text>
+<text x="880" y="758" text-anchor="middle">TRES</text>
+<text x="1290" y="686" text-anchor="middle">LREQ</text>
+<text x="1060" y="808" text-anchor="middle">DREQ</text>
+<text x="1530" y="798" text-anchor="middle">DRES</text>
+<text x="870" y="588" text-anchor="middle">EVTS</text>
+<text x="855" y="516" text-anchor="middle">CFG</text>
+<text x="1563" y="602" text-anchor="middle">LLCFG</text>
+<text x="738" y="772" text-anchor="middle">HDBG</text>
+<text x="104" y="2947" text-anchor="start" font-weight="bold">Legend</text>
+<text x="284" y="2988" text-anchor="start">Interface connector (one per signal group; arrow = active to passive)</text>
+<text x="104" y="3063" text-anchor="start">AXI profile has no external ACE snoop interface. External DMA visibility requires the SoC software cache-maintenance contract.</text>
+<text x="1910" y="536" text-anchor="middle">AXIL</text>
+<text x="1910" y="558" text-anchor="middle">32-bit AXI4-Lite control</text>
+<rect x="100" y="1290" width="2400" height="386" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1300" y="1317" text-anchor="middle" font-weight="bold">Block Functions &amp; Interfaces_AXI</text>
+<rect x="100" y="1330" width="330" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1355" text-anchor="start" font-weight="bold">Block</text>
+<rect x="430" y="1330" width="1480" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="434" y="1355" text-anchor="start" font-weight="bold">Function</text>
+<rect x="1910" y="1330" width="230" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1914" y="1355" text-anchor="start" font-weight="bold">Source</text>
+<rect x="2140" y="1330" width="360" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="2144" y="1355" text-anchor="start" font-weight="bold">Interfaces (mnemonics)</text>
+<rect x="100" y="1366" width="330" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1391" text-anchor="start">AXI cluster profile</text>
+<rect x="430" y="1366" width="1480" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="434" y="1391" text-anchor="start">Internal multi-hart coherence; external memory and MMIO use ordinary AXI4; no external snoop interface.</text>
+<rect x="1910" y="1366" width="230" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1914" y="1391" text-anchor="start">Sections 4, 5, 6</text>
+<rect x="2140" y="1366" width="360" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="2144" y="1391" text-anchor="start">IRQ, DBG, AXIL, MMIO, MEM, CLKR</text>
+<rect x="100" y="1402" width="330" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1427" text-anchor="start">CPU tile array (2 or 4)</text>
+<rect x="430" y="1402" width="1480" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="434" y="1427" text-anchor="start">Executes application software on identical 64-bit harts with private caches and per-hart interrupt/debug state.</text>
+<rect x="1910" y="1402" width="230" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1914" y="1427" text-anchor="start">Section 14.2</text>
+<rect x="2140" y="1402" width="360" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="2144" y="1427" text-anchor="start">TREQ, TRES, HDBG, IRQ, CLKR</text>
+<rect x="100" y="1438" width="330" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1474" text-anchor="start">Internal coherence fabric</text>
+<rect x="430" y="1438" width="1480" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="434" y="1474" text-anchor="start">Maintains cache-line ownership and aggregates cluster performance event taps.</text>
+<rect x="1910" y="1438" width="230" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1914" y="1474" text-anchor="start">Section 14.2</text>
+<rect x="2140" y="1438" width="360" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="2144" y="1463" text-anchor="start">TREQ, TRES, LREQ, LRES, DREQ, DRES,</text>
+<text x="2144" y="1485" text-anchor="start">EVTS, CLKR</text>
+<rect x="100" y="1496" width="330" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1521" text-anchor="start">Shared static LLC</text>
+<rect x="430" y="1496" width="1480" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="434" y="1521" text-anchor="start">Stores shared last-level cache lines and performs its configured BIST and flush operations.</text>
+<rect x="1910" y="1496" width="230" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1914" y="1521" text-anchor="start">Section 14.2</text>
+<rect x="2140" y="1496" width="360" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="2144" y="1521" text-anchor="start">LREQ, LRES, LLCFG, MEM, CLKR</text>
+<rect x="100" y="1532" width="330" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1557" text-anchor="start">Non-coherent device router</text>
+<rect x="430" y="1532" width="1480" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="434" y="1557" text-anchor="start">Routes non-cacheable peripheral transactions to the external AXI4 device fabric.</text>
+<rect x="1910" y="1532" width="230" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1914" y="1557" text-anchor="start">Section 14.2</text>
+<rect x="2140" y="1532" width="360" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="2144" y="1557" text-anchor="start">DREQ, DRES, MMIO, CLKR</text>
+<rect x="100" y="1568" width="330" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1593" text-anchor="start">Cluster control and CSR</text>
+<rect x="430" y="1568" width="1480" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="434" y="1593" text-anchor="start">Routes software access to cluster performance controls and LLC service functions.</text>
+<rect x="1910" y="1568" width="230" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1914" y="1593" text-anchor="start">Section 14.2</text>
+<rect x="2140" y="1568" width="360" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="2144" y="1593" text-anchor="start">CFG, LLCFG, AXIL</text>
+<rect x="100" y="1604" width="330" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1629" text-anchor="start">Cluster PMU</text>
+<rect x="430" y="1604" width="1480" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="434" y="1629" text-anchor="start">Counts selected hardware events, captures counter snapshots, and reports overflow causes.</text>
+<rect x="1910" y="1604" width="230" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1914" y="1629" text-anchor="start">Section 14.2</text>
+<rect x="2140" y="1604" width="360" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="2144" y="1629" text-anchor="start">EVTS, CFG, PMIRQ, CLKR</text>
+<rect x="100" y="1640" width="330" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1665" text-anchor="start">Per-hart debug adapter</text>
+<rect x="430" y="1640" width="1480" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="434" y="1665" text-anchor="start">Routes external debug requests and returns each active hart's debug state.</text>
+<rect x="1910" y="1640" width="230" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1914" y="1665" text-anchor="start">Section 14.2</text>
+<rect x="2140" y="1640" width="360" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="2144" y="1665" text-anchor="start">HDBG, DBG, CLKR</text>
+<rect x="100" y="1716" width="2400" height="1150" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1300" y="1743" text-anchor="middle" font-weight="bold">Interface Table_AXI</text>
+<rect x="100" y="1756" width="90" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1781" text-anchor="start" font-weight="bold">ID</text>
+<rect x="190" y="1756" width="300" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="1781" text-anchor="start" font-weight="bold">Interface</text>
+<rect x="490" y="1756" width="110" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="1781" text-anchor="start" font-weight="bold">Category</text>
+<rect x="600" y="1756" width="470" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="1781" text-anchor="start" font-weight="bold">Active side -&gt; passive side</text>
+<rect x="1070" y="1756" width="1430" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="1781" text-anchor="start" font-weight="bold">Key signals</text>
+<rect x="100" y="1792" width="90" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1828" text-anchor="start">AXIL</text>
+<rect x="190" y="1792" width="300" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="1828" text-anchor="start">AXI4-Lite control subordinate</text>
+<rect x="490" y="1792" width="110" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="1817" text-anchor="start">standard</text>
+<text x="494" y="1839" text-anchor="start">protocol</text>
+<rect x="600" y="1792" width="470" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="1828" text-anchor="start">SoC manager -&gt; cluster subordinate</text>
+<rect x="1070" y="1792" width="1430" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="1828" text-anchor="start">32-bit address/data, AW/W/B/AR/R channels</text>
+<rect x="100" y="1850" width="90" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1886" text-anchor="start">CFG</text>
+<rect x="190" y="1850" width="300" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="1886" text-anchor="start">PMU configuration</text>
+<rect x="490" y="1850" width="110" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="1875" text-anchor="start">internal</text>
+<text x="494" y="1897" text-anchor="start">CSR</text>
+<rect x="600" y="1850" width="470" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="1886" text-anchor="start">CSR block -&gt; PMU</text>
+<rect x="1070" y="1850" width="1430" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="1886" text-anchor="start">Event selector, counter enable, snapshot and cause control</text>
+<rect x="100" y="1908" width="90" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1944" text-anchor="start">CLKR</text>
+<rect x="190" y="1908" width="300" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="1944" text-anchor="start">Cluster clock and reset</text>
+<rect x="490" y="1908" width="110" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="1944" text-anchor="start">clock/reset</text>
+<rect x="600" y="1908" width="470" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="1944" text-anchor="start">SoC clock/reset controller -&gt; cluster</text>
+<rect x="1070" y="1908" width="1430" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="1944" text-anchor="start">i_clk_cluster, i_rst_n_cluster</text>
+<rect x="100" y="1966" width="90" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="2002" text-anchor="start">DBG</text>
+<rect x="190" y="1966" width="300" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="1991" text-anchor="start">External Debug Module</text>
+<text x="194" y="2013" text-anchor="start">connection</text>
+<rect x="490" y="1966" width="110" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="1991" text-anchor="start">debug</text>
+<text x="494" y="2013" text-anchor="start">control</text>
+<rect x="600" y="1966" width="470" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="2002" text-anchor="start">External DM -&gt; debug adapter</text>
+<rect x="1070" y="1966" width="1430" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="2002" text-anchor="start">i_hart_debug_req[3:0]; o_hart_debug_mode[3:0]</text>
+<rect x="100" y="2024" width="90" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="2071" text-anchor="start">DREQ</text>
+<rect x="190" y="2024" width="300" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="2071" text-anchor="start">Non-coherent device request</text>
+<rect x="490" y="2024" width="110" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="2049" text-anchor="start">internal</text>
+<text x="494" y="2071" text-anchor="start">device</text>
+<text x="494" y="2093" text-anchor="start">path</text>
+<rect x="600" y="2024" width="470" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="2071" text-anchor="start">Coherence fabric -&gt; AXI4 MMIO router</text>
+<rect x="1070" y="2024" width="1430" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="2071" text-anchor="start">Non-cacheable device read/write requests, routed from the coherence-fabric device path to the MMIO manager.</text>
+<rect x="100" y="2104" width="90" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="2151" text-anchor="start">DRES</text>
+<rect x="190" y="2104" width="300" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="2151" text-anchor="start">Non-coherent device response</text>
+<rect x="490" y="2104" width="110" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="2129" text-anchor="start">internal</text>
+<text x="494" y="2151" text-anchor="start">device</text>
+<text x="494" y="2173" text-anchor="start">path</text>
+<rect x="600" y="2104" width="470" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="2151" text-anchor="start">AXI4 MMIO router -&gt; coherence fabric</text>
+<rect x="1070" y="2104" width="1430" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="2151" text-anchor="start">Device read data and AXI response, returned to the coherence-fabric requester.</text>
+<rect x="100" y="2184" width="90" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="2220" text-anchor="start">EVTS</text>
+<rect x="190" y="2184" width="300" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="2209" text-anchor="start">Aggregated cluster</text>
+<text x="194" y="2231" text-anchor="start">performance events</text>
+<rect x="490" y="2184" width="110" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="2209" text-anchor="start">performance</text>
+<text x="494" y="2231" text-anchor="start">events</text>
+<rect x="600" y="2184" width="470" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="2220" text-anchor="start">hart, coherence, LLC -&gt; PMU</text>
+<rect x="1070" y="2184" width="1430" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="2220" text-anchor="start">The coherence observability tap aggregates event vectors from the CPU tiles, coherence fabric and LLC and presents them to the PMU.</text>
+<rect x="100" y="2242" width="90" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="2278" text-anchor="start">HDBG</text>
+<rect x="190" y="2242" width="300" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="2278" text-anchor="start">Per-hart debug routing</text>
+<rect x="490" y="2242" width="110" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="2267" text-anchor="start">debug</text>
+<text x="494" y="2289" text-anchor="start">control</text>
+<rect x="600" y="2242" width="470" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="2278" text-anchor="start">Debug adapter -&gt; CPU tiles</text>
+<rect x="1070" y="2242" width="1430" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="2278" text-anchor="start">Per-hart request and mode/status</text>
+<rect x="100" y="2300" width="90" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="2336" text-anchor="start">IRQ</text>
+<rect x="190" y="2300" width="300" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="2325" text-anchor="start">Per-hart platform interrupt</text>
+<text x="194" y="2347" text-anchor="start">inputs</text>
+<rect x="490" y="2300" width="110" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="2325" text-anchor="start">external</text>
+<text x="494" y="2347" text-anchor="start">interrupt</text>
+<rect x="600" y="2300" width="470" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="2336" text-anchor="start">SoC interrupt controller -&gt; CPU tile array</text>
+<rect x="1070" y="2300" width="1430" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="2336" text-anchor="start">i_int_msip[3:0], i_int_mtip[3:0], i_int_meip[3:0], i_int_ssip[3:0], i_int_stip[3:0], i_int_seip[3:0]</text>
+<rect x="100" y="2358" width="90" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="2394" text-anchor="start">LLCFG</text>
+<rect x="190" y="2358" width="300" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="2394" text-anchor="start">LLC service controls</text>
+<rect x="490" y="2358" width="110" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="2383" text-anchor="start">internal</text>
+<text x="494" y="2405" text-anchor="start">CSR</text>
+<rect x="600" y="2358" width="470" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="2394" text-anchor="start">CSR decoder -&gt; LLC</text>
+<rect x="1070" y="2358" width="1430" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="2394" text-anchor="start">BIST/flush/counter service access; SPM disabled</text>
+<rect x="100" y="2416" width="90" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="2463" text-anchor="start">LREQ</text>
+<rect x="190" y="2416" width="300" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="2463" text-anchor="start">LLC request path</text>
+<rect x="490" y="2416" width="110" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="2441" text-anchor="start">internal</text>
+<text x="494" y="2463" text-anchor="start">memory</text>
+<text x="494" y="2485" text-anchor="start">path</text>
+<rect x="600" y="2416" width="470" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="2463" text-anchor="start">Coherence fabric -&gt; LLC</text>
+<rect x="1070" y="2416" width="1430" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="2463" text-anchor="start">Shared cache-line requests and writeback data</text>
+<rect x="100" y="2496" width="90" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="2543" text-anchor="start">LRES</text>
+<rect x="190" y="2496" width="300" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="2543" text-anchor="start">LLC response path</text>
+<rect x="490" y="2496" width="110" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="2521" text-anchor="start">internal</text>
+<text x="494" y="2543" text-anchor="start">memory</text>
+<text x="494" y="2565" text-anchor="start">path</text>
+<rect x="600" y="2496" width="470" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="2543" text-anchor="start">LLC -&gt; coherence fabric</text>
+<rect x="1070" y="2496" width="1430" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="2543" text-anchor="start">Cache-line data and completion</text>
+<rect x="100" y="2576" width="90" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="2612" text-anchor="start">MEM</text>
+<rect x="190" y="2576" width="300" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="2601" text-anchor="start">AXI4 non-coherent memory</text>
+<text x="194" y="2623" text-anchor="start">manager</text>
+<rect x="490" y="2576" width="110" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="2601" text-anchor="start">standard</text>
+<text x="494" y="2623" text-anchor="start">protocol</text>
+<rect x="600" y="2576" width="470" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="2612" text-anchor="start">Cluster -&gt; memory fabric</text>
+<rect x="1070" y="2576" width="1430" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="2612" text-anchor="start">64-bit address/data, 4-bit ID, AXI4 AW/W/B/AR/R channels; no external snoops</text>
+<rect x="100" y="2634" width="90" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="2670" text-anchor="start">MMIO</text>
+<rect x="190" y="2634" width="300" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="2670" text-anchor="start">AXI4 peripheral manager</text>
+<rect x="490" y="2634" width="110" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="2659" text-anchor="start">standard</text>
+<text x="494" y="2681" text-anchor="start">protocol</text>
+<rect x="600" y="2634" width="470" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="2670" text-anchor="start">Cluster -&gt; peripheral fabric</text>
+<rect x="1070" y="2634" width="1430" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="2670" text-anchor="start">64-bit address/data, 4-bit ID, AXI4 AW/W/B/AR/R channels</text>
+<rect x="100" y="2692" width="90" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="2728" text-anchor="start">PMIRQ</text>
+<rect x="190" y="2692" width="300" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="2717" text-anchor="start">Aggregate PMU interrupt</text>
+<text x="194" y="2739" text-anchor="start">output</text>
+<rect x="490" y="2692" width="110" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="2728" text-anchor="start">interrupt</text>
+<rect x="600" y="2692" width="470" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="2728" text-anchor="start">Cluster PMU -&gt; SoC interrupt controller</text>
+<rect x="1070" y="2692" width="1430" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="2728" text-anchor="start">o_int_pmu</text>
+<rect x="100" y="2750" width="90" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="2786" text-anchor="start">TREQ</text>
+<rect x="190" y="2750" width="300" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="2786" text-anchor="start">Tile cache request path</text>
+<rect x="490" y="2750" width="110" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="2775" text-anchor="start">internal</text>
+<text x="494" y="2797" text-anchor="start">coherence</text>
+<rect x="600" y="2750" width="470" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="2786" text-anchor="start">CPU tile array -&gt; coherence fabric</text>
+<rect x="1070" y="2750" width="1430" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="2786" text-anchor="start">Cacheable read/write requests and ownership operations</text>
+<rect x="100" y="2808" width="90" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="2844" text-anchor="start">TRES</text>
+<rect x="190" y="2808" width="300" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="2844" text-anchor="start">Tile coherence response path</text>
+<rect x="490" y="2808" width="110" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="2833" text-anchor="start">internal</text>
+<text x="494" y="2855" text-anchor="start">coherence</text>
+<rect x="600" y="2808" width="470" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="2844" text-anchor="start">Coherence fabric -&gt; CPU tile array</text>
+<rect x="1070" y="2808" width="1430" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="2844" text-anchor="start">Data, completion, and probe responses</text>
+<path d="M 1780 540 L 1680 540" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1680,540 1692,534 1692,546" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 470 900 L 560 900" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="560,900 548,906 548,894" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1640 730 L 1780 730" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1780,730 1768,736 1768,724" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1650 900 L 1780 900" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1780,900 1768,906 1768,894" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 570 540 L 470 540" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="470,540 482,534 482,546" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 750 350 L 750 505" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="750,505 744,493 756,493" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 470 700 L 560 700" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="560,700 548,706 548,694" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 750 412 L 532 412 L 532 534 A 6 6 0 0 0 532 546 L 532 694 A 6 6 0 0 0 532 706 L 532 730 L 560 730" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="560,730 548,736 548,724" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 750 412 L 1100 412 L 1100 675" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1100,675 1094,663 1106,663" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 750 412 L 1718 412 L 1718 534 A 6 6 0 0 0 1718 546 L 1718 700 L 1640 700" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1640,700 1652,694 1652,706" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 750 412 L 1718 412 L 1718 534 A 6 6 0 0 0 1718 546 L 1718 724 A 6 6 0 0 0 1718 736 L 1718 870 L 1650 870" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1650,870 1662,864 1662,876" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 750 412 L 660 412 L 660 505" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="660,505 654,493 666,493" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 750 412 L 532 412 L 532 534 A 6 6 0 0 0 532 546 L 532 694 A 6 6 0 0 0 532 706 L 532 870 L 560 870" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="560,870 548,876 548,864" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 950 730 L 840 730" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="840,730 852,724 852,736" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1250 700 L 1400 700" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1400,700 1388,706 1388,694" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1400 730 L 1250 730" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1250,730 1262,724 1262,736" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1360 530 L 1106 530 A 6 6 0 0 0 1094 530 L 830 530" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="830,530 842,524 842,536" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1520 575 L 1520 675" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1520,675 1514,663 1526,663" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 700 845 L 700 745" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="700,745 706,757 694,757" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 840 700 L 930 700 L 930 710 L 950 710" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="950,710 938,716 938,704" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 950 690 L 930 690 L 930 560 L 830 560" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="830,560 842,554 842,566" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1060 745 L 1060 780 L 1480 780 L 1480 845" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1480,845 1474,833 1486,833" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1570 845 L 1570 770 L 1150 770 L 1150 745" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1150,745 1156,757 1144,757" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 100 2981 L 260 2981" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="260,2981 248,2987 248,2975" fill="#000000" stroke="#000000" stroke-width="1"/>
+</svg>

@@ -1,0 +1,252 @@
+{
+  "head": {
+    "text": "WF-002 — MESI read sharing with owner AXI writeback"
+  },
+  "signal": [
+    {
+      "name": "clk",
+      "wave": "p..................."
+    },
+    {},
+    [
+      "Requester hart 1 (logical aliases)",
+      {
+        "name": "req_valid",
+        "wave": "01000000000000000000"
+      },
+      {
+        "name": "req_ready",
+        "wave": "01000000000000000000"
+      },
+      {
+        "name": "req_line",
+        "wave": "x=xxxxxxxxxxxxxxxxxx",
+        "data": [
+          "X"
+        ]
+      }
+    ],
+    [
+      "Sharer directory (logical aliases)",
+      {
+        "name": "dir_valid",
+        "wave": "00010000000000000000"
+      },
+      {
+        "name": "dir_ready",
+        "wave": "00010000000000000000"
+      },
+      {
+        "name": "dir_tag",
+        "wave": "xxx=xxxxxxxxxxxxxxxx",
+        "data": [
+          "T0"
+        ]
+      },
+      {
+        "name": "dir_holders",
+        "wave": "xxx=xxxxxxxxxxxxxxxx",
+        "data": [
+          "Hart 0 (M)"
+        ]
+      }
+    ],
+    [
+      "PREPARE phase (logical aliases)",
+      {
+        "name": "probe_valid",
+        "wave": "00000100000000000000"
+      },
+      {
+        "name": "probe_ready",
+        "wave": "00000100000000000000"
+      },
+      {
+        "name": "probe_phase",
+        "wave": "xxxxx=xxxxxxxxxxxxxx",
+        "data": [
+          "PREPARE"
+        ]
+      },
+      {
+        "name": "probe_tag",
+        "wave": "xxxxx=xxxxxxxxxxxxxx",
+        "data": [
+          "T0"
+        ]
+      },
+      {
+        "name": "probe_target",
+        "wave": "xxxxx=xxxxxxxxxxxxxx",
+        "data": [
+          "Hart 0"
+        ]
+      },
+      {
+        "name": "probe_target_state",
+        "wave": "xxxxx=xxxxxxxxxxxxxx",
+        "data": [
+          "S"
+        ]
+      }
+    ],
+    [
+      "Owner's existing HPDcache AXI writeback path",
+      {
+        "name": "owner_line_lock",
+        "wave": "00000111111110000000"
+      },
+      {
+        "name": "awvalid",
+        "wave": "00000010000000000000"
+      },
+      {
+        "name": "awready",
+        "wave": "00000010000000000000"
+      },
+      {
+        "name": "awaddr",
+        "wave": "xxxxxx=xxxxxxxxxxxxx",
+        "data": [
+          "X"
+        ]
+      },
+      {
+        "name": "wvalid",
+        "wave": "00000001100000000000"
+      },
+      {
+        "name": "wready",
+        "wave": "00000001100000000000"
+      },
+      {
+        "name": "wdata",
+        "wave": "xxxxxxx==xxxxxxxxxxx",
+        "data": [
+          "X[63:0]",
+          "X[127:64]"
+        ]
+      },
+      {
+        "name": "wlast",
+        "wave": "00000000100000000000"
+      },
+      {
+        "name": "bvalid",
+        "wave": "00000000001000000000"
+      },
+      {
+        "name": "bready",
+        "wave": "00000000001000000000"
+      },
+      {
+        "name": "bresp",
+        "wave": "xxxxxxxxxx=xxxxxxxxx",
+        "data": [
+          "OKAY"
+        ]
+      }
+    ],
+    [
+      "PREPARE completion after matching B response",
+      {
+        "name": "prep_rsp_valid",
+        "wave": "00000000000100000000"
+      },
+      {
+        "name": "prep_rsp_ready",
+        "wave": "00000000000100000000"
+      },
+      {
+        "name": "prep_rsp_tag",
+        "wave": "xxxxxxxxxxx=xxxxxxxx",
+        "data": [
+          "T0"
+        ]
+      },
+      {
+        "name": "prep_rsp_status",
+        "wave": "xxxxxxxxxxx=xxxxxxxx",
+        "data": [
+          "OKAY; writeback_done"
+        ]
+      }
+    ],
+    [
+      "COMMIT, directory update, and permission grant",
+      {
+        "name": "commit_valid",
+        "wave": "00000000000010000000"
+      },
+      {
+        "name": "commit_ready",
+        "wave": "00000000000010000000"
+      },
+      {
+        "name": "commit_target",
+        "wave": "xxxxxxxxxxxx=xxxxxxx",
+        "data": [
+          "S"
+        ]
+      },
+      {
+        "name": "commit_ack_valid",
+        "wave": "00000000000000100000"
+      },
+      {
+        "name": "commit_ack_tag",
+        "wave": "xxxxxxxxxxxxxx=xxxxx",
+        "data": [
+          "T0"
+        ]
+      },
+      {
+        "name": "dir_update",
+        "wave": "00000000000000010000"
+      },
+      {
+        "name": "dir_new_holders",
+        "wave": "xxxxxxxxxxxxxxx=xxxx",
+        "data": [
+          "Hart 0, Hart 1 possible"
+        ]
+      },
+      {
+        "name": "grant_valid",
+        "wave": "00000000000000001000"
+      },
+      {
+        "name": "grant_ready",
+        "wave": "00000000000000001000"
+      },
+      {
+        "name": "grant_tag",
+        "wave": "xxxxxxxxxxxxxxxx=xxx",
+        "data": [
+          "T0"
+        ]
+      },
+      {
+        "name": "ccu_line_lock",
+        "wave": "00000111111111111000"
+      }
+    ],
+    [
+      "Stable cache state",
+      {
+        "name": "hart0_state_X",
+        "wave": "=xxxxxxxxxxxx=xxxxxx",
+        "data": [
+          "M",
+          "S"
+        ]
+      }
+    ]
+  ],
+  "foot": {
+    "text": "Logical aliases, not finalized RTL ports. Hart 0 stays M and locked while its HPDcache flush engine writes X as two 64-bit W beats through the existing AXI path. PREPARE completes only after the matching successful B response. COMMIT(S) changes the owner state; directory update and permission grant follow the COMMIT ACK. The grant permits hart 1's normal HPDcache refill from LLC; it is not CPU load completion. All cycle positions are illustrative and specify no latency or throughput."
+  },
+  "config": {
+    "hscale": 1
+  }
+}

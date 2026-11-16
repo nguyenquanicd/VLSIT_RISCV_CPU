@@ -1,0 +1,14 @@
+{
+  "rtl/vlsit/m_vlsit_riscv_cluster_core.sv": {
+    "before_sha256": "492bec5f88c871ad047177cc21c7b6c98ec2aa4882e32f37ee06a620573e16e8",
+    "after_sha256": "d0f37291e29937f4f84b18432ac5fac5492bd6d7865306ea9285eb862c6243e5",
+    "inserted_comment_base64": "ICAgIC8vIFJlY29uc3RydWN0IHRoZSBtYXRjaGVkIHBoeXNpY2FsIGxpbmUgYmFzZSB3aXRoIGZvdXIgemVybyBvZmZzZXQgYml0cy4NCg==",
+    "compiled_snapshot": "rtl/reports/fault_record_a06/simulation_sources/rtl/vlsit/m_vlsit_riscv_cluster_core.sv"
+  },
+  "rtl/vlsit/m_vlsit_riscv_cluster_axi_top.sv": {
+    "before_sha256": "f35c85ebb43761dde2905aa0dec19e042a11b240a7a9d9d5e87294d8e31cb631",
+    "after_sha256": "88788184ad9321ce922763b4f076d7865b5a5635677db47ee010628be8da8899",
+    "inserted_comment_base64": "ICogQ2hhbmdlIEhpc3Rvcnk6IDIwMjYtMTEtMTYgLSBRdWFuIE5ndXllbiBhbmQgQ29kZXggLSBWTFNJIFRlY2hub2xvZ3kgcGFnZToNCiAqICAgRG9jdW1lbnQgdGhlIDI0LUtpQiBjb250cm9sIGFwZXJ0dXJlIGFuZCBpdHMgbWF4aW11bSBsZWdhbCBiYXNlIGFkZHJlc3MuDQo=",
+    "compiled_snapshot": "rtl/reports/fault_record_a06/simulation_sources/rtl/vlsit/m_vlsit_riscv_cluster_axi_top.sv"
+  }
+}

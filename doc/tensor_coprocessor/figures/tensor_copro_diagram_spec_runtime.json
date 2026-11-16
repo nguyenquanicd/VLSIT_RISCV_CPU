@@ -1,0 +1,326 @@
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "tensor_copro_block_diagram_runtime.drawio",
+  "table_suffix": "",
+  "layout": {
+    "gap_h": 100,
+    "gap_v": 90,
+    "margin": 40,
+    "block_h": 80
+  },
+  "top": {
+    "frame_label": [
+      "TOP",
+      "(m_tensor_copro)"
+    ],
+    "block_label": [
+      "TOP",
+      "(m_tensor_copro)"
+    ],
+    "block_row": [
+      "TOP (m_tensor_copro)",
+      "Structural top.",
+      "Section 14.2"
+    ]
+  },
+  "frame_row": [
+    "TOP (m_tensor_copro) frame",
+    "Structural top.",
+    "Section 14.2"
+  ],
+  "frame_interfaces": [
+    "XIF",
+    "RES",
+    "MEM",
+    "APB",
+    "CRCLK"
+  ],
+  "blocks": [
+    {
+      "key": "U_CVXIF_ADAPTER",
+      "label": [
+        "u_cvxif_adapter",
+        "(m_cvxif_adapter)"
+      ],
+      "width": 200,
+      "row": 0,
+      "col": 0,
+      "row_name": "u_cvxif_adapter (m_cvxif_adapter)",
+      "function": "CV-X-IF handshake, decode, per-command mode latch, queue, scoreboard, and dispatch",
+      "source": "Section 14.2"
+    },
+    {
+      "key": "U_SYSTOLIC_ARRAY",
+      "label": [
+        "u_systolic_array",
+        "(m_systolic_array)"
+      ],
+      "width": 220,
+      "row": 0,
+      "col": 1,
+      "row_name": "u_systolic_array (m_systolic_array)",
+      "function": "Dense/vector MAC datapath plus paired 2:4 sparse MAC lanes; replicated PARA_ARRAY_COUNT times for active-command tile scheduling",
+      "source": "Section 14.2"
+    },
+    {
+      "key": "U_ACCUM",
+      "label": [
+        "u_accum",
+        "(m_accum)"
+      ],
+      "width": 120,
+      "row": 0,
+      "col": 2,
+      "row_name": "u_accum (m_accum)",
+      "function": "Accumulator",
+      "source": "Section 14.2"
+    },
+    {
+      "key": "U_ELEMWISE",
+      "label": [
+        "u_elemwise",
+        "(m_elemwise)"
+      ],
+      "width": 160,
+      "row": 1,
+      "col": 0,
+      "row_name": "u_elemwise (m_elemwise)",
+      "function": "Residual/bias/scale/activation epilogue (optional)",
+      "source": "Section 14.2"
+    },
+    {
+      "key": "U_REDUCE",
+      "label": [
+        "u_reduce",
+        "(m_reduce)"
+      ],
+      "width": 140,
+      "row": 1,
+      "col": 1,
+      "row_name": "u_reduce (m_reduce)",
+      "function": "Max/exp/sum softmax, Welford layer norm, pipelined piecewise special functions, attention normalization (optional)",
+      "source": "Section 14.2"
+    },
+    {
+      "key": "U_MEM_PATH",
+      "label": [
+        "u_mem_path",
+        "(m_mem_path)"
+      ],
+      "width": 160,
+      "row": 1,
+      "col": 2,
+      "row_name": "u_mem_path (m_mem_path)",
+      "function": "Non-coherent AXI4 burst DMA plus banked local SRAM and operand/result buffering",
+      "source": "Section 14.2"
+    },
+    {
+      "key": "U_CSR",
+      "label": [
+        "u_csr",
+        "(m_csr)"
+      ],
+      "width": 100,
+      "row": 2,
+      "col": 0,
+      "row_name": "u_csr (m_csr)",
+      "function": "Generated CSR (optional)",
+      "source": "Section 14.2"
+    }
+  ],
+  "connectors": [
+    {
+      "id": "ISS",
+      "src": "U_CVXIF_ADAPTER",
+      "src_side": "B",
+      "dst": "U_SYSTOLIC_ARRAY",
+      "dst_side": "T"
+    },
+    {
+      "id": "OPR",
+      "src": "U_MEM_PATH",
+      "src_side": "B",
+      "dst": "U_SYSTOLIC_ARRAY",
+      "dst_side": "R"
+    },
+    {
+      "id": "PSM",
+      "src": "U_SYSTOLIC_ARRAY",
+      "src_side": "R",
+      "dst": "U_ACCUM",
+      "dst_side": "L"
+    },
+    {
+      "id": "ACC",
+      "src": "U_ACCUM",
+      "src_side": "R",
+      "dst": "U_ELEMWISE",
+      "dst_side": "L"
+    },
+    {
+      "id": "VEC",
+      "src": "U_ELEMWISE",
+      "src_side": "R",
+      "dst": "U_REDUCE",
+      "dst_side": "L"
+    },
+    {
+      "id": "ATN",
+      "src": "U_REDUCE",
+      "src_side": "T",
+      "dst": "U_SYSTOLIC_ARRAY",
+      "dst_side": "B"
+    },
+    {
+      "id": "STO",
+      "src": "U_REDUCE",
+      "src_side": "R",
+      "dst": "U_MEM_PATH",
+      "dst_side": "L"
+    }
+  ],
+  "externals": [
+    {
+      "id": "XIF",
+      "block": "U_CVXIF_ADAPTER",
+      "side": "L",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "CV-X-IF INPUTS",
+        "issue + register + commit"
+      ]
+    },
+    {
+      "id": "RES",
+      "block": "U_CVXIF_ADAPTER",
+      "side": "T",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "CV-X-IF result / completion"
+      ]
+    },
+    {
+      "id": "MEM",
+      "block": "U_MEM_PATH",
+      "side": "B",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "IF-003 AXI4 BURST + SRAM",
+        "read/write requests out; data/responses in"
+      ]
+    },
+    {
+      "id": "APB",
+      "block": "U_CSR",
+      "side": "B",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "APB",
+        "APB4 register access"
+      ]
+    },
+    {
+      "id": "CRCLK",
+      "block": "U_SYSTOLIC_ARRAY",
+      "side": "T",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "CRCLK",
+        "core and APB clock/reset domains"
+      ]
+    }
+  ],
+  "nets": [],
+  "interfaces": [
+    {
+      "id": "XIF",
+      "name": "CV-X-IF issue/register/commit input sub-interfaces",
+      "category": "handshake",
+      "active": "host -> coprocessor",
+      "signals": "issue_valid, issue_req.instr/hartid/id; register_valid, register.hartid/id/rs[]/rs_valid; commit_valid, commit.hartid/id/commit_kill; issue_ready and register_ready return from coprocessor"
+    },
+    {
+      "id": "RES",
+      "name": "CV-X-IF issue response and result sub-interfaces",
+      "category": "handshake",
+      "active": "coprocessor -> host",
+      "signals": "issue_resp.accept/writeback/register_read; result_valid, result.hartid/id/data/rd/we; result_ready supplied by host"
+    },
+    {
+      "id": "MEM",
+      "name": "IF-003 non-coherent AXI4 burst DMA plus banked local SRAM",
+      "category": "custom",
+      "active": "mixed: coprocessor requests/outputs; memory system returns operands/responses",
+      "signals": "AXI4 AR/AW/W/R/B channels; internal banked SRAM ports. Widths, IDs, burst limits, arbitration, and SRAM timing remain TBD in DEC-004"
+    },
+    {
+      "id": "APB",
+      "name": "APB4 CSR access",
+      "category": "custom",
+      "active": "SoC -> CSR subordinate",
+      "signals": "PSEL, PENABLE, PWRITE, PADDR, PWDATA; PRDATA, PREADY, PSLVERR returned"
+    },
+    {
+      "id": "CRCLK",
+      "name": "Clock and reset",
+      "category": "custom",
+      "active": "SoC -> tensor coprocessor",
+      "signals": "i_clk_core, i_rst_n_core; optional i_clk_apb, i_rst_n_apb"
+    },
+    {
+      "id": "ISS",
+      "name": "Queued operation and mode",
+      "category": "custom",
+      "active": "u_cvxif_adapter -> u_systolic_array",
+      "signals": "command mode, precision, shape, tile metadata"
+    },
+    {
+      "id": "OPR",
+      "name": "Operand tiles",
+      "category": "custom",
+      "active": "u_mem_path -> u_systolic_array",
+      "signals": "operand tiles and sparse metadata"
+    },
+    {
+      "id": "PSM",
+      "name": "Partial sums",
+      "category": "custom",
+      "active": "u_systolic_array -> u_accum",
+      "signals": "partial sums and tile coordinates"
+    },
+    {
+      "id": "ACC",
+      "name": "Accumulator result",
+      "category": "custom",
+      "active": "u_accum -> u_elemwise",
+      "signals": "accumulated tile and precision"
+    },
+    {
+      "id": "VEC",
+      "name": "Epilogue vector",
+      "category": "custom",
+      "active": "u_elemwise -> u_reduce",
+      "signals": "post-processed vector tile"
+    },
+    {
+      "id": "ATN",
+      "name": "Attention softmax feedback",
+      "category": "custom",
+      "active": "u_reduce -> u_systolic_array",
+      "signals": "on-chip attention state and next matrix phase"
+    },
+    {
+      "id": "STO",
+      "name": "Post-processed output tile",
+      "category": "custom",
+      "active": "u_reduce -> u_mem_path",
+      "signals": "result tile and completion metadata"
+    }
+  ],
+  "legend_note": "The enclosing frame is the top module; blocks inside are its instances."
+}

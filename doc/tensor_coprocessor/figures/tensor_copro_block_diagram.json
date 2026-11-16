@@ -1,0 +1,281 @@
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "tensor_copro_block_diagram.drawio",
+  "table_suffix": "",
+  "layout": {
+    "gap_h": 60,
+    "gap_v": 70,
+    "margin": 40,
+    "block_h": 80
+  },
+  "top": {
+    "frame_label": [
+      "TOP",
+      "(m_tensor_copro)"
+    ],
+    "block_label": [
+      "TOP",
+      "(m_tensor_copro)"
+    ],
+    "block_row": [
+      "TOP (m_tensor_copro)",
+      "Structural top.",
+      "Section 14.2"
+    ]
+  },
+  "frame_row": [
+    "TOP (m_tensor_copro) frame",
+    "Structural top of the tensor coprocessor.",
+    "Section 14.2"
+  ],
+  "frame_interfaces": [
+    "XIF",
+    "MEM",
+    "APB",
+    "CRCLK"
+  ],
+  "blocks": [
+    {
+      "key": "A",
+      "label": [
+        "u_cvxif_adapter",
+        "(m_cvxif_adapter)"
+      ],
+      "width": 200,
+      "row": 0,
+      "col": 0,
+      "row_name": "u_cvxif_adapter (m_cvxif_adapter)",
+      "function": "CV-X-IF handshake, decode and scoreboard.",
+      "source": "Section 14.2"
+    },
+    {
+      "key": "B",
+      "label": [
+        "u_systolic_array",
+        "(m_systolic_array)"
+      ],
+      "width": 200,
+      "row": 1,
+      "col": 0,
+      "row_name": "u_systolic_array (m_systolic_array)",
+      "function": "Multiply-accumulate element array.",
+      "source": "Section 14.2"
+    },
+    {
+      "key": "C",
+      "label": [
+        "u_accum",
+        "(m_accum)"
+      ],
+      "width": 100,
+      "row": 2,
+      "col": 0,
+      "row_name": "u_accum (m_accum)",
+      "function": "Accumulator with bias handling.",
+      "source": "Section 14.2"
+    },
+    {
+      "key": "D",
+      "label": [
+        "u_mem_path",
+        "(m_mem_path)"
+      ],
+      "width": 120,
+      "row": 0,
+      "col": 1,
+      "row_name": "u_mem_path (m_mem_path)",
+      "function": "Operand and result access path.",
+      "source": "Section 14.2"
+    },
+    {
+      "key": "E",
+      "label": [
+        "u_elemwise",
+        "(m_elemwise)"
+      ],
+      "width": 120,
+      "row": 2,
+      "col": 1,
+      "row_name": "u_elemwise (m_elemwise)",
+      "function": "Element-wise add, scale, activation.",
+      "source": "Section 14.2"
+    },
+    {
+      "key": "F",
+      "label": [
+        "u_reduce",
+        "(m_reduce)"
+      ],
+      "width": 100,
+      "row": 2,
+      "col": 2,
+      "row_name": "u_reduce (m_reduce)",
+      "function": "Reduction sum and max.",
+      "source": "Section 14.2"
+    },
+    {
+      "key": "G",
+      "label": [
+        "u_csr",
+        "(m_csr)"
+      ],
+      "width": 80,
+      "row": 1,
+      "col": 2,
+      "row_name": "u_csr (m_csr)",
+      "function": "APB control and status registers.",
+      "source": "Section 14.2"
+    }
+  ],
+  "connectors": [
+    {
+      "id": "ISS",
+      "src": "A",
+      "src_side": "B",
+      "dst": "B",
+      "dst_side": "T"
+    },
+    {
+      "id": "OPR",
+      "src": "D",
+      "src_side": "B",
+      "dst": "B",
+      "dst_side": "R"
+    },
+    {
+      "id": "PSM",
+      "src": "B",
+      "src_side": "B",
+      "dst": "C",
+      "dst_side": "T"
+    },
+    {
+      "id": "ACC",
+      "src": "C",
+      "src_side": "R",
+      "dst": "E",
+      "dst_side": "L"
+    },
+    {
+      "id": "VEC",
+      "src": "E",
+      "src_side": "R",
+      "dst": "F",
+      "dst_side": "L"
+    }
+  ],
+  "externals": [
+    {
+      "id": "XIF",
+      "block": "A",
+      "side": "L",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "XIF",
+        "issue/register/commit/result"
+      ]
+    },
+    {
+      "id": "MEM",
+      "block": "D",
+      "side": "T",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "MEM",
+        "CV-X-IF mem / AXI / SRAM"
+      ]
+    },
+    {
+      "id": "APB",
+      "block": "G",
+      "side": "R",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "APB",
+        "APB4 register access"
+      ]
+    },
+    {
+      "id": "CRCLK",
+      "block": "A",
+      "side": "T",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "CRCLK",
+        "i_clk_core, i_rst_n_core"
+      ]
+    }
+  ],
+  "nets": [],
+  "interfaces": [
+    {
+      "id": "XIF",
+      "name": "CV-X-IF interface",
+      "category": "handshake",
+      "active": "external <-> TOP",
+      "signals": "issue, register, commit, result"
+    },
+    {
+      "id": "MEM",
+      "name": "Memory access path",
+      "category": "custom",
+      "active": "external <-> TOP",
+      "signals": "CV-X-IF memory / AXI / SRAM"
+    },
+    {
+      "id": "APB",
+      "name": "APB4 register interface",
+      "category": "custom",
+      "active": "external -> TOP",
+      "signals": "psel, penable, pwrite, paddr, pwdata"
+    },
+    {
+      "id": "CRCLK",
+      "name": "Clock and reset",
+      "category": "custom",
+      "active": "SoC -> TOP",
+      "signals": "i_clk_core, i_rst_n_core, i_clk_apb, i_rst_n_apb"
+    },
+    {
+      "id": "ISS",
+      "name": "Decode to array",
+      "category": "custom",
+      "active": "u_cvxif_adapter -> u_systolic_array",
+      "signals": "decoded opcode and config"
+    },
+    {
+      "id": "OPR",
+      "name": "Operand tiles",
+      "category": "custom",
+      "active": "u_mem_path -> u_systolic_array",
+      "signals": "operand A and B tiles"
+    },
+    {
+      "id": "PSM",
+      "name": "Partial sums",
+      "category": "custom",
+      "active": "u_systolic_array -> u_accum",
+      "signals": "partial-sum columns"
+    },
+    {
+      "id": "ACC",
+      "name": "Accumulator result",
+      "category": "custom",
+      "active": "u_accum -> u_elemwise",
+      "signals": "accumulated result tile"
+    },
+    {
+      "id": "VEC",
+      "name": "Vector to reduce",
+      "category": "custom",
+      "active": "u_elemwise -> u_reduce",
+      "signals": "post-processed vector tile"
+    }
+  ],
+  "legend_note": "The enclosing frame is the top module; blocks inside are its instances.",
+  "library_sha256": "D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6"
+}

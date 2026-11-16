@@ -1,0 +1,335 @@
+{
+  "page_name": "02_COHERENCE",
+  "library_sha256": "D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6",
+  "layout": {
+    "gap_h": 110,
+    "gap_v": 110,
+    "margin": 45,
+    "block_h": 80
+  },
+  "top": {
+    "frame_label": [
+      "Coherence and MMIO routing",
+      "(m_vlsit_riscv_coh_fabric)"
+    ]
+  },
+  "frame_row": [
+    "Coherence and MMIO routing",
+    "Document-grounded proposal; no RTL hierarchy is asserted.",
+    "VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS.md"
+  ],
+  "frame_interfaces": [
+    "LLC",
+    "DEV",
+    "EVT"
+  ],
+  "blocks": [
+    {
+      "key": "tile",
+      "label": [
+        "u_vlsit_riscv_tile_coh_adapter",
+        "(m_vlsit_riscv_tile_coh_adapter)",
+        "NEW"
+      ],
+      "width": 370,
+      "row": 0,
+      "col": 0,
+      "row_name": "u_vlsit_riscv_tile_coh_adapter / m_vlsit_riscv_tile_coh_adapter",
+      "function": "Terminates one tile's coherent request/response interface; instantiated once for each active hart.",
+      "source": "NEW | VLSIT"
+    },
+    {
+      "key": "ccu",
+      "label": [
+        "u_vlsit_riscv_coh_fabric",
+        "(m_vlsit_riscv_coh_fabric)",
+        "NEW"
+      ],
+      "width": 300,
+      "row": 0,
+      "col": 1,
+      "row_name": "u_vlsit_riscv_coh_fabric / m_vlsit_riscv_coh_fabric",
+      "function": "New MESI CCU coordinates tagged transactions and two-phase probes; all PREPARE/COMMIT/ABORT ACK waits have no timeout. Culsans supplies architecture reference, not copied RTL.",
+      "source": "NEW | VLSIT; Culsans is reference only"
+    },
+    {
+      "key": "txn",
+      "label": [
+        "u_vlsit_riscv_coh_txn_table",
+        "(m_vlsit_riscv_coh_txn_table)",
+        "NEW"
+      ],
+      "width": 330,
+      "row": 1,
+      "col": 1,
+      "row_name": "u_vlsit_riscv_coh_txn_table / m_vlsit_riscv_coh_txn_table",
+      "function": "Tracks 2\u201316 tagged contexts (default 8), line locks and PREPARE/COMMIT/ABORT ACK masks. A missing phase ACK retains its lock and slot until ACK or reset.",
+      "source": "NEW | VLSIT"
+    },
+    {
+      "key": "directory",
+      "label": [
+        "u_vlsit_riscv_sharer_directory",
+        "(m_vlsit_riscv_sharer_directory)",
+        "NEW"
+      ],
+      "width": 370,
+      "row": 0,
+      "col": 2,
+      "row_name": "u_vlsit_riscv_sharer_directory / m_vlsit_riscv_sharer_directory",
+      "function": "Independent non-inclusive directory: four banks, eight ways, 4,096/8,192 entries for two/four harts; per-bank round-robin and seven-bit tree-PLRU per set, choosing the lowest-index invalid way first.",
+      "source": "NEW | VLSIT"
+    },
+    {
+      "key": "probe",
+      "label": [
+        "u_vlsit_riscv_probe_scheduler",
+        "(m_vlsit_riscv_probe_scheduler)",
+        "NEW"
+      ],
+      "width": 360,
+      "row": 1,
+      "col": 2,
+      "row_name": "u_vlsit_riscv_probe_scheduler / m_vlsit_riscv_probe_scheduler",
+      "function": "Sends tagged PREPARE/COMMIT/ABORT only to recorded holders and collects one matching response from each target.",
+      "source": "NEW | VLSIT"
+    },
+    {
+      "key": "mux",
+      "label": [
+        "u_axi_mux",
+        "(axi_mux)",
+        "REUSE*"
+      ],
+      "width": 100,
+      "row": 2,
+      "col": 1,
+      "row_name": "u_axi_mux / axi_mux",
+      "function": "Arbitrates compatible AXI request sources into one output while preserving response association.",
+      "source": "REUSE candidate | PULP AXI"
+    },
+    {
+      "key": "dev_class",
+      "label": [
+        "u_vlsit_riscv_device_classifier",
+        "(m_vlsit_riscv_device_classifier)",
+        "NEW"
+      ],
+      "width": 380,
+      "row": 2,
+      "col": 0,
+      "row_name": "u_vlsit_riscv_device_classifier / m_vlsit_riscv_device_classifier",
+      "function": "Classifies normal cacheable memory versus non-cacheable device transactions using the SoC address/attribute contract.",
+      "source": "NEW | VLSIT"
+    },
+    {
+      "key": "demux",
+      "label": [
+        "u_axi_demux",
+        "(axi_demux)",
+        "REUSE*"
+      ],
+      "width": 130,
+      "row": 2,
+      "col": 2,
+      "row_name": "u_axi_demux / axi_demux",
+      "function": "Routes AXI transactions to selected targets with response and ID tracking; configuration must be checked against the chosen topology.",
+      "source": "REUSE candidate | PULP AXI"
+    },
+    {
+      "key": "mmio",
+      "label": [
+        "u_vlsit_riscv_axi_mmio",
+        "(m_vlsit_riscv_axi_mmio)",
+        "NEW"
+      ],
+      "width": 280,
+      "row": 3,
+      "col": 2,
+      "row_name": "u_vlsit_riscv_axi_mmio / m_vlsit_riscv_axi_mmio",
+      "function": "Carries non-cacheable peripheral traffic to the external AXI4 device fabric and returns responses without allocating cache lines.",
+      "source": "NEW | VLSIT wrapper"
+    }
+  ],
+  "connectors": [
+    {
+      "id": "COH_REQ",
+      "src": "tile",
+      "src_side": "R",
+      "dst": "ccu",
+      "dst_side": "L"
+    },
+    {
+      "id": "CTX",
+      "src": "ccu",
+      "src_side": "T",
+      "dst": "txn",
+      "dst_side": "B"
+    },
+    {
+      "id": "DIR",
+      "src": "ccu",
+      "src_side": "R",
+      "dst": "directory",
+      "dst_side": "L"
+    },
+    {
+      "id": "PROBE",
+      "src": "ccu",
+      "src_side": "B",
+      "dst": "probe",
+      "dst_side": "T"
+    },
+    {
+      "id": "MEM",
+      "src": "ccu",
+      "src_side": "B",
+      "dst": "mux",
+      "dst_side": "T"
+    },
+    {
+      "id": "DEVICE",
+      "src": "ccu",
+      "src_side": "R",
+      "dst": "dev_class",
+      "dst_side": "L"
+    },
+    {
+      "id": "DECODE",
+      "src": "dev_class",
+      "src_side": "B",
+      "dst": "demux",
+      "dst_side": "T"
+    },
+    {
+      "id": "MMIO",
+      "src": "demux",
+      "src_side": "B",
+      "dst": "mmio",
+      "dst_side": "T"
+    }
+  ],
+  "externals": [
+    {
+      "id": "LLC",
+      "block": "mux",
+      "side": "B",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "LLC",
+        "Shared LLC request"
+      ]
+    },
+    {
+      "id": "DEV",
+      "block": "mmio",
+      "side": "B",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "DEV",
+        "AXI4 device path"
+      ]
+    },
+    {
+      "id": "EVT",
+      "block": "ccu",
+      "side": "T",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "EVT",
+        "Coherence event taps"
+      ]
+    }
+  ],
+  "nets": [],
+  "interfaces": [
+    {
+      "id": "COH_REQ",
+      "name": "Tile coherent request service",
+      "category": "custom",
+      "active": "tile adapter -> CCU",
+      "signals": "One logical request/response service per active tile; local probe semantics and fields require the pinned Culsans/cache interfaces."
+    },
+    {
+      "id": "CTX",
+      "name": "Tagged transaction context",
+      "category": "custom",
+      "active": "CCU <-> transaction table",
+      "signals": "Line address, requester, slot-derived tag, holder/phase masks, dirty-data and LLC status; context is released only after protocol completion."
+    },
+    {
+      "id": "DIR",
+      "name": "Independent sharer directory",
+      "category": "custom",
+      "active": "CCU <-> directory",
+      "signals": "Four independently arbitrated banks; round-robin grant per bank; 8-way tree-PLRU (0=left, 1=right), lowest-index invalid-way preference, holder bitmap and two-phase victim resolution."
+    },
+    {
+      "id": "PROBE",
+      "name": "Tagged two-phase probes",
+      "category": "custom",
+      "active": "CCU <-> probe scheduler <-> D-caches",
+      "signals": "PREPARE keeps stable MESI unchanged; COMMIT applies target state; pre-COMMIT ABORT restores the prior state. No ACK timeout in any phase."
+    },
+    {
+      "id": "MEM",
+      "name": "Coherent normal-memory path",
+      "category": "custom",
+      "active": "CCU -> shared LLC path",
+      "signals": "Cacheable requests, ownership resolution and response data; exact VLSIT record is to be defined from source ports."
+    },
+    {
+      "id": "DEVICE",
+      "name": "Uncached device path",
+      "category": "custom",
+      "active": "CCU -> device classifier",
+      "signals": "Non-cacheable address/control/data and returned response."
+    },
+    {
+      "id": "DECODE",
+      "name": "AXI target routing",
+      "category": "standard protocol",
+      "active": "classifier -> AXI demux",
+      "signals": "AXI4 transaction channels; route policy is VLSIT-owned."
+    },
+    {
+      "id": "MMIO",
+      "name": "Non-coherent AXI4 peripheral",
+      "category": "standard protocol",
+      "active": "cluster -> peripheral fabric",
+      "signals": "AXI4 AW/W/B/AR/R; exact port widths are specified in Section 6."
+    },
+    {
+      "id": "TREQ",
+      "name": "Per-tile coherence boundary",
+      "category": "custom",
+      "active": "tiles -> fabric",
+      "signals": "Replicated logical cache request/response paths; exact RTL pins TBD."
+    },
+    {
+      "id": "LLC",
+      "name": "Shared LLC request boundary",
+      "category": "custom",
+      "active": "fabric -> LLC",
+      "signals": "AXI4 cache request path; profile-specific external memory service is described separately."
+    },
+    {
+      "id": "DEV",
+      "name": "AXI4 peripheral boundary",
+      "category": "standard protocol",
+      "active": "cluster -> SoC peripheral fabric",
+      "signals": "AXI4 MMIO channels as specified in Section 6."
+    },
+    {
+      "id": "EVT",
+      "name": "Coherence performance taps",
+      "category": "custom",
+      "active": "CCU -> cluster PMU",
+      "signals": "Candidate hit/miss, probe, conflict and queue events; exact source map is open."
+    }
+  ],
+  "legend_note": "The PULP axi_mux/axi_demux blocks are reuse candidates only until the pinned dependency versions and transaction topology are checked. Status codes: REUSE = upstream RTL reused; REUSE* = reuse candidate pending compatibility checks; MODIFY = source adaptation, wrapper, or macro binding; NEW = VLSIT RTL to design; GENERATED = CSR RTL from the selected generator. All proposed blocks are dashed because this cluster has no pinned integrated RTL yet."
+}

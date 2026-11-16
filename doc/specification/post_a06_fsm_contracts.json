@@ -1,0 +1,116 @@
+[
+  {
+    "id": "CMO_CONTROLLER", "module": "m_vlsit_riscv_cmo_controller", "initial": "ENUM_ST_CMO_IDLE",
+    "description": "Retain one hart command from acceptance through CCU preparation, optional LLC service and terminal completion. Every unspecified guard holds the state; errors are retained until the CPU response. FENCE.I bypasses LLC-to-DRAM service after preparation.",
+    "states": ["ENUM_ST_CMO_IDLE", "ENUM_ST_CMO_BEGIN", "ENUM_ST_CMO_PREPARE", "ENUM_ST_CMO_MAINT_REQ", "ENUM_ST_CMO_MAINT_WAIT", "ENUM_ST_CMO_FINISH_REQ", "ENUM_ST_CMO_FINISH_WAIT", "ENUM_ST_CMO_RESP"],
+    "transitions": [
+      ["ENUM_ST_CMO_IDLE", "ENUM_ST_CMO_BEGIN", "w_cmd_take"],
+      ["ENUM_ST_CMO_BEGIN", "ENUM_ST_CMO_PREPARE", "i_ccu_begin_ready"],
+      ["ENUM_ST_CMO_PREPARE", "ENUM_ST_CMO_FINISH_REQ", "w_prepare_take and (prepare error or FENCE.I)"],
+      ["ENUM_ST_CMO_PREPARE", "ENUM_ST_CMO_MAINT_REQ", "w_prepare_take and successful CBO"],
+      ["ENUM_ST_CMO_MAINT_REQ", "ENUM_ST_CMO_FINISH_REQ", "i_maint_ready and i_maint_done"],
+      ["ENUM_ST_CMO_MAINT_REQ", "ENUM_ST_CMO_MAINT_WAIT", "i_maint_ready and not i_maint_done"],
+      ["ENUM_ST_CMO_MAINT_WAIT", "ENUM_ST_CMO_FINISH_REQ", "i_maint_done"],
+      ["ENUM_ST_CMO_FINISH_REQ", "ENUM_ST_CMO_RESP", "i_ccu_finish_ready and i_ccu_finish_done"],
+      ["ENUM_ST_CMO_FINISH_REQ", "ENUM_ST_CMO_FINISH_WAIT", "i_ccu_finish_ready and not i_ccu_finish_done"],
+      ["ENUM_ST_CMO_FINISH_WAIT", "ENUM_ST_CMO_RESP", "i_ccu_finish_done"],
+      ["ENUM_ST_CMO_RESP", "ENUM_ST_CMO_IDLE", "next edge after one-cycle response"]
+    ]
+  },
+  {
+    "id": "CCU_CONTEXT", "module": "m_vlsit_riscv_coh_fabric", "initial": "ENUM_ST_IDLE",
+    "description": "One instance of this state lifecycle exists per transaction slot, not one global serialized CCU. Allocation selects DIR_REQ for a root, OWNER for a victim child, or GNT for an immediately rejected request. Parent wakeup on child completion is an inter-context transition. Matching tag/phase guards apply to every phase handshake. COMMIT/ABORT errors retain the context; no phase timeout exists.",
+    "states": ["ENUM_ST_IDLE", "ENUM_ST_DIR_REQ", "ENUM_ST_DIR_WAIT", "ENUM_ST_EVICT_ALLOC", "ENUM_ST_EVICT_WAIT", "ENUM_ST_OWNER", "ENUM_ST_PREP_START", "ENUM_ST_PREP_WAIT", "ENUM_ST_COMMIT_START", "ENUM_ST_COMMIT_WAIT", "ENUM_ST_ABORT_START", "ENUM_ST_ABORT_WAIT", "ENUM_ST_DIR_UPDATE", "ENUM_ST_DIR_CANCEL", "ENUM_ST_GNT", "ENUM_ST_GNT_WAIT", "ENUM_ST_CMO_PREPARED", "ENUM_ST_CMO_FINISH", "ENUM_ST_RETRY_CANCEL"],
+    "transitions": [
+      ["ENUM_ST_IDLE", "ENUM_ST_DIR_REQ", "root allocation accepted"],
+      ["ENUM_ST_IDLE", "ENUM_ST_OWNER", "victim child allocation accepted"],
+      ["ENUM_ST_IDLE", "ENUM_ST_GNT", "rejected request allocation accepted"],
+      ["ENUM_ST_DIR_REQ", "ENUM_ST_DIR_WAIT", "selected bank lookup accepted"],
+      ["ENUM_ST_DIR_WAIT", "ENUM_ST_EVICT_ALLOC", "lookup miss and victim has holders; not CMO"],
+      ["ENUM_ST_DIR_WAIT", "ENUM_ST_OWNER", "matching lookup; no held-victim service needed"],
+      ["ENUM_ST_EVICT_ALLOC", "ENUM_ST_RETRY_CANCEL", "victim line already locked by another context"],
+      ["ENUM_ST_RETRY_CANCEL", "ENUM_ST_DIR_REQ", "matching owner CANCEL accepted"],
+      ["ENUM_ST_EVICT_ALLOC", "ENUM_ST_EVICT_WAIT", "matching victim child allocated"],
+      ["ENUM_ST_EVICT_WAIT", "ENUM_ST_DIR_UPDATE", "child COMMIT completes"],
+      ["ENUM_ST_EVICT_WAIT", "ENUM_ST_DIR_CANCEL", "child ABORT completes"],
+      ["ENUM_ST_OWNER", "ENUM_ST_PREP_START", "matching owner metadata captured"],
+      ["ENUM_ST_PREP_START", "ENUM_ST_PREP_WAIT", "matching PREPARE phase accepted"],
+      ["ENUM_ST_PREP_WAIT", "ENUM_ST_CMO_PREPARED", "all PREPARE responses; source is CMO"],
+      ["ENUM_ST_PREP_WAIT", "ENUM_ST_ABORT_START", "PREPARE complete with error or missing dirty obligation"],
+      ["ENUM_ST_PREP_WAIT", "ENUM_ST_COMMIT_START", "PREPARE complete and dirty obligation satisfied"],
+      ["ENUM_ST_CMO_PREPARED", "ENUM_ST_CMO_FINISH", "i_ccu_prepare_ready"],
+      ["ENUM_ST_CMO_FINISH", "ENUM_ST_COMMIT_START", "matching finish accepted; commit and no retained error"],
+      ["ENUM_ST_CMO_FINISH", "ENUM_ST_ABORT_START", "matching finish accepted; abort or retained error"],
+      ["ENUM_ST_COMMIT_START", "ENUM_ST_COMMIT_WAIT", "matching COMMIT phase accepted"],
+      ["ENUM_ST_COMMIT_WAIT", "ENUM_ST_IDLE", "victim COMMIT ACKs and immediate release"],
+      ["ENUM_ST_COMMIT_WAIT", "ENUM_ST_GNT_WAIT", "victim COMMIT ACKs; deferred release"],
+      ["ENUM_ST_COMMIT_WAIT", "ENUM_ST_DIR_CANCEL", "CMO COMMIT ACKs; no directory hit"],
+      ["ENUM_ST_COMMIT_WAIT", "ENUM_ST_DIR_UPDATE", "root COMMIT ACKs; publish metadata"],
+      ["ENUM_ST_ABORT_START", "ENUM_ST_ABORT_WAIT", "matching ABORT phase accepted"],
+      ["ENUM_ST_ABORT_WAIT", "ENUM_ST_IDLE", "victim ABORT ACKs and immediate release"],
+      ["ENUM_ST_ABORT_WAIT", "ENUM_ST_GNT_WAIT", "victim ABORT ACKs; deferred release"],
+      ["ENUM_ST_ABORT_WAIT", "ENUM_ST_DIR_CANCEL", "root ABORT ACKs and reservation retained"],
+      ["ENUM_ST_ABORT_WAIT", "ENUM_ST_GNT", "root ABORT ACKs without reservation"],
+      ["ENUM_ST_DIR_UPDATE", "ENUM_ST_GNT", "matching bank UPDATE accepted"],
+      ["ENUM_ST_DIR_CANCEL", "ENUM_ST_GNT", "no reservation or matching CANCEL accepted"],
+      ["ENUM_ST_GNT", "ENUM_ST_GNT_WAIT", "matching CPU grant loaded"],
+      ["ENUM_ST_GNT", "ENUM_ST_IDLE", "CMO response release accepted"],
+      ["ENUM_ST_GNT_WAIT", "ENUM_ST_IDLE", "matching release accepted"]
+    ]
+  },
+  {
+    "id": "HPD_PROBE", "module": "m_vlsit_riscv_hpd_probe_engine", "initial": "ENUM_ST_IDLE",
+    "description": "Lookup and any required dirty writeback belong to PREPARE. Actual metadata changes occur only at a validated COMMIT. A malformed terminal request returns ERR_RSP and resumes TERMINAL_WAIT rather than discarding the legitimate prepared context. Absence remains I without line allocation.",
+    "states": ["ENUM_ST_IDLE", "ENUM_ST_LOOKUP_REQ", "ENUM_ST_LOOKUP_WAIT", "ENUM_ST_FLUSH_REQ", "ENUM_ST_FLUSH_WAIT", "ENUM_ST_PREPARE_RSP", "ENUM_ST_TERMINAL_WAIT", "ENUM_ST_UPDATE_REQ", "ENUM_ST_TERMINAL_RSP", "ENUM_ST_ERR_RSP", "ENUM_ST_STRAY_RSP"],
+    "transitions": [
+      ["ENUM_ST_IDLE", "ENUM_ST_LOOKUP_REQ", "accepted PREPARE"],
+      ["ENUM_ST_IDLE", "ENUM_ST_STRAY_RSP", "accepted non-PREPARE without context"],
+      ["ENUM_ST_STRAY_RSP", "ENUM_ST_IDLE", "response consumed"],
+      ["ENUM_ST_LOOKUP_REQ", "ENUM_ST_LOOKUP_WAIT", "lookup accepted"],
+      ["ENUM_ST_LOOKUP_WAIT", "ENUM_ST_FLUSH_REQ", "lookup matches dirty M hit; writeback enabled"],
+      ["ENUM_ST_LOOKUP_WAIT", "ENUM_ST_PREPARE_RSP", "lookup error, absence, or no writeback required"],
+      ["ENUM_ST_FLUSH_REQ", "ENUM_ST_FLUSH_WAIT", "native flush accepted"],
+      ["ENUM_ST_FLUSH_WAIT", "ENUM_ST_PREPARE_RSP", "native flush ACK received"],
+      ["ENUM_ST_PREPARE_RSP", "ENUM_ST_TERMINAL_WAIT", "PREPARE response consumed"],
+      ["ENUM_ST_TERMINAL_WAIT", "ENUM_ST_ERR_RSP", "terminal tag/line/target/phase mismatch or bad COMMIT"],
+      ["ENUM_ST_TERMINAL_WAIT", "ENUM_ST_TERMINAL_RSP", "matching ABORT or COMMIT of validated absence"],
+      ["ENUM_ST_TERMINAL_WAIT", "ENUM_ST_UPDATE_REQ", "matching good COMMIT of actual hit"],
+      ["ENUM_ST_UPDATE_REQ", "ENUM_ST_TERMINAL_RSP", "state update accepted"],
+      ["ENUM_ST_ERR_RSP", "ENUM_ST_TERMINAL_WAIT", "error response consumed; retain prepared context"],
+      ["ENUM_ST_TERMINAL_RSP", "ENUM_ST_IDLE", "terminal response consumed"]
+    ]
+  },
+  {
+    "id": "AXIL_REGBUS", "module": "m_vlsit_axil_reg_bridge", "initial": "ENUM_ST_IDLE",
+    "description": "Independent AXI address/data/read queues are separate from this service FSM. Local invalid-access responses do not enter RegBus request states. B/R responses have independent valid registers and remain stable until consumed.",
+    "states": ["ENUM_ST_IDLE", "ENUM_ST_WR_REQ", "ENUM_ST_RD_REQ"],
+    "transitions": [
+      ["ENUM_ST_IDLE", "ENUM_ST_WR_REQ", "selected legal complete write"],
+      ["ENUM_ST_IDLE", "ENUM_ST_RD_REQ", "selected legal queued read"],
+      ["ENUM_ST_WR_REQ", "ENUM_ST_IDLE", "RegBus request and response ready"],
+      ["ENUM_ST_RD_REQ", "ENUM_ST_IDLE", "RegBus request and response ready"]
+    ]
+  },
+  {
+    "id": "HPD_MISS_PERMISSION", "module": "hpdcache_miss_handler", "initial": "MISS_REQ_IDLE",
+    "description": "Native miss-request controller extended for permission-before-refill. The request ID, line and requested permission remain retained while CCU is stalled. OWN_ERROR returns a precise synthetic failed response rather than issuing a memory read. Refill data acceptance and directory publication are a separate native controller, not hidden in the OWN_WAIT transition.",
+    "states": ["MISS_REQ_IDLE", "MISS_REQ_OWN_REQ", "MISS_REQ_OWN_WAIT", "MISS_REQ_SEND", "MISS_REQ_OWN_ERROR"],
+    "transitions": [
+      ["MISS_REQ_IDLE", "MISS_REQ_OWN_REQ", "MSHR allocation accepted"],
+      ["MISS_REQ_OWN_REQ", "MISS_REQ_OWN_WAIT", "coh_own_req_ready_i"],
+      ["MISS_REQ_OWN_WAIT", "MISS_REQ_SEND", "matching valid grant; no error; legal permission"],
+      ["MISS_REQ_OWN_WAIT", "MISS_REQ_OWN_ERROR", "grant received but mismatch, error or illegal permission"],
+      ["MISS_REQ_SEND", "MISS_REQ_IDLE", "mem_req_ready_i"],
+      ["MISS_REQ_OWN_ERROR", "MISS_REQ_IDLE", "failed response consumed with last"]
+    ]
+  },
+  {
+    "id": "HPD_FLUSH_CAPTURE", "module": "hpdcache_flush", "initial": "FLUSH_IDLE",
+    "description": "Native SRAM capture/sending FSM; returning to FLUSH_IDLE means payload capture is complete, not that AXI B succeeded. Retained flush descriptors and accepted matching B independently determine the origin-tagged completion ACK. Dirty-tag/state mutation waits for that ACK under the cluster contract.",
+    "states": ["FLUSH_IDLE", "FLUSH_SEND"],
+    "transitions": [
+      ["FLUSH_IDLE", "FLUSH_SEND", "flush_alloc_i and flush_alloc_ready_o; read first word"],
+      ["FLUSH_SEND", "FLUSH_IDLE", "flush_resizer_wok and flush_eol"]
+    ]
+  }
+]

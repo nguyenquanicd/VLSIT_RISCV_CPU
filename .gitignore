@@ -1,0 +1,29 @@
+# Logs produced by lint, simulation, build and other tools
+*.log
+*.log.*
+
+# Local tool caches and browser preview state
+**/.test_tmp/
+**/.chrome-preview/
+**/Crashpad/
+
+# Generated build products
+**/build/
+**/obj/
+**/obj_dir/
+*.o
+*.obj
+*.exe
+*.dll
+*.so
+*.a
+
+# Nested upstream Git metadata is retained on disk for provenance, not embedded
+# as Git submodules in this project repository.
+**/.git
+
+# Generated full-project distribution archive (source and docs are committed directly)
+/vlsit_multicore_riscv_cluster_v1.zip
+
+# Vendor checkout metadata stays local; source and recorded pins live in the project.
+doc/provenance/third_party/*/

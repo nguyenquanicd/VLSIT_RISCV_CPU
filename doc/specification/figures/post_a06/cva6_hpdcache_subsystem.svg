@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1060" height="510" viewBox="370 340 1060 510" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="370" y="340" width="1060" height="510" fill="#FFFFFF"/>
+<rect x="400" y="370" width="1000" height="450" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<rect x="480" y="510" width="440" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="536" text-anchor="middle">i_axi_arbiter</text>
+<text x="700" y="558" text-anchor="middle">(cva6_hpdcache_subsystem_axi_arbiter)</text>
+<rect x="1040" y="510" width="280" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1180" y="536" text-anchor="middle">i_dcache</text>
+<text x="1180" y="558" text-anchor="middle">(cva6_hpdcache_wrapper)</text>
+<rect x="620" y="680" width="160" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="706" text-anchor="middle">i_cva6_icache</text>
+<text x="700" y="728" text-anchor="middle">(cva6_icache)</text>
+<text x="1378" y="411" text-anchor="end">Component composition</text>
+<text x="1378" y="433" text-anchor="end">(cva6_hpdcache_subsystem)</text>
+</svg>

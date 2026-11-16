@@ -1,0 +1,187 @@
+{
+  "page_name": "07_ACE",
+  "library_sha256": "D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6",
+  "layout": {
+    "gap_h": 110,
+    "gap_v": 110,
+    "margin": 45,
+    "block_h": 80
+  },
+  "top": {
+    "frame_label": [
+      "ACE external coherence boundary",
+      "(m_vlsit_riscv_ace_proxy)"
+    ]
+  },
+  "frame_row": [
+    "ACE external coherence boundary",
+    "Document-grounded proposal; no RTL hierarchy is asserted.",
+    "VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS.md"
+  ],
+  "frame_interfaces": [
+    "ACE",
+    "LLC",
+    "CLKR"
+  ],
+  "blocks": [
+    {
+      "key": "llc",
+      "label": [
+        "u_vlsit_axi_llc",
+        "(m_vlsit_axi_llc)",
+        "MODIFY"
+      ],
+      "width": 200,
+      "row": 0,
+      "col": 0,
+      "row_name": "u_vlsit_axi_llc / m_vlsit_axi_llc",
+      "function": "Supplies shared-cache requests and memory traffic; the ACE profile must define how LLC AXI traffic participates in external coherence.",
+      "source": "MODIFY | PULP axi_llc"
+    },
+    {
+      "key": "proxy",
+      "label": [
+        "u_vlsit_riscv_ace_proxy",
+        "(m_vlsit_riscv_ace_proxy)",
+        "NEW"
+      ],
+      "width": 290,
+      "row": 0,
+      "col": 1,
+      "row_name": "u_vlsit_riscv_ace_proxy / m_vlsit_riscv_ace_proxy",
+      "function": "Bridges external ACE transactions and inward snoops to the local coherence domain; response, data and ordering policy must be fixed before RTL.",
+      "source": "NEW | VLSIT"
+    },
+    {
+      "key": "probe",
+      "label": [
+        "u_vlsit_riscv_ace_probe_router",
+        "(m_vlsit_riscv_ace_probe_router)",
+        "NEW"
+      ],
+      "width": 370,
+      "row": 1,
+      "col": 1,
+      "row_name": "u_vlsit_riscv_ace_probe_router / m_vlsit_riscv_ace_probe_router",
+      "function": "Fans out snoop work to active local caches and collects clean/dirty responses and data for the proxy.",
+      "source": "NEW | VLSIT"
+    },
+    {
+      "key": "coh",
+      "label": [
+        "u_vlsit_riscv_coh_fabric",
+        "(m_vlsit_riscv_coh_fabric)",
+        "MODIFY"
+      ],
+      "width": 300,
+      "row": 1,
+      "col": 0,
+      "row_name": "u_vlsit_riscv_coh_fabric / m_vlsit_riscv_coh_fabric",
+      "function": "Owns local multi-hart coherence and must expose a complete local-probe transaction contract to the ACE adapter.",
+      "source": "MODIFY | Culsans candidate"
+    }
+  ],
+  "connectors": [
+    {
+      "id": "MEM",
+      "src": "llc",
+      "src_side": "R",
+      "dst": "proxy",
+      "dst_side": "L"
+    },
+    {
+      "id": "PROBE",
+      "src": "proxy",
+      "src_side": "R",
+      "dst": "probe",
+      "dst_side": "L"
+    },
+    {
+      "id": "LOCAL",
+      "src": "probe",
+      "src_side": "R",
+      "dst": "coh",
+      "dst_side": "L"
+    }
+  ],
+  "externals": [
+    {
+      "id": "ACE",
+      "block": "proxy",
+      "side": "R",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "ACE"
+      ]
+    },
+    {
+      "id": "LLC",
+      "block": "llc",
+      "side": "L",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "LLC",
+        "Shared LLC request boundary"
+      ]
+    },
+    {
+      "id": "CLKR",
+      "block": "llc",
+      "side": "T",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "CLKR",
+        "Clock/reset"
+      ]
+    }
+  ],
+  "nets": [],
+  "interfaces": [
+    {
+      "id": "MEM",
+      "name": "LLC to ACE profile adapter",
+      "category": "custom",
+      "active": "LLC <-> ACE proxy",
+      "signals": "Mapping between LLC AXI master traffic and external coherent ACE transactions is an open design decision; no pass-through equivalence is assumed."
+    },
+    {
+      "id": "PROBE",
+      "name": "External snoop service",
+      "category": "standard protocol",
+      "active": "ACE proxy -> local probe router",
+      "signals": "ACE AC requests are translated to local probes; CR/CD responses and acknowledge semantics follow the chosen supported ACE subset."
+    },
+    {
+      "id": "LOCAL",
+      "name": "Local cache probe service",
+      "category": "custom",
+      "active": "probe router -> coherence fabric",
+      "signals": "Probe request, per-hart response and dirty-line data; fields and timing must be defined from the pinned cache/CCU ports."
+    },
+    {
+      "id": "ACE",
+      "name": "External full ACE boundary",
+      "category": "standard protocol",
+      "active": "cluster -> ACE-capable SoC fabric",
+      "signals": "Fixed ACE port set is listed in Section 6; supported transaction subset and outstanding limits remain DEP-002."
+    },
+    {
+      "id": "LLC",
+      "name": "Shared LLC boundary",
+      "category": "custom",
+      "active": "coherence fabric -> LLC",
+      "signals": "AXI4 cache request and response service."
+    },
+    {
+      "id": "CLKR",
+      "name": "Cluster clock/reset",
+      "category": "custom",
+      "active": "SoC -> cluster",
+      "signals": "Synchronized reset deassertion is owned by the SoC."
+    }
+  ],
+  "legend_note": "PULP ace_ccu_top is a reuse candidate documented as an ACE interconnector, not a proven drop-in for the selected Culsans/HPDcache configuration. Keep the VLSIT proxy classified NEW until interface and behavior compatibility is demonstrated. Status codes: REUSE = upstream RTL reused; REUSE* = reuse candidate pending compatibility checks; MODIFY = source adaptation, wrapper, or macro binding; NEW = VLSIT RTL to design; GENERATED = CSR RTL from the selected generator. All proposed blocks are dashed because this cluster has no pinned integrated RTL yet."
+}

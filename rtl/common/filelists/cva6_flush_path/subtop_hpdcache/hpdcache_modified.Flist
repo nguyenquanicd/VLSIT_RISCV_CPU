@@ -1,0 +1,58 @@
+//
+//  Copyright 2023 Commissariat a l'Energie Atomique et aux Energies Alternatives (CEA)
+//  Copyright 2025 Univ. Grenoble Alpes, Inria, TIMA Laboratory
+//
+//  SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
+//
+//  Authors       : Cesar Fuguet
+//  Creation Date : January, 2023
+//  Description   : File list for the HPDcache
+//  History       :
+//
++incdir+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/include
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/hpdcache_pkg.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/utils/hpdcache_mem_req_read_arbiter.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/utils/hpdcache_mem_req_write_arbiter.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_demux.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_lfsr.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_sync_buffer.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_fifo_reg.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_fifo_reg_initialized.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_fxarb.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_rrarb.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_mux.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_decoder.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_1hot_to_binary.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_prio_1hot_encoder.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_prio_bin_encoder.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_sram.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_sram_wbyteenable.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_sram_wmask.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_regbank_wbyteenable_1rw.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_regbank_wmask_1rw.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_data_downsize.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_data_upsize.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_data_resize.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/hwpf_stride/hwpf_stride_pkg.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/hwpf_stride/hwpf_stride.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/hwpf_stride/hwpf_stride_arb.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/hwpf_stride/hwpf_stride_wrapper.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/hpdcache/rtl/src/hpdcache.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/hpdcache_amo.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/hpdcache_cmo.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/hpdcache_core_arbiter.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/hpdcache/rtl/src/hpdcache_ctrl.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/hpdcache/rtl/src/hpdcache_ctrl_pe.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/hpdcache/rtl/src/hpdcache_memctrl.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/hpdcache_cbuf.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/hpdcache/rtl/src/hpdcache_miss_handler.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/hpdcache/rtl/src/hpdcache_mshr.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/hpdcache/rtl/src/hpdcache_rtab.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/hpdcache_uncached.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/hpdcache_victim_plru.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/hpdcache_victim_random.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/hpdcache_victim_sel.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/hpdcache_wbuf.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/hpdcache/rtl/src/hpdcache_flush.sv
+
+

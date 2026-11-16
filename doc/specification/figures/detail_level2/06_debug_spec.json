@@ -1,0 +1,113 @@
+{
+  "page_name": "06_DEBUG",
+  "library_sha256": "D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6",
+  "layout": {
+    "gap_h": 110,
+    "gap_v": 110,
+    "margin": 45,
+    "block_h": 80
+  },
+  "top": {
+    "frame_label": [
+      "Per-hart debug routing",
+      "(m_vlsit_riscv_debug_router)"
+    ]
+  },
+  "frame_row": [
+    "Per-hart debug routing",
+    "Document-grounded proposal; no RTL hierarchy is asserted.",
+    "VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS.md"
+  ],
+  "frame_interfaces": [
+    "DBG",
+    "CLKR"
+  ],
+  "blocks": [
+    {
+      "key": "dm",
+      "label": [
+        "u_vlsit_riscv_debug_router",
+        "(m_vlsit_riscv_debug_router)",
+        "NEW"
+      ],
+      "width": 320,
+      "row": 0,
+      "col": 0,
+      "row_name": "u_vlsit_riscv_debug_router / m_vlsit_riscv_debug_router",
+      "function": "Routes external Debug Module requests to the selected active hart and returns per-hart debug state without embedding DTM/DM.",
+      "source": "NEW | VLSIT"
+    },
+    {
+      "key": "tiles",
+      "label": [
+        "u_vlsit_riscv_cpu_tile_0.._3",
+        "(m_vlsit_riscv_cpu_tile)",
+        "NEW"
+      ],
+      "width": 320,
+      "row": 1,
+      "col": 0,
+      "row_name": "u_vlsit_riscv_cpu_tile_0.._3 / m_vlsit_riscv_cpu_tile",
+      "function": "Elaborates only indices 0 through PARA_CPU_NUM-1; each tile contains the licensed modified CVA6 integration shell and HPDcache coherence copy.",
+      "source": "NEW | VLSIT"
+    }
+  ],
+  "connectors": [
+    {
+      "id": "HDBG",
+      "src": "dm",
+      "src_side": "B",
+      "dst": "tiles",
+      "dst_side": "T"
+    }
+  ],
+  "externals": [
+    {
+      "id": "DBG",
+      "block": "dm",
+      "side": "L",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "DBG",
+        "Debug Module"
+      ]
+    },
+    {
+      "id": "CLKR",
+      "block": "dm",
+      "side": "R",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "CLKR",
+        "Clock/reset"
+      ]
+    }
+  ],
+  "nets": [],
+  "interfaces": [
+    {
+      "id": "DBG",
+      "name": "External Debug Module connection",
+      "category": "custom",
+      "active": "External Debug Module -> router -> active harts",
+      "signals": "Per-hart request and mode/status semantics are specified at the cluster boundary; exact CVA6 native debug handshake must be pinned."
+    },
+    {
+      "id": "HDBG",
+      "name": "Native per-hart debug connections",
+      "category": "custom",
+      "active": "debug router -> CVA6 tiles",
+      "signals": "Each bit/lane maps to a zero-based hart; absent hart lanes are ignored in a two-hart build."
+    },
+    {
+      "id": "CLKR",
+      "name": "Cluster clock/reset",
+      "category": "custom",
+      "active": "SoC -> router and tiles",
+      "signals": "All shown blocks use the selected cluster clock/reset; reset release is synchronized by the SoC."
+    }
+  ],
+  "legend_note": "DTM and Debug Module remain outside the cluster. CVA6's debug interface is reused; the per-hart array routing wrapper is new VLSIT logic. Status codes: REUSE = upstream RTL reused; REUSE* = reuse candidate pending compatibility checks; MODIFY = source adaptation, wrapper, or macro binding; NEW = VLSIT RTL to design; GENERATED = CSR RTL from the selected generator. All proposed blocks are dashed because this cluster has no pinned integrated RTL yet."
+}

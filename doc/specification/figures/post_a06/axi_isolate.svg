@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="510" viewBox="480 340 720 510" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="480" y="340" width="720" height="510" fill="#FFFFFF"/>
+<rect x="510" y="370" width="660" height="450" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<rect x="630" y="510" width="140" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="536" text-anchor="middle">i_axi_demux</text>
+<text x="700" y="558" text-anchor="middle">(axi_demux)</text>
+<rect x="930" y="510" width="160" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1010" y="536" text-anchor="middle">i_axi_err_slv</text>
+<text x="1010" y="558" text-anchor="middle">(axi_err_slv)</text>
+<rect x="590" y="680" width="220" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="706" text-anchor="middle">i_axi_isolate</text>
+<text x="700" y="728" text-anchor="middle">(axi_isolate_inner)</text>
+<text x="1148" y="411" text-anchor="end">Component composition</text>
+<text x="1148" y="433" text-anchor="end">(axi_isolate)</text>
+</svg>

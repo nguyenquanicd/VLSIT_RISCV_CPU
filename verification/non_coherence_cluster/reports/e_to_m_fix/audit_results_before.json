@@ -1,0 +1,18 @@
+[
+  {
+    "harts": 2,
+    "case": "private load -> local store -> CBO.CLEAN",
+    "axi_error_injected": false,
+    "expected": "maintenance success and retire",
+    "observed": "FAIL: terminal command before LLC completion",
+    "log": "rtl/reports/cluster_completeness_audit/simulation_2h_error0.log"
+  },
+  {
+    "harts": 4,
+    "case": "private load -> local store -> CBO.CLEAN",
+    "axi_error_injected": false,
+    "expected": "maintenance success and retire",
+    "observed": "FAIL: terminal command before LLC completion",
+    "log": "rtl/reports/cluster_completeness_audit/simulation_4h_error0.log"
+  }
+]

@@ -1,0 +1,137 @@
+Counter({'WIDTHEXPAND': 119, 'ASCRANGE': 102, 'WIDTHTRUNC': 17, 'UNSIGNED': 3, 'CMPCONST': 2, 'CASEINCOMPLETE': 2, 'IMPLICITSTATIC': 1, 'SYMRSVDWORD': 1})
+src\fpnew_opgroup_fmt_slice.sv 241 Logical operator LOGAND expects 1 bit on the LHS, but LHS's VARREF 'TrueSIMDClass' generates 32 bits.
+    if (TrueSIMDClass && SIMD_WIDTH >= 10) begin : vectorial_true_class // true vectorial class blocks are 10bits in size
+src\fpnew_opgroup_fmt_slice.sv 278 Logical operator LOGAND expects 1 bit on the LHS, but LHS's VARREF 'TrueSIMDClass' generates 32 bits.
+  if (!(TrueSIMDClass && SIMD_WIDTH >= 10)) begin
+src\fpnew_cast_multi.sv 302 Operator SUB expects 12 bits on the RHS, but RHS's VARREF 'renorm_shamt_sgn' generates 7 bits.
+  assign fp_input_exp  = signed'(src_exp + src_subnormal - src_bias -
+src\fpnew_cast_multi.sv 304 Operator SUB expects 32 bits on the RHS, but RHS's VARREF 'renorm_shamt_sgn' generates 7 bits.
+  assign int_input_exp = $bits(int_input_exp)'(signed'(INT_MAN_WIDTH - 1 - renorm_shamt_sgn));
+src\fpnew_cast_multi.sv 445 Operator SHIFTL expects 129 bits on the LHS, but LHS's VARREF 'input_mant_q' generates 64 bits.
+    preshift_mant = input_mant_q << (INT_MAN_WIDTH + 1);
+src\fpnew_cast_multi.sv 450 Operator SUB expects 32 bits on the RHS, but RHS's VARREF 'input_exp_q' generates 12 bits.
+      denorm_shamt = $bits(denorm_shamt)'(unsigned'(MAX_INT_WIDTH - 1 - input_exp_q));
+src\fpnew_cast_multi.sv 452 Operator GTES expects 32 bits on the LHS, but LHS's VARREF 'input_exp_q' generates 12 bits.
+      if ((input_exp_q >= signed'(fpnew_pkg::int_width(int_fmt_q2) - 1 + op_mod_q2))    // Exponent larger than max int range,
+src\fpnew_cast_multi.sv 455 Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'input_exp_q' generates 12 bits.
+               && (input_exp_q == signed'(fpnew_pkg::int_width(int_fmt_q2) - 1)))) begin
+src\fpnew_cast_multi.sv 478 Operator ADD expects 32 or 12 bits on the LHS, but LHS's VARREF 'denorm_shamt' generates 7 bits.
+        denorm_shamt    = $bits(denorm_shamt)'(unsigned'(denorm_shamt + 1 - destination_exp_q)); // adjust right shifting
+src\fpnew_cast_multi.sv 483 Operator ADD expects 32 bits on the LHS, but LHS's VARREF 'denorm_shamt' generates 7 bits.
+        denorm_shamt    = $bits(denorm_shamt)'(unsigned'(denorm_shamt + 2 + fpnew_pkg::man_bits(dst_fmt_q2))); // to sticky
+src\fpnew_cast_multi.sv 481 Operator LTS expects 32 bits on the LHS, but LHS's VARREF 'destination_exp_q' generates 12 bits.
+      end else if (destination_exp_q < -signed'(fpnew_pkg::man_bits(dst_fmt_q2))) begin
+src\fpnew_cast_multi.sv 476 Operator GTES expects 32 bits on the LHS, but LHS's VARREF 'destination_exp_q' generates 12 bits.
+                   destination_exp_q >= -signed'(fpnew_pkg::man_bits(dst_fmt_q2))) begin
+src\fpnew_cast_multi.sv 470 Operator GTES expects 32 bits on the LHS, but LHS's VARREF 'destination_exp_q' generates 12 bits.
+      end else if (destination_exp_q >= signed'(2**fpnew_pkg::exp_bits(dst_fmt_q2))-1) begin
+src\fpnew_cast_multi.sv 637 Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'input_exp_q' generates 12 bits.
+        if (!rounded_sign && input_exp_q == signed'(INT_WIDTH - 2 + op_mod_q2)) begin
+src\fpnew_cast_multi.sv 644 Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'input_exp_q' generates 12 bits.
+        if (!op_mod_q2 && rounded_sign && input_exp_q == signed'(INT_WIDTH - 1)) begin
+src\fpnew_cast_multi.sv 682 Operator SHIFTL expects 32 bits on the LHS, but LHS's VARREF 'input_sign_q' generates 1 bits.
+                      ? input_sign_q << FP_WIDTH-1 // signed zero
+src\fpnew_cast_multi.sv 682 Operator SHIFTL expects 64 bits on the LHS, but LHS's VARREF 'input_sign_q' generates 1 bits.
+                      ? input_sign_q << FP_WIDTH-1 // signed zero
+src\fpnew_fma.sv 205 Operator PATMEMBER expects 11 bits on the Pattern value, but Pattern value's VARREF 'BIAS' generates 32 bits.
+        operand_a = '{sign: 1'b0, exponent: BIAS, mantissa: '0};
+src\fpnew_fma.sv 216 Operator PATMEMBER expects 11 bits on the Pattern value, but Pattern value's VARREF 'DONT_CARE' generates 1 bits.
+        operand_a  = '{default: fpnew_pkg::DONT_CARE};
+src\fpnew_fma.sv 216 Operator PATMEMBER expects 52 bits on the Pattern value, but Pattern value's VARREF 'DONT_CARE' generates 1 bits.
+        operand_a  = '{default: fpnew_pkg::DONT_CARE};
+src\fpnew_fma.sv 217 Operator PATMEMBER expects 11 bits on the Pattern value, but Pattern value's VARREF 'DONT_CARE' generates 1 bits.
+        operand_b  = '{default: fpnew_pkg::DONT_CARE};
+src\fpnew_fma.sv 217 Operator PATMEMBER expects 52 bits on the Pattern value, but Pattern value's VARREF 'DONT_CARE' generates 1 bits.
+        operand_b  = '{default: fpnew_pkg::DONT_CARE};
+src\fpnew_fma.sv 218 Operator PATMEMBER expects 11 bits on the Pattern value, but Pattern value's VARREF 'DONT_CARE' generates 1 bits.
+        operand_c  = '{default: fpnew_pkg::DONT_CARE};
+src\fpnew_fma.sv 218 Operator PATMEMBER expects 52 bits on the Pattern value, but Pattern value's VARREF 'DONT_CARE' generates 1 bits.
+        operand_c  = '{default: fpnew_pkg::DONT_CARE};
+src\fpnew_fma.sv 300 Operator ADD expects 13 bits on the RHS, but RHS's SIGNED generates 2 bits.
+  assign exponent_addend = signed'(exponent_c + $signed({1'b0, ~info_c.is_normal})); // 0 as subnorm
+src\fpnew_fma.sv 304 Operator ADD expects 32 bits on the LHS, but LHS's VARREF 'exponent_a' generates 13 bits.
+                            : signed'(exponent_a + info_a.is_subnormal
+src\fpnew_fma.sv 305 Operator ADD expects 32 bits on the RHS, but RHS's VARREF 'exponent_b' generates 13 bits.
+                                      + exponent_b + info_b.is_subnormal
+src\fpnew_fma.sv 318 Operator ASSIGN expects 8 bits on the Assign RHS, but Assign RHS's ADD generates 32 bits.
+      addend_shamt = 3 * PRECISION_BITS + 4;
+src\fpnew_fma.sv 321 Operator SUB expects 32 bits on the RHS, but RHS's VARREF 'exponent_difference' generates 13 bits.
+      addend_shamt = unsigned'(signed'(PRECISION_BITS) + 3 - exponent_difference);
+src\fpnew_fma.sv 321 Operator ASSIGN expects 8 bits on the Assign RHS, but Assign RHS's UNSIGNED generates 32 bits.
+      addend_shamt = unsigned'(signed'(PRECISION_BITS) + 3 - exponent_difference);
+src\fpnew_fma.sv 320 Operator LTES expects 32 bits on the LHS, but LHS's VARREF 'exponent_difference' generates 13 bits.
+    else if (exponent_difference <= signed'(PRECISION_BITS + 2))
+src\fpnew_fma.sv 317 Operator LTES expects 32 bits on the LHS, but LHS's VARREF 'exponent_difference' generates 13 bits.
+    if (exponent_difference <= signed'(-2 * PRECISION_BITS - 1))
+src\fpnew_fma.sv 345 Operator SHIFTL expects 163 bits on the LHS, but LHS's VARREF 'product' generates 106 bits.
+  assign product_shifted = product << 2; // constant shift
+src\fpnew_fma.sv 365 Operator SHIFTL expects 216 bits on the LHS, but LHS's VARREF 'mantissa_c' generates 53 bits.
+      (mantissa_c << (3 * PRECISION_BITS + 4)) >> addend_shamt;
+src\fpnew_fma.sv 538 Operator SUB expects 32 or 13 bits on the RHS, but RHS's VARREF 'leading_zero_count_sgn' generates 8 bits.
+        normalized_exponent = exponent_product_q - leading_zero_count_sgn + 1; // account for shift
+src\fpnew_fma.sv 542 Operator ADD expects 32 bits on the RHS, but RHS's VARREF 'exponent_product_q' generates 13 bits.
+        norm_shamt = $bits(norm_shamt)'(unsigned'(signed'(PRECISION_BITS) + 2 + exponent_product_q));
+src\fpnew_fma.sv 535 Operator SUB expects 32 or 13 bits on the RHS, but RHS's VARREF 'leading_zero_count_sgn' generates 8 bits.
+      if ((exponent_product_q - leading_zero_count_sgn + 1 >= 0) && !lzc_zeroes) begin
+src\fpnew_fma.sv 553 Operator SHIFTL expects 164 bits on the LHS, but LHS's VARREF 'sum_q' generates 163 bits.
+  assign sum_shifted       = sum_q << norm_shamt;
+src\fpnew_fma.sv 559 Operator ASSIGN expects 163 bits on the Assign RHS, but Assign RHS's VARREF 'sum_shifted' generates 164 bits.
+    {final_mantissa, sum_sticky_bits} = sum_shifted;
+src\fpnew_fma.sv 564 Operator ASSIGN expects 163 bits on the Assign RHS, but Assign RHS's SHIFTR generates 164 bits.
+      {final_mantissa, sum_sticky_bits} = sum_shifted >> 1;
+src\fpnew_fma.sv 571 Operator ASSIGN expects 163 bits on the Assign RHS, but Assign RHS's SHIFTL generates 164 bits.
+      {final_mantissa, sum_sticky_bits} = sum_shifted << 1;
+src\fpnew_fma.sv 205 Operator PATMEMBER expects 8 bits on the Pattern value, but Pattern value's VARREF 'BIAS' generates 32 bits.
+        operand_a = '{sign: 1'b0, exponent: BIAS, mantissa: '0};
+src\fpnew_fma.sv 216 Operator PATMEMBER expects 8 bits on the Pattern value, but Pattern value's VARREF 'DONT_CARE' generates 1 bits.
+        operand_a  = '{default: fpnew_pkg::DONT_CARE};
+src\fpnew_fma.sv 216 Operator PATMEMBER expects 23 bits on the Pattern value, but Pattern value's VARREF 'DONT_CARE' generates 1 bits.
+        operand_a  = '{default: fpnew_pkg::DONT_CARE};
+src\fpnew_fma.sv 217 Operator PATMEMBER expects 8 bits on the Pattern value, but Pattern value's VARREF 'DONT_CARE' generates 1 bits.
+        operand_b  = '{default: fpnew_pkg::DONT_CARE};
+src\fpnew_fma.sv 217 Operator PATMEMBER expects 23 bits on the Pattern value, but Pattern value's VARREF 'DONT_CARE' generates 1 bits.
+        operand_b  = '{default: fpnew_pkg::DONT_CARE};
+src\fpnew_fma.sv 218 Operator PATMEMBER expects 8 bits on the Pattern value, but Pattern value's VARREF 'DONT_CARE' generates 1 bits.
+        operand_c  = '{default: fpnew_pkg::DONT_CARE};
+src\fpnew_fma.sv 218 Operator PATMEMBER expects 23 bits on the Pattern value, but Pattern value's VARREF 'DONT_CARE' generates 1 bits.
+        operand_c  = '{default: fpnew_pkg::DONT_CARE};
+src\fpnew_fma.sv 300 Operator ADD expects 10 bits on the RHS, but RHS's SIGNED generates 2 bits.
+  assign exponent_addend = signed'(exponent_c + $signed({1'b0, ~info_c.is_normal})); // 0 as subnorm
+src\fpnew_fma.sv 304 Operator ADD expects 32 bits on the LHS, but LHS's VARREF 'exponent_a' generates 10 bits.
+                            : signed'(exponent_a + info_a.is_subnormal
+src\fpnew_fma.sv 305 Operator ADD expects 32 bits on the RHS, but RHS's VARREF 'exponent_b' generates 10 bits.
+                                      + exponent_b + info_b.is_subnormal
+src\fpnew_fma.sv 318 Operator ASSIGN expects 7 bits on the Assign RHS, but Assign RHS's ADD generates 32 bits.
+      addend_shamt = 3 * PRECISION_BITS + 4;
+src\fpnew_fma.sv 321 Operator SUB expects 32 bits on the RHS, but RHS's VARREF 'exponent_difference' generates 10 bits.
+      addend_shamt = unsigned'(signed'(PRECISION_BITS) + 3 - exponent_difference);
+src\fpnew_fma.sv 321 Operator ASSIGN expects 7 bits on the Assign RHS, but Assign RHS's UNSIGNED generates 32 bits.
+      addend_shamt = unsigned'(signed'(PRECISION_BITS) + 3 - exponent_difference);
+src\fpnew_fma.sv 320 Operator LTES expects 32 bits on the LHS, but LHS's VARREF 'exponent_difference' generates 10 bits.
+    else if (exponent_difference <= signed'(PRECISION_BITS + 2))
+src\fpnew_fma.sv 317 Operator LTES expects 32 bits on the LHS, but LHS's VARREF 'exponent_difference' generates 10 bits.
+    if (exponent_difference <= signed'(-2 * PRECISION_BITS - 1))
+src\fpnew_fma.sv 345 Operator SHIFTL expects 76 bits on the LHS, but LHS's VARREF 'product' generates 48 bits.
+  assign product_shifted = product << 2; // constant shift
+src\fpnew_fma.sv 365 Operator SHIFTL expects 100 bits on the LHS, but LHS's VARREF 'mantissa_c' generates 24 bits.
+      (mantissa_c << (3 * PRECISION_BITS + 4)) >> addend_shamt;
+src\fpnew_fma.sv 538 Operator SUB expects 32 or 10 bits on the RHS, but RHS's VARREF 'leading_zero_count_sgn' generates 7 bits.
+        normalized_exponent = exponent_product_q - leading_zero_count_sgn + 1; // account for shift
+src\fpnew_fma.sv 542 Operator ADD expects 32 bits on the RHS, but RHS's VARREF 'exponent_product_q' generates 10 bits.
+        norm_shamt = $bits(norm_shamt)'(unsigned'(signed'(PRECISION_BITS) + 2 + exponent_product_q));
+src\fpnew_fma.sv 535 Operator SUB expects 32 or 10 bits on the RHS, but RHS's VARREF 'leading_zero_count_sgn' generates 7 bits.
+      if ((exponent_product_q - leading_zero_count_sgn + 1 >= 0) && !lzc_zeroes) begin
+src\fpnew_fma.sv 553 Operator SHIFTL expects 77 bits on the LHS, but LHS's VARREF 'sum_q' generates 76 bits.
+  assign sum_shifted       = sum_q << norm_shamt;
+src\fpnew_fma.sv 559 Operator ASSIGN expects 76 bits on the Assign RHS, but Assign RHS's VARREF 'sum_shifted' generates 77 bits.
+    {final_mantissa, sum_sticky_bits} = sum_shifted;
+src\fpnew_fma.sv 564 Operator ASSIGN expects 76 bits on the Assign RHS, but Assign RHS's SHIFTR generates 77 bits.
+      {final_mantissa, sum_sticky_bits} = sum_shifted >> 1;
+src\fpnew_fma.sv 571 Operator ASSIGN expects 76 bits on the Assign RHS, but Assign RHS's SHIFTL generates 77 bits.
+      {final_mantissa, sum_sticky_bits} = sum_shifted << 1;
+src\fpnew_opgroup_multifmt_slice.sv 135 Operator AND expects 2 bits on the LHS, but LHS's EQ generates 1 bits.
+  assign dst_vec_op     = (OpGroup == fpnew_pkg::CONV) & {(op_i == fpnew_pkg::CPKCD), op_mod_i};
+src\fpnew_opgroup_multifmt_slice.sv 141 Operator COND expects 3 bits on the Conditional True, but Conditional True's VARREF 'int_fmt_i' generates 2 bits.
+  assign dst_fmt    = dst_fmt_is_int ? int_fmt_i : dst_fmt_i;
+src\fpnew_opgroup_fmt_slice.sv 286 Operator COND expects 64 bits on the Conditional False, but Conditional False's SEL generates 10 bits.
+  assign slice_class_result = result_is_vector ? slice_vec_class_result : lane_class_mask[0];

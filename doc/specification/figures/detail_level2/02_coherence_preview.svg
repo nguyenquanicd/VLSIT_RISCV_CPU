@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1438" height="1048" viewBox="446 276 1438 1048">
+<rect x="0" y="0" width="100%" height="100%" fill="white"/>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#20252b"/></marker></defs>
+<path d="M 1210 500 L 1210 350" fill="none" stroke="#20252b" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 1630 1150 L 1630 1250" fill="none" stroke="#20252b" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 1170 960 L 1170 1250" fill="none" stroke="#20252b" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 889 540 L 1010 540" fill="none" stroke="#20252b" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 1319 520 L 1440 520" fill="none" stroke="#20252b" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 1630 960 L 1630 1070" fill="none" stroke="#20252b" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 1210 580 L 1210 670 L 1630 670 L 1630 690" fill="none" stroke="#20252b" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 1120 500 L 1120 480 L 490 480 L 490 790 L 1120 790 L 1120 770" fill="none" stroke="#20252b" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 1120 580 L 1120 670 L 980 670 L 980 860 L 1170 860 L 1170 880" fill="none" stroke="#20252b" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 700 960 L 700 980 L 1540 980 L 1540 860 L 1630 860 L 1630 880" fill="none" stroke="#20252b" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 1319 560 L 1350 560 L 1350 850 L 490 850 L 490 920 L 510 920" fill="none" stroke="#20252b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="470" y="400" width="1390" height="800" fill="#f8fafc" stroke="#263746" stroke-width="2" stroke-dasharray="8 5"/>
+<text x="1625" y="1094.9" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="#16212a">
+<tspan x="1625" dy="0">u_vlsit_riscv_axi_mmio</tspan>
+<tspan x="1625" dy="20">(m_vlsit_riscv_axi_mmio)</tspan>
+<tspan x="1625" dy="20">NEW</tspan>
+</text>
+<text x="700" y="524.9" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="#16212a">
+<tspan x="700" dy="0">u_vlsit_riscv_tile_coh_adapter</tspan>
+<tspan x="700" dy="20">(m_vlsit_riscv_tile_coh_adapter)</tspan>
+<tspan x="700" dy="20">NEW</tspan>
+</text>
+<text x="1165" y="524.9" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="#16212a">
+<tspan x="1165" dy="0">u_vlsit_riscv_coh_fabric</tspan>
+<tspan x="1165" dy="20">(m_vlsit_riscv_coh_fabric)</tspan>
+<tspan x="1165" dy="20">NEW</tspan>
+</text>
+<text x="1165" y="714.9" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="#16212a">
+<tspan x="1165" dy="0">u_vlsit_riscv_coh_txn_table</tspan>
+<tspan x="1165" dy="20">(m_vlsit_riscv_coh_txn_table)</tspan>
+<tspan x="1165" dy="20">NEW</tspan>
+</text>
+<text x="1625" y="524.9" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="#16212a">
+<tspan x="1625" dy="0">u_vlsit_riscv_sharer_directory</tspan>
+<tspan x="1625" dy="20">(m_vlsit_riscv_sharer_directory)</tspan>
+<tspan x="1625" dy="20">NEW</tspan>
+</text>
+<text x="1625" y="714.9" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="#16212a">
+<tspan x="1625" dy="0">u_vlsit_riscv_probe_scheduler</tspan>
+<tspan x="1625" dy="20">(m_vlsit_riscv_probe_scheduler)</tspan>
+<tspan x="1625" dy="20">NEW</tspan>
+</text>
+<text x="1165" y="904.9" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="#16212a">
+<tspan x="1165" dy="0">u_axi_mux</tspan>
+<tspan x="1165" dy="20">(axi_mux)</tspan>
+<tspan x="1165" dy="20">REUSE*</tspan>
+</text>
+<text x="700" y="904.9" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="#16212a">
+<tspan x="700" dy="0">u_vlsit_riscv_device_classifier</tspan>
+<tspan x="700" dy="20">(m_vlsit_riscv_device_classifier)</tspan>
+<tspan x="700" dy="20">NEW</tspan>
+</text>
+<text x="1625" y="904.9" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="#16212a">
+<tspan x="1625" dy="0">u_axi_demux</tspan>
+<tspan x="1625" dy="20">(axi_demux)</tspan>
+<tspan x="1625" dy="20">REUSE*</tspan>
+</text>
+<text x="1210" y="320.55" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#16212a">
+<tspan x="1210" dy="0">EVT</tspan>
+<tspan x="1210" dy="18">Coherence event taps</tspan>
+</text>
+<text x="1630" y="1270.55" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#16212a">
+<tspan x="1630" dy="0">DEV</tspan>
+<tspan x="1630" dy="18">AXI4 device path</tspan>
+</text>
+<text x="1170" y="1270.55" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#16212a">
+<tspan x="1170" dy="0">LLC</tspan>
+<tspan x="1170" dy="18">Shared LLC request</tspan>
+</text>
+<text x="1702" y="440.55" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#16212a">
+<tspan x="1702" dy="0">Coherence and MMIO routing</tspan>
+<tspan x="1702" dy="18">(m_vlsit_riscv_coh_fabric)</tspan>
+</text>
+<text x="945" y="523.55" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#16212a">
+<tspan x="945" dy="0">COH_REQ</tspan>
+</text>
+<text x="515" y="463.55" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#16212a">
+<tspan x="515" dy="0">CTX</tspan>
+</text>
+<text x="1355" y="503.55" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#16212a">
+<tspan x="1355" dy="0">DIR</tspan>
+</text>
+<text x="1255" y="653.55" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#16212a">
+<tspan x="1255" dy="0">PROBE</tspan>
+</text>
+<text x="985" y="885.55" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#16212a">
+<tspan x="985" dy="0">MEM</tspan>
+</text>
+<text x="530" y="833.55" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#16212a">
+<tspan x="530" dy="0">DEVICE</tspan>
+</text>
+<text x="700" y="1005.55" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#16212a">
+<tspan x="700" dy="0">DECODE</tspan>
+</text>
+<text x="1668" y="989.55" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#16212a">
+<tspan x="1668" dy="0">MMIO</tspan>
+</text>
+</svg>

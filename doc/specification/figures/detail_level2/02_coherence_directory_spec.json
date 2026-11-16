@@ -1,0 +1,265 @@
+{
+  "page_name": "02_COHERENCE_DIRECTORY",
+  "out_name": "VLSIT_RISCV_CLUSTER_DETAIL_02_COHERENCE_DIRECTORY.drawio",
+  "library_sha256": "D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6",
+  "layout": {
+    "gap_h": 115,
+    "gap_v": 190,
+    "margin": 50,
+    "block_h": 80
+  },
+  "top": {
+    "frame_label": [
+      "Directory-based MESI coherence fabric",
+      "(m_vlsit_riscv_coh_fabric)"
+    ]
+  },
+  "frame_row": [
+    "Directory-based MESI with tagged concurrency",
+    "At least two distinct-line contexts; maximum capacity remains open.",
+    "VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS.md v0.6"
+  ],
+  "frame_interfaces": [
+    "TREQ",
+    "LLC",
+    "DEV",
+    "EVT"
+  ],
+  "blocks": [
+    {
+      "key": "tile",
+      "label": [
+        "u_vlsit_riscv_tile_coh_adapter",
+        "(m_vlsit_riscv_tile_coh_adapter)"
+      ],
+      "width": 360,
+      "row": 0,
+      "col": 0,
+      "row_name": "u_vlsit_riscv_tile_coh_adapter / m_vlsit_riscv_tile_coh_adapter",
+      "function": "Adapts each hart's cache request/response and tagged probe boundary; repeated once per active hart.",
+      "source": "NEW | VLSIT"
+    },
+    {
+      "key": "txn",
+      "label": [
+        "u_vlsit_riscv_coh_txn_table",
+        "(m_vlsit_riscv_coh_txn_table)"
+      ],
+      "width": 380,
+      "row": 0,
+      "col": 1,
+      "row_name": "u_vlsit_riscv_coh_txn_table / m_vlsit_riscv_coh_txn_table",
+      "function": "Tracks independent line contexts, requester, line lock, unique active tag, holder mask, matching responses, dirty-data obligation and LLC completion; at least two distinct lines may be active.",
+      "source": "NEW | VLSIT"
+    },
+    {
+      "key": "directory",
+      "label": [
+        "u_vlsit_riscv_sharer_directory",
+        "(m_vlsit_riscv_sharer_directory)"
+      ],
+      "width": 400,
+      "row": 1,
+      "col": 1,
+      "row_name": "u_vlsit_riscv_sharer_directory / m_vlsit_riscv_sharer_directory",
+      "function": "Returns a conservative per-line holder set and commits metadata with cache fill, downgrade, invalidation and eviction events; independent-entry banking/ports, capacity and replacement are open.",
+      "source": "NEW | VLSIT"
+    },
+    {
+      "key": "probe",
+      "label": [
+        "u_vlsit_riscv_probe_scheduler",
+        "(m_vlsit_riscv_probe_scheduler)"
+      ],
+      "width": 380,
+      "row": 0,
+      "col": 2,
+      "row_name": "u_vlsit_riscv_probe_scheduler / m_vlsit_riscv_probe_scheduler",
+      "function": "Schedules probes for multiple tagged contexts only to directory-selected holders and associates each response/data beat with its active transaction; per-cache depth is open.",
+      "source": "NEW | VLSIT"
+    },
+    {
+      "key": "device",
+      "label": [
+        "u_vlsit_riscv_device_classifier",
+        "(m_vlsit_riscv_device_classifier)"
+      ],
+      "width": 360,
+      "row": 1,
+      "col": 0,
+      "row_name": "u_vlsit_riscv_device_classifier / m_vlsit_riscv_device_classifier",
+      "function": "Separates non-cacheable device transactions from cacheable memory according to the SoC address/attribute contract.",
+      "source": "NEW | VLSIT"
+    },
+    {
+      "key": "mmio",
+      "label": [
+        "u_vlsit_riscv_axi_mmio",
+        "(m_vlsit_riscv_axi_mmio)"
+      ],
+      "width": 320,
+      "row": 1,
+      "col": 2,
+      "row_name": "u_vlsit_riscv_axi_mmio / m_vlsit_riscv_axi_mmio",
+      "function": "Carries uncached device traffic to the external AXI4 fabric and returns responses without allocating cache lines.",
+      "source": "NEW | VLSIT"
+    }
+  ],
+  "connectors": [
+    {
+      "id": "REQ",
+      "src": "tile",
+      "src_side": "R",
+      "dst": "txn",
+      "dst_side": "L"
+    },
+    {
+      "id": "DIR",
+      "src": "txn",
+      "src_side": "B",
+      "dst": "directory",
+      "dst_side": "T"
+    },
+    {
+      "id": "TAG",
+      "src": "txn",
+      "src_side": "R",
+      "dst": "probe",
+      "dst_side": "L"
+    },
+    {
+      "id": "SNP",
+      "src": "probe",
+      "src_side": "L",
+      "dst": "tile",
+      "dst_side": "R"
+    },
+    {
+      "id": "DEV",
+      "src": "tile",
+      "src_side": "B",
+      "dst": "device",
+      "dst_side": "T"
+    },
+    {
+      "id": "AXI",
+      "src": "device",
+      "src_side": "R",
+      "dst": "mmio",
+      "dst_side": "L"
+    }
+  ],
+  "externals": [
+    {
+      "id": "TREQ",
+      "block": "tile",
+      "side": "L",
+      "dir": "in",
+      "pos": 0.5,
+      "text": [
+        "TREQ",
+        "Tile request / probe"
+      ]
+    },
+    {
+      "id": "LLC",
+      "block": "txn",
+      "side": "T",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "LLC",
+        "Shared LLC line service"
+      ]
+    },
+    {
+      "id": "DEV",
+      "block": "mmio",
+      "side": "B",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "DEV",
+        "Non-coherent AXI4 device path"
+      ]
+    },
+    {
+      "id": "EVT",
+      "block": "txn",
+      "side": "T",
+      "dir": "out",
+      "pos": 1,
+      "text": [
+        "EVT",
+        "Coherence and queue event taps"
+      ]
+    }
+  ],
+  "nets": [],
+  "interfaces": [
+    {
+      "id": "REQ",
+      "name": "Tile coherent request service",
+      "category": "handshake",
+      "active": "tile adapter -> transaction table",
+      "signals": "Cacheable address, operation, requester, data and returned grant/response; exact cache records remain source-mapping dependencies."
+    },
+    {
+      "id": "DIR",
+      "name": "Sharer directory lookup and update",
+      "category": "handshake",
+      "active": "transaction table -> sharer directory",
+      "signals": "Physical line lookup, conservative holder bitmap, committed fill/downgrade/invalidation/eviction update, and transaction association."
+    },
+    {
+      "id": "TAG",
+      "name": "Tagged probe scheduling",
+      "category": "handshake",
+      "active": "transaction table -> probe scheduler",
+      "signals": "Transaction tag, physical line, selected holder mask, probe operation, response mask and dirty-data obligation."
+    },
+    {
+      "id": "SNP",
+      "name": "Targeted D-cache probes",
+      "category": "custom",
+      "active": "probe scheduler -> tile adapter",
+      "signals": "Tagged probe request and matching response/data; per-cache outstanding depth is TBD."
+    },
+    {
+      "id": "DEV",
+      "name": "Uncached device path",
+      "category": "handshake",
+      "active": "tile adapter -> device classifier",
+      "signals": "Non-cacheable address/control/data and returned response."
+    },
+    {
+      "id": "AXI",
+      "name": "AXI4 peripheral route",
+      "category": "standard protocol",
+      "active": "device classifier -> AXI MMIO router",
+      "signals": "AXI4 transaction channels; the SoC fabric decodes targets."
+    },
+    {
+      "id": "TREQ",
+      "name": "Per-hart tile boundary",
+      "category": "custom",
+      "active": "CPU tiles <-> tile adapters",
+      "signals": "Replicated coherent request/response and tagged local-probe boundary; exact source pins are TBD."
+    },
+    {
+      "id": "LLC",
+      "name": "Shared LLC line service",
+      "category": "custom",
+      "active": "transaction table -> shared LLC",
+      "signals": "Line read/write, refill, dirty writeback, error and completion; exact port mapping is TBD."
+    },
+    {
+      "id": "EVT",
+      "name": "PMU coherence event taps",
+      "category": "custom",
+      "active": "coherence fabric -> cluster PMU",
+      "signals": "Implemented directory, transaction, probe, dirty-owner and wait events; selector IDs remain open."
+    }
+  ],
+  "legend_note": "NEW: VLSIT sharer directory, transaction table, probe scheduler and CCU. MODIFY: separate licensed HPDcache copy; keep upstream pristine. Culsans is reference only. REUSE=unchanged; REUSE*=candidate; MODIFY=adapted; NEW=designed; GENERATED=CSR. Proposed architecture, not integrated RTL."
+}

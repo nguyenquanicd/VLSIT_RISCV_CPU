@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "top": "hpdcache_ownership_tb",
+  "scope": [
+    "configured modified HPDcache",
+    "ownership request held without refill until grant",
+    "Shared store invalidates/replays and requests exclusive ownership"
+  ],
+  "simulator": "C:\\Tools\\oss-cad-suite\\bin\\verilator_bin.exe",
+  "lint": {
+    "passed": true,
+    "errors": 0,
+    "warnings": 131
+  },
+  "result": "OWN_REQ load id=0 line=0000000000200 kind=0 time=716000\nGRANT load state=S ready=0 time=770000\nOWN_REQ shared-store id=0 line=0000000000200 kind=1 time=936000\nGRANT store state=M ready=0 time=970000\nPASS: ownership-gated refill and Shared-store invalidate/replay\n- C:\\HQuan\\102_MyGithub\\VLSIT_RISCV_CPU\\rtl\\reports\\hpdcache_ownership_sim\\hpdcache_ownership_tb.sv:487: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.053 devel\n- Verilator: $finish at 1us; walltime 0.000 s; speed 0.000 s/s\n- Verilator: cpu 0.000 s on 1 threads; allocated 6 MB",
+  "testbench_lint_passed": true
+}

@@ -1,0 +1,44 @@
+{
+  "signal": [
+    {
+      "name": "absent_harts_seen",
+      "wave": "==..=....=.",
+      "data": [
+        "0x0",
+        "0x1",
+        "0x3",
+        "0xf"
+      ]
+    },
+    {
+      "name": "harts_done",
+      "wave": "=..=..=.=.=",
+      "data": [
+        "0x0",
+        "0x2",
+        "0x6",
+        "0xe",
+        "0xf"
+      ]
+    },
+    {
+      "name": "peer_amo_values_seen",
+      "wave": "=.=..=.=...",
+      "data": [
+        "0x0",
+        "0x1",
+        "0x3",
+        "0x7"
+      ]
+    }
+  ],
+  "head": {
+    "text": "TEST-052: 4 harts, amo_refill_error; actual event samples"
+  },
+  "foot": {
+    "text": "Times (ns): 80, 8180, 13100, 13210, 13260, 15150, 15260, 15600, 15710, 20150, 21000. Nonuniform gaps."
+  },
+  "config": {
+    "hscale": 2
+  }
+}

@@ -1,0 +1,38 @@
+[
+  {
+    "suite": "cluster_completeness_audit",
+    "harts": 2,
+    "error": 0,
+    "supervisor": false,
+    "pass": true,
+    "cycles": 726,
+    "log": "rtl/reports/cluster_completeness_audit/simulation_2h_error0.log"
+  },
+  {
+    "suite": "cluster_completeness_audit",
+    "harts": 2,
+    "error": 1,
+    "supervisor": false,
+    "pass": true,
+    "cycles": 605,
+    "log": "rtl/reports/cluster_completeness_audit/simulation_2h_error1.log"
+  },
+  {
+    "suite": "cluster_completeness_audit",
+    "harts": 4,
+    "error": 0,
+    "supervisor": false,
+    "pass": true,
+    "cycles": 948,
+    "log": "rtl/reports/cluster_completeness_audit/simulation_4h_error0.log"
+  },
+  {
+    "suite": "cluster_completeness_audit",
+    "harts": 4,
+    "error": 1,
+    "supervisor": false,
+    "pass": true,
+    "cycles": 705,
+    "log": "rtl/reports/cluster_completeness_audit/simulation_4h_error1.log"
+  }
+]

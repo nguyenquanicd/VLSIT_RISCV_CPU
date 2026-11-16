@@ -1,0 +1,122 @@
+{
+  "page_name": "HPD_PROBE",
+  "out_name": "HPD_PROBE.drawio",
+  "function": "HPD_PROBE",
+  "initial": "ENUM_ST_IDLE",
+  "state_pattern": "^[A-Z][A-Z0-9_]+$",
+  "states": [
+    {
+      "name": "ENUM_ST_IDLE"
+    },
+    {
+      "name": "ENUM_ST_LOOKUP_REQ"
+    },
+    {
+      "name": "ENUM_ST_LOOKUP_WAIT"
+    },
+    {
+      "name": "ENUM_ST_FLUSH_REQ"
+    },
+    {
+      "name": "ENUM_ST_FLUSH_WAIT"
+    },
+    {
+      "name": "ENUM_ST_PREPARE_RSP"
+    },
+    {
+      "name": "ENUM_ST_TERMINAL_WAIT"
+    },
+    {
+      "name": "ENUM_ST_UPDATE_REQ"
+    },
+    {
+      "name": "ENUM_ST_TERMINAL_RSP"
+    },
+    {
+      "name": "ENUM_ST_ERR_RSP"
+    },
+    {
+      "name": "ENUM_ST_STRAY_RSP"
+    }
+  ],
+  "transitions": [
+    {
+      "src": "ENUM_ST_IDLE",
+      "dst": "ENUM_ST_LOOKUP_REQ",
+      "label": "accepted PREPARE"
+    },
+    {
+      "src": "ENUM_ST_IDLE",
+      "dst": "ENUM_ST_STRAY_RSP",
+      "label": "accepted non-PREPARE without context"
+    },
+    {
+      "src": "ENUM_ST_STRAY_RSP",
+      "dst": "ENUM_ST_IDLE",
+      "label": "response consumed"
+    },
+    {
+      "src": "ENUM_ST_LOOKUP_REQ",
+      "dst": "ENUM_ST_LOOKUP_WAIT",
+      "label": "lookup accepted"
+    },
+    {
+      "src": "ENUM_ST_LOOKUP_WAIT",
+      "dst": "ENUM_ST_FLUSH_REQ",
+      "label": "lookup matches dirty M hit; writeback enabled"
+    },
+    {
+      "src": "ENUM_ST_LOOKUP_WAIT",
+      "dst": "ENUM_ST_PREPARE_RSP",
+      "label": "lookup error, absence, or no writeback required"
+    },
+    {
+      "src": "ENUM_ST_FLUSH_REQ",
+      "dst": "ENUM_ST_FLUSH_WAIT",
+      "label": "native flush accepted"
+    },
+    {
+      "src": "ENUM_ST_FLUSH_WAIT",
+      "dst": "ENUM_ST_PREPARE_RSP",
+      "label": "native flush ACK received"
+    },
+    {
+      "src": "ENUM_ST_PREPARE_RSP",
+      "dst": "ENUM_ST_TERMINAL_WAIT",
+      "label": "PREPARE response consumed"
+    },
+    {
+      "src": "ENUM_ST_TERMINAL_WAIT",
+      "dst": "ENUM_ST_ERR_RSP",
+      "label": "terminal tag/line/target/phase mismatch or bad COMMIT"
+    },
+    {
+      "src": "ENUM_ST_TERMINAL_WAIT",
+      "dst": "ENUM_ST_TERMINAL_RSP",
+      "label": "matching ABORT or COMMIT of validated absence"
+    },
+    {
+      "src": "ENUM_ST_TERMINAL_WAIT",
+      "dst": "ENUM_ST_UPDATE_REQ",
+      "label": "matching good COMMIT of actual hit"
+    },
+    {
+      "src": "ENUM_ST_UPDATE_REQ",
+      "dst": "ENUM_ST_TERMINAL_RSP",
+      "label": "state update accepted"
+    },
+    {
+      "src": "ENUM_ST_ERR_RSP",
+      "dst": "ENUM_ST_TERMINAL_WAIT",
+      "label": "error response consumed; retain prepared context"
+    },
+    {
+      "src": "ENUM_ST_TERMINAL_RSP",
+      "dst": "ENUM_ST_IDLE",
+      "label": "terminal response consumed"
+    }
+  ],
+  "layout": {
+    "margin": 50
+  }
+}

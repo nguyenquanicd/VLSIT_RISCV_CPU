@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "return_code": 0,
+  "errors": 0,
+  "warnings": 135,
+  "top": "hpdcache_lint",
+  "mode": "configured HPDcache query-path lint",
+  "timed_out": false,
+  "uses_modified_hpdcache_mshr": true,
+  "uses_modified_hpdcache_miss_handler": true,
+  "uses_modified_hpdcache_top": true
+}

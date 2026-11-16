@@ -1,0 +1,18 @@
+{
+  "components": 117,
+  "working_flow_figures": 2,
+  "implemented_fsms": 6,
+  "fsm_figures": 10,
+  "rtl_files_unchanged": 464,
+  "block_tabs": [
+    "BLOCK_DIAGRAM",
+    "BLOCK_INFORMATION"
+  ],
+  "bilingual_specification": "User preference overrides skill R-005 English-only check.",
+  "spec_checker_native_exit": 1,
+  "spec_checker_technical_errors": 0,
+  "spec_checker_language_findings": 1,
+  "compatibility": "Project adapter restores protected FSM library edge style and emits exact oval/transition-label SVG; post-render library checks pass; installed skill unchanged.",
+  "component_functions": 35,
+  "modified_sources": 84
+}

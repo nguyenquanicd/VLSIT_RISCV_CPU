@@ -1,0 +1,134 @@
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "issue_read_operands.drawio",
+  "layout": {
+    "gap_h": 120,
+    "gap_v": 110,
+    "margin": 80,
+    "block_h": 60
+  },
+  "top": {
+    "frame_label": [
+      "Component composition",
+      "(issue_read_operands)"
+    ]
+  },
+  "frame_row": [
+    "issue_read_operands",
+    "Native modified component; function and change contract are specified in Section 14.",
+    "rtl/modified/cva6/core/issue_read_operands.sv"
+  ],
+  "frame_interfaces": [],
+  "blocks": [
+    {
+      "key": "B0",
+      "label": [
+        "i_ariane_fp_regfile",
+        "(ariane_regfile)"
+      ],
+      "width": 220,
+      "row": 0,
+      "col": 0,
+      "row_name": "i_ariane_fp_regfile (ariane_regfile)",
+      "function": "Native component",
+      "source": "MODIFY; rtl/modified/cva6/core/ariane_regfile_ff.sv"
+    },
+    {
+      "key": "B1",
+      "label": [
+        "i_ariane_regfile",
+        "(ariane_regfile)"
+      ],
+      "width": 200,
+      "row": 0,
+      "col": 1,
+      "row_name": "i_ariane_regfile (ariane_regfile)",
+      "function": "Native component",
+      "source": "MODIFY; rtl/modified/cva6/core/ariane_regfile_ff.sv"
+    },
+    {
+      "key": "B2",
+      "label": [
+        "i_ariane_fp_regfile_fpga",
+        "(ariane_regfile_fpga)"
+      ],
+      "width": 280,
+      "row": 1,
+      "col": 0,
+      "row_name": "i_ariane_fp_regfile_fpga (ariane_regfile_fpga)",
+      "function": "Native component",
+      "source": "REUSE; rtl/third_party/cva6/core/ariane_regfile_fpga.sv"
+    },
+    {
+      "key": "B3",
+      "label": [
+        "i_ariane_regfile_fpga",
+        "(ariane_regfile_fpga)"
+      ],
+      "width": 260,
+      "row": 1,
+      "col": 1,
+      "row_name": "i_ariane_regfile_fpga (ariane_regfile_fpga)",
+      "function": "Native component",
+      "source": "REUSE; rtl/third_party/cva6/core/ariane_regfile_fpga.sv"
+    },
+    {
+      "key": "B4",
+      "label": [
+        "i_cvxif_issue_register_commit_if_driver",
+        "(cvxif_issue_register_commit_if_driver)"
+      ],
+      "width": 460,
+      "row": 2,
+      "col": 0,
+      "row_name": "i_cvxif_issue_register_commit_if_driver (cvxif_issue_register_commit_if_driver)",
+      "function": "Native component",
+      "source": "REUSE; rtl/third_party/cva6/core/cvxif_issue_register_commit_if_driver.sv"
+    },
+    {
+      "key": "B5",
+      "label": [
+        "i_rs1_last_raw",
+        "(raw_checker)"
+      ],
+      "width": 180,
+      "row": 2,
+      "col": 1,
+      "row_name": "i_rs1_last_raw (raw_checker)",
+      "function": "Native component",
+      "source": "MODIFY; rtl/modified/cva6/core/raw_checker.sv"
+    },
+    {
+      "key": "B6",
+      "label": [
+        "i_rs2_last_raw",
+        "(raw_checker)"
+      ],
+      "width": 180,
+      "row": 3,
+      "col": 0,
+      "row_name": "i_rs2_last_raw (raw_checker)",
+      "function": "Native component",
+      "source": "MODIFY; rtl/modified/cva6/core/raw_checker.sv"
+    },
+    {
+      "key": "B7",
+      "label": [
+        "i_rs3_last_raw",
+        "(raw_checker)"
+      ],
+      "width": 180,
+      "row": 3,
+      "col": 1,
+      "row_name": "i_rs3_last_raw (raw_checker)",
+      "function": "Native component",
+      "source": "MODIFY; rtl/modified/cva6/core/raw_checker.sv"
+    }
+  ],
+  "connectors": [],
+  "externals": [],
+  "interfaces": [],
+  "nets": [],
+  "legend_note": "Exact source-referenced children; generate multiplicity and active branches are specified in the component text. Containment denotes hierarchy, not invented signal connectivity. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.",
+  "library_sha256": "15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"
+}

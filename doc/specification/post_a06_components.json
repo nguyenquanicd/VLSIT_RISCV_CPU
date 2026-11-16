@@ -1,0 +1,247 @@
+{
+  "m_vlsit_riscv_cluster_axi_top": {
+    "function": "Expose one synchronous cluster boundary and adapt the fixed 64-bit LLC memory interface to the selected external data width.",
+    "flow": "Instantiate the cluster core and the memory width adapter. Connect the core memory request/response bundle through the adapter; connect AXI4-Lite, MMIO, boot, interrupt and debug directly to the core. The TOP performs no cache or retirement decision.",
+    "storage": "Structural wiring only. Adapter buffering is owned by the child, not by the TOP.",
+    "critical": "PARA_CPU_NUM selects 2 or 4 active harts. Memory IDs are 7 bits; MMIO IDs are 6 bits. AXI4-Lite is address/data 32/32. A runtime bus-width switch is not supported.",
+    "verification": "Fresh native TOP lint passes at 2/4 harts. CPU end-to-end tests use the 64-bit external memory profile; other advertised widths remain leaf-qualified."
+  },
+  "m_vlsit_riscv_cluster_core": {
+    "function": "Integrate CPUs, coherence control, memory/MMIO routing, maintenance, shared LLC, PMU and software diagnostics.",
+    "flow": "CPU tiles request permissions from the shared CCU. Cacheable data travels through per-hart routing, memory arbitration and LLC; normal-uncached traffic uses the approved memory-bypass path, and device traffic uses the separate MMIO path. A selected maintenance instruction uses the CMO arbiter/controller and waits for CCU plus LLC terminal completion before returning to its hart. AXI4-Lite independently selects generated CSR or native LLC service.",
+    "storage": "Child blocks own contexts, arrays, counters and register queues. The core adds reset-only fatal-IRQ retention and first-fault metadata association.",
+    "critical": "Keep raw failed B response associated with the native ID-checked L1 flush ACK. Diagnostic W1C cannot clear a fatal retained cache context. Local protocol adapters must continue draining already issued responses during fault retention.",
+    "verification": "The latest source-consistent campaign has 58 real CPU scenarios. The presence of PMU, debug and LLC service instances does not establish functional closure of those paths."
+  },
+  "m_vlsit_riscv_cpu_tile_array": {
+    "function": "Replicate active CPU tiles and connect their ownership, query, lock and tagged-probe channels to one shared coherence tile array.",
+    "flow": "Instantiate one CPU tile per active hart with zero-based hart ID and common boot address. Route each tile's ownership request and returned grant to the corresponding coherence adapter. Fan probes and line-lock observations to the correct tile. Tie off only the inactive fixed hart slots when PARA_CPU_NUM is 2.",
+    "storage": "Replication/control wrapper; per-hart execution state resides in the CPU tile, transaction state in the shared fabric.",
+    "critical": "Inactive slots must never issue AXI or coherence requests or contribute PMU/fault events. Active-hart index must agree across IRQ, probe, AXI ID extension and diagnostic paths.",
+    "verification": "Active 2/4-hart real programs and inactive-slot unit checks exist; external per-hart IRQ/debug behavior still needs system tests."
+  },
+  "m_vlsit_riscv_cpu_tile": {
+    "function": "Wrap the locally adapted native CVA6 and derive its physical memory attributes from the same region table used by the AXI router.",
+    "flow": "CVA6 fetches at the shared boot entry and distinguishes harts by hart ID. The cache subsystem routes D-cache ownership/probes and native writeback ACKs through the wrapper. The same compile-time address table classifies outgoing AW/AR transactions. External maintenance completion returns to CVA6 retirement; per-hart IRQ/debug signals retain their source identity.",
+    "storage": "Native pipeline, MMU, instruction cache, HPDcache and FPU state are inside CVA6. The wrapper itself does not duplicate cache data.",
+    "critical": "ExternalCmo is enabled by the production cluster. CVXIF is disabled in the local licensed configuration. The wrapper must preserve native request IDs and source semantics rather than restyle upstream ports.",
+    "verification": "Real CPU boot/load/store/atomic/CMO and selected M/S trap cases pass. Full ISA, Sv39 and OS qualification remain open."
+  },
+  "m_vlsit_riscv_coh_tile_array": {
+    "function": "Compose one ownership/probe adapter per active hart with the multi-context directory-based MESI fabric.",
+    "flow": "Collect per-tile permission requests, propagate tagged grants, distribute PREPARE/COMMIT/ABORT probes and carry their responses back to the transaction context. Query actual cache activity before servicing a probe and expose line locks to CPU access/victim selection.",
+    "storage": "Adapter locks and fabric contexts are separate storage owners. Tags identify active contexts; a tag is not a software hart ID.",
+    "critical": "Do not conflate a probe handshake with completion. A cache may retain a prepared line across multiple cycles while waiting for its matching terminal phase.",
+    "verification": "Composed control units plus CPU atomic/maintenance paths pass. General multi-hart data correctness requires an independent memory scoreboard."
+  },
+  "m_vlsit_riscv_coh_fabric": {
+    "function": "Coordinate directory lookup, ownership decisions, victim replacement, tagged two-phase probes and commit/abort for multiple in-flight cache lines.",
+    "flow": "Allocate a root context only with a reserved victim escape credit available. Lookup the selected bank/set; capture owner/holders and actual PREPARE observations. If replacing a held directory entry, allocate a non-recursive victim child. If that victim is locked elsewhere, cancel the parent's set reservation before retrying. Publish directory changes only after successful terminal completion; return a retained success/error grant and release the matching context after consumption.",
+    "storage": "A state per context, retained requester/grant/error/victim/parent metadata and bank response bookkeeping; the transaction table holds phase-associated metadata and ACK masks.",
+    "critical": "Silent local E-to-M is legal and must be refined from actual probe results. Valid PREPARE-I can prune a conservative stale holder only at COMMIT. Owner writeback_done is required for actual dirty data. Missing phase ACKs have no timeout. N physical contexts admit at most N-1 CPU/CMO roots.",
+    "verification": "A-01/A-02/A-04/A-05 targeted CPU/unit tests pass. This is not a formal global deadlock or all-traffic fairness proof."
+  },
+  "m_vlsit_riscv_coh_bank_arb": {
+    "function": "Select eligible directory work fairly within each of four independent banks while preserving request identity.",
+    "flow": "Filter ineligible requests before round-robin selection. Admit a lookup/update/cancel only when its owning context can legally proceed. Reservation-owner terminal work remains serviceable when another requester is blocked on the same set.",
+    "storage": "Per-bank round-robin/request-token state. Directory contents are not stored here.",
+    "critical": "An ineligible UPDATE must not hide the CANCEL that releases its reservation dependency. Consume a request token once and rearm only for a new eligible request.",
+    "verification": "Bank-progress, reservation-cancel escape and A-05 directed units exist; saturated random fairness remains open."
+  },
+  "m_vlsit_riscv_coh_txn_table": {
+    "function": "Own the lifetime and immutable identity of every active coherence transaction and its current probe phase.",
+    "flow": "Allocate a free slot, retain line/requester/kind/target state, capture owner and phase information, accumulate only matching ACKs, preserve writeback/error obligations across phase changes, and release only the selected terminal context after response draining.",
+    "storage": "Per-slot valid, address, source/owner, target MESI, phase, expected/received masks and writeback/error state. PARA_COH_TXN_NUM is 2 through 16; default 8. CCU context tag width is max(1, clog2(context count)); the native probe endpoint has a separate fixed four-bit field adapted by its wrapper.",
+    "critical": "A new phase must not clear obligations needed by a later phase. Invalid or duplicate ACKs must not retire a live context. Reserved victim credit is an allocation policy enforced with the fabric.",
+    "verification": "Context full/wrap, identity, phase retention, invalid ACK and mutation checks exist; random reorder coverage remains incomplete."
+  },
+  "m_vlsit_riscv_sharer_directory": {
+    "function": "Store a conservative set of L1 holders and MESI/owner metadata independently of shared LLC residency.",
+    "flow": "Decode a 16-byte physical line into bank/set/tag. Lookup and reserve a candidate way, prefer an invalid way, otherwise choose tree-PLRU. Permit only the reservation owner's commit/update/cancel. Before overwriting a held victim, wait for its holders and dirty data obligations to finish.",
+    "storage": "Four banks, eight-way sets, tags/valid/holders/owner/state, per-set reservations and replacement metadata. Logical default directory capacity follows the approved 2/4-hart configuration.",
+    "critical": "Extra holder bits are conservative only when later probes reconcile them. A missing actual holder is forbidden. LLC eviction does not itself invalidate L1; directory victim eviction does require holder service.",
+    "verification": "Lookup/update/cancel, PLRU, victim and A-04/A-05 units/CPU paths exist. ASIC SRAM binding and formal no-false-negative proof remain open."
+  },
+  "m_vlsit_riscv_probe_scheduler": {
+    "function": "Schedule one active tagged probe per cache and route matching cache responses to the correct context.",
+    "flow": "Round-robin scan active contexts for each hart; select only expected, not-yet-ACKed targets. Retain request payload through backpressure. After PREPARE acceptance, keep phase-owner association so only the same transaction's terminal work uses that cache. Buffer the matching ACK until the transaction table accepts it; drain mismatches into a diagnostic event.",
+    "storage": "Per-hart request/active-probe/phase-owner/ACK-valid registers, associated tag/line/phase/state/error payload and scan pointer.",
+    "critical": "Target MESI comes from the matching context, never an unrelated live signal. Tag, line and phase all participate in response matching. No new PREPARE may steal a cache while an earlier transaction awaits COMMIT/ABORT.",
+    "verification": "Tagged phase/invalid response/control tests and CPU paths pass. General hostile response ordering remains a verification task."
+  },
+  "m_vlsit_riscv_tile_coh_adapter": {
+    "function": "Bridge native tile ownership/probe interfaces to the cluster fabric while enforcing line-busy and lock constraints.",
+    "flow": "Capture a native ownership request and retain its source ID through grant. Before a PREPARE, query the cache and delay same-line service while refill/AMO/eviction activity is unsafe. Acquire/release the tagged line lock with the two-phase probe lifetime and preserve retained phase identity under backpressure.",
+    "storage": "Request/grant and probe association state plus the child cache-line lock table.",
+    "critical": "A different-line CPU hit may proceed only if it does not conflict with a shared array resource. Failed terminal validation must not silently unlock the line or publish MESI changes.",
+    "verification": "Focused adapter/lock units and native CPU scenarios exist. Array-resource contention must not be mistaken for guaranteed hit-under-probe throughput."
+  },
+  "m_vlsit_riscv_cache_line_locks": {
+    "function": "Track line exclusion by transaction tag and answer CPU access, victim and probe lock queries.",
+    "flow": "Allocate or update a lock only for its owning tag, compare query line addresses against valid entries, and release only a matching terminal owner. Raise a protocol diagnostic for conflicting operations without corrupting existing locks.",
+    "storage": "One valid/tag/physical-line association per supported context.",
+    "critical": "A tag reused after release must not inherit an earlier line. Locks are control metadata, not cache data storage. Missing terminal ACK keeps the lock according to the no-timeout policy.",
+    "verification": "Lock lifetime, duplicate/conflict and terminal-release units are available; formal concurrency checks remain open."
+  },
+  "m_vlsit_riscv_hpd_probe_engine": {
+    "function": "Execute tagged PREPARE and matching COMMIT/ABORT against native HPDcache metadata and writeback services.",
+    "flow": "PREPARE requests a metadata lookup. An actual dirty M hit with writeback enabled initiates a native flush and waits for its accepted B result. Return the prepared state/error and retain the line. Matching COMMIT updates a real hit to the target MESI state; validated absence remains I without allocating a line. Matching ABORT returns without changing the prepared state. Invalid terminal requests report an error while preserving the valid prepared context.",
+    "storage": "Probe tag/line/target, observed state/way/hit/error/writeback status and retained response; eleven-state explicit FSM.",
+    "critical": "Payload stays stable while response ready is low. A successful AW or W transfer is not writeback completion. Unknown/mismatched requests must not destroy a legitimate prepared transaction.",
+    "verification": "Native probe-engine units plus dirty-owner, absence, ABORT and maintenance CPU paths pass."
+  },
+  "m_vlsit_riscv_cmo_arbiter": {
+    "function": "Select one hart's retirement-blocking maintenance request and preserve its completion destination.",
+    "flow": "Choose an eligible requester using the implemented arbitration pointer, latch the selected hart and instruction metadata, send one command to the controller and route terminal completion/error back to that hart. Keep other requests pending rather than duplicating an accepted instruction.",
+    "storage": "Selected/active request metadata and fairness pointer; no cache data.",
+    "critical": "Completion must use retained selection, not the current request vector. The instruction may retire or trap only after the controller's terminal result.",
+    "verification": "Arbiter units and actual CBO/FENCE.I CPU tests pass; simultaneous maintenance plus external interrupt/debug remains to qualify."
+  },
+  "m_vlsit_riscv_cmo_controller": {
+    "function": "Sequence CCU preparation, optional per-line LLC maintenance, terminal COMMIT/ABORT and the hart completion response.",
+    "flow": "Capture a command; obtain a CCU transaction; wait for PREPARE. For a successful CBO issue native LLC maintenance and wait for completion. For FENCE.I, skip LLC-to-DRAM maintenance after local dirty data reaches LLC. On any error request ABORT; otherwise request COMMIT. Wait for all terminal ACKs and context completion before responding to the CPU.",
+    "storage": "Retained op/hart/line/PC/VA/tag/error and eight-state FSM.",
+    "critical": "Support same-cycle accepted maintenance/finish completion without losing done. Do not report a precise error before ABORT ACKs. Cause 7 applies to the approved CBO path; cause 24 is the custom FENCE.I maintenance fault.",
+    "verification": "Directed controller/metadata units and CPU CBO/FENCE.I success/error/retry cases pass."
+  },
+  "m_vlsit_riscv_addr_decode": {
+    "function": "Classify a complete physical access against a shared compile-time region table.",
+    "flow": "Validate region alignment/size/type/non-overlap; compare the full requested address window, not only its first byte. Return matched region index/class or an error. Classes distinguish cacheable normal memory, normal uncached memory and device MMIO.",
+    "storage": "Combinational decode; no outstanding transaction state.",
+    "critical": "An access crossing the selected region boundary must not acquire the attributes of only its starting byte. Unmapped/invalid/reserved configurations fail closed. MMIO atomic operations are not silently forwarded as ordinary accesses.",
+    "verification": "Classifier and classifier/router leaf tests pass; CPU-originated MMIO/normal-uncached behavior remains unqualified."
+  },
+  "m_vlsit_riscv_axi_route": {
+    "function": "Route one tile's AXI transactions to cached memory, normal-uncached bypass, device MMIO or a local error responder.",
+    "flow": "Use the captured AW/AR classification and transaction attributes to select a downstream path. Retain write-path association across AW/W skew and return B/R to the originating tile. Unsupported/unmapped requests go to the native DECERR responder rather than being dropped.",
+    "storage": "Native AXI demultiplexer/ordering state and outstanding-route association.",
+    "critical": "AW and W are independent channels but W belongs to an accepted address stream. Normal-uncached and MMIO are distinct classes. Preserve ID and ATOP semantics on the supported memory path.",
+    "verification": "Route leaf tests and cacheable CPU traffic exist; full external MMIO/uncached/error campaigns are pending."
+  },
+  "m_vlsit_riscv_axi_mem_mux": {
+    "function": "Arbitrate per-hart memory traffic while preserving source identity and response routing.",
+    "flow": "Pack native AXI requests, mask inactive hart slots, arbitrate accepted requests and extend IDs with source identity. Route B/R responses back by the retained encoded source. Preserve AWATOP and write payload/last semantics.",
+    "storage": "Native AXI mux/ordering registers; does not execute atomics or store cache lines.",
+    "critical": "A source ID extension is not a coherence grant. Upstream cached atomics use the L1/CCU path; uncached ATOP still needs a functional SoC atomic target.",
+    "verification": "2/4-hart leaf transport tests plus CPU memory traffic pass. Uncached atomic execution is not demonstrated by metadata forwarding."
+  },
+  "m_vlsit_riscv_axi_mmio": {
+    "function": "Provide a separate non-coherent AXI4 device egress for active harts.",
+    "flow": "Pack each hart's selected device request, arbitrate through the native mux and return B/R by hart-extended ID. The external SoC fabric performs peripheral address decoding after the cluster selects this egress.",
+    "storage": "Mux transaction/ID state; no device register file or duplicate peripheral address map.",
+    "critical": "The egress data width is fixed at 64 bits in this profile. It does not acquire MESI ownership or bypass an unsupported atomic into a device.",
+    "verification": "TOP lint establishes connection. No complete CPU-to-device model program campaign has been found; classify peripheral behavior as unqualified."
+  },
+  "m_vlsit_axi_llc": {
+    "function": "Wrap the licensed native LLC with VLSIT AXI/service/maintenance and fault-event ports.",
+    "flow": "Translate flat ports into native AXI and RegBus records, service CPU/memory requests and forward per-line maintenance. Route native completion/error/events back to the cluster and forward a pulse plus victim address/raw B response for fatal non-maintenance writeback errors.",
+    "storage": "Native LLC owns tag/data SRAMs, descriptor queues and pending writeback/refill state. The wrapper changes naming/types, not cache policy.",
+    "critical": "Default 4 ways x 4096 lines x 2 blocks x 8 bytes = 256 KiB. The reference maintenance contract uses 16-byte lines. Larger PARA_LLC_BLOCK_NUM values are not functionally qualified. Runtime SPM is blocked.",
+    "verification": "Native LLC units and reduced-geometry CPU tests pass; default 256-KiB system stress and native CSR BIST/flush remain open."
+  },
+  "m_vlsit_riscv_axi_dw_adapter": {
+    "function": "Convert the fixed 64-bit memory-side LLC bus to synthesis-selected external AXI data width.",
+    "flow": "Pack VLSIT fields into the pinned native width-converter records. Split or merge W/R transfers while preserving addresses, sizes, IDs, strobes, last and response/ATOP metadata. Return data to the original LLC request context.",
+    "storage": "Native converter read/write packing and outstanding-transfer buffers.",
+    "critical": "Supported declared external widths are 32, 64, 128 and 256 bits, selected before synthesis. Metadata passage does not prove an atomic target executes the requested operation.",
+    "verification": "Four leaf-width tests pass. Only 64-bit external memory is exercised by the current real CPU regression."
+  },
+  "m_vlsit_riscv_axil_decode": {
+    "function": "Decode one external AXI4-Lite control port into cluster CSR and LLC service targets.",
+    "flow": "Capture independent AW/W and read requests. Validate aligned base/window, route full relative CSR offsets or subtract the LLC target base, and retain target association until its B/R is consumed. Reject accesses outside the control aperture locally.",
+    "storage": "Independent queued write/read payload and response/target state.",
+    "critical": "Use the approved 4-KiB group spacing and 24-KiB total aperture. Do not truncate CSR offsets to 12 bits and alias PMU/fault banks. Maximum legal 32-bit base is 0xFFFFA000.",
+    "verification": "A-06 native CPU CSR accesses plus nonzero/max/invalid-base map units pass; map-cookie checks do not verify the LLC service's side effects."
+  },
+  "m_vlsit_axil_reg_bridge": {
+    "function": "Translate AXI4-Lite LLC-service accesses into the pinned PULP RegBus request/response form.",
+    "flow": "Queue AW and W independently and arbitrate a complete write against a queued read. Decode legal native LLC offsets, reject forbidden writes including runtime SPM control, hold one RegBus request until ready, then retain AXI B/R through backpressure.",
+    "storage": "One read and one write entry, retained RegBus request, response registers and three-state FSM.",
+    "critical": "A request ready handshake is the RegBus response point; no APB converter exists. WSTRB must reach the native target. Read-only/unmapped/misaligned accesses must follow this bridge's documented response, distinct from generated CSR behavior.",
+    "verification": "Connected and lint-clean from TOP; native BIST/flush/status and concurrent software traffic still need active integration tests."
+  },
+  "m_vlsit_cpucl_csr": {
+    "function": "Implement workbook-defined AXI4-Lite PMU controls, snapshot words, IRQ/diagnostic status and read-only fatal records.",
+    "flow": "Accept queued AXI4-Lite operations, apply byte write masks and workbook access rules, perform hardware/software field priority, and return stable registered responses. Supply configuration outputs to PMU and sample hardware read-only inputs from counters and first-fault record.",
+    "storage": "Generated register fields and request/response queues. All generator outputs remain byte-identical to provenance; never hand-edit generated RTL.",
+    "critical": "Canonical AXIL_QUEUED workbook and recorded v3.5 generator define field names and semantics. Hardware writes win for generated W1C fields. A mandatory version-at-zero rule in the newer skill conflicts with the approved existing ABI; do not silently move the control register or add a register during this documentation rewrite.",
+    "verification": "A-06 verifies RO fault words, writes, strobes, reserved accesses and reset; active PMU/snapshot/IRQ operation remains to qualify."
+  },
+  "m_csr_async_fifo": {
+    "function": "Provide the generator's optional dual-clock request/response FIFO implementation.",
+    "flow": "Maintain binary/Gray pointers, synchronize pointers across the two domains and expose full/empty-qualified transfers in asynchronous configurations.",
+    "storage": "Payload memory, pointers and synchronizer state.",
+    "critical": "The current cluster ties CSR clocks to the same cluster domain; optional asynchronous generator branches are not evidence of a required cluster CDC path. Do not claim CDC qualification from TOP lint.",
+    "verification": "Generated collateral is included; asynchronous configuration is outside current cluster functional evidence."
+  },
+  "m_csr_sync_fifo": {
+    "function": "Provide the generated CSR's synchronous queued request/response storage.",
+    "flow": "Accept a write only when space exists, expose the oldest payload when nonempty and advance read/write/count state on actual handshakes.",
+    "storage": "Fixed-depth payload array, pointers and count.",
+    "critical": "Simultaneous enqueue/dequeue and response stalls must preserve ordering. The cluster uses the synchronous CSR path; asynchronous models remain generator collateral.",
+    "verification": "Exercised by A-06 AXI4-Lite operations; exhaustive standalone FIFO parameter coverage is not claimed."
+  },
+  "m_vlsit_riscv_pmu": {
+    "function": "Integrate source event packing, scope selection, counters, atomic snapshots and aggregate overflow interrupt.",
+    "flow": "Pack CVA6/HPDcache events per hart, sum active-hart indications for aggregate scope, combine LLC indicators and CCU occurrence counts, select a source/scope for each enabled counter, accumulate modulo width, snapshot all counters together and feed overflow causes to generated CSR.",
+    "storage": "Counter/snapshot storage lives in children; selectors and enable/raw IRQ fields live in generated CSR.",
+    "critical": "Default 16 counters, configurable 1 through 32; width 32 or 64. Scope 0 through 3 is per-hart, 4 aggregates active harts, 5 selects cluster events; unsupported combinations count zero. Validate source-event meaning before using results as IPC evidence.",
+    "verification": "Connected and linted; a full active PMU-to-software functional campaign is missing."
+  },
+  "m_vlsit_pmu_hart_evt": {
+    "function": "Pack CVA6 and HPDcache source indicators into a stable per-hart catalog order.",
+    "flow": "Concatenate 22 CVA6 and 16 HPDcache source bits for each active hart; preserve each source's pulse/level meaning for the selector.",
+    "storage": "Combinational packing only.",
+    "critical": "A source indicator may mean active cycles rather than instruction occurrences. OR-reduced native event sources must not be advertised as arbitrary multi-issue popcounts.",
+    "verification": "Source wiring inspected and hierarchy linted; complete event-by-event functional mapping is pending."
+  },
+  "m_vlsit_pmu_aggregate": {
+    "function": "Sum the same event indicator across active harts without discarding simultaneous occurrences.",
+    "flow": "Mask inactive harts and add the selected bit from each active hart into a three-bit count for every per-hart catalog position.",
+    "storage": "Combinational sums; counter storage is downstream.",
+    "critical": "Four simultaneous hart indicators produce four, not one. This cannot recover multiplicity already lost inside one native source indicator.",
+    "verification": "RTL is present and linted; independent source-to-counter checks are pending."
+  },
+  "m_vlsit_pmu_cluster_evt": {
+    "function": "Pack LLC single-bit indicators and CCU three-bit same-cycle occurrence counts into cluster event slots.",
+    "flow": "Zero-extend each LLC indicator and preserve each CCU count without OR-reducing it. Place LLC slots before the twelve CCU event slots according to the catalog.",
+    "storage": "Combinational mapping.",
+    "critical": "Transaction events and stall-cycle events have different units. A single-bit LLC signal may indicate one source event or activity; software meaning must agree with the actual tap.",
+    "verification": "CCU count tap units exist; complete native LLC event semantics and software readout remain unqualified."
+  },
+  "m_vlsit_pmu_event_select": {
+    "function": "Decode each software event ID and scope into an occurrence count for one counter.",
+    "flow": "For per-hart scope select an existing active hart; for aggregate scope select the precomputed active-hart sum; for cluster scope select LLC/CCU slots. Unknown IDs, absent harts and unsupported source/scope pairs yield zero.",
+    "storage": "Combinational selector; programming fields are stored in generated CSR.",
+    "critical": "Do not interpret scope values as unrestricted array indices. Keep software catalog ranges synchronized with native sources and reserved IDs.",
+    "verification": "TOP lint only for full software use; boundary ID/scope and invalid-selection tests are required."
+  },
+  "m_vlsit_pmu_counter_bank": {
+    "function": "Accumulate enabled event occurrence counts modulo the configured counter width and emit carry/overflow events.",
+    "flow": "Zero-extend the current value and event count, compute a width-plus-one sum, update an enabled nonzero count on the clock edge and expose the carry as the corresponding overflow event.",
+    "storage": "PARA_PMU_CNT_NUM live counters, each 32 or 64 bits.",
+    "critical": "Counts wrap modulo 2^W; saturation is not implemented. Carries can coincide with software IRQ clear or snapshot and need explicit integration tests.",
+    "verification": "Connected/linted; true wrap, enable, multiplicity and same-edge snapshot tests remain pending."
+  },
+  "m_vlsit_pmu_snapshot": {
+    "function": "Capture every live counter atomically and expose stable software low/high read words.",
+    "flow": "When the hardware observes the stored snapshot request, capture all live values on that edge, request clearing the command and set sticky done through generated CSR. Retain the captured image until the next command or reset. A 32-bit counter profile drives zero in each high word.",
+    "storage": "One full-width snapshot register per counter.",
+    "critical": "Software uses the explicit snapshot command; there is no read-low auto-snapshot feature. The captured value is the pre-edge live counter value under nonblocking sequential semantics; concurrent increments belong to the next live value.",
+    "verification": "RTL inspected and linted; software-visible command/done/stability tests are pending."
+  },
+  "m_vlsit_pmu_irq": {
+    "function": "Merge newly overflowing counters into retained raw causes and drive one aggregate level interrupt.",
+    "flow": "Compute pending as raw AND enable. If any new overflow occurs, reload the hardware update word with old raw causes OR new causes. Generated W1C fields apply their documented hardware-first priority.",
+    "storage": "No local flops; raw causes/enables are stored by generated CSR.",
+    "critical": "A new overflow in one counter can coincide with software clearing a different counter; test the actual full-word reload priority. Do not silently promise independent bitwise clear/set semantics that the generated field cannot provide.",
+    "verification": "Connected/linted; overflow/W1C/new-event collision and masked IRQ behavior need active tests."
+  },
+  "m_vlsit_riscv_fault_record": {
+    "function": "Capture the first fatal ordinary L1 or shared LLC writeback error until reset.",
+    "flow": "Select the lowest active L1 hart if several L1 events coincide; otherwise select LLC. Atomically capture source, victim address and raw B response with validity flags. Later independent fatal events only set multiple. A simultaneous second event also sets multiple on first capture.",
+    "storage": "First-fault status/info/address and reset-only valid/multiple state.",
+    "critical": "L1 has exact hart attribution. Shared LLC uses hart_valid=0; zero hart bits do not name hart 0. W1C diagnostic writes cannot clear this record. Precise CBO/FENCE/atomic errors are not ordinary fatal eviction records.",
+    "verification": "A-06 ten real CPU cases plus priority/high-address/inactive-hart/reset units and overwrite mutation detection pass."
+  }
+}

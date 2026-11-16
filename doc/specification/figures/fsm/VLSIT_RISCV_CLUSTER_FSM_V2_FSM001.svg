@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1350" height="1610" viewBox="15 -20 1350 1610" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="15" y="-20" width="1350" height="1610" fill="#FFFFFF"/>
+<text x="690" y="37" text-anchor="middle" font-weight="bold">FSM-001 — Directory-based read miss</text>
+<rect x="600" y="65" width="180" height="55" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="690" y="88.5" text-anchor="middle" font-weight="bold">RESET RELEASED</text>
+<text x="690" y="110.5" text-anchor="middle" font-weight="bold">Reset đã nhả</text>
+<rect x="560" y="155" width="260" height="90" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="690" y="185" text-anchor="middle" font-weight="bold">ST_IDLE</text>
+<text x="690" y="207" text-anchor="middle" font-weight="bold">Wait for read miss</text>
+<text x="690" y="229" text-anchor="middle" font-weight="bold">Chờ read miss</text>
+<rect x="560" y="305" width="260" height="100" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="690" y="340" text-anchor="middle" font-weight="bold">ST_DIR_LOOKUP</text>
+<text x="690" y="362" text-anchor="middle" font-weight="bold">Read holder mask</text>
+<text x="690" y="384" text-anchor="middle" font-weight="bold">Tra mask holder</text>
+<rect x="560" y="465" width="260" height="100" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="690" y="500" text-anchor="middle" font-weight="bold">ST_TAGGED_READ_PROBE</text>
+<text x="690" y="522" text-anchor="middle" font-weight="bold">Probe recorded holders</text>
+<text x="690" y="544" text-anchor="middle" font-weight="bold">Probe holder đã ghi</text>
+<rect x="600" y="625" width="180" height="110" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="690" y="676" text-anchor="middle" font-weight="bold">Dirty M owner?</text>
+<text x="690" y="698" text-anchor="middle" font-weight="bold">Owner M dirty?</text>
+<rect x="100" y="805" width="330" height="110" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="265" y="845" text-anchor="middle" font-weight="bold">ST_ACCEPT_DIRTY_LINE</text>
+<text x="265" y="867" text-anchor="middle" font-weight="bold">Receive two tagged beats</text>
+<text x="265" y="889" text-anchor="middle" font-weight="bold">Nhận hai beat theo tag</text>
+<rect x="100" y="980" width="330" height="100" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="265" y="1015" text-anchor="middle" font-weight="bold">ST_UPDATE_LLC</text>
+<text x="265" y="1037" text-anchor="middle" font-weight="bold">Wait for LLC writeback</text>
+<text x="265" y="1059" text-anchor="middle" font-weight="bold">Chờ LLC ghi dữ liệu</text>
+<rect x="850" y="805" width="360" height="110" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1030" y="845" text-anchor="middle" font-weight="bold">ST_GET_LINE_FROM_LLC</text>
+<text x="1030" y="867" text-anchor="middle" font-weight="bold">Refill over AXI on miss</text>
+<text x="1030" y="889" text-anchor="middle" font-weight="bold">Miss thì refill qua AXI</text>
+<rect x="560" y="1160" width="260" height="90" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="690" y="1190" text-anchor="middle" font-weight="bold">ST_GRANT_SHARED</text>
+<text x="690" y="1212" text-anchor="middle" font-weight="bold">Commit directory; grant S</text>
+<text x="690" y="1234" text-anchor="middle" font-weight="bold">Commit directory; cấp S</text>
+<rect x="560" y="1320" width="260" height="90" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="690" y="1350" text-anchor="middle" font-weight="bold">ST_HOLD_RESPONSE</text>
+<text x="690" y="1372" text-anchor="middle" font-weight="bold">Hold until accepted</text>
+<text x="690" y="1394" text-anchor="middle" font-weight="bold">Giữ đến khi nhận</text>
+<rect x="600" y="1460" width="180" height="55" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="690" y="1483.5" text-anchor="middle" font-weight="bold">COMPLETE</text>
+<text x="690" y="1505.5" text-anchor="middle" font-weight="bold">Hoàn tất</text>
+<text x="690" y="1533.5" text-anchor="middle">V2 DRAFT / NHÁP V2: logical ordering only.</text>
+<text x="690" y="1555.5" text-anchor="middle">Tag width, zero-target behavior, LLC error recovery and cycle timing are TBD.</text>
+<path d="M 690 120 L 690 155" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="690,155 684,143 696,143" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 690 245 L 690 305" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="690,305 684,293 696,293" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 690 405 L 690 465" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="690,465 684,453 696,453" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 690 565 L 690 625" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="690,625 684,613 696,613" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 600 680 L 500 680 L 470 680 L 470 860 L 430 860" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="430,860 442,854 442,866" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 780 680 L 820 680 L 820 860 L 850 860" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="850,860 838,866 838,854" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 265 915 L 265 980" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="265,980 259,968 271,968" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 265 1080 L 265 1110 L 500 1110 L 500 1205 L 560 1205" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="560,1205 548,1211 548,1199" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1030 915 L 1030 960 L 1000 960 L 1000 1100 L 820 1100 L 820 1205" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="820,1205 814,1193 826,1193" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 690 1250 L 690 1320" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="690,1320 684,1308 696,1308" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 690 1410 L 690 1460" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="690,1460 684,1448 696,1448" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 780 1487.5 L 1240 1487.5 L 1300 1487.5 L 1300 200 L 830 200 L 820 200" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="820,200 832,194 832,206" fill="#000000" stroke="#000000" stroke-width="1"/>
+</svg>

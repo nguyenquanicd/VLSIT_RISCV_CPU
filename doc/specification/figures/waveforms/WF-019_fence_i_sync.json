@@ -1,0 +1,155 @@
+{
+  "head": {
+    "text": "WF-019 — FENCE.I success and L1-to-LLC error recovery",
+    "tick": 0
+  },
+  "signal": [
+    {
+      "name": "clk_cluster",
+      "wave": "p....................."
+    },
+    {
+      "name": "i_rst_n_cluster",
+      "wave": "1....................."
+    },
+    [
+      "Successful FENCE.I operation (representative dirty line)",
+      {
+        "name": "fence_i_at_retirement_head",
+        "wave": "01........0..........."
+      },
+      {
+        "name": "owner_axi_aw_handshake",
+        "wave": "0.10.................."
+      },
+      {
+        "name": "owner_axi_wvalid",
+        "wave": "0..110................"
+      },
+      {
+        "name": "owner_axi_wlast",
+        "wave": "0...10................"
+      },
+      {
+        "name": "owner_axi_bvalid",
+        "wave": "0....10........10....."
+      },
+      {
+        "name": "owner_axi_bresp",
+        "wave": "x....=.........=......",
+        "data": [
+          "OKAY",
+          "SLVERR"
+        ]
+      },
+      {
+        "name": "owner_line_mesi",
+        "wave": "=.....=....=..........",
+        "data": [
+          "M (success line dirty)",
+          "E (LLC accepted; directory holder retained)",
+          "M (separate failed line)"
+        ]
+      },
+      {
+        "name": "directory_holder_valid",
+        "wave": "1....................."
+      },
+      {
+        "name": "local_icache_invalidate",
+        "wave": "0......10............."
+      },
+      {
+        "name": "local_fetch_pipeline_flush",
+        "wave": "0.......10............"
+      },
+      {
+        "name": "llc_external_memory_aw",
+        "wave": "0....................."
+      },
+      {
+        "name": "fence_i_retire",
+        "wave": "0........10..........."
+      }
+    ],
+    [
+      "Separate FENCE.I operation with L1-to-LLC error",
+      {
+        "name": "fence_i_error_at_head",
+        "wave": "0..........1.......0.."
+      },
+      {
+        "name": "owner_axi_aw_handshake_error_line",
+        "wave": "0...........10........"
+      },
+      {
+        "name": "owner_axi_wvalid_error_line",
+        "wave": "0...........0110......"
+      },
+      {
+        "name": "owner_axi_wlast_error_line",
+        "wave": "0...........0.10......"
+      },
+      {
+        "name": "abort_req_to_prepared_target",
+        "wave": "0...............10...."
+      },
+      {
+        "name": "abort_ack_owner",
+        "wave": "0................10..."
+      },
+      {
+        "name": "all_required_abort_acks",
+        "wave": "0.................10.."
+      },
+      {
+        "name": "failed_line_m_state_retained",
+        "wave": "0..........1.........."
+      },
+      {
+        "name": "fence_i_error_retire",
+        "wave": "0....................."
+      },
+      {
+        "name": "younger_instruction_retire",
+        "wave": "0....................."
+      },
+      {
+        "name": "local_icache_fetch_invalidate_error_case",
+        "wave": "0....................."
+      },
+      {
+        "name": "maintenance_exception_valid",
+        "wave": "0..................10."
+      },
+      {
+        "name": "trap_exception_code",
+        "wave": "x..................=..",
+        "data": [
+          "24 (custom synchronous maintenance exception)"
+        ]
+      },
+      {
+        "name": "trap_pc_mepc_or_sepc",
+        "wave": "x..................=..",
+        "data": [
+          "FENCE_PC_ERR = 0x8000_0100"
+        ]
+      },
+      {
+        "name": "trap_value_mtval_or_stval",
+        "wave": "x..................=..",
+        "data": [
+          "PA_LINE_ERR = 0x0000_0000_9000_2000 (16-byte aligned)"
+        ]
+      }
+    ]
+  ],
+  "foot": {
+    "text": "Two separate illustrative FENCE.I operations are shown; each owner write transfers one representative 16-byte line as two 64-bit W beats, and a whole-cache scan may repeat this sequence. Success: LLC B=OKAY precedes M→E, local I-cache/fetch invalidation, and retirement; no LLC-to-DRAM write is issued. Error: B=SLVERR triggers ABORT; only after all required ABORT ACKs does cause 24 trap at the FENCE.I PC with the aligned physical line base in mtval/stval. The failed M line and directory holder are preserved; the failed fence and younger instructions do not retire, and local fetch state is not invalidated. Spacing is illustrative, not a latency contract. Signal names are logical aliases, not finalized RTL ports.",
+    "tock": 0
+  },
+  "config": {
+    "hscale": 1
+  }
+}

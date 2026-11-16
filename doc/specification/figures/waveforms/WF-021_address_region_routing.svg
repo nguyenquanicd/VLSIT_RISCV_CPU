@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2342" height="388" viewBox="0 0 2342 388" font-family="Helvetica,Arial,sans-serif">
+<rect width="100%" height="100%" fill="#fff"/>
+<text x="12" y="20" font-size="14" font-weight="bold">WF-021 - Shared address-region classification (four independent cases)</text>
+<line x1="263" y1="30" x2="263" y2="360" stroke="#ccc" stroke-dasharray="2,3"/>
+<line x1="443" y1="30" x2="443" y2="360" stroke="#ccc" stroke-dasharray="2,3"/>
+<line x1="623" y1="30" x2="623" y2="360" stroke="#ccc" stroke-dasharray="2,3"/>
+<line x1="803" y1="30" x2="803" y2="360" stroke="#ccc" stroke-dasharray="2,3"/>
+<line x1="983" y1="30" x2="983" y2="360" stroke="#ccc" stroke-dasharray="2,3"/>
+<text x="12" y="49" font-size="12" font-weight="bold" fill="#225">Independent request cases (columns are cases, not clock cycles)</text>
+<text x="255" y="79" font-size="12" text-anchor="end">request_class</text>
+<polygon points="267.0,63.0 439.0,63.0 443.0,72.0 439.0,81.0 267.0,81.0 263.0,72.0" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="353.0" y="76.0" text-anchor="middle" font-size="11">CACHEABLE</text>
+<polygon points="447.0,63.0 619.0,63.0 623.0,72.0 619.0,81.0 447.0,81.0 443.0,72.0" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="533.0" y="76.0" text-anchor="middle" font-size="11">NORMAL_UNCACHED</text>
+<polygon points="627.0,63.0 799.0,63.0 803.0,72.0 799.0,81.0 627.0,81.0 623.0,72.0" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="713.0" y="76.0" text-anchor="middle" font-size="11">MMIO</text>
+<polygon points="807.0,63.0 979.0,63.0 983.0,72.0 979.0,81.0 807.0,81.0 803.0,72.0" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="893.0" y="76.0" text-anchor="middle" font-size="11">UNMAPPED</text>
+<text x="255" y="109" font-size="12" text-anchor="end">region_match</text>
+<polyline points="263.0,93.0 443.0,93.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="443.0,93.0 623.0,93.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="623.0,93.0 803.0,93.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="803.0,93.0 803.0,111.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="803.0,111.0 983.0,111.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="255" y="139" font-size="12" text-anchor="end">request_span_inside_region</text>
+<polyline points="263.0,123.0 443.0,123.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="443.0,123.0 623.0,123.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="623.0,123.0 803.0,123.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="803.0,123.0 803.0,141.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="803.0,141.0 983.0,141.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="12" y="199" font-size="12" font-weight="bold" fill="#225">Specified route decision (logical names; router RTL is pending)</text>
+<text x="255" y="229" font-size="12" text-anchor="end">route_to_ccu_llc</text>
+<polyline points="263.0,213.0 443.0,213.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="443.0,213.0 443.0,231.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="443.0,231.0 623.0,231.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="623.0,231.0 803.0,231.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="803.0,231.0 983.0,231.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="255" y="259" font-size="12" text-anchor="end">route_to_llc_uncached_bypass</text>
+<polyline points="263.0,261.0 443.0,261.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="443.0,261.0 443.0,243.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="443.0,243.0 623.0,243.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="623.0,243.0 623.0,261.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="623.0,261.0 803.0,261.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="803.0,261.0 983.0,261.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="255" y="289" font-size="12" text-anchor="end">route_to_axi_mmio</text>
+<polyline points="263.0,291.0 443.0,291.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="443.0,291.0 623.0,291.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="623.0,291.0 623.0,273.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="623.0,273.0 803.0,273.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="803.0,273.0 803.0,291.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="803.0,291.0 983.0,291.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="255" y="319" font-size="12" text-anchor="end">local_access_error</text>
+<polyline points="263.0,321.0 443.0,321.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="443.0,321.0 623.0,321.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="623.0,321.0 803.0,321.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="803.0,321.0 803.0,303.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="803.0,303.0 983.0,303.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="255" y="349" font-size="12" text-anchor="end">downstream_request_for_unmapped_case</text>
+<polyline points="263.0,351.0 443.0,351.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="443.0,351.0 623.0,351.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="623.0,351.0 803.0,351.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="803.0,351.0 983.0,351.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="12" y="380" font-size="11" fill="#444">The cases are independent illustrations, not a time sequence. CACHEABLE uses the shared CCU/LLC path; NORMAL_UNCACHED bypasses LLC allocation; MMIO bypasses CCU/LLC; UNMAPPED or a boundary-crossing span is rejected locally with no downstream request. Route rows are specification-level logical labels, not existing router RTL ports. No cycle latency or AXI response timing is defined by this figure.</text>
+</svg>

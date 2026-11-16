@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="540" height="510" viewBox="540 340 540 510" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="540" y="340" width="540" height="510" fill="#FFFFFF"/>
+<rect x="570" y="370" width="480" height="450" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<rect x="660" y="510" width="80" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="536" text-anchor="middle">i_lfsr</text>
+<text x="700" y="558" text-anchor="middle">(lfsr)</text>
+<rect x="890" y="510" width="60" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="920" y="536" text-anchor="middle">i_lzc</text>
+<text x="920" y="558" text-anchor="middle">(lzc)</text>
+<rect x="650" y="680" width="100" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="706" text-anchor="middle">pte_sram</text>
+<text x="700" y="728" text-anchor="middle">(sram)</text>
+<rect x="870" y="680" width="100" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="920" y="706" text-anchor="middle">tag_sram</text>
+<text x="920" y="728" text-anchor="middle">(sram)</text>
+<text x="1028" y="411" text-anchor="end">Component composition</text>
+<text x="1028" y="433" text-anchor="end">(cva6_shared_tlb)</text>
+</svg>

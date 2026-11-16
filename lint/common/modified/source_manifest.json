@@ -1,0 +1,140 @@
+{
+  "policy": "Pristine upstream files remain under rtl/third_party. Modified copies preserve upstream license/header text and record the actual integration delta.",
+  "sources": [
+    {
+      "original": "rtl/third_party/hpdcache_cva6_pinned/rtl/src/hpdcache.sv",
+      "modified": "rtl/modified/hpdcache/rtl/src/hpdcache.sv",
+      "upstream_revision": "e8f072e117ed3282950d4d1e975f462b173f0de0",
+      "original_sha256": "44506d119ea7f9ab38aff9a9d480da0bf58056f6bb49f51b115e57031a8641f4",
+      "modified_sha256": "0f127b6f981381f08bdefb3ee27d2f959205b0e461505e497f7623dffa067e5d",
+      "license_header_preserved": true,
+      "change": "Integrate tagged two-phase PREPARE/COMMIT/ABORT probe engine; arbitrate CPU, CMO and probe flush sources; route origin-qualified B responses; connect COMMIT-only MESI directory updates."
+    },
+    {
+      "original": "rtl/third_party/hpdcache_cva6_pinned/rtl/src/hpdcache_flush.sv",
+      "modified": "rtl/modified/hpdcache/rtl/src/hpdcache_flush.sv",
+      "upstream_revision": "e8f072e117ed3282950d4d1e975f462b173f0de0",
+      "original_sha256": "875fdb2a589c2ad6da282517f7cf10575ec0e404a40f0d4a508590cf72787353",
+      "modified_sha256": "3ed56c5e948a5745691150e69f25f78e9c23641a778bf5b524d4b55ade0af006",
+      "license_header_preserved": true,
+      "change": "Track allocation origin, match the full flush-local response ID, report B errors, and diagnose invalid flush responses."
+    },
+    {
+      "original": "rtl/third_party/cva6/core/cache_subsystem/cva6_hpdcache_wrapper.sv",
+      "modified": "rtl/modified/cva6/core/cache_subsystem/cva6_hpdcache_wrapper.sv",
+      "upstream_revision": "742dc82a0c706e0a3bfb98b709fd3ee06d50d12a",
+      "original_sha256": "ce29ff963355cd439eff7bc33239d06980b157c2ce8349088d0968cbc046cf0d",
+      "modified_sha256": "70e3f3ba64681056841d7c00cbbfb1de59fd24521b1a9ed2084db859a5289e5f",
+      "license_header_preserved": true,
+      "change": "Route tagged PREPARE/COMMIT/ABORT and flush completion metadata; export the 16 existing native HPDcache PMU event outputs in Event_Map order without changing source predicates."
+    },
+    {
+      "original": "rtl/third_party/cva6/core/cache_subsystem/cva6_hpdcache_subsystem.sv",
+      "modified": "rtl/modified/cva6/core/cache_subsystem/cva6_hpdcache_subsystem.sv",
+      "upstream_revision": "742dc82a0c706e0a3bfb98b709fd3ee06d50d12a",
+      "original_sha256": "26973d7061e131b04708daf58006676e9b100b79fc3c69347b4f67e3b7b2bb75",
+      "modified_sha256": "3826b7fc81f48028747614d142ea73c70be0c81a4f62c86c4bb0c96610fce99c",
+      "license_header_preserved": true,
+      "change": "Carry tagged probe, flush completion metadata, and native 16-bit HPDcache PMU event vector through the cache subsystem."
+    },
+    {
+      "original": "rtl/third_party/cva6/core/cva6.sv",
+      "modified": "rtl/modified/cva6/core/cva6.sv",
+      "upstream_revision": "742dc82a0c706e0a3bfb98b709fd3ee06d50d12a",
+      "original_sha256": "73c459f874ad5803af9f222fbe2eb34cc98b4d58104ff79f89f3bb9b383b44d2",
+      "modified_sha256": "5a9f275bc3904add97fdfafd1180934003c9d9f7fa87309da2a40f001abb8b6e",
+      "license_header_preserved": true,
+      "change": "Route supervisor interrupts, two-phase HPDcache coherence, PMU, debug, flush metadata, and HPDcache event vector; drive the event vector low for non-HPDcache profiles."
+    },
+    {
+      "original": "rtl/third_party/cva6/core/csr_regfile.sv",
+      "modified": "rtl/modified/cva6/core/csr_regfile.sv",
+      "upstream_revision": "742dc82a0c706e0a3bfb98b709fd3ee06d50d12a",
+      "original_sha256": "df25de0108c89f50be76bf096462b7c2ed7af1c0dc59d4eb5a33e2c24bf17aa9",
+      "modified_sha256": "9a13724684e13185dc9c34346d30894e70cb30ba533e2ca5432ae77b3789959a",
+      "license_header_preserved": true,
+      "change": "Add effective supervisor software/timer interrupt levels to CSR pending, interrupt and RVFI views."
+    },
+    {
+      "original": "rtl/third_party/cva6/core/perf_counters.sv",
+      "modified": "rtl/modified/cva6/core/perf_counters.sv",
+      "upstream_revision": "742dc82a0c706e0a3bfb98b709fd3ee06d50d12a",
+      "original_sha256": "c00d062f1299833a55b3ee576f145ff0da6bbca84c32c54218d87d9c9905e249",
+      "modified_sha256": "2c134dc25445a35d51a16580a8bec072546de97a70fd7f80db29a7d358c2e723",
+      "license_header_preserved": true,
+      "change": "Export the 22 raw event conditions used by the native CVA6 HPM selector for cluster PMU aggregation."
+    },
+    {
+      "original": "rtl/third_party/cva6/core/include/build_config_pkg.sv",
+      "modified": "rtl/modified/cva6/core/include/build_config_pkg.sv",
+      "upstream_revision": "742dc82a0c706e0a3bfb98b709fd3ee06d50d12a",
+      "original_sha256": "53b6035e3e0992650df72df0170a8438ced52c66de93c3bba0f1c8457bafa299",
+      "modified_sha256": "491d2a19ea085e491ee57842186266f2cea3dc0b30a566561e5c2f46062abcdb",
+      "license_header_preserved": true,
+      "change": "Derive CVA6 cached and non-idempotent PMA ranges from the shared DEC-037 region table."
+    },
+    {
+      "original": "rtl/third_party/cva6/core/include/cv64a6_imafdc_sv39_hpdcache_wb_config_pkg.sv",
+      "modified": "rtl/modified/cva6/core/include/cv64a6_imafdc_sv39_hpdcache_wb_config_pkg.sv",
+      "upstream_revision": "742dc82a0c706e0a3bfb98b709fd3ee06d50d12a",
+      "original_sha256": "daabfec0c9fdb760c55c3eb522a4cc42258e33f020b1dfe0157f3912fad1660c",
+      "modified_sha256": "d8934f3740d633c6df8140cb8155598414de1c5e22447248038226bf8346d5da",
+      "license_header_preserved": true,
+      "change": "Disable CVXIF in the local license-preserving configuration copy."
+    },
+    {
+      "original": "rtl/third_party/hpdcache_cva6_pinned/rtl/src/hpdcache_mshr.sv",
+      "modified": "rtl/modified/hpdcache/rtl/src/hpdcache_mshr.sv",
+      "upstream_revision": "e8f072e117ed3282950d4d1e975f462b173f0de0",
+      "original_sha256": "3fee4180b055e85368ab4b78062e3c1aba30e84b81e8d493c29568b0013bee9d",
+      "modified_sha256": "9a900145bebd11f436b9e766eecb5c1c11f7e715f96cb51bda922936ba9180f6",
+      "license_header_preserved": true,
+      "change": "Add shadow nline metadata and a parallel valid-MSHR query for exact-line coherence activity."
+    },
+    {
+      "original": "rtl/third_party/hpdcache_cva6_pinned/rtl/src/hpdcache_ctrl.sv",
+      "modified": "rtl/modified/hpdcache/rtl/src/hpdcache_ctrl.sv",
+      "upstream_revision": "e8f072e117ed3282950d4d1e975f462b173f0de0",
+      "original_sha256": "fb073a2eacd6511061133e82f7e4a61d0e304fc6f45bc982b390d4b029de4318",
+      "modified_sha256": "2639c6b8d6869f8a3506ad1bd1f309ca7efbbafa23cd97b9af3637c387743e4f",
+      "license_header_preserved": true,
+      "change": "Route the internal directory lookup and COMMIT-only MESI state-update handshake between HPDcache top and memctrl."
+    },
+    {
+      "original": "rtl/third_party/hpdcache_cva6_pinned/rtl/src/hpdcache_ctrl_pe.sv",
+      "modified": "rtl/modified/hpdcache/rtl/src/hpdcache_ctrl_pe.sv",
+      "upstream_revision": "e8f072e117ed3282950d4d1e975f462b173f0de0",
+      "original_sha256": "058eb13baac65608b4bfa7adf1b7c171bf36acde129c39dc70fffd2859aa7ce5",
+      "modified_sha256": "b9d086ef876c5cf417a0711cdbeb3e90f28227d1b202adf88fda907fe8336d41",
+      "license_header_preserved": true,
+      "change": "Replay a CPU request on a locked line, or defer a miss whose selected victim line is locked."
+    },
+    {
+      "original": "rtl/third_party/hpdcache_cva6_pinned/rtl/src/hpdcache_rtab.sv",
+      "modified": "rtl/modified/hpdcache/rtl/src/hpdcache_rtab.sv",
+      "upstream_revision": "e8f072e117ed3282950d4d1e975f462b173f0de0",
+      "original_sha256": "7750190b9a6f671e3afe780ba24b67a49e2ae99f5010dd2134e77f3043906e55",
+      "modified_sha256": "cd3433387b678deda7bbc98304a16f5c9a9b4d4ecac19cee668b23e4c7643afa",
+      "license_header_preserved": true,
+      "change": "Add a sidecar per-entry replay dependency that waits for release of the exact CCU-locked physical line."
+    },
+    {
+      "original": "rtl/third_party/hpdcache_cva6_pinned/rtl/src/hpdcache_memctrl.sv",
+      "modified": "rtl/modified/hpdcache/rtl/src/hpdcache_memctrl.sv",
+      "upstream_revision": "e8f072e117ed3282950d4d1e975f462b173f0de0",
+      "original_sha256": "c7bac976e2511b3d054caa31aed88a3e1dbcdefedcca1ccfa40f167c11aed8df",
+      "modified_sha256": "ae2f2670b5f2135c3ac9c30d9d84d3db035fd2f4369f68d2ba3fb4e75c2e77a6",
+      "license_header_preserved": true,
+      "change": "Add an explicit directory MESI update port; PREPARE lookup and ABORT remain non-mutating, and COMMIT writes the selected way."
+    },
+    {
+      "original": "rtl/third_party/hpdcache_cva6_pinned/rtl/src/hpdcache_miss_handler.sv",
+      "modified": "rtl/modified/hpdcache/rtl/src/hpdcache_miss_handler.sv",
+      "upstream_revision": "e8f072e117ed3282950d4d1e975f462b173f0de0",
+      "original_sha256": "5414fa36c1558b0781e07766559c2157ce27114528fc9993d69d737b52f5cc02",
+      "modified_sha256": "787c5fa84823204b8f18bf3037e84d9f08edfbfe35147e4cea1b1a0f889f37ea",
+      "license_header_preserved": true,
+      "change": "Preserve exclusive MESI metadata across legacy directory updates; initialize refill metadata as shared and retain maintenance behavior."
+    }
+  ]
+}

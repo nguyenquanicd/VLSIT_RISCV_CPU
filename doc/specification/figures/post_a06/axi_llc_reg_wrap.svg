@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="460" height="510" viewBox="470 340 460 510" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="470" y="340" width="460" height="510" fill="#FFFFFF"/>
+<rect x="500" y="370" width="400" height="450" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<rect x="580" y="510" width="240" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="536" text-anchor="middle">i_llc_config_regfile</text>
+<text x="700" y="558" text-anchor="middle">(axi_llc_reg_top)</text>
+<rect x="600" y="680" width="200" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="706" text-anchor="middle">i_axi_llc_top_raw</text>
+<text x="700" y="728" text-anchor="middle">(axi_llc_top)</text>
+<text x="878" y="411" text-anchor="end">Component composition</text>
+<text x="878" y="433" text-anchor="end">(axi_llc_reg_wrap)</text>
+</svg>

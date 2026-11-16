@@ -1,0 +1,28 @@
+{
+  "layout": "flow-lr-2-g140",
+  "geometry": {
+    "minimum_gap": 140.0,
+    "worst_fit": 0.5715123456790123,
+    "fit_ok": true,
+    "crossings": 2,
+    "label_conflicts": 0,
+    "distinct_x": 2,
+    "distinct_y": 7,
+    "distribution_ok": true,
+    "linear": false,
+    "findings": []
+  },
+  "stats": {
+    "crossings": 2,
+    "node_hits": 0,
+    "bends": 10,
+    "length": 4956.2904387087365,
+    "width": 850.0,
+    "height": 1060.0,
+    "overlaps": 0,
+    "label_conflicts": 0,
+    "distinct_x": 2,
+    "distinct_y": 7,
+    "linear": false
+  }
+}

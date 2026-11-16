@@ -1,0 +1,56 @@
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "m_vlsit_riscv_axi_route.drawio",
+  "layout": {
+    "gap_h": 120,
+    "gap_v": 110,
+    "margin": 80,
+    "block_h": 60
+  },
+  "top": {
+    "frame_label": [
+      "Component composition",
+      "(m_vlsit_riscv_axi_route)"
+    ]
+  },
+  "frame_row": [
+    "m_vlsit_riscv_axi_route",
+    "Route one tile's AXI transactions to cached memory, normal-uncached bypass, device MMIO or a local error responder.",
+    "rtl/common/vlsit/interconnect/m_vlsit_riscv_axi_route.sv"
+  ],
+  "frame_interfaces": [],
+  "blocks": [
+    {
+      "key": "B0",
+      "label": [
+        "u_dont_touch_axi_demux",
+        "(axi_demux)"
+      ],
+      "width": 260,
+      "row": 0,
+      "col": 0,
+      "row_name": "u_dont_touch_axi_demux (axi_demux)",
+      "function": "Native component",
+      "source": "REUSE; rtl/common/third_party/axi_llc_locked/axi/src/axi_demux.sv"
+    },
+    {
+      "key": "B1",
+      "label": [
+        "u_dont_touch_axi_err_slv",
+        "(axi_err_slv)"
+      ],
+      "width": 280,
+      "row": 1,
+      "col": 0,
+      "row_name": "u_dont_touch_axi_err_slv (axi_err_slv)",
+      "function": "Native component",
+      "source": "REUSE; rtl/common/third_party/axi_llc_locked/axi/src/axi_err_slv.sv"
+    }
+  ],
+  "connectors": [],
+  "externals": [],
+  "interfaces": [],
+  "nets": [],
+  "legend_note": "Exact source-referenced children; generate multiplicity and active branches are specified in the component text. Containment denotes hierarchy, not invented signal connectivity. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.",
+  "library_sha256": "15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"
+}

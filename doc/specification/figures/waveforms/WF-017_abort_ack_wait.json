@@ -1,0 +1,93 @@
+{
+  "head": {
+    "text": "WF-017 - No-timeout wait for a missing ABORT ACK"
+  },
+  "signal": [
+    {
+      "name": "clk_cluster",
+      "wave": "p............."
+    },
+    {
+      "name": "i_rst_n_cluster",
+      "wave": "1............0"
+    },
+    [
+      "Line X transaction (logical aliases)",
+      {
+        "name": "precommit_error",
+        "wave": "0...1........."
+      },
+      {
+        "name": "abort_valid_hart0",
+        "wave": "0....1........"
+      },
+      {
+        "name": "abort_valid_hart1",
+        "wave": "0....1........"
+      },
+      {
+        "name": "abort_ack_hart0",
+        "wave": "0......1......"
+      },
+      {
+        "name": "abort_ack_hart1",
+        "wave": "0............."
+      },
+      {
+        "name": "ccu_line_lock_X",
+        "wave": "01...........0"
+      },
+      {
+        "name": "txn_slot_T5_active",
+        "wave": "01...........0"
+      },
+      {
+        "name": "dir_holders_X",
+        "wave": "=............=",
+        "data": ["hart 0, hart 1", "invalid after reset"]
+      },
+      {
+        "name": "requester_grant_valid",
+        "wave": "0............."
+      }
+    ],
+    [
+      "Cache line state and local locks",
+      {
+        "name": "hart0_state_X",
+        "wave": "=......=.....=",
+        "data": ["S", "S", "I after reset"]
+      },
+      {
+        "name": "hart1_state_X",
+        "wave": "=............=",
+        "data": ["M", "I after reset"]
+      },
+      {
+        "name": "hart0_probe_lock_X",
+        "wave": "01.....0.....0"
+      },
+      {
+        "name": "hart1_probe_lock_X",
+        "wave": "01............0"
+      }
+    ],
+    [
+      "Independent line progress when resources allow",
+      {
+        "name": "line_Y_complete",
+        "wave": "0.......1.0..."
+      },
+      {
+        "name": "line_Y_uses_other_slot",
+        "wave": "0......1..0..."
+      }
+    ]
+  ],
+  "foot": {
+    "text": "A pre-COMMIT error sends ABORT to each targeted holder. Hart 0 ACKs and releases its local line lock while preserving S; hart 1 does not ACK and retains its old state/lock. The CCU keeps the transaction slot and line lock; directory and requester grant remain unchanged. No timeout: reset is the only recovery. Logical aliases, not finalized RTL ports; spacing is illustrative, not a latency bound."
+  },
+  "config": {
+    "hscale": 1
+  }
+}

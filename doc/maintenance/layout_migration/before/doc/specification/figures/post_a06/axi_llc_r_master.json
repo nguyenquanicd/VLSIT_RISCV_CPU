@@ -1,0 +1,43 @@
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "axi_llc_r_master.drawio",
+  "layout": {
+    "gap_h": 120,
+    "gap_v": 110,
+    "margin": 80,
+    "block_h": 60
+  },
+  "top": {
+    "frame_label": [
+      "Component composition",
+      "(axi_llc_r_master)"
+    ]
+  },
+  "frame_row": [
+    "axi_llc_r_master",
+    "Native modified component; function and change contract are specified in Section 14.",
+    "rtl/modified/axi_llc/src/eviction_refill/axi_llc_r_master.sv"
+  ],
+  "frame_interfaces": [],
+  "blocks": [
+    {
+      "key": "B0",
+      "label": [
+        "i_block_offset_counter",
+        "(counter)"
+      ],
+      "width": 260,
+      "row": 0,
+      "col": 0,
+      "row_name": "i_block_offset_counter (counter)",
+      "function": "Native component",
+      "source": "REUSE; rtl/third_party/cva6/vendor/pulp-platform/common_cells/src/counter.sv"
+    }
+  ],
+  "connectors": [],
+  "externals": [],
+  "interfaces": [],
+  "nets": [],
+  "legend_note": "Exact source-referenced children; generate multiplicity and active branches are specified in the component text. Containment denotes hierarchy, not invented signal connectivity. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.",
+  "library_sha256": "15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"
+}

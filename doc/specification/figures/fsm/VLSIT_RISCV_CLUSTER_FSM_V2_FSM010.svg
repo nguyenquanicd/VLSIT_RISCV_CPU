@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1350" height="1123" viewBox="15 -20 1350 1123" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="15" y="-20" width="1350" height="1123" fill="#FFFFFF"/>
+<text x="690" y="37" text-anchor="middle" font-weight="bold">FSM-010 — Tagged transaction context lifecycle</text>
+<rect x="600" y="65" width="180" height="55" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="690" y="88.5" text-anchor="middle" font-weight="bold">RESET RELEASED</text>
+<text x="690" y="110.5" text-anchor="middle" font-weight="bold">Reset đã nhả</text>
+<rect x="550" y="155" width="280" height="100" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="690" y="190" text-anchor="middle" font-weight="bold">ST_WAIT_REQ</text>
+<text x="690" y="212" text-anchor="middle" font-weight="bold">Wait for request</text>
+<text x="690" y="234" text-anchor="middle" font-weight="bold">Chờ request</text>
+<rect x="550" y="315" width="280" height="100" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="690" y="350" text-anchor="middle" font-weight="bold">ST_WAIT_SLOT_LINE</text>
+<text x="690" y="372" text-anchor="middle" font-weight="bold">READY low until slot and line free</text>
+<text x="690" y="394" text-anchor="middle" font-weight="bold">READY thấp khi thiếu slot/line</text>
+<rect x="550" y="475" width="280" height="100" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="690" y="510" text-anchor="middle" font-weight="bold">ST_ALLOC_TAG_LOCK</text>
+<text x="690" y="532" text-anchor="middle" font-weight="bold">Accept; allocate unique tag and lock</text>
+<text x="690" y="554" text-anchor="middle" font-weight="bold">Nhận; cấp tag duy nhất và khóa line</text>
+<rect x="550" y="635" width="280" height="100" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="690" y="670" text-anchor="middle" font-weight="bold">ST_TRACK_TXN</text>
+<text x="690" y="692" text-anchor="middle" font-weight="bold">Track probe/LLC responses by tag</text>
+<text x="690" y="714" text-anchor="middle" font-weight="bold">Theo dõi response theo tag</text>
+<rect x="550" y="795" width="280" height="100" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="690" y="830" text-anchor="middle" font-weight="bold">ST_WAIT_SAFE_DONE</text>
+<text x="690" y="852" text-anchor="middle" font-weight="bold">Hold result until accepted</text>
+<text x="690" y="874" text-anchor="middle" font-weight="bold">Giữ kết quả đến handshake</text>
+<rect x="550" y="915" width="280" height="100" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="690" y="950" text-anchor="middle" font-weight="bold">ST_RELEASE_CTX</text>
+<text x="690" y="972" text-anchor="middle" font-weight="bold">Release lock; retire tag</text>
+<text x="690" y="994" text-anchor="middle" font-weight="bold">Nhả khóa; thu hồi tag</text>
+<text x="690" y="1046.5" text-anchor="middle">V2 DRAFT / NHÁP V2: per-slot FSM; at least two distinct-line contexts may be active.</text>
+<text x="690" y="1068.5" text-anchor="middle">Maximum slots, tag width, fairness and recovery TBD / Số slot, độ rộng tag, fairness và phục hồi còn TBD.</text>
+<path d="M 690 120 L 690 155" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="690,155 684,143 696,143" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 690 255 L 690 315" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="690,315 684,303 696,303" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 690 415 L 690 475" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="690,475 684,463 696,463" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 690 575 L 690 635" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="690,635 684,623 696,623" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 690 735 L 690 795" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="690,795 684,783 696,783" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 690 895 L 690 915" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="690,915 684,903 696,903" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 830 965 L 960 965 L 1180 965 L 1180 205 L 830 205 L 830 205" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="830,205 830,205 830,205" fill="#000000" stroke="#000000" stroke-width="1"/>
+</svg>

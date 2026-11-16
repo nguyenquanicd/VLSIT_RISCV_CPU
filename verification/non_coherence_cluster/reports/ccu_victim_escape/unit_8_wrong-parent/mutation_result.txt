@@ -1,0 +1,1 @@
+PASS: wrong-parent caught; native exit=1; expected=unselected parent entered child wait

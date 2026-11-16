@@ -1,0 +1,95 @@
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "hpdcache_ctrl.drawio",
+  "layout": {
+    "gap_h": 120,
+    "gap_v": 110,
+    "margin": 80,
+    "block_h": 60
+  },
+  "top": {
+    "frame_label": [
+      "Component composition",
+      "(hpdcache_ctrl)"
+    ]
+  },
+  "frame_row": [
+    "hpdcache_ctrl",
+    "Native modified component; function and change contract are specified in Section 14.",
+    "rtl/common/modified/hpdcache/rtl/src/hpdcache_ctrl.sv"
+  ],
+  "frame_interfaces": [],
+  "blocks": [
+    {
+      "key": "B0",
+      "label": [
+        "dir_hit_way_encoder_i",
+        "(hpdcache_1hot_to_binary)"
+      ],
+      "width": 300,
+      "row": 0,
+      "col": 0,
+      "row_name": "dir_hit_way_encoder_i (hpdcache_1hot_to_binary)",
+      "function": "Native component",
+      "source": "REUSE; rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_1hot_to_binary.sv"
+    },
+    {
+      "key": "B1",
+      "label": [
+        "refill_way_encoder_i",
+        "(hpdcache_1hot_to_binary)"
+      ],
+      "width": 300,
+      "row": 0,
+      "col": 1,
+      "row_name": "refill_way_encoder_i (hpdcache_1hot_to_binary)",
+      "function": "Native component",
+      "source": "REUSE; rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_1hot_to_binary.sv"
+    },
+    {
+      "key": "B2",
+      "label": [
+        "hpdcache_ctrl_pe_i",
+        "(hpdcache_ctrl_pe)"
+      ],
+      "width": 220,
+      "row": 1,
+      "col": 0,
+      "row_name": "hpdcache_ctrl_pe_i (hpdcache_ctrl_pe)",
+      "function": "Hit/eviction pipeline execution",
+      "source": "MODIFY; rtl/common/modified/hpdcache/rtl/src/hpdcache_ctrl_pe.sv"
+    },
+    {
+      "key": "B3",
+      "label": [
+        "hpdcache_memctrl_i",
+        "(hpdcache_memctrl)"
+      ],
+      "width": 220,
+      "row": 1,
+      "col": 1,
+      "row_name": "hpdcache_memctrl_i (hpdcache_memctrl)",
+      "function": "Tag/data array ownership",
+      "source": "MODIFY; rtl/common/modified/hpdcache/rtl/src/hpdcache_memctrl.sv"
+    },
+    {
+      "key": "B4",
+      "label": [
+        "hpdcache_rtab_i",
+        "(hpdcache_rtab)"
+      ],
+      "width": 180,
+      "row": 2,
+      "col": 0,
+      "row_name": "hpdcache_rtab_i (hpdcache_rtab)",
+      "function": "Replay and blocked-request lifetime",
+      "source": "MODIFY; rtl/common/modified/hpdcache/rtl/src/hpdcache_rtab.sv"
+    }
+  ],
+  "connectors": [],
+  "externals": [],
+  "interfaces": [],
+  "nets": [],
+  "legend_note": "Exact source-referenced children; generate multiplicity and active branches are specified in the component text. Containment denotes hierarchy, not invented signal connectivity. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.",
+  "library_sha256": "15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"
+}

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="700" height="510" viewBox="500 340 700 510" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="500" y="340" width="700" height="510" fill="#FFFFFF"/>
+<rect x="530" y="370" width="640" height="450" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<rect x="620" y="510" width="160" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="536" text-anchor="middle">i_ht_free_lzc</text>
+<text x="700" y="558" text-anchor="middle">(lzc)</text>
+<rect x="920" y="510" width="160" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1000" y="536" text-anchor="middle">i_ld_free_lzc</text>
+<text x="1000" y="558" text-anchor="middle">(lzc)</text>
+<rect x="610" y="680" width="180" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="706" text-anchor="middle">i_id_ohb_in</text>
+<text x="700" y="728" text-anchor="middle">(onehot_to_bin)</text>
+<rect x="910" y="680" width="180" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1000" y="706" text-anchor="middle">i_id_ohb_out</text>
+<text x="1000" y="728" text-anchor="middle">(onehot_to_bin)</text>
+<text x="1148" y="411" text-anchor="end">Component composition</text>
+<text x="1148" y="433" text-anchor="end">(id_queue)</text>
+</svg>

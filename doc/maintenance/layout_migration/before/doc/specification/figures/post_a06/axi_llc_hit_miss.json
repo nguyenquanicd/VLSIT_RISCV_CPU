@@ -1,0 +1,69 @@
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "axi_llc_hit_miss.drawio",
+  "layout": {
+    "gap_h": 120,
+    "gap_v": 110,
+    "margin": 80,
+    "block_h": 60
+  },
+  "top": {
+    "frame_label": [
+      "Component composition",
+      "(axi_llc_hit_miss)"
+    ]
+  },
+  "frame_row": [
+    "axi_llc_hit_miss",
+    "Native modified component; function and change contract are specified in Section 14.",
+    "rtl/modified/axi_llc/src/axi_llc_hit_miss.sv"
+  ],
+  "frame_interfaces": [],
+  "blocks": [
+    {
+      "key": "B0",
+      "label": [
+        "i_lock_box_bloom",
+        "(axi_llc_lock_box_bloom)"
+      ],
+      "width": 280,
+      "row": 0,
+      "col": 0,
+      "row_name": "i_lock_box_bloom (axi_llc_lock_box_bloom)",
+      "function": "Native component",
+      "source": "REUSE; rtl/third_party/axi_llc/src/hit_miss_detect/axi_llc_lock_box_bloom.sv"
+    },
+    {
+      "key": "B1",
+      "label": [
+        "i_miss_counters",
+        "(axi_llc_miss_counters)"
+      ],
+      "width": 280,
+      "row": 0,
+      "col": 1,
+      "row_name": "i_miss_counters (axi_llc_miss_counters)",
+      "function": "Native component",
+      "source": "MODIFY; rtl/modified/axi_llc/src/hit_miss_detect/axi_llc_miss_counters.sv"
+    },
+    {
+      "key": "B2",
+      "label": [
+        "i_tag_store",
+        "(axi_llc_tag_store)"
+      ],
+      "width": 220,
+      "row": 1,
+      "col": 0,
+      "row_name": "i_tag_store (axi_llc_tag_store)",
+      "function": "LLC tag/dirty publication",
+      "source": "MODIFY; rtl/modified/axi_llc/src/hit_miss_detect/axi_llc_tag_store.sv"
+    }
+  ],
+  "connectors": [],
+  "externals": [],
+  "interfaces": [],
+  "nets": [],
+  "legend_note": "Exact source-referenced children; generate multiplicity and active branches are specified in the component text. Containment denotes hierarchy, not invented signal connectivity. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.",
+  "library_sha256": "15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"
+}

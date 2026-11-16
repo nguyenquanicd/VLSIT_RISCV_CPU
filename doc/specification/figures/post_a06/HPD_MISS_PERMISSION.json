@@ -1,0 +1,59 @@
+{
+  "page_name": "HPD_MISS_PERMISSION",
+  "out_name": "HPD_MISS_PERMISSION.drawio",
+  "function": "HPD_MISS_PERMISSION",
+  "initial": "MISS_REQ_IDLE",
+  "state_pattern": "^[A-Z][A-Z0-9_]+$",
+  "states": [
+    {
+      "name": "MISS_REQ_IDLE"
+    },
+    {
+      "name": "MISS_REQ_OWN_REQ"
+    },
+    {
+      "name": "MISS_REQ_OWN_WAIT"
+    },
+    {
+      "name": "MISS_REQ_SEND"
+    },
+    {
+      "name": "MISS_REQ_OWN_ERROR"
+    }
+  ],
+  "transitions": [
+    {
+      "src": "MISS_REQ_IDLE",
+      "dst": "MISS_REQ_OWN_REQ",
+      "label": "MSHR allocation accepted"
+    },
+    {
+      "src": "MISS_REQ_OWN_REQ",
+      "dst": "MISS_REQ_OWN_WAIT",
+      "label": "coh_own_req_ready_i"
+    },
+    {
+      "src": "MISS_REQ_OWN_WAIT",
+      "dst": "MISS_REQ_SEND",
+      "label": "matching valid grant; no error; legal permission"
+    },
+    {
+      "src": "MISS_REQ_OWN_WAIT",
+      "dst": "MISS_REQ_OWN_ERROR",
+      "label": "grant received but mismatch, error or illegal permission"
+    },
+    {
+      "src": "MISS_REQ_SEND",
+      "dst": "MISS_REQ_IDLE",
+      "label": "mem_req_ready_i"
+    },
+    {
+      "src": "MISS_REQ_OWN_ERROR",
+      "dst": "MISS_REQ_IDLE",
+      "label": "failed response consumed with last"
+    }
+  ],
+  "layout": {
+    "margin": 50
+  }
+}

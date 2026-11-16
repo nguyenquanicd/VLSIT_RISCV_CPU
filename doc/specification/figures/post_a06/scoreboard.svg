@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="340" viewBox="360 340 680 340" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="360" y="340" width="680" height="340" fill="#FFFFFF"/>
+<rect x="510" y="370" width="380" height="280" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<rect x="590" y="510" width="220" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="536" text-anchor="middle">component_boundary</text>
+<text x="700" y="558" text-anchor="middle">(scoreboard)</text>
+<text x="425" y="536" text-anchor="middle">IN</text>
+<text x="425" y="558" text-anchor="middle">ports</text>
+<text x="975" y="536" text-anchor="middle">OUT</text>
+<text x="975" y="558" text-anchor="middle">ports</text>
+<text x="868" y="411" text-anchor="end">Component composition</text>
+<text x="868" y="433" text-anchor="end">(scoreboard)</text>
+<path d="M 460 540 L 590 540" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="590,540 578,546 578,534" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 810 540 L 940 540" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="940,540 928,546 928,534" fill="#000000" stroke="#000000" stroke-width="1"/>
+</svg>

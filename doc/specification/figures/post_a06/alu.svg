@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="510" viewBox="520 340 600 510" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="520" y="340" width="600" height="510" fill="#FFFFFF"/>
+<rect x="550" y="370" width="540" height="450" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<rect x="640" y="510" width="120" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="536" text-anchor="middle">i_clz_32b</text>
+<text x="700" y="558" text-anchor="middle">(lzc)</text>
+<rect x="890" y="510" width="120" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="950" y="536" text-anchor="middle">i_clz_64b</text>
+<text x="950" y="558" text-anchor="middle">(lzc)</text>
+<rect x="630" y="680" width="140" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="706" text-anchor="middle">i_cpop_count</text>
+<text x="700" y="728" text-anchor="middle">(popcount)</text>
+<text x="1068" y="411" text-anchor="end">Component composition</text>
+<text x="1068" y="433" text-anchor="end">(alu)</text>
+</svg>

@@ -1,0 +1,12 @@
+# Manual review / Kiểm tra thủ công
+
+1. Absence proof uses the existing ACK eligibility (active matching tag, phase, expected hart, first response and scheduler line check). I does not relax response identity. The pruning guard uses the fully validated ACK error result.
+2. A recorded E owner may actually be M (A-01). Actual M still requires native B success when writeback is enabled; I/E only satisfy the no-data-needed obligation. The PMU writeback tap still observes the native writeback bit rather than the synthetic obligation-complete bit.
+3. PREPARE states are captured per tag/holder and cleared on allocation. COMMIT expects I for a captured-absent cache; ABORT expects the captured actual state. Candidate pruning is in the sole payload register process. Distinct hart bits can be pruned in one edge without introducing multiple drivers.
+4. Directory publication remains behind all COMMIT ACKs; ABORT never publishes the candidate. Empty masks produce I/owner zero. Read grants may conservatively remain S with one holder; no E-promotion or new DROP protocol is claimed.
+5. Native A-03 context holds dirty victim and both probe-exclusion addresses until B succeeds; failed B remains busy/M until reset. Native MSHR/refill/pipeline busy queries prevent an in-flight refill from racing absence lookup. No native cache module is changed by A-04.
+6. The cache probe FSM skips state-update/allocation on an absent COMMIT for any target, preserves the target identity check, and returns I. Its expanded case covers all legal error/hit/target-is-I combinations; unknown defaults remain intentional as documented by the original comments.
+7. Top/module/port/parameter count, clocks/reset and all licensed native files stay unchanged. Two VLSIT files retain headers and receive dated history. Rule findings are compared to the original snapshots; no new error or warning is accepted.
+8. Software data oracles and exact atomic totals are independent of RTL state. Monitor accesses are read-only. Faults enter through AXI RRESP; no force, artificial retirement or simulated cache replacement is used. Default directed-only coverage intent is retained.
+
+VI: Đã kiểm tra matching ACK, nghĩa no-data-needed I/E so với B thật của M, snapshot theo tag, candidate/COMMIT/ABORT, mask rỗng, busy guard A-03, không tạo line giả và full-case defaults. Không đổi module/port/parameter/native license. Golden độc lập và monitor chỉ đọc. Đây không thay thế formal/ISA/OS hoặc signoff ASIC.

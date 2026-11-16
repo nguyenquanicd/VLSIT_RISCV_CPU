@@ -1,0 +1,592 @@
+{
+  "library_sha256": "D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6",
+  "layout": {
+    "gap_h": 120,
+    "gap_v": 140,
+    "margin": 40,
+    "block_h": 80
+  },
+  "top": {
+    "frame_label": [
+      "TOP proposed cluster",
+      "(N = 2 or 4)"
+    ]
+  },
+  "frame_row": [
+    "TOP proposed cluster",
+    "Document-grounded proposed cluster; no RTL hierarchy or protocol compliance is asserted.",
+    "VLSIT_RISCV_CPU_Cluster_Architecture.md"
+  ],
+  "frame_interfaces": [
+    "ACER",
+    "ACSN",
+    "AXIP",
+    "APBC",
+    "TCK",
+    "TMS",
+    "TDI",
+    "TDO",
+    "IRQS",
+    "EVIRQ",
+    "CLKR"
+  ],
+  "blocks": [
+    {
+      "key": "CF",
+      "label": [
+        "Coherent fabric",
+        "(home + routing)"
+      ],
+      "width": 200,
+      "row": 0,
+      "col": 2,
+      "row_name": "Coherent fabric",
+      "function": "Proposed local ownership and request-routing subsystem. It resolves cache probes, serializes conflicting lines and routes non-cacheable accesses to the peripheral fabric. Not expanded.",
+      "source": "Architecture section 7, line 140"
+    },
+    {
+      "key": "MEM",
+      "label": [
+        "Coherent memory",
+        "(L2 + ACE proxy)"
+      ],
+      "width": 200,
+      "row": 0,
+      "col": 3,
+      "row_name": "Coherent memory",
+      "function": "Proposed memory subsystem combining optional shared L2 and external coherent proxy. It handles system-facing requests and returns snoop results from local ownership tracking. External full-coherent support remains integration work. Not expanded.",
+      "source": "Architecture section 7, line 140"
+    },
+    {
+      "key": "IO",
+      "label": [
+        "Peripheral fabric",
+        "(AXI4 MMIO router)"
+      ],
+      "width": 220,
+      "row": 1,
+      "col": 2,
+      "row_name": "Peripheral fabric",
+      "function": "Proposed non-cacheable peripheral routing and response-ordering subsystem. It isolates MMIO from allocating cache paths and handles decode errors. Not expanded.",
+      "source": "Architecture section 8, line 165"
+    },
+    {
+      "key": "DBG",
+      "label": [
+        "Debug subsystem",
+        "(DTM + DM + SBA)"
+      ],
+      "width": 200,
+      "row": 0,
+      "col": 0,
+      "row_name": "Debug subsystem",
+      "function": "Proposed multi-hart debug subsystem with transport, run control and coherent normal-memory system-bus access. Native feature compatibility must be confirmed. Not expanded.",
+      "source": "Architecture section 12, line 234"
+    },
+    {
+      "key": "PMU",
+      "label": [
+        "Performance monitor",
+        "(counters + snapshot)"
+      ],
+      "width": 240,
+      "row": 1,
+      "col": 3,
+      "row_name": "Performance monitor",
+      "function": "Proposed per-hart and shared performance accumulators, latency tracking and snapshot engine. Passive observation must not backpressure execution. Not expanded.",
+      "source": "Architecture section 10, line 189"
+    },
+    {
+      "key": "MGT",
+      "label": [
+        "Cluster management",
+        "(APB + power + wake)"
+      ],
+      "width": 240,
+      "row": 2,
+      "col": 0,
+      "row_name": "Cluster management",
+      "function": "Proposed management register bank and coordinated boot, quiesce, reset and wake controller. Cross-domain operations use acknowledged commands. Not expanded.",
+      "source": "Architecture section 9, line 177"
+    },
+    {
+      "key": "REC",
+      "label": [
+        "Flight recorder",
+        "(trigger + event RAM)"
+      ],
+      "width": 240,
+      "row": 2,
+      "col": 1,
+      "row_name": "Flight recorder",
+      "function": "Proposed bounded timestamped event recorder with pre/post-trigger capture and observable loss handling. Not a standard instruction-trace encoder. Not expanded.",
+      "source": "Architecture section 13, line 257"
+    },
+    {
+      "key": "CPU",
+      "label": [
+        "CPU tile bank",
+        "(2 or 4 core + L1)"
+      ],
+      "width": 240,
+      "row": 0,
+      "col": 1,
+      "row_name": "CPU tile bank: hart 0/1; hart 2/3 only for N=4",
+      "function": "Architectural array of two or four identical CPU tiles, each with its own core and private L1 instruction/data caches. Hart 0 and 1 are always present; hart 2 and 3 exist only in the four-core build. Replicated interfaces are indexed per tile, not a single physical shared bus. Not expanded at level 1.",
+      "source": "Architecture section 4, line 66"
+    }
+  ],
+  "connectors": [
+    {
+      "id": "CMEM",
+      "src": "CF",
+      "dst": "MEM",
+      "src_side": "R",
+      "dst_side": "L"
+    },
+    {
+      "id": "MMIO",
+      "src": "CF",
+      "dst": "IO",
+      "src_side": "B",
+      "dst_side": "T"
+    },
+    {
+      "id": "DSBA",
+      "src": "DBG",
+      "dst": "CF",
+      "src_side": "B",
+      "dst_side": "L"
+    },
+    {
+      "id": "FEVT",
+      "src": "CF",
+      "dst": "PMU",
+      "src_side": "B",
+      "dst_side": "T"
+    },
+    {
+      "id": "MEVT",
+      "src": "MEM",
+      "dst": "PMU",
+      "src_side": "B",
+      "dst_side": "T"
+    },
+    {
+      "id": "IEVT",
+      "src": "IO",
+      "dst": "PMU",
+      "src_side": "R",
+      "dst_side": "L"
+    },
+    {
+      "id": "TRIG",
+      "src": "PMU",
+      "dst": "REC",
+      "src_side": "B",
+      "dst_side": "B"
+    },
+    {
+      "id": "PCFG",
+      "src": "MGT",
+      "dst": "PMU",
+      "src_side": "B",
+      "dst_side": "B"
+    },
+    {
+      "id": "RCFG",
+      "src": "MGT",
+      "dst": "REC",
+      "src_side": "R",
+      "dst_side": "L"
+    },
+    {
+      "id": "DCFG",
+      "src": "MGT",
+      "dst": "DBG",
+      "src_side": "T",
+      "dst_side": "B"
+    },
+    {
+      "id": "FCFG",
+      "src": "MGT",
+      "dst": "CF",
+      "src_side": "R",
+      "dst_side": "B"
+    },
+    {
+      "id": "LPROB",
+      "src": "MEM",
+      "dst": "CF",
+      "src_side": "L",
+      "dst_side": "R"
+    },
+    {
+      "id": "TILE",
+      "src": "CPU",
+      "dst": "CF",
+      "src_side": "R",
+      "dst_side": "L"
+    },
+    {
+      "id": "TEVT",
+      "src": "CPU",
+      "dst": "PMU",
+      "src_side": "T",
+      "dst_side": "R"
+    },
+    {
+      "id": "HDBG",
+      "src": "DBG",
+      "dst": "CPU",
+      "src_side": "R",
+      "dst_side": "L"
+    },
+    {
+      "id": "TCTL",
+      "src": "MGT",
+      "dst": "CPU",
+      "src_side": "R",
+      "dst_side": "B"
+    }
+  ],
+  "externals": [
+    {
+      "id": "ACER",
+      "block": "MEM",
+      "side": "R",
+      "dir": "out",
+      "text": [
+        "ACER",
+        "ACE request / response"
+      ],
+      "pad": false
+    },
+    {
+      "id": "ACSN",
+      "block": "MEM",
+      "side": "R",
+      "dir": "in",
+      "text": [
+        "ACSN",
+        "External snoop service"
+      ],
+      "pad": false
+    },
+    {
+      "id": "AXIP",
+      "block": "IO",
+      "side": "B",
+      "dir": "out",
+      "text": [
+        "AXIP",
+        "Peripheral AXI4"
+      ],
+      "pad": false
+    },
+    {
+      "id": "APBC",
+      "block": "MGT",
+      "side": "L",
+      "dir": "in",
+      "text": [
+        "APBC",
+        "Management APB4"
+      ],
+      "pad": false
+    },
+    {
+      "id": "TCK",
+      "block": "DBG",
+      "side": "T",
+      "dir": "in",
+      "text": [
+        "TCK"
+      ],
+      "pad": true
+    },
+    {
+      "id": "TMS",
+      "block": "DBG",
+      "side": "T",
+      "dir": "in",
+      "text": [
+        "TMS"
+      ],
+      "pad": true
+    },
+    {
+      "id": "TDI",
+      "block": "DBG",
+      "side": "T",
+      "dir": "in",
+      "text": [
+        "TDI"
+      ],
+      "pad": true
+    },
+    {
+      "id": "TDO",
+      "block": "DBG",
+      "side": "T",
+      "dir": "out",
+      "text": [
+        "TDO"
+      ],
+      "pad": true
+    },
+    {
+      "id": "IRQS",
+      "block": "CPU",
+      "side": "T",
+      "dir": "in",
+      "text": [
+        "IRQS",
+        "Timer / IPI / IRQ"
+      ],
+      "pad": false
+    },
+    {
+      "id": "EVIRQ",
+      "block": "MGT",
+      "side": "L",
+      "dir": "out",
+      "text": [
+        "EVIRQ",
+        "Cluster event IRQs"
+      ],
+      "pad": false
+    },
+    {
+      "id": "CLKR",
+      "block": "MGT",
+      "side": "B",
+      "dir": "in",
+      "text": [
+        "CLKR",
+        "Clock / reset / wake"
+      ],
+      "pad": false
+    }
+  ],
+  "nets": [],
+  "interfaces": [
+    {
+      "id": "CMEM",
+      "name": "Coherent memory service",
+      "category": "custom",
+      "active": "CF -> MEM (proposed)",
+      "signals": "Fabric -> memory: normal-memory request; memory -> fabric: request completion/read data/error. External-initiated local snoop work is separately represented by LPROB.",
+      "evidence": "Architecture section 7, line 140"
+    },
+    {
+      "id": "MMIO",
+      "name": "Uncached peripheral requests",
+      "category": "custom",
+      "active": "CF -> IO (proposed)",
+      "signals": "Fabric -> router: uncached address/control and write payload; router -> fabric: read payload, completion and errors.",
+      "evidence": "Architecture section 8, line 165"
+    },
+    {
+      "id": "DSBA",
+      "name": "Coherent debug memory access",
+      "category": "custom",
+      "active": "DBG -> CF (proposed)",
+      "signals": "Debug -> fabric: cacheless coherent memory requests; fabric -> debug: completion/read data/error. Not a raw DRAM bypass.",
+      "evidence": "Architecture section 12, line 234"
+    },
+    {
+      "id": "FEVT",
+      "name": "Fabric event observation",
+      "category": "custom",
+      "active": "CF -> PMU (proposed)",
+      "signals": "Fabric -> PMU: ownership, probe, queue and atomic events; names and widths TBD.",
+      "evidence": "Architecture section 10, line 189"
+    },
+    {
+      "id": "MEVT",
+      "name": "Memory event observation",
+      "category": "custom",
+      "active": "MEM -> PMU (proposed)",
+      "signals": "Memory -> PMU: shared-cache and external request/response events; names and widths TBD.",
+      "evidence": "Architecture section 10, line 189"
+    },
+    {
+      "id": "IEVT",
+      "name": "MMIO event observation",
+      "category": "custom",
+      "active": "IO -> PMU (proposed)",
+      "signals": "Router -> PMU: MMIO handshakes, errors, backpressure and pending-request observations.",
+      "evidence": "Architecture section 10, line 189"
+    },
+    {
+      "id": "TRIG",
+      "name": "Recorder trigger and event feed",
+      "category": "custom",
+      "active": "PMU -> REC (proposed)",
+      "signals": "PMU -> recorder: selected timestamped records and trigger requests. Recorder full drops records and reports loss; no execution backpressure.",
+      "evidence": "Architecture section 13, line 257"
+    },
+    {
+      "id": "PCFG",
+      "name": "PMU configuration and readback",
+      "category": "custom",
+      "active": "MGT -> PMU (proposed)",
+      "signals": "Management -> PMU: selectors, masks and snapshot commands; PMU -> management: snapshot/status/acknowledgments.",
+      "evidence": "Architecture section 11, line 222"
+    },
+    {
+      "id": "RCFG",
+      "name": "Recorder configuration and readback",
+      "category": "custom",
+      "active": "MGT -> REC (proposed)",
+      "signals": "Management -> recorder: trigger and read commands; recorder -> management: records, status and loss counters.",
+      "evidence": "Architecture section 13, line 257"
+    },
+    {
+      "id": "DCFG",
+      "name": "Debug policy and wake coordination",
+      "category": "custom",
+      "active": "MGT -> DBG (proposed)",
+      "signals": "Management -> debug: policy and coordinated wake/configuration; debug -> management: availability/status and wake requirements.",
+      "evidence": "Architecture section 12, line 234"
+    },
+    {
+      "id": "FCFG",
+      "name": "Fabric management",
+      "category": "custom",
+      "active": "MGT -> CF (proposed)",
+      "signals": "Management -> fabric: supported quiesce/route-policy commit; fabric -> management: command and drained-state acknowledgments.",
+      "evidence": "Architecture section 16, line 300"
+    },
+    {
+      "id": "ACER",
+      "name": "Proposed ACE request service",
+      "category": "custom",
+      "active": "MEM -> coherent SoC fabric",
+      "signals": "Outward: normal/coherent memory requests and write payload; inward: read/write completion. Full protocol channel fields and widths not finalized.",
+      "evidence": "Architecture section 6, line 122"
+    },
+    {
+      "id": "ACSN",
+      "name": "Proposed ACE snoop service",
+      "category": "custom",
+      "active": "SoC fabric -> MEM",
+      "signals": "Inward: snoop requests; outward: snoop responses/data with required protocol acknowledgment behavior. Not RTL-proven ACE compliance.",
+      "evidence": "Architecture section 6, line 122"
+    },
+    {
+      "id": "AXIP",
+      "name": "Proposed AXI4 peripheral interface",
+      "category": "custom",
+      "active": "IO -> peripheral subsystem",
+      "signals": "Outward: AW/W/AR request channels; inward: B/R response channels; VALID/READY both directions. Actual RTL port names and widths TBD.",
+      "evidence": "Architecture section 6, line 122"
+    },
+    {
+      "id": "APBC",
+      "name": "Proposed APB4 management interface",
+      "category": "custom",
+      "active": "SoC configuration manager -> MGT",
+      "signals": "Inward: PSEL, PENABLE, PADDR[15:0], PWRITE, PWDATA[31:0], PSTRB[3:0], PPROT[2:0]; outward: PRDATA[31:0], PREADY, PSLVERR. Proposed boundary fields, not RTL names.",
+      "evidence": "Architecture section 9, line 177"
+    },
+    {
+      "id": "TCK",
+      "name": "Proposed JTAG TCK pin",
+      "category": "custom",
+      "active": "Debug host -> DBG",
+      "signals": "TCK: single dedicated JTAG pad line; proposed semantics, implementation not selected.",
+      "evidence": "Architecture section 12, line 234"
+    },
+    {
+      "id": "TMS",
+      "name": "Proposed JTAG TMS pin",
+      "category": "custom",
+      "active": "Debug host -> DBG",
+      "signals": "TMS: single dedicated JTAG pad line; proposed semantics, implementation not selected.",
+      "evidence": "Architecture section 12, line 234"
+    },
+    {
+      "id": "TDI",
+      "name": "Proposed JTAG TDI pin",
+      "category": "custom",
+      "active": "Debug host -> DBG",
+      "signals": "TDI: single dedicated JTAG pad line; proposed semantics, implementation not selected.",
+      "evidence": "Architecture section 12, line 234"
+    },
+    {
+      "id": "TDO",
+      "name": "Proposed JTAG TDO pin",
+      "category": "custom",
+      "active": "DBG -> debug host",
+      "signals": "TDO: single dedicated JTAG pad line; proposed semantics, implementation not selected.",
+      "evidence": "Architecture section 12, line 234"
+    },
+    {
+      "id": "IRQS",
+      "name": "Per-hart platform interrupts",
+      "category": "custom",
+      "active": "Platform -> CPU bank",
+      "signals": "Per-hart timer, inter-processor and platform interrupt inputs; proposed routing directly into tile bank. Exact vector width and core interrupt interface TBD.",
+      "evidence": "Architecture section 6, line 122"
+    },
+    {
+      "id": "EVIRQ",
+      "name": "Cluster event interrupts",
+      "category": "custom",
+      "active": "Cluster management -> platform",
+      "signals": "Cluster PMU, recorder and fault interrupt status, proposed level semantics from architecture section 6; exact pins TBD.",
+      "evidence": "Architecture section 6, line 122"
+    },
+    {
+      "id": "CLKR",
+      "name": "Cluster domain integration",
+      "category": "custom",
+      "active": "Platform -> management and internal domains",
+      "signals": "Cluster clock, management clock, reset and wake infrastructure; logical domain boundary only. Internal clock-tree wiring is not defined by the source architecture.",
+      "evidence": "Architecture section 16, line 300"
+    },
+    {
+      "id": "LPROB",
+      "name": "Local snoop service",
+      "category": "custom",
+      "active": "MEM -> CF (proposed)",
+      "signals": "Memory proxy -> fabric: external probe work; fabric -> memory proxy: aggregated snoop response and dirty data. Exact RTL names, widths and timing TBD.",
+      "evidence": "Architecture section 7"
+    },
+    {
+      "id": "TILE",
+      "name": "Replicated tile transactions",
+      "category": "custom",
+      "active": "CPU -> CF (proposed)",
+      "signals": "For each present hart independently: tile-to-fabric memory requests and fabric-to-tile completion/read data. Address/attributes choose coherent normal memory or uncached MMIO. Separate per-tile interfaces; not one shared physical link.",
+      "evidence": "Architecture sections 4, 7, 10, 12, 15"
+    },
+    {
+      "id": "TEVT",
+      "name": "Replicated tile event observation",
+      "category": "custom",
+      "active": "CPU -> PMU (proposed)",
+      "signals": "Per-tile retirement multiplicity, pipeline/cache/TLB event observations to PMU; source/hart association retained. Exact names, widths and timing TBD.",
+      "evidence": "Architecture sections 4, 7, 10, 12, 15"
+    },
+    {
+      "id": "HDBG",
+      "name": "Replicated native hart debug",
+      "category": "custom",
+      "active": "DBG -> CPU (proposed)",
+      "signals": "Debug-to-hart supported halt/resume/step transactions; per-hart state/completion returned. Not a claim of native halt-group support.",
+      "evidence": "Architecture sections 4, 7, 10, 12, 15"
+    },
+    {
+      "id": "TCTL",
+      "name": "Replicated tile management",
+      "category": "custom",
+      "active": "MGT -> CPU (proposed)",
+      "signals": "Management-to-tile boot/quiesce/wake/reset requests with per-hart acknowledgment and actual state returned. Exact native interfaces TBD.",
+      "evidence": "Architecture sections 4, 7, 10, 12, 15"
+    }
+  ],
+  "legend_note": "DOCUMENT PROPOSAL. CPU bank = 2/4 separate tiles; each has private core + L1I/L1D. Dashed outlines = proposed, not RTL-proven. TILE, TEVT, HDBG, TCTL are replicated per-hart interfaces. Arrow = initiator; response signals are included."
+}

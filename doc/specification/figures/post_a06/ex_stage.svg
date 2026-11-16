@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="700" height="850" viewBox="490 340 700 850" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="490" y="340" width="700" height="850" fill="#FFFFFF"/>
+<rect x="520" y="370" width="640" height="790" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<rect x="670" y="510" width="60" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="536" text-anchor="middle">aes_i</text>
+<text x="700" y="558" text-anchor="middle">(aes)</text>
+<rect x="920" y="510" width="160" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1000" y="536" text-anchor="middle">alu_wrapper_i</text>
+<text x="1000" y="558" text-anchor="middle">(alu_wrapper)</text>
+<rect x="620" y="680" width="160" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="706" text-anchor="middle">branch_unit_i</text>
+<text x="700" y="728" text-anchor="middle">(branch_unit)</text>
+<rect x="930" y="680" width="140" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1000" y="706" text-anchor="middle">csr_buffer_i</text>
+<text x="1000" y="728" text-anchor="middle">(csr_buffer)</text>
+<rect x="640" y="850" width="120" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="876" text-anchor="middle">cvxif_fu_i</text>
+<text x="700" y="898" text-anchor="middle">(cvxif_fu)</text>
+<rect x="940" y="850" width="120" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1000" y="876" text-anchor="middle">fpu_i</text>
+<text x="1000" y="898" text-anchor="middle">(fpu_wrap)</text>
+<rect x="600" y="1020" width="200" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="1046" text-anchor="middle">lsu_i</text>
+<text x="700" y="1068" text-anchor="middle">(load_store_unit)</text>
+<rect x="960" y="1020" width="80" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1000" y="1046" text-anchor="middle">i_mult</text>
+<text x="1000" y="1068" text-anchor="middle">(mult)</text>
+<text x="1138" y="411" text-anchor="end">Component composition</text>
+<text x="1138" y="433" text-anchor="end">(ex_stage)</text>
+</svg>

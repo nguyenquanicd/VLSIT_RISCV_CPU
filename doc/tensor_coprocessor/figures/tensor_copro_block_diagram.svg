@@ -1,0 +1,241 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2460" height="2153" viewBox="70 210 2460 2153" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="70" y="210" width="2460" height="2153" fill="#FFFFFF"/>
+<rect x="560" y="400" width="620" height="520" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<rect x="600" y="500" width="200" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="536" text-anchor="middle">u_cvxif_adapter</text>
+<text x="700" y="558" text-anchor="middle">(m_cvxif_adapter)</text>
+<rect x="600" y="650" width="200" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="686" text-anchor="middle">u_systolic_array</text>
+<text x="700" y="708" text-anchor="middle">(m_systolic_array)</text>
+<rect x="650" y="800" width="100" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="836" text-anchor="middle">u_accum</text>
+<text x="700" y="858" text-anchor="middle">(m_accum)</text>
+<rect x="860" y="500" width="120" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="920" y="536" text-anchor="middle">u_mem_path</text>
+<text x="920" y="558" text-anchor="middle">(m_mem_path)</text>
+<rect x="860" y="800" width="120" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="920" y="836" text-anchor="middle">u_elemwise</text>
+<text x="920" y="858" text-anchor="middle">(m_elemwise)</text>
+<rect x="1040" y="800" width="100" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1090" y="836" text-anchor="middle">u_reduce</text>
+<text x="1090" y="858" text-anchor="middle">(m_reduce)</text>
+<rect x="1050" y="650" width="80" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1090" y="686" text-anchor="middle">u_csr</text>
+<text x="1090" y="708" text-anchor="middle">(m_csr)</text>
+<text x="700" y="321" text-anchor="middle">CRCLK</text>
+<text x="700" y="343" text-anchor="middle">i_clk_core, i_rst_n_core</text>
+<text x="920" y="261" text-anchor="middle">MEM</text>
+<text x="920" y="283" text-anchor="middle">CV-X-IF mem / AXI / SRAM</text>
+<text x="1340" y="686" text-anchor="middle">APB</text>
+<text x="1340" y="708" text-anchor="middle">APB4 register access</text>
+<text x="1158" y="441" text-anchor="end">TOP</text>
+<text x="1158" y="463" text-anchor="end">(m_tensor_copro)</text>
+<text x="733" y="612" text-anchor="middle">ISS</text>
+<text x="825" y="676" text-anchor="middle">OPR</text>
+<text x="733" y="762" text-anchor="middle">PSM</text>
+<text x="775" y="826" text-anchor="middle">ACC</text>
+<text x="1005" y="826" text-anchor="middle">VEC</text>
+<text x="104" y="2179" text-anchor="start" font-weight="bold">Legend</text>
+<text x="284" y="2220" text-anchor="start">Interface connector (one per signal group; arrow = active to passive)</text>
+<text x="104" y="2295" text-anchor="start">The enclosing frame is the top module; blocks inside are its instances.</text>
+<text x="360" y="536" text-anchor="middle">XIF</text>
+<text x="360" y="558" text-anchor="middle">issue/register/commit/result</text>
+<rect x="100" y="1250" width="2400" height="408" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1300" y="1277" text-anchor="middle" font-weight="bold">Block Functions &amp; Interfaces</text>
+<rect x="100" y="1290" width="330" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1315" text-anchor="start" font-weight="bold">Block</text>
+<rect x="430" y="1290" width="1480" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="434" y="1315" text-anchor="start" font-weight="bold">Function</text>
+<rect x="1910" y="1290" width="230" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1914" y="1315" text-anchor="start" font-weight="bold">Source</text>
+<rect x="2140" y="1290" width="360" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="2144" y="1315" text-anchor="start" font-weight="bold">Interfaces (mnemonics)</text>
+<rect x="100" y="1326" width="330" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1351" text-anchor="start">TOP (m_tensor_copro) frame</text>
+<rect x="430" y="1326" width="1480" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="434" y="1351" text-anchor="start">Structural top of the tensor coprocessor.</text>
+<rect x="1910" y="1326" width="230" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1914" y="1351" text-anchor="start">Section 14.2</text>
+<rect x="2140" y="1326" width="360" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="2144" y="1351" text-anchor="start">XIF, MEM, APB, CRCLK</text>
+<rect x="100" y="1362" width="330" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1387" text-anchor="start">u_cvxif_adapter</text>
+<text x="104" y="1409" text-anchor="start">(m_cvxif_adapter)</text>
+<rect x="430" y="1362" width="1480" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="434" y="1398" text-anchor="start">CV-X-IF handshake, decode and scoreboard.</text>
+<rect x="1910" y="1362" width="230" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1914" y="1398" text-anchor="start">Section 14.2</text>
+<rect x="2140" y="1362" width="360" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="2144" y="1398" text-anchor="start">ISS, XIF, CRCLK</text>
+<rect x="100" y="1420" width="330" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1445" text-anchor="start">u_systolic_array</text>
+<text x="104" y="1467" text-anchor="start">(m_systolic_array)</text>
+<rect x="430" y="1420" width="1480" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="434" y="1456" text-anchor="start">Multiply-accumulate element array.</text>
+<rect x="1910" y="1420" width="230" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1914" y="1456" text-anchor="start">Section 14.2</text>
+<rect x="2140" y="1420" width="360" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="2144" y="1456" text-anchor="start">ISS, OPR, PSM</text>
+<rect x="100" y="1478" width="330" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1503" text-anchor="start">u_accum (m_accum)</text>
+<rect x="430" y="1478" width="1480" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="434" y="1503" text-anchor="start">Accumulator with bias handling.</text>
+<rect x="1910" y="1478" width="230" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1914" y="1503" text-anchor="start">Section 14.2</text>
+<rect x="2140" y="1478" width="360" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="2144" y="1503" text-anchor="start">PSM, ACC</text>
+<rect x="100" y="1514" width="330" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1539" text-anchor="start">u_mem_path (m_mem_path)</text>
+<rect x="430" y="1514" width="1480" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="434" y="1539" text-anchor="start">Operand and result access path.</text>
+<rect x="1910" y="1514" width="230" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1914" y="1539" text-anchor="start">Section 14.2</text>
+<rect x="2140" y="1514" width="360" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="2144" y="1539" text-anchor="start">OPR, MEM</text>
+<rect x="100" y="1550" width="330" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1575" text-anchor="start">u_elemwise (m_elemwise)</text>
+<rect x="430" y="1550" width="1480" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="434" y="1575" text-anchor="start">Element-wise add, scale, activation.</text>
+<rect x="1910" y="1550" width="230" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1914" y="1575" text-anchor="start">Section 14.2</text>
+<rect x="2140" y="1550" width="360" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="2144" y="1575" text-anchor="start">ACC, VEC</text>
+<rect x="100" y="1586" width="330" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1611" text-anchor="start">u_reduce (m_reduce)</text>
+<rect x="430" y="1586" width="1480" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="434" y="1611" text-anchor="start">Reduction sum and max.</text>
+<rect x="1910" y="1586" width="230" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1914" y="1611" text-anchor="start">Section 14.2</text>
+<rect x="2140" y="1586" width="360" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="2144" y="1611" text-anchor="start">VEC</text>
+<rect x="100" y="1622" width="330" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1647" text-anchor="start">u_csr (m_csr)</text>
+<rect x="430" y="1622" width="1480" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="434" y="1647" text-anchor="start">APB control and status registers.</text>
+<rect x="1910" y="1622" width="230" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1914" y="1647" text-anchor="start">Section 14.2</text>
+<rect x="2140" y="1622" width="360" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="2144" y="1647" text-anchor="start">APB</text>
+<rect x="100" y="1698" width="2400" height="400" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1300" y="1725" text-anchor="middle" font-weight="bold">Interface Table</text>
+<rect x="100" y="1738" width="90" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1763" text-anchor="start" font-weight="bold">ID</text>
+<rect x="190" y="1738" width="300" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="1763" text-anchor="start" font-weight="bold">Interface</text>
+<rect x="490" y="1738" width="110" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="1763" text-anchor="start" font-weight="bold">Category</text>
+<rect x="600" y="1738" width="470" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="1763" text-anchor="start" font-weight="bold">Active side -&gt; passive side</text>
+<rect x="1070" y="1738" width="1430" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="1763" text-anchor="start" font-weight="bold">Key signals</text>
+<rect x="100" y="1774" width="90" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1799" text-anchor="start">ACC</text>
+<rect x="190" y="1774" width="300" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="1799" text-anchor="start">Accumulator result</text>
+<rect x="490" y="1774" width="110" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="1799" text-anchor="start">custom</text>
+<rect x="600" y="1774" width="470" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="1799" text-anchor="start">u_accum -&gt; u_elemwise</text>
+<rect x="1070" y="1774" width="1430" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="1799" text-anchor="start">accumulated result tile</text>
+<rect x="100" y="1810" width="90" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1835" text-anchor="start">APB</text>
+<rect x="190" y="1810" width="300" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="1835" text-anchor="start">APB4 register interface</text>
+<rect x="490" y="1810" width="110" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="1835" text-anchor="start">custom</text>
+<rect x="600" y="1810" width="470" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="1835" text-anchor="start">external -&gt; TOP</text>
+<rect x="1070" y="1810" width="1430" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="1835" text-anchor="start">psel, penable, pwrite, paddr, pwdata</text>
+<rect x="100" y="1846" width="90" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1871" text-anchor="start">CRCLK</text>
+<rect x="190" y="1846" width="300" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="1871" text-anchor="start">Clock and reset</text>
+<rect x="490" y="1846" width="110" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="1871" text-anchor="start">custom</text>
+<rect x="600" y="1846" width="470" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="1871" text-anchor="start">SoC -&gt; TOP</text>
+<rect x="1070" y="1846" width="1430" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="1871" text-anchor="start">i_clk_core, i_rst_n_core, i_clk_apb, i_rst_n_apb</text>
+<rect x="100" y="1882" width="90" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1907" text-anchor="start">ISS</text>
+<rect x="190" y="1882" width="300" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="1907" text-anchor="start">Decode to array</text>
+<rect x="490" y="1882" width="110" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="1907" text-anchor="start">custom</text>
+<rect x="600" y="1882" width="470" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="1907" text-anchor="start">u_cvxif_adapter -&gt; u_systolic_array</text>
+<rect x="1070" y="1882" width="1430" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="1907" text-anchor="start">decoded opcode and config</text>
+<rect x="100" y="1918" width="90" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1943" text-anchor="start">MEM</text>
+<rect x="190" y="1918" width="300" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="1943" text-anchor="start">Memory access path</text>
+<rect x="490" y="1918" width="110" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="1943" text-anchor="start">custom</text>
+<rect x="600" y="1918" width="470" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="1943" text-anchor="start">external  TOP</text>
+<rect x="1070" y="1918" width="1430" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="1943" text-anchor="start">CV-X-IF memory / AXI / SRAM</text>
+<rect x="100" y="1954" width="90" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1979" text-anchor="start">OPR</text>
+<rect x="190" y="1954" width="300" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="1979" text-anchor="start">Operand tiles</text>
+<rect x="490" y="1954" width="110" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="1979" text-anchor="start">custom</text>
+<rect x="600" y="1954" width="470" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="1979" text-anchor="start">u_mem_path -&gt; u_systolic_array</text>
+<rect x="1070" y="1954" width="1430" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="1979" text-anchor="start">operand A and B tiles</text>
+<rect x="100" y="1990" width="90" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="2015" text-anchor="start">PSM</text>
+<rect x="190" y="1990" width="300" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="2015" text-anchor="start">Partial sums</text>
+<rect x="490" y="1990" width="110" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="2015" text-anchor="start">custom</text>
+<rect x="600" y="1990" width="470" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="2015" text-anchor="start">u_systolic_array -&gt; u_accum</text>
+<rect x="1070" y="1990" width="1430" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="2015" text-anchor="start">partial-sum columns</text>
+<rect x="100" y="2026" width="90" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="2051" text-anchor="start">VEC</text>
+<rect x="190" y="2026" width="300" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="2051" text-anchor="start">Vector to reduce</text>
+<rect x="490" y="2026" width="110" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="2051" text-anchor="start">custom</text>
+<rect x="600" y="2026" width="470" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="2051" text-anchor="start">u_elemwise -&gt; u_reduce</text>
+<rect x="1070" y="2026" width="1430" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="2051" text-anchor="start">post-processed vector tile</text>
+<rect x="100" y="2062" width="90" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="2087" text-anchor="start">XIF</text>
+<rect x="190" y="2062" width="300" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="2087" text-anchor="start">CV-X-IF interface</text>
+<rect x="490" y="2062" width="110" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="2087" text-anchor="start">handshake</text>
+<rect x="600" y="2062" width="470" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="2087" text-anchor="start">external  TOP</text>
+<rect x="1070" y="2062" width="1430" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="2087" text-anchor="start">issue, register, commit, result</text>
+<path d="M 510 540 L 600 540" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="600,540 588,546 588,534" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 700 350 L 700 500" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="700,500 694,488 706,488" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 920 290 L 920 500" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="920,500 914,488 926,488" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1230 690 L 1130 690" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1130,690 1142,684 1142,696" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 700 580 L 700 650" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="700,650 694,638 706,638" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 700 730 L 700 800" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="700,800 694,788 706,788" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 750 840 L 860 840" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="860,840 848,846 848,834" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 980 840 L 1040 840" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1040,840 1028,846 1028,834" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 920 580 L 920 690 L 800 690" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="800,690 812,684 812,696" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 100 2213 L 260 2213" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="260,2213 248,2219 248,2207" fill="#000000" stroke="#000000" stroke-width="1"/>
+</svg>

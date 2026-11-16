@@ -1,0 +1,11 @@
+{
+  "passed": false,
+  "return_code": 1,
+  "errors": 14,
+  "warnings": 343,
+  "top": "csr_regfile",
+  "timed_out": false,
+  "uses_modified_hpd_top": true,
+  "uses_modified_flush_engine": true,
+  "uses_modified_cva6_cache_wrapper": true
+}

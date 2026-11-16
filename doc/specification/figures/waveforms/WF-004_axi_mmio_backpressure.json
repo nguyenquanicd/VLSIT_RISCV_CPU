@@ -1,0 +1,92 @@
+{
+  "head": {
+    "text": "WF-004 AXI4 backpressure and payload stability"
+  },
+  "signal": [
+    {
+      "name": "i_clk_cluster",
+      "wave": "p..........."
+    },
+    {
+      "name": "o_axi_mmio_awvalid",
+      "wave": "01....0....."
+    },
+    {
+      "name": "i_axi_mmio_awready",
+      "wave": "0....10....."
+    },
+    {
+      "name": "o_axi_mmio_awaddr[63:0]",
+      "wave": "x=....xxxxxx",
+      "data": [
+        "A0"
+      ]
+    },
+    {
+      "name": "o_axi_mmio_wvalid",
+      "wave": "0.1...0....."
+    },
+    {
+      "name": "i_axi_mmio_wready",
+      "wave": "0....10....."
+    },
+    {
+      "name": "o_axi_mmio_wdata[63:0]",
+      "wave": "xx=...xxxxxx",
+      "data": [
+        "D0"
+      ]
+    },
+    {
+      "name": "i_axi_mmio_bvalid",
+      "wave": "0......1..0."
+    },
+    {
+      "name": "o_axi_mmio_bready",
+      "wave": "0........10."
+    },
+    {
+      "name": "i_axi_mmio_bresp[1:0]",
+      "wave": "xxxxxxx=..xx",
+      "data": [
+        "OKAY"
+      ]
+    },
+    {
+      "name": "o_axi_mmio_arvalid",
+      "wave": "0.1...0....."
+    },
+    {
+      "name": "i_axi_mmio_arready",
+      "wave": "0....10....."
+    },
+    {
+      "name": "o_axi_mmio_araddr[63:0]",
+      "wave": "xx=...xxxxxx",
+      "data": [
+        "A1"
+      ]
+    },
+    {
+      "name": "i_axi_mmio_rvalid",
+      "wave": "0......1..0."
+    },
+    {
+      "name": "o_axi_mmio_rready",
+      "wave": "0........10."
+    },
+    {
+      "name": "i_axi_mmio_rdata[63:0]",
+      "wave": "xxxxxxx=..xx",
+      "data": [
+        "R0"
+      ]
+    }
+  ],
+  "foot": {
+    "text": "Stalls are example intervals; payload stays stable until handshake. No latency bound is implied."
+  },
+  "config": {
+    "hscale": 2
+  }
+}

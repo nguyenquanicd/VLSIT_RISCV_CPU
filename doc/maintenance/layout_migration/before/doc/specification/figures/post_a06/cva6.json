@@ -1,0 +1,238 @@
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "cva6.drawio",
+  "layout": {
+    "gap_h": 120,
+    "gap_v": 110,
+    "margin": 80,
+    "block_h": 60
+  },
+  "top": {
+    "frame_label": [
+      "Component composition",
+      "(cva6)"
+    ]
+  },
+  "frame_row": [
+    "cva6",
+    "Native modified component; function and change contract are specified in Section 14.",
+    "rtl/modified/cva6/core/cva6.sv"
+  ],
+  "frame_interfaces": [],
+  "blocks": [
+    {
+      "key": "B0",
+      "label": [
+        "i_acc_dispatcher",
+        "(acc_dispatcher)"
+      ],
+      "width": 200,
+      "row": 0,
+      "col": 0,
+      "row_name": "i_acc_dispatcher (acc_dispatcher)",
+      "function": "Native component",
+      "source": "REUSE; rtl/third_party/cva6/core/acc_dispatcher.sv"
+    },
+    {
+      "key": "B1",
+      "label": [
+        "commit_stage_i",
+        "(commit_stage)"
+      ],
+      "width": 180,
+      "row": 0,
+      "col": 1,
+      "row_name": "commit_stage_i (commit_stage)",
+      "function": "Precise retirement and completion",
+      "source": "MODIFY; rtl/modified/cva6/core/commit_stage.sv"
+    },
+    {
+      "key": "B2",
+      "label": [
+        "controller_i",
+        "(controller)"
+      ],
+      "width": 140,
+      "row": 0,
+      "col": 2,
+      "row_name": "controller_i (controller)",
+      "function": "Pipeline flush and fence coordination",
+      "source": "MODIFY; rtl/modified/cva6/core/controller.sv"
+    },
+    {
+      "key": "B3",
+      "label": [
+        "csr_regfile_i",
+        "(csr_regfile)"
+      ],
+      "width": 160,
+      "row": 1,
+      "col": 0,
+      "row_name": "csr_regfile_i (csr_regfile)",
+      "function": "Privilege, delegation and trap state",
+      "source": "MODIFY; rtl/modified/cva6/core/csr_regfile.sv"
+    },
+    {
+      "key": "B4",
+      "label": [
+        "i_pc_fifo",
+        "(cva6_fifo_v3)"
+      ],
+      "width": 180,
+      "row": 1,
+      "col": 1,
+      "row_name": "i_pc_fifo (cva6_fifo_v3)",
+      "function": "Native component",
+      "source": "MODIFY; rtl/modified/cva6/core/cva6_fifo_v3.sv"
+    },
+    {
+      "key": "B5",
+      "label": [
+        "i_cache_subsystem",
+        "(cva6_hpdcache_subsystem)"
+      ],
+      "width": 300,
+      "row": 1,
+      "col": 2,
+      "row_name": "i_cache_subsystem (cva6_hpdcache_subsystem)",
+      "function": "Cache subsystem integration",
+      "source": "MODIFY; rtl/modified/cva6/core/cache_subsystem/cva6_hpdcache_subsystem.sv"
+    },
+    {
+      "key": "B6",
+      "label": [
+        "i_cva6_rvfi_probes",
+        "(cva6_rvfi_probes)"
+      ],
+      "width": 220,
+      "row": 2,
+      "col": 0,
+      "row_name": "i_cva6_rvfi_probes (cva6_rvfi_probes)",
+      "function": "Native component",
+      "source": "REUSE; rtl/third_party/cva6/core/cva6_rvfi_probes.sv"
+    },
+    {
+      "key": "B7",
+      "label": [
+        "ex_stage_i",
+        "(ex_stage)"
+      ],
+      "width": 120,
+      "row": 2,
+      "col": 1,
+      "row_name": "ex_stage_i (ex_stage)",
+      "function": "Native component",
+      "source": "MODIFY; rtl/modified/cva6/core/ex_stage.sv"
+    },
+    {
+      "key": "B8",
+      "label": [
+        "i_frontend",
+        "(frontend)"
+      ],
+      "width": 120,
+      "row": 2,
+      "col": 2,
+      "row_name": "i_frontend (frontend)",
+      "function": "Native component",
+      "source": "REUSE; rtl/third_party/cva6/core/frontend/frontend.sv"
+    },
+    {
+      "key": "B9",
+      "label": [
+        "id_stage_i",
+        "(id_stage)"
+      ],
+      "width": 120,
+      "row": 3,
+      "col": 0,
+      "row_name": "id_stage_i (id_stage)",
+      "function": "Native component",
+      "source": "REUSE; rtl/third_party/cva6/core/id_stage.sv"
+    },
+    {
+      "key": "B10",
+      "label": [
+        "instr_tracer_i",
+        "(instr_tracer)"
+      ],
+      "width": 180,
+      "row": 3,
+      "col": 1,
+      "row_name": "instr_tracer_i (instr_tracer)",
+      "function": "Native component",
+      "source": "REUSE; rtl/third_party/cva6/common/local/util/instr_tracer.sv"
+    },
+    {
+      "key": "B11",
+      "label": [
+        "issue_stage_i",
+        "(issue_stage)"
+      ],
+      "width": 160,
+      "row": 3,
+      "col": 2,
+      "row_name": "issue_stage_i (issue_stage)",
+      "function": "Native component",
+      "source": "REUSE; rtl/third_party/cva6/core/issue_stage.sv"
+    },
+    {
+      "key": "B12",
+      "label": [
+        "perf_counters_i",
+        "(perf_counters)"
+      ],
+      "width": 180,
+      "row": 4,
+      "col": 0,
+      "row_name": "perf_counters_i (perf_counters)",
+      "function": "Native CPU event taps",
+      "source": "MODIFY; rtl/modified/cva6/core/perf_counters.sv"
+    },
+    {
+      "key": "B13",
+      "label": [
+        "i_rr_arb_tree",
+        "(rr_arb_tree)"
+      ],
+      "width": 160,
+      "row": 4,
+      "col": 1,
+      "row_name": "i_rr_arb_tree (rr_arb_tree)",
+      "function": "Native component",
+      "source": "MODIFY; rtl/modified/cva6/vendor/pulp-platform/common_cells/src/rr_arb_tree.sv"
+    },
+    {
+      "key": "B14",
+      "label": [
+        "i_cache_subsystem",
+        "(std_cache_subsystem)"
+      ],
+      "width": 260,
+      "row": 4,
+      "col": 2,
+      "row_name": "i_cache_subsystem (std_cache_subsystem)",
+      "function": "Native component",
+      "source": "REUSE; rtl/third_party/cva6/core/cache_subsystem/std_cache_subsystem.sv"
+    },
+    {
+      "key": "B15",
+      "label": [
+        "i_cache_subsystem",
+        "(wt_cache_subsystem)"
+      ],
+      "width": 240,
+      "row": 5,
+      "col": 0,
+      "row_name": "i_cache_subsystem (wt_cache_subsystem)",
+      "function": "Native component",
+      "source": "MODIFY; rtl/modified/cva6/core/cache_subsystem/wt_cache_subsystem.sv"
+    }
+  ],
+  "connectors": [],
+  "externals": [],
+  "interfaces": [],
+  "nets": [],
+  "legend_note": "Exact source-referenced children; generate multiplicity and active branches are specified in the component text. Containment denotes hierarchy, not invented signal connectivity. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.",
+  "library_sha256": "15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"
+}

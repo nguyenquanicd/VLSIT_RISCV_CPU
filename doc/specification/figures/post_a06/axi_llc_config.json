@@ -1,0 +1,95 @@
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "axi_llc_config.drawio",
+  "layout": {
+    "gap_h": 120,
+    "gap_v": 110,
+    "margin": 80,
+    "block_h": 60
+  },
+  "top": {
+    "frame_label": [
+      "Component composition",
+      "(axi_llc_config)"
+    ]
+  },
+  "frame_row": [
+    "axi_llc_config",
+    "Native modified component; function and change contract are specified in Section 14.",
+    "rtl/common/modified/axi_llc/src/axi_llc_config.sv"
+  ],
+  "frame_interfaces": [],
+  "blocks": [
+    {
+      "key": "B0",
+      "label": [
+        "i_ar_addr_decode",
+        "(addr_decode)"
+      ],
+      "width": 200,
+      "row": 0,
+      "col": 0,
+      "row_name": "i_ar_addr_decode (addr_decode)",
+      "function": "Native component",
+      "source": "REUSE; rtl/common/third_party/axi_llc_locked/common_cells/src/addr_decode.sv"
+    },
+    {
+      "key": "B1",
+      "label": [
+        "i_aw_addr_decode",
+        "(addr_decode)"
+      ],
+      "width": 200,
+      "row": 0,
+      "col": 1,
+      "row_name": "i_aw_addr_decode (addr_decode)",
+      "function": "Native component",
+      "source": "REUSE; rtl/common/third_party/axi_llc_locked/common_cells/src/addr_decode.sv"
+    },
+    {
+      "key": "B2",
+      "label": [
+        "i_flush_recv_counter",
+        "(counter)"
+      ],
+      "width": 240,
+      "row": 1,
+      "col": 0,
+      "row_name": "i_flush_recv_counter (counter)",
+      "function": "Native component",
+      "source": "REUSE; rtl/common/third_party/cva6/vendor/pulp-platform/common_cells/src/counter.sv"
+    },
+    {
+      "key": "B3",
+      "label": [
+        "i_flush_send_counter",
+        "(counter)"
+      ],
+      "width": 240,
+      "row": 1,
+      "col": 1,
+      "row_name": "i_flush_send_counter (counter)",
+      "function": "Native component",
+      "source": "REUSE; rtl/common/third_party/cva6/vendor/pulp-platform/common_cells/src/counter.sv"
+    },
+    {
+      "key": "B4",
+      "label": [
+        "i_lzc_flush",
+        "(lzc)"
+      ],
+      "width": 140,
+      "row": 2,
+      "col": 0,
+      "row_name": "i_lzc_flush (lzc)",
+      "function": "Native component",
+      "source": "REUSE; rtl/common/third_party/cva6/vendor/pulp-platform/common_cells/src/lzc.sv"
+    }
+  ],
+  "connectors": [],
+  "externals": [],
+  "interfaces": [],
+  "nets": [],
+  "legend_note": "Exact source-referenced children; generate multiplicity and active branches are specified in the component text. Containment denotes hierarchy, not invented signal connectivity. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.",
+  "library_sha256": "15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"
+}

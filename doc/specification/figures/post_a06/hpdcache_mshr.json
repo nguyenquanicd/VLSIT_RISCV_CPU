@@ -1,0 +1,82 @@
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "hpdcache_mshr.drawio",
+  "layout": {
+    "gap_h": 120,
+    "gap_v": 110,
+    "margin": 80,
+    "block_h": 60
+  },
+  "top": {
+    "frame_label": [
+      "Component composition",
+      "(hpdcache_mshr)"
+    ]
+  },
+  "frame_row": [
+    "hpdcache_mshr",
+    "Native modified component; function and change contract are specified in Section 14.",
+    "rtl/common/modified/hpdcache/rtl/src/hpdcache_mshr.sv"
+  ],
+  "frame_interfaces": [],
+  "blocks": [
+    {
+      "key": "B0",
+      "label": [
+        "mshr_mem",
+        "(hpdcache_regbank_wbyteenable_1rw)"
+      ],
+      "width": 400,
+      "row": 0,
+      "col": 0,
+      "row_name": "mshr_mem (hpdcache_regbank_wbyteenable_1rw)",
+      "function": "Native component",
+      "source": "REUSE; rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_regbank_wbyteenable_1rw.sv"
+    },
+    {
+      "key": "B1",
+      "label": [
+        "mshr_mem",
+        "(hpdcache_regbank_wmask_1rw)"
+      ],
+      "width": 340,
+      "row": 0,
+      "col": 1,
+      "row_name": "mshr_mem (hpdcache_regbank_wmask_1rw)",
+      "function": "Native component",
+      "source": "REUSE; rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_regbank_wmask_1rw.sv"
+    },
+    {
+      "key": "B2",
+      "label": [
+        "mshr_mem",
+        "(hpdcache_sram_wbyteenable)"
+      ],
+      "width": 320,
+      "row": 1,
+      "col": 0,
+      "row_name": "mshr_mem (hpdcache_sram_wbyteenable)",
+      "function": "Native component",
+      "source": "REUSE; rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_sram_wbyteenable.sv"
+    },
+    {
+      "key": "B3",
+      "label": [
+        "mshr_mem",
+        "(hpdcache_sram_wmask)"
+      ],
+      "width": 260,
+      "row": 1,
+      "col": 1,
+      "row_name": "mshr_mem (hpdcache_sram_wmask)",
+      "function": "Native component",
+      "source": "REUSE; rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_sram_wmask.sv"
+    }
+  ],
+  "connectors": [],
+  "externals": [],
+  "interfaces": [],
+  "nets": [],
+  "legend_note": "Exact source-referenced children; generate multiplicity and active branches are specified in the component text. Containment denotes hierarchy, not invented signal connectivity. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.",
+  "library_sha256": "15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"
+}

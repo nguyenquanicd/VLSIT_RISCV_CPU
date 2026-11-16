@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="510" viewBox="410 340 1080 510" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="410" y="340" width="1080" height="510" fill="#FFFFFF"/>
+<rect x="440" y="370" width="1020" height="450" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<rect x="520" y="510" width="360" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="536" text-anchor="middle">i_cva6_hpdcache_load_if_adapter</text>
+<text x="700" y="558" text-anchor="middle">(cva6_hpdcache_if_adapter)</text>
+<rect x="1000" y="510" width="380" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1190" y="536" text-anchor="middle">i_cva6_hpdcache_store_if_adapter</text>
+<text x="1190" y="558" text-anchor="middle">(cva6_hpdcache_if_adapter)</text>
+<rect x="640" y="680" width="120" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="706" text-anchor="middle">i_hpdcache</text>
+<text x="700" y="728" text-anchor="middle">(hpdcache)</text>
+<rect x="1060" y="680" width="260" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1190" y="706" text-anchor="middle">i_hwpf_stride_wrapper</text>
+<text x="1190" y="728" text-anchor="middle">(hwpf_stride_wrapper)</text>
+<text x="1438" y="411" text-anchor="end">Component composition</text>
+<text x="1438" y="433" text-anchor="end">(cva6_hpdcache_wrapper)</text>
+</svg>

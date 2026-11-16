@@ -1,0 +1,28 @@
+{
+  "layout": "flow-lr-snake-3-g180",
+  "geometry": {
+    "minimum_gap": 140.0,
+    "worst_fit": 0.5708448117539027,
+    "fit_ok": true,
+    "crossings": 0,
+    "label_conflicts": 0,
+    "distinct_x": 3,
+    "distinct_y": 8,
+    "distribution_ok": true,
+    "linear": false,
+    "findings": []
+  },
+  "stats": {
+    "crossings": 0,
+    "node_hits": 0,
+    "bends": 13,
+    "length": 6096.5460503754,
+    "width": 1230.0,
+    "height": 1020.0,
+    "overlaps": 0,
+    "label_conflicts": 0,
+    "distinct_x": 3,
+    "distinct_y": 8,
+    "linear": false
+  }
+}

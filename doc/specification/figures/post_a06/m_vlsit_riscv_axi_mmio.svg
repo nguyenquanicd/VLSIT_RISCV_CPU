@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="460" height="340" viewBox="470 340 460 340" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="470" y="340" width="460" height="340" fill="#FFFFFF"/>
+<rect x="500" y="370" width="400" height="280" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<rect x="580" y="510" width="240" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="536" text-anchor="middle">u_dont_touch_axi_mux</text>
+<text x="700" y="558" text-anchor="middle">(axi_mux)</text>
+<text x="878" y="411" text-anchor="end">Component composition</text>
+<text x="878" y="433" text-anchor="end">(m_vlsit_riscv_axi_mmio)</text>
+</svg>

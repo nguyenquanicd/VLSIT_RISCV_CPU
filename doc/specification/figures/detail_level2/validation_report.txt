@@ -1,0 +1,24 @@
+01_TILE: SCORE gapH=110 gapV=110 seed=2 failed=0 unplaced=0 issues=0 bend_gt5=0 bend5=0 bends=0 cross_total=0 cross_max_per_connector=0 frame=1050x610
+02_COHERENCE: SCORE gapH=110 gapV=110 seed=2 failed=0 unplaced=0 issues=0 bend_gt5=0 bend5=0 bends=18 cross_total=4 cross_max_per_connector=2 frame=1390x800
+03_LLC: SCORE gapH=110 gapV=110 seed=2 failed=0 unplaced=0 issues=0 bend_gt5=0 bend5=0 bends=4 cross_total=1 cross_max_per_connector=1 frame=1520x610
+04_CONTROL: SCORE gapH=110 gapV=110 seed=2 failed=0 unplaced=0 issues=0 bend_gt5=0 bend5=0 bends=8 cross_total=0 cross_max_per_connector=0 frame=1020x420
+05_PMU: SCORE gapH=110 gapV=110 seed=2 failed=0 unplaced=0 issues=0 bend_gt5=0 bend5=0 bends=0 cross_total=0 cross_max_per_connector=0 frame=790x800
+06_DEBUG: SCORE gapH=110 gapV=110 seed=2 failed=0 unplaced=0 issues=0 bend_gt5=0 bend5=0 bends=0 cross_total=0 cross_max_per_connector=0 frame=410x420
+07_ACE: SCORE gapH=110 gapV=110 seed=2 failed=0 unplaced=0 issues=0 bend_gt5=0 bend5=0 bends=8 cross_total=0 cross_max_per_connector=0 frame=870x420
+PASS: 190 library-derived cells across 7 pages. RTL semantics and visual layout were not checked.
+
+[01_TILE] frame i1__2 1050x610 ratio 1.72
+[01_TILE] shapes: 6 blocks, 13 labels, 0 pads; connectors: 10; physical crossings: 0; bends: 0 bends=10; findings: 0
+[02_COHERENCE] frame i1__2 1390x800 ratio 1.74
+[02_COHERENCE] shapes: 9 blocks, 15 labels, 0 pads; connectors: 12; physical crossings: 4; bends: 0 bends=7, 2 bends=1, 4 bends=4; findings: 0
+[03_LLC] frame i1__2 1520x610 ratio 2.49
+[03_LLC] shapes: 7 blocks, 14 labels, 0 pads; connectors: 11; physical crossings: 1; bends: 0 bends=10, 4 bends=1; findings: 0
+[04_CONTROL] frame i1__2 1020x420 ratio 2.43
+[04_CONTROL] shapes: 5 blocks, 10 labels, 0 pads; connectors: 7; physical crossings: 0; bends: 0 bends=5, 4 bends=2; findings: 0
+[05_PMU] frame i1__2 790x800 ratio 0.99
+[05_PMU] shapes: 7 blocks, 13 labels, 0 pads; connectors: 10; physical crossings: 0; bends: 0 bends=10; findings: 0
+[06_DEBUG] frame i1__2 410x420 ratio 0.98
+[06_DEBUG] shapes: 2 blocks, 7 labels, 0 pads; connectors: 4; physical crossings: 0; bends: 0 bends=4; findings: 0
+[07_ACE] frame i1__2 870x420 ratio 2.07
+[07_ACE] shapes: 4 blocks, 10 labels, 0 pads; connectors: 7; physical crossings: 0; bends: 0 bends=5, 4 bends=2; findings: 0
+total findings: 0

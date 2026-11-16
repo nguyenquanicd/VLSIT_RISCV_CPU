@@ -1,0 +1,53 @@
+{
+  "head": {
+    "text": "WF-021 - Shared address-region classification (four independent cases)"
+  },
+  "signal": [
+    [
+      "Independent request cases (columns are cases, not clock cycles)",
+      {
+        "name": "request_class",
+        "wave": "====",
+        "data": ["CACHEABLE", "NORMAL_UNCACHED", "MMIO", "UNMAPPED"]
+      },
+      {
+        "name": "region_match",
+        "wave": "1110"
+      },
+      {
+        "name": "request_span_inside_region",
+        "wave": "1110"
+      }
+    ],
+    {},
+    [
+      "Specified route decision (logical names; router RTL is pending)",
+      {
+        "name": "route_to_ccu_llc",
+        "wave": "1000"
+      },
+      {
+        "name": "route_to_llc_uncached_bypass",
+        "wave": "0100"
+      },
+      {
+        "name": "route_to_axi_mmio",
+        "wave": "0010"
+      },
+      {
+        "name": "local_access_error",
+        "wave": "0001"
+      },
+      {
+        "name": "downstream_request_for_unmapped_case",
+        "wave": "0000"
+      }
+    ]
+  ],
+  "foot": {
+    "text": "The cases are independent illustrations, not a time sequence. CACHEABLE uses the shared CCU/LLC path; NORMAL_UNCACHED bypasses LLC allocation; MMIO bypasses CCU/LLC; UNMAPPED or a boundary-crossing span is rejected locally with no downstream request. Route rows are specification-level logical labels, not existing router RTL ports. No cycle latency or AXI response timing is defined by this figure."
+  },
+  "config": {
+    "hscale": 2
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "head": {"text": "WF-006 APB register write then read"},
+  "signal": [
+    {"name": "i_clk_apb", "wave": "p........."},
+    {"name": "i_apb_psel", "wave": "01.0......"},
+    {"name": "i_apb_penable", "wave": "0.10......"},
+    {"name": "i_apb_pwrite", "wave": "01.0......"},
+    {"name": "i_apb_paddr[15:0]", "wave": "x=.xxxxxxx", "data": ["0x4"]},
+    {"name": "i_apb_pwdata[31:0]", "wave": "x=.xxxxxxx", "data": ["1"]},
+    {"name": "o_apb_pready", "wave": "0.10......"},
+    {"name": "o_apb_prdata[31:0]", "wave": "xxxxx=.xx.", "data": ["ver"]}
+  ],
+  "foot": {"text": "APB4 write to tcop_ctrl then read of tcop_version; Asynchronous=1."},
+  "config": {"hscale": 2}
+}

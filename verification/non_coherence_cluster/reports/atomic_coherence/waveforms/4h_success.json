@@ -1,0 +1,56 @@
+{
+  "signal": [
+    {
+      "name": "atomic_response_ack",
+      "wave": "=...............==",
+      "data": [
+        "0x0",
+        "0x1",
+        "0x0"
+      ]
+    },
+    {
+      "name": "probe_rsp_valid",
+      "wave": "===.==.==.==.==...",
+      "data": [
+        "0x0",
+        "0x1",
+        "0x0",
+        "0x1",
+        "0x0",
+        "0x1",
+        "0x0",
+        "0x2",
+        "0x0",
+        "0x3",
+        "0x0"
+      ]
+    },
+    {
+      "name": "probe_rsp_ready",
+      "wave": "=.==.==.==.==.==..",
+      "data": [
+        "0xf",
+        "0xe",
+        "0xf",
+        "0xe",
+        "0xf",
+        "0xe",
+        "0xf",
+        "0xd",
+        "0xf",
+        "0xc",
+        "0xf"
+      ]
+    }
+  ],
+  "head": {
+    "text": "A-02 4 harts: success; actual event samples"
+  },
+  "foot": {
+    "text": "Times (ns): 80, 5780, 5790, 5800, 5850, 5860, 5870, 6020, 6030, 6040, 6070, 6080, 6090, 6140, 6150, 6160, 6260, 6270. Nonuniform gaps; not clock-cycle columns."
+  },
+  "config": {
+    "hscale": 2
+  }
+}

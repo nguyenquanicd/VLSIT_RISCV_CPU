@@ -1,0 +1,285 @@
+{
+  "page_name": "03_LLC",
+  "library_sha256": "D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6",
+  "layout": {
+    "gap_h": 110,
+    "gap_v": 110,
+    "margin": 45,
+    "block_h": 80
+  },
+  "top": {
+    "frame_label": [
+      "Shared LLC internal datapath",
+      "(axi_llc)"
+    ]
+  },
+  "frame_row": [
+    "Shared LLC internal datapath",
+    "Document-grounded proposal; no RTL hierarchy is asserted.",
+    "VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS.md"
+  ],
+  "frame_interfaces": [
+    "SLV",
+    "MEM",
+    "SVC"
+  ],
+  "blocks": [
+    {
+      "key": "split",
+      "label": [
+        "u_axi_llc_chan_splitter",
+        "(axi_llc_chan_splitter)",
+        "REUSE"
+      ],
+      "width": 270,
+      "row": 1,
+      "col": 0,
+      "row_name": "u_axi_llc_chan_splitter / axi_llc_chan_splitter",
+      "function": "Splits AXI bursts into cache-line descriptors and merges read, write and flush descriptors.",
+      "source": "REUSE | PULP axi_llc"
+    },
+    {
+      "key": "hm",
+      "label": [
+        "u_axi_llc_hit_miss",
+        "(axi_llc_hit_miss)",
+        "REUSE"
+      ],
+      "width": 210,
+      "row": 1,
+      "col": 1,
+      "row_name": "u_axi_llc_hit_miss / axi_llc_hit_miss",
+      "function": "Performs tag lookup, hit bypass, miss ordering and line-lock checks before the read/write datapaths.",
+      "source": "REUSE | PULP axi_llc"
+    },
+    {
+      "key": "tags",
+      "label": [
+        "u_axi_llc_tag_store",
+        "(axi_llc_tag_store)",
+        "REUSE*"
+      ],
+      "width": 220,
+      "row": 0,
+      "col": 1,
+      "row_name": "u_axi_llc_tag_store / axi_llc_tag_store",
+      "function": "Stores and looks up tags/dirty state and performs tag-store initialization BIST.",
+      "source": "REUSE candidate | PULP axi_llc"
+    },
+    {
+      "key": "rw",
+      "label": [
+        "u_axi_llc_rw_units",
+        "(axi_llc_read_unit / axi_llc_write_unit)",
+        "REUSE"
+      ],
+      "width": 460,
+      "row": 2,
+      "col": 1,
+      "row_name": "u_axi_llc_rw_units / axi_llc_read_unit / axi_llc_write_unit",
+      "function": "Serves cache hits and transfers data between AXI slave transactions and configured LLC data ways.",
+      "source": "REUSE | PULP axi_llc"
+    },
+    {
+      "key": "miss",
+      "label": [
+        "u_axi_llc_miss_units",
+        "(axi_llc_evict_unit / axi_llc_refill_unit)",
+        "REUSE"
+      ],
+      "width": 480,
+      "row": 1,
+      "col": 2,
+      "row_name": "u_axi_llc_miss_units / axi_llc_evict_unit / axi_llc_refill_unit",
+      "function": "Writes back dirty victims and refills cache lines from the LLC master memory interface.",
+      "source": "REUSE | PULP axi_llc"
+    },
+    {
+      "key": "ways",
+      "label": [
+        "u_axi_llc_data_ways",
+        "(LLC data-way storage)",
+        "MODIFY"
+      ],
+      "width": 250,
+      "row": 2,
+      "col": 2,
+      "row_name": "u_axi_llc_data_ways / LLC data-way storage",
+      "function": "Holds cache-line data; map the source storage wrappers to selected ASIC SRAM macros and timing models.",
+      "source": "MODIFY | SRAM macro integration"
+    },
+    {
+      "key": "cfg",
+      "label": [
+        "u_axi_llc_config",
+        "(axi_llc_config)",
+        "MODIFY"
+      ],
+      "width": 180,
+      "row": 2,
+      "col": 0,
+      "row_name": "u_axi_llc_config / axi_llc_config",
+      "function": "Reports BIST/status and controls flush/counters; the VLSIT wrapper shall lock SPM disabled and expose the approved service window.",
+      "source": "MODIFY | PULP axi_llc wrapper policy"
+    }
+  ],
+  "connectors": [
+    {
+      "id": "DESC",
+      "src": "split",
+      "src_side": "R",
+      "dst": "hm",
+      "dst_side": "L"
+    },
+    {
+      "id": "TAG",
+      "src": "hm",
+      "src_side": "T",
+      "dst": "tags",
+      "dst_side": "B"
+    },
+    {
+      "id": "HIT",
+      "src": "hm",
+      "src_side": "B",
+      "dst": "rw",
+      "dst_side": "T"
+    },
+    {
+      "id": "MISS",
+      "src": "hm",
+      "src_side": "R",
+      "dst": "miss",
+      "dst_side": "L"
+    },
+    {
+      "id": "DATA",
+      "src": "rw",
+      "src_side": "R",
+      "dst": "ways",
+      "dst_side": "L"
+    },
+    {
+      "id": "EVICT",
+      "src": "miss",
+      "src_side": "B",
+      "dst": "ways",
+      "dst_side": "T"
+    },
+    {
+      "id": "FLUSH",
+      "src": "cfg",
+      "src_side": "L",
+      "dst": "hm",
+      "dst_side": "R"
+    }
+  ],
+  "externals": [
+    {
+      "id": "SLV",
+      "block": "split",
+      "side": "L",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "SLV",
+        "AXI4 cache request interface"
+      ]
+    },
+    {
+      "id": "MEM",
+      "block": "miss",
+      "side": "R",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "MEM"
+      ]
+    },
+    {
+      "id": "SVC",
+      "block": "cfg",
+      "side": "B",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "SVC",
+        "AXI4-Lite service"
+      ]
+    }
+  ],
+  "nets": [],
+  "interfaces": [
+    {
+      "id": "DESC",
+      "name": "LLC descriptor pipeline",
+      "category": "handshake",
+      "active": "channel splitter -> hit/miss pipeline",
+      "signals": "Address, burst fragment, ID, way, hit/miss, eviction/refill/flush control; internal types vary by pinned source."
+    },
+    {
+      "id": "TAG",
+      "name": "Tag lookup and BIST",
+      "category": "handshake",
+      "active": "hit/miss -> tag store",
+      "signals": "Lookup/store/flush/BIST commands and tag/dirty/way status."
+    },
+    {
+      "id": "HIT",
+      "name": "Hit data access",
+      "category": "handshake",
+      "active": "hit/miss -> read/write units",
+      "signals": "Hit descriptor and data-way request/response routing."
+    },
+    {
+      "id": "MISS",
+      "name": "Miss pipeline",
+      "category": "handshake",
+      "active": "hit/miss -> eviction/refill",
+      "signals": "Ordered miss descriptors, victim selection, dirty writeback and line refill."
+    },
+    {
+      "id": "DATA",
+      "name": "LLC data-way service",
+      "category": "handshake",
+      "active": "read/write units -> data ways",
+      "signals": "Way, line index, block offset, write enable, data, strobe and response."
+    },
+    {
+      "id": "EVICT",
+      "name": "Memory refill/writeback",
+      "category": "standard protocol",
+      "active": "LLC -> memory profile",
+      "signals": "AXI4 master traffic for dirty eviction and line refill."
+    },
+    {
+      "id": "FLUSH",
+      "name": "LLC flush service",
+      "category": "handshake",
+      "active": "AXI4-Lite service -> LLC control",
+      "signals": "Status/configuration and flush requests; exact service fields follow pinned axi_llc wrapper."
+    },
+    {
+      "id": "SLV",
+      "name": "LLC AXI4 slave path",
+      "category": "standard protocol",
+      "active": "coherence fabric -> LLC",
+      "signals": "AXI4 AW/W/B/AR/R; request boundary is defined in Section 6."
+    },
+    {
+      "id": "MEM",
+      "name": "LLC memory egress",
+      "category": "standard protocol",
+      "active": "LLC -> memory profile",
+      "signals": "AXI4 master data path; CFG-ACE conversion/ordering remains an integration dependency."
+    },
+    {
+      "id": "SVC",
+      "name": "LLC AXI4-Lite service",
+      "category": "standard protocol",
+      "active": "SoC -> LLC service target",
+      "signals": "AXI4-Lite service port routed by the shared control decoder."
+    }
+  ],
+  "legend_note": "PULP documentation describes the listed functional units. Exact module hierarchy, storage macro binding and top wrapper must be pinned; total capacity remains the user-approved static 256-KiB baseline. Status codes: REUSE = upstream RTL reused; REUSE* = reuse candidate pending compatibility checks; MODIFY = source adaptation, wrapper, or macro binding; NEW = VLSIT RTL to design; GENERATED = CSR RTL from the selected generator. All proposed blocks are dashed because this cluster has no pinned integrated RTL yet."
+}

@@ -1,0 +1,9 @@
+{
+  "head": {
+    "text": "WF-008 deferred"
+  },
+  "signal": [],
+  "foot": {
+    "text": "External ACE ordering behavior is deferred with the external ACE profile; this is not a current AXI RTL waveform. This status card defines no signal timing."
+  }
+}

@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="440" viewBox="10 10 940 440" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="10" y="10" width="940" height="440" fill="#FFFFFF"/>
+<rect x="185" y="40" width="210" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="290" y="77" text-anchor="middle">ENUM_ST_IDLE</text>
+<rect x="175" y="200" width="230" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="290" y="237" text-anchor="middle">ENUM_ST_DECODE</text>
+<rect x="320" y="360" width="220" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="430" y="397" text-anchor="middle">ENUM_ST_FETCH</text>
+<rect x="655" y="360" width="250" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="780" y="397" text-anchor="middle">ENUM_ST_COMPUTE</text>
+<rect x="675" y="200" width="210" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="780" y="237" text-anchor="middle">ENUM_ST_POST</text>
+<rect x="640" y="40" width="280" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="780" y="77" text-anchor="middle">ENUM_ST_WRITEBACK</text>
+<rect x="40" y="360" width="220" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="150" y="397" text-anchor="middle">ENUM_ST_ERROR</text>
+<path d="M 290 100 L 290 200" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="290,200 284,188 296,188" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 315.592 259.248 L 404.467 360.819" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="404.467,360.819 392.049,355.739 401.08,347.837" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 264.408 259.248 L 175.533 360.819" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="175.533,360.819 178.92,347.837 187.951,355.739" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 540 390 L 655 390" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="655,390 643,396 643,384" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 780 360 L 780 260" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="780,260 786,272 774,272" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 780 200 L 780 100" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="780,100 786,112 774,112" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 640 70 L 395 70" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="395,70 407,64 407,76" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 150 360 L 150 70 L 185 70" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="185,70 173,76 173,64" fill="#000000" stroke="#000000" stroke-width="1"/>
+</svg>

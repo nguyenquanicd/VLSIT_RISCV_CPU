@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="620" height="680" viewBox="520 340 620 680" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="520" y="340" width="620" height="680" fill="#FFFFFF"/>
+<rect x="550" y="370" width="560" height="620" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<rect x="660" y="510" width="80" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="536" text-anchor="middle">i_lfsr</text>
+<text x="700" y="558" text-anchor="middle">(lfsr)</text>
+<rect x="930" y="510" width="60" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="960" y="536" text-anchor="middle">i_lzc</text>
+<text x="960" y="558" text-anchor="middle">(lzc)</text>
+<rect x="640" y="680" width="120" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="706" text-anchor="middle">i_lzc_hit</text>
+<text x="700" y="728" text-anchor="middle">(lzc)</text>
+<rect x="890" y="680" width="140" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="960" y="706" text-anchor="middle">data_sram</text>
+<text x="960" y="728" text-anchor="middle">(sram_cache)</text>
+<rect x="630" y="850" width="140" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="876" text-anchor="middle">tag_sram</text>
+<text x="700" y="898" text-anchor="middle">(sram_cache)</text>
+<text x="1088" y="411" text-anchor="end">Component composition</text>
+<text x="1088" y="433" text-anchor="end">(cva6_icache)</text>
+</svg>

@@ -1,0 +1,84 @@
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "store_buffer.drawio",
+  "layout": {
+    "gap_h": 120,
+    "gap_v": 110,
+    "margin": 80,
+    "block_h": 60
+  },
+  "top": {
+    "frame_label": [
+      "Component composition",
+      "(store_buffer)"
+    ]
+  },
+  "frame_row": [
+    "store_buffer",
+    "Native modified component; function and change contract are specified in Section 14.",
+    "rtl/modified/cva6/core/store_buffer.sv"
+  ],
+  "frame_interfaces": [
+    "IN",
+    "OUT"
+  ],
+  "blocks": [
+    {
+      "key": "B0",
+      "label": [
+        "component_boundary",
+        "(store_buffer)"
+      ],
+      "width": 220,
+      "row": 0,
+      "col": 0,
+      "row_name": "component_boundary (store_buffer)",
+      "function": "Retained committed store/CBO queue",
+      "source": "MODIFY; rtl/modified/cva6/core/store_buffer.sv"
+    }
+  ],
+  "connectors": [],
+  "externals": [
+    {
+      "id": "IN",
+      "block": "B0",
+      "side": "L",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "IN",
+        "ports"
+      ]
+    },
+    {
+      "id": "OUT",
+      "block": "B0",
+      "side": "R",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "OUT",
+        "ports"
+      ]
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "IN",
+      "name": "Parent in ports",
+      "category": "custom",
+      "active": "in",
+      "signals": "clk_i, rst_ni, flush_i, stall_st_pending_i, page_offset_i, commit_i, valid_i, valid_without_flush_i, paddr_i, vaddr_i, data_i, be_i, data_size_i, cbo_op_i, req_port_i"
+    },
+    {
+      "id": "OUT",
+      "name": "Parent out ports",
+      "category": "custom",
+      "active": "out",
+      "signals": "no_st_pending_o, store_buffer_empty_o, page_offset_matches_o, commit_ready_o, ready_o, rvfi_mem_paddr_o, cmo_entry_valid_o, cmo_entry_op_o, cmo_entry_paddr_o, cmo_entry_vaddr_o, req_port_o"
+    }
+  ],
+  "nets": [],
+  "legend_note": "A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.",
+  "library_sha256": "15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"
+}

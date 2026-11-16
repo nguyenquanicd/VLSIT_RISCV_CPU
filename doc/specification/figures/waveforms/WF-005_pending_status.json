@@ -1,0 +1,9 @@
+{
+  "head": {
+    "text": "WF-005 pending detail"
+  },
+  "signal": [],
+  "foot": {
+    "text": "The software cache-maintenance sequence for external non-coherent DMA still needs an agreed platform contract. This status card defines no signal timing."
+  }
+}

@@ -1,0 +1,270 @@
+{
+  "page_name": "01_TILE",
+  "library_sha256": "D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6",
+  "layout": {
+    "gap_h": 110,
+    "gap_v": 110,
+    "margin": 45,
+    "block_h": 80
+  },
+  "top": {
+    "frame_label": [
+      "CPU tile internals",
+      "(m_vlsit_riscv_cpu_tile)"
+    ]
+  },
+  "frame_row": [
+    "CPU tile internals",
+    "Document-grounded proposal; no RTL hierarchy is asserted.",
+    "VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS.md"
+  ],
+  "frame_interfaces": [
+    "BOOT",
+    "IRQ",
+    "TREQ",
+    "EVT"
+  ],
+  "blocks": [
+    {
+      "key": "core",
+      "label": [
+        "u_cva6",
+        "(cva6)",
+        "MODIFY"
+      ],
+      "width": 80,
+      "row": 0,
+      "col": 0,
+      "row_name": "u_cva6 / cva6",
+      "function": "Uses a license-preserving local config with CVXIF disabled; the licensed shell routes boot address, D-cache ownership and tagged probes. Pipeline, MMU and I-cache submodules remain unchanged.",
+      "source": "MODIFY | OpenHW CVA6 integration copy"
+    },
+    {
+      "key": "subsys",
+      "label": [
+        "u_cva6_hpdcache_subsystem",
+        "(cva6_hpdcache_subsystem)",
+        "MODIFY"
+      ],
+      "width": 290,
+      "row": 0,
+      "col": 1,
+      "row_name": "u_cva6_hpdcache_subsystem / cva6_hpdcache_subsystem",
+      "function": "Splits the cacheable D-cache path from I-cache/device traffic and connects ownership grant plus tagged probe/data response paths to the coherence fabric.",
+      "source": "MODIFY | OpenHW CVA6"
+    },
+    {
+      "key": "icache",
+      "label": [
+        "u_cva6_icache",
+        "(cva6_icache)",
+        "REUSE"
+      ],
+      "width": 150,
+      "row": 1,
+      "col": 1,
+      "row_name": "u_cva6_icache / cva6_icache",
+      "function": "Stores instruction lines and services instruction fetches for the hart.",
+      "source": "REUSE | OpenHW CVA6"
+    },
+    {
+      "key": "hpdwrap",
+      "label": [
+        "u_cva6_hpdcache_wrapper",
+        "(cva6_hpdcache_wrapper)",
+        "MODIFY"
+      ],
+      "width": 270,
+      "row": 0,
+      "col": 2,
+      "row_name": "u_cva6_hpdcache_wrapper / cva6_hpdcache_wrapper",
+      "function": "Carries CPU request IDs and hart identity across the new permission request/grant and tagged probe interfaces.",
+      "source": "MODIFY | OpenHW CVA6"
+    },
+    {
+      "key": "hpd",
+      "label": [
+        "u_hpdcache",
+        "(hpdcache)",
+        "MODIFY"
+      ],
+      "width": 120,
+      "row": 1,
+      "col": 2,
+      "row_name": "u_hpdcache / hpdcache",
+      "function": "Adds per-line I/S/E/M state, permission-before-fill/upgrade sequencing, same-line exclusion and full-line tagged probe service.",
+      "source": "MODIFY | OpenHW HPDcache licensed copy"
+    },
+    {
+      "key": "tile_adapt",
+      "label": [
+        "u_vlsit_riscv_tile_coh_adapter",
+        "(m_vlsit_riscv_tile_coh_adapter)",
+        "NEW"
+      ],
+      "width": 370,
+      "row": 2,
+      "col": 2,
+      "row_name": "u_vlsit_riscv_tile_coh_adapter / m_vlsit_riscv_tile_coh_adapter",
+      "function": "Adapts source request IDs and line operations to the CCU; gates D-cache completion on ownership grants and associates tagged probe responses.",
+      "source": "NEW | VLSIT"
+    }
+  ],
+  "connectors": [
+    {
+      "id": "CORE",
+      "src": "core",
+      "src_side": "R",
+      "dst": "subsys",
+      "dst_side": "L"
+    },
+    {
+      "id": "IFETCH",
+      "src": "subsys",
+      "src_side": "B",
+      "dst": "icache",
+      "dst_side": "T"
+    },
+    {
+      "id": "DCACHE",
+      "src": "subsys",
+      "src_side": "R",
+      "dst": "hpdwrap",
+      "dst_side": "L"
+    },
+    {
+      "id": "HPD",
+      "src": "hpdwrap",
+      "src_side": "B",
+      "dst": "hpd",
+      "dst_side": "T"
+    },
+    {
+      "id": "COH",
+      "src": "hpd",
+      "src_side": "B",
+      "dst": "tile_adapt",
+      "dst_side": "T"
+    }
+  ],
+  "externals": [
+    {
+      "id": "BOOT",
+      "block": "core",
+      "side": "T",
+      "dir": "in",
+      "pos": -20,
+      "text": [
+        "BOOT",
+        "Shared i_boot_addr[63:0]"
+      ]
+    },
+    {
+      "id": "IRQ",
+      "block": "core",
+      "side": "L",
+      "dir": "in",
+      "pos": -30,
+      "text": [
+        "IRQ",
+        "Per-hart interrupt inputs"
+      ]
+    },
+    {
+      "id": "TREQ",
+      "block": "tile_adapt",
+      "side": "B",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "TREQ",
+        "Coherence boundary"
+      ]
+    },
+    {
+      "id": "EVT",
+      "block": "core",
+      "side": "T",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "EVT",
+        "Per-hart event taps"
+      ]
+    }
+  ],
+  "nets": [],
+  "interfaces": [
+    {
+      "id": "CORE",
+      "name": "CVA6/cache subsystem",
+      "category": "handshake",
+      "active": "cva6 -> cache subsystem",
+      "signals": "Request, response, fetch/data payload and completion; exact record fields depend on the pinned CVA6 source."
+    },
+    {
+      "id": "IFETCH",
+      "name": "Instruction cache path",
+      "category": "handshake",
+      "active": "cache subsystem -> cva6_icache",
+      "signals": "Instruction fetch request/return data; exact RTL fields are source-version dependent."
+    },
+    {
+      "id": "DCACHE",
+      "name": "HPDcache wrapper path",
+      "category": "handshake",
+      "active": "cache subsystem -> wrapper",
+      "signals": "Data-cache requester traffic and responses; types and outstanding limits must match the selected config."
+    },
+    {
+      "id": "HPD",
+      "name": "HPDcache internal path",
+      "category": "handshake",
+      "active": "wrapper -> hpdcache",
+      "signals": "Requester commands, response data, write data and cache-maintenance status."
+    },
+    {
+      "id": "COH",
+      "name": "Tile ownership request/grant",
+      "category": "custom",
+      "active": "D-cache -> CCU -> D-cache",
+      "signals": "Read-shared or write-unique permission request, physical line address, original requester ID, grant state and line data; exact widths are frozen in the port plan."
+    },
+    {
+      "id": "PROBE",
+      "name": "Tagged two-phase probe",
+      "category": "custom",
+      "active": "CCU <-> D-cache",
+      "signals": "PREPARE returns stable MESI state and any dirty data without changing state; COMMIT changes target state; ABORT restores the old state. Missing COMMIT ACK holds line lock/slot until reset."
+    },
+    {
+      "id": "IRQ",
+      "name": "Per-hart platform interrupts",
+      "category": "custom",
+      "active": "SoC -> CVA6",
+      "signals": "Per-hart interrupt classes defined in Section 6."
+    },
+    {
+      "id": "BOOT",
+      "name": "Shared boot address",
+      "category": "custom",
+      "active": "SoC -> every active CVA6 hart",
+      "signals": "One runtime 64-bit input is held through reset release and fanned out to boot_addr_i of each active hart; software may branch on mhartid."
+    },
+    {
+      "id": "TREQ",
+      "name": "Tile coherence boundary",
+      "category": "custom",
+      "active": "tile -> cluster fabric",
+      "signals": "Logical cacheable request/response interface; names, widths and cycle timing await source integration."
+    },
+    {
+      "id": "EVT",
+      "name": "Hart performance event taps",
+      "category": "custom",
+      "active": "CVA6/cache -> PMU",
+      "signals": "Candidate CVA6 performance events and cache events; event map is an open dependency."
+    }
+  ],
+  "legend_note": "Planned wrapper/instance names are VLSIT proposals, not names observed in a pinned RTL tree. CVXIF is disabled in the licensed local CVA6 config copy; no CVXIF port is exposed at the cluster boundary. Status codes: REUSE = upstream RTL reused; REUSE* = reuse candidate pending compatibility checks; MODIFY = source adaptation, wrapper, or macro binding; NEW = VLSIT RTL to design; GENERATED = CSR RTL from the selected generator. All proposed blocks are dashed because this cluster has no pinned integrated RTL yet."
+}

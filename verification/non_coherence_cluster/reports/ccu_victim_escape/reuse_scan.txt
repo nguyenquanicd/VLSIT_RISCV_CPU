@@ -1,0 +1,3 @@
+library: C:\HQuan\102_MyGithub\VLSIT_RTL_Generator_AI_Model\common_rtl (0 modules); specification: doc/specification/VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS.md
+no candidate: no module of the library shares enough keywords with the specification (min score 8)
+RESULT: NO CANDIDATE

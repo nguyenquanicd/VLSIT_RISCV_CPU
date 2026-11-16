@@ -1,0 +1,448 @@
+{
+ "page_name": "AXI_CLUSTER",
+ "out_name": "VLSIT_RISCV_CLUSTER_AXI.drawio",
+ "table_suffix": "_AXI",
+ "layout": {
+  "gap_h": 110,
+  "gap_v": 100,
+  "margin": 45,
+  "block_h": 70
+ },
+ "top": {
+  "frame_label": [
+   "RISC-V CLUSTER",
+   "(m_vlsit_riscv_cluster_axi_top)"
+  ],
+  "block_label": [
+   "RISC-V CLUSTER",
+   "(m_vlsit_riscv_cluster_axi_top)"
+  ],
+  "block_row": [
+   "m_vlsit_riscv_cluster_axi_top",
+   "Two/four-hart coherent cluster with AXI-only external memory profile.",
+   "Section 14.2"
+  ]
+ },
+ "frame_row": [
+  "AXI cluster profile",
+  "Internal multi-hart coherence; external memory and MMIO use ordinary AXI4; no external snoop interface.",
+  "Sections 4, 5, 6"
+ ],
+ "frame_interfaces": [
+  "IRQ",
+  "DBG",
+  "AXIL",
+  "MMIO",
+  "MEM",
+  "CLKR"
+ ],
+ "blocks": [
+  {
+   "key": "tiles",
+   "label": [
+    "CPU tile array",
+    "(m_vlsit_riscv_cpu_tile)"
+   ],
+   "width": 280,
+   "row": 1,
+   "col": 0,
+   "row_name": "CPU tile array (2 or 4)",
+   "function": "Executes application software on identical 64-bit harts with private caches and per-hart interrupt/debug state.",
+   "source": "Section 14.2"
+  },
+  {
+   "key": "coh",
+   "label": [
+    "Coherence fabric",
+    "(m_vlsit_riscv_coh_fabric)"
+   ],
+   "width": 300,
+   "row": 1,
+   "col": 1,
+   "row_name": "Internal coherence fabric",
+   "function": "Maintains cache-line ownership and aggregates cluster performance event taps.",
+   "source": "Section 14.2"
+  },
+  {
+   "key": "llc",
+   "label": [
+    "Shared LLC",
+    "(m_vlsit_axi_llc)"
+   ],
+   "width": 240,
+   "row": 1,
+   "col": 2,
+   "row_name": "Shared static LLC",
+   "function": "Stores shared last-level cache lines and performs its configured BIST and flush operations.",
+   "source": "Section 14.2"
+  },
+  {
+   "key": "mmio",
+   "label": [
+    "AXI4 MMIO",
+    "(m_vlsit_riscv_axi_mmio)"
+   ],
+   "width": 260,
+   "row": 2,
+   "col": 2,
+   "row_name": "Non-coherent device router",
+   "function": "Routes non-cacheable peripheral transactions to the external AXI4 device fabric.",
+   "source": "Section 14.2"
+  },
+  {
+   "key": "csr",
+   "label": [
+    "AXI-Lite decode and CSR",
+    "(m_vlsit_riscv_axil_decode)"
+   ],
+   "width": 320,
+   "row": 0,
+   "col": 2,
+   "row_name": "Cluster control and CSR",
+   "function": "Routes software access to cluster performance controls and LLC service functions.",
+   "source": "Section 14.2"
+  },
+  {
+   "key": "pmu",
+   "label": [
+    "Cluster PMU",
+    "(m_vlsit_riscv_pmu)"
+   ],
+   "width": 260,
+   "row": 0,
+   "col": 0,
+   "row_name": "Cluster PMU",
+   "function": "Counts selected hardware events, captures counter snapshots, and reports overflow causes.",
+   "source": "Section 14.2"
+  },
+  {
+   "key": "debug",
+   "label": [
+    "Debug adapter",
+    "(m_vlsit_riscv_cluster_core)"
+   ],
+   "width": 280,
+   "row": 2,
+   "col": 0,
+   "row_name": "Per-hart debug adapter",
+   "function": "Routes external debug requests and returns each active hart's debug state.",
+   "source": "Section 14.2"
+  }
+ ],
+ "connectors": [
+  {
+   "id": "TREQ",
+   "src": "tiles",
+   "src_side": "R",
+   "dst": "coh",
+   "dst_side": "L"
+  },
+  {
+   "id": "TRES",
+   "src": "coh",
+   "src_side": "L",
+   "dst": "tiles",
+   "dst_side": "R"
+  },
+  {
+   "id": "LREQ",
+   "src": "coh",
+   "src_side": "R",
+   "dst": "llc",
+   "dst_side": "L"
+  },
+  {
+   "id": "LRES",
+   "src": "llc",
+   "src_side": "L",
+   "dst": "coh",
+   "dst_side": "R"
+  },
+  {
+   "id": "DREQ",
+   "src": "coh",
+   "src_side": "B",
+   "dst": "mmio",
+   "dst_side": "T"
+  },
+  {
+   "id": "DRES",
+   "src": "mmio",
+   "src_side": "T",
+   "dst": "coh",
+   "dst_side": "B"
+  },
+  {
+   "id": "EVTS",
+   "src": "coh",
+   "src_side": "L",
+   "dst": "pmu",
+   "dst_side": "R"
+  },
+  {
+   "id": "CFG",
+   "src": "csr",
+   "src_side": "L",
+   "dst": "pmu",
+   "dst_side": "R"
+  },
+  {
+   "id": "LLCFG",
+   "src": "csr",
+   "src_side": "B",
+   "dst": "llc",
+   "dst_side": "T"
+  },
+  {
+   "id": "HDBG",
+   "src": "debug",
+   "src_side": "T",
+   "dst": "tiles",
+   "dst_side": "B"
+  }
+ ],
+ "externals": [
+  {
+   "id": "IRQ",
+   "block": "tiles",
+   "side": "L",
+   "dir": "in",
+   "pos": -20,
+   "text": [
+    "IRQ",
+    "Per-hart platform interrupt levels"
+   ]
+  },
+  {
+   "id": "DBG",
+   "block": "debug",
+   "side": "L",
+   "dir": "in",
+   "pos": 15,
+   "text": [
+    "DBG",
+    "External DM request/status"
+   ]
+  },
+  {
+   "id": "AXIL",
+   "block": "csr",
+   "side": "R",
+   "dir": "in",
+   "pos": 0,
+   "text": [
+    "AXIL",
+    "32-bit AXI4-Lite control"
+   ]
+  },
+  {
+   "id": "MMIO",
+   "block": "mmio",
+   "side": "R",
+   "dir": "out",
+   "pos": 0,
+   "text": [
+    "MMIO",
+    "Non-coherent AXI4 peripheral path"
+   ]
+  },
+  {
+   "id": "MEM",
+   "block": "llc",
+   "side": "R",
+   "dir": "out",
+   "pos": 0,
+   "text": [
+    "MEM",
+    "AXI4 memory"
+   ]
+  },
+  {
+   "id": "PMIRQ",
+   "block": "pmu",
+   "side": "L",
+   "dir": "out",
+   "pos": 0,
+   "text": [
+    "PMIRQ",
+    "Aggregate PMU interrupt"
+   ]
+  },
+  {
+   "id": "CLKR",
+   "block": "pmu",
+   "side": "T",
+   "dir": "in",
+   "pos": 0,
+   "text": [
+    "CLKR",
+    "i_clk_cluster, i_rst_n_cluster"
+   ]
+  }
+ ],
+ "nets": [
+  {
+   "entry": "CLKR",
+   "sinks": [
+    {
+     "id": "CLK0",
+     "block": "tiles",
+     "side": "L",
+     "pos": 0
+    },
+    {
+     "id": "CLK1",
+     "block": "coh",
+     "side": "T",
+     "pos": 0
+    },
+    {
+     "id": "CLK2",
+     "block": "llc",
+     "side": "R",
+     "pos": 0
+    },
+    {
+     "id": "CLK3",
+     "block": "mmio",
+     "side": "R",
+     "pos": 0
+    },
+    {
+     "id": "CLK4",
+     "block": "pmu",
+     "side": "T",
+     "pos": 0
+    },
+    {
+     "id": "CLK5",
+     "block": "debug",
+     "side": "L",
+     "pos": 0
+    }
+   ]
+  }
+ ],
+ "interfaces": [
+  {
+   "id": "IRQ",
+   "name": "Per-hart platform interrupt inputs",
+   "category": "external interrupt",
+   "active": "SoC interrupt controller -> CPU tile array",
+   "signals": "i_int_msip[3:0], i_int_mtip[3:0], i_int_meip[3:0], i_int_ssip[3:0], i_int_stip[3:0], i_int_seip[3:0]"
+  },
+  {
+   "id": "DBG",
+   "name": "External Debug Module connection",
+   "category": "debug control",
+   "active": "External DM -> debug adapter",
+   "signals": "i_hart_debug_req[3:0]; o_hart_debug_mode[3:0]"
+  },
+  {
+   "id": "AXIL",
+   "name": "AXI4-Lite control subordinate",
+   "category": "standard protocol",
+   "active": "SoC manager -> cluster subordinate",
+   "signals": "32-bit address/data, AW/W/B/AR/R channels"
+  },
+  {
+   "id": "MMIO",
+   "name": "AXI4 peripheral manager",
+   "category": "standard protocol",
+   "active": "Cluster -> peripheral fabric",
+   "signals": "64-bit address/data, 4-bit ID, AXI4 AW/W/B/AR/R channels"
+  },
+  {
+   "id": "MEM",
+   "name": "AXI4 non-coherent memory manager",
+   "category": "standard protocol",
+   "active": "Cluster -> memory fabric",
+   "signals": "64-bit address/data, 4-bit ID, AXI4 AW/W/B/AR/R channels; no external snoops"
+  },
+  {
+   "id": "PMIRQ",
+   "name": "Aggregate PMU interrupt output",
+   "category": "interrupt",
+   "active": "Cluster PMU -> SoC interrupt controller",
+   "signals": "o_int_pmu"
+  },
+  {
+   "id": "CLKR",
+   "name": "Cluster clock and reset",
+   "category": "clock/reset",
+   "active": "SoC clock/reset controller -> cluster",
+   "signals": "i_clk_cluster, i_rst_n_cluster"
+  },
+  {
+   "id": "TREQ",
+   "name": "Tile cache request path",
+   "category": "internal coherence",
+   "active": "CPU tile array -> coherence fabric",
+   "signals": "Cacheable read/write requests and ownership operations"
+  },
+  {
+   "id": "TRES",
+   "name": "Tile coherence response path",
+   "category": "internal coherence",
+   "active": "Coherence fabric -> CPU tile array",
+   "signals": "Data, completion, and probe responses"
+  },
+  {
+   "id": "LREQ",
+   "name": "LLC request path",
+   "category": "internal memory path",
+   "active": "Coherence fabric -> LLC",
+   "signals": "Shared cache-line requests and writeback data"
+  },
+  {
+   "id": "LRES",
+   "name": "LLC response path",
+   "category": "internal memory path",
+   "active": "LLC -> coherence fabric",
+   "signals": "Cache-line data and completion"
+  },
+  {
+   "id": "DREQ",
+   "name": "Non-coherent device request",
+   "category": "internal device path",
+   "active": "Coherence fabric -> AXI4 MMIO router",
+   "signals": "Non-cacheable device read/write requests, routed from the coherence-fabric device path to the MMIO manager."
+  },
+  {
+   "id": "DRES",
+   "name": "Non-coherent device response",
+   "category": "internal device path",
+   "active": "AXI4 MMIO router -> coherence fabric",
+   "signals": "Device read data and AXI response, returned to the coherence-fabric requester."
+  },
+  {
+   "id": "EVTS",
+   "name": "Aggregated cluster performance events",
+   "category": "performance events",
+   "active": "hart, coherence, LLC -> PMU",
+   "signals": "The coherence observability tap aggregates event vectors from the CPU tiles, coherence fabric and LLC and presents them to the PMU."
+  },
+  {
+   "id": "CFG",
+   "name": "PMU configuration",
+   "category": "internal CSR",
+   "active": "CSR block -> PMU",
+   "signals": "Event selector, counter enable, snapshot and cause control"
+  },
+  {
+   "id": "LLCFG",
+   "name": "LLC service controls",
+   "category": "internal CSR",
+   "active": "CSR decoder -> LLC",
+   "signals": "BIST/flush/counter service access; SPM disabled"
+  },
+  {
+   "id": "HDBG",
+   "name": "Per-hart debug routing",
+   "category": "debug control",
+   "active": "Debug adapter -> CPU tiles",
+   "signals": "Per-hart request and mode/status"
+  }
+ ],
+ "legend_note": "AXI profile has no external ACE snoop interface. External DMA visibility requires the SoC software cache-maintenance contract."
+}

@@ -1,0 +1,44 @@
+{
+  "head": {
+    "text": "WF-022 - T1 update blocked, T2 owner cancel escapes (abstract event order)"
+  },
+  "signal": [
+    {
+      "name": "event_phase",
+      "wave": "===",
+      "data": ["T1 blocked", "T2 cancel handshake", "T1 update handshake"]
+    },
+    [
+      "Bank 0 operation channels (existing directory ports)",
+      {
+        "name": "i_update_valid[0] (T1)",
+        "wave": "111"
+      },
+      {
+        "name": "o_update_ready[0]",
+        "wave": "001"
+      },
+      {
+        "name": "i_cancel_valid[0] (T2 reservation owner)",
+        "wave": "010"
+      },
+      {
+        "name": "o_cancel_ready[0]",
+        "wave": "010"
+      }
+    ],
+    [
+      "Reservation state (internal state label)",
+      {
+        "name": "reg_dir_resv_valid",
+        "wave": "110"
+      }
+    ]
+  ],
+  "foot": {
+    "text": "Columns are ordered event phases, not clock cycles. T1 keeps UPDATE VALID while it is ineligible and READY remains low. The matching reservation-owner T2 CANCEL is accepted independently and releases the set reservation. T1's unchanged UPDATE then handshakes. This illustrates the selected CC-01 escape and makes no cycle-latency claim."
+  },
+  "config": {
+    "hscale": 2
+  }
+}

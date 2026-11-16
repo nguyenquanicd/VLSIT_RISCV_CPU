@@ -1,0 +1,11 @@
+# Changed production RTL / RTL production đã sửa
+
+| File | SHA-256 after |
+|---|---|
+| [rtl/common/modified/axi_llc/src/hit_miss_detect/axi_llc_tag_store.sv](../../../rtl/common/modified/axi_llc/src/hit_miss_detect/axi_llc_tag_store.sv) | `73f96ee184cec95a368368f20d1abec008fa8a288de2b266f6f008f30752e85d` |
+| [rtl/common/modified/hpdcache/rtl/src/hpdcache.sv](../../../rtl/common/modified/hpdcache/rtl/src/hpdcache.sv) | `bf145248415507f42d982dd9e0637695bf6736149ee92f580a06fc808d843f74` |
+| [rtl/common/modified/hpdcache/rtl/src/hpdcache_ctrl.sv](../../../rtl/common/modified/hpdcache/rtl/src/hpdcache_ctrl.sv) | `4589e227c8fc05e3fbf7e4300a576a7975bd23c0b29267afb6220c5c8945e8bf` |
+| [rtl/common/modified/hpdcache/rtl/src/hpdcache_ctrl_pe.sv](../../../rtl/common/modified/hpdcache/rtl/src/hpdcache_ctrl_pe.sv) | `81fb221fbe96d8965126ae4152a8ee1e3e9312c6975445ca5ce093291c393950` |
+| [rtl/non_coherence_cluster/m_vlsit_riscv_cluster_core.sv](../../../rtl/non_coherence_cluster/m_vlsit_riscv_cluster_core.sv) | `fb1d7196ac3009f5685c289b898ba9bc981829f28a6b01406a570456964deb62` |
+
+Diff +82/−13 lines, baseline 6930 lines; churn 1.37%. Includes comments; not gate area. / Gồm comment, không phải gate area.

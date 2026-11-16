@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="850" viewBox="440 340 940 850" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="440" y="340" width="940" height="850" fill="#FFFFFF"/>
+<rect x="470" y="370" width="880" height="790" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<rect x="560" y="510" width="280" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="536" text-anchor="middle">u_vlsit_pmu_aggregate</text>
+<text x="700" y="558" text-anchor="middle">(m_vlsit_pmu_aggregate)</text>
+<rect x="970" y="510" width="300" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1120" y="536" text-anchor="middle">u_vlsit_pmu_cluster_evt</text>
+<text x="1120" y="558" text-anchor="middle">(m_vlsit_pmu_cluster_evt)</text>
+<rect x="550" y="680" width="300" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="706" text-anchor="middle">u_vlsit_pmu_cnt_bank</text>
+<text x="700" y="728" text-anchor="middle">(m_vlsit_pmu_counter_bank)</text>
+<rect x="970" y="680" width="300" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1120" y="706" text-anchor="middle">u_vlsit_pmu_evt_sel</text>
+<text x="1120" y="728" text-anchor="middle">(m_vlsit_pmu_event_select)</text>
+<rect x="570" y="850" width="260" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="876" text-anchor="middle">u_vlsit_pmu_hart_evt</text>
+<text x="700" y="898" text-anchor="middle">(m_vlsit_pmu_hart_evt)</text>
+<rect x="1020" y="850" width="200" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1120" y="876" text-anchor="middle">u_vlsit_pmu_irq</text>
+<text x="1120" y="898" text-anchor="middle">(m_vlsit_pmu_irq)</text>
+<rect x="570" y="1020" width="260" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="1046" text-anchor="middle">u_vlsit_pmu_snapshot</text>
+<text x="700" y="1068" text-anchor="middle">(m_vlsit_pmu_snapshot)</text>
+<text x="1328" y="411" text-anchor="end">Component composition</text>
+<text x="1328" y="433" text-anchor="end">(m_vlsit_riscv_pmu)</text>
+</svg>

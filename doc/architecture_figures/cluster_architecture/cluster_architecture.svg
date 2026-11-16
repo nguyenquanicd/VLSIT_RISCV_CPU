@@ -1,0 +1,199 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2140" height="1160" viewBox="70 30 2140 1160">
+<rect x="0" y="0" width="100%" height="100%" fill="white"/>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M 0 0 L 10 5 L 0 10 Z" fill="black"/></marker></defs>
+<rect x="540" y="400" width="1380" height="660" fill="white" stroke="black" stroke-width="2" stroke-dasharray="6 4"/>
+<rect x="1310" y="500" width="200" height="80" fill="white" stroke="black" stroke-width="2" stroke-dasharray="6 4"/>
+<rect x="1660" y="500" width="200" height="80" fill="white" stroke="black" stroke-width="2" stroke-dasharray="6 4"/>
+<rect x="1300" y="720" width="220" height="80" fill="white" stroke="black" stroke-width="2" stroke-dasharray="6 4"/>
+<rect x="600" y="500" width="200" height="80" fill="white" stroke="black" stroke-width="2" stroke-dasharray="6 4"/>
+<rect x="1640" y="720" width="240" height="80" fill="white" stroke="black" stroke-width="2" stroke-dasharray="6 4"/>
+<rect x="580" y="940" width="240" height="80" fill="white" stroke="black" stroke-width="2" stroke-dasharray="6 4"/>
+<rect x="940" y="940" width="240" height="80" fill="white" stroke="black" stroke-width="2" stroke-dasharray="6 4"/>
+<rect x="940" y="500" width="240" height="80" fill="white" stroke="black" stroke-width="2" stroke-dasharray="6 4"/>
+<path d="M 1020 350 L 1020 500" fill="none" stroke="white" stroke-width="5"/>
+<path d="M 1020 350 L 1020 500" fill="none" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 630 350 L 630 500" fill="none" stroke="white" stroke-width="5"/>
+<path d="M 630 350 L 630 500" fill="none" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 780 350 L 780 500" fill="none" stroke="white" stroke-width="5"/>
+<path d="M 780 350 L 780 500" fill="none" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 680 290 L 680 500" fill="none" stroke="white" stroke-width="5"/>
+<path d="M 680 290 L 680 500" fill="none" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 730 500 L 730 230" fill="none" stroke="white" stroke-width="5"/>
+<path d="M 730 500 L 730 230" fill="none" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 1410 800 L 1410 1110" fill="none" stroke="white" stroke-width="5"/>
+<path d="M 1410 800 L 1410 1110" fill="none" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 1860 520 L 1970 520" fill="none" stroke="white" stroke-width="5"/>
+<path d="M 1860 520 L 1970 520" fill="none" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 1970 560 L 1860 560" fill="none" stroke="white" stroke-width="5"/>
+<path d="M 1970 560 L 1860 560" fill="none" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 660 1110 L 660 1020" fill="none" stroke="white" stroke-width="5"/>
+<path d="M 660 1110 L 660 1020" fill="none" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 490 960 L 580 960" fill="none" stroke="white" stroke-width="5"/>
+<path d="M 490 960 L 580 960" fill="none" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 580 1000 L 490 1000" fill="none" stroke="white" stroke-width="5"/>
+<path d="M 580 1000 L 490 1000" fill="none" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 1510 520 L 1660 520" fill="none" stroke="white" stroke-width="5"/>
+<path d="M 1510 520 L 1660 520" fill="none" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 1410 580 L 1410 720" fill="none" stroke="white" stroke-width="5"/>
+<path d="M 1410 580 L 1410 720" fill="none" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 1810 580 L 1810 720" fill="none" stroke="white" stroke-width="5"/>
+<path d="M 1810 580 L 1810 720" fill="none" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 1520 760 L 1640 760" fill="none" stroke="white" stroke-width="5"/>
+<path d="M 1520 760 L 1640 760" fill="none" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 820 1000 L 940 1000" fill="none" stroke="white" stroke-width="5"/>
+<path d="M 820 1000 L 940 1000" fill="none" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 660 940 L 660 580" fill="none" stroke="white" stroke-width="5"/>
+<path d="M 660 940 L 660 580" fill="none" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 1660 560 L 1510 560" fill="none" stroke="white" stroke-width="5"/>
+<path d="M 1660 560 L 1510 560" fill="none" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 1180 560 L 1310 560" fill="none" stroke="white" stroke-width="5"/>
+<path d="M 1180 560 L 1310 560" fill="none" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 800 540 L 940 540" fill="none" stroke="white" stroke-width="5"/>
+<path d="M 800 540 L 940 540" fill="none" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 1490 580 L 1490 610 L 1720 610 L 1720 720" fill="none" stroke="white" stroke-width="5"/>
+<path d="M 1490 580 L 1490 610 L 1720 610 L 1720 720" fill="none" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 750 580 L 750 600 L 1290 600 L 1290 566 Q 1302 560 1290 554 L 1290 520 L 1310 520" fill="none" stroke="white" stroke-width="5"/>
+<path d="M 750 580 L 750 600 L 1290 600 L 1290 566 Q 1302 560 1290 554 L 1290 520 L 1310 520" fill="none" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 820 980 L 840 980 L 840 640 L 1060 640 L 1060 606 Q 1072 600 1060 594 L 1060 580" fill="none" stroke="white" stroke-width="5"/>
+<path d="M 820 980 L 840 980 L 840 640 L 1060 640 L 1060 606 Q 1072 600 1060 594 L 1060 580" fill="none" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 1110 500 L 1110 480 L 1900 480 L 1900 514 Q 1912 520 1900 526 L 1900 554 Q 1912 560 1900 566 L 1900 760 L 1880 760" fill="none" stroke="white" stroke-width="5"/>
+<path d="M 1110 500 L 1110 480 L 1900 480 L 1900 514 Q 1912 520 1900 526 L 1900 554 Q 1912 560 1900 566 L 1900 760 L 1880 760" fill="none" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 820 960 L 834 960 Q 840 948 846 960 L 920 960 L 920 680 L 1330 680 L 1330 580" fill="none" stroke="white" stroke-width="5"/>
+<path d="M 820 960 L 834 960 Q 840 948 846 960 L 920 960 L 920 680 L 1330 680 L 1330 580" fill="none" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 750 1020 L 750 1040 L 1404 1040 Q 1410 1028 1416 1040 L 1720 1040 L 1720 800" fill="none" stroke="white" stroke-width="5"/>
+<path d="M 750 1020 L 750 1040 L 1404 1040 Q 1410 1028 1416 1040 L 1720 1040 L 1720 800" fill="none" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 1810 800 L 1810 1050 L 1416 1050 Q 1410 1038 1404 1050 L 1060 1050 L 1060 1046 Q 1072 1040 1060 1034 L 1060 1020" fill="none" stroke="white" stroke-width="5"/>
+<path d="M 1810 800 L 1810 1050 L 1416 1050 Q 1410 1038 1404 1050 L 1060 1050 L 1060 1046 Q 1072 1040 1060 1034 L 1060 1020" fill="none" stroke="black" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M615,320 h30 v30 h-30 Z M615,320 l30,30 M645,320 l-30,30" fill="white" stroke="black" stroke-width="2"/>
+<path d="M765,320 h30 v30 h-30 Z M765,320 l30,30 M795,320 l-30,30" fill="white" stroke="black" stroke-width="2"/>
+<path d="M665,260 h30 v30 h-30 Z M665,260 l30,30 M695,260 l-30,30" fill="white" stroke="black" stroke-width="2"/>
+<path d="M715,200 h30 v30 h-30 Z M715,200 l30,30 M745,200 l-30,30" fill="white" stroke="black" stroke-width="2"/>
+<text x="1410" y="535" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="black">
+<tspan x="1410" dy="0">Coherent fabric</tspan>
+<tspan x="1410" dy="22">(home + routing)</tspan>
+</text>
+<text x="1760" y="535" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="black">
+<tspan x="1760" dy="0">Coherent memory</tspan>
+<tspan x="1760" dy="22">(L2 + ACE proxy)</tspan>
+</text>
+<text x="1410" y="755" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="black">
+<tspan x="1410" dy="0">Peripheral fabric</tspan>
+<tspan x="1410" dy="22">(AXI4 MMIO router)</tspan>
+</text>
+<text x="700" y="535" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="black">
+<tspan x="700" dy="0">Debug subsystem</tspan>
+<tspan x="700" dy="22">(DTM + DM + SBA)</tspan>
+</text>
+<text x="1760" y="755" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="black">
+<tspan x="1760" dy="0">Performance monitor</tspan>
+<tspan x="1760" dy="22">(counters + snapshot)</tspan>
+</text>
+<text x="700" y="975" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="black">
+<tspan x="700" dy="0">Cluster management</tspan>
+<tspan x="700" dy="22">(APB + power + wake)</tspan>
+</text>
+<text x="1060" y="975" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="black">
+<tspan x="1060" dy="0">Flight recorder</tspan>
+<tspan x="1060" dy="22">(trigger + event RAM)</tspan>
+</text>
+<text x="1060" y="535" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="black">
+<tspan x="1060" dy="0">CPU tile bank</tspan>
+<tspan x="1060" dy="22">(2 or 4 core + L1)</tspan>
+</text>
+<text x="104" y="82" text-anchor="start" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="black">
+<tspan x="104" dy="0">VLSIT RISC-V CPU cluster: architectural level 1</tspan>
+<tspan x="104" dy="22">Document proposal | 2 or 4 CPU tiles | no RTL evidence</tspan>
+</text>
+<text x="1020" y="320" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="black">
+<tspan x="1020" dy="0">IRQS</tspan>
+<tspan x="1020" dy="22">Timer / IPI / IRQ</tspan>
+</text>
+<text x="630" y="305" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="black">
+<tspan x="630" dy="0">TCK</tspan>
+</text>
+<text x="780" y="305" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="black">
+<tspan x="780" dy="0">TMS</tspan>
+</text>
+<text x="680" y="245" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="black">
+<tspan x="680" dy="0">TDI</tspan>
+</text>
+<text x="730" y="185" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="black">
+<tspan x="730" dy="0">TDO</tspan>
+</text>
+<text x="1410" y="1130" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="black">
+<tspan x="1410" dy="0">AXIP</tspan>
+<tspan x="1410" dy="22">Peripheral AXI4</tspan>
+</text>
+<text x="2060" y="480" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="black">
+<tspan x="2060" dy="0">ACER</tspan>
+<tspan x="2060" dy="22">ACE request / response</tspan>
+</text>
+<text x="2060" y="590" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="black">
+<tspan x="2060" dy="0">ACSN</tspan>
+<tspan x="2060" dy="22">External snoop service</tspan>
+</text>
+<text x="660" y="1130" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="black">
+<tspan x="660" dy="0">CLKR</tspan>
+<tspan x="660" dy="22">Clock / reset / wake</tspan>
+</text>
+<text x="435" y="920" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="black">
+<tspan x="435" dy="0">APBC</tspan>
+<tspan x="435" dy="22">Management APB4</tspan>
+</text>
+<text x="420" y="1030" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="black">
+<tspan x="420" dy="0">EVIRQ</tspan>
+<tspan x="420" dy="22">Cluster event IRQs</tspan>
+</text>
+<text x="1898" y="440" text-anchor="end" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="black">
+<tspan x="1898" dy="0">TOP proposed cluster</tspan>
+<tspan x="1898" dy="22">(N = 2 or 4)</tspan>
+</text>
+<text x="1585" y="501" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="black">
+<tspan x="1585" dy="0">CMEM</tspan>
+</text>
+<text x="880" y="981" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="black">
+<tspan x="880" dy="0">RCFG</tspan>
+</text>
+<text x="1448" y="691" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="black">
+<tspan x="1448" dy="0">MMIO</tspan>
+</text>
+<text x="750" y="627" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="black">
+<tspan x="750" dy="0">DSBA</tspan>
+</text>
+<text x="1530" y="637" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="black">
+<tspan x="1530" dy="0">FEVT</tspan>
+</text>
+<text x="1848" y="611" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="black">
+<tspan x="1848" dy="0">MEVT</tspan>
+</text>
+<text x="1560" y="745" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="black">
+<tspan x="1560" dy="0">IEVT</tspan>
+</text>
+<text x="1848" y="831" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="black">
+<tspan x="1848" dy="0">TRIG</tspan>
+</text>
+<text x="1210" y="1025" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="black">
+<tspan x="1210" dy="0">PCFG</tspan>
+</text>
+<text x="622" y="611" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="black">
+<tspan x="622" dy="0">DCFG</tspan>
+</text>
+<text x="960" y="707" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="black">
+<tspan x="960" dy="0">FCFG</tspan>
+</text>
+<text x="1585" y="591" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="black">
+<tspan x="1585" dy="0">LPROB</tspan>
+</text>
+<text x="1220" y="545" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="black">
+<tspan x="1220" dy="0">TILE</tspan>
+</text>
+<text x="1110" y="465" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="black">
+<tspan x="1110" dy="0">TEVT</tspan>
+</text>
+<text x="840" y="525" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="black">
+<tspan x="840" dy="0">HDBG</tspan>
+</text>
+<text x="802" y="671" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="18" fill="black">
+<tspan x="802" dy="0">TCTL</tspan>
+</text>
+</svg>

@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "dut": "m_vlsit_riscv_axi_mem_mux",
+  "testbench": "tb_m_vlsit_riscv_axi_mem_mux",
+  "simulator": "C:\\Tools\\oss-cad-suite\\bin\\verilator_bin.exe",
+  "results": [
+    {
+      "harts": 2,
+      "passed": true,
+      "result": "PASS: AXI IDs, ATOP, W/R payloads, response routing, and inactive-hart mask; harts=2\n- C:\\HQuan\\102_MyGithub\\VLSIT_RISCV_CPU\\rtl\\verification\\axi_mem_mux\\tb_m_vlsit_riscv_axi_mem_mux.sv:281: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.053 devel\n- Verilator: $finish at 270ns; walltime 0.000 s; speed 0.000 s/s\n- Verilator: cpu 0.000 s on 1 threads; allocated 6 MB"
+    },
+    {
+      "harts": 4,
+      "passed": true,
+      "result": "PASS: AXI IDs, ATOP, W/R payloads, response routing, and inactive-hart mask; harts=4\n- C:\\HQuan\\102_MyGithub\\VLSIT_RISCV_CPU\\rtl\\verification\\axi_mem_mux\\tb_m_vlsit_riscv_axi_mem_mux.sv:281: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.053 devel\n- Verilator: $finish at 170ns; walltime 0.001 s; speed 333.816 us/s\n- Verilator: cpu 0.000 s on 1 threads; allocated 6 MB"
+    }
+  ]
+}

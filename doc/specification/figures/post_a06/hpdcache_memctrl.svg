@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1020" viewBox="440 340 1400 1020" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="440" y="340" width="1400" height="1020" fill="#FFFFFF"/>
+<rect x="470" y="370" width="1340" height="960" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<rect x="1470" y="850" width="180" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1560" y="876" text-anchor="middle">i_dir_ways_mux</text>
+<text x="1560" y="898" text-anchor="middle">(hpdcache_mux)</text>
+<rect x="600" y="1020" width="200" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="1046" text-anchor="middle">victim_tag_mux_i</text>
+<text x="700" y="1068" text-anchor="middle">(hpdcache_mux)</text>
+<rect x="1030" y="1020" width="180" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1120" y="1046" text-anchor="middle">dir_sram</text>
+<text x="1120" y="1068" text-anchor="middle">(hpdcache_sram)</text>
+<rect x="1400" y="1020" width="320" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1560" y="1046" text-anchor="middle">data_sram</text>
+<text x="1560" y="1068" text-anchor="middle">(hpdcache_sram_wbyteenable)</text>
+<rect x="570" y="1190" width="260" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="1216" text-anchor="middle">victim_sel_i</text>
+<text x="700" y="1238" text-anchor="middle">(hpdcache_victim_sel)</text>
+<rect x="600" y="510" width="200" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="536" text-anchor="middle">amo_be_demux_i</text>
+<text x="700" y="558" text-anchor="middle">(hpdcache_demux)</text>
+<rect x="970" y="510" width="300" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1120" y="536" text-anchor="middle">data_req_write_be_demux_i</text>
+<text x="1120" y="558" text-anchor="middle">(hpdcache_demux)</text>
+<rect x="1410" y="510" width="300" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1560" y="536" text-anchor="middle">data_read_flush_mux_row_i</text>
+<text x="1560" y="558" text-anchor="middle">(hpdcache_mux)</text>
+<rect x="550" y="680" width="300" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="706" text-anchor="middle">data_read_flush_mux_way_i</text>
+<text x="700" y="728" text-anchor="middle">(hpdcache_mux)</text>
+<rect x="980" y="680" width="280" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1120" y="706" text-anchor="middle">data_read_req_word_mux_i</text>
+<text x="1120" y="728" text-anchor="middle">(hpdcache_mux)</text>
+<rect x="1390" y="680" width="340" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1560" y="706" text-anchor="middle">data_read_req_word_way_mux_i</text>
+<text x="1560" y="728" text-anchor="middle">(hpdcache_mux)</text>
+<rect x="610" y="850" width="180" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="876" text-anchor="middle">flush_tag_mux_i</text>
+<text x="700" y="898" text-anchor="middle">(hpdcache_mux)</text>
+<rect x="1030" y="850" width="180" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1120" y="876" text-anchor="middle">hit_tag_mux_i</text>
+<text x="1120" y="898" text-anchor="middle">(hpdcache_mux)</text>
+<text x="1788" y="411" text-anchor="end">Component composition</text>
+<text x="1788" y="433" text-anchor="end">(hpdcache_memctrl)</text>
+</svg>

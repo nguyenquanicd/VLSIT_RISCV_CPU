@@ -1,0 +1,121 @@
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "load_store_unit.drawio",
+  "layout": {
+    "gap_h": 120,
+    "gap_v": 110,
+    "margin": 80,
+    "block_h": 60
+  },
+  "top": {
+    "frame_label": [
+      "Component composition",
+      "(load_store_unit)"
+    ]
+  },
+  "frame_row": [
+    "load_store_unit",
+    "Native modified component; function and change contract are specified in Section 14.",
+    "rtl/modified/cva6/core/load_store_unit.sv"
+  ],
+  "frame_interfaces": [],
+  "blocks": [
+    {
+      "key": "B0",
+      "label": [
+        "i_cva6_mmu",
+        "(cva6_mmu)"
+      ],
+      "width": 120,
+      "row": 0,
+      "col": 0,
+      "row_name": "i_cva6_mmu (cva6_mmu)",
+      "function": "Native component",
+      "source": "MODIFY; rtl/modified/cva6/core/cva6_mmu/cva6_mmu.sv"
+    },
+    {
+      "key": "B1",
+      "label": [
+        "i_load_unit",
+        "(load_unit)"
+      ],
+      "width": 140,
+      "row": 0,
+      "col": 1,
+      "row_name": "i_load_unit (load_unit)",
+      "function": "Load/atomic completion and fault path",
+      "source": "MODIFY; rtl/modified/cva6/core/load_unit.sv"
+    },
+    {
+      "key": "B2",
+      "label": [
+        "lsu_bypass_i",
+        "(lsu_bypass)"
+      ],
+      "width": 140,
+      "row": 1,
+      "col": 0,
+      "row_name": "lsu_bypass_i (lsu_bypass)",
+      "function": "Native component",
+      "source": "REUSE; rtl/third_party/cva6/core/lsu_bypass.sv"
+    },
+    {
+      "key": "B3",
+      "label": [
+        "i_pmp_data_if",
+        "(pmp_data_if)"
+      ],
+      "width": 160,
+      "row": 1,
+      "col": 1,
+      "row_name": "i_pmp_data_if (pmp_data_if)",
+      "function": "Native component",
+      "source": "REUSE; rtl/third_party/cva6/core/pmp/src/pmp_data_if.sv"
+    },
+    {
+      "key": "B4",
+      "label": [
+        "i_pipe_reg_load",
+        "(shift_reg)"
+      ],
+      "width": 180,
+      "row": 2,
+      "col": 0,
+      "row_name": "i_pipe_reg_load (shift_reg)",
+      "function": "Native component",
+      "source": "REUSE; rtl/third_party/cva6/vendor/pulp-platform/common_cells/src/shift_reg.sv"
+    },
+    {
+      "key": "B5",
+      "label": [
+        "i_pipe_reg_store",
+        "(shift_reg)"
+      ],
+      "width": 200,
+      "row": 2,
+      "col": 1,
+      "row_name": "i_pipe_reg_store (shift_reg)",
+      "function": "Native component",
+      "source": "REUSE; rtl/third_party/cva6/vendor/pulp-platform/common_cells/src/shift_reg.sv"
+    },
+    {
+      "key": "B6",
+      "label": [
+        "i_store_unit",
+        "(store_unit)"
+      ],
+      "width": 140,
+      "row": 3,
+      "col": 0,
+      "row_name": "i_store_unit (store_unit)",
+      "function": "Store translation and CBO metadata",
+      "source": "MODIFY; rtl/modified/cva6/core/store_unit.sv"
+    }
+  ],
+  "connectors": [],
+  "externals": [],
+  "interfaces": [],
+  "nets": [],
+  "legend_note": "Exact source-referenced children; generate multiplicity and active branches are specified in the component text. Containment denotes hierarchy, not invented signal connectivity. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.",
+  "library_sha256": "15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"
+}

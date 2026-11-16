@@ -1,0 +1,58 @@
+[
+  {
+    "harts": 2,
+    "supervisor": false,
+    "error": 0,
+    "cycles": 938,
+    "pass": true
+  },
+  {
+    "harts": 2,
+    "supervisor": false,
+    "error": 1,
+    "cycles": 1020,
+    "pass": true
+  },
+  {
+    "harts": 2,
+    "supervisor": true,
+    "error": 0,
+    "cycles": 1063,
+    "pass": true
+  },
+  {
+    "harts": 2,
+    "supervisor": true,
+    "error": 1,
+    "cycles": 1145,
+    "pass": true
+  },
+  {
+    "harts": 4,
+    "supervisor": false,
+    "error": 0,
+    "cycles": 1015,
+    "pass": true
+  },
+  {
+    "harts": 4,
+    "supervisor": false,
+    "error": 1,
+    "cycles": 1163,
+    "pass": true
+  },
+  {
+    "harts": 4,
+    "supervisor": true,
+    "error": 0,
+    "cycles": 1140,
+    "pass": true
+  },
+  {
+    "harts": 4,
+    "supervisor": true,
+    "error": 1,
+    "cycles": 1288,
+    "pass": true
+  }
+]

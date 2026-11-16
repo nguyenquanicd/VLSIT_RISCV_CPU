@@ -1,0 +1,93 @@
+[
+  {
+    "file": "rtl/modified/cva6/core/cache_subsystem/cva6_hpdcache_subsystem.sv",
+    "before_lines": 686,
+    "after_lines": 708,
+    "changed_lines": 22,
+    "sha256": "16a62dc4d19f45426aa97bf06fc219a600820b3c6c095ff8abb7b3fbbedbabd1"
+  },
+  {
+    "file": "rtl/modified/cva6/core/cache_subsystem/cva6_hpdcache_wrapper.sv",
+    "before_lines": 532,
+    "after_lines": 552,
+    "changed_lines": 20,
+    "sha256": "03ca70a30becb8beebe431484f96fac6ae357f04c32dc3a6733432b6edb3f9c8"
+  },
+  {
+    "file": "rtl/modified/cva6/core/cache_subsystem/cva6_icache.sv",
+    "before_lines": 604,
+    "after_lines": 608,
+    "changed_lines": 4,
+    "sha256": "40eacba839d5917d078494b5bca977dd7908ff5b47f7f67ccfe0036239977d36"
+  },
+  {
+    "file": "rtl/modified/cva6/core/cache_subsystem/cva6_icache_axi_wrapper.sv",
+    "before_lines": 214,
+    "after_lines": 218,
+    "changed_lines": 4,
+    "sha256": "d3f25dad642a791b3a440e6e2c6f7900bd208ef560e5b68ba6ecf4f330fd8e85"
+  },
+  {
+    "file": "rtl/modified/cva6/core/cache_subsystem/wt_cache_subsystem.sv",
+    "before_lines": 291,
+    "after_lines": 295,
+    "changed_lines": 4,
+    "sha256": "fa69e0e4d72519108a6f82488700c683e999bf0f65ff73bb4b835e16225db4cf"
+  },
+  {
+    "file": "rtl/modified/cva6/core/commit_stage.sv",
+    "before_lines": 618,
+    "after_lines": 650,
+    "changed_lines": 39,
+    "sha256": "242d6a8d3ca603da217dc2e76d5eed2ff976566e16b26f46c35ceed6b98b343a"
+  },
+  {
+    "file": "rtl/modified/cva6/core/controller.sv",
+    "before_lines": 277,
+    "after_lines": 281,
+    "changed_lines": 6,
+    "sha256": "25afa12239db92809895197c2d7c5aafa90bc31f8ab39512313e96b017e3191a"
+  },
+  {
+    "file": "rtl/modified/cva6/core/csr_regfile.sv",
+    "before_lines": 3244,
+    "after_lines": 3250,
+    "changed_lines": 9,
+    "sha256": "7f61a7ffee3046e7209873cc01b2a94a14b5daa22909e78ac6da81703be32413"
+  },
+  {
+    "file": "rtl/modified/cva6/core/cva6.sv",
+    "before_lines": 2196,
+    "after_lines": 2241,
+    "changed_lines": 55,
+    "sha256": "ea4d5d9d44741943d0f7534e9973487337d6e61240a71ab5529e875338e06251"
+  },
+  {
+    "file": "rtl/modified/hpdcache/rtl/src/hpdcache.sv",
+    "before_lines": 1588,
+    "after_lines": 1619,
+    "changed_lines": 33,
+    "sha256": "02f1d6c052dec1cc2f989e42aca61f931c0983db5e5de04c12404436310a0072"
+  },
+  {
+    "file": "rtl/modified/hpdcache_cva6_pinned/rtl/src/hpdcache_cmo.sv",
+    "before_lines": 494,
+    "after_lines": 571,
+    "changed_lines": 80,
+    "sha256": "1e890e9fd0a51983a5c05806f253687d52da908db05d83ddf7c2f919211daa26"
+  },
+  {
+    "file": "rtl/vlsit/m_vlsit_riscv_cmo_controller.sv",
+    "before_lines": 255,
+    "after_lines": 260,
+    "changed_lines": 8,
+    "sha256": "d58adb7dfc7e9f44ebbbecdec6600bb539a878cd8e436ee3c5e90a575a26e5c9"
+  },
+  {
+    "file": "rtl/vlsit/m_vlsit_riscv_coh_fabric.sv",
+    "before_lines": 1181,
+    "after_lines": 1194,
+    "changed_lines": 18,
+    "sha256": "f60400a4b460bac30e0de8a8117b3e49df11b3f7781dbc1b8ccd47f7d88cc773"
+  }
+]

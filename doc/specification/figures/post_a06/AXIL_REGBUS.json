@@ -1,0 +1,43 @@
+{
+  "page_name": "AXIL_REGBUS",
+  "out_name": "AXIL_REGBUS.drawio",
+  "function": "AXIL_REGBUS",
+  "initial": "ENUM_ST_IDLE",
+  "state_pattern": "^[A-Z][A-Z0-9_]+$",
+  "states": [
+    {
+      "name": "ENUM_ST_IDLE"
+    },
+    {
+      "name": "ENUM_ST_WR_REQ"
+    },
+    {
+      "name": "ENUM_ST_RD_REQ"
+    }
+  ],
+  "transitions": [
+    {
+      "src": "ENUM_ST_IDLE",
+      "dst": "ENUM_ST_WR_REQ",
+      "label": "selected legal complete write"
+    },
+    {
+      "src": "ENUM_ST_IDLE",
+      "dst": "ENUM_ST_RD_REQ",
+      "label": "selected legal queued read"
+    },
+    {
+      "src": "ENUM_ST_WR_REQ",
+      "dst": "ENUM_ST_IDLE",
+      "label": "RegBus request and response ready"
+    },
+    {
+      "src": "ENUM_ST_RD_REQ",
+      "dst": "ENUM_ST_IDLE",
+      "label": "RegBus request and response ready"
+    }
+  ],
+  "layout": {
+    "margin": 50
+  }
+}

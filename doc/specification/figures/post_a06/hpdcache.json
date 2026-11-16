@@ -1,0 +1,160 @@
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "hpdcache.drawio",
+  "layout": {
+    "gap_h": 120,
+    "gap_v": 110,
+    "margin": 80,
+    "block_h": 60
+  },
+  "top": {
+    "frame_label": [
+      "Component composition",
+      "(hpdcache)"
+    ]
+  },
+  "frame_row": [
+    "hpdcache",
+    "Native modified component; function and change contract are specified in Section 14.",
+    "rtl/common/modified/hpdcache/rtl/src/hpdcache.sv"
+  ],
+  "frame_interfaces": [],
+  "blocks": [
+    {
+      "key": "B0",
+      "label": [
+        "hpdcache_cmo_i",
+        "(hpdcache_cmo)"
+      ],
+      "width": 180,
+      "row": 0,
+      "col": 0,
+      "row_name": "hpdcache_cmo_i (hpdcache_cmo)",
+      "function": "Native component",
+      "source": "MODIFY; rtl/common/modified/hpdcache_cva6_pinned/rtl/src/hpdcache_cmo.sv"
+    },
+    {
+      "key": "B1",
+      "label": [
+        "core_req_arbiter_i",
+        "(hpdcache_core_arbiter)"
+      ],
+      "width": 280,
+      "row": 0,
+      "col": 1,
+      "row_name": "core_req_arbiter_i (hpdcache_core_arbiter)",
+      "function": "Native component",
+      "source": "REUSE; rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/hpdcache_core_arbiter.sv"
+    },
+    {
+      "key": "B2",
+      "label": [
+        "hpdcache_ctrl_i",
+        "(hpdcache_ctrl)"
+      ],
+      "width": 180,
+      "row": 0,
+      "col": 2,
+      "row_name": "hpdcache_ctrl_i (hpdcache_ctrl)",
+      "function": "Cache array resource arbitration",
+      "source": "MODIFY; rtl/common/modified/hpdcache/rtl/src/hpdcache_ctrl.sv"
+    },
+    {
+      "key": "B3",
+      "label": [
+        "flush_i",
+        "(hpdcache_flush)"
+      ],
+      "width": 200,
+      "row": 1,
+      "col": 0,
+      "row_name": "flush_i (hpdcache_flush)",
+      "function": "Origin-tagged dirty writeback completion",
+      "source": "MODIFY; rtl/common/modified/hpdcache/rtl/src/hpdcache_flush.sv"
+    },
+    {
+      "key": "B4",
+      "label": [
+        "hpdcache_mem_req_read_arbiter_i",
+        "(hpdcache_mem_req_read_arbiter)"
+      ],
+      "width": 360,
+      "row": 1,
+      "col": 1,
+      "row_name": "hpdcache_mem_req_read_arbiter_i (hpdcache_mem_req_read_arbiter)",
+      "function": "Native component",
+      "source": "REUSE; rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/utils/hpdcache_mem_req_read_arbiter.sv"
+    },
+    {
+      "key": "B5",
+      "label": [
+        "hpdcache_mem_req_write_arbiter_i",
+        "(hpdcache_mem_req_write_arbiter)"
+      ],
+      "width": 380,
+      "row": 1,
+      "col": 2,
+      "row_name": "hpdcache_mem_req_write_arbiter_i (hpdcache_mem_req_write_arbiter)",
+      "function": "Native component",
+      "source": "REUSE; rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/utils/hpdcache_mem_req_write_arbiter.sv"
+    },
+    {
+      "key": "B6",
+      "label": [
+        "hpdcache_miss_handler_i",
+        "(hpdcache_miss_handler)"
+      ],
+      "width": 280,
+      "row": 2,
+      "col": 0,
+      "row_name": "hpdcache_miss_handler_i (hpdcache_miss_handler)",
+      "function": "Ownership-gated miss and refill",
+      "source": "MODIFY; rtl/common/modified/hpdcache/rtl/src/hpdcache_miss_handler.sv"
+    },
+    {
+      "key": "B7",
+      "label": [
+        "hpdcache_uc_i",
+        "(hpdcache_uncached)"
+      ],
+      "width": 220,
+      "row": 2,
+      "col": 1,
+      "row_name": "hpdcache_uc_i (hpdcache_uncached)",
+      "function": "Native component",
+      "source": "MODIFY; rtl/common/modified/hpdcache_cva6_pinned/rtl/src/hpdcache_uncached.sv"
+    },
+    {
+      "key": "B8",
+      "label": [
+        "hpdcache_wbuf_i",
+        "(hpdcache_wbuf)"
+      ],
+      "width": 180,
+      "row": 2,
+      "col": 2,
+      "row_name": "hpdcache_wbuf_i (hpdcache_wbuf)",
+      "function": "Native component",
+      "source": "REUSE; rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/hpdcache_wbuf.sv"
+    },
+    {
+      "key": "B9",
+      "label": [
+        "u_vlsit_riscv_hpd_probe_engine",
+        "(m_vlsit_riscv_hpd_probe_engine)"
+      ],
+      "width": 380,
+      "row": 3,
+      "col": 0,
+      "row_name": "u_vlsit_riscv_hpd_probe_engine (m_vlsit_riscv_hpd_probe_engine)",
+      "function": "Execute tagged PREPARE and matching COMMIT/ABORT against native HPDcache metadata and writeback services.",
+      "source": "NEW; rtl/common/vlsit/coherence/m_vlsit_riscv_hpd_probe_engine.sv"
+    }
+  ],
+  "connectors": [],
+  "externals": [],
+  "interfaces": [],
+  "nets": [],
+  "legend_note": "Exact source-referenced children; generate multiplicity and active branches are specified in the component text. Containment denotes hierarchy, not invented signal connectivity. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.",
+  "library_sha256": "15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"
+}

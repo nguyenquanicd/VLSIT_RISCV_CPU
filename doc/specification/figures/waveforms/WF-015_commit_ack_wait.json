@@ -1,0 +1,90 @@
+{
+  "head": {
+    "text": "WF-015 - No-timeout wait for a missing COMMIT ACK"
+  },
+  "signal": [
+    {
+      "name": "clk_cluster",
+      "wave": "p............."
+    },
+    {
+      "name": "i_rst_n_cluster",
+      "wave": "1............0"
+    },
+    [
+      "Line X transaction (logical aliases)",
+      {
+        "name": "txn_valid_X",
+        "wave": "01............"
+      },
+      {
+        "name": "txn_tag_X",
+        "wave": "=.............",
+        "data": ["T3"]
+      },
+      {
+        "name": "line_lock_X",
+        "wave": "01...........0"
+      },
+      {
+        "name": "txn_slot_T3_active",
+        "wave": "01...........0"
+      },
+      {
+        "name": "dir_holders_X",
+        "wave": "=............=",
+        "data": ["hart 0, hart 1", "invalid after reset"]
+      },
+      {
+        "name": "requester_grant_valid",
+        "wave": "0............."
+      }
+    ],
+    [
+      "COMMIT(I) to both prepared holders",
+      {
+        "name": "commit_valid_hart0",
+        "wave": "0...1........."
+      },
+      {
+        "name": "commit_valid_hart1",
+        "wave": "0...1........."
+      },
+      {
+        "name": "commit_ack_hart0",
+        "wave": "0.....1......."
+      },
+      {
+        "name": "commit_ack_hart1",
+        "wave": "0............."
+      },
+      {
+        "name": "hart0_state_X",
+        "wave": "=.....=......=",
+        "data": ["S", "I", "I after reset"]
+      },
+      {
+        "name": "hart1_state_X",
+        "wave": "=............=",
+        "data": ["S", "I after reset"]
+      }
+    ],
+    [
+      "Independent line progress when resources allow",
+      {
+        "name": "line_Y_complete",
+        "wave": "0.......1.0..."
+      },
+      {
+        "name": "line_Y_uses_other_slot",
+        "wave": "0......1..0..."
+      }
+    ]
+  ],
+  "foot": {
+    "text": "After PREPARE and required data/LLC work, COMMIT(I) targets harts 0 and 1. Hart 0 ACKs; hart 1 does not. No timeout: the CCU keeps line X locked and slot T3 allocated, leaves the directory unchanged, and withholds the requester grant. Line Y may complete only when its slot and resources are independent. Reset is the only recovery and clears cache/directory valid state. Logical aliases, not finalized RTL ports; spacing is illustrative, not a latency bound."
+  },
+  "config": {
+    "hscale": 1
+  }
+}

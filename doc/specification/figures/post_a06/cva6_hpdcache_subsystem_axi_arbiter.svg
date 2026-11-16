@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="850" viewBox="420 340 1040 850" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="420" y="340" width="1040" height="850" fill="#FFFFFF"/>
+<rect x="450" y="370" width="980" height="790" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<rect x="530" y="510" width="340" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="536" text-anchor="middle">i_icache_hpdcache_data_upsize</text>
+<text x="700" y="558" text-anchor="middle">(hpdcache_data_upsize)</text>
+<rect x="1040" y="510" width="260" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1170" y="536" text-anchor="middle">i_icache_miss_req_fifo</text>
+<text x="1170" y="558" text-anchor="middle">(hpdcache_fifo_reg)</text>
+<rect x="550" y="680" width="300" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="706" text-anchor="middle">i_icache_refill_meta_fifo</text>
+<text x="700" y="728" text-anchor="middle">(hpdcache_fifo_reg)</text>
+<rect x="990" y="680" width="360" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1170" y="706" text-anchor="middle">i_mem_req_read_arbiter</text>
+<text x="1170" y="728" text-anchor="middle">(hpdcache_mem_req_read_arbiter)</text>
+<rect x="550" y="850" width="300" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="876" text-anchor="middle">i_mem_resp_read_demux</text>
+<text x="700" y="898" text-anchor="middle">(hpdcache_mem_resp_demux)</text>
+<rect x="1020" y="850" width="300" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1170" y="876" text-anchor="middle">i_hpdcache_mem_to_axi_read</text>
+<text x="1170" y="898" text-anchor="middle">(hpdcache_mem_to_axi_read)</text>
+<rect x="540" y="1020" width="320" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="1046" text-anchor="middle">i_hpdcache_mem_to_axi_write</text>
+<text x="700" y="1068" text-anchor="middle">(hpdcache_mem_to_axi_write)</text>
+<text x="1408" y="411" text-anchor="end">Component composition</text>
+<text x="1408" y="433" text-anchor="end">(cva6_hpdcache_subsystem_axi_arbiter)</text>
+</svg>

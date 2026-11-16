@@ -1,0 +1,225 @@
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "axi_llc_top.drawio",
+  "layout": {
+    "gap_h": 120,
+    "gap_v": 110,
+    "margin": 80,
+    "block_h": 60
+  },
+  "top": {
+    "frame_label": [
+      "Component composition",
+      "(axi_llc_top)"
+    ]
+  },
+  "frame_row": [
+    "axi_llc_top",
+    "Native modified component; function and change contract are specified in Section 14.",
+    "rtl/modified/axi_llc/src/axi_llc_top.sv"
+  ],
+  "frame_interfaces": [],
+  "blocks": [
+    {
+      "key": "B0",
+      "label": [
+        "i_axi_bypass_demux",
+        "(axi_demux)"
+      ],
+      "width": 220,
+      "row": 0,
+      "col": 0,
+      "row_name": "i_axi_bypass_demux (axi_demux)",
+      "function": "Native component",
+      "source": "REUSE; rtl/third_party/axi_llc_locked/axi/src/axi_demux.sv"
+    },
+    {
+      "key": "B1",
+      "label": [
+        "i_axi_isolate_flush",
+        "(axi_isolate)"
+      ],
+      "width": 220,
+      "row": 0,
+      "col": 1,
+      "row_name": "i_axi_isolate_flush (axi_isolate)",
+      "function": "Native component",
+      "source": "MODIFY; rtl/modified/axi_llc_locked/axi/src/axi_isolate.sv"
+    },
+    {
+      "key": "B2",
+      "label": [
+        "i_ar_splitter",
+        "(axi_llc_chan_splitter)"
+      ],
+      "width": 280,
+      "row": 0,
+      "col": 2,
+      "row_name": "i_ar_splitter (axi_llc_chan_splitter)",
+      "function": "Native component",
+      "source": "MODIFY; rtl/modified/axi_llc/src/axi_llc_chan_splitter.sv"
+    },
+    {
+      "key": "B3",
+      "label": [
+        "i_aw_splitter",
+        "(axi_llc_chan_splitter)"
+      ],
+      "width": 280,
+      "row": 1,
+      "col": 0,
+      "row_name": "i_aw_splitter (axi_llc_chan_splitter)",
+      "function": "Native component",
+      "source": "MODIFY; rtl/modified/axi_llc/src/axi_llc_chan_splitter.sv"
+    },
+    {
+      "key": "B4",
+      "label": [
+        "i_llc_config",
+        "(axi_llc_config)"
+      ],
+      "width": 200,
+      "row": 1,
+      "col": 1,
+      "row_name": "i_llc_config (axi_llc_config)",
+      "function": "Native BIST/whole-way flush control",
+      "source": "MODIFY; rtl/modified/axi_llc/src/axi_llc_config.sv"
+    },
+    {
+      "key": "B5",
+      "label": [
+        "i_evict_unit",
+        "(axi_llc_evict_unit)"
+      ],
+      "width": 240,
+      "row": 1,
+      "col": 2,
+      "row_name": "i_evict_unit (axi_llc_evict_unit)",
+      "function": "Eviction/refill transport completion",
+      "source": "MODIFY; rtl/modified/axi_llc/src/axi_llc_evict_unit.sv"
+    },
+    {
+      "key": "B6",
+      "label": [
+        "i_hit_miss_unit",
+        "(axi_llc_hit_miss)"
+      ],
+      "width": 220,
+      "row": 2,
+      "col": 0,
+      "row_name": "i_hit_miss_unit (axi_llc_hit_miss)",
+      "function": "LLC lookup and descriptor association",
+      "source": "MODIFY; rtl/modified/axi_llc/src/axi_llc_hit_miss.sv"
+    },
+    {
+      "key": "B7",
+      "label": [
+        "i_merge_unit",
+        "(axi_llc_merge_unit)"
+      ],
+      "width": 240,
+      "row": 2,
+      "col": 1,
+      "row_name": "i_merge_unit (axi_llc_merge_unit)",
+      "function": "Native component",
+      "source": "REUSE; rtl/third_party/axi_llc/src/axi_llc_merge_unit.sv"
+    },
+    {
+      "key": "B8",
+      "label": [
+        "i_read_unit",
+        "(axi_llc_read_unit)"
+      ],
+      "width": 220,
+      "row": 2,
+      "col": 2,
+      "row_name": "i_read_unit (axi_llc_read_unit)",
+      "function": "Native component",
+      "source": "MODIFY; rtl/modified/axi_llc/src/axi_llc_read_unit.sv"
+    },
+    {
+      "key": "B9",
+      "label": [
+        "i_refill_unit",
+        "(axi_llc_refill_unit)"
+      ],
+      "width": 260,
+      "row": 3,
+      "col": 0,
+      "row_name": "i_refill_unit (axi_llc_refill_unit)",
+      "function": "Native component",
+      "source": "REUSE; rtl/third_party/axi_llc/src/axi_llc_refill_unit.sv"
+    },
+    {
+      "key": "B10",
+      "label": [
+        "i_llc_ways",
+        "(axi_llc_ways)"
+      ],
+      "width": 180,
+      "row": 3,
+      "col": 1,
+      "row_name": "i_llc_ways (axi_llc_ways)",
+      "function": "Native component",
+      "source": "REUSE; rtl/third_party/axi_llc/src/axi_llc_ways.sv"
+    },
+    {
+      "key": "B11",
+      "label": [
+        "i_write_unit",
+        "(axi_llc_write_unit)"
+      ],
+      "width": 240,
+      "row": 3,
+      "col": 2,
+      "row_name": "i_write_unit (axi_llc_write_unit)",
+      "function": "Native component",
+      "source": "MODIFY; rtl/modified/axi_llc/src/axi_llc_write_unit.sv"
+    },
+    {
+      "key": "B12",
+      "label": [
+        "i_axi_bypass_mux",
+        "(axi_mux)"
+      ],
+      "width": 200,
+      "row": 4,
+      "col": 0,
+      "row_name": "i_axi_bypass_mux (axi_mux)",
+      "function": "Native component",
+      "source": "REUSE; rtl/third_party/axi_llc_locked/axi/src/axi_mux.sv"
+    },
+    {
+      "key": "B13",
+      "label": [
+        "i_rw_arb_tree",
+        "(rr_arb_tree)"
+      ],
+      "width": 160,
+      "row": 4,
+      "col": 1,
+      "row_name": "i_rw_arb_tree (rr_arb_tree)",
+      "function": "Native component",
+      "source": "MODIFY; rtl/modified/cva6/vendor/pulp-platform/common_cells/src/rr_arb_tree.sv"
+    },
+    {
+      "key": "B14",
+      "label": [
+        "i_rw_spill",
+        "(spill_register)"
+      ],
+      "width": 200,
+      "row": 4,
+      "col": 2,
+      "row_name": "i_rw_spill (spill_register)",
+      "function": "Native component",
+      "source": "REUSE; rtl/third_party/axi_llc_locked/common_cells/src/spill_register.sv"
+    }
+  ],
+  "connectors": [],
+  "externals": [],
+  "interfaces": [],
+  "nets": [],
+  "legend_note": "Exact source-referenced children; generate multiplicity and active branches are specified in the component text. Containment denotes hierarchy, not invented signal connectivity. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.",
+  "library_sha256": "15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"
+}

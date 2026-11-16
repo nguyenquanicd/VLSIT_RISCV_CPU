@@ -1,0 +1,167 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="462" height="1048" viewBox="0 0 462 1048" font-family="Helvetica,Arial,sans-serif">
+<rect width="100%" height="100%" fill="#fff"/>
+<text x="12" y="20" font-size="14" font-weight="bold">WF-021: Shared PMA and router address-region classification</text>
+<line x1="162" y1="30" x2="162" y2="1020" stroke="#ccc" stroke-dasharray="2,3"/>
+<line x1="234" y1="30" x2="234" y2="1020" stroke="#ccc" stroke-dasharray="2,3"/>
+<line x1="306" y1="30" x2="306" y2="1020" stroke="#ccc" stroke-dasharray="2,3"/>
+<line x1="378" y1="30" x2="378" y2="1020" stroke="#ccc" stroke-dasharray="2,3"/>
+<line x1="450" y1="30" x2="450" y2="1020" stroke="#ccc" stroke-dasharray="2,3"/>
+<text x="154" y="49" font-size="12" text-anchor="end">i_clk_cluster</text>
+<polyline points="162.0,51.0 162.0,33.0 198.0,33.0 198.0,51.0 234.0,51.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="234.0,51.0 234.0,33.0 270.0,33.0 270.0,51.0 306.0,51.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="306.0,51.0 306.0,33.0 342.0,33.0 342.0,51.0 378.0,51.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="378.0,51.0 378.0,33.0 414.0,33.0 414.0,51.0 450.0,51.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="12" y="79" font-size="12" font-weight="bold" fill="#225">Cacheable normal memory</text>
+<text x="154" y="109" font-size="12" text-anchor="end">i_req_valid</text>
+<polyline points="162.0,111.0 234.0,111.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="234.0,111.0 234.0,93.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="234.0,93.0 306.0,93.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="306.0,93.0 306.0,111.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="306.0,111.0 378.0,111.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="378.0,111.0 450.0,111.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="154" y="139" font-size="12" text-anchor="end">i_req_ready</text>
+<polyline points="162.0,123.0 234.0,123.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="234.0,123.0 306.0,123.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="306.0,123.0 378.0,123.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="378.0,123.0 450.0,123.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="154" y="169" font-size="12" text-anchor="end">i_phys_addr</text>
+<rect x="162.0" y="153.0" width="72.0" height="18.0" fill="#ddd" stroke="#000"/>
+<polygon points="238.0,153.0 446.0,153.0 450.0,162.0 446.0,171.0 238.0,171.0 234.0,162.0" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="342.0" y="166.0" text-anchor="middle" font-size="11">0x80000000</text>
+<text x="154" y="199" font-size="12" text-anchor="end">route_class</text>
+<rect x="162.0" y="183.0" width="72.0" height="18.0" fill="#ddd" stroke="#000"/>
+<polygon points="238.0,183.0 446.0,183.0 450.0,192.0 446.0,201.0 238.0,201.0 234.0,192.0" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="342.0" y="196.0" text-anchor="middle" font-size="11">CACHEABLE</text>
+<text x="154" y="229" font-size="12" text-anchor="end">memory_path_req</text>
+<polyline points="162.0,231.0 234.0,231.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="234.0,231.0 306.0,231.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="306.0,231.0 306.0,213.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="306.0,213.0 378.0,213.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="378.0,213.0 378.0,231.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="378.0,231.0 450.0,231.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="154" y="259" font-size="12" text-anchor="end">mmio_path_req</text>
+<polyline points="162.0,261.0 234.0,261.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="234.0,261.0 306.0,261.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="306.0,261.0 378.0,261.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="378.0,261.0 450.0,261.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="154" y="289" font-size="12" text-anchor="end">local_access_error</text>
+<polyline points="162.0,291.0 234.0,291.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="234.0,291.0 306.0,291.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="306.0,291.0 378.0,291.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="378.0,291.0 450.0,291.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="12" y="319" font-size="12" font-weight="bold" fill="#225">Normal uncached memory</text>
+<text x="154" y="349" font-size="12" text-anchor="end">i_req_valid</text>
+<polyline points="162.0,351.0 234.0,351.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="234.0,351.0 234.0,333.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="234.0,333.0 306.0,333.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="306.0,333.0 306.0,351.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="306.0,351.0 378.0,351.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="378.0,351.0 450.0,351.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="154" y="379" font-size="12" text-anchor="end">i_req_ready</text>
+<polyline points="162.0,363.0 234.0,363.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="234.0,363.0 306.0,363.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="306.0,363.0 378.0,363.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="378.0,363.0 450.0,363.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="154" y="409" font-size="12" text-anchor="end">i_phys_addr</text>
+<rect x="162.0" y="393.0" width="72.0" height="18.0" fill="#ddd" stroke="#000"/>
+<polygon points="238.0,393.0 446.0,393.0 450.0,402.0 446.0,411.0 238.0,411.0 234.0,402.0" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="342.0" y="406.0" text-anchor="middle" font-size="11">0x100000100</text>
+<text x="154" y="439" font-size="12" text-anchor="end">route_class</text>
+<rect x="162.0" y="423.0" width="72.0" height="18.0" fill="#ddd" stroke="#000"/>
+<polygon points="238.0,423.0 446.0,423.0 450.0,432.0 446.0,441.0 238.0,441.0 234.0,432.0" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="342.0" y="436.0" text-anchor="middle" font-size="11">NORMAL_UNCACHED</text>
+<text x="154" y="469" font-size="12" text-anchor="end">memory_path_req</text>
+<polyline points="162.0,471.0 234.0,471.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="234.0,471.0 306.0,471.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="306.0,471.0 306.0,453.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="306.0,453.0 378.0,453.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="378.0,453.0 378.0,471.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="378.0,471.0 450.0,471.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="154" y="499" font-size="12" text-anchor="end">mmio_path_req</text>
+<polyline points="162.0,501.0 234.0,501.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="234.0,501.0 306.0,501.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="306.0,501.0 378.0,501.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="378.0,501.0 450.0,501.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="154" y="529" font-size="12" text-anchor="end">local_access_error</text>
+<polyline points="162.0,531.0 234.0,531.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="234.0,531.0 306.0,531.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="306.0,531.0 378.0,531.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="378.0,531.0 450.0,531.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="12" y="559" font-size="12" font-weight="bold" fill="#225">Device/MMIO</text>
+<text x="154" y="589" font-size="12" text-anchor="end">i_req_valid</text>
+<polyline points="162.0,591.0 234.0,591.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="234.0,591.0 234.0,573.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="234.0,573.0 306.0,573.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="306.0,573.0 306.0,591.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="306.0,591.0 378.0,591.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="378.0,591.0 450.0,591.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="154" y="619" font-size="12" text-anchor="end">i_req_ready</text>
+<polyline points="162.0,603.0 234.0,603.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="234.0,603.0 306.0,603.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="306.0,603.0 378.0,603.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="378.0,603.0 450.0,603.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="154" y="649" font-size="12" text-anchor="end">i_phys_addr</text>
+<rect x="162.0" y="633.0" width="72.0" height="18.0" fill="#ddd" stroke="#000"/>
+<polygon points="238.0,633.0 446.0,633.0 450.0,642.0 446.0,651.0 238.0,651.0 234.0,642.0" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="342.0" y="646.0" text-anchor="middle" font-size="11">0x40000100</text>
+<text x="154" y="679" font-size="12" text-anchor="end">route_class</text>
+<rect x="162.0" y="663.0" width="72.0" height="18.0" fill="#ddd" stroke="#000"/>
+<polygon points="238.0,663.0 446.0,663.0 450.0,672.0 446.0,681.0 238.0,681.0 234.0,672.0" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="342.0" y="676.0" text-anchor="middle" font-size="11">MMIO</text>
+<text x="154" y="709" font-size="12" text-anchor="end">memory_path_req</text>
+<polyline points="162.0,711.0 234.0,711.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="234.0,711.0 306.0,711.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="306.0,711.0 378.0,711.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="378.0,711.0 450.0,711.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="154" y="739" font-size="12" text-anchor="end">mmio_path_req</text>
+<polyline points="162.0,741.0 234.0,741.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="234.0,741.0 306.0,741.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="306.0,741.0 306.0,723.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="306.0,723.0 378.0,723.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="378.0,723.0 378.0,741.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="378.0,741.0 450.0,741.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="154" y="769" font-size="12" text-anchor="end">local_access_error</text>
+<polyline points="162.0,771.0 234.0,771.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="234.0,771.0 306.0,771.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="306.0,771.0 378.0,771.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="378.0,771.0 450.0,771.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="12" y="799" font-size="12" font-weight="bold" fill="#225">Unmapped address</text>
+<text x="154" y="829" font-size="12" text-anchor="end">i_req_valid</text>
+<polyline points="162.0,831.0 234.0,831.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="234.0,831.0 234.0,813.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="234.0,813.0 306.0,813.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="306.0,813.0 306.0,831.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="306.0,831.0 378.0,831.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="378.0,831.0 450.0,831.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="154" y="859" font-size="12" text-anchor="end">i_req_ready</text>
+<polyline points="162.0,843.0 234.0,843.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="234.0,843.0 306.0,843.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="306.0,843.0 378.0,843.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="378.0,843.0 450.0,843.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="154" y="889" font-size="12" text-anchor="end">i_phys_addr</text>
+<rect x="162.0" y="873.0" width="72.0" height="18.0" fill="#ddd" stroke="#000"/>
+<polygon points="238.0,873.0 446.0,873.0 450.0,882.0 446.0,891.0 238.0,891.0 234.0,882.0" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="342.0" y="886.0" text-anchor="middle" font-size="11">0xD0000000</text>
+<text x="154" y="919" font-size="12" text-anchor="end">route_class</text>
+<rect x="162.0" y="903.0" width="72.0" height="18.0" fill="#ddd" stroke="#000"/>
+<polygon points="238.0,903.0 446.0,903.0 450.0,912.0 446.0,921.0 238.0,921.0 234.0,912.0" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="342.0" y="916.0" text-anchor="middle" font-size="11">NO_MATCH</text>
+<text x="154" y="949" font-size="12" text-anchor="end">memory_path_req</text>
+<polyline points="162.0,951.0 234.0,951.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="234.0,951.0 306.0,951.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="306.0,951.0 378.0,951.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="378.0,951.0 450.0,951.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="154" y="979" font-size="12" text-anchor="end">mmio_path_req</text>
+<polyline points="162.0,981.0 234.0,981.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="234.0,981.0 306.0,981.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="306.0,981.0 378.0,981.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="378.0,981.0 450.0,981.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="154" y="1009" font-size="12" text-anchor="end">local_access_error</text>
+<polyline points="162.0,1011.0 234.0,1011.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="234.0,1011.0 306.0,1011.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="306.0,1011.0 306.0,993.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="306.0,993.0 378.0,993.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="378.0,993.0 378.0,1011.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="378.0,1011.0 450.0,1011.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="12" y="1040" font-size="11" fill="#444">Each group is a separate example. Event spacing is illustrative; it defines neither latency nor throughput.</text>
+</svg>

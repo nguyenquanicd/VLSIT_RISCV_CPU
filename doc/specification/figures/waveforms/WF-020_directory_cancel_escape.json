@@ -1,0 +1,48 @@
+{
+  "head": {
+    "text": "WF-020 - Directory reservation cancel escape (abstract event order)"
+  },
+  "signal": [
+    {
+      "name": "clk_cluster",
+      "wave": "p......."
+    },
+    [
+      "Bank 0 operation channels",
+      {
+        "name": "i_lookup_valid[0] (T2 miss)",
+        "wave": "01......"
+      },
+      {
+        "name": "o_lookup_ready[0]",
+        "wave": "01......"
+      },
+      {
+        "name": "reg_dir_resv_valid (internal, set 5)",
+        "wave": "01...0.."
+      },
+      {
+        "name": "i_update_valid[0] (T1, held until handshake)",
+        "wave": "0.1...0."
+      },
+      {
+        "name": "o_update_ready[0]",
+        "wave": "0.....1."
+      },
+      {
+        "name": "i_cancel_valid[0] (T2 reservation owner)",
+        "wave": "0...1..."
+      },
+      {
+        "name": "o_cancel_ready[0]",
+        "wave": "0...1..."
+      }
+    ]
+  ],
+  "foot": {
+    "text": "Abstract ordering only; positions are not RTL cycle or latency promises. T2 first reserves set 5. T1's update belongs to another tag, so it remains VALID while not READY and cannot occupy the arbiter grant. The matching T2 cancel handshakes and releases only the reservation. T1's unchanged update payload then handshakes. These signals identify the current sharer-directory bank-0 ports; reg_dir_resv_valid is internal state. No RTL was changed in this update."
+  },
+  "config": {
+    "hscale": 1
+  }
+}

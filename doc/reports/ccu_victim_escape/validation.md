@@ -1,0 +1,87 @@
+# Validation / Kiem chung
+
+| Test | Result | Cycles | Evidence |
+|---|---|---:|---|
+| A-05 real CPU 2h dirty_eviction | PASS | 2398 | [log](../../../verification/non_coherence_cluster/reports/ccu_victim_escape/simulation_2h_2slots_dirty_eviction.log) |
+| A-04 real CPU 2h dirty_eviction | PASS | 2346 | [log](../../../verification/non_coherence_cluster/reports/directory_holder_lifecycle/simulation_2h_dirty_eviction.log) |
+| A-05 real CPU 2h clean_eviction | PASS | 2186 | [log](../../../verification/non_coherence_cluster/reports/ccu_victim_escape/simulation_2h_2slots_clean_eviction.log) |
+| A-04 real CPU 2h clean_eviction | PASS | 2210 | [log](../../../verification/non_coherence_cluster/reports/directory_holder_lifecycle/simulation_2h_clean_eviction.log) |
+| A-05 real CPU 2h amo_refill_error | PASS | 1797 | [log](../../../verification/non_coherence_cluster/reports/ccu_victim_escape/simulation_2h_2slots_amo_refill_error.log) |
+| A-04 real CPU 2h amo_refill_error | PASS | 1769 | [log](../../../verification/non_coherence_cluster/reports/directory_holder_lifecycle/simulation_2h_amo_refill_error.log) |
+| A-05 real CPU 2h lr_refill_error | PASS | 1797 | [log](../../../verification/non_coherence_cluster/reports/ccu_victim_escape/simulation_2h_2slots_lr_refill_error.log) |
+| A-04 real CPU 2h lr_refill_error | PASS | 1769 | [log](../../../verification/non_coherence_cluster/reports/directory_holder_lifecycle/simulation_2h_lr_refill_error.log) |
+| L1 eviction 2h B=0 | PASS | 1274 | [log](../../../verification/non_coherence_cluster/reports/l1_eviction_retention/simulation_2h_error0.log) |
+| L1 eviction 2h B=2 | PASS | 2638 | [log](../../../verification/non_coherence_cluster/reports/l1_eviction_retention/simulation_2h_error2.log) |
+| L1 eviction 2h B=3 | PASS | 2638 | [log](../../../verification/non_coherence_cluster/reports/l1_eviction_retention/simulation_2h_error3.log) |
+| Atomic 2h success | PASS | 2872 | [log](../../../verification/non_coherence_cluster/reports/atomic_coherence/simulation_2h_success.log) |
+| Atomic 2h lrsc_contention | PASS | 3270 | [log](../../../verification/non_coherence_cluster/reports/atomic_coherence/simulation_2h_lrsc_contention.log) |
+| Atomic 2h amo_fault | PASS | 542 | [log](../../../verification/non_coherence_cluster/reports/atomic_coherence/simulation_2h_amo_fault.log) |
+| Atomic 2h lr_fault | PASS | 542 | [log](../../../verification/non_coherence_cluster/reports/atomic_coherence/simulation_2h_lr_fault.log) |
+| Atomic 2h owner_fault | PASS | 716 | [log](../../../verification/non_coherence_cluster/reports/atomic_coherence/simulation_2h_owner_fault.log) |
+| CBO 2h error=0 | PASS | 724 | [log](../../../verification/non_coherence_cluster/reports/cmo_end_to_end/simulation_2h_error0.log) |
+| CBO 2h error=0_load_first | PASS | 726 | [log](../../../verification/non_coherence_cluster/reports/cmo_end_to_end/simulation_2h_error0_load_first.log) |
+| FENCE.I 2h error=0 | PASS | 938 | [log](../../../verification/non_coherence_cluster/reports/fence_i_end_to_end/simulation_2h_error0.log) |
+| FENCE.I 2h error=0_supervisor | PASS | 1063 | [log](../../../verification/non_coherence_cluster/reports/fence_i_end_to_end/simulation_2h_error0_supervisor.log) |
+| CBO 2h error=1 | PASS | 603 | [log](../../../verification/non_coherence_cluster/reports/cmo_end_to_end/simulation_2h_error1.log) |
+| CBO 2h error=1_load_first | PASS | 605 | [log](../../../verification/non_coherence_cluster/reports/cmo_end_to_end/simulation_2h_error1_load_first.log) |
+| FENCE.I 2h error=1 | PASS | 1020 | [log](../../../verification/non_coherence_cluster/reports/fence_i_end_to_end/simulation_2h_error1.log) |
+| FENCE.I 2h error=1_supervisor | PASS | 1145 | [log](../../../verification/non_coherence_cluster/reports/fence_i_end_to_end/simulation_2h_error1_supervisor.log) |
+| Native model directory_holder_lifecycle 2h | PASS | - | [log](../../../verification/non_coherence_cluster/reports/directory_holder_lifecycle/model_2h.log) |
+| Native model l1_eviction_retention 2h | PASS | - | [log](../../../verification/non_coherence_cluster/reports/l1_eviction_retention/model_2h.log) |
+| Native model atomic_coherence 2h | PASS | - | [log](../../../verification/non_coherence_cluster/reports/atomic_coherence/model_2h.log) |
+| Native model cmo_end_to_end 2h | PASS | - | [log](../../../verification/non_coherence_cluster/reports/cmo_end_to_end/model_2h.log) |
+| Native model fence_i_end_to_end 2h | PASS | - | [log](../../../verification/non_coherence_cluster/reports/fence_i_end_to_end/model_2h.log) |
+| Native A-05 CPU model 2h | PASS | - | [log](../../../verification/non_coherence_cluster/reports/ccu_victim_escape/model_2h_2slots.log) |
+| Production TOP lint 2h | PASS | - | [log](../../../lint/non_coherence_cluster/full_integration/top_lint_2h_20261115_214429.log) |
+| Complete baseline driver 2h | PASS | - | [log](../../../verification/non_coherence_cluster/reports/directory_holder_lifecycle/regression_driver_2h.log) |
+| Complete A-05 driver 2h | PASS | - | [log](../../../verification/non_coherence_cluster/reports/ccu_victim_escape/regression_driver_2h.log) |
+| A-05 CPU model/bench/program identity 2h | PASS | - | [log](../../../verification/non_coherence_cluster/reports/ccu_victim_escape/model_inputs_A-05_2h.json) |
+| A-04 CPU model/bench/program identity 2h | PASS | - | [log](../../../verification/non_coherence_cluster/reports/ccu_victim_escape/model_inputs_A-04_2h.json) |
+| A-05 real CPU 4h dirty_eviction | PASS | 3006 | [log](../../../verification/non_coherence_cluster/reports/ccu_victim_escape/simulation_4h_2slots_dirty_eviction.log) |
+| A-04 real CPU 4h dirty_eviction | PASS | 2746 | [log](../../../verification/non_coherence_cluster/reports/directory_holder_lifecycle/simulation_4h_dirty_eviction.log) |
+| A-05 real CPU 4h clean_eviction | PASS | 2826 | [log](../../../verification/non_coherence_cluster/reports/ccu_victim_escape/simulation_4h_2slots_clean_eviction.log) |
+| A-04 real CPU 4h clean_eviction | PASS | 2574 | [log](../../../verification/non_coherence_cluster/reports/directory_holder_lifecycle/simulation_4h_clean_eviction.log) |
+| A-05 real CPU 4h amo_refill_error | PASS | 2401 | [log](../../../verification/non_coherence_cluster/reports/ccu_victim_escape/simulation_4h_2slots_amo_refill_error.log) |
+| A-04 real CPU 4h amo_refill_error | PASS | 2093 | [log](../../../verification/non_coherence_cluster/reports/directory_holder_lifecycle/simulation_4h_amo_refill_error.log) |
+| A-05 real CPU 4h lr_refill_error | PASS | 2401 | [log](../../../verification/non_coherence_cluster/reports/ccu_victim_escape/simulation_4h_2slots_lr_refill_error.log) |
+| A-04 real CPU 4h lr_refill_error | PASS | 2093 | [log](../../../verification/non_coherence_cluster/reports/directory_holder_lifecycle/simulation_4h_lr_refill_error.log) |
+| L1 eviction 4h B=0 | PASS | 1566 | [log](../../../verification/non_coherence_cluster/reports/l1_eviction_retention/simulation_4h_error0.log) |
+| L1 eviction 4h B=2 | PASS | 3214 | [log](../../../verification/non_coherence_cluster/reports/l1_eviction_retention/simulation_4h_error2.log) |
+| L1 eviction 4h B=3 | PASS | 3214 | [log](../../../verification/non_coherence_cluster/reports/l1_eviction_retention/simulation_4h_error3.log) |
+| Atomic 4h success | PASS | 3484 | [log](../../../verification/non_coherence_cluster/reports/atomic_coherence/simulation_4h_success.log) |
+| Atomic 4h lrsc_contention | PASS | 6577 | [log](../../../verification/non_coherence_cluster/reports/atomic_coherence/simulation_4h_lrsc_contention.log) |
+| Atomic 4h amo_fault | PASS | 558 | [log](../../../verification/non_coherence_cluster/reports/atomic_coherence/simulation_4h_amo_fault.log) |
+| Atomic 4h lr_fault | PASS | 558 | [log](../../../verification/non_coherence_cluster/reports/atomic_coherence/simulation_4h_lr_fault.log) |
+| Atomic 4h owner_fault | PASS | 817 | [log](../../../verification/non_coherence_cluster/reports/atomic_coherence/simulation_4h_owner_fault.log) |
+| CBO 4h error=0 | PASS | 944 | [log](../../../verification/non_coherence_cluster/reports/cmo_end_to_end/simulation_4h_error0.log) |
+| CBO 4h error=0_load_first | PASS | 948 | [log](../../../verification/non_coherence_cluster/reports/cmo_end_to_end/simulation_4h_error0_load_first.log) |
+| FENCE.I 4h error=0 | PASS | 1015 | [log](../../../verification/non_coherence_cluster/reports/fence_i_end_to_end/simulation_4h_error0.log) |
+| FENCE.I 4h error=0_supervisor | PASS | 1140 | [log](../../../verification/non_coherence_cluster/reports/fence_i_end_to_end/simulation_4h_error0_supervisor.log) |
+| CBO 4h error=1 | PASS | 701 | [log](../../../verification/non_coherence_cluster/reports/cmo_end_to_end/simulation_4h_error1.log) |
+| CBO 4h error=1_load_first | PASS | 705 | [log](../../../verification/non_coherence_cluster/reports/cmo_end_to_end/simulation_4h_error1_load_first.log) |
+| FENCE.I 4h error=1 | PASS | 1163 | [log](../../../verification/non_coherence_cluster/reports/fence_i_end_to_end/simulation_4h_error1.log) |
+| FENCE.I 4h error=1_supervisor | PASS | 1288 | [log](../../../verification/non_coherence_cluster/reports/fence_i_end_to_end/simulation_4h_error1_supervisor.log) |
+| Native model directory_holder_lifecycle 4h | PASS | - | [log](../../../verification/non_coherence_cluster/reports/directory_holder_lifecycle/model_4h.log) |
+| Native model l1_eviction_retention 4h | PASS | - | [log](../../../verification/non_coherence_cluster/reports/l1_eviction_retention/model_4h.log) |
+| Native model atomic_coherence 4h | PASS | - | [log](../../../verification/non_coherence_cluster/reports/atomic_coherence/model_4h.log) |
+| Native model cmo_end_to_end 4h | PASS | - | [log](../../../verification/non_coherence_cluster/reports/cmo_end_to_end/model_4h.log) |
+| Native model fence_i_end_to_end 4h | PASS | - | [log](../../../verification/non_coherence_cluster/reports/fence_i_end_to_end/model_4h.log) |
+| Native A-05 CPU model 4h | PASS | - | [log](../../../verification/non_coherence_cluster/reports/ccu_victim_escape/model_4h_2slots.log) |
+| Production TOP lint 4h | PASS | - | [log](../../../lint/non_coherence_cluster/full_integration/top_lint_4h_20261115_214655.log) |
+| Complete baseline driver 4h | PASS | - | [log](../../../verification/non_coherence_cluster/reports/directory_holder_lifecycle/regression_driver_4h.log) |
+| Complete A-05 driver 4h | PASS | - | [log](../../../verification/non_coherence_cluster/reports/ccu_victim_escape/regression_driver_4h.log) |
+| A-05 CPU model/bench/program identity 4h | PASS | - | [log](../../../verification/non_coherence_cluster/reports/ccu_victim_escape/model_inputs_A-05_4h.json) |
+| A-04 CPU model/bench/program identity 4h | PASS | - | [log](../../../verification/non_coherence_cluster/reports/ccu_victim_escape/model_inputs_A-04_4h.json) |
+| TEST-053 2 context saturation | PASS | 1470 | [log](../../../verification/non_coherence_cluster/reports/ccu_victim_escape/unit_2/simulation_4h_error0.log) |
+| Native TEST-053 2 context model | PASS | - | [log](../../../verification/non_coherence_cluster/reports/ccu_victim_escape/unit_2/model_4h.log) |
+| TEST-053 8 context saturation | PASS | 1577 | [log](../../../verification/non_coherence_cluster/reports/ccu_victim_escape/unit_8/simulation_4h_error0.log) |
+| Native TEST-053 8 context model | PASS | - | [log](../../../verification/non_coherence_cluster/reports/ccu_victim_escape/unit_8/model_4h.log) |
+| TEST-053 16 context saturation | PASS | 1939 | [log](../../../verification/non_coherence_cluster/reports/ccu_victim_escape/unit_16/simulation_4h_error0.log) |
+| Native TEST-053 16 context model | PASS | - | [log](../../../verification/non_coherence_cluster/reports/ccu_victim_escape/unit_16/model_4h.log) |
+| A-04 fabric_unit | PASS | - | [log](../../../verification/non_coherence_cluster/reports/directory_holder_lifecycle/fabric_unit/simulation_4h_error0.log) |
+| Native A-04 fabric_unit | PASS | - | [log](../../../verification/non_coherence_cluster/reports/directory_holder_lifecycle/fabric_unit/model_4h.log) |
+| A-04 probe_unit | PASS | - | [log](../../../verification/non_coherence_cluster/reports/directory_holder_lifecycle/probe_unit/simulation_4h_error0.log) |
+| Native A-04 probe_unit | PASS | - | [log](../../../verification/non_coherence_cluster/reports/directory_holder_lifecycle/probe_unit/model_4h.log) |
+| Mutation no-credit caught | PASS | - | [log](../../../verification/non_coherence_cluster/reports/ccu_victim_escape/unit_2_no-credit/mutation_result.txt) |
+| Mutation wrong-parent caught | PASS | - | [log](../../../verification/non_coherence_cluster/reports/ccu_victim_escape/unit_8_wrong-parent/mutation_result.txt) |
+| Mutation wrong-grant caught | PASS | - | [log](../../../verification/non_coherence_cluster/reports/ccu_victim_escape/unit_16_wrong-grant/mutation_result.txt) |

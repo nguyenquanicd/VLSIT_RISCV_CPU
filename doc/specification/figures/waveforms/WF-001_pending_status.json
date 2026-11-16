@@ -1,0 +1,9 @@
+{
+  "head": {
+    "text": "WF-001 pending detail"
+  },
+  "signal": [],
+  "foot": {
+    "text": "LLC BIST/status register mapping and exact ready gating are still open; no timing has been drawn. This status card defines no signal timing."
+  }
+}

@@ -1,0 +1,121 @@
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "cva6_hpdcache_subsystem_axi_arbiter.drawio",
+  "layout": {
+    "gap_h": 120,
+    "gap_v": 110,
+    "margin": 80,
+    "block_h": 60
+  },
+  "top": {
+    "frame_label": [
+      "Component composition",
+      "(cva6_hpdcache_subsystem_axi_arbiter)"
+    ]
+  },
+  "frame_row": [
+    "cva6_hpdcache_subsystem_axi_arbiter",
+    "Native modified component; function and change contract are specified in Section 14.",
+    "rtl/modified/cva6/core/cache_subsystem/cva6_hpdcache_subsystem_axi_arbiter.sv"
+  ],
+  "frame_interfaces": [],
+  "blocks": [
+    {
+      "key": "B0",
+      "label": [
+        "i_icache_hpdcache_data_upsize",
+        "(hpdcache_data_upsize)"
+      ],
+      "width": 340,
+      "row": 0,
+      "col": 0,
+      "row_name": "i_icache_hpdcache_data_upsize (hpdcache_data_upsize)",
+      "function": "Native component",
+      "source": "MODIFY; rtl/modified/hpdcache_cva6_pinned/rtl/src/common/hpdcache_data_upsize.sv"
+    },
+    {
+      "key": "B1",
+      "label": [
+        "i_icache_miss_req_fifo",
+        "(hpdcache_fifo_reg)"
+      ],
+      "width": 260,
+      "row": 0,
+      "col": 1,
+      "row_name": "i_icache_miss_req_fifo (hpdcache_fifo_reg)",
+      "function": "Native component",
+      "source": "REUSE; rtl/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_fifo_reg.sv"
+    },
+    {
+      "key": "B2",
+      "label": [
+        "i_icache_refill_meta_fifo",
+        "(hpdcache_fifo_reg)"
+      ],
+      "width": 300,
+      "row": 1,
+      "col": 0,
+      "row_name": "i_icache_refill_meta_fifo (hpdcache_fifo_reg)",
+      "function": "Native component",
+      "source": "REUSE; rtl/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_fifo_reg.sv"
+    },
+    {
+      "key": "B3",
+      "label": [
+        "i_mem_req_read_arbiter",
+        "(hpdcache_mem_req_read_arbiter)"
+      ],
+      "width": 360,
+      "row": 1,
+      "col": 1,
+      "row_name": "i_mem_req_read_arbiter (hpdcache_mem_req_read_arbiter)",
+      "function": "Native component",
+      "source": "REUSE; rtl/third_party/hpdcache_cva6_pinned/rtl/src/utils/hpdcache_mem_req_read_arbiter.sv"
+    },
+    {
+      "key": "B4",
+      "label": [
+        "i_mem_resp_read_demux",
+        "(hpdcache_mem_resp_demux)"
+      ],
+      "width": 300,
+      "row": 2,
+      "col": 0,
+      "row_name": "i_mem_resp_read_demux (hpdcache_mem_resp_demux)",
+      "function": "Native component",
+      "source": "MODIFY; rtl/modified/hpdcache_cva6_pinned/rtl/src/utils/hpdcache_mem_resp_demux.sv"
+    },
+    {
+      "key": "B5",
+      "label": [
+        "i_hpdcache_mem_to_axi_read",
+        "(hpdcache_mem_to_axi_read)"
+      ],
+      "width": 300,
+      "row": 2,
+      "col": 1,
+      "row_name": "i_hpdcache_mem_to_axi_read (hpdcache_mem_to_axi_read)",
+      "function": "Native component",
+      "source": "REUSE; rtl/third_party/hpdcache_cva6_pinned/rtl/src/utils/hpdcache_mem_to_axi_read.sv"
+    },
+    {
+      "key": "B6",
+      "label": [
+        "i_hpdcache_mem_to_axi_write",
+        "(hpdcache_mem_to_axi_write)"
+      ],
+      "width": 320,
+      "row": 3,
+      "col": 0,
+      "row_name": "i_hpdcache_mem_to_axi_write (hpdcache_mem_to_axi_write)",
+      "function": "Native component",
+      "source": "MODIFY; rtl/modified/hpdcache_cva6_pinned/rtl/src/utils/hpdcache_mem_to_axi_write.sv"
+    }
+  ],
+  "connectors": [],
+  "externals": [],
+  "interfaces": [],
+  "nets": [],
+  "legend_note": "Exact source-referenced children; generate multiplicity and active branches are specified in the component text. Containment denotes hierarchy, not invented signal connectivity. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.",
+  "library_sha256": "15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"
+}

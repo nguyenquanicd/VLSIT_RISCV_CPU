@@ -1,0 +1,99 @@
+{
+  "head": {
+    "text": "WF-003 AXI4 MMIO read/write"
+  },
+  "signal": [
+    {
+      "name": "i_clk_cluster",
+      "wave": "p........."
+    },
+    {
+      "name": "o_axi_mmio_awvalid",
+      "wave": "0.1...0..."
+    },
+    {
+      "name": "i_axi_mmio_awready",
+      "wave": "0....10..."
+    },
+    {
+      "name": "o_axi_mmio_awaddr[63:0]",
+      "wave": "xx=...xxxx",
+      "data": [
+        "A0"
+      ]
+    },
+    {
+      "name": "o_axi_mmio_wvalid",
+      "wave": "0..1.0...."
+    },
+    {
+      "name": "i_axi_mmio_wready",
+      "wave": "0...10...."
+    },
+    {
+      "name": "o_axi_mmio_wdata[63:0]",
+      "wave": "xxx=.xxxxx",
+      "data": [
+        "D0"
+      ]
+    },
+    {
+      "name": "i_axi_mmio_bvalid",
+      "wave": "0......1.0"
+    },
+    {
+      "name": "o_axi_mmio_bready",
+      "wave": "0.......10"
+    },
+    {
+      "name": "i_axi_mmio_bresp[1:0]",
+      "wave": "xxxxxxx=.x",
+      "data": [
+        "OKAY"
+      ]
+    },
+    {
+      "name": "o_axi_mmio_arvalid",
+      "wave": "01.0......"
+    },
+    {
+      "name": "i_axi_mmio_arready",
+      "wave": "0.10......"
+    },
+    {
+      "name": "o_axi_mmio_araddr[63:0]",
+      "wave": "x=.xxxxxxx",
+      "data": [
+        "A1"
+      ]
+    },
+    {
+      "name": "i_axi_mmio_rvalid",
+      "wave": "0....1.0.."
+    },
+    {
+      "name": "o_axi_mmio_rready",
+      "wave": "0.....10.."
+    },
+    {
+      "name": "i_axi_mmio_rdata[63:0]",
+      "wave": "xxxxx=.xxx",
+      "data": [
+        "R0"
+      ]
+    },
+    {
+      "name": "i_axi_mmio_rresp[1:0]",
+      "wave": "xxxxx=.xxx",
+      "data": [
+        "OKAY"
+      ]
+    }
+  ],
+  "foot": {
+    "text": "One legal trace; channel timing and response latency are illustrative, not bounds."
+  },
+  "config": {
+    "hscale": 2
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "page_name": "CCU_ABORT_RELEASE",
+  "out_name": "CCU_ABORT_RELEASE.drawio",
+  "function": "CCU_ABORT_RELEASE",
+  "initial": "ENUM_ST_ABORT_START",
+  "state_pattern": "^[A-Z][A-Z0-9_]+$",
+  "states": [
+    {
+      "name": "ENUM_ST_ABORT_START"
+    },
+    {
+      "name": "ENUM_ST_ABORT_WAIT"
+    },
+    {
+      "name": "ENUM_ST_DIR_CANCEL"
+    },
+    {
+      "name": "ENUM_ST_GNT"
+    },
+    {
+      "name": "ENUM_ST_GNT_WAIT"
+    },
+    {
+      "name": "ENUM_ST_IDLE"
+    }
+  ],
+  "transitions": [
+    {
+      "src": "ENUM_ST_ABORT_START",
+      "dst": "ENUM_ST_ABORT_WAIT",
+      "label": "T25: abort start",
+      "guard": "matching ABORT phase accepted"
+    },
+    {
+      "src": "ENUM_ST_ABORT_WAIT",
+      "dst": "ENUM_ST_IDLE",
+      "label": "T26: victim release",
+      "guard": "victim ABORT ACKs and immediate release"
+    },
+    {
+      "src": "ENUM_ST_ABORT_WAIT",
+      "dst": "ENUM_ST_GNT_WAIT",
+      "label": "T27: victim hold",
+      "guard": "victim ABORT ACKs; deferred release"
+    },
+    {
+      "src": "ENUM_ST_ABORT_WAIT",
+      "dst": "ENUM_ST_DIR_CANCEL",
+      "label": "T28: cancel owner",
+      "guard": "root ABORT ACKs and reservation retained"
+    },
+    {
+      "src": "ENUM_ST_ABORT_WAIT",
+      "dst": "ENUM_ST_GNT",
+      "label": "T29: error grant",
+      "guard": "root ABORT ACKs without reservation"
+    },
+    {
+      "src": "ENUM_ST_DIR_CANCEL",
+      "dst": "ENUM_ST_GNT",
+      "label": "T31: cancel",
+      "guard": "no reservation or matching CANCEL accepted"
+    },
+    {
+      "src": "ENUM_ST_GNT",
+      "dst": "ENUM_ST_GNT_WAIT",
+      "label": "T32: grant load",
+      "guard": "matching CPU grant loaded"
+    },
+    {
+      "src": "ENUM_ST_GNT",
+      "dst": "ENUM_ST_IDLE",
+      "label": "T33: CMO release",
+      "guard": "CMO response release accepted"
+    },
+    {
+      "src": "ENUM_ST_GNT_WAIT",
+      "dst": "ENUM_ST_IDLE",
+      "label": "T34: release",
+      "guard": "matching release accepted"
+    }
+  ],
+  "layout": {
+    "margin": 50,
+    "node_gap": 220,
+    "rank_gap": 220,
+    "max_columns": 3
+  }
+}

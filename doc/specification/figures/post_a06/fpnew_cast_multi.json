@@ -1,0 +1,69 @@
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "fpnew_cast_multi.drawio",
+  "layout": {
+    "gap_h": 120,
+    "gap_v": 110,
+    "margin": 80,
+    "block_h": 60
+  },
+  "top": {
+    "frame_label": [
+      "Component composition",
+      "(fpnew_cast_multi)"
+    ]
+  },
+  "frame_row": [
+    "fpnew_cast_multi",
+    "Native modified component; function and change contract are specified in Section 14.",
+    "rtl/common/modified/cvfpu/src/fpnew_cast_multi.sv"
+  ],
+  "frame_interfaces": [],
+  "blocks": [
+    {
+      "key": "B0",
+      "label": [
+        "i_fpnew_classifier",
+        "(fpnew_classifier)"
+      ],
+      "width": 220,
+      "row": 0,
+      "col": 0,
+      "row_name": "i_fpnew_classifier (fpnew_classifier)",
+      "function": "Native component",
+      "source": "REUSE; rtl/common/third_party/cvfpu/src/fpnew_classifier.sv"
+    },
+    {
+      "key": "B1",
+      "label": [
+        "i_fpnew_rounding",
+        "(fpnew_rounding)"
+      ],
+      "width": 200,
+      "row": 0,
+      "col": 1,
+      "row_name": "i_fpnew_rounding (fpnew_rounding)",
+      "function": "Native component",
+      "source": "REUSE; rtl/common/third_party/cvfpu/src/fpnew_rounding.sv"
+    },
+    {
+      "key": "B2",
+      "label": [
+        "i_lzc",
+        "(lzc)"
+      ],
+      "width": 60,
+      "row": 1,
+      "col": 0,
+      "row_name": "i_lzc (lzc)",
+      "function": "Native component",
+      "source": "REUSE; rtl/common/third_party/cva6/vendor/pulp-platform/common_cells/src/lzc.sv"
+    }
+  ],
+  "connectors": [],
+  "externals": [],
+  "interfaces": [],
+  "nets": [],
+  "legend_note": "Exact source-referenced children; generate multiplicity and active branches are specified in the component text. Containment denotes hierarchy, not invented signal connectivity. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.",
+  "library_sha256": "15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"
+}

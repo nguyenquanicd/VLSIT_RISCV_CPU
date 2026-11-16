@@ -1,0 +1,179 @@
+--- A04/m_vlsit_riscv_coh_fabric.sv
+
++++ A05/m_vlsit_riscv_coh_fabric.sv
+
+@@ -7,6 +7,10 @@
+
+  * Description  : MESI ownership fabric joining transaction, directory, and probe blocks.
+  * Specification: REQ-MEM-001, REQ-MEM-005, REQ-MEM-006, REQ-MEM-009, REQ-MEM-012..014
+  * Change History:
++ * 2026-11-15 - Modified by Quan Nguyen and Codex - VLSI Technology page:
++ *              A-05: reserve one victim context credit, bind child allocation
++ *              to the selected parent, cancel/retry victim-line conflicts
++ *              before waiting (REQ-MEM-009/010/014/019; TEST-053).
+  * 2026-11-14 - Quan Nguyen and Codex - VLSI Technology page:
+  *              Size dynamic hart-vector indices to the configured hart count
+  *              so the two-hart profile does not truncate 2-bit selectors.
+@@ -146,7 +150,8 @@
+
+     ENUM_ST_GNT = 5'b01110,
+     ENUM_ST_GNT_WAIT = 5'b01111,
+     ENUM_ST_CMO_PREPARED = 5'd16,
+-    ENUM_ST_CMO_FINISH = 5'd17
++    ENUM_ST_CMO_FINISH = 5'd17,
++    ENUM_ST_RETRY_CANCEL = 5'd18
+   } coh_state_type_def;
+ 
+   logic reg_cmo_active;
+@@ -223,6 +228,10 @@
+
+   // Transaction-table interface
+   logic w_alloc_valid;
+   logic w_alloc_ready;
++  logic w_table_alloc_ready;
++  logic w_free_seen;
++  logic w_root_alloc_en;
++  logic [PARA_COH_TXN_NUM-1:0] w_victim_line_busy;
+   logic [2:0] w_alloc_src;
+   logic [2:0] w_alloc_req_id;
+   logic [51:0] w_alloc_pa_line;
+@@ -344,6 +353,28 @@
+
+   logic w_req_kind_valid;
+   logic w_lookup_diag_event;
+ 
++  // Reserve the last free context for a non-recursive victim child. Root
++  // backpressure must never gate phase completion, native writeback or release.
++  assign w_alloc_ready = w_table_alloc_ready & (w_internal_pick_valid | w_root_alloc_en);
++  // Detect two free entries and victim-line locks without depending on READY.
++  always_comb begin : p_com_alloc_capacity
++    w_free_seen = 1'b0;
++    w_root_alloc_en = 1'b0;
++    w_victim_line_busy = '0;
++    for (int slot_idx = 0; slot_idx < PARA_COH_TXN_NUM; slot_idx++) begin
++      if (~w_ctx_valid[slot_idx]) begin
++        if (w_free_seen)
++          w_root_alloc_en = 1'b1;
++        w_free_seen = 1'b1;
++      end
++      for (int other_idx = 0; other_idx < PARA_COH_TXN_NUM; other_idx++) begin
++        if ((slot_idx != other_idx) & w_ctx_valid[other_idx]
++            & (reg_ctx_victim_line[slot_idx] == w_ctx_pa_line[other_idx]))
++          w_victim_line_busy[slot_idx] = 1'b1;
++      end
++    end
++  end
++
+   // Static source encodings and directory state values are fixed by the HDS.
+   // Request arbitration accepts one hart request per cycle; internal victim work has priority.
+   always_comb begin : p_com_req_pick
+@@ -353,7 +384,7 @@
+
+     w_internal_parent_tag = '0;
+     for (int slot_idx = 0; slot_idx < PARA_COH_TXN_NUM; slot_idx++) begin
+       if ((reg_fsm_ctx_current_state[slot_idx] == ENUM_ST_EVICT_ALLOC)
+-          & ~w_internal_pick_valid) begin
++          & ~w_victim_line_busy[slot_idx] & ~w_internal_pick_valid) begin
+         w_internal_pick_valid = 1'b1;
+         w_internal_parent_tag = LPARA_COH_TAG_W'(slot_idx);
+       end
+@@ -401,7 +432,7 @@
+
+       w_alloc_target_state = 2'(LPARA_MESI_I);
+       end
+       3'b01?: begin
+-      w_alloc_valid = 1'b1;
++      w_alloc_valid = w_root_alloc_en;
+       w_alloc_src = 3'(LPARA_SRC_CMO);
+       w_alloc_pa_line = i_ccu_begin_pa_line;
+       w_alloc_kind = 2'(LPARA_REQ_CMO);
+@@ -410,7 +441,7 @@
+
+       w_alloc_wback_en = i_ccu_begin_wback_en;
+       end
+       3'b001: begin
+-      w_alloc_valid = 1'b1;
++      w_alloc_valid = w_root_alloc_en;
+       w_alloc_req_id = i_req_id[LPARA_CPU_IDX_W'(w_req_pick_hart)];
+       w_alloc_pa_line = i_req_pa_line[LPARA_CPU_IDX_W'(w_req_pick_hart)];
+       w_alloc_kind = i_req_kind[LPARA_CPU_IDX_W'(w_req_pick_hart)];
+@@ -475,7 +506,8 @@
+
+           w_dir_update_state[bank_idx] = (|reg_ctx_new_holders[slot_idx])
+                                          ? reg_ctx_gnt_state[slot_idx] : 2'(LPARA_MESI_I);
+         end
+-        if ((reg_fsm_ctx_current_state[slot_idx] == ENUM_ST_DIR_CANCEL)
++        if (((reg_fsm_ctx_current_state[slot_idx] == ENUM_ST_DIR_CANCEL)
++             | (reg_fsm_ctx_current_state[slot_idx] == ENUM_ST_RETRY_CANCEL))
+             & reg_ctx_dir_reserved[slot_idx]
+             & (w_ctx_pa_line[slot_idx][1:0] == 2'(bank_idx))
+             & ~w_cancel_pick_valid[bank_idx]) begin
+@@ -695,7 +727,7 @@
+
+     .i_clk_cluster(i_clk_cluster),
+     .i_rst_n_cluster(i_rst_n_cluster),
+     .i_alloc_valid(w_alloc_valid),
+-    .o_alloc_ready(w_alloc_ready),
++    .o_alloc_ready(w_table_alloc_ready),
+     .i_alloc_src(w_alloc_src),
+     .i_alloc_req_id(w_alloc_req_id),
+     .i_alloc_pa_line(w_alloc_pa_line),
+@@ -842,7 +874,9 @@
+
+           & ~reg_ctx_is_victim[slot_idx]
+           & (w_ctx_src[slot_idx] == 3'(LPARA_SRC_CPU))
+           & (reg_ctx_gnt_accepted[slot_idx]
+-             | w_gnt_hs[LPARA_CPU_IDX_W'(reg_ctx_hart[slot_idx])]))
++             | (w_gnt_hs[LPARA_CPU_IDX_W'(reg_ctx_hart[slot_idx])]
++                & (reg_gnt_tag[LPARA_CPU_IDX_W'(reg_ctx_hart[slot_idx])]
++                   == LPARA_COH_TAG_W'(slot_idx)))))
+           | ((w_ctx_src[slot_idx] == 3'(LPARA_SRC_CMO))
+                    && (reg_fsm_ctx_current_state[slot_idx] == ENUM_ST_GNT))
+           | (reg_ctx_is_victim[slot_idx]
+@@ -946,9 +980,17 @@
+
+           end
+         end
+         ENUM_ST_EVICT_ALLOC: begin
+-          if (w_alloc_valid & w_alloc_ready & w_internal_pick_valid
+-              & (w_alloc_tag != LPARA_COH_TAG_W'(slot_idx)))
++          if (w_victim_line_busy[slot_idx])
++            w_fsm_ctx_nxt_state[slot_idx] = ENUM_ST_RETRY_CANCEL;
++          else if (w_alloc_valid & w_alloc_ready & w_internal_pick_valid
++                   & (w_internal_parent_tag == LPARA_COH_TAG_W'(slot_idx)))
+             w_fsm_ctx_nxt_state[slot_idx] = ENUM_ST_EVICT_WAIT;
++        end
++        ENUM_ST_RETRY_CANCEL: begin
++          if (w_cancel_hs[w_ctx_pa_line[slot_idx][1:0]]
++              & (w_dir_cancel_tag[w_ctx_pa_line[slot_idx][1:0]]
++                 == LPARA_COH_TAG_W'(slot_idx)))
++            w_fsm_ctx_nxt_state[slot_idx] = ENUM_ST_DIR_REQ;
+         end
+         ENUM_ST_EVICT_WAIT: begin
+         end
+@@ -1031,7 +1073,9 @@
+
+           if (w_ctx_src[slot_idx] == 3'(LPARA_SRC_CMO)) begin
+             if (w_release_hs[slot_idx])
+               w_fsm_ctx_nxt_state[slot_idx] = ENUM_ST_IDLE;
+-          end else if (w_gnt_load[LPARA_CPU_IDX_W'(reg_ctx_hart[slot_idx])])
++          end else if (w_gnt_load[LPARA_CPU_IDX_W'(reg_ctx_hart[slot_idx])]
++                       & (w_gnt_load_tag[LPARA_CPU_IDX_W'(reg_ctx_hart[slot_idx])]
++                          == LPARA_COH_TAG_W'(slot_idx)))
+             w_fsm_ctx_nxt_state[slot_idx] = ENUM_ST_GNT_WAIT;
+         end
+         ENUM_ST_GNT_WAIT: begin
+@@ -1204,6 +1248,12 @@
+
+           end
+         end
+       end
++      // A victim conflict cancels only this parent's reservation, then lookup
++      // retries with fresh metadata; no cache state has been changed yet.
++      for (int bank_idx = 0; bank_idx < 4; bank_idx++) begin
++        if (w_cancel_hs[bank_idx])
++          reg_ctx_dir_reserved[w_dir_cancel_tag[bank_idx]] <= 1'b0;
++      end
+       // Prune only the transaction's candidate; ABORT never publishes it.
+       for (int hart_idx = 0; hart_idx < PARA_CPU_NUM; hart_idx++) begin
+         if (w_ack_eligible[hart_idx]

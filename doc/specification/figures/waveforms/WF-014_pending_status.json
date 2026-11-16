@@ -1,0 +1,9 @@
+{
+  "head": {
+    "text": "WF-014 pending detail"
+  },
+  "signal": [],
+  "foot": {
+    "text": "Reset behavior for outstanding AXI and internal probe transactions still requires a source-mapped reset/flush contract. This status card defines no signal timing."
+  }
+}

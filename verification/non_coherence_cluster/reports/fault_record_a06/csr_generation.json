@@ -1,0 +1,19 @@
+{
+  "generator": "C:/HQuan/102_MyGithub/APB-CSR-Generator/CSR_Generation.py",
+  "version": "3.5",
+  "workbook": "doc/specification/VLSIT_RISCV_CPU_Cluster_CSR.xlsx",
+  "sheet": "AXIL_QUEUED",
+  "files": {
+    "rtl/vlsit/csr_generated/RTL/filelist.f": "691a5361001f45d4cf07e6e6446485a34cbd58e06e50e662ffc9a66812e67c17",
+    "rtl/vlsit/csr_generated/RTL/m_vlsit_cpucl_csr.sv": "3d7a4f5a0139cf57f488db3833e02f2d98bb95138ba707dba2de263bef4f063f",
+    "rtl/vlsit/csr_generated/RTL/models/m_csr_async_fifo.sv": "0d0fd9fdaa0decd74e303c0de9f99e23d028ce03c81a84e834ed619ce452ce1a",
+    "rtl/vlsit/csr_generated/RTL/models/m_csr_sync.sv": "11dccb2921e6e7f7cffd532525c8fc335dcf2d9cd67b2cb42035c1433a2af259",
+    "rtl/vlsit/csr_generated/RTL/models/m_csr_sync_fifo.sv": "904cbb8823c765297936ad4ac94d71f5a391af2bad64b012cfec576fa66d70f8",
+    "rtl/vlsit/csr_generated/Debug/debug.json": "b8ea7f17eacada161eb14e6ac2a4131e476a77e9c143bab58258423e0a67b86e"
+  },
+  "workbook_sha256": "db9c2be09610e67d43fa53ccf485939aa68e4e3cc930b22b3dab48f00eeda4cc",
+  "generator_sha256": "3930534acf8dc4fca73c92c397cd3cf44f2125931d7b2fb69f25c83231bbc462",
+  "generator_dependencies": {
+    "CSR_Protocol_Generation.py": "e98b86f51433f0802f06e344d50d0fa1df9fe1a38f9651918bb4dd29994d6a34"
+  }
+}

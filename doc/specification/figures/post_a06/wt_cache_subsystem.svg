@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="700" height="510" viewBox="510 340 700 510" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="510" y="340" width="700" height="510" fill="#FFFFFF"/>
+<rect x="540" y="370" width="640" height="450" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<rect x="620" y="510" width="160" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="536" text-anchor="middle">i_cva6_icache</text>
+<text x="700" y="558" text-anchor="middle">(cva6_icache)</text>
+<rect x="900" y="510" width="200" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1000" y="536" text-anchor="middle">i_adapter</text>
+<text x="1000" y="558" text-anchor="middle">(wt_axi_adapter)</text>
+<rect x="630" y="680" width="140" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="706" text-anchor="middle">i_wt_dcache</text>
+<text x="700" y="728" text-anchor="middle">(wt_dcache)</text>
+<text x="1158" y="411" text-anchor="end">Component composition</text>
+<text x="1158" y="433" text-anchor="end">(wt_cache_subsystem)</text>
+</svg>

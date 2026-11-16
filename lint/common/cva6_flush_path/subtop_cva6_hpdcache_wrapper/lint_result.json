@@ -1,0 +1,14 @@
+{
+  "passed": false,
+  "return_code": 1,
+  "errors": 9,
+  "warnings": 536,
+  "top": "cva6_hpdcache_wrapper",
+  "timed_out": false,
+  "uses_modified_hpd_top": true,
+  "uses_modified_flush_engine": true,
+  "uses_modified_hpdcache_memctrl": true,
+  "uses_modified_hpdcache_miss_handler": true,
+  "uses_modified_hpdcache_mshr": true,
+  "uses_modified_cva6_cache_wrapper": true
+}

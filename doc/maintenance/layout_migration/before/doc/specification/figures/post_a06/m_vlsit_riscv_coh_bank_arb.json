@@ -1,0 +1,84 @@
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "m_vlsit_riscv_coh_bank_arb.drawio",
+  "layout": {
+    "gap_h": 120,
+    "gap_v": 110,
+    "margin": 80,
+    "block_h": 60
+  },
+  "top": {
+    "frame_label": [
+      "Component composition",
+      "(m_vlsit_riscv_coh_bank_arb)"
+    ]
+  },
+  "frame_row": [
+    "m_vlsit_riscv_coh_bank_arb",
+    "Select eligible directory work fairly within each of four independent banks while preserving request identity.",
+    "rtl/vlsit/m_vlsit_riscv_coh_bank_arb.sv"
+  ],
+  "frame_interfaces": [
+    "IN",
+    "OUT"
+  ],
+  "blocks": [
+    {
+      "key": "B0",
+      "label": [
+        "component_boundary",
+        "(m_vlsit_riscv_coh_bank_arb)"
+      ],
+      "width": 340,
+      "row": 0,
+      "col": 0,
+      "row_name": "component_boundary (m_vlsit_riscv_coh_bank_arb)",
+      "function": "Select eligible directory work fairly within each of four independent banks while preserving request identity.",
+      "source": "NEW; rtl/vlsit/m_vlsit_riscv_coh_bank_arb.sv"
+    }
+  ],
+  "connectors": [],
+  "externals": [
+    {
+      "id": "IN",
+      "block": "B0",
+      "side": "L",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "IN",
+        "ports"
+      ]
+    },
+    {
+      "id": "OUT",
+      "block": "B0",
+      "side": "R",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "OUT",
+        "ports"
+      ]
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "IN",
+      "name": "Parent in ports",
+      "category": "custom",
+      "active": "in",
+      "signals": "i_clk_cluster, i_rst_n_cluster, i_req_valid, i_req_bank, i_gnt_ready"
+    },
+    {
+      "id": "OUT",
+      "name": "Parent out ports",
+      "category": "custom",
+      "active": "out",
+      "signals": "o_gnt_valid, o_gnt_slot, o_bank_conflict_stall"
+    }
+  ],
+  "nets": [],
+  "legend_note": "A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.",
+  "library_sha256": "15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"
+}

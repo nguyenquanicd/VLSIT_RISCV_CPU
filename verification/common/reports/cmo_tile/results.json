@@ -1,0 +1,74 @@
+[
+  {
+    "configuration": "m_vlsit_riscv_cmo_controller_t2_h2",
+    "passed": true,
+    "errors": 0,
+    "warnings": 0
+  },
+  {
+    "configuration": "m_vlsit_riscv_cmo_controller_t2_h4",
+    "passed": true,
+    "errors": 0,
+    "warnings": 0
+  },
+  {
+    "configuration": "m_vlsit_riscv_cmo_controller_t5_h2",
+    "passed": true,
+    "errors": 0,
+    "warnings": 0
+  },
+  {
+    "configuration": "m_vlsit_riscv_cmo_controller_t5_h4",
+    "passed": true,
+    "errors": 0,
+    "warnings": 0
+  },
+  {
+    "configuration": "m_vlsit_riscv_cmo_controller_t8_h2",
+    "passed": true,
+    "errors": 0,
+    "warnings": 0
+  },
+  {
+    "configuration": "m_vlsit_riscv_cmo_controller_t8_h4",
+    "passed": true,
+    "errors": 0,
+    "warnings": 0
+  },
+  {
+    "configuration": "m_vlsit_riscv_cmo_controller_t16_h2",
+    "passed": true,
+    "errors": 0,
+    "warnings": 0
+  },
+  {
+    "configuration": "m_vlsit_riscv_cmo_controller_t16_h4",
+    "passed": true,
+    "errors": 0,
+    "warnings": 0
+  },
+  {
+    "configuration": "m_vlsit_riscv_tile_coh_adapter_t2",
+    "passed": true,
+    "errors": 0,
+    "warnings": 0
+  },
+  {
+    "configuration": "m_vlsit_riscv_tile_coh_adapter_t5",
+    "passed": true,
+    "errors": 0,
+    "warnings": 0
+  },
+  {
+    "configuration": "m_vlsit_riscv_tile_coh_adapter_t8",
+    "passed": true,
+    "errors": 0,
+    "warnings": 0
+  },
+  {
+    "configuration": "m_vlsit_riscv_tile_coh_adapter_t16",
+    "passed": true,
+    "errors": 0,
+    "warnings": 0
+  }
+]

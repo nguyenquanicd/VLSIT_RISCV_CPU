@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="828" height="468" viewBox="286 376 828 468">
+<rect x="0" y="0" width="100%" height="100%" fill="white"/>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#20252b"/></marker></defs>
+<path d="M 450 540 L 540 540" fill="none" stroke="#20252b" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 960 540 L 860 540" fill="none" stroke="#20252b" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 700 580 L 700 690" fill="none" stroke="#20252b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="500" y="400" width="410" height="420" fill="#f8fafc" stroke="#263746" stroke-width="2" stroke-dasharray="8 5"/>
+<text x="700" y="524.9" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="#16212a">
+<tspan x="700" dy="0">u_vlsit_riscv_debug_router</tspan>
+<tspan x="700" dy="20">(m_vlsit_riscv_debug_router)</tspan>
+<tspan x="700" dy="20">NEW</tspan>
+</text>
+<text x="700" y="714.9" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="#16212a">
+<tspan x="700" dy="0">u_vlsit_riscv_cpu_tile_0.._3</tspan>
+<tspan x="700" dy="20">(m_vlsit_riscv_cpu_tile)</tspan>
+<tspan x="700" dy="20">NEW</tspan>
+</text>
+<text x="738" y="609.55" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#16212a">
+<tspan x="738" dy="0">HDBG</tspan>
+</text>
+<text x="380" y="535.55" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#16212a">
+<tspan x="380" dy="0">DBG</tspan>
+<tspan x="380" dy="18">Debug Module</tspan>
+</text>
+<text x="1025" y="535.55" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#16212a">
+<tspan x="1025" dy="0">CLKR</tspan>
+<tspan x="1025" dy="18">Clock/reset</tspan>
+</text>
+<text x="742" y="440.55" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#16212a">
+<tspan x="742" dy="0">Per-hart debug routing</tspan>
+<tspan x="742" dy="18">(m_vlsit_riscv_debug_router)</tspan>
+</text>
+</svg>

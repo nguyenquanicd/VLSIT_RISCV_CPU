@@ -1,0 +1,253 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2460" height="2256" viewBox="70 285 2460 2256" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="70" y="285" width="2460" height="2256" fill="#FFFFFF"/>
+<rect x="470" y="390" width="1470" height="510" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<rect x="520" y="500" width="360" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="536" text-anchor="middle">u_vlsit_riscv_tile_coh_adapter</text>
+<text x="700" y="558" text-anchor="middle">(m_vlsit_riscv_tile_coh_adapter)</text>
+<rect x="1005" y="500" width="380" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1195" y="536" text-anchor="middle">u_vlsit_riscv_coh_txn_table</text>
+<text x="1195" y="558" text-anchor="middle">(m_vlsit_riscv_coh_txn_table)</text>
+<rect x="995" y="770" width="400" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1195" y="806" text-anchor="middle">u_vlsit_riscv_sharer_directory</text>
+<text x="1195" y="828" text-anchor="middle">(m_vlsit_riscv_sharer_directory)</text>
+<rect x="1510" y="500" width="380" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1700" y="536" text-anchor="middle">u_vlsit_riscv_probe_scheduler</text>
+<text x="1700" y="558" text-anchor="middle">(m_vlsit_riscv_probe_scheduler)</text>
+<rect x="520" y="770" width="360" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="806" text-anchor="middle">u_vlsit_riscv_device_classifier</text>
+<text x="700" y="828" text-anchor="middle">(m_vlsit_riscv_device_classifier)</text>
+<rect x="1540" y="770" width="320" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1700" y="806" text-anchor="middle">u_vlsit_riscv_axi_mmio</text>
+<text x="1700" y="828" text-anchor="middle">(m_vlsit_riscv_axi_mmio)</text>
+<text x="310" y="536" text-anchor="middle">TREQ</text>
+<text x="310" y="558" text-anchor="middle">Tile request / probe</text>
+<text x="1015" y="336" text-anchor="middle">LLC</text>
+<text x="1015" y="358" text-anchor="middle">Shared LLC line service</text>
+<text x="1410" y="336" text-anchor="middle">EVT</text>
+<text x="1410" y="358" text-anchor="middle">Coherence and queue event taps</text>
+<text x="1918" y="431" text-anchor="end">Directory-based MESI coherence fabric</text>
+<text x="1918" y="453" text-anchor="end">(m_vlsit_riscv_coh_fabric)</text>
+<text x="905" y="506" text-anchor="middle">REQ</text>
+<text x="1233" y="652" text-anchor="middle">DIR</text>
+<text x="1445" y="588" text-anchor="middle">TAG</text>
+<text x="905" y="628" text-anchor="middle">SNP</text>
+<text x="733" y="612" text-anchor="middle">DEV</text>
+<text x="1435" y="856" text-anchor="middle">AXI</text>
+<text x="104" y="2357" text-anchor="start" font-weight="bold">Legend</text>
+<text x="284" y="2398" text-anchor="start">Interface connector (one per signal group; arrow = active to passive)</text>
+<text x="104" y="2473" text-anchor="start">The selected VLSIT architecture uses a NEW sharer directory, transaction table, probe scheduler and CCU. OpenHW HPDcache is MODIFY in a separate license-preserving copy for MESI state and tagged probes; the pristine upstream clone remains unchanged. PULP Culsans is architecture reference only because its pinned PlanV cache ports do not match the selected OpenHW HPDcache. Status codes: REUSE = unchanged upstream RTL; REUSE* = candidate pending compatibility checks; MODIFY = source adaptation/wrapper; NEW = VLSIT RTL; GENERATED = CSR RTL from the reviewed workbook. The diagram is a document-grounded proposal, not an integrated RTL hierarchy.</text>
+<text x="1700" y="971" text-anchor="middle">DEV</text>
+<text x="1700" y="993" text-anchor="middle">Non-coherent AXI4 device path</text>
+<rect x="100" y="1230" width="2400" height="526" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1300" y="1257" text-anchor="middle" font-weight="bold">Block Functions &amp; Interfaces (level 1)</text>
+<rect x="100" y="1270" width="330" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1295" text-anchor="start" font-weight="bold">Block</text>
+<rect x="430" y="1270" width="1480" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="434" y="1295" text-anchor="start" font-weight="bold">Function</text>
+<rect x="1910" y="1270" width="230" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1914" y="1295" text-anchor="start" font-weight="bold">Source</text>
+<rect x="2140" y="1270" width="360" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="2144" y="1295" text-anchor="start" font-weight="bold">Interfaces (mnemonics)</text>
+<rect x="100" y="1306" width="330" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1342" text-anchor="start">Directory-based coherence</text>
+<text x="104" y="1364" text-anchor="start">proposal</text>
+<rect x="430" y="1306" width="1480" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="434" y="1353" text-anchor="start">At least two distinct-line transactions; exact capacities remain open.</text>
+<rect x="1910" y="1306" width="230" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1914" y="1342" text-anchor="start">VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS.md</text>
+<text x="1914" y="1364" text-anchor="start">v0.5</text>
+<rect x="2140" y="1306" width="360" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="2144" y="1353" text-anchor="start">TREQ, LLC, DEV, EVT</text>
+<rect x="100" y="1386" width="330" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1411" text-anchor="start">u_vlsit_riscv_tile_coh_adapter /</text>
+<text x="104" y="1433" text-anchor="start">m_vlsit_riscv_tile_coh_adapter</text>
+<rect x="430" y="1386" width="1480" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="434" y="1422" text-anchor="start">Adapts each hart's cache request/response and tagged probe boundary; repeated once per active hart.</text>
+<rect x="1910" y="1386" width="230" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1914" y="1422" text-anchor="start">NEW | VLSIT</text>
+<rect x="2140" y="1386" width="360" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="2144" y="1422" text-anchor="start">REQ, SNP, DEV, TREQ</text>
+<rect x="100" y="1444" width="330" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1469" text-anchor="start">u_vlsit_riscv_coh_txn_table /</text>
+<text x="104" y="1491" text-anchor="start">m_vlsit_riscv_coh_txn_table</text>
+<rect x="430" y="1444" width="1480" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="434" y="1480" text-anchor="start">Tracks requester, line lock, unique active tag, holder mask, responses, dirty-data obligation and LLC completion for at least two distinct lines.</text>
+<rect x="1910" y="1444" width="230" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1914" y="1480" text-anchor="start">NEW | VLSIT</text>
+<rect x="2140" y="1444" width="360" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="2144" y="1480" text-anchor="start">REQ, DIR, TAG, LLC, EVT</text>
+<rect x="100" y="1502" width="330" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1527" text-anchor="start">u_vlsit_riscv_sharer_directory /</text>
+<text x="104" y="1549" text-anchor="start">m_vlsit_riscv_sharer_directory</text>
+<rect x="430" y="1502" width="1480" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="434" y="1527" text-anchor="start">Returns a conservative per-line holder set and commits metadata with cache fill, downgrade, invalidation and eviction events; capacity and</text>
+<text x="434" y="1549" text-anchor="start">replacement are open.</text>
+<rect x="1910" y="1502" width="230" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1914" y="1538" text-anchor="start">NEW | VLSIT</text>
+<rect x="2140" y="1502" width="360" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="2144" y="1538" text-anchor="start">DIR</text>
+<rect x="100" y="1560" width="330" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1585" text-anchor="start">u_vlsit_riscv_probe_scheduler /</text>
+<text x="104" y="1607" text-anchor="start">m_vlsit_riscv_probe_scheduler</text>
+<rect x="430" y="1560" width="1480" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="434" y="1596" text-anchor="start">Issues tagged probes only to directory-selected holders and associates each response/data beat with its active transaction.</text>
+<rect x="1910" y="1560" width="230" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1914" y="1596" text-anchor="start">NEW | VLSIT</text>
+<rect x="2140" y="1560" width="360" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="2144" y="1596" text-anchor="start">TAG, SNP</text>
+<rect x="100" y="1618" width="330" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1643" text-anchor="start">u_vlsit_riscv_device_classifier</text>
+<text x="104" y="1665" text-anchor="start">/</text>
+<text x="104" y="1687" text-anchor="start">m_vlsit_riscv_device_classifier</text>
+<rect x="430" y="1618" width="1480" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="434" y="1665" text-anchor="start">Separates non-cacheable device transactions from cacheable memory according to the SoC address/attribute contract.</text>
+<rect x="1910" y="1618" width="230" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1914" y="1665" text-anchor="start">NEW | VLSIT</text>
+<rect x="2140" y="1618" width="360" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="2144" y="1665" text-anchor="start">DEV, AXI</text>
+<rect x="100" y="1698" width="330" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1723" text-anchor="start">u_vlsit_riscv_axi_mmio /</text>
+<text x="104" y="1745" text-anchor="start">m_vlsit_riscv_axi_mmio</text>
+<rect x="430" y="1698" width="1480" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="434" y="1734" text-anchor="start">Carries uncached device traffic to the external AXI4 fabric and returns responses without allocating cache lines.</text>
+<rect x="1910" y="1698" width="230" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1914" y="1734" text-anchor="start">NEW | VLSIT</text>
+<rect x="2140" y="1698" width="360" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="2144" y="1734" text-anchor="start">AXI, DEV</text>
+<rect x="100" y="1796" width="2400" height="480" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1300" y="1823" text-anchor="middle" font-weight="bold">Interface Table (level 1)</text>
+<rect x="100" y="1836" width="90" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1861" text-anchor="start" font-weight="bold">ID</text>
+<rect x="190" y="1836" width="300" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="1861" text-anchor="start" font-weight="bold">Interface</text>
+<rect x="490" y="1836" width="110" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="1861" text-anchor="start" font-weight="bold">Category</text>
+<rect x="600" y="1836" width="470" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="1861" text-anchor="start" font-weight="bold">Active side -&gt; passive side</text>
+<rect x="1070" y="1836" width="1430" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="1861" text-anchor="start" font-weight="bold">Key signals</text>
+<rect x="100" y="1872" width="90" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1908" text-anchor="start">AXI</text>
+<rect x="190" y="1872" width="300" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="1908" text-anchor="start">AXI4 peripheral route</text>
+<rect x="490" y="1872" width="110" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="1897" text-anchor="start">standard</text>
+<text x="494" y="1919" text-anchor="start">protocol</text>
+<rect x="600" y="1872" width="470" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="1908" text-anchor="start">device classifier -&gt; AXI MMIO router</text>
+<rect x="1070" y="1872" width="1430" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="1908" text-anchor="start">AXI4 transaction channels; the SoC fabric decodes targets.</text>
+<rect x="100" y="1930" width="90" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1955" text-anchor="start">DEV</text>
+<rect x="190" y="1930" width="300" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="1955" text-anchor="start">Uncached device path</text>
+<rect x="490" y="1930" width="110" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="1955" text-anchor="start">handshake</text>
+<rect x="600" y="1930" width="470" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="1955" text-anchor="start">tile adapter -&gt; device classifier</text>
+<rect x="1070" y="1930" width="1430" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="1955" text-anchor="start">Non-cacheable address/control/data and returned response.</text>
+<rect x="100" y="1966" width="90" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="1991" text-anchor="start">DEV</text>
+<rect x="190" y="1966" width="300" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="1991" text-anchor="start">Uncached device path</text>
+<rect x="490" y="1966" width="110" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="1991" text-anchor="start">handshake</text>
+<rect x="600" y="1966" width="470" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="1991" text-anchor="start">tile adapter -&gt; device classifier</text>
+<rect x="1070" y="1966" width="1430" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="1991" text-anchor="start">Non-cacheable address/control/data and returned response.</text>
+<rect x="100" y="2002" width="90" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="2038" text-anchor="start">DIR</text>
+<rect x="190" y="2002" width="300" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="2027" text-anchor="start">Sharer directory lookup and</text>
+<text x="194" y="2049" text-anchor="start">update</text>
+<rect x="490" y="2002" width="110" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="2038" text-anchor="start">handshake</text>
+<rect x="600" y="2002" width="470" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="2038" text-anchor="start">transaction table -&gt; sharer directory</text>
+<rect x="1070" y="2002" width="1430" height="58" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="2038" text-anchor="start">Physical line lookup, conservative holder bitmap, committed fill/downgrade/invalidation/eviction update, and transaction association.</text>
+<rect x="100" y="2060" width="90" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="2085" text-anchor="start">EVT</text>
+<rect x="190" y="2060" width="300" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="2085" text-anchor="start">PMU coherence event taps</text>
+<rect x="490" y="2060" width="110" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="2085" text-anchor="start">custom</text>
+<rect x="600" y="2060" width="470" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="2085" text-anchor="start">coherence fabric -&gt; cluster PMU</text>
+<rect x="1070" y="2060" width="1430" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="2085" text-anchor="start">Implemented directory, transaction, probe, dirty-owner and wait events; selector IDs remain open.</text>
+<rect x="100" y="2096" width="90" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="2121" text-anchor="start">LLC</text>
+<rect x="190" y="2096" width="300" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="2121" text-anchor="start">Shared LLC line service</text>
+<rect x="490" y="2096" width="110" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="2121" text-anchor="start">custom</text>
+<rect x="600" y="2096" width="470" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="2121" text-anchor="start">transaction table -&gt; shared LLC</text>
+<rect x="1070" y="2096" width="1430" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="2121" text-anchor="start">Line read/write, refill, dirty writeback, error and completion; exact port mapping is TBD.</text>
+<rect x="100" y="2132" width="90" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="2157" text-anchor="start">REQ</text>
+<rect x="190" y="2132" width="300" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="2157" text-anchor="start">Tile coherent request service</text>
+<rect x="490" y="2132" width="110" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="2157" text-anchor="start">handshake</text>
+<rect x="600" y="2132" width="470" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="2157" text-anchor="start">tile adapter -&gt; transaction table</text>
+<rect x="1070" y="2132" width="1430" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="2157" text-anchor="start">Cacheable address, operation, requester, data and returned grant/response; exact cache records remain source-mapping dependencies.</text>
+<rect x="100" y="2168" width="90" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="2193" text-anchor="start">SNP</text>
+<rect x="190" y="2168" width="300" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="2193" text-anchor="start">Targeted D-cache probes</text>
+<rect x="490" y="2168" width="110" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="2193" text-anchor="start">custom</text>
+<rect x="600" y="2168" width="470" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="2193" text-anchor="start">probe scheduler -&gt; tile adapter</text>
+<rect x="1070" y="2168" width="1430" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="2193" text-anchor="start">Tagged probe request and matching response/data; per-cache outstanding depth is TBD.</text>
+<rect x="100" y="2204" width="90" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="2229" text-anchor="start">TAG</text>
+<rect x="190" y="2204" width="300" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="2229" text-anchor="start">Tagged probe scheduling</text>
+<rect x="490" y="2204" width="110" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="2229" text-anchor="start">handshake</text>
+<rect x="600" y="2204" width="470" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="2229" text-anchor="start">transaction table -&gt; probe scheduler</text>
+<rect x="1070" y="2204" width="1430" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="2229" text-anchor="start">Transaction tag, physical line, selected holder mask, probe operation, response mask and dirty-data obligation.</text>
+<rect x="100" y="2240" width="90" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="104" y="2265" text-anchor="start">TREQ</text>
+<rect x="190" y="2240" width="300" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="194" y="2265" text-anchor="start">Per-hart tile boundary</text>
+<rect x="490" y="2240" width="110" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="494" y="2265" text-anchor="start">custom</text>
+<rect x="600" y="2240" width="470" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="604" y="2265" text-anchor="start">CPU tiles  tile adapters</text>
+<rect x="1070" y="2240" width="1430" height="36" fill="#FFFFFF" stroke="#000000" stroke-width="1"/>
+<text x="1074" y="2265" text-anchor="start">Replicated coherent request/response and tagged local-probe boundary; exact source pins are TBD.</text>
+<path d="M 1700 850 L 1700 950" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1700,950 1694,938 1706,938" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 420 540 L 520 540" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="520,540 508,546 508,534" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1150 500 L 1150 340" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1150,340 1156,352 1144,352" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1240 500 L 1240 340" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1240,340 1246,352 1234,352" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 880 520 L 1000 520" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1000,520 988,526 988,514" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1200 580 L 1200 770" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1200,770 1194,758 1206,758" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1380 560 L 1510 560" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1510,560 1498,566 1498,554" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 700 580 L 700 770" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="700,770 694,758 706,758" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 880 810 L 970 810 L 970 870 L 1520 870 L 1520 810 L 1540 810" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1540,810 1528,816 1528,804" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1510 520 L 1400 520 L 1400 554 A 6 6 0 0 0 1400 566 L 1400 600 L 1206 600 A 6 6 0 0 0 1194 600 L 900 600 L 900 560 L 880 560" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="880,560 892,554 892,566" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 100 2391 L 260 2391" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="260,2391 248,2397 248,2385" fill="#000000" stroke="#000000" stroke-width="1"/>
+</svg>

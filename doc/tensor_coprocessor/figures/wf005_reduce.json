@@ -1,0 +1,15 @@
+{
+  "head": {"text": "WF-005 Reduction operation (success)"},
+  "signal": [
+    {"name": "i_clk_core", "wave": "p........."},
+    {"name": "i_xif_issue_valid", "wave": "01.0......"},
+    {"name": "o_xif_issue_ready", "wave": "01.0......"},
+    {"name": "i_xif_issue_req_instr[31:0]", "wave": "x=.xxxxxxx", "data": ["RED"]},
+    {"name": "o_xif_issue_resp_accept", "wave": "01.0......"},
+    {"name": "o_xif_result_valid", "wave": "0.....10.."},
+    {"name": "i_xif_result_ready", "wave": "0.....10.."},
+    {"name": "o_xif_result_data", "wave": "xxxxx=.xxx", "data": ["s"]}
+  ],
+  "foot": {"text": "Scalar sum/max uses result.data; row/vector outputs are written through IF-003."},
+  "config": {"hscale": 2}
+}

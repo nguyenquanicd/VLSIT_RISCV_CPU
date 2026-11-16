@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="510" viewBox="440 340 1000 510" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="440" y="340" width="1000" height="510" fill="#FFFFFF"/>
+<rect x="470" y="370" width="940" height="450" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<rect x="550" y="510" width="300" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="536" text-anchor="middle">i_fmt_slice</text>
+<text x="700" y="558" text-anchor="middle">(fpnew_opgroup_fmt_slice)</text>
+<rect x="970" y="510" width="360" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1150" y="536" text-anchor="middle">i_multifmt_slice</text>
+<text x="1150" y="558" text-anchor="middle">(fpnew_opgroup_multifmt_slice)</text>
+<rect x="620" y="680" width="160" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="706" text-anchor="middle">i_arbiter</text>
+<text x="700" y="728" text-anchor="middle">(rr_arb_tree)</text>
+<text x="1388" y="411" text-anchor="end">Component composition</text>
+<text x="1388" y="433" text-anchor="end">(fpnew_opgroup_block)</text>
+</svg>

@@ -1,0 +1,95 @@
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "hpdcache_flush.drawio",
+  "layout": {
+    "gap_h": 120,
+    "gap_v": 110,
+    "margin": 80,
+    "block_h": 60
+  },
+  "top": {
+    "frame_label": [
+      "Component composition",
+      "(hpdcache_flush)"
+    ]
+  },
+  "frame_row": [
+    "hpdcache_flush",
+    "Native modified component; function and change contract are specified in Section 14.",
+    "rtl/modified/hpdcache/rtl/src/hpdcache_flush.sv"
+  ],
+  "frame_interfaces": [],
+  "blocks": [
+    {
+      "key": "B0",
+      "label": [
+        "flush_dir_free_ptr_bin_i",
+        "(hpdcache_1hot_to_binary)"
+      ],
+      "width": 300,
+      "row": 0,
+      "col": 0,
+      "row_name": "flush_dir_free_ptr_bin_i (hpdcache_1hot_to_binary)",
+      "function": "Native component",
+      "source": "REUSE; rtl/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_1hot_to_binary.sv"
+    },
+    {
+      "key": "B1",
+      "label": [
+        "flush_data_resizer_i",
+        "(hpdcache_data_resize)"
+      ],
+      "width": 260,
+      "row": 0,
+      "col": 1,
+      "row_name": "flush_data_resizer_i (hpdcache_data_resize)",
+      "function": "Native component",
+      "source": "REUSE; rtl/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_data_resize.sv"
+    },
+    {
+      "key": "B2",
+      "label": [
+        "flush_ack_decoder_i",
+        "(hpdcache_decoder)"
+      ],
+      "width": 220,
+      "row": 1,
+      "col": 0,
+      "row_name": "flush_ack_decoder_i (hpdcache_decoder)",
+      "function": "Native component",
+      "source": "REUSE; rtl/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_decoder.sv"
+    },
+    {
+      "key": "B3",
+      "label": [
+        "mem_req_meta_fifo_i",
+        "(hpdcache_fifo_reg)"
+      ],
+      "width": 220,
+      "row": 1,
+      "col": 1,
+      "row_name": "mem_req_meta_fifo_i (hpdcache_fifo_reg)",
+      "function": "Native component",
+      "source": "REUSE; rtl/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_fifo_reg.sv"
+    },
+    {
+      "key": "B4",
+      "label": [
+        "flush_dir_free_arb_i",
+        "(hpdcache_fxarb)"
+      ],
+      "width": 240,
+      "row": 2,
+      "col": 0,
+      "row_name": "flush_dir_free_arb_i (hpdcache_fxarb)",
+      "function": "Native component",
+      "source": "REUSE; rtl/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_fxarb.sv"
+    }
+  ],
+  "connectors": [],
+  "externals": [],
+  "interfaces": [],
+  "nets": [],
+  "legend_note": "Exact source-referenced children; generate multiplicity and active branches are specified in the component text. Containment denotes hierarchy, not invented signal connectivity. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.",
+  "library_sha256": "15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"
+}

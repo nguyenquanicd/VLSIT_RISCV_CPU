@@ -1,0 +1,12 @@
++incdir+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/common_cells/include
++incdir+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/axi/include
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/common_cells/src/cc_pkg.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/common_cells/src/cc_lzc.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/common_cells/src/cc_rr_arb_tree.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/common_cells/src/cc_fifo.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/common_cells/src/cc_spill_register_flushable.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/common_cells/src/cc_spill_register.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/common_cells/src/cc_stream_register.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/axi/src/axi_id_prepend.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/axi/src/axi_mux.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/vlsit/interconnect/m_vlsit_riscv_axi_mem_mux.sv

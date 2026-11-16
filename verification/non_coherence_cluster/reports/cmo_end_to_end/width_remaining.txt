@@ -1,0 +1,182 @@
+cache_subsystem\cva6_icache.sv 42 Operator VAR 'RdTxId' expects 4 bits on the Initial value, but Initial value's CONST '32'h8' generates 32 bits.
+    parameter logic [CVA6Cfg.MEM_TID_WIDTH-1:0] RdTxId = 0
+src\stream_xbar.sv 30 Operator VAR 'ExtPrio' expects 32 bits on the Initial value, but Initial value's CONST '1'h0' generates 1 bits.
+  parameter int unsigned ExtPrio     = 1'b0,
+src\stream_xbar.sv 33 Operator VAR 'AxiVldRdy' expects 32 bits on the Initial value, but Initial value's CONST '1'h1' generates 1 bits.
+  parameter int unsigned AxiVldRdy   = 1'b1,
+src\stream_xbar.sv 37 Operator VAR 'LockIn' expects 32 bits on the Initial value, but Initial value's CONST '1'h1' generates 1 bits.
+  parameter int unsigned LockIn      = 1'b1,
+src\stream_xbar.sv 179 Logical operator GENIF expects 1 bit on the If, but If's VARREF 'AxiVldRdy' generates 32 bits.
+  if (AxiVldRdy) begin : gen_handshake_assertions
+src\rr_arb_tree.sv 60 Operator VAR 'ExtPrio' expects 1 bits on the Initial value, but Initial value's CONST '32'h0' generates 32 bits.
+  parameter bit          ExtPrio    = 1'b0,
+src\rr_arb_tree.sv 67 Operator VAR 'AxiVldRdy' expects 1 bits on the Initial value, but Initial value's CONST '32'h1' generates 32 bits.
+  parameter bit          AxiVldRdy  = 1'b0,
+src\rr_arb_tree.sv 74 Operator VAR 'LockIn' expects 1 bits on the Initial value, but Initial value's CONST '32'h1' generates 32 bits.
+  parameter bit          LockIn     = 1'b0,
+src\stream_demux.sv 19 Operator COND expects 32 bits on the Conditional False, but Conditional False's CONST '1'h1' generates 1 bits.
+  parameter int unsigned LOG_N_OUP = (N_OUP > 32'd1) ? unsigned'($clog2(N_OUP)) : 1'b1
+util\sram_cache.sv 42 Logical operator COND expects 1 bit on the Conditional Test, but Conditional Test's VARREF 'USER_EN' generates 32 bits.
+  localparam DATA_AND_USER_WIDTH = USER_EN ? DATA_WIDTH + USER_WIDTH : DATA_WIDTH;
+rtl\tc_sram.sv 95 Operator CASE expects 48 bits on the Case expression, but Case expression's VARREF 'SimInit' generates 32 bits.
+      case (SimInit)
+src\sub_per_hash.sv 120 Operator MODDIV expects 64 bits on the RHS, but RHS's VARREF 'i' generates 32 bits.
+          index = rand_number % i;
+src\sub_per_hash.sv 124 Bit extraction of array[15:0] requires 4 bit index, not 64 bits.
+          perm_array[r][i]     = perm_array[r][index];
+src\sub_per_hash.sv 125 Bit extraction of array[15:0] requires 4 bit index, not 64 bits.
+          perm_array[r][index] = indices[r][i];
+src\sub_per_hash.sv 123 Operator NEQ expects 64 bits on the LHS, but LHS's VARREF 'i' generates 32 bits.
+        if (i != index) begin
+src\sub_per_hash.sv 130 Operator MODDIV expects 64 bits on the RHS, but RHS's VARREF 'NoRounds' generates 32 bits.
+      advance     = rand_number % NoRounds;
+src\sub_per_hash.sv 131 Operator LT expects 64 bits on the LHS, but LHS's VARREF 'i' generates 32 bits.
+      for (int unsigned i = 0; i < advance; i++) begin
+src\sub_per_hash.sv 164 Operator MODDIV expects 64 bits on the RHS, but RHS's VARREF 'InpWidth' generates 32 bits.
+          index = rand_number % InpWidth;
+src\sub_per_hash.sv 170 Operator MODDIV expects 64 bits on the RHS, but RHS's VARREF 'NoRounds' generates 32 bits.
+      advance     = rand_number % NoRounds;
+src\sub_per_hash.sv 171 Operator LT expects 64 bits on the LHS, but LHS's VARREF 'i' generates 32 bits.
+      for (int unsigned i = 0; i < advance; i++) begin
+src\lfsr.sv 298 Operator GT expects 32 bits on the LHS, but LHS's VARREF 'RstVal' generates 8 bits.
+  assert(RstVal > unsigned'(0)) else
+src\hpdcache_flush.sv 349 Operator PATMEMBER expects 64 bits on the Pattern value, but Pattern value's REPLICATE generates 56 bits.
+        mem_req_addr: {flush_alloc_nline_i, {HPDcacheCfg.clOffsetWidth{1'b0}} },
+cache_subsystem\cva6_hpdcache_if_adapter.sv 260 Operator PATMEMBER expects 3 bits on the Pattern value, but Pattern value's SEL generates 2 bits.
+              size: cva6_amo_req_i.size,
+cache_subsystem\cva6_hpdcache_if_adapter.sv 278 Operator PATMEMBER expects 3 bits on the Pattern value, but Pattern value's SEL generates 2 bits.
+              size: cva6_req_i.data_size,
+core\load_unit.sv 473 Operator COND expects 3 bits on the Conditional False, but Conditional False's CONST '1'h0' generates 1 bits.
+  assign ldbuf_rindex = (CVA6Cfg.NrLoadBufEntries > 1) ? ldbuf_id_t'(req_port_i.data_rid) : 1'b0;
+core\load_unit.sv 694 Operator LT expects 32 or 4 bits on the LHS, but LHS's SEL generates 3 bits.
+        |-> ldbuf_wdata.vaddr[CVA6Cfg.XLEN_ALIGN_BYTES-1:0] < 8)
+core\alu.sv 96 Operator SHIFTL expects 64 bits on the LHS, but LHS's SEL generates 32 bits.
+          SH1ADDUW:    operand_a_bitmanip = operand_a[31:0] << 1;
+core\alu.sv 97 Operator SHIFTL expects 64 bits on the LHS, but LHS's SEL generates 32 bits.
+          SH2ADDUW:    operand_a_bitmanip = operand_a[31:0] << 2;
+core\alu.sv 98 Operator SHIFTL expects 64 bits on the LHS, but LHS's SEL generates 32 bits.
+          SH3ADDUW:    operand_a_bitmanip = operand_a[31:0] << 3;
+core\alu.sv 276 Operator LT expects 32 bits on the LHS, but LHS's SEL generates 8 bits.
+      assign xperm8_result[i << 3 +: 8] = (operand_b[i << 3 +: 8] < (CVA6Cfg.XLEN / 8)) ? operand_a[operand_b[i << 3 +: 8] << 3 +: 8] : 8'b0;
+core\alu.sv 276 Bit extraction of var[63:0] requires 6 bit index, not 8 bits.
+      assign xperm8_result[i << 3 +: 8] = (operand_b[i << 3 +: 8] < (CVA6Cfg.XLEN / 8)) ? operand_a[operand_b[i << 3 +: 8] << 3 +: 8] : 8'b0;
+core\alu.sv 285 Operator LT expects 32 bits on the LHS, but LHS's SEL generates 4 bits.
+      assign xperm4_result[q << 2 +: 4] = (operand_b[q << 2 +: 4] < (CVA6Cfg.XLEN / 4)) ? operand_a[{2'b0, operand_b[q << 2 +: 4]} << 2 +: 4] : 4'b0;
+core\alu.sv 324 Operator COND expects 64 bits on the Conditional False, but Conditional False's VARREF 'shift_result32' generates 32 bits.
+      SLL, SRL, SRA: result_o = CVA6Cfg.IS_XLEN64 ? shift_result : shift_result32;
+core\alu.sv 332 Operator SUB expects 64 bits on the LHS, but LHS's SEL generates 32 bits.
+      bit_indx = 1 << (operand_b & (CVA6Cfg.XLEN - 1));
+core\alu.sv 335 Operator SUB expects 32 bits on the RHS, but RHS's SEL generates 5 bits.
+        rolw = $bits(rolw)'(({{CVA6Cfg.XLEN-32{1'b0}},operand_a[31:0]} << operand_b[4:0]) | ({{CVA6Cfg.XLEN-32{1'b0}},operand_a[31:0]} >> (CVA6Cfg.XLEN-32-operand_b[4:0])));
+core\alu.sv 336 Operator SUB expects 32 bits on the RHS, but RHS's SEL generates 5 bits.
+        rorw = $bits(rorw)'(({{CVA6Cfg.XLEN-32{1'b0}},operand_a[31:0]} >> operand_b[4:0]) | ({{CVA6Cfg.XLEN-32{1'b0}},operand_a[31:0]} << (CVA6Cfg.XLEN-32-operand_b[4:0])));
+core\alu.sv 373 Operator SUB expects 32 bits on the RHS, but RHS's SEL generates 6 bits.
+        result_o = CVA6Cfg.IS_XLEN64 ? ((operand_a << operand_b[5:0]) | (operand_a >> (CVA6Cfg.XLEN-operand_b[5:0]))) : ((operand_a << operand_b[4:0]) | (operand_a >> (CVA6Cfg.XLEN-operand_b[4:0])));
+core\alu.sv 373 Operator SUB expects 32 bits on the RHS, but RHS's SEL generates 5 bits.
+        result_o = CVA6Cfg.IS_XLEN64 ? ((operand_a << operand_b[5:0]) | (operand_a >> (CVA6Cfg.XLEN-operand_b[5:0]))) : ((operand_a << operand_b[4:0]) | (operand_a >> (CVA6Cfg.XLEN-operand_b[4:0])));
+core\alu.sv 376 Operator SUB expects 32 bits on the RHS, but RHS's SEL generates 6 bits.
+        result_o = CVA6Cfg.IS_XLEN64 ? ((operand_a >> operand_b[5:0]) | (operand_a << (CVA6Cfg.XLEN-operand_b[5:0]))) : ((operand_a >> operand_b[4:0]) | (operand_a << (CVA6Cfg.XLEN-operand_b[4:0])));
+core\alu.sv 376 Operator SUB expects 32 bits on the RHS, but RHS's SEL generates 5 bits.
+        result_o = CVA6Cfg.IS_XLEN64 ? ((operand_a >> operand_b[5:0]) | (operand_a << (CVA6Cfg.XLEN-operand_b[5:0]))) : ((operand_a >> operand_b[4:0]) | (operand_a << (CVA6Cfg.XLEN-operand_b[4:0])));
+core\alu.sv 399 Operator COND expects 64 bits on the Conditional True, but Conditional True's REPLICATE generates 32 bits.
+        result_o = CVA6Cfg.IS_XLEN32 ? ({operand_b[15:0], operand_a[15:0]}) : ({operand_b[31:0], operand_a[31:0]});
+core\alu.sv 401 Operator COND expects 64 bits on the Conditional True, but Conditional True's REPLICATE generates 32 bits.
+        result_o = CVA6Cfg.IS_XLEN32 ? ({16'b0, operand_b[7:0], operand_a[7:0]}) : ({48'b0, operand_b[7:0], operand_a[7:0]});
+core\ariane_regfile_ff.sv 55 Operator EQ expects 32 bits on the LHS, but LHS's SEL generates 5 bits.
+        if (waddr_i[j] == i) we_dec[j][i] = we_i[j];
+src\axi_demux_simple.sv 433 Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'slv_aw_select_i' generates 1 bits.
+        if (aw_valid && (slv_aw_select_i == i)) begin
+src\axi_demux_simple.sv 440 Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'w_select' generates 1 bits.
+        if (w_select_valid && (w_select == i)) begin
+src\axi_demux_simple.sv 452 Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'slv_ar_select_i' generates 1 bits.
+        if (ar_valid && (slv_ar_select_i == i)) begin
+src\axi_atop_filter.sv 123 Operator LT expects 32 bits on the LHS, but LHS's SEL generates 2 bits.
+        if (complete_w_without_aw_downstream || (w_cnt_q.cnt < AxiMaxWriteTxns)) begin
+src\axi_demux_simple.sv 433 Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'slv_aw_select_i' generates 2 bits.
+        if (aw_valid && (slv_aw_select_i == i)) begin
+src\axi_demux_simple.sv 440 Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'w_select' generates 2 bits.
+        if (w_select_valid && (w_select == i)) begin
+src\axi_demux_simple.sv 452 Operator EQ expects 32 bits on the LHS, but LHS's VARREF 'slv_ar_select_i' generates 2 bits.
+        if (ar_valid && (slv_ar_select_i == i)) begin
+cache_subsystem\cva6_icache.sv 161 Operator SHIFTL expects 64 bits on the LHS, but LHS's REPLICATE generates 4 bits.
+                         ( paddr_is_nc  & mem_data_req_o ) ? {{ICACHE_OFFSET_WIDTH-1{1'b0}}, cl_offset_q[2]}<<2 : // needed since we transfer 32bit over a 64bit AXI bus in this case
+cache_subsystem\cva6_icache.sv 161 Operator COND expects 64 bits on the Conditional False, but Conditional False's VARREF 'cl_offset_q' generates 4 bits.
+                         ( paddr_is_nc  & mem_data_req_o ) ? {{ICACHE_OFFSET_WIDTH-1{1'b0}}, cl_offset_q[2]}<<2 : // needed since we transfer 32bit over a 64bit AXI bus in this case
+cache_subsystem\cva6_icache.sv 431 Logical operator COND expects 1 bit on the Conditional Test, but Conditional Test's SEL generates 32 bits.
+    assign cl_user[i] = CVA6Cfg.FETCH_USER_EN ? cl_ruser[i][{cl_offset_q, 3'b0}+:CVA6Cfg.FETCH_USER_WIDTH] : '0;
+cache_subsystem\cva6_icache.sv 446 Logical operator COND expects 1 bit on the Conditional Test, but Conditional Test's SEL generates 32 bits.
+      dreq_o.user = CVA6Cfg.FETCH_USER_EN ? cl_user[hit_idx] : '0;
+cache_subsystem\cva6_icache.sv 449 Logical operator COND expects 1 bit on the Conditional Test, but Conditional Test's SEL generates 32 bits.
+      dreq_o.user = CVA6Cfg.FETCH_USER_EN ? mem_rtrn_i.user[{cl_offset_q, 3'b0}+:CVA6Cfg.FETCH_USER_WIDTH] : '0;
+src\stream_xbar.sv 176 Operator LT expects 32 bits on the LHS, but LHS's SEL generates 2 bits.
+            "Non-existing output is selected!")
+src\stream_xbar.sv 176 Operator LT expects 32 bits on the LHS, but LHS's SEL generates 1 bits.
+            "Non-existing output is selected!")
+hit_miss_detect\axi_llc_miss_counters.sv 60 Operator EQ expects 32 bits on the LHS, but LHS's SEL generates 4 bits.
+      if ((cnt_up_i.id[0+:AxiIdLookupBits] == i) && cnt_up_i.valid) begin
+hit_miss_detect\axi_llc_miss_counters.sv 65 Operator EQ expects 32 bits on the LHS, but LHS's SEL generates 4 bits.
+      if ((cnt_down_i.id[0+:AxiIdLookupBits] == i) && cnt_down_i.valid) begin
+hit_miss_detect\axi_llc_miss_counters.sv 74 Operator EQ expects 32 bits on the LHS, but LHS's SEL generates 4 bits.
+      if (cnt_up_i.id[0+:AxiIdLookupBits] == i) begin
+src\axi_llc_burst_cutter.sv 81 Operator DIV expects 64 bits on the LHS, but LHS's SEL generates 32 bits.
+      addr_map[i].end_addr   = tmp_addr + (Cfg.BlockSize / 32'd8) * Cfg.NumBlocks * Cfg.NumLines;
+src\axi_llc_burst_cutter.sv 81 Operator DIV expects 64 bits on the RHS, but RHS's CONST '32'h8' generates 32 bits.
+      addr_map[i].end_addr   = tmp_addr + (Cfg.BlockSize / 32'd8) * Cfg.NumBlocks * Cfg.NumLines;
+src\axi_llc_burst_cutter.sv 82 Operator DIV expects 64 bits on the LHS, but LHS's SEL generates 32 bits.
+      tmp_addr               = tmp_addr + (Cfg.BlockSize / 32'd8) * Cfg.NumBlocks * Cfg.NumLines;
+src\axi_llc_burst_cutter.sv 82 Operator DIV expects 64 bits on the RHS, but RHS's CONST '32'h8' generates 32 bits.
+      tmp_addr               = tmp_addr + (Cfg.BlockSize / 32'd8) * Cfg.NumBlocks * Cfg.NumLines;
+src\axi_llc_burst_cutter.sv 104 Operator SHIFTL expects 64 bits on the LHS, but LHS's SEL generates 60 bits.
+                             << LineOffset);
+core\fpu_wrap.sv 409 Operator COND expects 64 bits on the Conditional False, but Conditional False's REPLICATE generates 32 bits.
+            operand_c_d = CVA6Cfg.RVD ? {4{operand_c_i[15:0]}} : {2{operand_c_i[15:0]}};
+core\fpu_wrap.sv 411 Operator COND expects 64 bits on the Conditional False, but Conditional False's REPLICATE generates 32 bits.
+            operand_c_d = CVA6Cfg.RVD ? {8{operand_c_i[7:0]}} : {4{operand_c_i[7:0]}};
+core\fpu_wrap.sv 418 Operator COND expects 64 bits on the Conditional False, but Conditional False's REPLICATE generates 32 bits.
+            operand_b_d = CVA6Cfg.RVD ? {4{operand_b_i[15:0]}} : {2{operand_b_i[15:0]}};
+core\fpu_wrap.sv 420 Operator COND expects 64 bits on the Conditional False, but Conditional False's REPLICATE generates 32 bits.
+            operand_b_d = CVA6Cfg.RVD ? {8{operand_b_i[7:0]}} : {4{operand_b_i[7:0]}};
+core\mult.sv 148 Operator FUNCREF 'sext32to64' expects 32 bits on the Function Argument, but Function Argument's VARREF 'result' generates 64 bits.
+  assign div_result = (CVA6Cfg.IS_XLEN64 && word_op_q) ? sext32to64(result) : result;
+core\scoreboard.sv 286 Operator ADD expects 32 bits on the LHS, but LHS's SEL generates 3 bits.
+    assign commit_pointer_n[k] = $bits(commit_pointer_n[k])'((flush_i) ? '0 : commit_pointer_n[0] + unsigned'(k));
+src\axi_llc_read_unit.sv 148 Operator ADD expects 128 bits on the LHS, but LHS's SEL generates 64 bits.
+              desc_d.a_x_addr = $bits(desc_d.a_x_addr)'(axi_pkg::aligned_addr(desc_q.a_x_addr +
+src\axi_llc_read_unit.sv 148 Operator ADD expects 128 bits on the RHS, but RHS's FUNCREF 'num_bytes' generates 16 bits.
+              desc_d.a_x_addr = $bits(desc_d.a_x_addr)'(axi_pkg::aligned_addr(desc_q.a_x_addr +
+src\axi_llc_write_unit.sv 175 Operator ADD expects 128 bits on the LHS, but LHS's SEL generates 64 bits.
+              desc_d.a_x_addr = $bits(desc_d.a_x_addr)'(axi_pkg::aligned_addr(desc_q.a_x_addr +
+src\axi_llc_write_unit.sv 175 Operator ADD expects 128 bits on the RHS, but RHS's FUNCREF 'num_bytes' generates 16 bits.
+              desc_d.a_x_addr = $bits(desc_d.a_x_addr)'(axi_pkg::aligned_addr(desc_q.a_x_addr +
+core\commit_stage.sv 276 Operator COND expects 64 bits on the Conditional True, but Conditional True's SEL generates 5 bits.
+            (payload_first_fp ? commit_instr_i[0].ex.cause[4:0] : 5'b0));
+core\commit_stage.sv 276 Operator COND expects 64 bits on the Conditional False, but Conditional False's CONST '5'h0' generates 5 bits.
+            (payload_first_fp ? commit_instr_i[0].ex.cause[4:0] : 5'b0));
+core\commit_stage.sv 271 Operator LT expects 32 bits on the LHS, but LHS's VARREF 'sdtrig_commit_icount_nr_instr_i' generates 1 bits.
+          !(CVA6Cfg.Sdtrig && sdtrig_commit_icount_valid_i && sdtrig_commit_icount_nr_instr_i < CVA6Cfg.NrCommitPorts) &&
+core\commit_stage.sv 475 Operator LT expects 32 bits on the LHS, but LHS's VARREF 'sdtrig_commit_icount_nr_instr_i' generates 1 bits.
+                                && !(CVA6Cfg.Sdtrig && sdtrig_commit_icount_valid_i && sdtrig_commit_icount_nr_instr_i < CVA6Cfg.NrCommitPorts)
+src\axi_llc_pkg.sv 72 Operator ADD expects 16 bits on the LHS, but LHS's VARREF 'len' generates 8 bits.
+      num_bytes: (len + 16'd1) << size,
+src\axi_pkg.sv 130 Operator CASE expects 8 bits on the Case Item, but Case Item's CONST '4'h1' generates 4 bits.
+    unique case (len)
+src\axi_pkg.sv 130 Operator CASE expects 8 bits on the Case Item, but Case Item's CONST '4'h3' generates 4 bits.
+    unique case (len)
+src\axi_pkg.sv 130 Operator CASE expects 8 bits on the Case Item, but Case Item's CONST '4'h7' generates 4 bits.
+    unique case (len)
+src\axi_pkg.sv 130 Operator CASE expects 8 bits on the Case Item, but Case Item's CONST '4'hf' generates 4 bits.
+    unique case (len)
+src\axi_pkg.sv 167 Operator ADD expects 128 bits on the LHS, but LHS's VARREF 'len' generates 8 bits.
+        ret_addr = ret_addr - (num_bytes(size) * (len + 1));
+src\axi_pkg.sv 166 Operator ADD expects 128 bits on the LHS, but LHS's VARREF 'len' generates 8 bits.
+      if (burst == BURST_WRAP && ret_addr >= wrp_bond + (num_bytes(size) * (len + 1))) begin
+src\axi_pkg.sv 178 Operator DIV expects 128 bits on the RHS, but RHS's VARREF 'strobe_width' generates 16 bits.
+    return _addr - (_addr / strobe_width) * strobe_width;
+src\axi_pkg.sv 178 Operator ASSIGN expects 16 bits on the Assign RHS, but Assign RHS's SUB generates 128 bits.
+    return _addr - (_addr / strobe_width) * strobe_width;
+src\axi_pkg.sv 186 Operator SUB expects 128 bits on the LHS, but LHS's FUNCREF 'num_bytes' generates 16 bits.
+      return aligned_addr(addr, size) + (num_bytes(size) - 1) - (addr / strobe_width) * strobe_width;
+src\axi_pkg.sv 186 Operator DIV expects 128 bits on the RHS, but RHS's VARREF 'strobe_width' generates 16 bits.
+      return aligned_addr(addr, size) + (num_bytes(size) - 1) - (addr / strobe_width) * strobe_width;
+src\axi_pkg.sv 186 Operator ASSIGN expects 16 bits on the Assign RHS, but Assign RHS's SUB generates 128 bits.
+      return aligned_addr(addr, size) + (num_bytes(size) - 1) - (addr / strobe_width) * strobe_width;

@@ -1,0 +1,272 @@
+{
+  "page_name": "05_PMU",
+  "library_sha256": "D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6",
+  "layout": {
+    "gap_h": 110,
+    "gap_v": 110,
+    "margin": 45,
+    "block_h": 80
+  },
+  "top": {
+    "frame_label": [
+      "Cluster PMU internals",
+      "(m_vlsit_riscv_pmu)"
+    ]
+  },
+  "frame_row": [
+    "Cluster PMU internals",
+    "Document-grounded proposal; no RTL hierarchy is asserted.",
+    "VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS.md"
+  ],
+  "frame_interfaces": [
+    "CFG",
+    "READ",
+    "IRQ"
+  ],
+  "blocks": [
+    {
+      "key": "hart_evt",
+      "label": [
+        "u_vlsit_pmu_hart_evt",
+        "(m_vlsit_pmu_hart_evt)",
+        "NEW"
+      ],
+      "width": 250,
+      "row": 0,
+      "col": 0,
+      "row_name": "u_vlsit_pmu_hart_evt / m_vlsit_pmu_hart_evt",
+      "function": "Collects the implemented per-hart event vectors and retains source-hart identity.",
+      "source": "NEW | VLSIT"
+    },
+    {
+      "key": "cluster_evt",
+      "label": [
+        "u_vlsit_pmu_cluster_evt",
+        "(m_vlsit_pmu_cluster_evt)",
+        "NEW"
+      ],
+      "width": 290,
+      "row": 1,
+      "col": 0,
+      "row_name": "u_vlsit_pmu_cluster_evt / m_vlsit_pmu_cluster_evt",
+      "function": "Collects cluster-global event sources such as LLC and fabric events without inventing per-hart attribution.",
+      "source": "NEW | VLSIT"
+    },
+    {
+      "key": "select",
+      "label": [
+        "u_vlsit_pmu_event_select",
+        "(m_vlsit_pmu_event_select)",
+        "NEW"
+      ],
+      "width": 300,
+      "row": 0,
+      "col": 1,
+      "row_name": "u_vlsit_pmu_event_select / m_vlsit_pmu_event_select",
+      "function": "Selects a programmed event and applies scope 0\u20133 hart, 4 aggregate, or 5 cluster-global.",
+      "source": "NEW | VLSIT"
+    },
+    {
+      "key": "sum",
+      "label": [
+        "u_vlsit_pmu_aggregate",
+        "(m_vlsit_pmu_aggregate)",
+        "NEW"
+      ],
+      "width": 270,
+      "row": 1,
+      "col": 1,
+      "row_name": "u_vlsit_pmu_aggregate / m_vlsit_pmu_aggregate",
+      "function": "Adds simultaneous per-hart occurrences; four matching hart events in one cycle increment by four.",
+      "source": "NEW | VLSIT"
+    },
+    {
+      "key": "count",
+      "label": [
+        "u_vlsit_pmu_counter_bank",
+        "(m_vlsit_pmu_counter_bank)",
+        "NEW"
+      ],
+      "width": 300,
+      "row": 2,
+      "col": 1,
+      "row_name": "u_vlsit_pmu_counter_bank / m_vlsit_pmu_counter_bank",
+      "function": "Implements PARA_PMU_COUNTER_NUM counters, modulo-2^W wrap, event selection and enable state.",
+      "source": "NEW | VLSIT"
+    },
+    {
+      "key": "snap",
+      "label": [
+        "u_vlsit_pmu_snapshot",
+        "(m_vlsit_pmu_snapshot)",
+        "NEW"
+      ],
+      "width": 250,
+      "row": 3,
+      "col": 1,
+      "row_name": "u_vlsit_pmu_snapshot / m_vlsit_pmu_snapshot",
+      "function": "Captures a coherent read image on the software snapshot command and holds it for low/high reads.",
+      "source": "NEW | VLSIT"
+    },
+    {
+      "key": "irq",
+      "label": [
+        "u_vlsit_pmu_irq",
+        "(m_vlsit_pmu_irq)",
+        "NEW"
+      ],
+      "width": 200,
+      "row": 2,
+      "col": 0,
+      "row_name": "u_vlsit_pmu_irq / m_vlsit_pmu_irq",
+      "function": "Latches enabled overflow causes and drives one aggregate level interrupt until software clears causes.",
+      "source": "NEW | VLSIT"
+    }
+  ],
+  "connectors": [
+    {
+      "id": "HEVT",
+      "src": "hart_evt",
+      "src_side": "R",
+      "dst": "select",
+      "dst_side": "L"
+    },
+    {
+      "id": "GEVT",
+      "src": "cluster_evt",
+      "src_side": "R",
+      "dst": "sum",
+      "dst_side": "L"
+    },
+    {
+      "id": "SEL",
+      "src": "select",
+      "src_side": "B",
+      "dst": "sum",
+      "dst_side": "T"
+    },
+    {
+      "id": "INC",
+      "src": "sum",
+      "src_side": "B",
+      "dst": "count",
+      "dst_side": "T"
+    },
+    {
+      "id": "SNAP",
+      "src": "count",
+      "src_side": "B",
+      "dst": "snap",
+      "dst_side": "T"
+    },
+    {
+      "id": "OVF",
+      "src": "count",
+      "src_side": "L",
+      "dst": "irq",
+      "dst_side": "R"
+    }
+  ],
+  "externals": [
+    {
+      "id": "CFG",
+      "block": "select",
+      "side": "R",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "CFG",
+        "CSR control"
+      ]
+    },
+    {
+      "id": "READ",
+      "block": "snap",
+      "side": "B",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "READ",
+        "Stable counter snapshot image"
+      ]
+    },
+    {
+      "id": "IRQ",
+      "block": "irq",
+      "side": "B",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "IRQ",
+        "Aggregate PMU interrupt"
+      ]
+    }
+  ],
+  "nets": [],
+  "interfaces": [
+    {
+      "id": "HEVT",
+      "name": "Per-hart event vectors",
+      "category": "custom",
+      "active": "CVA6/cache -> hart event collector",
+      "signals": "Candidate CVA6 performance counters and per-hart cache events; exact source availability and selector IDs are pending."
+    },
+    {
+      "id": "GEVT",
+      "name": "Cluster-global event vectors",
+      "category": "custom",
+      "active": "CCU/LLC/fabric -> cluster event collector",
+      "signals": "LLC/fabric/error events with cluster-global scope."
+    },
+    {
+      "id": "SEL",
+      "name": "PMU selector output",
+      "category": "custom",
+      "active": "event selector -> occurrence aggregator",
+      "signals": "One selected source and scope; no increment for reserved or unavailable sources."
+    },
+    {
+      "id": "INC",
+      "name": "Event multiplicity",
+      "category": "custom",
+      "active": "aggregator -> counter bank",
+      "signals": "Unsigned occurrence count per cycle; scope 4 sums active-hart events."
+    },
+    {
+      "id": "SNAP",
+      "name": "Counter snapshot capture",
+      "category": "custom",
+      "active": "counter bank -> snapshot bank",
+      "signals": "Atomic capture of configured counter values on accepted command."
+    },
+    {
+      "id": "OVF",
+      "name": "Counter overflow status",
+      "category": "custom",
+      "active": "counter bank -> IRQ logic",
+      "signals": "Overflow pulses are converted to sticky per-counter cause bits."
+    },
+    {
+      "id": "CFG",
+      "name": "CSR PMU configuration",
+      "category": "custom",
+      "active": "generated CSR -> PMU",
+      "signals": "Selector, scope, enable, snapshot and clear controls; workbook controls offsets."
+    },
+    {
+      "id": "READ",
+      "name": "Stable PMU read image",
+      "category": "custom",
+      "active": "snapshot bank -> CSR read data",
+      "signals": "Snapshot values remain stable until the next accepted snapshot or reset."
+    },
+    {
+      "id": "IRQ",
+      "name": "Aggregate PMU interrupt",
+      "category": "custom",
+      "active": "PMU -> SoC interrupt controller",
+      "signals": "Single level output follows enabled pending sticky causes."
+    }
+  ],
+  "legend_note": "The source event dictionary and exact CVA6 performance-event wire mapping remain open. The diagram does not claim that all listed candidate events exist in the selected CVA6 revision. Status codes: REUSE = upstream RTL reused; REUSE* = reuse candidate pending compatibility checks; MODIFY = source adaptation, wrapper, or macro binding; NEW = VLSIT RTL to design; GENERATED = CSR RTL from the selected generator. All proposed blocks are dashed because this cluster has no pinned integrated RTL yet."
+}

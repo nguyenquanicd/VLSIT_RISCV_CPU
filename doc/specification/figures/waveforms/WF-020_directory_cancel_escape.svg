@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2676" height="328" viewBox="0 0 2676 328" font-family="Helvetica,Arial,sans-serif">
+<rect width="100%" height="100%" fill="#fff"/>
+<text x="12" y="20" font-size="14" font-weight="bold">WF-020 - Directory reservation cancel escape (abstract event order)</text>
+<line x1="287" y1="30" x2="287" y2="300" stroke="#ccc" stroke-dasharray="2,3"/>
+<line x1="323" y1="30" x2="323" y2="300" stroke="#ccc" stroke-dasharray="2,3"/>
+<line x1="359" y1="30" x2="359" y2="300" stroke="#ccc" stroke-dasharray="2,3"/>
+<line x1="395" y1="30" x2="395" y2="300" stroke="#ccc" stroke-dasharray="2,3"/>
+<line x1="431" y1="30" x2="431" y2="300" stroke="#ccc" stroke-dasharray="2,3"/>
+<line x1="467" y1="30" x2="467" y2="300" stroke="#ccc" stroke-dasharray="2,3"/>
+<line x1="503" y1="30" x2="503" y2="300" stroke="#ccc" stroke-dasharray="2,3"/>
+<line x1="539" y1="30" x2="539" y2="300" stroke="#ccc" stroke-dasharray="2,3"/>
+<line x1="575" y1="30" x2="575" y2="300" stroke="#ccc" stroke-dasharray="2,3"/>
+<text x="279" y="49" font-size="12" text-anchor="end">clk_cluster</text>
+<polyline points="287.0,51.0 287.0,33.0 305.0,33.0 305.0,51.0 323.0,51.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="323.0,51.0 323.0,33.0 341.0,33.0 341.0,51.0 359.0,51.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="359.0,51.0 359.0,33.0 377.0,33.0 377.0,51.0 395.0,51.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="395.0,51.0 395.0,33.0 413.0,33.0 413.0,51.0 431.0,51.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="431.0,51.0 431.0,33.0 449.0,33.0 449.0,51.0 467.0,51.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="467.0,51.0 467.0,33.0 485.0,33.0 485.0,51.0 503.0,51.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="503.0,51.0 503.0,33.0 521.0,33.0 521.0,51.0 539.0,51.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="539.0,51.0 539.0,33.0 557.0,33.0 557.0,51.0 575.0,51.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="12" y="79" font-size="12" font-weight="bold" fill="#225">Bank 0 operation channels</text>
+<text x="279" y="109" font-size="12" text-anchor="end">i_lookup_valid[0] (T2 miss)</text>
+<polyline points="287.0,111.0 323.0,111.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="323.0,111.0 323.0,93.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="323.0,93.0 359.0,93.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="359.0,93.0 395.0,93.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="395.0,93.0 431.0,93.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="431.0,93.0 467.0,93.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="467.0,93.0 503.0,93.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="503.0,93.0 539.0,93.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="539.0,93.0 575.0,93.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="279" y="139" font-size="12" text-anchor="end">o_lookup_ready[0]</text>
+<polyline points="287.0,141.0 323.0,141.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="323.0,141.0 323.0,123.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="323.0,123.0 359.0,123.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="359.0,123.0 395.0,123.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="395.0,123.0 431.0,123.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="431.0,123.0 467.0,123.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="467.0,123.0 503.0,123.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="503.0,123.0 539.0,123.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="539.0,123.0 575.0,123.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="279" y="169" font-size="12" text-anchor="end">reg_dir_resv_valid (internal, set 5)</text>
+<polyline points="287.0,171.0 323.0,171.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="323.0,171.0 323.0,153.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="323.0,153.0 359.0,153.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="359.0,153.0 395.0,153.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="395.0,153.0 431.0,153.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="431.0,153.0 467.0,153.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="467.0,153.0 467.0,171.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="467.0,171.0 503.0,171.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="503.0,171.0 539.0,171.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="539.0,171.0 575.0,171.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="279" y="199" font-size="12" text-anchor="end">i_update_valid[0] (T1, held until handshake)</text>
+<polyline points="287.0,201.0 323.0,201.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="323.0,201.0 359.0,201.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="359.0,201.0 359.0,183.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="359.0,183.0 395.0,183.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="395.0,183.0 431.0,183.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="431.0,183.0 467.0,183.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="467.0,183.0 503.0,183.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="503.0,183.0 503.0,201.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="503.0,201.0 539.0,201.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="539.0,201.0 575.0,201.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="279" y="229" font-size="12" text-anchor="end">o_update_ready[0]</text>
+<polyline points="287.0,231.0 323.0,231.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="323.0,231.0 359.0,231.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="359.0,231.0 395.0,231.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="395.0,231.0 431.0,231.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="431.0,231.0 467.0,231.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="467.0,231.0 503.0,231.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="503.0,231.0 503.0,213.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="503.0,213.0 539.0,213.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="539.0,213.0 575.0,213.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="279" y="259" font-size="12" text-anchor="end">i_cancel_valid[0] (T2 reservation owner)</text>
+<polyline points="287.0,261.0 323.0,261.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="323.0,261.0 359.0,261.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="359.0,261.0 395.0,261.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="395.0,261.0 431.0,261.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="431.0,261.0 431.0,243.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="431.0,243.0 467.0,243.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="467.0,243.0 503.0,243.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="503.0,243.0 539.0,243.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="539.0,243.0 575.0,243.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="279" y="289" font-size="12" text-anchor="end">o_cancel_ready[0]</text>
+<polyline points="287.0,291.0 323.0,291.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="323.0,291.0 359.0,291.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="359.0,291.0 395.0,291.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="395.0,291.0 431.0,291.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="431.0,291.0 431.0,273.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="431.0,273.0 467.0,273.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="467.0,273.0 503.0,273.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="503.0,273.0 539.0,273.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="539.0,273.0 575.0,273.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="12" y="320" font-size="11" fill="#444">Abstract ordering only; positions are not RTL cycle or latency promises. T2 first reserves set 5. T1's update belongs to another tag, so it remains VALID while not READY and cannot occupy the arbiter grant. The matching T2 cancel handshakes and releases only the reservation. T1's unchanged update payload then handshakes. These signals identify the current sharer-directory bank-0 ports; reg_dir_resv_valid is internal state. No RTL was changed in this update.</text>
+</svg>

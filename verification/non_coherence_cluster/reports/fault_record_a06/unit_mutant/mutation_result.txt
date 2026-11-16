@@ -1,0 +1,1 @@
+PASS: overwrite-first-fault mutant caught; native exit=1

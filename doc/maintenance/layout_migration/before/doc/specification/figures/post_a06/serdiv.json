@@ -1,0 +1,56 @@
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "serdiv.drawio",
+  "layout": {
+    "gap_h": 120,
+    "gap_v": 110,
+    "margin": 80,
+    "block_h": 60
+  },
+  "top": {
+    "frame_label": [
+      "Component composition",
+      "(serdiv)"
+    ]
+  },
+  "frame_row": [
+    "serdiv",
+    "Native modified component; function and change contract are specified in Section 14.",
+    "rtl/modified/cva6/core/serdiv.sv"
+  ],
+  "frame_interfaces": [],
+  "blocks": [
+    {
+      "key": "B0",
+      "label": [
+        "i_lzc_a",
+        "(lzc)"
+      ],
+      "width": 100,
+      "row": 0,
+      "col": 0,
+      "row_name": "i_lzc_a (lzc)",
+      "function": "Native component",
+      "source": "REUSE; rtl/third_party/cva6/vendor/pulp-platform/common_cells/src/lzc.sv"
+    },
+    {
+      "key": "B1",
+      "label": [
+        "i_lzc_b",
+        "(lzc)"
+      ],
+      "width": 100,
+      "row": 1,
+      "col": 0,
+      "row_name": "i_lzc_b (lzc)",
+      "function": "Native component",
+      "source": "REUSE; rtl/third_party/cva6/vendor/pulp-platform/common_cells/src/lzc.sv"
+    }
+  ],
+  "connectors": [],
+  "externals": [],
+  "interfaces": [],
+  "nets": [],
+  "legend_note": "Exact source-referenced children; generate multiplicity and active branches are specified in the component text. Containment denotes hierarchy, not invented signal connectivity. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.",
+  "library_sha256": "15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"
+}

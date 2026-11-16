@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1418" height="833" viewBox="276 301 1418 833">
+<rect x="0" y="0" width="100%" height="100%" fill="white"/>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#20252b"/></marker></defs>
+<path d="M 570 540 L 660 540" fill="none" stroke="#20252b" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 680 350 L 680 500" fill="none" stroke="#20252b" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 720 500 L 720 350" fill="none" stroke="#20252b" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 1440 960 L 1440 1060" fill="none" stroke="#20252b" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 740 540 L 850 540" fill="none" stroke="#20252b" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 1000 580 L 1000 690" fill="none" stroke="#20252b" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 1140 540 L 1300 540" fill="none" stroke="#20252b" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 1440 580 L 1440 690" fill="none" stroke="#20252b" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 1440 770 L 1440 880" fill="none" stroke="#20252b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="620" y="400" width="1050" height="610" fill="#f8fafc" stroke="#263746" stroke-width="2" stroke-dasharray="8 5"/>
+<text x="700" y="524.9" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="#16212a">
+<tspan x="700" dy="0">u_cva6</tspan>
+<tspan x="700" dy="20">(cva6)</tspan>
+<tspan x="700" dy="20">MODIFY</tspan>
+</text>
+<text x="995" y="524.9" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="#16212a">
+<tspan x="995" dy="0">u_cva6_hpdcache_subsystem</tspan>
+<tspan x="995" dy="20">(cva6_hpdcache_subsystem)</tspan>
+<tspan x="995" dy="20">MODIFY</tspan>
+</text>
+<text x="995" y="714.9" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="#16212a">
+<tspan x="995" dy="0">u_cva6_icache</tspan>
+<tspan x="995" dy="20">(cva6_icache)</tspan>
+<tspan x="995" dy="20">REUSE</tspan>
+</text>
+<text x="1435" y="524.9" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="#16212a">
+<tspan x="1435" dy="0">u_cva6_hpdcache_wrapper</tspan>
+<tspan x="1435" dy="20">(cva6_hpdcache_wrapper)</tspan>
+<tspan x="1435" dy="20">MODIFY</tspan>
+</text>
+<text x="1435" y="714.9" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="#16212a">
+<tspan x="1435" dy="0">u_hpdcache</tspan>
+<tspan x="1435" dy="20">(hpdcache)</tspan>
+<tspan x="1435" dy="20">MODIFY</tspan>
+</text>
+<text x="1435" y="904.9" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="#16212a">
+<tspan x="1435" dy="0">u_vlsit_riscv_tile_coh_adapter</tspan>
+<tspan x="1435" dy="20">(m_vlsit_riscv_tile_coh_adapter)</tspan>
+<tspan x="1435" dy="20">NEW</tspan>
+</text>
+<text x="540" y="345.55" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#16212a">
+<tspan x="540" dy="0">BOOT</tspan>
+<tspan x="540" dy="18">Shared i_boot_addr[63:0]</tspan>
+</text>
+<text x="835" y="345.55" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#16212a">
+<tspan x="835" dy="0">EVT</tspan>
+<tspan x="835" dy="18">Per-hart event taps</tspan>
+</text>
+<text x="1440" y="1080.55" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#16212a">
+<tspan x="1440" dy="0">TREQ</tspan>
+<tspan x="1440" dy="18">Coherence boundary</tspan>
+</text>
+<text x="1522" y="440.55" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#16212a">
+<tspan x="1522" dy="0">CPU tile internals</tspan>
+<tspan x="1522" dy="18">(m_vlsit_riscv_cpu_tile)</tspan>
+</text>
+<text x="780" y="523.55" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#16212a">
+<tspan x="780" dy="0">CORE</tspan>
+</text>
+<text x="1048" y="609.55" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#16212a">
+<tspan x="1048" dy="0">IFETCH</tspan>
+</text>
+<text x="1180" y="523.55" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#16212a">
+<tspan x="1180" dy="0">DCACHE</tspan>
+</text>
+<text x="1473" y="609.55" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#16212a">
+<tspan x="1473" dy="0">HPD</tspan>
+</text>
+<text x="1473" y="799.55" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#16212a">
+<tspan x="1473" dy="0">COH</tspan>
+</text>
+<text x="435" y="535.55" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#16212a">
+<tspan x="435" dy="0">IRQ</tspan>
+<tspan x="435" dy="18">Per-hart interrupt inputs</tspan>
+</text>
+</svg>

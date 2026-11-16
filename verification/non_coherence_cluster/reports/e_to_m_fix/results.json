@@ -1,0 +1,158 @@
+{
+  "rtl_file": "rtl/vlsit/m_vlsit_riscv_coh_fabric.sv",
+  "sha256": "92a02cfd7d764796329716357c76774e490f4987621dc23ded3cc0017ba33608",
+  "before_lines": 1194,
+  "after_lines": 1252,
+  "changed_lines": 85,
+  "simulations": [
+    {
+      "suite": "cluster_completeness_audit",
+      "harts": 2,
+      "error": 0,
+      "supervisor": false,
+      "pass": true,
+      "cycles": 726,
+      "log": "rtl/reports/cluster_completeness_audit/simulation_2h_error0.log"
+    },
+    {
+      "suite": "cluster_completeness_audit",
+      "harts": 2,
+      "error": 1,
+      "supervisor": false,
+      "pass": true,
+      "cycles": 605,
+      "log": "rtl/reports/cluster_completeness_audit/simulation_2h_error1.log"
+    },
+    {
+      "suite": "cluster_completeness_audit",
+      "harts": 4,
+      "error": 0,
+      "supervisor": false,
+      "pass": true,
+      "cycles": 948,
+      "log": "rtl/reports/cluster_completeness_audit/simulation_4h_error0.log"
+    },
+    {
+      "suite": "cluster_completeness_audit",
+      "harts": 4,
+      "error": 1,
+      "supervisor": false,
+      "pass": true,
+      "cycles": 705,
+      "log": "rtl/reports/cluster_completeness_audit/simulation_4h_error1.log"
+    },
+    {
+      "suite": "cmo_end_to_end",
+      "harts": 2,
+      "error": 0,
+      "supervisor": false,
+      "pass": true,
+      "cycles": 724,
+      "log": "rtl/reports/cmo_end_to_end/simulation_2h_error0.log"
+    },
+    {
+      "suite": "cmo_end_to_end",
+      "harts": 2,
+      "error": 1,
+      "supervisor": false,
+      "pass": true,
+      "cycles": 603,
+      "log": "rtl/reports/cmo_end_to_end/simulation_2h_error1.log"
+    },
+    {
+      "suite": "cmo_end_to_end",
+      "harts": 4,
+      "error": 0,
+      "supervisor": false,
+      "pass": true,
+      "cycles": 944,
+      "log": "rtl/reports/cmo_end_to_end/simulation_4h_error0.log"
+    },
+    {
+      "suite": "cmo_end_to_end",
+      "harts": 4,
+      "error": 1,
+      "supervisor": false,
+      "pass": true,
+      "cycles": 701,
+      "log": "rtl/reports/cmo_end_to_end/simulation_4h_error1.log"
+    },
+    {
+      "suite": "fence_i_end_to_end",
+      "harts": 2,
+      "error": 0,
+      "supervisor": false,
+      "pass": true,
+      "cycles": 938,
+      "log": "rtl/reports/fence_i_end_to_end/simulation_2h_error0.log"
+    },
+    {
+      "suite": "fence_i_end_to_end",
+      "harts": 2,
+      "error": 0,
+      "supervisor": true,
+      "pass": true,
+      "cycles": 1063,
+      "log": "rtl/reports/fence_i_end_to_end/simulation_2h_error0_supervisor.log"
+    },
+    {
+      "suite": "fence_i_end_to_end",
+      "harts": 2,
+      "error": 1,
+      "supervisor": false,
+      "pass": true,
+      "cycles": 1020,
+      "log": "rtl/reports/fence_i_end_to_end/simulation_2h_error1.log"
+    },
+    {
+      "suite": "fence_i_end_to_end",
+      "harts": 2,
+      "error": 1,
+      "supervisor": true,
+      "pass": true,
+      "cycles": 1145,
+      "log": "rtl/reports/fence_i_end_to_end/simulation_2h_error1_supervisor.log"
+    },
+    {
+      "suite": "fence_i_end_to_end",
+      "harts": 4,
+      "error": 0,
+      "supervisor": false,
+      "pass": true,
+      "cycles": 1015,
+      "log": "rtl/reports/fence_i_end_to_end/simulation_4h_error0.log"
+    },
+    {
+      "suite": "fence_i_end_to_end",
+      "harts": 4,
+      "error": 0,
+      "supervisor": true,
+      "pass": true,
+      "cycles": 1140,
+      "log": "rtl/reports/fence_i_end_to_end/simulation_4h_error0_supervisor.log"
+    },
+    {
+      "suite": "fence_i_end_to_end",
+      "harts": 4,
+      "error": 1,
+      "supervisor": false,
+      "pass": true,
+      "cycles": 1163,
+      "log": "rtl/reports/fence_i_end_to_end/simulation_4h_error1.log"
+    },
+    {
+      "suite": "fence_i_end_to_end",
+      "harts": 4,
+      "error": 1,
+      "supervisor": true,
+      "pass": true,
+      "cycles": 1288,
+      "log": "rtl/reports/fence_i_end_to_end/simulation_4h_error1_supervisor.log"
+    }
+  ],
+  "unit_pass": true,
+  "top_lint_warnings": {
+    "2": 0,
+    "4": 0
+  }
+}

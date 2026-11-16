@@ -1,0 +1,1 @@
+PASS: no-credit caught; native exit=1; expected=escape credit

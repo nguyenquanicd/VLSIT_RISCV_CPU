@@ -1,0 +1,9 @@
+{
+  "head": {
+    "text": "WF-012 pending detail"
+  },
+  "signal": [],
+  "foot": {
+    "text": "Exact CVA6 debug pin timing and external Debug Module reset/clock mapping remain integration inputs. This status card defines no signal timing."
+  }
+}

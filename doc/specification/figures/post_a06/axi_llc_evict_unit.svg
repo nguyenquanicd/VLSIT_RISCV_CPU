@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="510" viewBox="480 340 860 510" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="480" y="340" width="860" height="510" fill="#FFFFFF"/>
+<rect x="510" y="370" width="800" height="450" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<rect x="590" y="510" width="220" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="536" text-anchor="middle">i_aw_master</text>
+<text x="700" y="558" text-anchor="middle">(axi_llc_ax_master)</text>
+<rect x="970" y="510" width="220" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1080" y="536" text-anchor="middle">i_w_master</text>
+<text x="1080" y="558" text-anchor="middle">(axi_llc_w_master)</text>
+<rect x="590" y="680" width="220" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="706" text-anchor="middle">i_stream_fifo_evict</text>
+<text x="700" y="728" text-anchor="middle">(stream_fifo)</text>
+<rect x="930" y="680" width="300" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1080" y="706" text-anchor="middle">i_stream_fifo_miss_buffer</text>
+<text x="1080" y="728" text-anchor="middle">(stream_fifo)</text>
+<text x="1288" y="411" text-anchor="end">Component composition</text>
+<text x="1288" y="433" text-anchor="end">(axi_llc_evict_unit)</text>
+</svg>

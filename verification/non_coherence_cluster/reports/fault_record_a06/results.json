@@ -1,0 +1,822 @@
+{
+  "comment_only_cleanup": {
+    "rtl/vlsit/m_vlsit_riscv_cluster_core.sv": {
+      "before_sha256": "492bec5f88c871ad047177cc21c7b6c98ec2aa4882e32f37ee06a620573e16e8",
+      "after_sha256": "d0f37291e29937f4f84b18432ac5fac5492bd6d7865306ea9285eb862c6243e5",
+      "inserted_comment_base64": "ICAgIC8vIFJlY29uc3RydWN0IHRoZSBtYXRjaGVkIHBoeXNpY2FsIGxpbmUgYmFzZSB3aXRoIGZvdXIgemVybyBvZmZzZXQgYml0cy4NCg==",
+      "compiled_snapshot": "rtl/reports/fault_record_a06/simulation_sources/rtl/vlsit/m_vlsit_riscv_cluster_core.sv"
+    },
+    "rtl/vlsit/m_vlsit_riscv_cluster_axi_top.sv": {
+      "before_sha256": "f35c85ebb43761dde2905aa0dec19e042a11b240a7a9d9d5e87294d8e31cb631",
+      "after_sha256": "88788184ad9321ce922763b4f076d7865b5a5635677db47ee010628be8da8899",
+      "inserted_comment_base64": "ICogQ2hhbmdlIEhpc3Rvcnk6IDIwMjYtMTEtMTYgLSBRdWFuIE5ndXllbiBhbmQgQ29kZXggLSBWTFNJIFRlY2hub2xvZ3kgcGFnZToNCiAqICAgRG9jdW1lbnQgdGhlIDI0LUtpQiBjb250cm9sIGFwZXJ0dXJlIGFuZCBpdHMgbWF4aW11bSBsZWdhbCBiYXNlIGFkZHJlc3MuDQo=",
+      "compiled_snapshot": "rtl/reports/fault_record_a06/simulation_sources/rtl/vlsit/m_vlsit_riscv_cluster_axi_top.sv"
+    }
+  },
+  "date": "2026-11-16",
+  "top": "m_vlsit_riscv_cluster_axi_top",
+  "results": [
+    {
+      "test": "A-06 CPU 2h l1 B=2",
+      "passed": true,
+      "cycles": 5222,
+      "log": "rtl/reports/fault_record_a06/simulation_2h_l1_error2.log"
+    },
+    {
+      "test": "A-06 CPU 2h l1 B=3",
+      "passed": true,
+      "cycles": 5222,
+      "log": "rtl/reports/fault_record_a06/simulation_2h_l1_error3.log"
+    },
+    {
+      "test": "A-06 CPU 2h llc B=2",
+      "passed": true,
+      "cycles": 1382,
+      "log": "rtl/reports/fault_record_a06/simulation_2h_llc_error2.log"
+    },
+    {
+      "test": "A-06 CPU 2h llc B=3",
+      "passed": true,
+      "cycles": 1382,
+      "log": "rtl/reports/fault_record_a06/simulation_2h_llc_error3.log"
+    },
+    {
+      "test": "A-06 CPU 2h highest-hart-first B response",
+      "passed": true,
+      "cycles": 5290,
+      "log": "rtl/reports/fault_record_a06/simulation_2h_l1_error2_reverse.log"
+    },
+    {
+      "test": "A-05 CPU 2h dirty_eviction",
+      "passed": true,
+      "cycles": 2398,
+      "log": "rtl/reports/ccu_victim_escape/simulation_2h_2slots_dirty_eviction.log"
+    },
+    {
+      "test": "A-05 CPU 2h clean_eviction",
+      "passed": true,
+      "cycles": 2186,
+      "log": "rtl/reports/ccu_victim_escape/simulation_2h_2slots_clean_eviction.log"
+    },
+    {
+      "test": "A-05 CPU 2h amo_refill_error",
+      "passed": true,
+      "cycles": 1797,
+      "log": "rtl/reports/ccu_victim_escape/simulation_2h_2slots_amo_refill_error.log"
+    },
+    {
+      "test": "A-05 CPU 2h lr_refill_error",
+      "passed": true,
+      "cycles": 1797,
+      "log": "rtl/reports/ccu_victim_escape/simulation_2h_2slots_lr_refill_error.log"
+    },
+    {
+      "test": "A-04 CPU 2h dirty_eviction",
+      "passed": true,
+      "cycles": 2346,
+      "log": "rtl/reports/directory_holder_lifecycle/simulation_2h_dirty_eviction.log"
+    },
+    {
+      "test": "A-04 CPU 2h clean_eviction",
+      "passed": true,
+      "cycles": 2210,
+      "log": "rtl/reports/directory_holder_lifecycle/simulation_2h_clean_eviction.log"
+    },
+    {
+      "test": "A-04 CPU 2h amo_refill_error",
+      "passed": true,
+      "cycles": 1769,
+      "log": "rtl/reports/directory_holder_lifecycle/simulation_2h_amo_refill_error.log"
+    },
+    {
+      "test": "A-04 CPU 2h lr_refill_error",
+      "passed": true,
+      "cycles": 1769,
+      "log": "rtl/reports/directory_holder_lifecycle/simulation_2h_lr_refill_error.log"
+    },
+    {
+      "test": "A-03 CPU 2h B=0",
+      "passed": true,
+      "cycles": 1274,
+      "log": "rtl/reports/l1_eviction_retention/simulation_2h_error0.log"
+    },
+    {
+      "test": "A-03 CPU 2h B=2",
+      "passed": true,
+      "cycles": 2638,
+      "log": "rtl/reports/l1_eviction_retention/simulation_2h_error2.log"
+    },
+    {
+      "test": "A-03 CPU 2h B=3",
+      "passed": true,
+      "cycles": 2638,
+      "log": "rtl/reports/l1_eviction_retention/simulation_2h_error3.log"
+    },
+    {
+      "test": "Atomic CPU 2h success",
+      "passed": true,
+      "cycles": 2872,
+      "log": "rtl/reports/atomic_coherence/simulation_2h_success.log"
+    },
+    {
+      "test": "Atomic CPU 2h lrsc_contention",
+      "passed": true,
+      "cycles": 3270,
+      "log": "rtl/reports/atomic_coherence/simulation_2h_lrsc_contention.log"
+    },
+    {
+      "test": "Atomic CPU 2h amo_fault",
+      "passed": true,
+      "cycles": 542,
+      "log": "rtl/reports/atomic_coherence/simulation_2h_amo_fault.log"
+    },
+    {
+      "test": "Atomic CPU 2h lr_fault",
+      "passed": true,
+      "cycles": 542,
+      "log": "rtl/reports/atomic_coherence/simulation_2h_lr_fault.log"
+    },
+    {
+      "test": "Atomic CPU 2h owner_fault",
+      "passed": true,
+      "cycles": 716,
+      "log": "rtl/reports/atomic_coherence/simulation_2h_owner_fault.log"
+    },
+    {
+      "test": "CBO CPU 2h error=0",
+      "passed": true,
+      "cycles": 724,
+      "log": "rtl/reports/cmo_end_to_end/simulation_2h_error0.log"
+    },
+    {
+      "test": "CBO CPU 2h error=0_load_first",
+      "passed": true,
+      "cycles": 726,
+      "log": "rtl/reports/cmo_end_to_end/simulation_2h_error0_load_first.log"
+    },
+    {
+      "test": "FENCE.I CPU 2h error=0",
+      "passed": true,
+      "cycles": 938,
+      "log": "rtl/reports/fence_i_end_to_end/simulation_2h_error0.log"
+    },
+    {
+      "test": "FENCE.I CPU 2h error=0_supervisor",
+      "passed": true,
+      "cycles": 1063,
+      "log": "rtl/reports/fence_i_end_to_end/simulation_2h_error0_supervisor.log"
+    },
+    {
+      "test": "CBO CPU 2h error=1",
+      "passed": true,
+      "cycles": 603,
+      "log": "rtl/reports/cmo_end_to_end/simulation_2h_error1.log"
+    },
+    {
+      "test": "CBO CPU 2h error=1_load_first",
+      "passed": true,
+      "cycles": 605,
+      "log": "rtl/reports/cmo_end_to_end/simulation_2h_error1_load_first.log"
+    },
+    {
+      "test": "FENCE.I CPU 2h error=1",
+      "passed": true,
+      "cycles": 1020,
+      "log": "rtl/reports/fence_i_end_to_end/simulation_2h_error1.log"
+    },
+    {
+      "test": "FENCE.I CPU 2h error=1_supervisor",
+      "passed": true,
+      "cycles": 1145,
+      "log": "rtl/reports/fence_i_end_to_end/simulation_2h_error1_supervisor.log"
+    },
+    {
+      "test": "Native model directory_holder_lifecycle 2h",
+      "passed": true,
+      "cycles": null,
+      "log": "rtl/reports/directory_holder_lifecycle/model_2h.log"
+    },
+    {
+      "test": "Native model l1_eviction_retention 2h",
+      "passed": true,
+      "cycles": null,
+      "log": "rtl/reports/l1_eviction_retention/model_2h.log"
+    },
+    {
+      "test": "Native model atomic_coherence 2h",
+      "passed": true,
+      "cycles": null,
+      "log": "rtl/reports/atomic_coherence/model_2h.log"
+    },
+    {
+      "test": "Native model cmo_end_to_end 2h",
+      "passed": true,
+      "cycles": null,
+      "log": "rtl/reports/cmo_end_to_end/model_2h.log"
+    },
+    {
+      "test": "Native model fence_i_end_to_end 2h",
+      "passed": true,
+      "cycles": null,
+      "log": "rtl/reports/fence_i_end_to_end/model_2h.log"
+    },
+    {
+      "test": "Native model fault_record_a06 2h",
+      "passed": true,
+      "cycles": null,
+      "log": "rtl/reports/fault_record_a06/model_2h.log"
+    },
+    {
+      "test": "Native A-05 model 2h",
+      "passed": true,
+      "cycles": null,
+      "log": "rtl/reports/ccu_victim_escape/model_2h_2slots.log"
+    },
+    {
+      "test": "Production TOP lint 2h",
+      "passed": true,
+      "cycles": null,
+      "log": "rtl/reports/full_integration/top_lint_2h_20261116_033110.log"
+    },
+    {
+      "test": "Completed directory_holder_lifecycle driver 2h",
+      "passed": true,
+      "log": "rtl/reports/directory_holder_lifecycle/regression_driver_2h.log"
+    },
+    {
+      "test": "Completed ccu_victim_escape driver 2h",
+      "passed": true,
+      "log": "rtl/reports/ccu_victim_escape/regression_driver_2h.log"
+    },
+    {
+      "test": "Completed fault_record_a06 driver 2h",
+      "passed": true,
+      "log": "rtl/reports/fault_record_a06/regression_driver_2h.log"
+    },
+    {
+      "test": "A-06 model/bench/program compatibility 2h",
+      "passed": true,
+      "log": "rtl/reports/fault_record_a06/model_inputs_A-06_2h.json"
+    },
+    {
+      "test": "A-05 model/bench/program compatibility 2h",
+      "passed": true,
+      "log": "rtl/reports/fault_record_a06/model_inputs_A-05_2h.json"
+    },
+    {
+      "test": "A-04 model/bench/program compatibility 2h",
+      "passed": true,
+      "log": "rtl/reports/fault_record_a06/model_inputs_A-04_2h.json"
+    },
+    {
+      "test": "First fatal unit 2 active harts",
+      "passed": true,
+      "cycles": null,
+      "log": "rtl/reports/fault_record_a06/unit/simulation_2h_error0.log"
+    },
+    {
+      "test": "Native fault unit 2h",
+      "passed": true,
+      "cycles": null,
+      "log": "rtl/reports/fault_record_a06/unit/model_2h.log"
+    },
+    {
+      "test": "A-06 CPU 4h l1 B=2",
+      "passed": true,
+      "cycles": 8094,
+      "log": "rtl/reports/fault_record_a06/simulation_4h_l1_error2.log"
+    },
+    {
+      "test": "A-06 CPU 4h l1 B=3",
+      "passed": true,
+      "cycles": 8094,
+      "log": "rtl/reports/fault_record_a06/simulation_4h_l1_error3.log"
+    },
+    {
+      "test": "A-06 CPU 4h llc B=2",
+      "passed": true,
+      "cycles": 1650,
+      "log": "rtl/reports/fault_record_a06/simulation_4h_llc_error2.log"
+    },
+    {
+      "test": "A-06 CPU 4h llc B=3",
+      "passed": true,
+      "cycles": 1650,
+      "log": "rtl/reports/fault_record_a06/simulation_4h_llc_error3.log"
+    },
+    {
+      "test": "A-06 CPU 4h highest-hart-first B response",
+      "passed": true,
+      "cycles": 8222,
+      "log": "rtl/reports/fault_record_a06/simulation_4h_l1_error2_reverse.log"
+    },
+    {
+      "test": "A-05 CPU 4h dirty_eviction",
+      "passed": true,
+      "cycles": 3006,
+      "log": "rtl/reports/ccu_victim_escape/simulation_4h_2slots_dirty_eviction.log"
+    },
+    {
+      "test": "A-05 CPU 4h clean_eviction",
+      "passed": true,
+      "cycles": 2826,
+      "log": "rtl/reports/ccu_victim_escape/simulation_4h_2slots_clean_eviction.log"
+    },
+    {
+      "test": "A-05 CPU 4h amo_refill_error",
+      "passed": true,
+      "cycles": 2401,
+      "log": "rtl/reports/ccu_victim_escape/simulation_4h_2slots_amo_refill_error.log"
+    },
+    {
+      "test": "A-05 CPU 4h lr_refill_error",
+      "passed": true,
+      "cycles": 2401,
+      "log": "rtl/reports/ccu_victim_escape/simulation_4h_2slots_lr_refill_error.log"
+    },
+    {
+      "test": "A-04 CPU 4h dirty_eviction",
+      "passed": true,
+      "cycles": 2746,
+      "log": "rtl/reports/directory_holder_lifecycle/simulation_4h_dirty_eviction.log"
+    },
+    {
+      "test": "A-04 CPU 4h clean_eviction",
+      "passed": true,
+      "cycles": 2574,
+      "log": "rtl/reports/directory_holder_lifecycle/simulation_4h_clean_eviction.log"
+    },
+    {
+      "test": "A-04 CPU 4h amo_refill_error",
+      "passed": true,
+      "cycles": 2093,
+      "log": "rtl/reports/directory_holder_lifecycle/simulation_4h_amo_refill_error.log"
+    },
+    {
+      "test": "A-04 CPU 4h lr_refill_error",
+      "passed": true,
+      "cycles": 2093,
+      "log": "rtl/reports/directory_holder_lifecycle/simulation_4h_lr_refill_error.log"
+    },
+    {
+      "test": "A-03 CPU 4h B=0",
+      "passed": true,
+      "cycles": 1566,
+      "log": "rtl/reports/l1_eviction_retention/simulation_4h_error0.log"
+    },
+    {
+      "test": "A-03 CPU 4h B=2",
+      "passed": true,
+      "cycles": 3214,
+      "log": "rtl/reports/l1_eviction_retention/simulation_4h_error2.log"
+    },
+    {
+      "test": "A-03 CPU 4h B=3",
+      "passed": true,
+      "cycles": 3214,
+      "log": "rtl/reports/l1_eviction_retention/simulation_4h_error3.log"
+    },
+    {
+      "test": "Atomic CPU 4h success",
+      "passed": true,
+      "cycles": 3484,
+      "log": "rtl/reports/atomic_coherence/simulation_4h_success.log"
+    },
+    {
+      "test": "Atomic CPU 4h lrsc_contention",
+      "passed": true,
+      "cycles": 6577,
+      "log": "rtl/reports/atomic_coherence/simulation_4h_lrsc_contention.log"
+    },
+    {
+      "test": "Atomic CPU 4h amo_fault",
+      "passed": true,
+      "cycles": 558,
+      "log": "rtl/reports/atomic_coherence/simulation_4h_amo_fault.log"
+    },
+    {
+      "test": "Atomic CPU 4h lr_fault",
+      "passed": true,
+      "cycles": 558,
+      "log": "rtl/reports/atomic_coherence/simulation_4h_lr_fault.log"
+    },
+    {
+      "test": "Atomic CPU 4h owner_fault",
+      "passed": true,
+      "cycles": 817,
+      "log": "rtl/reports/atomic_coherence/simulation_4h_owner_fault.log"
+    },
+    {
+      "test": "CBO CPU 4h error=0",
+      "passed": true,
+      "cycles": 944,
+      "log": "rtl/reports/cmo_end_to_end/simulation_4h_error0.log"
+    },
+    {
+      "test": "CBO CPU 4h error=0_load_first",
+      "passed": true,
+      "cycles": 948,
+      "log": "rtl/reports/cmo_end_to_end/simulation_4h_error0_load_first.log"
+    },
+    {
+      "test": "FENCE.I CPU 4h error=0",
+      "passed": true,
+      "cycles": 1015,
+      "log": "rtl/reports/fence_i_end_to_end/simulation_4h_error0.log"
+    },
+    {
+      "test": "FENCE.I CPU 4h error=0_supervisor",
+      "passed": true,
+      "cycles": 1140,
+      "log": "rtl/reports/fence_i_end_to_end/simulation_4h_error0_supervisor.log"
+    },
+    {
+      "test": "CBO CPU 4h error=1",
+      "passed": true,
+      "cycles": 701,
+      "log": "rtl/reports/cmo_end_to_end/simulation_4h_error1.log"
+    },
+    {
+      "test": "CBO CPU 4h error=1_load_first",
+      "passed": true,
+      "cycles": 705,
+      "log": "rtl/reports/cmo_end_to_end/simulation_4h_error1_load_first.log"
+    },
+    {
+      "test": "FENCE.I CPU 4h error=1",
+      "passed": true,
+      "cycles": 1163,
+      "log": "rtl/reports/fence_i_end_to_end/simulation_4h_error1.log"
+    },
+    {
+      "test": "FENCE.I CPU 4h error=1_supervisor",
+      "passed": true,
+      "cycles": 1288,
+      "log": "rtl/reports/fence_i_end_to_end/simulation_4h_error1_supervisor.log"
+    },
+    {
+      "test": "Native model directory_holder_lifecycle 4h",
+      "passed": true,
+      "cycles": null,
+      "log": "rtl/reports/directory_holder_lifecycle/model_4h.log"
+    },
+    {
+      "test": "Native model l1_eviction_retention 4h",
+      "passed": true,
+      "cycles": null,
+      "log": "rtl/reports/l1_eviction_retention/model_4h.log"
+    },
+    {
+      "test": "Native model atomic_coherence 4h",
+      "passed": true,
+      "cycles": null,
+      "log": "rtl/reports/atomic_coherence/model_4h.log"
+    },
+    {
+      "test": "Native model cmo_end_to_end 4h",
+      "passed": true,
+      "cycles": null,
+      "log": "rtl/reports/cmo_end_to_end/model_4h.log"
+    },
+    {
+      "test": "Native model fence_i_end_to_end 4h",
+      "passed": true,
+      "cycles": null,
+      "log": "rtl/reports/fence_i_end_to_end/model_4h.log"
+    },
+    {
+      "test": "Native model fault_record_a06 4h",
+      "passed": true,
+      "cycles": null,
+      "log": "rtl/reports/fault_record_a06/model_4h.log"
+    },
+    {
+      "test": "Native A-05 model 4h",
+      "passed": true,
+      "cycles": null,
+      "log": "rtl/reports/ccu_victim_escape/model_4h_2slots.log"
+    },
+    {
+      "test": "Production TOP lint 4h",
+      "passed": true,
+      "cycles": null,
+      "log": "rtl/reports/full_integration/top_lint_4h_20261116_033110.log"
+    },
+    {
+      "test": "Completed directory_holder_lifecycle driver 4h",
+      "passed": true,
+      "log": "rtl/reports/directory_holder_lifecycle/regression_driver_4h.log"
+    },
+    {
+      "test": "Completed ccu_victim_escape driver 4h",
+      "passed": true,
+      "log": "rtl/reports/ccu_victim_escape/regression_driver_4h.log"
+    },
+    {
+      "test": "Completed fault_record_a06 driver 4h",
+      "passed": true,
+      "log": "rtl/reports/fault_record_a06/regression_driver_4h.log"
+    },
+    {
+      "test": "A-06 model/bench/program compatibility 4h",
+      "passed": true,
+      "log": "rtl/reports/fault_record_a06/model_inputs_A-06_4h.json"
+    },
+    {
+      "test": "A-05 model/bench/program compatibility 4h",
+      "passed": true,
+      "log": "rtl/reports/fault_record_a06/model_inputs_A-05_4h.json"
+    },
+    {
+      "test": "A-04 model/bench/program compatibility 4h",
+      "passed": true,
+      "log": "rtl/reports/fault_record_a06/model_inputs_A-04_4h.json"
+    },
+    {
+      "test": "First fatal unit 4 active harts",
+      "passed": true,
+      "cycles": null,
+      "log": "rtl/reports/fault_record_a06/unit/simulation_4h_error0.log"
+    },
+    {
+      "test": "Native fault unit 4h",
+      "passed": true,
+      "cycles": null,
+      "log": "rtl/reports/fault_record_a06/unit/model_4h.log"
+    },
+    {
+      "test": "CSR group routing/base mode 0",
+      "passed": true,
+      "cycles": null,
+      "log": "rtl/reports/fault_record_a06/map_mode0/simulation_4h_error0.log"
+    },
+    {
+      "test": "Native CSR routing mode 0",
+      "passed": true,
+      "cycles": null,
+      "log": "rtl/reports/fault_record_a06/map_mode0/model_4h.log"
+    },
+    {
+      "test": "CSR group routing/base mode 1",
+      "passed": true,
+      "cycles": null,
+      "log": "rtl/reports/fault_record_a06/map_mode1/simulation_4h_error0.log"
+    },
+    {
+      "test": "Native CSR routing mode 1",
+      "passed": true,
+      "cycles": null,
+      "log": "rtl/reports/fault_record_a06/map_mode1/model_4h.log"
+    },
+    {
+      "test": "CSR group routing/base mode 2",
+      "passed": true,
+      "cycles": null,
+      "log": "rtl/reports/fault_record_a06/map_mode2/simulation_4h_error0.log"
+    },
+    {
+      "test": "Native CSR routing mode 2",
+      "passed": true,
+      "cycles": null,
+      "log": "rtl/reports/fault_record_a06/map_mode2/model_4h.log"
+    },
+    {
+      "test": "First-fault overwrite mutant caught",
+      "passed": true,
+      "log": "rtl/reports/fault_record_a06/unit_mutant/mutation_result.txt"
+    },
+    {
+      "test": "Canonical CSR workbook/generator byte identity",
+      "passed": true,
+      "cycles": null,
+      "log": "rtl/reports/fault_record_a06/csr_verify.log"
+    }
+  ],
+  "source_sha256": {
+    "rtl/vlsit/csr_generated/RTL/m_vlsit_cpucl_csr.sv": "3d7a4f5a0139cf57f488db3833e02f2d98bb95138ba707dba2de263bef4f063f",
+    "rtl/vlsit/csr_generated/RTL/models/m_csr_async_fifo.sv": "0d0fd9fdaa0decd74e303c0de9f99e23d028ce03c81a84e834ed619ce452ce1a",
+    "rtl/vlsit/csr_generated/RTL/models/m_csr_sync.sv": "11dccb2921e6e7f7cffd532525c8fc335dcf2d9cd67b2cb42035c1433a2af259",
+    "rtl/vlsit/csr_generated/RTL/models/m_csr_sync_fifo.sv": "904cbb8823c765297936ad4ac94d71f5a391af2bad64b012cfec576fa66d70f8",
+    "rtl/vlsit/m_vlsit_axi_llc.sv": "dcc463e488470ee38f634ddb47cff0d3dd900ffc35def6357db6b01a7b447788",
+    "rtl/vlsit/m_vlsit_axil_reg_bridge.sv": "ad70591c34b41bc77c07458efaa51ac4a90e3765a548a2a182ca15125a422867",
+    "rtl/vlsit/m_vlsit_pmu_aggregate.sv": "3d1eb1c42cd2cf3dd3da230f6a5221a6d37b43431d6dea734f637b8d91a4b7c7",
+    "rtl/vlsit/m_vlsit_pmu_cluster_evt.sv": "0422e459d3db21127ff4f75141356e8b51a84719eb8ef12333aaffb3f44cf80f",
+    "rtl/vlsit/m_vlsit_pmu_counter_bank.sv": "d23e751859444eefdebcdd9ccc618b5145f51ab53f682d37d3481221cdc7f278",
+    "rtl/vlsit/m_vlsit_pmu_event_select.sv": "cd3c281d1fdc94182a1c96e316b9270cb70c468263e55bd8db50c2ac9526c20f",
+    "rtl/vlsit/m_vlsit_pmu_hart_evt.sv": "0959d4baa8ce80a7bdc61062d6b69f59f401b152ab557c0106a7f66e1ce49d99",
+    "rtl/vlsit/m_vlsit_pmu_irq.sv": "a5ab26c73e831e3afb40350db215990aa78681de00a7c67aa9c98eb52d72bc23",
+    "rtl/vlsit/m_vlsit_pmu_snapshot.sv": "a9c1d7ad66f9df47c3c78b9549683dc26e072ad1aa1c93e891b109c9f7bda800",
+    "rtl/vlsit/m_vlsit_riscv_addr_decode.sv": "dff33e13eabacfb73dc1ee49a5644391cb1fa2e5bbcce322823b6d00ac7b4fa5",
+    "rtl/vlsit/m_vlsit_riscv_axi_dw_adapter.sv": "b9a5d4fdaef238a9ead3095a8c79623fd37e31d13c62083ab4df68f3ec24d015",
+    "rtl/vlsit/m_vlsit_riscv_axi_mem_mux.sv": "53d979aee7a1c27ea8bb29ffe938d9b98e2f5e1a6c88c11fa55fe120c6792856",
+    "rtl/vlsit/m_vlsit_riscv_axi_mmio.sv": "38515615df37f135b961b45c79b045c55b07f206e126eb0ba3797e113c174410",
+    "rtl/vlsit/m_vlsit_riscv_axi_route.sv": "6930c60f31bceee306f97e6f221faa0ff634508446b499b19a89baad36ff69b4",
+    "rtl/vlsit/m_vlsit_riscv_axil_decode.sv": "839ee9556ed6e594e13aa07dd0da51763b337b369f01eaf816c0f8fa568b4d2e",
+    "rtl/vlsit/m_vlsit_riscv_cache_line_locks.sv": "bf32a0796ab858cce72202c2f8e9e4ae7cc90557e8ebcb75319fe5cb25f7eef6",
+    "rtl/vlsit/m_vlsit_riscv_cluster_axi_top.sv": "88788184ad9321ce922763b4f076d7865b5a5635677db47ee010628be8da8899",
+    "rtl/vlsit/m_vlsit_riscv_cluster_core.sv": "d0f37291e29937f4f84b18432ac5fac5492bd6d7865306ea9285eb862c6243e5",
+    "rtl/vlsit/m_vlsit_riscv_cmo_arbiter.sv": "425fbd8cdce188fb68221a2c9c6e65c937792aab03f01bf9cc6dd90af9f6b715",
+    "rtl/vlsit/m_vlsit_riscv_cmo_controller.sv": "d58adb7dfc7e9f44ebbbecdec6600bb539a878cd8e436ee3c5e90a575a26e5c9",
+    "rtl/vlsit/m_vlsit_riscv_coh_bank_arb.sv": "94c79005eaf5073f1ea5ecd11d7839df279d43c647dc695163e1fe7424e9343b",
+    "rtl/vlsit/m_vlsit_riscv_coh_fabric.sv": "d18e9ffc4cb6e0f3122dbabaf321b30376715750bb8624bccacd879dca917a9d",
+    "rtl/vlsit/m_vlsit_riscv_coh_tile_array.sv": "a086490e04077850790301b867f62055c560e29a96ac0514f1ab2ae204bc75c5",
+    "rtl/vlsit/m_vlsit_riscv_coh_txn_table.sv": "0c7f97f259391e26cc237a5715ffc59e10f8fdcfba979ded3686d9d09dc0c0b2",
+    "rtl/vlsit/m_vlsit_riscv_cpu_tile.sv": "beae7da5112cfbc187ea5f21f8c56b3acdd23bcae109aefb7cac2232fa0c3f13",
+    "rtl/vlsit/m_vlsit_riscv_cpu_tile_array.sv": "54a303aaed77d2850bf70873239a49250aa7e77cbb8731bbfcfb60b46229aaa8",
+    "rtl/vlsit/m_vlsit_riscv_debug_router.sv": "e22ea10d89fa116409c1b67afb5f0c91a6c202d2ab85f1e283dfa576f7824cec",
+    "rtl/vlsit/m_vlsit_riscv_fault_record.sv": "36d4ee7ff167f6cd6b3ac0cb5d90054956f4dfce100a19cce3b726b09e163f42",
+    "rtl/vlsit/m_vlsit_riscv_hpd_probe_engine.sv": "bfed63aa45efe85f4173fac32efb96c4d13afe058e8cc66199ced63d959337cf",
+    "rtl/vlsit/m_vlsit_riscv_pmu.sv": "91b7fc45bcffbefb178c7d3f6191629c5b680903f6c88292beff8cb5ebc2a035",
+    "rtl/vlsit/m_vlsit_riscv_probe_scheduler.sv": "b18296c304246b86c260b3ea1bc9c594902d84cb09537efa85b04c22a5da1433",
+    "rtl/vlsit/m_vlsit_riscv_sharer_directory.sv": "0bd7b9974a7490387dd4fba26e55372b3df2f304e0951ed1b14c6c979b68a30f",
+    "rtl/vlsit/m_vlsit_riscv_tile_coh_adapter.sv": "c9debd4cd96e4fd7fddf397148d830de54fed9693d480aa871bdb9d6320fdb1a",
+    "rtl/modified/axi_llc/common_cells/src/id_queue.sv": "08528a50bddd85c47515ea79bd97292f5f5c314288b8eea25c8ea0e2ee0d2e01",
+    "rtl/modified/axi_llc/src/axi_llc_burst_cutter.sv": "0c6b20a461668614711e296d3725511d11d754f75a867ffc14126712abfaa0b5",
+    "rtl/modified/axi_llc/src/axi_llc_chan_splitter.sv": "d3551e9cfb8623faa1187c3094a9904a4a17195d4169a6f8d3437e768e26e988",
+    "rtl/modified/axi_llc/src/axi_llc_config.sv": "3461f3379a6ed3411d521364f0d584f09336098c06985569f748e391aaec863f",
+    "rtl/modified/axi_llc/src/axi_llc_evict_unit.sv": "5dec3b2ed009a680941dcf0cbbcd0957fe6d81fd651f306e67fd3c292871a296",
+    "rtl/modified/axi_llc/src/axi_llc_hit_miss.sv": "ca8c69aed413de2bd8ae9ed03d39b116340fa38761961db413ee68bf283ac958",
+    "rtl/modified/axi_llc/src/axi_llc_pkg.sv": "dcfefb63107885a4a3d867cbd03b086732663c9a4c1ab24e3aa3b866ba1f0249",
+    "rtl/modified/axi_llc/src/axi_llc_read_unit.sv": "60e45cf4f19320206aca3b462350260965425bf5bf65af98ac70f56f248ed3e2",
+    "rtl/modified/axi_llc/src/axi_llc_reg_wrap.sv": "4d6c951bf0c470406f58f9db0c9087cb804f94711c02651887ff4e852ca5d70f",
+    "rtl/modified/axi_llc/src/axi_llc_top.sv": "7fcf1648737938214bd65bc04289f568542e1b228bf254533c5534d94058d081",
+    "rtl/modified/axi_llc/src/axi_llc_write_unit.sv": "71d9b00742019aaef25d20f4ce1a3392a78f39e1787219104cef55756ba46c8f",
+    "rtl/modified/axi_llc/src/eviction_refill/axi_llc_ax_master.sv": "0582b76716461886a1736abd62ee405690686470848363b2432a84758641f8a8",
+    "rtl/modified/axi_llc/src/eviction_refill/axi_llc_r_master.sv": "1e20d44bbb23290c4dc923eae7a2c77118882c50932efe7f1d281ae799593362",
+    "rtl/modified/axi_llc/src/eviction_refill/axi_llc_w_master.sv": "fb65a3ee3b9a6c700894ae8c839b0bdd0410ee740a670421ea0deae41c56c02e",
+    "rtl/modified/axi_llc/src/hit_miss_detect/axi_llc_miss_counters.sv": "4031220b751c86baba3a42d05f629f4a1b50aeacfbc93be5b8c1609283205530",
+    "rtl/modified/axi_llc/src/hit_miss_detect/axi_llc_tag_store.sv": "73f96ee184cec95a368368f20d1abec008fa8a288de2b266f6f008f30752e85d",
+    "rtl/modified/axi_llc_locked/axi/src/axi_atop_filter.sv": "3f9c60d0c47c5b9cbd4d75ab1afbe78bcc41a96aeac6848d09469e9268b1f323",
+    "rtl/modified/axi_llc_locked/axi/src/axi_demux_simple.sv": "0f09c3089f0b703a5d16d09d6599da3244c55e377b16d52729b3191394bcd429",
+    "rtl/modified/axi_llc_locked/axi/src/axi_isolate.sv": "3feb35b109346f4aec3d0929ba0d5b142477c0954c9d0bdfb9fd76580315b0f6",
+    "rtl/modified/axi_llc_locked/common_cells/src/stream_xbar.sv": "e5f3d045930bb7730fa7b5bb29c508c5ba21877166cd01ca0764ee46e5c181b7",
+    "rtl/modified/axi_llc_locked/common_cells/src/sub_per_hash.sv": "d4168c01ad9d5ed58a0f9b102cf940c66bbbac5fc760cb340d80e552f300afd9",
+    "rtl/modified/cva6/common/local/util/sram.sv": "87ab2c601649cd17ad8f1922b553137cabad50981c993fba257a4d517f9ae01a",
+    "rtl/modified/cva6/common/local/util/sram_cache.sv": "1f44b581d4b5509b7529122b8fce9c4b32cf354c142e3c987ea20ba5e582353b",
+    "rtl/modified/cva6/core/aes.sv": "ce685b7726018bd50cae3613a8fae93985cde16abdf4a358c1897fc5355d7af7",
+    "rtl/modified/cva6/core/alu.sv": "dd9823e9ddf6236e39b4b20f97794f4e179bf42d57d18f284e98ff551bff2100",
+    "rtl/modified/cva6/core/ariane_regfile_ff.sv": "6e79184c85c437227523d6c3d921cfc416c771914a0127d8a64eddfe021adaa7",
+    "rtl/modified/cva6/core/cache_subsystem/cva6_hpdcache_if_adapter.sv": "8b8458df516d03b8e07f7a7a96258688bf45baa20510c4432265a727c4982cc7",
+    "rtl/modified/cva6/core/cache_subsystem/cva6_hpdcache_subsystem.sv": "d4090c05d7df565f808fa6a1f9d395a138f8ee98280e2b264142d873a1f3b059",
+    "rtl/modified/cva6/core/cache_subsystem/cva6_hpdcache_subsystem_axi_arbiter.sv": "204d94c6ed3e3469ba9dc4506fedefe543e4776b54908e6a315a2516318a118f",
+    "rtl/modified/cva6/core/cache_subsystem/cva6_hpdcache_wrapper.sv": "81a31131234689a1d041b2ca7221d234bced9f08c7d7b2385a8740bb291af945",
+    "rtl/modified/cva6/core/cache_subsystem/cva6_icache.sv": "40eacba839d5917d078494b5bca977dd7908ff5b47f7f67ccfe0036239977d36",
+    "rtl/modified/cva6/core/cache_subsystem/cva6_icache_axi_wrapper.sv": "d3f25dad642a791b3a440e6e2c6f7900bd208ef560e5b68ba6ecf4f330fd8e85",
+    "rtl/modified/cva6/core/cache_subsystem/wt_cache_subsystem.sv": "fa69e0e4d72519108a6f82488700c683e999bf0f65ff73bb4b835e16225db4cf",
+    "rtl/modified/cva6/core/commit_stage.sv": "992342d972a0467f98e5a72a21df275c67a338383e2f26a646fb4b1ceed90d25",
+    "rtl/modified/cva6/core/controller.sv": "25afa12239db92809895197c2d7c5aafa90bc31f8ab39512313e96b017e3191a",
+    "rtl/modified/cva6/core/csr_regfile.sv": "7f61a7ffee3046e7209873cc01b2a94a14b5daa22909e78ac6da81703be32413",
+    "rtl/modified/cva6/core/cva6.sv": "736d133c2af04b1b75db21c65b7663ef6afe4fe6b25c459ffe96299291d8dd97",
+    "rtl/modified/cva6/core/cva6_fifo_v3.sv": "79fd9d32826ee291d8b8baffc7f03b9607fa4bee0c4e02ace72ac628e70e31e9",
+    "rtl/modified/cva6/core/cva6_mmu/cva6_mmu.sv": "a9140fc1b6a625eb333c4fa0ce492a12256a8554776fe993208de83df2087ad3",
+    "rtl/modified/cva6/core/cva6_mmu/cva6_shared_tlb.sv": "bb08363e71d18e618ad70a8126ed4635f1f921af77454a92deb93c640ff085e2",
+    "rtl/modified/cva6/core/cva6_mmu/cva6_tlb.sv": "88c073579f57e4ff8239c5734b57ff249079b334ed634c4e578dd1ecba8b547f",
+    "rtl/modified/cva6/core/decoder.sv": "be09dec462398db578af94d1654149eef1529f26e1b8067c4e73a0adf22151c0",
+    "rtl/modified/cva6/core/ex_stage.sv": "f55e3db46f3ee0444fbd824d9edef195f6643ab9b3bbc63918255946515a78ee",
+    "rtl/modified/cva6/core/fpu_wrap.sv": "dbee106fd77fb4befcb4e92c4d6eeb6a979c44dbab3d7f2739ebbec84c0f8d29",
+    "rtl/modified/cva6/core/include/build_config_pkg.sv": "4da9da86cdb175b0aa9daa01233ba376ad2bbe29ef983daced0ddf2d6f2a7016",
+    "rtl/modified/cva6/core/include/cv64a6_imafdc_sv39_hpdcache_wb_config_pkg.sv": "25b69873a233244c4809b9e60f83d1da437e85796bb3236802f2f783993c0635",
+    "rtl/modified/cva6/core/issue_read_operands.sv": "f7a15a183ebab1e7b34323005b646f9c94afb2aa4618490dcdaf72708badc3d1",
+    "rtl/modified/cva6/core/load_store_unit.sv": "e8f09e8246430d819af9c745a85fd2f7df7060c1471c738dc3741ee35b4e2cea",
+    "rtl/modified/cva6/core/load_unit.sv": "3255ed2c33287c192aa0fe9d810f7a35933756e8978f752a9589fcff632f184b",
+    "rtl/modified/cva6/core/mult.sv": "927131ac93e28d76019c9f302f7f6a3c76dd50525051d053c494e5546da75264",
+    "rtl/modified/cva6/core/perf_counters.sv": "8a3e944828585b72209853692b9ebc0c5dad18cc8a942cfbbc051d53241784cd",
+    "rtl/modified/cva6/core/raw_checker.sv": "bfae35b84a86629d59d0ed538482ebe252a56db52da7eedde927dd74d99ebe6c",
+    "rtl/modified/cva6/core/scoreboard.sv": "0b91260aa40bec6feb41ab22ecb5d9c1b948b2178d5d9384e4197ad7b1a8396e",
+    "rtl/modified/cva6/core/serdiv.sv": "fd78ca1996758916ac006b4337011f14f860d03c7199771f69de2d1356d3ac79",
+    "rtl/modified/cva6/core/store_buffer.sv": "072c1c2a11d140e88895c9600ac3eecd2c1a0417479608c333e75d63eba43d1c",
+    "rtl/modified/cva6/core/store_unit.sv": "01db894c03351a6f941bd4de4d9b2c7475ed21e4fd346a8f83a418053963314c",
+    "rtl/modified/cva6/vendor/pulp-platform/axi/src/axi_pkg.sv": "18caed1062fa0e7811d28970d47f7ae0607465dea85bc2099e2666c0048f8435",
+    "rtl/modified/cva6/vendor/pulp-platform/common_cells/src/lfsr.sv": "aa9c1be246800860a54304aeb33fe40dc087bdf40bf24e35baef576fe07fd018",
+    "rtl/modified/cva6/vendor/pulp-platform/common_cells/src/rr_arb_tree.sv": "1b4b37d6705ec00177e74d61d5351fa3906b76cc112550239b8bf9c24412be85",
+    "rtl/modified/cva6/vendor/pulp-platform/common_cells/src/stream_demux.sv": "d98e7378469e9c4c3544f2bb55c65c81c2e7dc1385fb76b4882fe33f4b8c3eeb",
+    "rtl/modified/cva6/vendor/pulp-platform/tech_cells_generic/src/rtl/tc_sram.sv": "2ffa349a812567cc1c9811ba024d973882e68c6f9e39dc2ca1305bd45b628611",
+    "rtl/modified/cvfpu/src/fpnew_cast_multi.sv": "4f7ecc02b63859ce47ceaa49f5d8aeabd851dd65174cf115a871f6bf0d685f59",
+    "rtl/modified/cvfpu/src/fpnew_divsqrt_th_64_multi.sv": "1adef214bef710a3cca6af18b1c388f793d14e95b5db77f2a7851d01b58af7a0",
+    "rtl/modified/cvfpu/src/fpnew_fma.sv": "6b58d9fadd4e14feba62b5f99312eb8b8f46854a61bf604f1afa8dd6be9f66d4",
+    "rtl/modified/cvfpu/src/fpnew_noncomp.sv": "8d65943204f5ae532a89c34a1b0d49aa3ef929a330403719055d786c002fdf78",
+    "rtl/modified/cvfpu/src/fpnew_opgroup_block.sv": "585d69b9e6bc0ea5c1f02262b86974af26dce70cbf49e08e5fa1655a464b43f4",
+    "rtl/modified/cvfpu/src/fpnew_opgroup_fmt_slice.sv": "e121ba6fcc4fc2aed218bbd10851d04bf8b8b91251b2f9a6af379c1a5b5baa21",
+    "rtl/modified/cvfpu/src/fpnew_opgroup_multifmt_slice.sv": "0a9554a3ee88ac98fe823663640951d3174c47bfe3fe3769ff59ad9998187366",
+    "rtl/modified/cvfpu/src/fpnew_pkg.sv": "1860bc9732637e10dfb784a6c57bd0831e54e296cf6b849932348b23106acc81",
+    "rtl/modified/hpdcache/rtl/src/hpdcache.sv": "bf145248415507f42d982dd9e0637695bf6736149ee92f580a06fc808d843f74",
+    "rtl/modified/hpdcache/rtl/src/hpdcache_ctrl.sv": "4589e227c8fc05e3fbf7e4300a576a7975bd23c0b29267afb6220c5c8945e8bf",
+    "rtl/modified/hpdcache/rtl/src/hpdcache_ctrl_pe.sv": "81fb221fbe96d8965126ae4152a8ee1e3e9312c6975445ca5ce093291c393950",
+    "rtl/modified/hpdcache/rtl/src/hpdcache_flush.sv": "0e4d13fce15aef5dc7a08df45ee3c4ceeaa457c856d283cffac389311340b099",
+    "rtl/modified/hpdcache/rtl/src/hpdcache_memctrl.sv": "d3cbc5c1e649052a587d364d0558eb94428dd5aacdc9e3405c87062355ef657b",
+    "rtl/modified/hpdcache/rtl/src/hpdcache_miss_handler.sv": "905f9e8f75ae9e694ae8331c102ee4f1f6786b9b83fa6b61ba0431b6b8230b22",
+    "rtl/modified/hpdcache/rtl/src/hpdcache_mshr.sv": "9a900145bebd11f436b9e766eecb5c1c11f7e715f96cb51bda922936ba9180f6",
+    "rtl/modified/hpdcache/rtl/src/hpdcache_rtab.sv": "cd3433387b678deda7bbc98304a16f5c9a9b4d4ecac19cee668b23e4c7643afa",
+    "rtl/modified/hpdcache/rtl/src/hwpf_stride_wrapper.sv": "c9644cbd47d60873118bd82dcabf4f0a91734a1ecceac60bc4703931e25867c8",
+    "rtl/modified/hpdcache_cva6_pinned/rtl/src/common/hpdcache_data_upsize.sv": "ea08c1ea189e170e57aa18f01b356e186d83216cf2faba88bb6cf15eca5b2175",
+    "rtl/modified/hpdcache_cva6_pinned/rtl/src/hpdcache_cmo.sv": "1e890e9fd0a51983a5c05806f253687d52da908db05d83ddf7c2f919211daa26",
+    "rtl/modified/hpdcache_cva6_pinned/rtl/src/hpdcache_uncached.sv": "b3ff5d90ecec598c7eae062c78ac4df689d29cb80c8c2009da818dfa07cf5145",
+    "rtl/modified/hpdcache_cva6_pinned/rtl/src/hwpf_stride/hwpf_stride.sv": "d22002872c9907f69380eccd729e68cd38cde51c78a1510cfd341afb5edb4620",
+    "rtl/modified/hpdcache_cva6_pinned/rtl/src/utils/hpdcache_mem_resp_demux.sv": "607a1b952e833fded0964e769f492258ebea5c0e3fe93ec1f28371d72489b523",
+    "rtl/modified/hpdcache_cva6_pinned/rtl/src/utils/hpdcache_mem_to_axi_write.sv": "7ac3afcd107fe833062d87d825942f1e93f17a4550c0b60b1dca0064046b6f1a"
+  },
+  "verification_sha256": {
+    "rtl/verification/fault_record_a06/build_program.py": "4ff3673e68dba69863e5133da3535a4e613a19fe4eef5abfc8ce9a8a5da00ed4",
+    "rtl/verification/fault_record_a06/collect_evidence.py": "3347f79b95b2ca19e389964e12404003a6883f7693d24bdfa907b78938a55ac6",
+    "rtl/verification/fault_record_a06/llc_checks.svh": "568ad14dc90e11e7ef61f9662f403db9b281f27bc3fdda825210077ee28706c1",
+    "rtl/verification/fault_record_a06/llc_constants.svh": "a5b7b01e5becfb4b02f6b519358962c3c029ac184ca953327e1c3921fa97218e",
+    "rtl/verification/fault_record_a06/llc_program.hex": "4272d86be5e75b91df7745df8d58a7f1b6bf1a0c41fae44e299f9bf02ce618d9",
+    "rtl/verification/fault_record_a06/m_vlsit_axi_llc.sv": "100503cfc77194568fdfdea56f88537275be9696dbc58d5c4e539517a327a9de",
+    "rtl/verification/fault_record_a06/m_vlsit_axi_llc_native.sv": "eaa94ac40f6f2323105b0ce7df2062589ac4c29884ccf3704c73619a9f0e214f",
+    "rtl/verification/fault_record_a06/program.hex": "10da7cd0ba95861843280bf4c6ac2c55a5117346628e52f31250403f51831d6b",
+    "rtl/verification/fault_record_a06/program_checks.svh": "f0937187b1ddb8592f56d586a4a1ab1435cfb9f3f543e394daa1546ae6d67a4e",
+    "rtl/verification/fault_record_a06/program_constants.svh": "df59c60a3a99114e7ac1f82f0a83f430a968b16c7c3fc8a7413cb5bb500aa6db",
+    "rtl/verification/fault_record_a06/run.py": "e308f82210b0ef7553d7b197d9a35a13e959e3ab270859ecd5201898d2e3be6e",
+    "rtl/verification/fault_record_a06/run_map.py": "948108015a083cbd4488647068a95fdc1188ec65a5a82ce258e807ca5c6fe2d9",
+    "rtl/verification/fault_record_a06/run_regression.py": "52617865c51067d5d7223d459ef3d0aeede76787dd80ddd912878d3a246a338a",
+    "rtl/verification/fault_record_a06/run_unit.py": "ab9575728035078bb6e43f04ec58be9c8c4d5c42b58d9aa1e334167e462c0050",
+    "rtl/verification/fault_record_a06/tb_fault_map.sv": "37ef10a2d08d19e2879c0fd71e08cf024f459a113e8d84027ceb3cfcb96d09c9",
+    "rtl/verification/fault_record_a06/tb_fault_record.sv": "03528b155cff5f6d373f89ffbd94a27d30808e9d0bb64922c33ff463230d72fb",
+    "rtl/verification/fault_record_a06/tb_fault_record_cpu.sv": "04b52c8c611b0206ea3372d2fadfa9d6f9924a202fa8572fcddc3ba62b1676d9"
+  },
+  "changed_rtl": [
+    {
+      "path": "rtl/vlsit/csr_generated/RTL/m_vlsit_cpucl_csr.sv",
+      "kind": "MODIFIED",
+      "after_sha256": "3d7a4f5a0139cf57f488db3833e02f2d98bb95138ba707dba2de263bef4f063f",
+      "before_sha256": "e07873759bccc11dbcee4a1192a4cb462389238acdf96cff651a7e41ddb68ae7"
+    },
+    {
+      "path": "rtl/vlsit/csr_generated/RTL/models/m_csr_async_fifo.sv",
+      "kind": "MODIFIED",
+      "after_sha256": "0d0fd9fdaa0decd74e303c0de9f99e23d028ce03c81a84e834ed619ce452ce1a",
+      "before_sha256": "ad8f2934c1939154ab75194f7e2257ffb4702436d74fb0ccd68598219fc21fc0"
+    },
+    {
+      "path": "rtl/vlsit/csr_generated/RTL/models/m_csr_sync.sv",
+      "kind": "MODIFIED",
+      "after_sha256": "11dccb2921e6e7f7cffd532525c8fc335dcf2d9cd67b2cb42035c1433a2af259",
+      "before_sha256": "0285b754348e7a76b8ddbfeece24fa46a3b27026957f15d21c1201229cc7ab07"
+    },
+    {
+      "path": "rtl/vlsit/csr_generated/RTL/models/m_csr_sync_fifo.sv",
+      "kind": "MODIFIED",
+      "after_sha256": "904cbb8823c765297936ad4ac94d71f5a391af2bad64b012cfec576fa66d70f8",
+      "before_sha256": "f490f0dd81eb6da3e8e2bdcc6a3a9b34792947a761677908751f73a454401a20"
+    },
+    {
+      "path": "rtl/vlsit/m_vlsit_axi_llc.sv",
+      "kind": "MODIFIED",
+      "after_sha256": "dcc463e488470ee38f634ddb47cff0d3dd900ffc35def6357db6b01a7b447788",
+      "before_sha256": "aace88b6d4f5883a7be40af058cb04994b11cf64acb78064436c75a89ff9e0c4"
+    },
+    {
+      "path": "rtl/vlsit/m_vlsit_riscv_axil_decode.sv",
+      "kind": "MODIFIED",
+      "after_sha256": "839ee9556ed6e594e13aa07dd0da51763b337b369f01eaf816c0f8fa568b4d2e",
+      "before_sha256": "876ca45ce5bfd122140dc51baf7b865652bc9363eb577d2fa5b013a7f9c89d3d"
+    },
+    {
+      "path": "rtl/vlsit/m_vlsit_riscv_cluster_axi_top.sv",
+      "kind": "MODIFIED",
+      "after_sha256": "88788184ad9321ce922763b4f076d7865b5a5635677db47ee010628be8da8899",
+      "before_sha256": "ece108da4fe0fb5c5e2190e71c9cfeba71672bc046a21880650cb465ba3f2e0b"
+    },
+    {
+      "path": "rtl/vlsit/m_vlsit_riscv_cluster_core.sv",
+      "kind": "MODIFIED",
+      "after_sha256": "d0f37291e29937f4f84b18432ac5fac5492bd6d7865306ea9285eb862c6243e5",
+      "before_sha256": "fb1d7196ac3009f5685c289b898ba9bc981829f28a6b01406a570456964deb62"
+    },
+    {
+      "path": "rtl/vlsit/m_vlsit_riscv_fault_record.sv",
+      "kind": "NEW",
+      "after_sha256": "36d4ee7ff167f6cd6b3ac0cb5d90054956f4dfce100a19cce3b726b09e163f42"
+    },
+    {
+      "path": "rtl/modified/axi_llc/src/axi_llc_evict_unit.sv",
+      "kind": "MODIFIED",
+      "after_sha256": "5dec3b2ed009a680941dcf0cbbcd0957fe6d81fd651f306e67fd3c292871a296",
+      "before_sha256": "83bfde6f3a8971a505e48b815612e14f93d495db2326370d96b3a0e07315b42b"
+    },
+    {
+      "path": "rtl/modified/axi_llc/src/axi_llc_reg_wrap.sv",
+      "kind": "MODIFIED",
+      "after_sha256": "4d6c951bf0c470406f58f9db0c9087cb804f94711c02651887ff4e852ca5d70f",
+      "before_sha256": "52e7407452fbc4197fc47a55cc3ca4a7f42fac234bf5107249cdddb3a6aa1776"
+    },
+    {
+      "path": "rtl/modified/axi_llc/src/axi_llc_top.sv",
+      "kind": "MODIFIED",
+      "after_sha256": "7fcf1648737938214bd65bc04289f568542e1b228bf254533c5534d94058d081",
+      "before_sha256": "385d0db50137c371cfa71803403f847f87f5c4e9237ffafdc919157c277fedaf"
+    },
+    {
+      "path": "rtl/modified/axi_llc/src/eviction_refill/axi_llc_w_master.sv",
+      "kind": "MODIFIED",
+      "after_sha256": "fb65a3ee3b9a6c700894ae8c839b0bdd0410ee740a670421ea0deae41c56c02e",
+      "before_sha256": "df14eb94f09f2180226b685331d7ffb2bd032134c5182674c8c7a4af4c4de738"
+    }
+  ],
+  "diff": {
+    "added": 260,
+    "removed": 20,
+    "baseline_lines": 5334
+  },
+  "coverage": "Directed checks only; no code coverage measured"
+}

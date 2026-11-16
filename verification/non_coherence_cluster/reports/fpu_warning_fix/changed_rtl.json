@@ -1,0 +1,16 @@
+[
+  {
+    "file": "rtl/modified/cva6/core/fpu_wrap.sv",
+    "before_lines": 576,
+    "after_lines": 584,
+    "changed_lines": 18,
+    "sha256": "dbee106fd77fb4befcb4e92c4d6eeb6a979c44dbab3d7f2739ebbec84c0f8d29"
+  },
+  {
+    "file": "rtl/modified/cvfpu/src/fpnew_opgroup_block.sv",
+    "before_lines": 256,
+    "after_lines": 263,
+    "changed_lines": 11,
+    "sha256": "585d69b9e6bc0ea5c1f02262b86974af26dce70cbf49e08e5fa1655a464b43f4"
+  }
+]

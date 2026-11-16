@@ -1,0 +1,186 @@
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "m_vlsit_riscv_cluster_core.drawio",
+  "layout": {
+    "gap_h": 120,
+    "gap_v": 110,
+    "margin": 80,
+    "block_h": 60
+  },
+  "top": {
+    "frame_label": [
+      "Component composition",
+      "(m_vlsit_riscv_cluster_core)"
+    ]
+  },
+  "frame_row": [
+    "m_vlsit_riscv_cluster_core",
+    "Integrate CPUs, coherence control, memory/MMIO routing, maintenance, shared LLC, PMU and software diagnostics.",
+    "rtl/vlsit/m_vlsit_riscv_cluster_core.sv"
+  ],
+  "frame_interfaces": [],
+  "blocks": [
+    {
+      "key": "B0",
+      "label": [
+        "u_vlsit_axi_llc",
+        "(m_vlsit_axi_llc)"
+      ],
+      "width": 200,
+      "row": 0,
+      "col": 0,
+      "row_name": "u_vlsit_axi_llc (m_vlsit_axi_llc)",
+      "function": "Wrap the licensed native LLC with VLSIT AXI/service/maintenance and fault-event ports.",
+      "source": "NEW; rtl/vlsit/m_vlsit_axi_llc.sv"
+    },
+    {
+      "key": "B1",
+      "label": [
+        "u_vlsit_axil_reg_bridge",
+        "(m_vlsit_axil_reg_bridge)"
+      ],
+      "width": 300,
+      "row": 0,
+      "col": 1,
+      "row_name": "u_vlsit_axil_reg_bridge (m_vlsit_axil_reg_bridge)",
+      "function": "Translate AXI4-Lite LLC-service accesses into the pinned PULP RegBus request/response form.",
+      "source": "NEW; rtl/vlsit/m_vlsit_axil_reg_bridge.sv"
+    },
+    {
+      "key": "B2",
+      "label": [
+        "u_vlsit_cpucl_csr",
+        "(m_vlsit_cpucl_csr)"
+      ],
+      "width": 220,
+      "row": 0,
+      "col": 2,
+      "row_name": "u_vlsit_cpucl_csr (m_vlsit_cpucl_csr)",
+      "function": "Implement workbook-defined AXI4-Lite PMU controls, snapshot words, IRQ/diagnostic status and read-only fatal records.",
+      "source": "GENERATED; rtl/vlsit/csr_generated/RTL/m_vlsit_cpucl_csr.sv"
+    },
+    {
+      "key": "B3",
+      "label": [
+        "u_vlsit_riscv_axi_mem_mux",
+        "(m_vlsit_riscv_axi_mem_mux)"
+      ],
+      "width": 320,
+      "row": 1,
+      "col": 0,
+      "row_name": "u_vlsit_riscv_axi_mem_mux (m_vlsit_riscv_axi_mem_mux)",
+      "function": "Arbitrate per-hart memory traffic while preserving source identity and response routing.",
+      "source": "NEW; rtl/vlsit/m_vlsit_riscv_axi_mem_mux.sv"
+    },
+    {
+      "key": "B4",
+      "label": [
+        "u_vlsit_riscv_axi_mmio",
+        "(m_vlsit_riscv_axi_mmio)"
+      ],
+      "width": 280,
+      "row": 1,
+      "col": 1,
+      "row_name": "u_vlsit_riscv_axi_mmio (m_vlsit_riscv_axi_mmio)",
+      "function": "Provide a separate non-coherent AXI4 device egress for active harts.",
+      "source": "NEW; rtl/vlsit/m_vlsit_riscv_axi_mmio.sv"
+    },
+    {
+      "key": "B5",
+      "label": [
+        "u_vlsit_riscv_axi_route",
+        "(m_vlsit_riscv_axi_route)"
+      ],
+      "width": 300,
+      "row": 1,
+      "col": 2,
+      "row_name": "u_vlsit_riscv_axi_route (m_vlsit_riscv_axi_route)",
+      "function": "Route one tile's AXI transactions to cached memory, normal-uncached bypass, device MMIO or a local error responder.",
+      "source": "NEW; rtl/vlsit/m_vlsit_riscv_axi_route.sv"
+    },
+    {
+      "key": "B6",
+      "label": [
+        "u_vlsit_riscv_axil_decode",
+        "(m_vlsit_riscv_axil_decode)"
+      ],
+      "width": 320,
+      "row": 2,
+      "col": 0,
+      "row_name": "u_vlsit_riscv_axil_decode (m_vlsit_riscv_axil_decode)",
+      "function": "Decode one external AXI4-Lite control port into cluster CSR and LLC service targets.",
+      "source": "NEW; rtl/vlsit/m_vlsit_riscv_axil_decode.sv"
+    },
+    {
+      "key": "B7",
+      "label": [
+        "u_vlsit_riscv_cmo_arbiter",
+        "(m_vlsit_riscv_cmo_arbiter)"
+      ],
+      "width": 320,
+      "row": 2,
+      "col": 1,
+      "row_name": "u_vlsit_riscv_cmo_arbiter (m_vlsit_riscv_cmo_arbiter)",
+      "function": "Select one hart's retirement-blocking maintenance request and preserve its completion destination.",
+      "source": "NEW; rtl/vlsit/m_vlsit_riscv_cmo_arbiter.sv"
+    },
+    {
+      "key": "B8",
+      "label": [
+        "u_vlsit_riscv_cmo_controller",
+        "(m_vlsit_riscv_cmo_controller)"
+      ],
+      "width": 360,
+      "row": 2,
+      "col": 2,
+      "row_name": "u_vlsit_riscv_cmo_controller (m_vlsit_riscv_cmo_controller)",
+      "function": "Sequence CCU preparation, optional per-line LLC maintenance, terminal COMMIT/ABORT and the hart completion response.",
+      "source": "NEW; rtl/vlsit/m_vlsit_riscv_cmo_controller.sv"
+    },
+    {
+      "key": "B9",
+      "label": [
+        "u_vlsit_riscv_cpu_tile_array",
+        "(m_vlsit_riscv_cpu_tile_array)"
+      ],
+      "width": 360,
+      "row": 3,
+      "col": 0,
+      "row_name": "u_vlsit_riscv_cpu_tile_array (m_vlsit_riscv_cpu_tile_array)",
+      "function": "Replicate active CPU tiles and connect their ownership, query, lock and tagged-probe channels to one shared coherence tile array.",
+      "source": "NEW; rtl/vlsit/m_vlsit_riscv_cpu_tile_array.sv"
+    },
+    {
+      "key": "B10",
+      "label": [
+        "u_vlsit_riscv_fault_record",
+        "(m_vlsit_riscv_fault_record)"
+      ],
+      "width": 340,
+      "row": 3,
+      "col": 1,
+      "row_name": "u_vlsit_riscv_fault_record (m_vlsit_riscv_fault_record)",
+      "function": "Capture the first fatal ordinary L1 or shared LLC writeback error until reset.",
+      "source": "NEW; rtl/vlsit/m_vlsit_riscv_fault_record.sv"
+    },
+    {
+      "key": "B11",
+      "label": [
+        "u_vlsit_riscv_pmu",
+        "(m_vlsit_riscv_pmu)"
+      ],
+      "width": 220,
+      "row": 3,
+      "col": 2,
+      "row_name": "u_vlsit_riscv_pmu (m_vlsit_riscv_pmu)",
+      "function": "Integrate source event packing, scope selection, counters, atomic snapshots and aggregate overflow interrupt.",
+      "source": "NEW; rtl/vlsit/m_vlsit_riscv_pmu.sv"
+    }
+  ],
+  "connectors": [],
+  "externals": [],
+  "interfaces": [],
+  "nets": [],
+  "legend_note": "Exact source-referenced children; generate multiplicity and active branches are specified in the component text. Containment denotes hierarchy, not invented signal connectivity. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.",
+  "library_sha256": "15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"
+}

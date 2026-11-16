@@ -1,0 +1,73 @@
+# RTL files changed / File RTL đã sửa
+
+67 RTL files differ from the preserved pre-change snapshots. Upstream originals remain in `rtl/third_party`. / 67 file RTL khác snapshot trước sửa; nguồn gốc vẫn ở `rtl/third_party`.
+
+| File | Added / Thêm | Removed / Bỏ |
+|---|---|---|
+| [rtl/modified/axi_llc/src/axi_llc_burst_cutter.sv](../../modified/axi_llc/src/axi_llc_burst_cutter.sv) | 7 | 3 |
+| [rtl/modified/axi_llc/src/axi_llc_chan_splitter.sv](../../modified/axi_llc/src/axi_llc_chan_splitter.sv) | 4 | 2 |
+| [rtl/modified/axi_llc/src/axi_llc_config.sv](../../modified/axi_llc/src/axi_llc_config.sv) | 5 | 3 |
+| [rtl/modified/axi_llc/src/axi_llc_pkg.sv](../../modified/axi_llc/src/axi_llc_pkg.sv) | 3 | 1 |
+| [rtl/modified/axi_llc/src/axi_llc_read_unit.sv](../../modified/axi_llc/src/axi_llc_read_unit.sv) | 6 | 2 |
+| [rtl/modified/axi_llc/src/axi_llc_reg_wrap.sv](../../modified/axi_llc/src/axi_llc_reg_wrap.sv) | 43 | 2 |
+| [rtl/modified/axi_llc/src/axi_llc_write_unit.sv](../../modified/axi_llc/src/axi_llc_write_unit.sv) | 6 | 2 |
+| [rtl/modified/axi_llc/src/eviction_refill/axi_llc_ax_master.sv](../../modified/axi_llc/src/eviction_refill/axi_llc_ax_master.sv) | 3 | 1 |
+| [rtl/modified/axi_llc/src/hit_miss_detect/axi_llc_miss_counters.sv](../../modified/axi_llc/src/hit_miss_detect/axi_llc_miss_counters.sv) | 5 | 3 |
+| [rtl/modified/axi_llc/src/hit_miss_detect/axi_llc_tag_store.sv](../../modified/axi_llc/src/hit_miss_detect/axi_llc_tag_store.sv) | 3 | 1 |
+| [rtl/modified/axi_llc_locked/axi/src/axi_atop_filter.sv](../../modified/axi_llc_locked/axi/src/axi_atop_filter.sv) | 3 | 1 |
+| [rtl/modified/axi_llc_locked/axi/src/axi_demux_simple.sv](../../modified/axi_llc_locked/axi/src/axi_demux_simple.sv) | 15 | 7 |
+| [rtl/modified/axi_llc_locked/axi/src/axi_isolate.sv](../../modified/axi_llc_locked/axi/src/axi_isolate.sv) | 55 | 30 |
+| [rtl/modified/axi_llc_locked/common_cells/src/stream_xbar.sv](../../modified/axi_llc_locked/common_cells/src/stream_xbar.sv) | 8 | 4 |
+| [rtl/modified/axi_llc_locked/common_cells/src/sub_per_hash.sv](../../modified/axi_llc_locked/common_cells/src/sub_per_hash.sv) | 14 | 10 |
+| [rtl/modified/cva6/common/local/util/sram.sv](../../modified/cva6/common/local/util/sram.sv) | 3 | 1 |
+| [rtl/modified/cva6/common/local/util/sram_cache.sv](../../modified/cva6/common/local/util/sram_cache.sv) | 3 | 1 |
+| [rtl/modified/cva6/core/aes.sv](../../modified/cva6/core/aes.sv) | 16 | 14 |
+| [rtl/modified/cva6/core/alu.sv](../../modified/cva6/core/alu.sv) | 22 | 18 |
+| [rtl/modified/cva6/core/ariane_regfile_ff.sv](../../modified/cva6/core/ariane_regfile_ff.sv) | 3 | 1 |
+| [rtl/modified/cva6/core/cache_subsystem/cva6_hpdcache_if_adapter.sv](../../modified/cva6/core/cache_subsystem/cva6_hpdcache_if_adapter.sv) | 12 | 6 |
+| [rtl/modified/cva6/core/cache_subsystem/cva6_hpdcache_subsystem.sv](../../modified/cva6/core/cache_subsystem/cva6_hpdcache_subsystem.sv) | 3 | 1 |
+| [rtl/modified/cva6/core/cache_subsystem/cva6_hpdcache_subsystem_axi_arbiter.sv](../../modified/cva6/core/cache_subsystem/cva6_hpdcache_subsystem_axi_arbiter.sv) | 5 | 3 |
+| [rtl/modified/cva6/core/cache_subsystem/cva6_icache.sv](../../modified/cva6/core/cache_subsystem/cva6_icache.sv) | 12 | 6 |
+| [rtl/modified/cva6/core/commit_stage.sv](../../modified/cva6/core/commit_stage.sv) | 66 | 12 |
+| [rtl/modified/cva6/core/csr_regfile.sv](../../modified/cva6/core/csr_regfile.sv) | 47 | 36 |
+| [rtl/modified/cva6/core/cva6.sv](../../modified/cva6/core/cva6.sv) | 3 | 1 |
+| [rtl/modified/cva6/core/cva6_mmu/cva6_shared_tlb.sv](../../modified/cva6/core/cva6_mmu/cva6_shared_tlb.sv) | 3 | 1 |
+| [rtl/modified/cva6/core/cva6_mmu/cva6_tlb.sv](../../modified/cva6/core/cva6_mmu/cva6_tlb.sv) | 3 | 1 |
+| [rtl/modified/cva6/core/decoder.sv](../../modified/cva6/core/decoder.sv) | 44 | 38 |
+| [rtl/modified/cva6/core/ex_stage.sv](../../modified/cva6/core/ex_stage.sv) | 12 | 10 |
+| [rtl/modified/cva6/core/fpu_wrap.sv](../../modified/cva6/core/fpu_wrap.sv) | 28 | 28 |
+| [rtl/modified/cva6/core/include/build_config_pkg.sv](../../modified/cva6/core/include/build_config_pkg.sv) | 3 | 1 |
+| [rtl/modified/cva6/core/include/cv64a6_imafdc_sv39_hpdcache_wb_config_pkg.sv](../../modified/cva6/core/include/cv64a6_imafdc_sv39_hpdcache_wb_config_pkg.sv) | 4 | 2 |
+| [rtl/modified/cva6/core/issue_read_operands.sv](../../modified/cva6/core/issue_read_operands.sv) | 53 | 51 |
+| [rtl/modified/cva6/core/load_store_unit.sv](../../modified/cva6/core/load_store_unit.sv) | 4 | 2 |
+| [rtl/modified/cva6/core/load_unit.sv](../../modified/cva6/core/load_unit.sv) | 8 | 6 |
+| [rtl/modified/cva6/core/mult.sv](../../modified/cva6/core/mult.sv) | 7 | 3 |
+| [rtl/modified/cva6/core/perf_counters.sv](../../modified/cva6/core/perf_counters.sv) | 21 | 19 |
+| [rtl/modified/cva6/core/raw_checker.sv](../../modified/cva6/core/raw_checker.sv) | 18 | 4 |
+| [rtl/modified/cva6/core/scoreboard.sv](../../modified/cva6/core/scoreboard.sv) | 7 | 1 |
+| [rtl/modified/cva6/core/serdiv.sv](../../modified/cva6/core/serdiv.sv) | 3 | 1 |
+| [rtl/modified/cva6/vendor/pulp-platform/axi/src/axi_pkg.sv](../../modified/cva6/vendor/pulp-platform/axi/src/axi_pkg.sv) | 11 | 9 |
+| [rtl/modified/cva6/vendor/pulp-platform/common_cells/src/lfsr.sv](../../modified/cva6/vendor/pulp-platform/common_cells/src/lfsr.sv) | 3 | 1 |
+| [rtl/modified/cva6/vendor/pulp-platform/common_cells/src/rr_arb_tree.sv](../../modified/cva6/vendor/pulp-platform/common_cells/src/rr_arb_tree.sv) | 9 | 2 |
+| [rtl/modified/cva6/vendor/pulp-platform/common_cells/src/stream_demux.sv](../../modified/cva6/vendor/pulp-platform/common_cells/src/stream_demux.sv) | 3 | 1 |
+| [rtl/modified/cva6/vendor/pulp-platform/tech_cells_generic/src/rtl/tc_sram.sv](../../modified/cva6/vendor/pulp-platform/tech_cells_generic/src/rtl/tc_sram.sv) | 12 | 4 |
+| [rtl/modified/cvfpu/src/fpnew_cast_multi.sv](../../modified/cvfpu/src/fpnew_cast_multi.sv) | 74 | 66 |
+| [rtl/modified/cvfpu/src/fpnew_divsqrt_th_64_multi.sv](../../modified/cvfpu/src/fpnew_divsqrt_th_64_multi.sv) | 22 | 18 |
+| [rtl/modified/cvfpu/src/fpnew_fma.sv](../../modified/cvfpu/src/fpnew_fma.sv) | 68 | 62 |
+| [rtl/modified/cvfpu/src/fpnew_noncomp.sv](../../modified/cvfpu/src/fpnew_noncomp.sv) | 36 | 30 |
+| [rtl/modified/cvfpu/src/fpnew_opgroup_fmt_slice.sv](../../modified/cvfpu/src/fpnew_opgroup_fmt_slice.sv) | 8 | 4 |
+| [rtl/modified/cvfpu/src/fpnew_opgroup_multifmt_slice.sv](../../modified/cvfpu/src/fpnew_opgroup_multifmt_slice.sv) | 16 | 10 |
+| [rtl/modified/cvfpu/src/fpnew_pkg.sv](../../modified/cvfpu/src/fpnew_pkg.sv) | 34 | 30 |
+| [rtl/modified/hpdcache/rtl/src/hpdcache_ctrl.sv](../../modified/hpdcache/rtl/src/hpdcache_ctrl.sv) | 4 | 2 |
+| [rtl/modified/hpdcache/rtl/src/hpdcache_flush.sv](../../modified/hpdcache/rtl/src/hpdcache_flush.sv) | 3 | 1 |
+| [rtl/modified/hpdcache/rtl/src/hpdcache_miss_handler.sv](../../modified/hpdcache/rtl/src/hpdcache_miss_handler.sv) | 15 | 4 |
+| [rtl/modified/hpdcache/rtl/src/hwpf_stride_wrapper.sv](../../modified/hpdcache/rtl/src/hwpf_stride_wrapper.sv) | 4 | 2 |
+| [rtl/modified/hpdcache_cva6_pinned/rtl/src/common/hpdcache_data_upsize.sv](../../modified/hpdcache_cva6_pinned/rtl/src/common/hpdcache_data_upsize.sv) | 4 | 2 |
+| [rtl/modified/hpdcache_cva6_pinned/rtl/src/hpdcache_uncached.sv](../../modified/hpdcache_cva6_pinned/rtl/src/hpdcache_uncached.sv) | 4 | 2 |
+| [rtl/modified/hpdcache_cva6_pinned/rtl/src/hwpf_stride/hwpf_stride.sv](../../modified/hpdcache_cva6_pinned/rtl/src/hwpf_stride/hwpf_stride.sv) | 10 | 8 |
+| [rtl/modified/hpdcache_cva6_pinned/rtl/src/utils/hpdcache_mem_resp_demux.sv](../../modified/hpdcache_cva6_pinned/rtl/src/utils/hpdcache_mem_resp_demux.sv) | 3 | 1 |
+| [rtl/modified/hpdcache_cva6_pinned/rtl/src/utils/hpdcache_mem_to_axi_write.sv](../../modified/hpdcache_cva6_pinned/rtl/src/utils/hpdcache_mem_to_axi_write.sv) | 4 | 0 |
+| [rtl/vlsit/m_vlsit_pmu_event_select.sv](../../vlsit/m_vlsit_pmu_event_select.sv) | 3 | 1 |
+| [rtl/vlsit/m_vlsit_riscv_cluster_core.sv](../../vlsit/m_vlsit_riscv_cluster_core.sv) | 3 | 1 |
+| [rtl/vlsit/m_vlsit_riscv_coh_fabric.sv](../../vlsit/m_vlsit_riscv_coh_fabric.sv) | 9 | 7 |
+| [rtl/vlsit/m_vlsit_riscv_cpu_tile.sv](../../vlsit/m_vlsit_riscv_cpu_tile.sv) | 4 | 0 |

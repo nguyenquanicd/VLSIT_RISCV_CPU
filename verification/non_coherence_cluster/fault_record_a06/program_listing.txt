@@ -1,0 +1,662 @@
+80000000: f1402573 csrr mhartid
+80000004: 00451913 slli hart,4
+80000008: 800005b7 lui address
+8000000c: 20058593 addi x11,x11,512
+80000010: 02059593 slli 32
+80000014: 0205d593 srli 32
+80000018: 012585b3 add
+8000001c: 000019b7 lui stride 4096
+80000020: 80009ab7 lui address
+80000024: 300a8a93 addi x21,x21,768
+80000028: 020a9a93 slli 32
+8000002c: 020ada93 srli 32
+80000030: 012a8ab3 add
+80000034: 10090693 addi x13,x18,256
+80000038: 00d5b023 sd
+8000003c: 20090693 addi x13,x18,512
+80000040: 00d5b423 sd
+80000044: 0005b703 ld
+80000048: 0085b703 ld
+8000004c: 40d70b33 sub dependency, last load minus expected
+80000050: 016585b3 add
+80000054: 013585b3 add
+80000058: 10190693 addi x13,x18,257
+8000005c: 00d5b023 sd
+80000060: 20190693 addi x13,x18,513
+80000064: 00d5b423 sd
+80000068: 0005b703 ld
+8000006c: 0085b703 ld
+80000070: 40d70b33 sub dependency, last load minus expected
+80000074: 016585b3 add
+80000078: 013585b3 add
+8000007c: 10290693 addi x13,x18,258
+80000080: 00d5b023 sd
+80000084: 20290693 addi x13,x18,514
+80000088: 00d5b423 sd
+8000008c: 0005b703 ld
+80000090: 0085b703 ld
+80000094: 40d70b33 sub dependency, last load minus expected
+80000098: 016585b3 add
+8000009c: 013585b3 add
+800000a0: 10390693 addi x13,x18,259
+800000a4: 00d5b023 sd
+800000a8: 20390693 addi x13,x18,515
+800000ac: 00d5b423 sd
+800000b0: 0005b703 ld
+800000b4: 0085b703 ld
+800000b8: 40d70b33 sub dependency, last load minus expected
+800000bc: 016585b3 add
+800000c0: 013585b3 add
+800000c4: 10490693 addi x13,x18,260
+800000c8: 00d5b023 sd
+800000cc: 20490693 addi x13,x18,516
+800000d0: 00d5b423 sd
+800000d4: 0005b703 ld
+800000d8: 0085b703 ld
+800000dc: 40d70b33 sub dependency, last load minus expected
+800000e0: 016585b3 add
+800000e4: 013585b3 add
+800000e8: 10590693 addi x13,x18,261
+800000ec: 00d5b023 sd
+800000f0: 20590693 addi x13,x18,517
+800000f4: 00d5b423 sd
+800000f8: 0005b703 ld
+800000fc: 0085b703 ld
+80000100: 40d70b33 sub dependency, last load minus expected
+80000104: 016585b3 add
+80000108: 013585b3 add
+8000010c: 10690693 addi x13,x18,262
+80000110: 00d5b023 sd
+80000114: 20690693 addi x13,x18,518
+80000118: 00d5b423 sd
+8000011c: 0005b703 ld
+80000120: 0085b703 ld
+80000124: 40d70b33 sub dependency, last load minus expected
+80000128: 016585b3 add
+8000012c: 013585b3 add
+80000130: 10790693 addi x13,x18,263
+80000134: 00d5b023 sd
+80000138: 20790693 addi x13,x18,519
+8000013c: 00d5b423 sd
+80000140: 0005b703 ld
+80000144: 0085b703 ld
+80000148: 40d70b33 sub dependency, last load minus expected
+8000014c: 016585b3 add
+80000150: 013585b3 add
+80000154: 000ab783 ld
+80000158: 0005b703 ld
+8000015c: 0a50006f j post-recovery clean
+80000160: 00000013 nop; unexecuted padding/data window
+80000164: 00000013 nop; unexecuted padding/data window
+80000168: 00000013 nop; unexecuted padding/data window
+8000016c: 00000013 nop; unexecuted padding/data window
+80000170: 00000013 nop; unexecuted padding/data window
+80000174: 00000013 nop; unexecuted padding/data window
+80000178: 00000013 nop; unexecuted padding/data window
+8000017c: 00000013 nop; unexecuted padding/data window
+80000180: 00000013 nop; unexecuted padding/data window
+80000184: 00000013 nop; unexecuted padding/data window
+80000188: 00000013 nop; unexecuted padding/data window
+8000018c: 00000013 nop; unexecuted padding/data window
+80000190: 00000013 nop; unexecuted padding/data window
+80000194: 00000013 nop; unexecuted padding/data window
+80000198: 00000013 nop; unexecuted padding/data window
+8000019c: 00000013 nop; unexecuted padding/data window
+800001a0: 00000013 nop; unexecuted padding/data window
+800001a4: 00000013 nop; unexecuted padding/data window
+800001a8: 00000013 nop; unexecuted padding/data window
+800001ac: 00000013 nop; unexecuted padding/data window
+800001b0: 00000013 nop; unexecuted padding/data window
+800001b4: 00000013 nop; unexecuted padding/data window
+800001b8: 00000013 nop; unexecuted padding/data window
+800001bc: 00000013 nop; unexecuted padding/data window
+800001c0: 00000013 nop; unexecuted padding/data window
+800001c4: 00000013 nop; unexecuted padding/data window
+800001c8: 00000013 nop; unexecuted padding/data window
+800001cc: 00000013 nop; unexecuted padding/data window
+800001d0: 00000013 nop; unexecuted padding/data window
+800001d4: 00000013 nop; unexecuted padding/data window
+800001d8: 00000013 nop; unexecuted padding/data window
+800001dc: 00000013 nop; unexecuted padding/data window
+800001e0: 00000013 nop; unexecuted padding/data window
+800001e4: 00000013 nop; unexecuted padding/data window
+800001e8: 00000013 nop; unexecuted padding/data window
+800001ec: 00000013 nop; unexecuted padding/data window
+800001f0: 00000013 nop; unexecuted padding/data window
+800001f4: 00000013 nop; unexecuted padding/data window
+800001f8: 00000013 nop; unexecuted padding/data window
+800001fc: 00000013 nop; unexecuted padding/data window
+80000200: 00000013 nop; unexecuted padding/data window
+80000204: 00000013 nop; unexecuted padding/data window
+80000208: 00000013 nop; unexecuted padding/data window
+8000020c: 00000013 nop; unexecuted padding/data window
+80000210: 00000013 nop; unexecuted padding/data window
+80000214: 00000013 nop; unexecuted padding/data window
+80000218: 00000013 nop; unexecuted padding/data window
+8000021c: 00000013 nop; unexecuted padding/data window
+80000220: 00000013 nop; unexecuted padding/data window
+80000224: 00000013 nop; unexecuted padding/data window
+80000228: 00000013 nop; unexecuted padding/data window
+8000022c: 00000013 nop; unexecuted padding/data window
+80000230: 00000013 nop; unexecuted padding/data window
+80000234: 00000013 nop; unexecuted padding/data window
+80000238: 00000013 nop; unexecuted padding/data window
+8000023c: 00000013 nop; unexecuted padding/data window
+80000240: 00000013 nop; unexecuted padding/data window
+80000244: 00000013 nop; unexecuted padding/data window
+80000248: 00000013 nop; unexecuted padding/data window
+8000024c: 00000013 nop; unexecuted padding/data window
+80000250: 00000013 nop; unexecuted padding/data window
+80000254: 00000013 nop; unexecuted padding/data window
+80000258: 00000013 nop; unexecuted padding/data window
+8000025c: 00000013 nop; unexecuted padding/data window
+80000260: 00000013 nop; unexecuted padding/data window
+80000264: 00000013 nop; unexecuted padding/data window
+80000268: 00000013 nop; unexecuted padding/data window
+8000026c: 00000013 nop; unexecuted padding/data window
+80000270: 00000013 nop; unexecuted padding/data window
+80000274: 00000013 nop; unexecuted padding/data window
+80000278: 00000013 nop; unexecuted padding/data window
+8000027c: 00000013 nop; unexecuted padding/data window
+80000280: 00000013 nop; unexecuted padding/data window
+80000284: 00000013 nop; unexecuted padding/data window
+80000288: 00000013 nop; unexecuted padding/data window
+8000028c: 00000013 nop; unexecuted padding/data window
+80000290: 00000013 nop; unexecuted padding/data window
+80000294: 00000013 nop; unexecuted padding/data window
+80000298: 00000013 nop; unexecuted padding/data window
+8000029c: 00000013 nop; unexecuted padding/data window
+800002a0: 00000013 nop; unexecuted padding/data window
+800002a4: 00000013 nop; unexecuted padding/data window
+800002a8: 00000013 nop; unexecuted padding/data window
+800002ac: 00000013 nop; unexecuted padding/data window
+800002b0: 00000013 nop; unexecuted padding/data window
+800002b4: 00000013 nop; unexecuted padding/data window
+800002b8: 00000013 nop; unexecuted padding/data window
+800002bc: 00000013 nop; unexecuted padding/data window
+800002c0: 00000013 nop; unexecuted padding/data window
+800002c4: 00000013 nop; unexecuted padding/data window
+800002c8: 00000013 nop; unexecuted padding/data window
+800002cc: 00000013 nop; unexecuted padding/data window
+800002d0: 00000013 nop; unexecuted padding/data window
+800002d4: 00000013 nop; unexecuted padding/data window
+800002d8: 00000013 nop; unexecuted padding/data window
+800002dc: 00000013 nop; unexecuted padding/data window
+800002e0: 00000013 nop; unexecuted padding/data window
+800002e4: 00000013 nop; unexecuted padding/data window
+800002e8: 00000013 nop; unexecuted padding/data window
+800002ec: 00000013 nop; unexecuted padding/data window
+800002f0: 00000013 nop; unexecuted padding/data window
+800002f4: 00000013 nop; unexecuted padding/data window
+800002f8: 00000013 nop; unexecuted padding/data window
+800002fc: 00000013 nop; unexecuted padding/data window
+80000300: 00000013 nop; unexecuted padding/data window
+80000304: 00000013 nop; unexecuted padding/data window
+80000308: 00000013 nop; unexecuted padding/data window
+8000030c: 00000013 nop; unexecuted padding/data window
+80000310: 00000013 nop; unexecuted padding/data window
+80000314: 00000013 nop; unexecuted padding/data window
+80000318: 00000013 nop; unexecuted padding/data window
+8000031c: 00000013 nop; unexecuted padding/data window
+80000320: 00000013 nop; unexecuted padding/data window
+80000324: 00000013 nop; unexecuted padding/data window
+80000328: 00000013 nop; unexecuted padding/data window
+8000032c: 00000013 nop; unexecuted padding/data window
+80000330: 00000013 nop; unexecuted padding/data window
+80000334: 00000013 nop; unexecuted padding/data window
+80000338: 00000013 nop; unexecuted padding/data window
+8000033c: 00000013 nop; unexecuted padding/data window
+80000340: 00000013 nop; unexecuted padding/data window
+80000344: 00000013 nop; unexecuted padding/data window
+80000348: 00000013 nop; unexecuted padding/data window
+8000034c: 00000013 nop; unexecuted padding/data window
+80000350: 00000013 nop; unexecuted padding/data window
+80000354: 00000013 nop; unexecuted padding/data window
+80000358: 00000013 nop; unexecuted padding/data window
+8000035c: 00000013 nop; unexecuted padding/data window
+80000360: 00000013 nop; unexecuted padding/data window
+80000364: 00000013 nop; unexecuted padding/data window
+80000368: 00000013 nop; unexecuted padding/data window
+8000036c: 00000013 nop; unexecuted padding/data window
+80000370: 00000013 nop; unexecuted padding/data window
+80000374: 00000013 nop; unexecuted padding/data window
+80000378: 00000013 nop; unexecuted padding/data window
+8000037c: 00000013 nop; unexecuted padding/data window
+80000380: 00000013 nop; unexecuted padding/data window
+80000384: 00000013 nop; unexecuted padding/data window
+80000388: 00000013 nop; unexecuted padding/data window
+8000038c: 00000013 nop; unexecuted padding/data window
+80000390: 00000013 nop; unexecuted padding/data window
+80000394: 00000013 nop; unexecuted padding/data window
+80000398: 00000013 nop; unexecuted padding/data window
+8000039c: 00000013 nop; unexecuted padding/data window
+800003a0: 00000013 nop; unexecuted padding/data window
+800003a4: 00000013 nop; unexecuted padding/data window
+800003a8: 00000013 nop; unexecuted padding/data window
+800003ac: 00000013 nop; unexecuted padding/data window
+800003b0: 00000013 nop; unexecuted padding/data window
+800003b4: 00000013 nop; unexecuted padding/data window
+800003b8: 00000013 nop; unexecuted padding/data window
+800003bc: 00000013 nop; unexecuted padding/data window
+800003c0: 00000013 nop; unexecuted padding/data window
+800003c4: 00000013 nop; unexecuted padding/data window
+800003c8: 00000013 nop; unexecuted padding/data window
+800003cc: 00000013 nop; unexecuted padding/data window
+800003d0: 00000013 nop; unexecuted padding/data window
+800003d4: 00000013 nop; unexecuted padding/data window
+800003d8: 00000013 nop; unexecuted padding/data window
+800003dc: 00000013 nop; unexecuted padding/data window
+800003e0: 00000013 nop; unexecuted padding/data window
+800003e4: 00000013 nop; unexecuted padding/data window
+800003e8: 00000013 nop; unexecuted padding/data window
+800003ec: 00000013 nop; unexecuted padding/data window
+800003f0: 00000013 nop; unexecuted padding/data window
+800003f4: 00000013 nop; unexecuted padding/data window
+800003f8: 00000013 nop; unexecuted padding/data window
+800003fc: 00000013 nop; unexecuted padding/data window
+80000400: 00000013 nop; unexecuted padding/data window
+80000404: 00000013 nop; unexecuted padding/data window
+80000408: 00000013 nop; unexecuted padding/data window
+8000040c: 00000013 nop; unexecuted padding/data window
+80000410: 00000013 nop; unexecuted padding/data window
+80000414: 00000013 nop; unexecuted padding/data window
+80000418: 00000013 nop; unexecuted padding/data window
+8000041c: 00000013 nop; unexecuted padding/data window
+80000420: 00000013 nop; unexecuted padding/data window
+80000424: 00000013 nop; unexecuted padding/data window
+80000428: 00000013 nop; unexecuted padding/data window
+8000042c: 00000013 nop; unexecuted padding/data window
+80000430: 00000013 nop; unexecuted padding/data window
+80000434: 00000013 nop; unexecuted padding/data window
+80000438: 00000013 nop; unexecuted padding/data window
+8000043c: 00000013 nop; unexecuted padding/data window
+80000440: 00000013 nop; unexecuted padding/data window
+80000444: 00000013 nop; unexecuted padding/data window
+80000448: 00000013 nop; unexecuted padding/data window
+8000044c: 00000013 nop; unexecuted padding/data window
+80000450: 00000013 nop; unexecuted padding/data window
+80000454: 00000013 nop; unexecuted padding/data window
+80000458: 00000013 nop; unexecuted padding/data window
+8000045c: 00000013 nop; unexecuted padding/data window
+80000460: 00000013 nop; unexecuted padding/data window
+80000464: 00000013 nop; unexecuted padding/data window
+80000468: 00000013 nop; unexecuted padding/data window
+8000046c: 00000013 nop; unexecuted padding/data window
+80000470: 00000013 nop; unexecuted padding/data window
+80000474: 00000013 nop; unexecuted padding/data window
+80000478: 00000013 nop; unexecuted padding/data window
+8000047c: 00000013 nop; unexecuted padding/data window
+80000480: 00000013 nop; unexecuted padding/data window
+80000484: 00000013 nop; unexecuted padding/data window
+80000488: 00000013 nop; unexecuted padding/data window
+8000048c: 00000013 nop; unexecuted padding/data window
+80000490: 00000013 nop; unexecuted padding/data window
+80000494: 00000013 nop; unexecuted padding/data window
+80000498: 00000013 nop; unexecuted padding/data window
+8000049c: 00000013 nop; unexecuted padding/data window
+800004a0: 00000013 nop; unexecuted padding/data window
+800004a4: 00000013 nop; unexecuted padding/data window
+800004a8: 00000013 nop; unexecuted padding/data window
+800004ac: 00000013 nop; unexecuted padding/data window
+800004b0: 00000013 nop; unexecuted padding/data window
+800004b4: 00000013 nop; unexecuted padding/data window
+800004b8: 00000013 nop; unexecuted padding/data window
+800004bc: 00000013 nop; unexecuted padding/data window
+800004c0: 00000013 nop; unexecuted padding/data window
+800004c4: 00000013 nop; unexecuted padding/data window
+800004c8: 00000013 nop; unexecuted padding/data window
+800004cc: 00000013 nop; unexecuted padding/data window
+800004d0: 00000013 nop; unexecuted padding/data window
+800004d4: 00000013 nop; unexecuted padding/data window
+800004d8: 00000013 nop; unexecuted padding/data window
+800004dc: 00000013 nop; unexecuted padding/data window
+800004e0: 00000013 nop; unexecuted padding/data window
+800004e4: 00000013 nop; unexecuted padding/data window
+800004e8: 00000013 nop; unexecuted padding/data window
+800004ec: 00000013 nop; unexecuted padding/data window
+800004f0: 00000013 nop; unexecuted padding/data window
+800004f4: 00000013 nop; unexecuted padding/data window
+800004f8: 00000013 nop; unexecuted padding/data window
+800004fc: 00000013 nop; unexecuted padding/data window
+80000500: 00000013 nop; unexecuted padding/data window
+80000504: 00000013 nop; unexecuted padding/data window
+80000508: 00000013 nop; unexecuted padding/data window
+8000050c: 00000013 nop; unexecuted padding/data window
+80000510: 00000013 nop; unexecuted padding/data window
+80000514: 00000013 nop; unexecuted padding/data window
+80000518: 00000013 nop; unexecuted padding/data window
+8000051c: 00000013 nop; unexecuted padding/data window
+80000520: 00000013 nop; unexecuted padding/data window
+80000524: 00000013 nop; unexecuted padding/data window
+80000528: 00000013 nop; unexecuted padding/data window
+8000052c: 00000013 nop; unexecuted padding/data window
+80000530: 00000013 nop; unexecuted padding/data window
+80000534: 00000013 nop; unexecuted padding/data window
+80000538: 00000013 nop; unexecuted padding/data window
+8000053c: 00000013 nop; unexecuted padding/data window
+80000540: 00000013 nop; unexecuted padding/data window
+80000544: 00000013 nop; unexecuted padding/data window
+80000548: 00000013 nop; unexecuted padding/data window
+8000054c: 00000013 nop; unexecuted padding/data window
+80000550: 00000013 nop; unexecuted padding/data window
+80000554: 00000013 nop; unexecuted padding/data window
+80000558: 00000013 nop; unexecuted padding/data window
+8000055c: 00000013 nop; unexecuted padding/data window
+80000560: 00000013 nop; unexecuted padding/data window
+80000564: 00000013 nop; unexecuted padding/data window
+80000568: 00000013 nop; unexecuted padding/data window
+8000056c: 00000013 nop; unexecuted padding/data window
+80000570: 00000013 nop; unexecuted padding/data window
+80000574: 00000013 nop; unexecuted padding/data window
+80000578: 00000013 nop; unexecuted padding/data window
+8000057c: 00000013 nop; unexecuted padding/data window
+80000580: 00000013 nop; unexecuted padding/data window
+80000584: 00000013 nop; unexecuted padding/data window
+80000588: 00000013 nop; unexecuted padding/data window
+8000058c: 00000013 nop; unexecuted padding/data window
+80000590: 00000013 nop; unexecuted padding/data window
+80000594: 00000013 nop; unexecuted padding/data window
+80000598: 00000013 nop; unexecuted padding/data window
+8000059c: 00000013 nop; unexecuted padding/data window
+800005a0: 00000013 nop; unexecuted padding/data window
+800005a4: 00000013 nop; unexecuted padding/data window
+800005a8: 00000013 nop; unexecuted padding/data window
+800005ac: 00000013 nop; unexecuted padding/data window
+800005b0: 00000013 nop; unexecuted padding/data window
+800005b4: 00000013 nop; unexecuted padding/data window
+800005b8: 00000013 nop; unexecuted padding/data window
+800005bc: 00000013 nop; unexecuted padding/data window
+800005c0: 00000013 nop; unexecuted padding/data window
+800005c4: 00000013 nop; unexecuted padding/data window
+800005c8: 00000013 nop; unexecuted padding/data window
+800005cc: 00000013 nop; unexecuted padding/data window
+800005d0: 00000013 nop; unexecuted padding/data window
+800005d4: 00000013 nop; unexecuted padding/data window
+800005d8: 00000013 nop; unexecuted padding/data window
+800005dc: 00000013 nop; unexecuted padding/data window
+800005e0: 00000013 nop; unexecuted padding/data window
+800005e4: 00000013 nop; unexecuted padding/data window
+800005e8: 00000013 nop; unexecuted padding/data window
+800005ec: 00000013 nop; unexecuted padding/data window
+800005f0: 00000013 nop; unexecuted padding/data window
+800005f4: 00000013 nop; unexecuted padding/data window
+800005f8: 00000013 nop; unexecuted padding/data window
+800005fc: 00000013 nop; unexecuted padding/data window
+80000600: 00000013 nop; unexecuted padding/data window
+80000604: 00000013 nop; unexecuted padding/data window
+80000608: 00000013 nop; unexecuted padding/data window
+8000060c: 00000013 nop; unexecuted padding/data window
+80000610: 00000013 nop; unexecuted padding/data window
+80000614: 00000013 nop; unexecuted padding/data window
+80000618: 00000013 nop; unexecuted padding/data window
+8000061c: 00000013 nop; unexecuted padding/data window
+80000620: 00000013 nop; unexecuted padding/data window
+80000624: 00000013 nop; unexecuted padding/data window
+80000628: 00000013 nop; unexecuted padding/data window
+8000062c: 00000013 nop; unexecuted padding/data window
+80000630: 00000013 nop; unexecuted padding/data window
+80000634: 00000013 nop; unexecuted padding/data window
+80000638: 00000013 nop; unexecuted padding/data window
+8000063c: 00000013 nop; unexecuted padding/data window
+80000640: 00000013 nop; unexecuted padding/data window
+80000644: 00000013 nop; unexecuted padding/data window
+80000648: 00000013 nop; unexecuted padding/data window
+8000064c: 00000013 nop; unexecuted padding/data window
+80000650: 00000013 nop; unexecuted padding/data window
+80000654: 00000013 nop; unexecuted padding/data window
+80000658: 00000013 nop; unexecuted padding/data window
+8000065c: 00000013 nop; unexecuted padding/data window
+80000660: 00000013 nop; unexecuted padding/data window
+80000664: 00000013 nop; unexecuted padding/data window
+80000668: 00000013 nop; unexecuted padding/data window
+8000066c: 00000013 nop; unexecuted padding/data window
+80000670: 00000013 nop; unexecuted padding/data window
+80000674: 00000013 nop; unexecuted padding/data window
+80000678: 00000013 nop; unexecuted padding/data window
+8000067c: 00000013 nop; unexecuted padding/data window
+80000680: 00000013 nop; unexecuted padding/data window
+80000684: 00000013 nop; unexecuted padding/data window
+80000688: 00000013 nop; unexecuted padding/data window
+8000068c: 00000013 nop; unexecuted padding/data window
+80000690: 00000013 nop; unexecuted padding/data window
+80000694: 00000013 nop; unexecuted padding/data window
+80000698: 00000013 nop; unexecuted padding/data window
+8000069c: 00000013 nop; unexecuted padding/data window
+800006a0: 00000013 nop; unexecuted padding/data window
+800006a4: 00000013 nop; unexecuted padding/data window
+800006a8: 00000013 nop; unexecuted padding/data window
+800006ac: 00000013 nop; unexecuted padding/data window
+800006b0: 00000013 nop; unexecuted padding/data window
+800006b4: 00000013 nop; unexecuted padding/data window
+800006b8: 00000013 nop; unexecuted padding/data window
+800006bc: 00000013 nop; unexecuted padding/data window
+800006c0: 00000013 nop; unexecuted padding/data window
+800006c4: 00000013 nop; unexecuted padding/data window
+800006c8: 00000013 nop; unexecuted padding/data window
+800006cc: 00000013 nop; unexecuted padding/data window
+800006d0: 00000013 nop; unexecuted padding/data window
+800006d4: 00000013 nop; unexecuted padding/data window
+800006d8: 00000013 nop; unexecuted padding/data window
+800006dc: 00000013 nop; unexecuted padding/data window
+800006e0: 00000013 nop; unexecuted padding/data window
+800006e4: 00000013 nop; unexecuted padding/data window
+800006e8: 00000013 nop; unexecuted padding/data window
+800006ec: 00000013 nop; unexecuted padding/data window
+800006f0: 00000013 nop; unexecuted padding/data window
+800006f4: 00000013 nop; unexecuted padding/data window
+800006f8: 00000013 nop; unexecuted padding/data window
+800006fc: 00000013 nop; unexecuted padding/data window
+80000700: 00000013 nop; unexecuted padding/data window
+80000704: 00000013 nop; unexecuted padding/data window
+80000708: 00000013 nop; unexecuted padding/data window
+8000070c: 00000013 nop; unexecuted padding/data window
+80000710: 00000013 nop; unexecuted padding/data window
+80000714: 00000013 nop; unexecuted padding/data window
+80000718: 00000013 nop; unexecuted padding/data window
+8000071c: 00000013 nop; unexecuted padding/data window
+80000720: 00000013 nop; unexecuted padding/data window
+80000724: 00000013 nop; unexecuted padding/data window
+80000728: 00000013 nop; unexecuted padding/data window
+8000072c: 00000013 nop; unexecuted padding/data window
+80000730: 00000013 nop; unexecuted padding/data window
+80000734: 00000013 nop; unexecuted padding/data window
+80000738: 00000013 nop; unexecuted padding/data window
+8000073c: 00000013 nop; unexecuted padding/data window
+80000740: 00000013 nop; unexecuted padding/data window
+80000744: 00000013 nop; unexecuted padding/data window
+80000748: 00000013 nop; unexecuted padding/data window
+8000074c: 00000013 nop; unexecuted padding/data window
+80000750: 00000013 nop; unexecuted padding/data window
+80000754: 00000013 nop; unexecuted padding/data window
+80000758: 00000013 nop; unexecuted padding/data window
+8000075c: 00000013 nop; unexecuted padding/data window
+80000760: 00000013 nop; unexecuted padding/data window
+80000764: 00000013 nop; unexecuted padding/data window
+80000768: 00000013 nop; unexecuted padding/data window
+8000076c: 00000013 nop; unexecuted padding/data window
+80000770: 00000013 nop; unexecuted padding/data window
+80000774: 00000013 nop; unexecuted padding/data window
+80000778: 00000013 nop; unexecuted padding/data window
+8000077c: 00000013 nop; unexecuted padding/data window
+80000780: 00000013 nop; unexecuted padding/data window
+80000784: 00000013 nop; unexecuted padding/data window
+80000788: 00000013 nop; unexecuted padding/data window
+8000078c: 00000013 nop; unexecuted padding/data window
+80000790: 00000013 nop; unexecuted padding/data window
+80000794: 00000013 nop; unexecuted padding/data window
+80000798: 00000013 nop; unexecuted padding/data window
+8000079c: 00000013 nop; unexecuted padding/data window
+800007a0: 00000013 nop; unexecuted padding/data window
+800007a4: 00000013 nop; unexecuted padding/data window
+800007a8: 00000013 nop; unexecuted padding/data window
+800007ac: 00000013 nop; unexecuted padding/data window
+800007b0: 00000013 nop; unexecuted padding/data window
+800007b4: 00000013 nop; unexecuted padding/data window
+800007b8: 00000013 nop; unexecuted padding/data window
+800007bc: 00000013 nop; unexecuted padding/data window
+800007c0: 00000013 nop; unexecuted padding/data window
+800007c4: 00000013 nop; unexecuted padding/data window
+800007c8: 00000013 nop; unexecuted padding/data window
+800007cc: 00000013 nop; unexecuted padding/data window
+800007d0: 00000013 nop; unexecuted padding/data window
+800007d4: 00000013 nop; unexecuted padding/data window
+800007d8: 00000013 nop; unexecuted padding/data window
+800007dc: 00000013 nop; unexecuted padding/data window
+800007e0: 00000013 nop; unexecuted padding/data window
+800007e4: 00000013 nop; unexecuted padding/data window
+800007e8: 00000013 nop; unexecuted padding/data window
+800007ec: 00000013 nop; unexecuted padding/data window
+800007f0: 00000013 nop; unexecuted padding/data window
+800007f4: 00000013 nop; unexecuted padding/data window
+800007f8: 00000013 nop; unexecuted padding/data window
+800007fc: 00000013 nop; unexecuted padding/data window
+80000800: 00000013 nop; unexecuted padding/data window
+80000804: 00000013 nop; unexecuted padding/data window
+80000808: 00000013 nop; unexecuted padding/data window
+8000080c: 00000013 nop; unexecuted padding/data window
+80000810: 00000013 nop; unexecuted padding/data window
+80000814: 00000013 nop; unexecuted padding/data window
+80000818: 00000013 nop; unexecuted padding/data window
+8000081c: 00000013 nop; unexecuted padding/data window
+80000820: 00000013 nop; unexecuted padding/data window
+80000824: 00000013 nop; unexecuted padding/data window
+80000828: 00000013 nop; unexecuted padding/data window
+8000082c: 00000013 nop; unexecuted padding/data window
+80000830: 00000013 nop; unexecuted padding/data window
+80000834: 00000013 nop; unexecuted padding/data window
+80000838: 00000013 nop; unexecuted padding/data window
+8000083c: 00000013 nop; unexecuted padding/data window
+80000840: 00000013 nop; unexecuted padding/data window
+80000844: 00000013 nop; unexecuted padding/data window
+80000848: 00000013 nop; unexecuted padding/data window
+8000084c: 00000013 nop; unexecuted padding/data window
+80000850: 00000013 nop; unexecuted padding/data window
+80000854: 00000013 nop; unexecuted padding/data window
+80000858: 00000013 nop; unexecuted padding/data window
+8000085c: 00000013 nop; unexecuted padding/data window
+80000860: 00000013 nop; unexecuted padding/data window
+80000864: 00000013 nop; unexecuted padding/data window
+80000868: 00000013 nop; unexecuted padding/data window
+8000086c: 00000013 nop; unexecuted padding/data window
+80000870: 00000013 nop; unexecuted padding/data window
+80000874: 00000013 nop; unexecuted padding/data window
+80000878: 00000013 nop; unexecuted padding/data window
+8000087c: 00000013 nop; unexecuted padding/data window
+80000880: 00000013 nop; unexecuted padding/data window
+80000884: 00000013 nop; unexecuted padding/data window
+80000888: 00000013 nop; unexecuted padding/data window
+8000088c: 00000013 nop; unexecuted padding/data window
+80000890: 00000013 nop; unexecuted padding/data window
+80000894: 00000013 nop; unexecuted padding/data window
+80000898: 00000013 nop; unexecuted padding/data window
+8000089c: 00000013 nop; unexecuted padding/data window
+800008a0: 00000013 nop; unexecuted padding/data window
+800008a4: 00000013 nop; unexecuted padding/data window
+800008a8: 00000013 nop; unexecuted padding/data window
+800008ac: 00000013 nop; unexecuted padding/data window
+800008b0: 00000013 nop; unexecuted padding/data window
+800008b4: 00000013 nop; unexecuted padding/data window
+800008b8: 00000013 nop; unexecuted padding/data window
+800008bc: 00000013 nop; unexecuted padding/data window
+800008c0: 00000013 nop; unexecuted padding/data window
+800008c4: 00000013 nop; unexecuted padding/data window
+800008c8: 00000013 nop; unexecuted padding/data window
+800008cc: 00000013 nop; unexecuted padding/data window
+800008d0: 00000013 nop; unexecuted padding/data window
+800008d4: 00000013 nop; unexecuted padding/data window
+800008d8: 00000013 nop; unexecuted padding/data window
+800008dc: 00000013 nop; unexecuted padding/data window
+800008e0: 00000013 nop; unexecuted padding/data window
+800008e4: 00000013 nop; unexecuted padding/data window
+800008e8: 00000013 nop; unexecuted padding/data window
+800008ec: 00000013 nop; unexecuted padding/data window
+800008f0: 00000013 nop; unexecuted padding/data window
+800008f4: 00000013 nop; unexecuted padding/data window
+800008f8: 00000013 nop; unexecuted padding/data window
+800008fc: 00000013 nop; unexecuted padding/data window
+80000900: 00000013 nop; unexecuted padding/data window
+80000904: 00000013 nop; unexecuted padding/data window
+80000908: 00000013 nop; unexecuted padding/data window
+8000090c: 00000013 nop; unexecuted padding/data window
+80000910: 00000013 nop; unexecuted padding/data window
+80000914: 00000013 nop; unexecuted padding/data window
+80000918: 00000013 nop; unexecuted padding/data window
+8000091c: 00000013 nop; unexecuted padding/data window
+80000920: 00000013 nop; unexecuted padding/data window
+80000924: 00000013 nop; unexecuted padding/data window
+80000928: 00000013 nop; unexecuted padding/data window
+8000092c: 00000013 nop; unexecuted padding/data window
+80000930: 00000013 nop; unexecuted padding/data window
+80000934: 00000013 nop; unexecuted padding/data window
+80000938: 00000013 nop; unexecuted padding/data window
+8000093c: 00000013 nop; unexecuted padding/data window
+80000940: 00000013 nop; unexecuted padding/data window
+80000944: 00000013 nop; unexecuted padding/data window
+80000948: 00000013 nop; unexecuted padding/data window
+8000094c: 00000013 nop; unexecuted padding/data window
+80000950: 00000013 nop; unexecuted padding/data window
+80000954: 00000013 nop; unexecuted padding/data window
+80000958: 00000013 nop; unexecuted padding/data window
+8000095c: 00000013 nop; unexecuted padding/data window
+80000960: 00000013 nop; unexecuted padding/data window
+80000964: 00000013 nop; unexecuted padding/data window
+80000968: 00000013 nop; unexecuted padding/data window
+8000096c: 00000013 nop; unexecuted padding/data window
+80000970: 00000013 nop; unexecuted padding/data window
+80000974: 00000013 nop; unexecuted padding/data window
+80000978: 00000013 nop; unexecuted padding/data window
+8000097c: 00000013 nop; unexecuted padding/data window
+80000980: 00000013 nop; unexecuted padding/data window
+80000984: 00000013 nop; unexecuted padding/data window
+80000988: 00000013 nop; unexecuted padding/data window
+8000098c: 00000013 nop; unexecuted padding/data window
+80000990: 00000013 nop; unexecuted padding/data window
+80000994: 00000013 nop; unexecuted padding/data window
+80000998: 00000013 nop; unexecuted padding/data window
+8000099c: 00000013 nop; unexecuted padding/data window
+800009a0: 00000013 nop; unexecuted padding/data window
+800009a4: 00000013 nop; unexecuted padding/data window
+800009a8: 00000013 nop; unexecuted padding/data window
+800009ac: 00000013 nop; unexecuted padding/data window
+800009b0: 00000013 nop; unexecuted padding/data window
+800009b4: 00000013 nop; unexecuted padding/data window
+800009b8: 00000013 nop; unexecuted padding/data window
+800009bc: 00000013 nop; unexecuted padding/data window
+800009c0: 00000013 nop; unexecuted padding/data window
+800009c4: 00000013 nop; unexecuted padding/data window
+800009c8: 00000013 nop; unexecuted padding/data window
+800009cc: 00000013 nop; unexecuted padding/data window
+800009d0: 00000013 nop; unexecuted padding/data window
+800009d4: 00000013 nop; unexecuted padding/data window
+800009d8: 00000013 nop; unexecuted padding/data window
+800009dc: 00000013 nop; unexecuted padding/data window
+800009e0: 00000013 nop; unexecuted padding/data window
+800009e4: 00000013 nop; unexecuted padding/data window
+800009e8: 00000013 nop; unexecuted padding/data window
+800009ec: 00000013 nop; unexecuted padding/data window
+800009f0: 00000013 nop; unexecuted padding/data window
+800009f4: 00000013 nop; unexecuted padding/data window
+800009f8: 00000013 nop; unexecuted padding/data window
+800009fc: 00000013 nop; unexecuted padding/data window
+80000a00: 800005b7 lui address
+80000a04: 20058593 addi x11,x11,512
+80000a08: 02059593 slli 32
+80000a0c: 0205d593 srli 32
+80000a10: 012585b3 add
+80000a14: 0015a00f cbo.clean post-recovery dirty line
+80000a18: 013585b3 add
+80000a1c: 0015a00f cbo.clean post-recovery dirty line
+80000a20: 013585b3 add
+80000a24: 0015a00f cbo.clean post-recovery dirty line
+80000a28: 013585b3 add
+80000a2c: 0015a00f cbo.clean post-recovery dirty line
+80000a30: 013585b3 add
+80000a34: 0015a00f cbo.clean post-recovery dirty line
+80000a38: 013585b3 add
+80000a3c: 0015a00f cbo.clean post-recovery dirty line
+80000a40: 013585b3 add
+80000a44: 0015a00f cbo.clean post-recovery dirty line
+80000a48: 013585b3 add
+80000a4c: 0015a00f cbo.clean post-recovery dirty line
+80000a50: 013585b3 add
+80000a54: 0000006f j done

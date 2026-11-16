@@ -1,0 +1,140 @@
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "CLUSTER_CMO_FLOW.drawio",
+  "layout": {
+    "gap_h": 120,
+    "gap_v": 110,
+    "margin": 80,
+    "block_h": 60
+  },
+  "top": {
+    "frame_label": [
+      "CLUSTER CMO FLOW",
+      "(m_vlsit_riscv_cluster_core)"
+    ]
+  },
+  "frame_row": [
+    "m_vlsit_riscv_cluster_core",
+    "Integrate CPUs, coherence control, memory/MMIO routing, maintenance, shared LLC, PMU and software diagnostics.",
+    "rtl/vlsit/m_vlsit_riscv_cluster_core.sv"
+  ],
+  "frame_interfaces": [],
+  "blocks": [
+    {
+      "key": "B0",
+      "label": [
+        "u_vlsit_riscv_cpu_tile_array",
+        "(m_vlsit_riscv_cpu_tile_array)"
+      ],
+      "width": 360,
+      "row": 0,
+      "col": 0,
+      "row_name": "u_vlsit_riscv_cpu_tile_array (m_vlsit_riscv_cpu_tile_array)",
+      "function": "Replicate active CPU tiles and connect their ownership, query, lock and tagged-probe channels to one shared coherence tile array.",
+      "source": "NEW; rtl/vlsit/m_vlsit_riscv_cpu_tile_array.sv"
+    },
+    {
+      "key": "B1",
+      "label": [
+        "u_vlsit_riscv_cmo_arbiter",
+        "(m_vlsit_riscv_cmo_arbiter)"
+      ],
+      "width": 320,
+      "row": 0,
+      "col": 1,
+      "row_name": "u_vlsit_riscv_cmo_arbiter (m_vlsit_riscv_cmo_arbiter)",
+      "function": "Select one hart's retirement-blocking maintenance request and preserve its completion destination.",
+      "source": "NEW; rtl/vlsit/m_vlsit_riscv_cmo_arbiter.sv"
+    },
+    {
+      "key": "B2",
+      "label": [
+        "u_vlsit_axi_llc",
+        "(m_vlsit_axi_llc)"
+      ],
+      "width": 200,
+      "row": 1,
+      "col": 0,
+      "row_name": "u_vlsit_axi_llc (m_vlsit_axi_llc)",
+      "function": "Wrap the licensed native LLC with VLSIT AXI/service/maintenance and fault-event ports.",
+      "source": "NEW; rtl/vlsit/m_vlsit_axi_llc.sv"
+    },
+    {
+      "key": "B3",
+      "label": [
+        "u_vlsit_riscv_cmo_controller",
+        "(m_vlsit_riscv_cmo_controller)"
+      ],
+      "width": 360,
+      "row": 1,
+      "col": 1,
+      "row_name": "u_vlsit_riscv_cmo_controller (m_vlsit_riscv_cmo_controller)",
+      "function": "Sequence CCU preparation, optional per-line LLC maintenance, terminal COMMIT/ABORT and the hart completion response.",
+      "source": "NEW; rtl/vlsit/m_vlsit_riscv_cmo_controller.sv"
+    }
+  ],
+  "connectors": [
+    {
+      "id": "CMD",
+      "src": "B0",
+      "src_side": "R",
+      "dst": "B1",
+      "dst_side": "L"
+    },
+    {
+      "id": "TAKE",
+      "src": "B1",
+      "src_side": "B",
+      "dst": "B3",
+      "dst_side": "T"
+    },
+    {
+      "id": "MAINT",
+      "src": "B3",
+      "src_side": "L",
+      "dst": "B2",
+      "dst_side": "R"
+    },
+    {
+      "id": "CCU",
+      "src": "B3",
+      "src_side": "T",
+      "dst": "B0",
+      "dst_side": "B"
+    }
+  ],
+  "externals": [],
+  "interfaces": [
+    {
+      "id": "CMD",
+      "name": "CMD request and response bundle",
+      "category": "handshake",
+      "active": "B0 -> B1",
+      "signals": "w_cmo_ccu_begin_hart, w_cmo_ccu_begin_op, w_cmo_ccu_begin_pa_line, w_cmo_ccu_begin_ready, w_cmo_ccu_begin_valid, w_cmo_ccu_begin_wback_en, w_cmo_ccu_finish_commit, w_cmo_ccu_finish_done, w_cmo_ccu_finish_ready, w_cmo_ccu_finish_tag, w_cmo_ccu_finish_valid, w_cmo_ccu_prepare_err, w_cmo_ccu_prepare_ready, w_cmo_ccu_prepare_tag, w_cmo_ccu_prepare_valid, w_cmo_done, w_cmo_error, w_cmo_hart, w_cmo_op, w_cmo_pa_line, w_cmo_pc, w_cmo_ready, w_cmo_req_op, w_cmo_req_pa_line, w_cmo_req_pc, w_cmo_req_ready, w_cmo_req_vaddr, w_cmo_req_valid, w_cmo_rsp_done, w_cmo_rsp_err, w_cmo_vaddr, w_cmo_valid"
+    },
+    {
+      "id": "TAKE",
+      "name": "TAKE request and response bundle",
+      "category": "handshake",
+      "active": "B1 -> B3",
+      "signals": "w_cmo_ccu_begin_hart, w_cmo_ccu_begin_op, w_cmo_ccu_begin_pa_line, w_cmo_ccu_begin_ready, w_cmo_ccu_begin_valid, w_cmo_ccu_begin_wback_en, w_cmo_ccu_finish_commit, w_cmo_ccu_finish_done, w_cmo_ccu_finish_ready, w_cmo_ccu_finish_tag, w_cmo_ccu_finish_valid, w_cmo_ccu_prepare_err, w_cmo_ccu_prepare_ready, w_cmo_ccu_prepare_tag, w_cmo_ccu_prepare_valid, w_cmo_done, w_cmo_error, w_cmo_hart, w_cmo_op, w_cmo_pa_line, w_cmo_pc, w_cmo_ready, w_cmo_req_op, w_cmo_req_pa_line, w_cmo_req_pc, w_cmo_req_ready, w_cmo_req_vaddr, w_cmo_req_valid, w_cmo_rsp_done, w_cmo_rsp_err, w_cmo_vaddr, w_cmo_valid"
+    },
+    {
+      "id": "MAINT",
+      "name": "MAINT request and response bundle",
+      "category": "handshake",
+      "active": "B3 -> B2",
+      "signals": "w_maint_done, w_maint_error, w_maint_op, w_maint_pa_line, w_maint_ready, w_maint_valid"
+    },
+    {
+      "id": "CCU",
+      "name": "CCU request and response bundle",
+      "category": "handshake",
+      "active": "B3 -> B0",
+      "signals": "w_ccu_evt_count"
+    }
+  ],
+  "nets": [],
+  "legend_note": "Focused working-flow view of actual core child instances. Arrows indicate request initiation; completion/data responses return in the same bundle. Only the named path is shown: other core children remain in the full composition diagram. The route block represents the source generate replication across active harts. Complete qualifiers and ordering are in Sections 6.3 and 10.5.",
+  "library_sha256": "15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"
+}

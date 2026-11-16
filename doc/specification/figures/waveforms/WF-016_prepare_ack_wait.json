@@ -1,0 +1,94 @@
+{
+  "head": {
+    "text": "WF-016 - No-timeout wait for a missing PREPARE ACK"
+  },
+  "signal": [
+    {
+      "name": "clk_cluster",
+      "wave": "p............."
+    },
+    {
+      "name": "i_rst_n_cluster",
+      "wave": "1............0"
+    },
+    [
+      "Line X transaction (logical aliases)",
+      {
+        "name": "txn_valid_X",
+        "wave": "01............"
+      },
+      {
+        "name": "txn_tag_X",
+        "wave": "=.............",
+        "data": ["T2"]
+      },
+      {
+        "name": "line_lock_X",
+        "wave": "01...........0"
+      },
+      {
+        "name": "txn_slot_T2_active",
+        "wave": "01...........0"
+      },
+      {
+        "name": "dir_holders_X",
+        "wave": "=............=",
+        "data": ["hart 0, hart 1", "invalid after reset"]
+      },
+      {
+        "name": "requester_grant_valid",
+        "wave": "0............."
+      }
+    ],
+    [
+      "PREPARE to both recorded holders",
+      {
+        "name": "prepare_valid_hart0",
+        "wave": "0...1........."
+      },
+      {
+        "name": "prepare_valid_hart1",
+        "wave": "0...1........."
+      },
+      {
+        "name": "prepare_ack_hart0",
+        "wave": "0.....1......."
+      },
+      {
+        "name": "prepare_ack_hart1",
+        "wave": "0............."
+      },
+      {
+        "name": "commit_valid",
+        "wave": "0............."
+      },
+      {
+        "name": "hart0_state_X",
+        "wave": "=............=",
+        "data": ["S", "I after reset"]
+      },
+      {
+        "name": "hart1_state_X",
+        "wave": "=............=",
+        "data": ["M", "I after reset"]
+      }
+    ],
+    [
+      "Independent line progress when resources allow",
+      {
+        "name": "line_Y_complete",
+        "wave": "0.......1.0..."
+      },
+      {
+        "name": "line_Y_uses_other_slot",
+        "wave": "0......1..0..."
+      }
+    ]
+  ],
+  "foot": {
+    "text": "Hart 0 returns PREPARE ACK; hart 1 does not. No timeout: the CCU keeps line X locked and slot T2 allocated, leaves stable MESI and directory metadata unchanged, and sends neither COMMIT nor requester grant. A different line may progress only with independent slot and resources. Reset is the only recovery. Logical aliases, not finalized RTL ports; spacing is illustrative, not a latency bound."
+  },
+  "config": {
+    "hscale": 1
+  }
+}

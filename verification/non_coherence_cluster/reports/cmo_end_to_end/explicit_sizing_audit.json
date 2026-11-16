@@ -1,0 +1,342 @@
+[
+  {
+    "file": "rtl/modified/cva6/vendor/pulp-platform/tech_cells_generic/src/rtl/tc_sram.sv",
+    "destination": "init_val[i]"
+  },
+  {
+    "file": "rtl/modified/cvfpu/src/fpnew_cast_multi.sv",
+    "destination": "fmt_exponent[fmt]"
+  },
+  {
+    "file": "rtl/modified/cvfpu/src/fpnew_cast_multi.sv",
+    "destination": "fmt_mantissa[fmt]"
+  },
+  {
+    "file": "rtl/modified/cvfpu/src/fpnew_cast_multi.sv",
+    "destination": "fmt_shift_compensation[fmt]"
+  },
+  {
+    "file": "rtl/modified/cvfpu/src/fpnew_cast_multi.sv",
+    "destination": "src_bias"
+  },
+  {
+    "file": "rtl/modified/cvfpu/src/fpnew_cast_multi.sv",
+    "destination": "src_subnormal"
+  },
+  {
+    "file": "rtl/modified/cvfpu/src/fpnew_cast_multi.sv",
+    "destination": "int_input_exp"
+  },
+  {
+    "file": "rtl/modified/cvfpu/src/fpnew_cast_multi.sv",
+    "destination": "destination_exp"
+  },
+  {
+    "file": "rtl/modified/cvfpu/src/fpnew_cast_multi.sv",
+    "destination": "denorm_shamt"
+  },
+  {
+    "file": "rtl/modified/cvfpu/src/fpnew_cast_multi.sv",
+    "destination": "denorm_shamt"
+  },
+  {
+    "file": "rtl/modified/cvfpu/src/fpnew_cast_multi.sv",
+    "destination": "denorm_shamt"
+  },
+  {
+    "file": "rtl/modified/cvfpu/src/fpnew_cast_multi.sv",
+    "destination": "final_exp"
+  },
+  {
+    "file": "rtl/modified/cvfpu/src/fpnew_cast_multi.sv",
+    "destination": "final_exp"
+  },
+  {
+    "file": "rtl/modified/cvfpu/src/fpnew_cast_multi.sv",
+    "destination": "denorm_shamt"
+  },
+  {
+    "file": "rtl/modified/cvfpu/src/fpnew_cast_multi.sv",
+    "destination": "denorm_shamt"
+  },
+  {
+    "file": "rtl/modified/cvfpu/src/fpnew_cast_multi.sv",
+    "destination": "fmt_pre_round_abs[fmt]"
+  },
+  {
+    "file": "rtl/modified/cvfpu/src/fpnew_noncomp.sv",
+    "destination": "cmp_result"
+  },
+  {
+    "file": "rtl/modified/cvfpu/src/fpnew_noncomp.sv",
+    "destination": "cmp_result"
+  },
+  {
+    "file": "rtl/modified/cvfpu/src/fpnew_fma.sv",
+    "destination": "exponent_a"
+  },
+  {
+    "file": "rtl/modified/cvfpu/src/fpnew_fma.sv",
+    "destination": "exponent_b"
+  },
+  {
+    "file": "rtl/modified/cvfpu/src/fpnew_fma.sv",
+    "destination": "exponent_c"
+  },
+  {
+    "file": "rtl/modified/cvfpu/src/fpnew_fma.sv",
+    "destination": "exponent_product"
+  },
+  {
+    "file": "rtl/modified/cvfpu/src/fpnew_fma.sv",
+    "destination": "sum"
+  },
+  {
+    "file": "rtl/modified/cvfpu/src/fpnew_fma.sv",
+    "destination": "norm_shamt"
+  },
+  {
+    "file": "rtl/modified/axi_llc_locked/common_cells/src/sub_per_hash.sv",
+    "destination": "xor_array[r][i][j]"
+  },
+  {
+    "file": "rtl/modified/cvfpu/src/fpnew_opgroup_multifmt_slice.sv",
+    "destination": "lane_aux[lane]"
+  },
+  {
+    "file": "rtl/modified/cvfpu/src/fpnew_opgroup_multifmt_slice.sv",
+    "destination": "lane_tags[lane]"
+  },
+  {
+    "file": "rtl/modified/cvfpu/src/fpnew_opgroup_fmt_slice.sv",
+    "destination": "slice_regular_result"
+  },
+  {
+    "file": "rtl/modified/cva6/common/local/util/sram.sv",
+    "destination": "be_aligned[BE_WIDTH_ALIGNED-1:0]"
+  },
+  {
+    "file": "rtl/modified/hpdcache_cva6_pinned/rtl/src/hpdcache_uncached.sv",
+    "destination": "mem_req_read_o.mem_req_addr"
+  },
+  {
+    "file": "rtl/modified/hpdcache_cva6_pinned/rtl/src/hpdcache_uncached.sv",
+    "destination": "mem_req_write_o.mem_req_addr"
+  },
+  {
+    "file": "rtl/modified/hpdcache/rtl/src/hpdcache_miss_handler.sv",
+    "destination": "mem_req_o.mem_req_addr"
+  },
+  {
+    "file": "rtl/modified/hpdcache/rtl/src/hpdcache_ctrl.sv",
+    "destination": "err_dir_wdata"
+  },
+  {
+    "file": "rtl/modified/hpdcache/rtl/src/hpdcache_ctrl.sv",
+    "destination": "err_dat_wdata"
+  },
+  {
+    "file": "rtl/modified/hpdcache_cva6_pinned/rtl/src/hwpf_stride/hwpf_stride.sv",
+    "destination": "snoop_nline_o"
+  },
+  {
+    "file": "rtl/modified/hpdcache_cva6_pinned/rtl/src/hwpf_stride/hwpf_stride.sv",
+    "destination": "request_nline_d"
+  },
+  {
+    "file": "rtl/modified/hpdcache_cva6_pinned/rtl/src/hwpf_stride/hwpf_stride.sv",
+    "destination": "shadow_base_d.base_cline"
+  },
+  {
+    "file": "rtl/modified/hpdcache_cva6_pinned/rtl/src/hwpf_stride/hwpf_stride.sv",
+    "destination": "request_nline_d"
+  },
+  {
+    "file": "rtl/modified/hpdcache_cva6_pinned/rtl/src/hwpf_stride/hwpf_stride.sv",
+    "destination": "request_nline_d"
+  },
+  {
+    "file": "rtl/modified/hpdcache_cva6_pinned/rtl/src/hwpf_stride/hwpf_stride.sv",
+    "destination": "shadow_base_d.base_cline"
+  },
+  {
+    "file": "rtl/modified/cva6/core/cva6_mmu/cva6_tlb.sv",
+    "destination": "v_st_enbl"
+  },
+  {
+    "file": "rtl/modified/hpdcache_cva6_pinned/rtl/src/utils/hpdcache_mem_resp_demux.sv",
+    "destination": "mem_resp_demux_sel"
+  },
+  {
+    "file": "rtl/modified/hpdcache/rtl/src/hwpf_stride_wrapper.sv",
+    "destination": "hwpf_stride_status_free_idx"
+  },
+  {
+    "file": "rtl/modified/hpdcache/rtl/src/hwpf_stride_wrapper.sv",
+    "destination": "snoop_nline"
+  },
+  {
+    "file": "rtl/modified/cva6/core/cache_subsystem/cva6_hpdcache_if_adapter.sv",
+    "destination": "hpdcache_req.size"
+  },
+  {
+    "file": "rtl/modified/cva6/core/serdiv.sv",
+    "destination": "shift_a"
+  },
+  {
+    "file": "rtl/modified/cva6/core/alu.sv",
+    "destination": "operand_a_bitmanip"
+  },
+  {
+    "file": "rtl/modified/cva6/core/alu.sv",
+    "destination": "operand_a_bitmanip"
+  },
+  {
+    "file": "rtl/modified/cva6/core/alu.sv",
+    "destination": "operand_a_cpop"
+  },
+  {
+    "file": "rtl/modified/cva6/core/alu.sv",
+    "destination": "rolw"
+  },
+  {
+    "file": "rtl/modified/cva6/core/alu.sv",
+    "destination": "rorw"
+  },
+  {
+    "file": "rtl/modified/cva6/core/alu.sv",
+    "destination": "result_o"
+  },
+  {
+    "file": "rtl/modified/cva6/core/alu.sv",
+    "destination": "result_o"
+  },
+  {
+    "file": "rtl/modified/cva6/core/raw_checker.sv",
+    "destination": "last_before_idx"
+  },
+  {
+    "file": "rtl/modified/cva6/core/raw_checker.sv",
+    "destination": "last_after_idx"
+  },
+  {
+    "file": "rtl/modified/cva6/core/cache_subsystem/cva6_icache.sv",
+    "destination": "cl_offset_d"
+  },
+  {
+    "file": "rtl/modified/axi_llc/src/eviction_refill/axi_llc_ax_master.sv",
+    "destination": "chan_d.id"
+  },
+  {
+    "file": "rtl/modified/cva6/core/cache_subsystem/cva6_hpdcache_subsystem_axi_arbiter.sv",
+    "destination": "icache_miss_req_wdata.mem_req_addr"
+  },
+  {
+    "file": "rtl/modified/cva6/core/cache_subsystem/cva6_hpdcache_subsystem_axi_arbiter.sv",
+    "destination": "icache_miss_req_wdata.mem_req_len"
+  },
+  {
+    "file": "rtl/modified/cva6/core/cache_subsystem/cva6_hpdcache_subsystem_axi_arbiter.sv",
+    "destination": "icache_miss_req_wdata.mem_req_size"
+  },
+  {
+    "file": "rtl/modified/cva6/core/aes.sv",
+    "destination": "result_o"
+  },
+  {
+    "file": "rtl/modified/cva6/core/aes.sv",
+    "destination": "result_o"
+  },
+  {
+    "file": "rtl/modified/cva6/core/aes.sv",
+    "destination": "result_o"
+  },
+  {
+    "file": "rtl/modified/cva6/core/aes.sv",
+    "destination": "result_o"
+  },
+  {
+    "file": "rtl/modified/cva6/core/aes.sv",
+    "destination": "result_o"
+  },
+  {
+    "file": "rtl/modified/cva6/core/aes.sv",
+    "destination": "result_o"
+  },
+  {
+    "file": "rtl/modified/cva6/core/aes.sv",
+    "destination": "result_o"
+  },
+  {
+    "file": "rtl/modified/cva6/core/aes.sv",
+    "destination": "result_o"
+  },
+  {
+    "file": "rtl/modified/cva6/core/aes.sv",
+    "destination": "result_o"
+  },
+  {
+    "file": "rtl/modified/cva6/core/aes.sv",
+    "destination": "result_o"
+  },
+  {
+    "file": "rtl/modified/cva6/core/aes.sv",
+    "destination": "result_o"
+  },
+  {
+    "file": "rtl/modified/cva6/core/aes.sv",
+    "destination": "result_o"
+  },
+  {
+    "file": "rtl/modified/cva6/core/aes.sv",
+    "destination": "result_o"
+  },
+  {
+    "file": "rtl/modified/cva6/core/aes.sv",
+    "destination": "result_o"
+  },
+  {
+    "file": "rtl/modified/cva6/core/load_store_unit.sv",
+    "destination": "cva6_misaligned_exception"
+  },
+  {
+    "file": "rtl/modified/cva6/core/mult.sv",
+    "destination": "operand_a"
+  },
+  {
+    "file": "rtl/modified/cva6/core/mult.sv",
+    "destination": "operand_b"
+  },
+  {
+    "file": "rtl/modified/cva6/core/scoreboard.sv",
+    "destination": "commit_pointer_n[k]"
+  },
+  {
+    "file": "rtl/modified/cva6/core/decoder.sv",
+    "destination": "orig_instr_o"
+  },
+  {
+    "file": "rtl/modified/axi_llc/src/axi_llc_read_unit.sv",
+    "destination": "desc_d.a_x_addr"
+  },
+  {
+    "file": "rtl/modified/axi_llc/src/axi_llc_write_unit.sv",
+    "destination": "desc_d.a_x_addr"
+  },
+  {
+    "file": "rtl/modified/axi_llc/src/axi_llc_config.sv",
+    "destination": "conf_regs_o.set_asso"
+  },
+  {
+    "file": "rtl/modified/axi_llc/src/axi_llc_config.sv",
+    "destination": "conf_regs_o.num_lines"
+  },
+  {
+    "file": "rtl/modified/axi_llc/src/axi_llc_config.sv",
+    "destination": "conf_regs_o.num_blocks"
+  },
+  {
+    "file": "rtl/modified/cva6/core/csr_regfile.sv",
+    "destination": "index"
+  }
+]

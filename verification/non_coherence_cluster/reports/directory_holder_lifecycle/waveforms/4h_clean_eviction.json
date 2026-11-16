@@ -1,0 +1,43 @@
+{
+  "signal": [
+    {
+      "name": "absent_harts_seen",
+      "wave": "==......=.",
+      "data": [
+        "0x0",
+        "0x1",
+        "0xf"
+      ]
+    },
+    {
+      "name": "harts_done",
+      "wave": "=..=.=.=.=",
+      "data": [
+        "0x0",
+        "0x2",
+        "0x6",
+        "0xe",
+        "0xf"
+      ]
+    },
+    {
+      "name": "peer_amo_values_seen",
+      "wave": "=.=.=.=...",
+      "data": [
+        "0x0",
+        "0x1",
+        "0x3",
+        "0x7"
+      ]
+    }
+  ],
+  "head": {
+    "text": "TEST-052: 4 harts, clean_eviction; actual event samples"
+  },
+  "foot": {
+    "text": "Times (ns): 80, 18370, 20380, 20490, 20830, 20940, 21360, 21470, 24850, 25810. Nonuniform gaps."
+  },
+  "config": {
+    "hscale": 2
+  }
+}

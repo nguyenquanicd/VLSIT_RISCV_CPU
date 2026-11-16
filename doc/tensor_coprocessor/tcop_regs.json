@@ -1,0 +1,47 @@
+{
+  "module": "m_vlsit_csr_tcop",
+  "prefix": "tcop",
+  "async": 1,
+  "ip_version": {"major": 1, "minor": 0},
+  "registers": [
+    {
+      "name": "tcop_version",
+      "offset": "0x0",
+      "description": "Tensor coprocessor version register. Reports the IP major and minor version numbers.",
+      "fields": [
+        {"name": "major", "bits": "[31:16]", "type": "ro", "reset": "0x1", "description": "Major version number of the tensor coprocessor. Software reads it to select compatible driver behavior.\n\nUsage: Read after reset; software never writes this field.\n\nValues:\n0x1 major version 1 (reset value).\n\nUnit: none.\n\nLimits: 16-bit unsigned value."},
+        {"name": "minor", "bits": "[15:0]", "type": "ro", "reset": "0x0", "description": "Minor version number of the tensor coprocessor. Software reads it to identify compatible additions.\n\nUsage: Read after reset; software never writes this field.\n\nValues:\n0x0 minor version 0 (reset value).\n\nUnit: none.\n\nLimits: 16-bit unsigned value."}
+      ]
+    },
+    {
+      "name": "tcop_ctrl",
+      "offset": "0x4",
+      "description": "Tensor coprocessor control register. Enables the datapath and selects the operation mode.",
+      "fields": [
+        {"name": "en", "bits": "[0]", "type": "rw", "reset": "0x0", "description": "Tensor coprocessor enable. Enables the systolic-array datapath and instruction acceptance.\n\nUsage: Written by software before issuing tensor instructions; may be changed only while the IP is idle (busy is 0).\n\nValues:\n0x0 disabled (reset value);\n0x1 enabled.\n\nUnit: none.\n\nLimits: one-bit value."},
+        {"name": "op_mode", "bits": "[2:1]", "type": "rw", "reset": "0x0", "description": "Operation mode select. Selects the operation class executed by an offloaded instruction.\n\nUsage: Written before enable or while idle; must match the PARA_OP_SCOPE elaboration setting.\n\nValues:\n0x0 GEMM only (reset value);\n0x1 element-wise;\n0x2 reduction;\n0x3 reserved.\n\nUnit: none.\n\nLimits: 2-bit value."},
+        {"name": "soft_rst", "bits": "[3]", "type": "rw", "reset": "0x0", "description": "Software reset. Resets the datapath to idle without deasserting the external reset.\n\nUsage: Write 0x1 then 0x0 to issue a self-clearing reset; the IP returns to idle.\n\nValues:\n0x0 normal operation (reset value);\n0x1 assert software reset.\n\nUnit: none.\n\nLimits: one-bit value."},
+        {"name": "reserved", "bits": "[31:4]", "type": "ro", "reset": "0x0", "description": ""}
+      ]
+    },
+    {
+      "name": "tcop_sts",
+      "offset": "0x8",
+      "description": "Tensor coprocessor status register. Reports busy, done and error state.",
+      "fields": [
+        {"name": "busy", "bits": "[0]", "type": "ro", "reset": "0x0", "description": "Busy status. Indicates the datapath is processing an offloaded instruction.\n\nUsage: Software polls this field before reconfiguring; read-only.\n\nValues:\n0x0 idle (reset value);\n0x1 busy.\n\nUnit: none.\n\nLimits: one-bit value."},
+        {"name": "done", "bits": "[1]", "type": "rwi", "reset": "0x0", "description": "Done status. Indicates the last offloaded instruction completed and returned a result.\n\nUsage: Hardware sets this field on completion; software writes 0x0 to clear it after observing.\n\nValues:\n0x0 not done (reset value);\n0x1 done.\n\nUnit: none.\n\nLimits: one-bit value."},
+        {"name": "err", "bits": "[2]", "type": "w1c", "reset": "0x0", "description": "Error status. Indicates the last offloaded instruction terminated with an error.\n\nUsage: Hardware sets this field on error; software writes 0x1 to clear it.\n\nValues:\n0x0 no error (reset value);\n0x1 error.\n\nUnit: none.\n\nLimits: one-bit value."},
+        {"name": "reserved", "bits": "[31:3]", "type": "ro", "reset": "0x0", "description": ""}
+      ]
+    },
+    {
+      "name": "tcop_cfg",
+      "offset": "0xC",
+      "description": "Tensor coprocessor configuration register. Holds the matrix dimension or stride for the next operation.",
+      "fields": [
+        {"name": "cfg_val", "bits": "[31:0]", "type": "rw", "reset": "0x0", "description": "Configuration value. Holds the matrix dimension or stride for the next offloaded operation.\n\nUsage: Written by software before issuing the instruction; used by the datapath for operand addressing.\n\nValues:\n0x00000000 default (reset value);\n0x00000001 to 0xFFFFFFFF configurable value.\n\nUnit: none.\n\nLimits: 32-bit value."}
+      ]
+    }
+  ]
+}

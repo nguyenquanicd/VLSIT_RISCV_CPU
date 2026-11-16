@@ -1,0 +1,1634 @@
+<?xml version='1.0' encoding='utf-8'?>
+<mxfile host="app.diagrams.net" modified="2026-11-07T17:20:00.000Z" agent="OpenAI Codex" version="24.7.8" type="device">
+  <diagram id="FSM001" name="FSM-001_CC_READ_V3">
+    <mxGraphModel dx="1380" dy="1600" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1380" pageHeight="1580" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="FSM001_title__2" value="&lt;b&gt;FSM-001 — Two-phase directory read sharing&lt;/b&gt;" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=18;fontColor=#000000;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="0" vlsit_library_cell="2" vlsit_library_instance="FSM001_title">
+          <mxGeometry width="1290" height="40" as="geometry" x="45" y="10" />
+        </mxCell>
+        <mxCell id="FSM001_start__2" value="&lt;b&gt;RESET RELEASED&lt;/b&gt;&lt;br&gt;Reset đã nhả" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="33" vlsit_library_cell="2" vlsit_library_instance="FSM001_start">
+          <mxGeometry width="180" height="55" as="geometry" x="600" y="65" />
+        </mxCell>
+        <mxCell id="FSM001_idle__2" value="&lt;b&gt;ST_IDLE&lt;/b&gt;&lt;br&gt;Wait for read miss&lt;br&gt;Chờ read miss" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM001_idle">
+          <mxGeometry width="260" height="90" as="geometry" x="560" y="155" />
+        </mxCell>
+        <mxCell id="FSM001_probe__2" value="&lt;b&gt;ST_PREPARE_PROBES&lt;/b&gt;&lt;br&gt;Lock line; target holders&lt;br&gt;MESI state unchanged" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM001_probe">
+          <mxGeometry width="260" height="100" as="geometry" x="560" y="305" />
+        </mxCell>
+        <mxCell id="FSM001_collect__2" value="&lt;b&gt;ST_WAIT_PREPARE&lt;/b&gt;&lt;br&gt;Collect tagged status&lt;br&gt;Match tag and hart; no payload" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM001_collect">
+          <mxGeometry width="260" height="100" as="geometry" x="560" y="465" />
+        </mxCell>
+        <mxCell id="FSM001_m_owner__2" value="&lt;b&gt;Dirty M owner?&lt;/b&gt;&lt;br&gt;Owner M dirty?" style="rhombus;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="34" vlsit_library_cell="2" vlsit_library_instance="FSM001_m_owner">
+          <mxGeometry width="180" height="110" as="geometry" x="600" y="625" />
+        </mxCell>
+        <mxCell id="FSM001_dirty__2" value="&lt;b&gt;ST_OWNER_WRITEBACK&lt;/b&gt;&lt;br&gt;Use owner HPDcache AXI path&lt;br&gt;Owner stays M and line-locked" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM001_dirty">
+          <mxGeometry width="330" height="110" as="geometry" x="100" y="805" />
+        </mxCell>
+        <mxCell id="FSM001_llc_update__2" value="&lt;b&gt;ST_WAIT_OWNER_B&lt;/b&gt;&lt;br&gt;Write two 64-bit beats&lt;br&gt;Wait for matching B status" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM001_llc_update">
+          <mxGeometry width="330" height="100" as="geometry" x="100" y="980" />
+        </mxCell>
+        <mxCell id="FSM001_llc_read__2" value="&lt;b&gt;ST_PREPARE_NO_M&lt;/b&gt;&lt;br&gt;No dirty M owner&lt;br&gt;Return tagged PREPARE status only" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM001_llc_read">
+          <mxGeometry width="360" height="110" as="geometry" x="850" y="805" />
+        </mxCell>
+        <mxCell id="FSM001_grant__2" value="&lt;b&gt;ST_COMMIT_TO_S&lt;/b&gt;&lt;br&gt;Wait for all COMMIT ACKs&lt;br&gt;Update directory; grant S" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM001_grant">
+          <mxGeometry width="260" height="90" as="geometry" x="560" y="1160" />
+        </mxCell>
+        <mxCell id="FSM001_response__2" value="&lt;b&gt;ST_RETURN_PERMISSION&lt;/b&gt;&lt;br&gt;Hold grant until ready&lt;br&gt;Requester refills via HPDcache" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM001_response">
+          <mxGeometry width="260" height="90" as="geometry" x="560" y="1320" />
+        </mxCell>
+        <mxCell id="FSM001_done__2" value="&lt;b&gt;COMPLETE&lt;/b&gt;&lt;br&gt;Hoàn tất" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="33" vlsit_library_cell="2" vlsit_library_instance="FSM001_done">
+          <mxGeometry width="180" height="55" as="geometry" x="600" y="1460" />
+        </mxCell>
+        <mxCell id="FSM001_review_note__2" value="B error fails PREPARE and triggers ABORT. Probe returns status only. No ACK timeout; retain lock/slot until ACKs or reset." style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=18;fontColor=#000000;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="0" vlsit_library_cell="2" vlsit_library_instance="FSM001_review_note">
+          <mxGeometry width="1290" height="45" as="geometry" x="45" y="1515" />
+        </mxCell>
+        <mxCell id="FSM001_e000__2" value="RESET / RESET" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM001_e000" source="FSM001_start__2" target="FSM001_idle__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690.0" y="120.0" as="sourcePoint" />
+            <mxPoint x="690.0" y="155.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM001_e001__2" value="read miss accepted / nhận read miss" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM001_e001" source="FSM001_idle__2" target="FSM001_probe__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690.0" y="245.0" as="sourcePoint" />
+            <mxPoint x="690.0" y="305.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM001_e002__2" value="directory lookup done / tra directory xong" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM001_e002" source="FSM001_probe__2" target="FSM001_collect__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690.0" y="405.0" as="sourcePoint" />
+            <mxPoint x="690.0" y="465.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM001_e003__2" value="all PREPARE ACKs; empty target set also resolves / đủ PREPARE ACK; không holder cũng hoàn tất" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM001_e003" source="FSM001_collect__2" target="FSM001_m_owner__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690.0" y="565.0" as="sourcePoint" />
+            <mxPoint x="690.0" y="625.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM001_e004__2" value="YES / CÓ" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0;exitY=0.5;entryX=1;entryY=0.5;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM001_e004" source="FSM001_m_owner__2" target="FSM001_dirty__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="600.0" y="680.0" as="sourcePoint" />
+            <mxPoint x="430.0" y="860.0" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="500" y="680" />
+              <mxPoint x="470" y="680" />
+              <mxPoint x="470" y="860" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM001_e005__2" value="NO / KHÔNG" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=1;exitY=0.5;entryX=0;entryY=0.5;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM001_e005" source="FSM001_m_owner__2" target="FSM001_llc_read__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="780.0" y="680.0" as="sourcePoint" />
+            <mxPoint x="850.0" y="860.0" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="820" y="680" />
+              <mxPoint x="820" y="860" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM001_e006__2" value="Owner starts writeback through its existing AXI path / Owner bắt đầu writeback qua AXI hiện có" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM001_e006" source="FSM001_dirty__2" target="FSM001_llc_update__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="265.0" y="915.0" as="sourcePoint" />
+            <mxPoint x="265.0" y="980.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM001_e007__2" value="matching AXI B response OK; PREPARE succeeds / B response AXI khớp và OK; PREPARE thành công" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.23;entryY=0;align=center;verticalAlign=middle;exitPerimeter=1;entryPerimeter=1;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM001_e007" source="FSM001_llc_update__2" target="FSM001_grant__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="265" y="1080" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="265" y="1120" />
+              <mxPoint x="620" y="1120" />
+            </Array>
+            <mxPoint x="620" y="1160" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM001_e008__2" value="no M owner; PREPARE status OK / không có owner M; PREPARE status OK" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.77;entryY=0;align=center;verticalAlign=middle;exitPerimeter=1;entryPerimeter=1;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM001_e008" source="FSM001_llc_read__2" target="FSM001_grant__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1030" y="915" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="1030" y="1100" />
+              <mxPoint x="760" y="1100" />
+            </Array>
+            <mxPoint x="760" y="1160" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM001_e009__2" value="all COMMIT ACKs; update directory; grant S permission / đủ COMMIT ACK; cập nhật directory; cấp quyền S" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM001_e009" source="FSM001_grant__2" target="FSM001_response__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690.0" y="1250.0" as="sourcePoint" />
+            <mxPoint x="690.0" y="1320.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM001_e010__2" value="requester response handshake / requester bắt tay nhận response" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM001_e010" source="FSM001_response__2" target="FSM001_done__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690.0" y="1410.0" as="sourcePoint" />
+            <mxPoint x="690.0" y="1460.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM001_e011__2" value="release line lock / nhả khóa line" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=1;exitY=0.5;entryX=1;entryY=0.5;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM001_e011" source="FSM001_done__2" target="FSM001_idle__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="780.0" y="1487.5" as="sourcePoint" />
+            <mxPoint x="820.0" y="200.0" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1240" y="1487.5" />
+              <mxPoint x="1300" y="1487.5" />
+              <mxPoint x="1300" y="200" />
+              <mxPoint x="830" y="200" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="FSM002" name="FSM-002_CC_WRITE_V3">
+    <mxGraphModel dx="1380" dy="1600" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1380" pageHeight="1580" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="FSM002_title__2" value="&lt;b&gt;FSM-002 — Two-phase write/AMO ownership&lt;/b&gt;" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=18;fontColor=#000000;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="0" vlsit_library_cell="2" vlsit_library_instance="FSM002_title">
+          <mxGeometry width="1290" height="40" as="geometry" x="45" y="10" />
+        </mxCell>
+        <mxCell id="FSM002_start__2" value="&lt;b&gt;RESET RELEASED&lt;/b&gt;&lt;br&gt;Reset đã nhả" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="33" vlsit_library_cell="2" vlsit_library_instance="FSM002_start">
+          <mxGeometry width="180" height="55" as="geometry" x="600" y="65" />
+        </mxCell>
+        <mxCell id="FSM002_idle__2" value="&lt;b&gt;ST_IDLE&lt;/b&gt;&lt;br&gt;Wait for GetM/AMO&lt;br&gt;Chờ GetM/AMO" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM002_idle">
+          <mxGeometry width="260" height="90" as="geometry" x="560" y="155" />
+        </mxCell>
+        <mxCell id="FSM002_probe__2" value="&lt;b&gt;ST_PREPARE_PEERS&lt;/b&gt;&lt;br&gt;Lock line; target holders&lt;br&gt;MESI state unchanged" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM002_probe">
+          <mxGeometry width="260" height="100" as="geometry" x="560" y="305" />
+        </mxCell>
+        <mxCell id="FSM002_collect__2" value="&lt;b&gt;ST_WAIT_PREPARE&lt;/b&gt;&lt;br&gt;Collect PREPARE status&lt;br&gt;Match tag/hart; check B" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM002_collect">
+          <mxGeometry width="260" height="100" as="geometry" x="560" y="465" />
+        </mxCell>
+        <mxCell id="FSM002_m_owner__2" value="&lt;b&gt;Dirty M owner?&lt;/b&gt;&lt;br&gt;Owner M dirty?" style="rhombus;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="34" vlsit_library_cell="2" vlsit_library_instance="FSM002_m_owner">
+          <mxGeometry width="180" height="110" as="geometry" x="600" y="625" />
+        </mxCell>
+        <mxCell id="FSM002_dirty__2" value="&lt;b&gt;ST_OWNER_WRITEBACK&lt;/b&gt;&lt;br&gt;Write line via owner AXI&lt;br&gt;Keep M and lock" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM002_dirty">
+          <mxGeometry width="330" height="110" as="geometry" x="100" y="805" />
+        </mxCell>
+        <mxCell id="FSM002_llc_update__2" value="&lt;b&gt;ST_COMMIT_PEERS_I&lt;/b&gt;&lt;br&gt;COMMIT(I); wait for all ACKs&lt;br&gt;Update directory after ACKs" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM002_llc_update">
+          <mxGeometry width="330" height="100" as="geometry" x="100" y="980" />
+        </mxCell>
+        <mxCell id="FSM002_llc_read__2" value="&lt;b&gt;ST_PREPARE_RESOLVED&lt;/b&gt;&lt;br&gt;No M owner or B OK&lt;br&gt;Probe has no data payload" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM002_llc_read">
+          <mxGeometry width="360" height="110" as="geometry" x="850" y="805" />
+        </mxCell>
+        <mxCell id="FSM002_grant__2" value="&lt;b&gt;ST_GRANT_M&lt;/b&gt;&lt;br&gt;Set directory owner&lt;br&gt;Grant M on ACKs" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM002_grant">
+          <mxGeometry width="260" height="90" as="geometry" x="560" y="1160" />
+        </mxCell>
+        <mxCell id="FSM002_response__2" value="&lt;b&gt;ST_RETURN_PERMISSION&lt;/b&gt;&lt;br&gt;Hold grant until ready&lt;br&gt;Requester refills via HPDcache" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM002_response">
+          <mxGeometry width="260" height="90" as="geometry" x="560" y="1320" />
+        </mxCell>
+        <mxCell id="FSM002_done__2" value="&lt;b&gt;COMPLETE&lt;/b&gt;&lt;br&gt;Hoàn tất" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="33" vlsit_library_cell="2" vlsit_library_instance="FSM002_done">
+          <mxGeometry width="180" height="55" as="geometry" x="600" y="1460" />
+        </mxCell>
+        <mxCell id="FSM002_review_note__2" value="B error triggers ABORT; preserve MESI and deny grant. No ACK timeout; retain lock/slot until ACK or reset." style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=18;fontColor=#000000;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="0" vlsit_library_cell="2" vlsit_library_instance="FSM002_review_note">
+          <mxGeometry width="1290" height="45" as="geometry" x="45" y="1515" />
+        </mxCell>
+        <mxCell id="FSM002_e000__2" value="RESET / RESET" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM002_e000" source="FSM002_start__2" target="FSM002_idle__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690.0" y="120.0" as="sourcePoint" />
+            <mxPoint x="690.0" y="155.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM002_e001__2" value="GetM accepted; allocate tag/lock / nhận GetM; cấp tag/khóa" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM002_e001" source="FSM002_idle__2" target="FSM002_probe__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690.0" y="245.0" as="sourcePoint" />
+            <mxPoint x="690.0" y="305.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM002_e002__2" value="directory lookup done / tra directory xong" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM002_e002" source="FSM002_probe__2" target="FSM002_collect__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690.0" y="405.0" as="sourcePoint" />
+            <mxPoint x="690.0" y="465.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM002_e003__2" value="all PREPARE ACKs; zero targets resolves / đủ PREPARE ACK; 0 holder cũng hoàn tất" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM002_e003" source="FSM002_collect__2" target="FSM002_m_owner__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690.0" y="565.0" as="sourcePoint" />
+            <mxPoint x="690.0" y="625.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM002_e004__2" value="YES / CÓ" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0;exitY=0.5;entryX=1;entryY=0.5;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM002_e004" source="FSM002_m_owner__2" target="FSM002_dirty__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="600.0" y="680.0" as="sourcePoint" />
+            <mxPoint x="430.0" y="860.0" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="500" y="680" />
+              <mxPoint x="470" y="680" />
+              <mxPoint x="470" y="860" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM002_e005__2" value="NO / KHÔNG" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=1;exitY=0.5;entryX=0;entryY=0.5;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM002_e005" source="FSM002_m_owner__2" target="FSM002_llc_read__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="780.0" y="680.0" as="sourcePoint" />
+            <mxPoint x="850.0" y="860.0" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="820" y="680" />
+              <mxPoint x="820" y="860" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM002_e006__2" value="Owner AXI writeback completes; line remains M until COMMIT / Writeback AXI xong; line giữ M tới COMMIT" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM002_e006" source="FSM002_dirty__2" target="FSM002_llc_update__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="265.0" y="915.0" as="sourcePoint" />
+            <mxPoint x="265.0" y="980.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM002_e007__2" value="all peer COMMIT ACKs; update directory / đủ COMMIT ACK; cập nhật directory" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;exitPerimeter=1;entryPerimeter=1;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM002_e007" source="FSM002_llc_update__2" target="FSM002_grant__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="265" y="1080" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="265" y="1120" />
+              <mxPoint x="690" y="1120" />
+            </Array>
+            <mxPoint x="690" y="1160" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM002_e008__2" value="no M owner or matching B response OK / không có owner M hoặc B response khớp và OK" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=1;entryY=0.5;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM002_e008" source="FSM002_llc_read__2" target="FSM002_llc_update__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1030.0" y="915.0" as="sourcePoint" />
+            <mxPoint x="820.0" y="1205.0" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1030" y="960" />
+              <mxPoint x="1000" y="960" />
+              <mxPoint x="1000" y="1100" />
+              <mxPoint x="820" y="1100" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM002_e009__2" value="M permission granted; requester refill follows / đã cấp quyền M; requester refill sau đó" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM002_e009" source="FSM002_grant__2" target="FSM002_response__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690.0" y="1250.0" as="sourcePoint" />
+            <mxPoint x="690.0" y="1320.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM002_e010__2" value="requester grant valid / quyền M của requester hợp lệ" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM002_e010" source="FSM002_response__2" target="FSM002_done__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690.0" y="1410.0" as="sourcePoint" />
+            <mxPoint x="690.0" y="1460.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM002_e011__2" value="response handshake / response handshake" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=1;exitY=0.5;entryX=1;entryY=0.5;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM002_e011" source="FSM002_done__2" target="FSM002_idle__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="780.0" y="1487.5" as="sourcePoint" />
+            <mxPoint x="820.0" y="200.0" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1240" y="1487.5" />
+              <mxPoint x="1300" y="1487.5" />
+              <mxPoint x="1300" y="200" />
+              <mxPoint x="830" y="200" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM002_commit_wait__2" value="missing COMMIT ACK: wait; retain line lock/slot / thiếu ACK: chờ; giữ khóa line/slot" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=1;exitY=0.25;entryX=1;entryY=0.75;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM002_commit_wait" source="FSM002_llc_update__2" target="FSM002_llc_update__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="430" y="1005" as="sourcePoint" />
+            <mxPoint x="430" y="1055" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="480" y="1005" />
+              <mxPoint x="480" y="1080" />
+              <mxPoint x="430" y="1080" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="FSM003" name="FSM-003_CACHE_PROBE_V3">
+    <mxGraphModel dx="1380" dy="2300" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1380" pageHeight="2360" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="FSM003_title__2" value="&lt;b&gt;FSM-003 — Two-phase D-cache probe service&lt;/b&gt;" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=18;fontColor=#000000;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="0" vlsit_library_cell="2" vlsit_library_instance="FSM003_title">
+          <mxGeometry width="1290" height="40" as="geometry" x="45" y="10" />
+        </mxCell>
+        <mxCell id="FSM003_start__2" value="&lt;b&gt;RESET RELEASED&lt;/b&gt;&lt;br&gt;Reset đã nhả" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="33" vlsit_library_cell="2" vlsit_library_instance="FSM003_start">
+          <mxGeometry width="180" height="55" as="geometry" x="600" y="65" />
+        </mxCell>
+        <mxCell id="FSM003_wait__2" value="&lt;b&gt;ST_PROBE_WAIT&lt;/b&gt;&lt;br&gt;Wait for probe / Chờ probe" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM003_wait">
+          <mxGeometry width="260" height="90" as="geometry" x="560" y="155" />
+        </mxCell>
+        <mxCell id="FSM003_capture__2" value="&lt;b&gt;ST_LOCK_LINE&lt;/b&gt;&lt;br&gt;Block CPU access to line&lt;br&gt;Drain same-line refill" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM003_capture">
+          <mxGeometry width="260" height="90" as="geometry" x="560" y="305" />
+        </mxCell>
+        <mxCell id="FSM003_hit__2" value="&lt;b&gt;Line present?&lt;/b&gt;&lt;br&gt;Có line trong cache?" style="rhombus;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="34" vlsit_library_cell="2" vlsit_library_instance="FSM003_hit">
+          <mxGeometry width="180" height="110" as="geometry" x="600" y="455" />
+        </mxCell>
+        <mxCell id="FSM003_ack_miss__2" value="&lt;b&gt;ST_PREPARE_I&lt;/b&gt;&lt;br&gt;Line absent: report I/status&lt;br&gt;No payload" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM003_ack_miss">
+          <mxGeometry width="330" height="95" as="geometry" x="80" y="640" />
+        </mxCell>
+        <mxCell id="FSM003_m__2" value="&lt;b&gt;State is M?&lt;/b&gt;&lt;br&gt;State hiện tại là M?" style="rhombus;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="34" vlsit_library_cell="2" vlsit_library_instance="FSM003_m">
+          <mxGeometry width="180" height="110" as="geometry" x="600" y="640" />
+        </mxCell>
+        <mxCell id="FSM003_send__2" value="&lt;b&gt;ST_OWNER_WRITEBACK&lt;/b&gt;&lt;br&gt;Write line via flush AXI&lt;br&gt;Wait B; keep M and lock" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM003_send">
+          <mxGeometry width="350" height="110" as="geometry" x="80" y="835" />
+        </mxCell>
+        <mxCell id="FSM003_cmd__2" value="&lt;b&gt;COMMIT or ABORT?&lt;/b&gt;&lt;br&gt;Line remains locked until command" style="rhombus;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="34" vlsit_library_cell="2" vlsit_library_instance="FSM003_cmd">
+          <mxGeometry width="220" height="115" as="geometry" x="580" y="1400" />
+        </mxCell>
+        <mxCell id="FSM003_set_s__2" value="&lt;b&gt;ST_COMMIT_TO_S&lt;/b&gt;&lt;br&gt;Apply stable state S" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM003_set_s">
+          <mxGeometry width="320" height="105" as="geometry" x="400" y="1810" />
+        </mxCell>
+        <mxCell id="FSM003_set_i__2" value="&lt;b&gt;ST_COMMIT_TO_I&lt;/b&gt;&lt;br&gt;Apply stable state I" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM003_set_i">
+          <mxGeometry width="320" height="105" as="geometry" x="820" y="1810" />
+        </mxCell>
+        <mxCell id="FSM003_ack__2" value="&lt;b&gt;ST_PREPARE_ACK&lt;/b&gt;&lt;br&gt;Return state/status; no data&lt;br&gt;Hold MESI/lock until command" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM003_ack">
+          <mxGeometry width="260" height="100" as="geometry" x="560" y="1240" />
+        </mxCell>
+        <mxCell id="FSM003_review_note__2" value="M PREPARE waits for matching owner B. B error fails PREPARE and triggers ABORT. Probe carries no data; lock stays through COMMIT/ABORT ACK." style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=18;fontColor=#000000;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="0" vlsit_library_cell="2" vlsit_library_instance="FSM003_review_note">
+          <mxGeometry width="1290" height="70" as="geometry" x="45" y="2170" />
+        </mxCell>
+        <mxCell id="FSM003_e000__2" value="RESET / RESET" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM003_e000" source="FSM003_start__2" target="FSM003_wait__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690.0" y="120.0" as="sourcePoint" />
+            <mxPoint x="690.0" y="155.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM003_e001__2" value="probe accepted / nhận probe" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM003_e001" source="FSM003_wait__2" target="FSM003_capture__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690.0" y="245.0" as="sourcePoint" />
+            <mxPoint x="690.0" y="305.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM003_e002__2" value="tag lookup complete / tra tag xong" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM003_e002" source="FSM003_capture__2" target="FSM003_hit__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690.0" y="395.0" as="sourcePoint" />
+            <mxPoint x="690.0" y="455.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM003_e003__2" value="NO / KHÔNG" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0;exitY=0.5;entryX=1;entryY=0.5;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM003_e003" source="FSM003_hit__2" target="FSM003_ack_miss__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="600.0" y="510.0" as="sourcePoint" />
+            <mxPoint x="410.0" y="687.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="500" y="510" />
+              <mxPoint x="450" y="510" />
+              <mxPoint x="450" y="687.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM003_e004__2" value="no-data response / response không data" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.08;entryY=0;align=center;verticalAlign=middle;exitPerimeter=1;entryPerimeter=1;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM003_e004" source="FSM003_ack_miss__2" target="FSM003_ack__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="245" y="735" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="245" y="760" />
+              <mxPoint x="35" y="760" />
+              <mxPoint x="35" y="1100" />
+              <mxPoint x="580" y="1100" />
+            </Array>
+            <mxPoint x="580" y="1240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM003_e005__2" value="YES / CÓ" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM003_e005" source="FSM003_hit__2" target="FSM003_m__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690.0" y="565.0" as="sourcePoint" />
+            <mxPoint x="690.0" y="640.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM003_e006__2" value="M owner: launch AXI writeback / Owner M: khởi phát writeback AXI" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0;exitY=0.5;entryX=1;entryY=0.5;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM003_e006" source="FSM003_m__2" target="FSM003_send__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="600.0" y="695.0" as="sourcePoint" />
+            <mxPoint x="430.0" y="890.0" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="500" y="695" />
+              <mxPoint x="460" y="695" />
+              <mxPoint x="460" y="890" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM003_e007__2" value="NO / KHÔNG" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=1;exitY=0.5;entryX=0.92;entryY=0;align=center;verticalAlign=middle;exitPerimeter=1;entryPerimeter=1;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM003_e007" source="FSM003_m__2" target="FSM003_ack__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="780" y="695" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="850" y="695" />
+              <mxPoint x="850" y="1100" />
+              <mxPoint x="800" y="1100" />
+            </Array>
+            <mxPoint x="800" y="1240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM003_e008__2" value="matching AXI B status received (OK or error) / nhận B status AXI khớp (OK hoặc lỗi)" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;jumpStyle=arc;jumpSize=6;exitPerimeter=1;entryPerimeter=1;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM003_e008" source="FSM003_send__2" target="FSM003_ack__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="255" y="945" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="255" y="1080" />
+              <mxPoint x="690" y="1080" />
+            </Array>
+            <mxPoint x="690" y="1240" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM003_e009__2" value="COMMIT / COMMIT" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0;exitY=0.5;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM003_e009" source="FSM003_cmd__2" target="FSM003_target__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690" y="1515" as="sourcePoint" />
+            <mxPoint x="690" y="1570" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM003_e010__2" value="ABORT; preserve old state / ABORT; giữ state cũ" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=1;exitY=0.5;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM003_e010" source="FSM003_cmd__2" target="FSM003_abort__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="580" y="1457" as="sourcePoint" />
+            <mxPoint x="210" y="1800" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="500" y="1457" />
+              <mxPoint x="210" y="1457" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM003_e011__2" value="stable state updated / state ổn định đã cập nhật" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.27;entryY=0;align=center;verticalAlign=middle;exitPerimeter=1;entryPerimeter=1;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM003_e011" source="FSM003_set_s__2" target="FSM003_commit_ack__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="560" y="1915" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="560" y="1950" />
+              <mxPoint x="630" y="1950" />
+            </Array>
+            <mxPoint x="630" y="2000" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM003_e012__2" value="stable state updated / state ổn định đã cập nhật" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.73;entryY=0;align=center;verticalAlign=middle;exitPerimeter=1;entryPerimeter=1;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM003_e012" source="FSM003_set_i__2" target="FSM003_commit_ack__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="980" y="1915" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="980" y="1950" />
+              <mxPoint x="750" y="1950" />
+            </Array>
+            <mxPoint x="750" y="2000" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM003_e013__2" value="PREPARE status accepted; wait for COMMIT/ABORT / đã nhận PREPARE status; chờ COMMIT/ABORT" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=1;entryY=0.5;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM003_e013" source="FSM003_ack__2" target="FSM003_cmd__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690" y="1340" as="sourcePoint" />
+            <mxPoint x="690" y="1400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM003_target__2" value="&lt;b&gt;Target state?&lt;/b&gt;&lt;br&gt;Đích S hay I?" style="rhombus;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="34" vlsit_library_cell="2" vlsit_library_instance="FSM003_target">
+          <mxGeometry width="220" height="115" as="geometry" x="580" y="1570" />
+        </mxCell>
+        <mxCell id="FSM003_abort__2" value="&lt;b&gt;ST_ABORT_ACK&lt;/b&gt;&lt;br&gt;Preserve old MESI state&lt;br&gt;Unlock after ABORT ACK" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM003_abort">
+          <mxGeometry width="300" height="105" as="geometry" x="60" y="1800" />
+        </mxCell>
+        <mxCell id="FSM003_commit_ack__2" value="&lt;b&gt;ST_COMMIT_ACK&lt;/b&gt;&lt;br&gt;Return tagged ACK&lt;br&gt;Release cache-local lock" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM003_commit_ack">
+          <mxGeometry width="260" height="100" as="geometry" x="560" y="2000" />
+        </mxCell>
+        <mxCell id="FSM003_e015__2" value="S / S" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM003_e015" source="FSM003_target__2" target="FSM003_set_s__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690" y="1685" as="sourcePoint" />
+            <mxPoint x="560" y="1810" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="560" y="1685" />
+              <mxPoint x="560" y="1810" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM003_e016__2" value="I / I" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM003_e016" source="FSM003_target__2" target="FSM003_set_i__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690" y="1685" as="sourcePoint" />
+            <mxPoint x="980" y="1810" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="820" y="1685" />
+              <mxPoint x="980" y="1685" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM003_e017__2" value="COMMIT ACK handshake / bắt tay COMMIT ACK" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=0;entryX=1;entryY=0.5;exitPerimeter=1;entryPerimeter=1;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM003_e017" source="FSM003_commit_ack__2" target="FSM003_wait__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690" y="2000" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="690" y="1940" />
+              <mxPoint x="1250" y="1940" />
+              <mxPoint x="1250" y="200" />
+            </Array>
+            <mxPoint x="820" y="200" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM003_e018__2" value="ABORT ACK handshake / bắt tay ABORT ACK" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM003_e018" source="FSM003_abort__2" target="FSM003_wait__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="60" y="1852" as="sourcePoint" />
+            <mxPoint x="560" y="200" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="25" y="1852" />
+              <mxPoint x="25" y="200" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="FSM004" name="FSM-004_TILE_ADAPTER">
+    <mxGraphModel dx="1380" dy="1600" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1380" pageHeight="1080" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="FSM004_title__2" value="&lt;b&gt;FSM-004 — Tile coherent-request adapter&lt;/b&gt;" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=18;fontColor=#000000;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="0" vlsit_library_cell="2" vlsit_library_instance="FSM004_title">
+          <mxGeometry width="1290" height="40" as="geometry" x="45" y="10" />
+        </mxCell>
+        <mxCell id="FSM004_start__2" value="&lt;b&gt;RESET RELEASED&lt;/b&gt;&lt;br&gt;Reset đã nhả" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="33" vlsit_library_cell="2" vlsit_library_instance="FSM004_start">
+          <mxGeometry width="180" height="55" as="geometry" x="600" y="65" />
+        </mxCell>
+        <mxCell id="FSM004_idle__2" value="&lt;b&gt;ST_IDLE&lt;/b&gt;&lt;br&gt;Wait for HPDcache miss/upgrade / Chờ miss/upgrade từ HPDcache" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM004_idle">
+          <mxGeometry width="280" height="100" as="geometry" x="550" y="155" />
+        </mxCell>
+        <mxCell id="FSM004_capture__2" value="&lt;b&gt;ST_CAPTURE_REQUEST&lt;/b&gt;&lt;br&gt;Latch request, address, ID and attributes / Chốt request, address, ID và thuộc tính" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM004_capture">
+          <mxGeometry width="280" height="100" as="geometry" x="550" y="315" />
+        </mxCell>
+        <mxCell id="FSM004_send__2" value="&lt;b&gt;ST_SEND_COH_REQUEST&lt;/b&gt;&lt;br&gt;Hold coherent request until CCU accepts / Giữ request đến khi CCU nhận" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM004_send">
+          <mxGeometry width="280" height="100" as="geometry" x="550" y="475" />
+        </mxCell>
+        <mxCell id="FSM004_wait__2" value="&lt;b&gt;ST_WAIT_COH_GRANT&lt;/b&gt;&lt;br&gt;Wait for permission grant&lt;br&gt;Refill follows through HPDcache AXI path" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM004_wait">
+          <mxGeometry width="280" height="100" as="geometry" x="550" y="635" />
+        </mxCell>
+        <mxCell id="FSM004_ret__2" value="&lt;b&gt;ST_RETURN_CACHE_RESPONSE&lt;/b&gt;&lt;br&gt;Hold response until HPDcache accepts / Giữ response đến khi HPDcache nhận" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM004_ret">
+          <mxGeometry width="280" height="100" as="geometry" x="550" y="795" />
+        </mxCell>
+        <mxCell id="FSM004_done__2" value="&lt;b&gt;COMPLETE&lt;/b&gt;&lt;br&gt;Hoàn tất" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="33" vlsit_library_cell="2" vlsit_library_instance="FSM004_done">
+          <mxGeometry width="280" height="100" as="geometry" x="550" y="915" />
+        </mxCell>
+        <mxCell id="FSM004_review_note__2" value="V2 REVIEW DRAFT / BẢN NHÁP V2: HPDcache request/response records, IDs, and retry/error path require source-port review." style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=18;fontColor=#000000;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="0" vlsit_library_cell="2" vlsit_library_instance="FSM004_review_note">
+          <mxGeometry width="1290" height="45" as="geometry" x="45" y="1015" />
+        </mxCell>
+        <mxCell id="FSM004_e000__2" value="RESET / RESET" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM004_e000" source="FSM004_start__2" target="FSM004_idle__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690.0" y="120.0" as="sourcePoint" />
+            <mxPoint x="690.0" y="155.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM004_e001__2" value="request accepted / nhận request" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM004_e001" source="FSM004_idle__2" target="FSM004_capture__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690.0" y="255.0" as="sourcePoint" />
+            <mxPoint x="690.0" y="315.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM004_e002__2" value="fields mapped / đã ánh xạ field" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM004_e002" source="FSM004_capture__2" target="FSM004_send__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690.0" y="415.0" as="sourcePoint" />
+            <mxPoint x="690.0" y="475.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM004_e003__2" value="CCU request handshake / request CCU handshake" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM004_e003" source="FSM004_send__2" target="FSM004_wait__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690.0" y="575.0" as="sourcePoint" />
+            <mxPoint x="690.0" y="635.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM004_e004__2" value="grant/data received / đã nhận grant/data" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM004_e004" source="FSM004_wait__2" target="FSM004_ret__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690.0" y="735.0" as="sourcePoint" />
+            <mxPoint x="690.0" y="795.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM004_e005__2" value="cache response handshake / response cache handshake" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM004_e005" source="FSM004_ret__2" target="FSM004_done__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690.0" y="895.0" as="sourcePoint" />
+            <mxPoint x="690.0" y="965.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM004_e006__2" value="return to idle / về idle" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=1;exitY=0.5;entryX=1;entryY=0.5;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM004_e006" source="FSM004_done__2" target="FSM004_idle__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="780.0" y="992.5" as="sourcePoint" />
+            <mxPoint x="830.0" y="205.0" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="960" y="992.5" />
+              <mxPoint x="1180" y="992.5" />
+              <mxPoint x="1180" y="205" />
+              <mxPoint x="830" y="205" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="FSM005" name="FSM-005_AXIL_READ">
+    <mxGraphModel dx="1380" dy="1600" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1380" pageHeight="1330" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="FSM005_title__2" value="&lt;b&gt;FSM-005 — AXI4-Lite read routing&lt;/b&gt;" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=18;fontColor=#000000;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="0" vlsit_library_cell="2" vlsit_library_instance="FSM005_title">
+          <mxGeometry width="1290" height="40" as="geometry" x="45" y="10" />
+        </mxCell>
+        <mxCell id="FSM005_start__2" value="&lt;b&gt;RESET RELEASED&lt;/b&gt;&lt;br&gt;Reset đã nhả" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="33" vlsit_library_cell="2" vlsit_library_instance="FSM005_start">
+          <mxGeometry width="180" height="55" as="geometry" x="600" y="65" />
+        </mxCell>
+        <mxCell id="FSM005_idle__2" value="&lt;b&gt;ST_WAIT_AR&lt;/b&gt;&lt;br&gt;Wait for ARVALID and accept address / Chờ ARVALID và nhận address" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM005_idle">
+          <mxGeometry width="280" height="100" as="geometry" x="550" y="155" />
+        </mxCell>
+        <mxCell id="FSM005_decode__2" value="&lt;b&gt;ST_DECODE_ADDRESS&lt;/b&gt;&lt;br&gt;Check alignment and select CSR or LLC / Kiểm tra alignment, chọn CSR hoặc LLC" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM005_decode">
+          <mxGeometry width="280" height="105" as="geometry" x="550" y="315" />
+        </mxCell>
+        <mxCell id="FSM005_valid__2" value="&lt;b&gt;Mapped and aligned?&lt;/b&gt;&lt;br&gt;Đúng alignment và có map?" style="rhombus;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="34" vlsit_library_cell="2" vlsit_library_instance="FSM005_valid">
+          <mxGeometry width="180" height="115" as="geometry" x="600" y="485" />
+        </mxCell>
+        <mxCell id="FSM005_error__2" value="&lt;b&gt;ST_RETURN_ERROR_R&lt;/b&gt;&lt;br&gt;Return SLVERR/DECERR; hold R until accepted / Trả SLVERR/DECERR; giữ R đến handshake" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM005_error">
+          <mxGeometry width="360" height="115" as="geometry" x="80" y="690" />
+        </mxCell>
+        <mxCell id="FSM005_route__2" value="&lt;b&gt;ST_ISSUE_TARGET_AR&lt;/b&gt;&lt;br&gt;Issue target read / Phát read tới target" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM005_route">
+          <mxGeometry width="300" height="100" as="geometry" x="820" y="690" />
+        </mxCell>
+        <mxCell id="FSM005_wait__2" value="&lt;b&gt;ST_WAIT_TARGET_R&lt;/b&gt;&lt;br&gt;Wait for target R response / Chờ response R từ target" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM005_wait">
+          <mxGeometry width="300" height="100" as="geometry" x="820" y="850" />
+        </mxCell>
+        <mxCell id="FSM005_hold__2" value="&lt;b&gt;ST_HOLD_R_RESPONSE&lt;/b&gt;&lt;br&gt;Hold RVALID and payload until RREADY / Giữ RVALID và payload đến RREADY" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM005_hold">
+          <mxGeometry width="320" height="105" as="geometry" x="550" y="1040" />
+        </mxCell>
+        <mxCell id="FSM005_done__2" value="&lt;b&gt;COMPLETE&lt;/b&gt;&lt;br&gt;Hoàn tất" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="33" vlsit_library_cell="2" vlsit_library_instance="FSM005_done">
+          <mxGeometry width="180" height="55" as="geometry" x="620" y="1220" />
+        </mxCell>
+        <mxCell id="FSM005_review_note__2" value="V2 REVIEW DRAFT / BẢN NHÁP V2: target queue depth, timeout, and exact CSR/LLC map are TBD." style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=18;fontColor=#000000;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="0" vlsit_library_cell="2" vlsit_library_instance="FSM005_review_note">
+          <mxGeometry width="1290" height="45" as="geometry" x="45" y="1265" />
+        </mxCell>
+        <mxCell id="FSM005_e000__2" value="RESET / RESET" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM005_e000" source="FSM005_start__2" target="FSM005_idle__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690.0" y="120.0" as="sourcePoint" />
+            <mxPoint x="690.0" y="155.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM005_e001__2" value="AR handshake / AR handshake" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM005_e001" source="FSM005_idle__2" target="FSM005_decode__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690.0" y="255.0" as="sourcePoint" />
+            <mxPoint x="690.0" y="315.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM005_e002__2" value="decode complete / decode xong" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM005_e002" source="FSM005_decode__2" target="FSM005_valid__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690.0" y="420.0" as="sourcePoint" />
+            <mxPoint x="690.0" y="485.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM005_e003__2" value="NO / KHÔNG" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0;exitY=0.5;entryX=1;entryY=0.5;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM005_e003" source="FSM005_valid__2" target="FSM005_error__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="600.0" y="542.5" as="sourcePoint" />
+            <mxPoint x="440.0" y="747.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="500" y="542.5" />
+              <mxPoint x="460" y="542.5" />
+              <mxPoint x="460" y="747.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM005_e004__2" value="YES / CÓ" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=1;exitY=0.5;entryX=0;entryY=0.5;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM005_e004" source="FSM005_valid__2" target="FSM005_route__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="780.0" y="542.5" as="sourcePoint" />
+            <mxPoint x="820.0" y="740.0" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="800" y="542.5" />
+              <mxPoint x="800" y="740" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM005_e005__2" value="error response prepared / đã chuẩn bị lỗi R" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0;entryY=0.5;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM005_e005" source="FSM005_error__2" target="FSM005_hold__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="260.0" y="805.0" as="sourcePoint" />
+            <mxPoint x="550.0" y="1092.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="260" y="840" />
+              <mxPoint x="500" y="840" />
+              <mxPoint x="500" y="1092.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM005_e006__2" value="target AR handshake / target AR handshake" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM005_e006" source="FSM005_route__2" target="FSM005_wait__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="970.0" y="790.0" as="sourcePoint" />
+            <mxPoint x="970.0" y="850.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM005_e007__2" value="target R accepted / đã nhận R target" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0;exitY=0.5;entryX=1;entryY=0.5;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM005_e007" source="FSM005_wait__2" target="FSM005_hold__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="820.0" y="900.0" as="sourcePoint" />
+            <mxPoint x="870.0" y="1092.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="780" y="900" />
+              <mxPoint x="760" y="900" />
+              <mxPoint x="760" y="1092.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM005_e008__2" value="R handshake / R handshake" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM005_e008" source="FSM005_hold__2" target="FSM005_done__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="710.0" y="1145.0" as="sourcePoint" />
+            <mxPoint x="710.0" y="1220.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM005_e009__2" value="return to idle / về idle" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=1;exitY=0.5;entryX=1;entryY=0.5;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM005_e009" source="FSM005_done__2" target="FSM005_idle__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="800.0" y="1247.5" as="sourcePoint" />
+            <mxPoint x="830.0" y="205.0" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="900" y="1247.5" />
+              <mxPoint x="1250" y="1247.5" />
+              <mxPoint x="1250" y="205" />
+              <mxPoint x="830" y="205" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="FSM006" name="FSM-006_AXIL_WRITE">
+    <mxGraphModel dx="1380" dy="1600" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1380" pageHeight="1510" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="FSM006_title__2" value="&lt;b&gt;FSM-006 — AXI4-Lite write routing&lt;/b&gt;" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=18;fontColor=#000000;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="0" vlsit_library_cell="2" vlsit_library_instance="FSM006_title">
+          <mxGeometry width="1290" height="40" as="geometry" x="45" y="10" />
+        </mxCell>
+        <mxCell id="FSM006_start__2" value="&lt;b&gt;RESET RELEASED&lt;/b&gt;&lt;br&gt;Reset đã nhả" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="33" vlsit_library_cell="2" vlsit_library_instance="FSM006_start">
+          <mxGeometry width="180" height="55" as="geometry" x="600" y="65" />
+        </mxCell>
+        <mxCell id="FSM006_collect__2" value="&lt;b&gt;ST_COLLECT_AW_W&lt;/b&gt;&lt;br&gt;Accept AW and W independently; retain each until paired / Nhận AW/W độc lập, giữ đến khi ghép đủ" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM006_collect">
+          <mxGeometry width="300" height="120" as="geometry" x="540" y="155" />
+        </mxCell>
+        <mxCell id="FSM006_paired__2" value="&lt;b&gt;Address and data paired?&lt;/b&gt;&lt;br&gt;Đã nhận đủ address và data?" style="rhombus;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="34" vlsit_library_cell="2" vlsit_library_instance="FSM006_paired">
+          <mxGeometry width="180" height="115" as="geometry" x="600" y="345" />
+        </mxCell>
+        <mxCell id="FSM006_decode__2" value="&lt;b&gt;ST_DECODE_WRITE&lt;/b&gt;&lt;br&gt;Check alignment, target and strobes / Kiểm tra alignment, target và strobe" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM006_decode">
+          <mxGeometry width="300" height="105" as="geometry" x="540" y="525" />
+        </mxCell>
+        <mxCell id="FSM006_valid__2" value="&lt;b&gt;Write request legal?&lt;/b&gt;&lt;br&gt;Write request hợp lệ?" style="rhombus;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="34" vlsit_library_cell="2" vlsit_library_instance="FSM006_valid">
+          <mxGeometry width="180" height="115" as="geometry" x="600" y="695" />
+        </mxCell>
+        <mxCell id="FSM006_error__2" value="&lt;b&gt;ST_RETURN_ERROR_B&lt;/b&gt;&lt;br&gt;Return SLVERR/DECERR; hold B until accepted / Trả SLVERR/DECERR; giữ B đến handshake" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM006_error">
+          <mxGeometry width="360" height="115" as="geometry" x="80" y="900" />
+        </mxCell>
+        <mxCell id="FSM006_route__2" value="&lt;b&gt;ST_ISSUE_TARGET_AW_W&lt;/b&gt;&lt;br&gt;Issue paired write to selected target / Phát write tới target đã chọn" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM006_route">
+          <mxGeometry width="330" height="105" as="geometry" x="820" y="900" />
+        </mxCell>
+        <mxCell id="FSM006_wait__2" value="&lt;b&gt;ST_WAIT_TARGET_B&lt;/b&gt;&lt;br&gt;Wait for target B response / Chờ response B từ target" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM006_wait">
+          <mxGeometry width="330" height="100" as="geometry" x="820" y="1060" />
+        </mxCell>
+        <mxCell id="FSM006_hold__2" value="&lt;b&gt;ST_HOLD_B_RESPONSE&lt;/b&gt;&lt;br&gt;Hold BVALID and response until BREADY / Giữ BVALID và response đến BREADY" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM006_hold">
+          <mxGeometry width="300" height="105" as="geometry" x="540" y="1230" />
+        </mxCell>
+        <mxCell id="FSM006_done__2" value="&lt;b&gt;COMPLETE&lt;/b&gt;&lt;br&gt;Hoàn tất" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="33" vlsit_library_cell="2" vlsit_library_instance="FSM006_done">
+          <mxGeometry width="180" height="55" as="geometry" x="600" y="1400" />
+        </mxCell>
+        <mxCell id="FSM006_review_note__2" value="V2 REVIEW DRAFT / BẢN NHÁP V2: AW/W buffering depth and partial-write behavior follow the reviewed CSR workbook." style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=18;fontColor=#000000;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="0" vlsit_library_cell="2" vlsit_library_instance="FSM006_review_note">
+          <mxGeometry width="1290" height="45" as="geometry" x="45" y="1445" />
+        </mxCell>
+        <mxCell id="FSM006_e000__2" value="RESET / RESET" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM006_e000" source="FSM006_start__2" target="FSM006_collect__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690.0" y="120.0" as="sourcePoint" />
+            <mxPoint x="690.0" y="155.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM006_e001__2" value="AW and W both accepted / Đã nhận cả AW và W" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM006_e001" source="FSM006_collect__2" target="FSM006_paired__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690.0" y="275.0" as="sourcePoint" />
+            <mxPoint x="690.0" y="345.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM006_e002__2" value="NO: keep collecting / CHƯA: tiếp tục nhận" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0;exitY=0.5;entryX=0;entryY=0.5;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM006_e002" source="FSM006_paired__2" target="FSM006_collect__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="600.0" y="402.5" as="sourcePoint" />
+            <mxPoint x="540.0" y="215.0" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="500" y="402.5" />
+              <mxPoint x="470" y="402.5" />
+              <mxPoint x="470" y="215" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM006_e003__2" value="YES / ĐỦ" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=1;exitY=0.5;entryX=0;entryY=0.5;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM006_e003" source="FSM006_paired__2" target="FSM006_decode__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="780.0" y="402.5" as="sourcePoint" />
+            <mxPoint x="540.0" y="577.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="880" y="402.5" />
+              <mxPoint x="960" y="402.5" />
+              <mxPoint x="960" y="577.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM006_e004__2" value="decode complete / decode xong" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM006_e004" source="FSM006_decode__2" target="FSM006_valid__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690.0" y="630.0" as="sourcePoint" />
+            <mxPoint x="690.0" y="695.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM006_e005__2" value="NO / KHÔNG" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0;exitY=0.5;entryX=1;entryY=0.5;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM006_e005" source="FSM006_valid__2" target="FSM006_error__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="600.0" y="752.5" as="sourcePoint" />
+            <mxPoint x="440.0" y="957.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="500" y="752.5" />
+              <mxPoint x="460" y="752.5" />
+              <mxPoint x="460" y="957.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM006_e006__2" value="YES / CÓ" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=1;exitY=0.5;entryX=0;entryY=0.5;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM006_e006" source="FSM006_valid__2" target="FSM006_route__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="780.0" y="752.5" as="sourcePoint" />
+            <mxPoint x="820.0" y="952.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="880" y="752.5" />
+              <mxPoint x="960" y="752.5" />
+              <mxPoint x="960" y="952.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM006_e007__2" value="error B prepared / đã chuẩn bị B lỗi" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0;entryY=0.5;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM006_e007" source="FSM006_error__2" target="FSM006_hold__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="260.0" y="1015.0" as="sourcePoint" />
+            <mxPoint x="540.0" y="1282.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="260" y="1040" />
+              <mxPoint x="500" y="1040" />
+              <mxPoint x="500" y="1282.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM006_e008__2" value="target write handshake / target write handshake" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM006_e008" source="FSM006_route__2" target="FSM006_wait__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="985.0" y="1005.0" as="sourcePoint" />
+            <mxPoint x="985.0" y="1060.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM006_e009__2" value="target B received / đã nhận B target" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0;exitY=0.5;entryX=1;entryY=0.5;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM006_e009" source="FSM006_wait__2" target="FSM006_hold__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="820.0" y="1110.0" as="sourcePoint" />
+            <mxPoint x="840.0" y="1282.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="780" y="1110" />
+              <mxPoint x="760" y="1110" />
+              <mxPoint x="760" y="1282.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM006_e010__2" value="B handshake / B handshake" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM006_e010" source="FSM006_hold__2" target="FSM006_done__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690.0" y="1335.0" as="sourcePoint" />
+            <mxPoint x="690.0" y="1400.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM006_e011__2" value="return to collect / về thu AW/W" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=1;exitY=0.5;entryX=1;entryY=0.5;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM006_e011" source="FSM006_done__2" target="FSM006_collect__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="780.0" y="1427.5" as="sourcePoint" />
+            <mxPoint x="840.0" y="215.0" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="900" y="1427.5" />
+              <mxPoint x="1270" y="1427.5" />
+              <mxPoint x="1270" y="215" />
+              <mxPoint x="840" y="215" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="FSM007" name="FSM-007_PMU_SNAPSHOT">
+    <mxGraphModel dx="1380" dy="1400" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1380" pageHeight="1400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="FSM007_title__2" value="&lt;b&gt;FSM-007 — PMU snapshot control&lt;/b&gt;" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=18;fontColor=#000000;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="0" vlsit_library_cell="2" vlsit_library_instance="FSM007_title">
+          <mxGeometry width="1290" height="40" as="geometry" x="45" y="10" />
+        </mxCell>
+        <mxCell id="FSM007_start__2" value="&lt;b&gt;RESET RELEASED&lt;/b&gt;&lt;br&gt;Reset đã nhả" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="33" vlsit_library_cell="2" vlsit_library_instance="FSM007_start">
+          <mxGeometry width="180" height="55" as="geometry" x="600" y="65" />
+        </mxCell>
+        <mxCell id="FSM007_idle__2" value="&lt;b&gt;ST_IDLE&lt;/b&gt;&lt;br&gt;Wait for snapshot request / Chờ yêu cầu snapshot" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM007_idle">
+          <mxGeometry width="280" height="95" as="geometry" x="550" y="155" />
+        </mxCell>
+        <mxCell id="FSM007_req__2" value="&lt;b&gt;Snapshot requested?&lt;/b&gt;&lt;br&gt;Có yêu cầu snapshot?" style="rhombus;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="34" vlsit_library_cell="2" vlsit_library_instance="FSM007_req">
+          <mxGeometry width="180" height="115" as="geometry" x="600" y="315" />
+        </mxCell>
+        <mxCell id="FSM007_capture__2" value="&lt;b&gt;ST_CAPTURE_COUNTER_BANK&lt;/b&gt;&lt;br&gt;Copy counters to snapshot bank / Chép counter vào snapshot bank" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM007_capture">
+          <mxGeometry width="340" height="105" as="geometry" x="520" y="520" />
+        </mxCell>
+        <mxCell id="FSM007_done__2" value="&lt;b&gt;ST_DONE_HELD&lt;/b&gt;&lt;br&gt;Assert snapshot_done; hold values stable / Báo snapshot_done; giữ giá trị ổn định" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM007_done">
+          <mxGeometry width="340" height="105" as="geometry" x="520" y="710" />
+        </mxCell>
+        <mxCell id="FSM007_clear__2" value="&lt;b&gt;New snapshot request?&lt;/b&gt;&lt;br&gt;Yêu cầu snapshot mới?" style="rhombus;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="34" vlsit_library_cell="2" vlsit_library_instance="FSM007_clear">
+          <mxGeometry width="180" height="115" as="geometry" x="600" y="900" />
+        </mxCell>
+        <mxCell id="FSM007_restart__2" value="&lt;b&gt;NEXT CAPTURE&lt;/b&gt;&lt;br&gt;Lần chụp tiếp" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="33" vlsit_library_cell="2" vlsit_library_instance="FSM007_restart">
+          <mxGeometry width="220" height="55" as="geometry" x="950" y="1090" />
+        </mxCell>
+        <mxCell id="FSM007_review_note__2" value="V2 REVIEW DRAFT / BẢN NHÁP V2: request auto-clear and done-clear policy must match the approved CSR workbook." style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=18;fontColor=#000000;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="0" vlsit_library_cell="2" vlsit_library_instance="FSM007_review_note">
+          <mxGeometry width="1290" height="45" as="geometry" x="45" y="1335" />
+        </mxCell>
+        <mxCell id="FSM007_e000__2" value="RESET / RESET" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM007_e000" source="FSM007_start__2" target="FSM007_idle__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690.0" y="120.0" as="sourcePoint" />
+            <mxPoint x="690.0" y="155.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM007_e001__2" value="poll request / chờ request" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM007_e001" source="FSM007_idle__2" target="FSM007_req__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690.0" y="250.0" as="sourcePoint" />
+            <mxPoint x="690.0" y="315.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM007_e002__2" value="NO / KHÔNG" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0;exitY=0.5;entryX=0;entryY=0.5;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM007_e002" source="FSM007_req__2" target="FSM007_idle__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="600.0" y="372.5" as="sourcePoint" />
+            <mxPoint x="550.0" y="202.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="500" y="372.5" />
+              <mxPoint x="460" y="372.5" />
+              <mxPoint x="460" y="202.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM007_e003__2" value="YES / CÓ" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=1;exitY=0.5;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM007_e003" source="FSM007_req__2" target="FSM007_capture__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="780.0" y="372.5" as="sourcePoint" />
+            <mxPoint x="690.0" y="520.0" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="900" y="372.5" />
+              <mxPoint x="900" y="500" />
+              <mxPoint x="690" y="500" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM007_e004__2" value="capture complete / chụp xong" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM007_e004" source="FSM007_capture__2" target="FSM007_done__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690.0" y="625.0" as="sourcePoint" />
+            <mxPoint x="690.0" y="710.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM007_e005__2" value="software action / thao tác phần mềm" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM007_e005" source="FSM007_done__2" target="FSM007_clear__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690.0" y="815.0" as="sourcePoint" />
+            <mxPoint x="690.0" y="900.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM007_e006__2" value="NO: check done clear / KHÔNG: kiểm tra xóa done" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0;exitY=0.5;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM007_e006" source="FSM007_clear__2" target="FSM007_done_clear__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="600.0" y="957.5" as="sourcePoint" />
+            <mxPoint x="690.0" y="1080.0" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="500" y="957.5" />
+              <mxPoint x="500" y="1040" />
+              <mxPoint x="690" y="1040" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM007_e007__2" value="YES: capture again / CÓ: chụp lại" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=1;exitY=0.5;entryX=0;entryY=0.5;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM007_e007" source="FSM007_clear__2" target="FSM007_restart__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="780.0" y="957.5" as="sourcePoint" />
+            <mxPoint x="950.0" y="1117.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="880" y="957.5" />
+              <mxPoint x="940" y="957.5" />
+              <mxPoint x="940" y="1117.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM007_e008__2" value="start next capture / chụp lượt mới" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=0;entryX=0;entryY=0.5;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM007_e008" source="FSM007_restart__2" target="FSM007_capture__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1060.0" y="1090.0" as="sourcePoint" />
+            <mxPoint x="520.0" y="572.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1060" y="900" />
+              <mxPoint x="50" y="900" />
+              <mxPoint x="50" y="572.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM007_done_clear__2" value="&lt;b&gt;snapshot_done cleared?&lt;/b&gt;&lt;br&gt;đã xóa snapshot_done?" style="rhombus;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="34" vlsit_library_cell="2" vlsit_library_instance="FSM007_done_clear">
+          <mxGeometry width="180" height="115" as="geometry" x="600" y="1080" />
+        </mxCell>
+        <mxCell id="FSM007_e009__2" value="NO: retain snapshot / KHÔNG: giữ snapshot" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=1;entryY=0.5;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM007_e009" source="FSM007_done_clear__2" target="FSM007_done__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690.0" y="1195.0" as="sourcePoint" />
+            <mxPoint x="860.0" y="762.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="690" y="1230" />
+              <mxPoint x="1220" y="1230" />
+              <mxPoint x="1220" y="762.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM007_e010__2" value="YES: return to idle / CÓ: về idle" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=1;exitY=0.5;entryX=1;entryY=0.5;jumpStyle=arc;jumpSize=6;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM007_e010" source="FSM007_done_clear__2" target="FSM007_idle__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="780.0" y="1137.5" as="sourcePoint" />
+            <mxPoint x="830.0" y="202.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="900" y="1137.5" />
+              <mxPoint x="1280" y="1137.5" />
+              <mxPoint x="1280" y="202.5" />
+              <mxPoint x="830" y="202.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="FSM008" name="FSM-008_MMIO_READ">
+    <mxGraphModel dx="1380" dy="1480" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1380" pageHeight="1480" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="FSM008_title__2" value="&lt;b&gt;FSM-008 — AXI4 MMIO read route&lt;/b&gt;" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=18;fontColor=#000000;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="0" vlsit_library_cell="2" vlsit_library_instance="FSM008_title">
+          <mxGeometry width="1290" height="40" as="geometry" x="45" y="10" />
+        </mxCell>
+        <mxCell id="FSM008_start__2" value="&lt;b&gt;RESET RELEASED&lt;/b&gt;&lt;br&gt;Reset đã nhả" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="33" vlsit_library_cell="2" vlsit_library_instance="FSM008_start">
+          <mxGeometry width="180" height="55" as="geometry" x="600" y="65" />
+        </mxCell>
+        <mxCell id="FSM008_idle__2" value="&lt;b&gt;ST_WAIT_AR&lt;/b&gt;&lt;br&gt;Accept non-cacheable AR / Nhận AR không cache" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM008_idle">
+          <mxGeometry width="260" height="90" as="geometry" x="560" y="155" />
+        </mxCell>
+        <mxCell id="FSM008_decode__2" value="&lt;b&gt;ST_DECODE_MMIO_AR&lt;/b&gt;&lt;br&gt;Check address and memory attributes / Kiểm tra address và thuộc tính memory" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM008_decode">
+          <mxGeometry width="260" height="100" as="geometry" x="560" y="305" />
+        </mxCell>
+        <mxCell id="FSM008_legal__2" value="&lt;b&gt;Mapped MMIO address?&lt;/b&gt;&lt;br&gt;Address MMIO có map?" style="rhombus;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="34" vlsit_library_cell="2" vlsit_library_instance="FSM008_legal">
+          <mxGeometry width="180" height="110" as="geometry" x="600" y="465" />
+        </mxCell>
+        <mxCell id="FSM008_error__2" value="&lt;b&gt;ST_RETURN_DECODE_ERROR&lt;/b&gt;&lt;br&gt;Unmapped address: DECERR; malformed policy TBD / Chưa ánh xạ: DECERR; quy tắc malformed TBD" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM008_error">
+          <mxGeometry width="360" height="105" as="geometry" x="80" y="660" />
+        </mxCell>
+        <mxCell id="FSM008_forward__2" value="&lt;b&gt;ST_FORWARD_AR&lt;/b&gt;&lt;br&gt;Forward AR with ID and attributes / Chuyển AR kèm ID và thuộc tính" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM008_forward">
+          <mxGeometry width="300" height="100" as="geometry" x="870" y="660" />
+        </mxCell>
+        <mxCell id="FSM008_wait__2" value="&lt;b&gt;ST_WAIT_R_BURST&lt;/b&gt;&lt;br&gt;Wait for R beats through RLAST / Chờ các beat R đến RLAST" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM008_wait">
+          <mxGeometry width="300" height="100" as="geometry" x="870" y="820" />
+        </mxCell>
+        <mxCell id="FSM008_stream__2" value="&lt;b&gt;ST_FORWARD_R_BURST&lt;/b&gt;&lt;br&gt;Preserve RID, RESP and RLAST; hold beat on stall / Giữ RID, RESP, RLAST; giữ beat khi stall" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM008_stream">
+          <mxGeometry width="300" height="115" as="geometry" x="870" y="980" />
+        </mxCell>
+        <mxCell id="FSM008_hold__2" value="&lt;b&gt;ST_HOLD_R_RESPONSE&lt;/b&gt;&lt;br&gt;Hold final response until requester accepts / Giữ response cuối đến handshake" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM008_hold">
+          <mxGeometry width="320" height="105" as="geometry" x="560" y="1160" />
+        </mxCell>
+        <mxCell id="FSM008_done__2" value="&lt;b&gt;COMPLETE&lt;/b&gt;&lt;br&gt;Hoàn tất" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="33" vlsit_library_cell="2" vlsit_library_instance="FSM008_done">
+          <mxGeometry width="180" height="55" as="geometry" x="620" y="1330" />
+        </mxCell>
+        <mxCell id="FSM008_note__2" value="V2 REVIEW DRAFT / BẢN NHÁP V2: address map, malformed/misaligned policy, buffer depth, outstanding IDs and timeout TBD. Unmapped address returns DECERR. / Địa chỉ chưa ánh xạ trả DECERR." style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=18;fontColor=#000000;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="0" vlsit_library_cell="2" vlsit_library_instance="FSM008_note">
+          <mxGeometry width="1290" height="45" as="geometry" x="45" y="1415" />
+        </mxCell>
+        <mxCell id="FSM008_e000__2" value="reset released / reset đã nhả" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM008_e000" source="FSM008_start__2" target="FSM008_idle__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690" y="120" as="sourcePoint" />
+            <mxPoint x="690" y="155" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM008_e001__2" value="ARVALID &amp;&amp; ARREADY / bắt tay AR" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM008_e001" source="FSM008_idle__2" target="FSM008_decode__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690" y="245" as="sourcePoint" />
+            <mxPoint x="690" y="305" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM008_e002__2" value="address and attributes checked / đã kiểm tra địa chỉ và thuộc tính" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM008_e002" source="FSM008_decode__2" target="FSM008_legal__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690" y="405" as="sourcePoint" />
+            <mxPoint x="690" y="465" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM008_e003__2" value="NO / KHÔNG" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0;exitY=0.5;entryX=0.5;entryY=0;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM008_e003" source="FSM008_legal__2" target="FSM008_error__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="600" y="520" as="sourcePoint" />
+            <mxPoint x="260" y="660" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="520" y="520" />
+              <mxPoint x="260" y="520" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM008_e004__2" value="YES / CÓ" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=1;exitY=0.5;entryX=0.5;entryY=0;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM008_e004" source="FSM008_legal__2" target="FSM008_forward__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="780" y="520" as="sourcePoint" />
+            <mxPoint x="1020" y="660" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="820" y="520" />
+              <mxPoint x="1020" y="520" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM008_e005__2" value="unmapped address: DECERR; malformed policy TBD / địa chỉ chưa map: DECERR; quy tắc malformed còn TBD" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM008_e005" source="FSM008_error__2" target="FSM008_hold__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="440" y="712.5" as="sourcePoint" />
+            <mxPoint x="560" y="1212.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="500" y="712.5" />
+              <mxPoint x="500" y="1212.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM008_e006__2" value="downstream AR handshake / bắt tay AR phía target" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM008_e006" source="FSM008_forward__2" target="FSM008_wait__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1020" y="760" as="sourcePoint" />
+            <mxPoint x="1020" y="820" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM008_e007__2" value="first RVALID / beat R đầu tiên" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM008_e007" source="FSM008_wait__2" target="FSM008_stream__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1020" y="920" as="sourcePoint" />
+            <mxPoint x="1020" y="980" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM008_e008__2" value="no accepted RLAST: wait or hold payload / chưa bắt tay RLAST: chờ hoặc giữ payload" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=1;exitY=0.5;entryX=1;entryY=1;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM008_e008" source="FSM008_stream__2" target="FSM008_stream__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1170" y="1037.5" as="sourcePoint" />
+            <mxPoint x="1170" y="1095" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1230" y="1037.5" />
+              <mxPoint x="1230" y="1120" />
+              <mxPoint x="1170" y="1120" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM008_e009__2" value="RVALID &amp;&amp; RREADY &amp;&amp; RLAST; capture final response / bắt tay RLAST; lưu response cuối" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0;exitY=0.5;entryX=0.5;entryY=0;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM008_e009" source="FSM008_stream__2" target="FSM008_hold__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="870" y="1037.5" as="sourcePoint" />
+            <mxPoint x="720" y="1160" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="830" y="1037.5" />
+              <mxPoint x="830" y="1130" />
+              <mxPoint x="720" y="1130" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM008_e010__2" value="upstream R handshake / bắt tay R phía requester" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM008_e010" source="FSM008_hold__2" target="FSM008_done__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="720" y="1265" as="sourcePoint" />
+            <mxPoint x="710" y="1330" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="720" y="1290" />
+              <mxPoint x="710" y="1290" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM008_e011__2" value="release route / giải phóng route" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=1;exitY=0.5;entryX=1;entryY=0.5;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM008_e011" source="FSM008_done__2" target="FSM008_idle__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="800" y="1357.5" as="sourcePoint" />
+            <mxPoint x="820" y="200" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="880" y="1357.5" />
+              <mxPoint x="1260" y="1357.5" />
+              <mxPoint x="1260" y="200" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="FSM009" name="FSM-009_MMIO_WRITE">
+    <mxGraphModel dx="1380" dy="1510" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1380" pageHeight="1510" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="FSM009_title__2" value="&lt;b&gt;FSM-009 — AXI4 MMIO write route&lt;/b&gt;" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=18;fontColor=#000000;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="0" vlsit_library_cell="2" vlsit_library_instance="FSM009_title">
+          <mxGeometry width="1290" height="40" as="geometry" x="45" y="10" />
+        </mxCell>
+        <mxCell id="FSM009_start__2" value="&lt;b&gt;RESET RELEASED&lt;/b&gt;&lt;br&gt;Reset đã nhả" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="33" vlsit_library_cell="2" vlsit_library_instance="FSM009_start">
+          <mxGeometry width="180" height="55" as="geometry" x="600" y="65" />
+        </mxCell>
+        <mxCell id="FSM009_collect__2" value="&lt;b&gt;ST_COLLECT_AW_W&lt;/b&gt;&lt;br&gt;Accept AW and W independently / Nhận AW và W độc lập" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM009_collect">
+          <mxGeometry width="280" height="105" as="geometry" x="550" y="155" />
+        </mxCell>
+        <mxCell id="FSM009_pair__2" value="&lt;b&gt;AW/W request available?&lt;/b&gt;&lt;br&gt;Đã có request AW/W?" style="rhombus;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="34" vlsit_library_cell="2" vlsit_library_instance="FSM009_pair">
+          <mxGeometry width="180" height="115" as="geometry" x="600" y="330" />
+        </mxCell>
+        <mxCell id="FSM009_decode__2" value="&lt;b&gt;ST_DECODE_MMIO_AW&lt;/b&gt;&lt;br&gt;Check target address and attributes / Kiểm tra địa chỉ target và thuộc tính" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM009_decode">
+          <mxGeometry width="280" height="100" as="geometry" x="550" y="500" />
+        </mxCell>
+        <mxCell id="FSM009_legal__2" value="&lt;b&gt;Mapped MMIO address?&lt;/b&gt;&lt;br&gt;Address MMIO có map?" style="rhombus;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="34" vlsit_library_cell="2" vlsit_library_instance="FSM009_legal">
+          <mxGeometry width="180" height="115" as="geometry" x="600" y="660" />
+        </mxCell>
+        <mxCell id="FSM009_error__2" value="&lt;b&gt;ST_RETURN_DECODE_ERROR&lt;/b&gt;&lt;br&gt;Unmapped address: DECERR; malformed policy TBD / Chưa ánh xạ: DECERR; quy tắc malformed TBD" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM009_error">
+          <mxGeometry width="360" height="105" as="geometry" x="80" y="860" />
+        </mxCell>
+        <mxCell id="FSM009_forward__2" value="&lt;b&gt;ST_FORWARD_AW_W_BURST&lt;/b&gt;&lt;br&gt;Forward AW; stream W beats through WLAST / Chuyển AW; stream beat W đến WLAST" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM009_forward">
+          <mxGeometry width="360" height="120" as="geometry" x="850" y="860" />
+        </mxCell>
+        <mxCell id="FSM009_wait__2" value="&lt;b&gt;ST_WAIT_B&lt;/b&gt;&lt;br&gt;Wait for target B response / Chờ response B từ target" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM009_wait">
+          <mxGeometry width="360" height="95" as="geometry" x="850" y="1040" />
+        </mxCell>
+        <mxCell id="FSM009_hold__2" value="&lt;b&gt;ST_HOLD_B_RESPONSE&lt;/b&gt;&lt;br&gt;Hold BID/BRESP until requester accepts / Giữ BID/BRESP đến handshake" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM009_hold">
+          <mxGeometry width="320" height="105" as="geometry" x="550" y="1220" />
+        </mxCell>
+        <mxCell id="FSM009_done__2" value="&lt;b&gt;COMPLETE&lt;/b&gt;&lt;br&gt;Hoàn tất" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="33" vlsit_library_cell="2" vlsit_library_instance="FSM009_done">
+          <mxGeometry width="180" height="55" as="geometry" x="600" y="1400" />
+        </mxCell>
+        <mxCell id="FSM009_note__2" value="V2 REVIEW DRAFT / BẢN NHÁP V2: AW/W buffer depth, ID ordering, malformed/misaligned policy and timeout TBD. Unmapped address returns DECERR. / Địa chỉ chưa ánh xạ trả DECERR." style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=18;fontColor=#000000;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="0" vlsit_library_cell="2" vlsit_library_instance="FSM009_note">
+          <mxGeometry width="1290" height="45" as="geometry" x="45" y="1445" />
+        </mxCell>
+        <mxCell id="FSM009_e000__2" value="reset released / reset đã nhả" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM009_e000" source="FSM009_start__2" target="FSM009_collect__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690" y="120" as="sourcePoint" />
+            <mxPoint x="690" y="155" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM009_e001__2" value="collect AW and W independently / thu AW và W độc lập" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM009_e001" source="FSM009_collect__2" target="FSM009_pair__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690" y="260" as="sourcePoint" />
+            <mxPoint x="690" y="330" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM009_e002__2" value="NO: continue collecting / CHƯA: tiếp tục thu" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM009_e002" source="FSM009_pair__2" target="FSM009_collect__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="600" y="387.5" as="sourcePoint" />
+            <mxPoint x="550" y="207.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="520" y="387.5" />
+              <mxPoint x="500" y="387.5" />
+              <mxPoint x="500" y="207.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM009_e003__2" value="YES: both request parts available / ĐỦ: đã có AW và W" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM009_e003" source="FSM009_pair__2" target="FSM009_decode__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690" y="445" as="sourcePoint" />
+            <mxPoint x="690" y="500" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM009_e004__2" value="address and attributes checked / đã kiểm tra địa chỉ và thuộc tính" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM009_e004" source="FSM009_decode__2" target="FSM009_legal__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690" y="600" as="sourcePoint" />
+            <mxPoint x="690" y="660" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM009_e005__2" value="NO / KHÔNG" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0;exitY=0.5;entryX=0.5;entryY=0;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM009_e005" source="FSM009_legal__2" target="FSM009_error__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="600" y="717.5" as="sourcePoint" />
+            <mxPoint x="260" y="860" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="520" y="717.5" />
+              <mxPoint x="260" y="717.5" />
+              <mxPoint x="260" y="820" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM009_e006__2" value="YES / CÓ" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=1;exitY=0.5;entryX=0.5;entryY=0;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM009_e006" source="FSM009_legal__2" target="FSM009_forward__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="780" y="717.5" as="sourcePoint" />
+            <mxPoint x="1030" y="860" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="820" y="717.5" />
+              <mxPoint x="1030" y="717.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM009_e007__2" value="unmapped address: DECERR; malformed policy TBD / địa chỉ chưa map: DECERR; quy tắc malformed còn TBD" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM009_e007" source="FSM009_error__2" target="FSM009_hold__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="440" y="912.5" as="sourcePoint" />
+            <mxPoint x="550" y="1272.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="500" y="912.5" />
+              <mxPoint x="500" y="1272.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM009_e008__2" value="AW or W still pending; hold payload / AW hoặc W chưa xong; giữ payload" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=1;exitY=0.5;entryX=0.5;entryY=1;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM009_e008" source="FSM009_forward__2" target="FSM009_forward__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1210" y="920" as="sourcePoint" />
+            <mxPoint x="1210" y="980" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1270" y="920" />
+              <mxPoint x="1270" y="1010" />
+              <mxPoint x="1210" y="1010" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM009_e009__2" value="AW handshake and final WLAST handshake / bắt tay AW và beat WLAST cuối" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM009_e009" source="FSM009_forward__2" target="FSM009_wait__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1030" y="980" as="sourcePoint" />
+            <mxPoint x="1030" y="1040" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM009_e010__2" value="wait while BVALID=0 / chờ khi BVALID=0" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=1;exitY=0.5;entryX=0.5;entryY=1;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM009_e010" source="FSM009_wait__2" target="FSM009_wait__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1210" y="1087.5" as="sourcePoint" />
+            <mxPoint x="1210" y="1135" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1270" y="1087.5" />
+              <mxPoint x="1270" y="1180" />
+              <mxPoint x="1210" y="1180" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM009_e011__2" value="target BVALID / BVALID từ target" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0;exitY=0.5;entryX=0.5;entryY=0;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM009_e011" source="FSM009_wait__2" target="FSM009_hold__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="850" y="1087.5" as="sourcePoint" />
+            <mxPoint x="710" y="1220" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="810" y="1087.5" />
+              <mxPoint x="810" y="1190" />
+              <mxPoint x="710" y="1190" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM009_e012__2" value="BVALID &amp;&amp; !BREADY: hold BID/BRESP / BVALID &amp;&amp; !BREADY: giữ BID/BRESP" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=1;exitY=0.5;entryX=1;entryY=1;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM009_e012" source="FSM009_hold__2" target="FSM009_hold__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="870" y="1272.5" as="sourcePoint" />
+            <mxPoint x="870" y="1325" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="930" y="1272.5" />
+              <mxPoint x="930" y="1350" />
+              <mxPoint x="870" y="1350" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM009_e013__2" value="upstream B handshake / bắt tay B phía requester" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM009_e013" source="FSM009_hold__2" target="FSM009_done__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="710" y="1325" as="sourcePoint" />
+            <mxPoint x="690" y="1400" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="710" y="1360" />
+              <mxPoint x="690" y="1360" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM009_e014__2" value="release write route / giải phóng route ghi" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=1;exitY=0.5;entryX=1;entryY=0.5;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM009_e014" source="FSM009_done__2" target="FSM009_collect__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="780" y="1427.5" as="sourcePoint" />
+            <mxPoint x="830" y="207.5" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="850" y="1427.5" />
+              <mxPoint x="1290" y="1427.5" />
+              <mxPoint x="1290" y="207.5" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="FSM010" name="FSM-010_TAGGED_TXN_CONTEXT_V3">
+    <mxGraphModel dx="1380" dy="1600" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1380" pageHeight="1080" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="FSM010_title__2" value="&lt;b&gt;FSM-010 — Two-phase tagged transaction context&lt;/b&gt;" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=18;fontColor=#000000;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="0" vlsit_library_cell="2" vlsit_library_instance="fsm010_FSM004_title">
+          <mxGeometry width="1290" height="40" as="geometry" x="45" y="10" />
+        </mxCell>
+        <mxCell id="FSM010_start__2" value="&lt;b&gt;RESET RELEASED&lt;/b&gt;&lt;br&gt;Reset đã nhả" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="33" vlsit_library_cell="2" vlsit_library_instance="fsm010_FSM004_start">
+          <mxGeometry width="180" height="55" as="geometry" x="600" y="65" />
+        </mxCell>
+        <mxCell id="FSM010_idle__2" value="&lt;b&gt;ST_WAIT_REQ&lt;/b&gt;&lt;br&gt;Wait for request&lt;br&gt;Chờ request" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="fsm010_FSM004_idle">
+          <mxGeometry width="280" height="100" as="geometry" x="550" y="155" />
+        </mxCell>
+        <mxCell id="FSM010_capture__2" value="&lt;b&gt;ST_WAIT_SLOT_LINE&lt;/b&gt;&lt;br&gt;READY low until slot and line free&lt;br&gt;READY thấp khi thiếu slot/line" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="fsm010_FSM004_capture">
+          <mxGeometry width="280" height="100" as="geometry" x="550" y="315" />
+        </mxCell>
+        <mxCell id="FSM010_send__2" value="&lt;b&gt;ST_ALLOCATE_CONTEXT&lt;/b&gt;&lt;br&gt;Allocate line lock and slot tag&lt;br&gt;Initialize phase masks" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="fsm010_FSM004_send">
+          <mxGeometry width="280" height="100" as="geometry" x="550" y="475" />
+        </mxCell>
+        <mxCell id="FSM010_wait__2" value="&lt;b&gt;ST_TRACK_PHASE_ACKS&lt;/b&gt;&lt;br&gt;Track phase ACKs by tag&lt;br&gt;Hold lock and slot until all ACKs" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="fsm010_FSM004_wait">
+          <mxGeometry width="280" height="100" as="geometry" x="550" y="635" />
+        </mxCell>
+        <mxCell id="FSM010_ret__2" value="&lt;b&gt;ST_WAIT_RESULT&lt;/b&gt;&lt;br&gt;Wait for directory completion&lt;br&gt;Hold response under backpressure" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="fsm010_FSM004_ret">
+          <mxGeometry width="280" height="100" as="geometry" x="550" y="795" />
+        </mxCell>
+        <mxCell id="FSM010_done__2" value="&lt;b&gt;ST_RELEASE_CONTEXT&lt;/b&gt;&lt;br&gt;Release line lock and tag slot&lt;br&gt;Only after every phase ACK" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="33" vlsit_library_cell="2" vlsit_library_instance="fsm010_FSM004_done">
+          <mxGeometry width="280" height="100" as="geometry" x="550" y="915" />
+        </mxCell>
+        <mxCell id="FSM010_review_note__2" value="Transaction slots: default 8, range 2–16. Missing phase ACK: no timeout; hold lock/slot until ACK or reset." style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=18;fontColor=#000000;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="0" vlsit_library_cell="2" vlsit_library_instance="fsm010_FSM004_review_note">
+          <mxGeometry width="1290" height="45" as="geometry" x="45" y="1028" />
+        </mxCell>
+        <mxCell id="FSM010_e000__2" value="RESET / RESET" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="fsm010_FSM004_e000" source="FSM010_start__2" target="FSM010_idle__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690.0" y="120.0" as="sourcePoint" />
+            <mxPoint x="690.0" y="155.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM010_e001__2" value="request presented / đưa request" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="fsm010_FSM004_e001" source="FSM010_idle__2" target="FSM010_capture__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690.0" y="255.0" as="sourcePoint" />
+            <mxPoint x="690.0" y="315.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM010_e002__2" value="slot and line become free / slot và line trống" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="fsm010_FSM004_e002" source="FSM010_capture__2" target="FSM010_send__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690.0" y="415.0" as="sourcePoint" />
+            <mxPoint x="690.0" y="475.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM010_e003__2" value="unique tag and line lock set / cấp tag, đặt khóa line" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="fsm010_FSM004_e003" source="FSM010_send__2" target="FSM010_wait__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690.0" y="575.0" as="sourcePoint" />
+            <mxPoint x="690.0" y="635.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM010_missing_phase_ack__2" value="missing PREPARE/COMMIT/ABORT ACK; wait without timeout; retain lock/slot / thiếu ACK; chờ không timeout; giữ lock/slot" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=1;exitY=0.25;entryX=1;entryY=0.75;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM010_missing_phase_ack" source="FSM010_wait__2" target="FSM010_wait__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="830" y="660" as="sourcePoint" />
+            <mxPoint x="830" y="710" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="900" y="660" />
+              <mxPoint x="960" y="660" />
+              <mxPoint x="960" y="710" />
+              <mxPoint x="830" y="710" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM010_e004__2" value="all expected phase ACKs; directory safe / đủ ACK mọi phase; directory an toàn" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="fsm010_FSM004_e004" source="FSM010_wait__2" target="FSM010_ret__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690.0" y="735.0" as="sourcePoint" />
+            <mxPoint x="690.0" y="795.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM010_e005__2" value="directory safe; response accepted / directory an toàn; đã nhận response" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="fsm010_FSM004_e005" source="FSM010_ret__2" target="FSM010_done__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="690.0" y="895.0" as="sourcePoint" />
+            <mxPoint x="690.0" y="915.0" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM010_e006__2" value="release entry and lock / nhả entry và khóa" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=1;exitY=0.5;entryX=1;entryY=0.5;align=center;verticalAlign=middle;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="fsm010_FSM004_e006" source="FSM010_done__2" target="FSM010_idle__2">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="830.0" y="965.0" as="sourcePoint" />
+            <mxPoint x="830.0" y="205.0" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="960" y="965" />
+              <mxPoint x="1180" y="965" />
+              <mxPoint x="1180" y="205" />
+              <mxPoint x="830" y="205" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="FSM011" name="FSM-011_CBO_CMO_V1">
+    <mxGraphModel dx="1790" dy="1600" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1700" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="FSM011_title" value="&lt;b&gt;FSM-011 — System-wide CBO maintenance and precise fault&lt;/b&gt;" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=18;fontSize=18;fontColor=#000000;strokeColor=none;fillColor=none;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="0" vlsit_library_cell="2" vlsit_library_instance="FSM011_title">
+          <mxGeometry width="1600" height="45" as="geometry" x="100" y="10" />
+        </mxCell>
+        <mxCell id="FSM011_start" value="&lt;b&gt;RESET RELEASED&lt;/b&gt;&lt;br&gt;Reset đã nhả" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="33" vlsit_library_cell="2" vlsit_library_instance="FSM011_start">
+          <mxGeometry width="260" height="65" as="geometry" x="770" y="70" />
+        </mxCell>
+        <mxCell id="FSM011_idle" value="&lt;b&gt;ST_IDLE&lt;/b&gt;&lt;br&gt;Wait for legal CBO&lt;br&gt;Chờ CBO hợp lệ" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM011_idle">
+          <mxGeometry width="280" height="95" as="geometry" x="760" y="170" />
+        </mxCell>
+        <mxCell id="FSM011_older" value="&lt;b&gt;ST_WAIT_OLDER&lt;/b&gt;&lt;br&gt;Drain older stores; latch op, paddr, PC, vaddr&lt;br&gt;Chờ store cũ; giữ ngữ cảnh CBO" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM011_older">
+          <mxGeometry width="400" height="115" as="geometry" x="700" y="315" />
+        </mxCell>
+        <mxCell id="FSM011_prepare" value="&lt;b&gt;ST_PREPARE&lt;/b&gt;&lt;br&gt;Allocate shared CCU context; lock line&lt;br&gt;Target directory-recorded L1 holders" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM011_prepare">
+          <mxGeometry width="400" height="120" as="geometry" x="700" y="480" />
+        </mxCell>
+        <mxCell id="FSM011_wait_prepare" value="&lt;b&gt;ST_WAIT_PREPARE&lt;/b&gt;&lt;br&gt;Collect tagged PREPARE status&lt;br&gt;CLEAN/FLUSH/INVAL-as-FLUSH: M owner writes back through AXI; retain M&lt;br&gt;True INVAL: keep dirty M; skip writeback" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM011_wait_prepare">
+          <mxGeometry width="400" height="160" as="geometry" x="700" y="650" />
+        </mxCell>
+        <mxCell id="FSM011_prep_ok" value="&lt;b&gt;All PREPARE statuses OK?&lt;/b&gt;&lt;br&gt;Mọi PREPARE thành công?" style="rhombus;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="34" vlsit_library_cell="2" vlsit_library_instance="FSM011_prep_ok">
+          <mxGeometry width="220" height="120" as="geometry" x="790" y="830" />
+        </mxCell>
+        <mxCell id="FSM011_llc" value="&lt;b&gt;ST_LLC_CMO&lt;/b&gt;&lt;br&gt;Per-line lookup; no refill&lt;br&gt;CLEAN/FLUSH: write dirty line to memory&lt;br&gt;True INVAL: invalidate without writeback&lt;br&gt;INVAL-as-FLUSH follows FLUSH" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM011_llc">
+          <mxGeometry width="400" height="160" as="geometry" x="1280" y="700" />
+        </mxCell>
+        <mxCell id="FSM011_llc_ok" value="&lt;b&gt;CMO complete without writeback error?&lt;/b&gt;&lt;br&gt;CMO xong, không lỗi writeback?" style="rhombus;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="34" vlsit_library_cell="2" vlsit_library_instance="FSM011_llc_ok">
+          <mxGeometry width="240" height="120" as="geometry" x="1360" y="930" />
+        </mxCell>
+        <mxCell id="FSM011_commit" value="&lt;b&gt;ST_COMMIT&lt;/b&gt;&lt;br&gt;CLEAN: sole M→E; retain copies&lt;br&gt;FLUSH/true INVAL: invalidate L1 and LLC&lt;br&gt;Commit directory after required ACKs" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM011_commit">
+          <mxGeometry width="400" height="150" as="geometry" x="700" y="1120" />
+        </mxCell>
+        <mxCell id="FSM011_wait_commit" value="&lt;b&gt;ST_WAIT_COMMIT_ACK&lt;/b&gt;&lt;br&gt;Keep line lock/context until all ACKs&lt;br&gt;No timeout; reset is recovery" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM011_wait_commit">
+          <mxGeometry width="400" height="105" as="geometry" x="700" y="1325" />
+        </mxCell>
+        <mxCell id="FSM011_success" value="&lt;b&gt;CMO SUCCESS&lt;/b&gt;&lt;br&gt;Allow CBO retirement once" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="33" vlsit_library_cell="2" vlsit_library_instance="FSM011_success">
+          <mxGeometry width="220" height="75" as="geometry" x="790" y="1480" />
+        </mxCell>
+        <mxCell id="FSM011_abort" value="&lt;b&gt;ST_ABORT&lt;/b&gt;&lt;br&gt;Send ABORT to prepared holders&lt;br&gt;Preserve stable MESI/directory and dirty data" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM011_abort">
+          <mxGeometry width="410" height="130" as="geometry" x="100" y="865" />
+        </mxCell>
+        <mxCell id="FSM011_wait_abort" value="&lt;b&gt;ST_WAIT_ABORT_ACK&lt;/b&gt;&lt;br&gt;Wait for every ABORT ACK&lt;br&gt;No timeout; retain context/line lock" style="ellipse;whiteSpace=wrap;html=1;fontSize=18;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="13" vlsit_library_cell="2" vlsit_library_instance="FSM011_wait_abort">
+          <mxGeometry width="410" height="110" as="geometry" x="100" y="1065" />
+        </mxCell>
+        <mxCell id="FSM011_fault" value="&lt;b&gt;PRECISE CBO FAULT&lt;/b&gt;&lt;br&gt;Writeback-required operations only&lt;br&gt;Store/AMO access fault before retirement&lt;br&gt;Use original PC and effective address" style="rounded=1;whiteSpace=wrap;html=1;strokeWidth=2;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="33" vlsit_library_cell="2" vlsit_library_instance="FSM011_fault">
+          <mxGeometry width="370" height="125" as="geometry" x="120" y="1245" />
+        </mxCell>
+        <mxCell id="FSM011_e_reset" value="reset / reset" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;exitPerimeter=0;entryX=0.5;entryY=0;entryPerimeter=0;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM011_e_reset" source="FSM011_start" target="FSM011_idle">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="900" y="135" as="sourcePoint" />
+            <mxPoint x="900" y="170" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="900" y="150" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM011_e_accept" value="legal CBO at retirement head / CBO hợp lệ" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;exitPerimeter=0;entryX=0.5;entryY=0;entryPerimeter=0;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM011_e_accept" source="FSM011_idle" target="FSM011_older">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="900" y="265" as="sourcePoint" />
+            <mxPoint x="900" y="315" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="900" y="290" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM011_e_drain" value="older stores drained / store cũ đã xong" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;exitPerimeter=0;entryX=0.5;entryY=0;entryPerimeter=0;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM011_e_drain" source="FSM011_older" target="FSM011_prepare">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="900" y="430" as="sourcePoint" />
+            <mxPoint x="900" y="480" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="900" y="455" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM011_e_lock" value="line locked; PREPARE sent / đã khóa line" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;exitPerimeter=0;entryX=0.5;entryY=0;entryPerimeter=0;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM011_e_lock" source="FSM011_prepare" target="FSM011_wait_prepare">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="900" y="600" as="sourcePoint" />
+            <mxPoint x="900" y="650" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="900" y="625" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM011_e_prepared" value="all targeted responses collected / đủ response" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;exitPerimeter=0;entryX=0.5;entryY=0;entryPerimeter=0;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM011_e_prepared" source="FSM011_wait_prepare" target="FSM011_prep_ok">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="900" y="810" as="sourcePoint" />
+            <mxPoint x="900" y="830" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="900" y="805" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM011_e_prep_yes" value="YES / CÓ" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=1;exitY=0.5;exitPerimeter=0;entryX=0;entryY=0.5;entryPerimeter=0;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM011_e_prep_yes" source="FSM011_prep_ok" target="FSM011_llc">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1010" y="890" as="sourcePoint" />
+            <mxPoint x="1280" y="780" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1130" y="890" />
+              <mxPoint x="1130" y="780" />
+              <mxPoint x="1190" y="780" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM011_e_prep_no" value="NO: owner/PREPARE error / lỗi" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0;exitY=0.5;exitPerimeter=0;entryX=1;entryY=0.25;entryPerimeter=0;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM011_e_prep_no" source="FSM011_prep_ok" target="FSM011_abort">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="790" y="890" as="sourcePoint" />
+            <mxPoint x="510" y="898" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="650" y="890" />
+              <mxPoint x="650" y="898" />
+              <mxPoint x="570" y="898" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM011_e_llc_rsp" value="maintenance response / response bảo trì" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;exitPerimeter=0;entryX=0.5;entryY=0;entryPerimeter=0;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM011_e_llc_rsp" source="FSM011_llc" target="FSM011_llc_ok">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1480" y="860" as="sourcePoint" />
+            <mxPoint x="1480" y="930" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1480" y="895" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM011_e_llc_yes" value="YES / CÓ" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0;exitY=0.5;exitPerimeter=0;entryX=1;entryY=0.5;entryPerimeter=0;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM011_e_llc_yes" source="FSM011_llc_ok" target="FSM011_commit">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1360" y="990" as="sourcePoint" />
+            <mxPoint x="1100" y="1195" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1260" y="990" />
+              <mxPoint x="1200" y="990" />
+              <mxPoint x="1200" y="1195" />
+              <mxPoint x="1100" y="1195" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM011_e_llc_no" value="NO: preserve LLC dirty line / lỗi, giữ dirty" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=1;exitY=0.5;exitPerimeter=0;entryX=1;entryY=0.75;entryPerimeter=0;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM011_e_llc_no" source="FSM011_llc_ok" target="FSM011_abort">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="1600" y="990" as="sourcePoint" />
+            <mxPoint x="510" y="962" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="1660" y="990" />
+              <mxPoint x="1660" y="1080" />
+              <mxPoint x="560" y="1080" />
+              <mxPoint x="560" y="962" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM011_e_commit_wait" value="COMMIT issued / đã gửi COMMIT" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;exitPerimeter=0;entryX=0.5;entryY=0;entryPerimeter=0;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM011_e_commit_wait" source="FSM011_commit" target="FSM011_wait_commit">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="900" y="1270" as="sourcePoint" />
+            <mxPoint x="900" y="1325" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="900" y="1300" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM011_e_commit_done" value="all commit ACKs; release line/context / đủ ACK" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;exitPerimeter=0;entryX=0.5;entryY=0;entryPerimeter=0;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM011_e_commit_done" source="FSM011_wait_commit" target="FSM011_success">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="900" y="1430" as="sourcePoint" />
+            <mxPoint x="900" y="1480" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="900" y="1460" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM011_e_abort_wait" value="ABORT issued / đã gửi ABORT" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;exitPerimeter=0;entryX=0.5;entryY=0;entryPerimeter=0;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM011_e_abort_wait" source="FSM011_abort" target="FSM011_wait_abort">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="305" y="995" as="sourcePoint" />
+            <mxPoint x="305" y="1065" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="305" y="1030" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM011_e_abort_done" value="all abort ACKs; return error / đủ ACK, trả lỗi" style="endArrow=block;html=1;rounded=0;fontSize=18;strokeWidth=2;endFill=1;fontSize=18;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;fontColor=#000000;strokeColor=#000000;fillColor=#FFFFFF;exitX=0.5;exitY=1;exitPerimeter=0;entryX=0.5;entryY=0;entryPerimeter=0;" edge="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="1" vlsit_library_cell="2" vlsit_library_instance="FSM011_e_abort_done" source="FSM011_wait_abort" target="FSM011_fault">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="305" y="1175" as="sourcePoint" />
+            <mxPoint x="305" y="1245" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="305" y="1210" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="FSM011_notes" value="True CBIE-decoded INVAL locks holders and invalidates at COMMIT without owner or LLC writeback; dirty copies may be discarded. CLEAN/FLUSH and INVAL-as-FLUSH perform required writebacks. Only their writeback errors reach the precise CBO fault path. Missing PREPARE/COMMIT/ABORT ACKs wait without timeout; reset is the only recovery. CBO is not retired until success; on error, no younger instruction retires. FENCE.I has a separate D-cache-to-LLC scan followed by local I-cache/fetch invalidation; it does not wait for LLC-to-DRAM writeback. On L1-to-LLC B error, preserve M/directory state, ABORT and wait for all ACKs, then raise precise synchronous custom exception cause 24 at the FENCE.I PC with the aligned physical line base in mtval/stval; suppress retirement and local fetch invalidation on error. This contract is outside the CMO FSM.&lt;br&gt;FENCE.I có luồng riêng: quét D-cache, chuyển line dirty lên LLC rồi invalidate I-cache/fetch cục bộ; không đợi writeback LLC-ra-DRAM. Nếu B L1-to-LLC lỗi, giữ M/directory state, gửi ABORT chờ đủ ACK, sau đó phát exception đồng bộ chính xác cause 24 tại PC FENCE.I với physical line base đã căn chỉnh trong mtval/stval; không retire và không invalidate fetch cục bộ khi lỗi. Hợp đồng này nằm ngoài FSM CMO." style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;rounded=0;fontSize=18;fontSize=18;fontColor=#000000;strokeColor=none;fillColor=none;" vertex="1" parent="1" vlsit_library_sha256="D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6" vlsit_library_entry="0" vlsit_library_cell="2" vlsit_library_instance="FSM011_notes">
+          <mxGeometry width="1640" height="80" as="geometry" x="80" y="1580" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,84 @@
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "m_vlsit_riscv_hpd_probe_engine.drawio",
+  "layout": {
+    "gap_h": 120,
+    "gap_v": 110,
+    "margin": 80,
+    "block_h": 60
+  },
+  "top": {
+    "frame_label": [
+      "Component composition",
+      "(m_vlsit_riscv_hpd_probe_engine)"
+    ]
+  },
+  "frame_row": [
+    "m_vlsit_riscv_hpd_probe_engine",
+    "Execute tagged PREPARE and matching COMMIT/ABORT against native HPDcache metadata and writeback services.",
+    "rtl/vlsit/m_vlsit_riscv_hpd_probe_engine.sv"
+  ],
+  "frame_interfaces": [
+    "IN",
+    "OUT"
+  ],
+  "blocks": [
+    {
+      "key": "B0",
+      "label": [
+        "component_boundary",
+        "(m_vlsit_riscv_hpd_probe_engine)"
+      ],
+      "width": 380,
+      "row": 0,
+      "col": 0,
+      "row_name": "component_boundary (m_vlsit_riscv_hpd_probe_engine)",
+      "function": "Execute tagged PREPARE and matching COMMIT/ABORT against native HPDcache metadata and writeback services.",
+      "source": "NEW; rtl/vlsit/m_vlsit_riscv_hpd_probe_engine.sv"
+    }
+  ],
+  "connectors": [],
+  "externals": [
+    {
+      "id": "IN",
+      "block": "B0",
+      "side": "L",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "IN",
+        "ports"
+      ]
+    },
+    {
+      "id": "OUT",
+      "block": "B0",
+      "side": "R",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "OUT",
+        "ports"
+      ]
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "IN",
+      "name": "Parent in ports",
+      "category": "custom",
+      "active": "in",
+      "signals": "i_clk_cache, i_rst_n_cache, i_probe_req_valid, i_probe_req_tag, i_probe_req_nline, i_probe_req_phase, i_probe_req_target_state, i_probe_req_wback_en, i_probe_rsp_ready, i_lookup_ready, i_lookup_rsp_valid, i_lookup_rsp_tag, i_lookup_rsp_nline, i_lookup_rsp_way, i_lookup_rsp_hit, i_lookup_rsp_state, i_lookup_rsp_err, i_flush_ready, i_flush_ack_valid, i_flush_ack_nline, i_flush_ack_err, i_state_update_ready"
+    },
+    {
+      "id": "OUT",
+      "name": "Parent out ports",
+      "category": "custom",
+      "active": "out",
+      "signals": "o_probe_req_ready, o_probe_rsp_valid, o_probe_rsp_tag, o_probe_rsp_nline, o_probe_rsp_phase, o_probe_rsp_state, o_probe_rsp_err, o_probe_rsp_wback_done, o_lookup_valid, o_lookup_tag, o_lookup_nline, o_lookup_rsp_ready, o_flush_valid, o_flush_nline, o_flush_way, o_state_update_valid, o_state_update_nline, o_state_update_way, o_state_update_state"
+    }
+  ],
+  "nets": [],
+  "legend_note": "A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.",
+  "library_sha256": "15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"
+}

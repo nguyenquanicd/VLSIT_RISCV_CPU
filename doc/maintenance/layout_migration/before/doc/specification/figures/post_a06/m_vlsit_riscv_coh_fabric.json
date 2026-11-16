@@ -1,0 +1,82 @@
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "m_vlsit_riscv_coh_fabric.drawio",
+  "layout": {
+    "gap_h": 120,
+    "gap_v": 110,
+    "margin": 80,
+    "block_h": 60
+  },
+  "top": {
+    "frame_label": [
+      "Component composition",
+      "(m_vlsit_riscv_coh_fabric)"
+    ]
+  },
+  "frame_row": [
+    "m_vlsit_riscv_coh_fabric",
+    "Coordinate directory lookup, ownership decisions, victim replacement, tagged two-phase probes and commit/abort for multiple in-flight cache lines.",
+    "rtl/vlsit/m_vlsit_riscv_coh_fabric.sv"
+  ],
+  "frame_interfaces": [],
+  "blocks": [
+    {
+      "key": "B0",
+      "label": [
+        "u_vlsit_riscv_coh_bank_arb",
+        "(m_vlsit_riscv_coh_bank_arb)"
+      ],
+      "width": 340,
+      "row": 0,
+      "col": 0,
+      "row_name": "u_vlsit_riscv_coh_bank_arb (m_vlsit_riscv_coh_bank_arb)",
+      "function": "Select eligible directory work fairly within each of four independent banks while preserving request identity.",
+      "source": "NEW; rtl/vlsit/m_vlsit_riscv_coh_bank_arb.sv"
+    },
+    {
+      "key": "B1",
+      "label": [
+        "u_vlsit_riscv_coh_txn_table",
+        "(m_vlsit_riscv_coh_txn_table)"
+      ],
+      "width": 340,
+      "row": 0,
+      "col": 1,
+      "row_name": "u_vlsit_riscv_coh_txn_table (m_vlsit_riscv_coh_txn_table)",
+      "function": "Own the lifetime and immutable identity of every active coherence transaction and its current probe phase.",
+      "source": "NEW; rtl/vlsit/m_vlsit_riscv_coh_txn_table.sv"
+    },
+    {
+      "key": "B2",
+      "label": [
+        "u_vlsit_riscv_probe_scheduler",
+        "(m_vlsit_riscv_probe_scheduler)"
+      ],
+      "width": 360,
+      "row": 1,
+      "col": 0,
+      "row_name": "u_vlsit_riscv_probe_scheduler (m_vlsit_riscv_probe_scheduler)",
+      "function": "Schedule one active tagged probe per cache and route matching cache responses to the correct context.",
+      "source": "NEW; rtl/vlsit/m_vlsit_riscv_probe_scheduler.sv"
+    },
+    {
+      "key": "B3",
+      "label": [
+        "u_vlsit_riscv_sharer_directory",
+        "(m_vlsit_riscv_sharer_directory)"
+      ],
+      "width": 380,
+      "row": 1,
+      "col": 1,
+      "row_name": "u_vlsit_riscv_sharer_directory (m_vlsit_riscv_sharer_directory)",
+      "function": "Store a conservative set of L1 holders and MESI/owner metadata independently of shared LLC residency.",
+      "source": "NEW; rtl/vlsit/m_vlsit_riscv_sharer_directory.sv"
+    }
+  ],
+  "connectors": [],
+  "externals": [],
+  "interfaces": [],
+  "nets": [],
+  "legend_note": "Exact source-referenced children; generate multiplicity and active branches are specified in the component text. Containment denotes hierarchy, not invented signal connectivity. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.",
+  "library_sha256": "15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"
+}

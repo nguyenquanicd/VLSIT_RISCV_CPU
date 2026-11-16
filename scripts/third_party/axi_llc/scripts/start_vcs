@@ -1,0 +1,13 @@
+#!/usr/sepp/bin/vcs-2020.12 bash
+# Copyright 2022 ETH Zurich and University of Bologna.
+# Solderpad Hardware License, Version 0.51, see LICENSE for details.
+# SPDX-License-Identifier: SHL-0.51
+
+set -eo pipefail
+
+bin/axi_llc.vcs +vcs+lic+wait +ntb_random_seed=1 | tee logs/axi_llc.vcs.log
+
+if grep -E '^(Error|Fatal):' logs/axi_llc.vcs.log -A 1; then
+    echo >&2 "Testbench failed"
+    exit 1
+fi

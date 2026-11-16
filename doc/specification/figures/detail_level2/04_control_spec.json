@@ -1,0 +1,190 @@
+{
+  "page_name": "04_CONTROL",
+  "library_sha256": "D1631ACF98A920526B235E8970FEDDC9305EA2F0D6A35C6529CD220D62AFABB6",
+  "layout": {
+    "gap_h": 110,
+    "gap_v": 110,
+    "margin": 45,
+    "block_h": 80
+  },
+  "top": {
+    "frame_label": [
+      "Control and CSR routing",
+      "(m_vlsit_riscv_axil_decode)"
+    ]
+  },
+  "frame_row": [
+    "Control and CSR routing",
+    "Document-grounded proposal; no RTL hierarchy is asserted.",
+    "VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS.md"
+  ],
+  "frame_interfaces": [
+    "AXIL",
+    "IRQ"
+  ],
+  "blocks": [
+    {
+      "key": "mux",
+      "label": [
+        "u_axi_lite_demux",
+        "(axi_lite_demux)",
+        "REUSE*"
+      ],
+      "width": 180,
+      "row": 0,
+      "col": 0,
+      "row_name": "u_axi_lite_demux / axi_lite_demux",
+      "function": "Routes the one external AXI4-Lite subordinate port to the cluster CSR and LLC service targets.",
+      "source": "REUSE candidate | PULP AXI"
+    },
+    {
+      "key": "decode",
+      "label": [
+        "u_vlsit_riscv_axil_decode",
+        "(m_vlsit_riscv_axil_decode)",
+        "NEW"
+      ],
+      "width": 310,
+      "row": 0,
+      "col": 1,
+      "row_name": "u_vlsit_riscv_axil_decode / m_vlsit_riscv_axil_decode",
+      "function": "Implements the approved local address windows, transaction response association and unmapped/misaligned error policy.",
+      "source": "NEW | VLSIT"
+    },
+    {
+      "key": "csr",
+      "label": [
+        "u_vlsit_cpucl_csr",
+        "(m_vlsit_cpucl_csr)",
+        "GENERATED"
+      ],
+      "width": 220,
+      "row": 0,
+      "col": 2,
+      "row_name": "u_vlsit_cpucl_csr / m_vlsit_cpucl_csr",
+      "function": "Provides software-visible cluster CSR fields generated from the project AXI4-Lite workbook.",
+      "source": "GENERATED | CSR_Generation.py v3.4 (commit c40f319)"
+    },
+    {
+      "key": "llc_cfg",
+      "label": [
+        "u_axi_llc_cfg",
+        "(axi_llc_config wrapper)",
+        "MODIFY"
+      ],
+      "width": 280,
+      "row": 1,
+      "col": 1,
+      "row_name": "u_axi_llc_cfg / axi_llc_config wrapper",
+      "function": "Provides LLC BIST, flush and status service; runtime SPM writes must be blocked or tied off by the VLSIT integration.",
+      "source": "MODIFY | PULP axi_llc wrapper policy"
+    },
+    {
+      "key": "pmu",
+      "label": [
+        "u_vlsit_riscv_pmu",
+        "(m_vlsit_riscv_pmu)",
+        "NEW"
+      ],
+      "width": 220,
+      "row": 1,
+      "col": 2,
+      "row_name": "u_vlsit_riscv_pmu / m_vlsit_riscv_pmu",
+      "function": "Consumes CSR selectors/control and exports snapshot, status, overflow causes and the aggregate PMU interrupt.",
+      "source": "NEW | VLSIT"
+    }
+  ],
+  "connectors": [
+    {
+      "id": "AXIL",
+      "src": "mux",
+      "src_side": "R",
+      "dst": "decode",
+      "dst_side": "L"
+    },
+    {
+      "id": "CSR",
+      "src": "decode",
+      "src_side": "T",
+      "dst": "csr",
+      "dst_side": "B"
+    },
+    {
+      "id": "LLCSVC",
+      "src": "decode",
+      "src_side": "B",
+      "dst": "llc_cfg",
+      "dst_side": "T"
+    },
+    {
+      "id": "PMCFG",
+      "src": "csr",
+      "src_side": "R",
+      "dst": "pmu",
+      "dst_side": "L"
+    }
+  ],
+  "externals": [
+    {
+      "id": "AXIL",
+      "block": "mux",
+      "side": "L",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "AXIL",
+        "32-bit AXI4-Lite control port"
+      ]
+    },
+    {
+      "id": "IRQ",
+      "block": "pmu",
+      "side": "B",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "IRQ",
+        "Aggregate PMU interrupt"
+      ]
+    }
+  ],
+  "nets": [],
+  "interfaces": [
+    {
+      "id": "AXIL",
+      "name": "AXI4-Lite control subordinate",
+      "category": "standard protocol",
+      "active": "SoC manager -> control router",
+      "signals": "32-bit address/data, four byte strobes and AW/W/B/AR/R channels."
+    },
+    {
+      "id": "CSR",
+      "name": "Cluster CSR access",
+      "category": "custom",
+      "active": "decoder -> generated CSR",
+      "signals": "AXI-Lite register write/read operations and generated register fields."
+    },
+    {
+      "id": "LLCSVC",
+      "name": "LLC service window",
+      "category": "standard protocol",
+      "active": "decoder -> LLC service",
+      "signals": "AXI4-Lite service transactions; address map remains workbook/integration controlled."
+    },
+    {
+      "id": "PMCFG",
+      "name": "PMU configuration/status",
+      "category": "custom",
+      "active": "CSR -> PMU",
+      "signals": "Event ID, scope, counter enable, snapshot command and cause/status fields; exact offsets are workbook-owned."
+    },
+    {
+      "id": "IRQ",
+      "name": "Aggregate PMU interrupt",
+      "category": "custom",
+      "active": "PMU -> SoC interrupt controller",
+      "signals": "One level interrupt asserted while an enabled sticky cause remains pending."
+    }
+  ],
+  "legend_note": "The selected CSR generator version and AXI4-Lite protocol are requirements. The workbook, offsets, reset values and LLC window base remain open until the workbook is reviewed. Status codes: REUSE = upstream RTL reused; REUSE* = reuse candidate pending compatibility checks; MODIFY = source adaptation, wrapper, or macro binding; NEW = VLSIT RTL to design; GENERATED = CSR RTL from the selected generator. All proposed blocks are dashed because this cluster has no pinned integrated RTL yet."
+}

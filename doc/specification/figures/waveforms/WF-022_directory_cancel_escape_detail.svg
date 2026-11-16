@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1967" height="298" viewBox="0 0 1967 298" font-family="Helvetica,Arial,sans-serif">
+<rect width="100%" height="100%" fill="#fff"/>
+<text x="12" y="20" font-size="14" font-weight="bold">WF-022 - T1 update blocked, T2 owner cancel escapes (abstract event order)</text>
+<line x1="266" y1="30" x2="266" y2="270" stroke="#ccc" stroke-dasharray="2,3"/>
+<line x1="446" y1="30" x2="446" y2="270" stroke="#ccc" stroke-dasharray="2,3"/>
+<line x1="626" y1="30" x2="626" y2="270" stroke="#ccc" stroke-dasharray="2,3"/>
+<line x1="806" y1="30" x2="806" y2="270" stroke="#ccc" stroke-dasharray="2,3"/>
+<text x="258" y="49" font-size="12" text-anchor="end">event_phase</text>
+<polygon points="270.0,33.0 442.0,33.0 446.0,42.0 442.0,51.0 270.0,51.0 266.0,42.0" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="356.0" y="46.0" text-anchor="middle" font-size="11">T1 blocked</text>
+<polygon points="450.0,33.0 622.0,33.0 626.0,42.0 622.0,51.0 450.0,51.0 446.0,42.0" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="536.0" y="46.0" text-anchor="middle" font-size="11">T2 cancel handshake</text>
+<polygon points="630.0,33.0 802.0,33.0 806.0,42.0 802.0,51.0 630.0,51.0 626.0,42.0" fill="#ffffff" stroke="#000" stroke-width="1.2"/>
+<text x="716.0" y="46.0" text-anchor="middle" font-size="11">T1 update handshake</text>
+<text x="12" y="79" font-size="12" font-weight="bold" fill="#225">Bank 0 operation channels (existing directory ports)</text>
+<text x="258" y="109" font-size="12" text-anchor="end">i_update_valid[0] (T1)</text>
+<polyline points="266.0,93.0 446.0,93.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="446.0,93.0 626.0,93.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="626.0,93.0 806.0,93.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="258" y="139" font-size="12" text-anchor="end">o_update_ready[0]</text>
+<polyline points="266.0,141.0 446.0,141.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="446.0,141.0 626.0,141.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="626.0,141.0 626.0,123.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="626.0,123.0 806.0,123.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="258" y="169" font-size="12" text-anchor="end">i_cancel_valid[0] (T2 reservation owner)</text>
+<polyline points="266.0,171.0 446.0,171.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="446.0,171.0 446.0,153.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="446.0,153.0 626.0,153.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="626.0,153.0 626.0,171.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="626.0,171.0 806.0,171.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="258" y="199" font-size="12" text-anchor="end">o_cancel_ready[0]</text>
+<polyline points="266.0,201.0 446.0,201.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="446.0,201.0 446.0,183.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="446.0,183.0 626.0,183.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="626.0,183.0 626.0,201.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="626.0,201.0 806.0,201.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="12" y="229" font-size="12" font-weight="bold" fill="#225">Reservation state (internal state label)</text>
+<text x="258" y="259" font-size="12" text-anchor="end">reg_dir_resv_valid</text>
+<polyline points="266.0,243.0 446.0,243.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="446.0,243.0 626.0,243.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="626.0,243.0 626.0,261.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<polyline points="626.0,261.0 806.0,261.0" stroke="#000" stroke-width="1.4" fill="none"/>
+<text x="12" y="290" font-size="11" fill="#444">Columns are ordered event phases, not clock cycles. T1 keeps UPDATE VALID while it is ineligible and READY remains low. The matching reservation-owner T2 CANCEL is accepted independently and releases the set reservation. T1's unchanged UPDATE then handshakes. This illustrates the selected CC-01 escape and makes no cycle-latency claim.</text>
+</svg>

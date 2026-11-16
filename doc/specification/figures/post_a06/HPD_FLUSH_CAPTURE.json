@@ -1,0 +1,30 @@
+{
+  "page_name": "HPD_FLUSH_CAPTURE",
+  "out_name": "HPD_FLUSH_CAPTURE.drawio",
+  "function": "HPD_FLUSH_CAPTURE",
+  "initial": "FLUSH_IDLE",
+  "state_pattern": "^[A-Z][A-Z0-9_]+$",
+  "states": [
+    {
+      "name": "FLUSH_IDLE"
+    },
+    {
+      "name": "FLUSH_SEND"
+    }
+  ],
+  "transitions": [
+    {
+      "src": "FLUSH_IDLE",
+      "dst": "FLUSH_SEND",
+      "label": "flush_alloc_i and flush_alloc_ready_o; read first word"
+    },
+    {
+      "src": "FLUSH_SEND",
+      "dst": "FLUSH_IDLE",
+      "label": "flush_resizer_wok and flush_eol"
+    }
+  ],
+  "layout": {
+    "margin": 50
+  }
+}

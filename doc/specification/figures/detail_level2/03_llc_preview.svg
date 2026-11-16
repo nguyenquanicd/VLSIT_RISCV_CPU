@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2018" height="758" viewBox="146 376 2018 758">
+<rect x="0" y="0" width="100%" height="100%" fill="white"/>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 Z" fill="#20252b"/></marker></defs>
+<path d="M 700 1060 L 700 960" fill="none" stroke="#20252b" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 1995 730 L 2090 730" fill="none" stroke="#20252b" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 470 730 L 565 730" fill="none" stroke="#20252b" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 839 730 L 1070 730" fill="none" stroke="#20252b" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 1180 690 L 1180 580" fill="none" stroke="#20252b" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 1180 770 L 1180 880" fill="none" stroke="#20252b" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 1280 710 L 1510 710" fill="none" stroke="#20252b" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 1409 920 L 1630 920" fill="none" stroke="#20252b" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 1760 770 L 1760 880" fill="none" stroke="#20252b" stroke-width="2" marker-end="url(#arrow)"/>
+<path d="M 610 920 L 590 920 L 590 790 L 1300 790 L 1300 750 L 1280 750" fill="none" stroke="#20252b" stroke-width="2" marker-end="url(#arrow)"/>
+<rect x="520" y="400" width="1520" height="610" fill="#f8fafc" stroke="#263746" stroke-width="2" stroke-dasharray="8 5"/>
+<text x="700" y="714.9" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="#16212a">
+<tspan x="700" dy="0">u_axi_llc_chan_splitter</tspan>
+<tspan x="700" dy="20">(axi_llc_chan_splitter)</tspan>
+<tspan x="700" dy="20">REUSE</tspan>
+</text>
+<text x="1175" y="714.9" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="#16212a">
+<tspan x="1175" dy="0">u_axi_llc_hit_miss</tspan>
+<tspan x="1175" dy="20">(axi_llc_hit_miss)</tspan>
+<tspan x="1175" dy="20">REUSE</tspan>
+</text>
+<text x="1175" y="524.9" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="#16212a">
+<tspan x="1175" dy="0">u_axi_llc_tag_store</tspan>
+<tspan x="1175" dy="20">(axi_llc_tag_store)</tspan>
+<tspan x="1175" dy="20">REUSE*</tspan>
+</text>
+<text x="1175" y="904.9" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="#16212a">
+<tspan x="1175" dy="0">u_axi_llc_rw_units</tspan>
+<tspan x="1175" dy="20">(axi_llc_read_unit / axi_llc_write_unit)</tspan>
+<tspan x="1175" dy="20">REUSE</tspan>
+</text>
+<text x="1755" y="714.9" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="#16212a">
+<tspan x="1755" dy="0">u_axi_llc_miss_units</tspan>
+<tspan x="1755" dy="20">(axi_llc_evict_unit / axi_llc_refill_unit)</tspan>
+<tspan x="1755" dy="20">REUSE</tspan>
+</text>
+<text x="1755" y="904.9" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="#16212a">
+<tspan x="1755" dy="0">u_axi_llc_data_ways</tspan>
+<tspan x="1755" dy="20">(LLC data-way storage)</tspan>
+<tspan x="1755" dy="20">MODIFY</tspan>
+</text>
+<text x="700" y="904.9" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="14" fill="#16212a">
+<tspan x="700" dy="0">u_axi_llc_config</tspan>
+<tspan x="700" dy="20">(axi_llc_config)</tspan>
+<tspan x="700" dy="20">MODIFY</tspan>
+</text>
+<text x="2115" y="734.55" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#16212a">
+<tspan x="2115" dy="0">MEM</tspan>
+</text>
+<text x="320" y="725.55" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#16212a">
+<tspan x="320" dy="0">SLV</tspan>
+<tspan x="320" dy="18">AXI4 cache request interface</tspan>
+</text>
+<text x="1872" y="440.55" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#16212a">
+<tspan x="1872" dy="0">Shared LLC internal datapath</tspan>
+<tspan x="1872" dy="18">(axi_llc)</tspan>
+</text>
+<text x="870" y="713.55" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#16212a">
+<tspan x="870" dy="0">DESC</tspan>
+</text>
+<text x="1213" y="609.55" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#16212a">
+<tspan x="1213" dy="0">TAG</tspan>
+</text>
+<text x="1213" y="839.55" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#16212a">
+<tspan x="1213" dy="0">HIT</tspan>
+</text>
+<text x="1320" y="693.55" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#16212a">
+<tspan x="1320" dy="0">MISS</tspan>
+</text>
+<text x="1440" y="903.55" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#16212a">
+<tspan x="1440" dy="0">DATA</tspan>
+</text>
+<text x="1803" y="799.55" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#16212a">
+<tspan x="1803" dy="0">EVICT</tspan>
+</text>
+<text x="635" y="815.55" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#16212a">
+<tspan x="635" dy="0">FLUSH</tspan>
+</text>
+<text x="700" y="1080.55" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="13" fill="#16212a">
+<tspan x="700" dy="0">SVC</tspan>
+<tspan x="700" dy="18">AXI4-Lite service</tspan>
+</text>
+</svg>

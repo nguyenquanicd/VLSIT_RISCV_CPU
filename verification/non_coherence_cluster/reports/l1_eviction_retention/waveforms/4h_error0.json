@@ -1,0 +1,42 @@
+{
+  "signal": [
+    {
+      "name": "eviction_error_harts",
+      "wave": "=........",
+      "data": [
+        "0x0"
+      ]
+    },
+    {
+      "name": "pending_evictions",
+      "wave": "=====....",
+      "data": [
+        "0x0",
+        "0x1",
+        "0x3",
+        "0x7",
+        "0xf"
+      ]
+    },
+    {
+      "name": "completed_misses",
+      "wave": "=....====",
+      "data": [
+        "0x0",
+        "0x1",
+        "0x3",
+        "0x7",
+        "0xf"
+      ]
+    }
+  ],
+  "head": {
+    "text": "TEST-050: 4 harts, B=0; actual event samples"
+  },
+  "foot": {
+    "text": "Times (ns): 80, 10860, 11010, 11120, 11200, 12930, 13690, 14650, 15730. Nonuniform gaps."
+  },
+  "config": {
+    "hscale": 2
+  }
+}

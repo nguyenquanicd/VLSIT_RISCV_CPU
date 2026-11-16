@@ -1,0 +1,105 @@
+{
+  "head": {
+    "text": "WF-018 — CBO writeback error, ABORT, and precise pre-retirement fault"
+  },
+  "signal": [
+    {
+      "name": "clk_cluster",
+      "wave": "p..............."
+    },
+    {
+      "name": "i_rst_n_cluster",
+      "wave": "1..............."
+    },
+    [
+      "Contract event aliases (not finalized RTL ports)",
+      {
+        "name": "cbo_at_retirement_head",
+        "wave": "01.............0"
+      },
+      {
+        "name": "owner_axi_bvalid",
+        "wave": "0....1.........."
+      },
+      {
+        "name": "owner_axi_bresp",
+        "wave": "x....=..........",
+        "data": ["OKAY"]
+      },
+      {
+        "name": "llc_axi_bvalid",
+        "wave": "0.......1......."
+      },
+      {
+        "name": "llc_axi_bresp",
+        "wave": "x.......=.......",
+        "data": ["SLVERR"]
+      },
+      {
+        "name": "abort_req_all_holders",
+        "wave": "0........1...0.."
+      },
+      {
+        "name": "abort_ack_hart0",
+        "wave": "0..........1...."
+      },
+      {
+        "name": "abort_ack_hart1",
+        "wave": "0............1.."
+      },
+      {
+        "name": "all_abort_acknowledged",
+        "wave": "0............10."
+      },
+      {
+        "name": "cmo_error_valid_to_cva6",
+        "wave": "0.............1."
+      },
+      {
+        "name": "precise_cbo_fault_valid",
+        "wave": "0..............1"
+      },
+      {
+        "name": "cbo_retire",
+        "wave": "0..............."
+      },
+      {
+        "name": "younger_instruction_retire",
+        "wave": "0..............."
+      }
+    ],
+    [
+      "Architectural context and preserved data",
+      {
+        "name": "owner_line_state",
+        "wave": "=..............=",
+        "data": ["M before writeback", "M retained after ABORT"]
+      },
+      {
+        "name": "llc_line_dirty",
+        "wave": "0....1........."
+      },
+      {
+        "name": "trap_mepc_or_sepc",
+        "wave": "x..............=",
+        "data": ["0x8020_1040"]
+      },
+      {
+        "name": "trap_mtval_or_stval",
+        "wave": "x..............=",
+        "data": ["0x9000_0007"]
+      },
+      {
+        "name": "trap_cause",
+        "wave": "x..............=",
+        "data": ["Cause 7: Store/AMO access fault"]
+      }
+    ]
+  ],
+  "foot": {
+    "text": "Example: hart 2 executes CBO.CLEAN at PC 0x8020_1040 with effective address 0x9000_0007. The owner writeback succeeds, LLC memory B returns SLVERR, the CBO remains at the retirement head, and the trap is raised only after every ABORT ACK. The dirty owner state remains recoverable. This is event ordering only: spacing is illustrative, not a cycle or latency contract. True CBO.INVAL has no writeback B-error path. Signal names are contract aliases, not final RTL ports."
+  },
+  "config": {
+    "hscale": 1
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "top": "tb_m_vlsit_riscv_addr_decode",
+  "dut": "m_vlsit_riscv_addr_decode",
+  "simulator": "C:\\Tools\\oss-cad-suite\\bin\\verilator_bin.exe",
+  "checks": [
+    "cacheable range base and final aligned beat",
+    "access crossing a region boundary",
+    "normal uncached region classification",
+    "MMIO classification and atomic rejection",
+    "unmapped address and zero-byte access",
+    "overlapping static-region table rejection"
+  ],
+  "result": "PASS: region table classes, access boundaries, atomic policy, and invalid overlap\n- C:\\HQuan\\102_MyGithub\\VLSIT_RISCV_CPU\\rtl\\verification\\addr_region_table\\tb_m_vlsit_riscv_addr_decode.sv:171: Verilog $finish\n- S i m u l a t i o n   R e p o r t: Verilator 5.053 devel\n- Verilator: $finish at 9ns; walltime 0.000 s; speed 0.000 s/s\n- Verilator: cpu 0.000 s on 1 threads; allocated 6 MB"
+}

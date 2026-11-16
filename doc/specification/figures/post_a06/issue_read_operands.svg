@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1060" height="850" viewBox="360 340 1060 850" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="360" y="340" width="1060" height="850" fill="#FFFFFF"/>
+<rect x="390" y="370" width="1000" height="790" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<rect x="590" y="510" width="220" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="536" text-anchor="middle">i_ariane_fp_regfile</text>
+<text x="700" y="558" text-anchor="middle">(ariane_regfile)</text>
+<rect x="1080" y="510" width="200" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1180" y="536" text-anchor="middle">i_ariane_regfile</text>
+<text x="1180" y="558" text-anchor="middle">(ariane_regfile)</text>
+<rect x="560" y="680" width="280" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="706" text-anchor="middle">i_ariane_fp_regfile_fpga</text>
+<text x="700" y="728" text-anchor="middle">(ariane_regfile_fpga)</text>
+<rect x="1050" y="680" width="260" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1180" y="706" text-anchor="middle">i_ariane_regfile_fpga</text>
+<text x="1180" y="728" text-anchor="middle">(ariane_regfile_fpga)</text>
+<rect x="470" y="850" width="460" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="876" text-anchor="middle">i_cvxif_issue_register_commit_if_driver</text>
+<text x="700" y="898" text-anchor="middle">(cvxif_issue_register_commit_if_driver)</text>
+<rect x="1090" y="850" width="180" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1180" y="876" text-anchor="middle">i_rs1_last_raw</text>
+<text x="1180" y="898" text-anchor="middle">(raw_checker)</text>
+<rect x="610" y="1020" width="180" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="1046" text-anchor="middle">i_rs2_last_raw</text>
+<text x="700" y="1068" text-anchor="middle">(raw_checker)</text>
+<rect x="1090" y="1020" width="180" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1180" y="1046" text-anchor="middle">i_rs3_last_raw</text>
+<text x="1180" y="1068" text-anchor="middle">(raw_checker)</text>
+<text x="1368" y="411" text-anchor="end">Component composition</text>
+<text x="1368" y="433" text-anchor="end">(issue_read_operands)</text>
+</svg>

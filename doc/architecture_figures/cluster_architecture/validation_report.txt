@@ -1,0 +1,7 @@
+PASS: 85 library-derived cells across 1 pages. RTL semantics and visual layout were not checked.
+
+[01_LEVEL_1] frame i1__2 1380x660 ratio 2.09
+[01_LEVEL_1] shapes: 8 blocks, 32 labels, 4 pads; connectors: 28; physical crossings: 8; bends: 0 bends=21, 2 bends=3, 3 bends=4; findings: 0
+total findings: 0
+
+SCORE gapH=120 gapV=140 seed=2 failed=0 unplaced=0 issues=0 bend_gt5=0 bend5=0 bends=18 cross_total=8 cross_max_per_connector=2 frame=1380x660

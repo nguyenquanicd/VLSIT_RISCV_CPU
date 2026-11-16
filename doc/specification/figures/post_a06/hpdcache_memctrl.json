@@ -1,0 +1,199 @@
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "hpdcache_memctrl.drawio",
+  "layout": {
+    "gap_h": 120,
+    "gap_v": 110,
+    "margin": 80,
+    "block_h": 60
+  },
+  "top": {
+    "frame_label": [
+      "Component composition",
+      "(hpdcache_memctrl)"
+    ]
+  },
+  "frame_row": [
+    "hpdcache_memctrl",
+    "Native modified component; function and change contract are specified in Section 14.",
+    "rtl/common/modified/hpdcache/rtl/src/hpdcache_memctrl.sv"
+  ],
+  "frame_interfaces": [],
+  "blocks": [
+    {
+      "key": "B0",
+      "label": [
+        "amo_be_demux_i",
+        "(hpdcache_demux)"
+      ],
+      "width": 200,
+      "row": 0,
+      "col": 0,
+      "row_name": "amo_be_demux_i (hpdcache_demux)",
+      "function": "Native component",
+      "source": "REUSE; rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_demux.sv"
+    },
+    {
+      "key": "B1",
+      "label": [
+        "data_req_write_be_demux_i",
+        "(hpdcache_demux)"
+      ],
+      "width": 300,
+      "row": 0,
+      "col": 1,
+      "row_name": "data_req_write_be_demux_i (hpdcache_demux)",
+      "function": "Native component",
+      "source": "REUSE; rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_demux.sv"
+    },
+    {
+      "key": "B2",
+      "label": [
+        "data_read_flush_mux_row_i",
+        "(hpdcache_mux)"
+      ],
+      "width": 300,
+      "row": 0,
+      "col": 2,
+      "row_name": "data_read_flush_mux_row_i (hpdcache_mux)",
+      "function": "Native component",
+      "source": "REUSE; rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_mux.sv"
+    },
+    {
+      "key": "B3",
+      "label": [
+        "data_read_flush_mux_way_i",
+        "(hpdcache_mux)"
+      ],
+      "width": 300,
+      "row": 1,
+      "col": 0,
+      "row_name": "data_read_flush_mux_way_i (hpdcache_mux)",
+      "function": "Native component",
+      "source": "REUSE; rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_mux.sv"
+    },
+    {
+      "key": "B4",
+      "label": [
+        "data_read_req_word_mux_i",
+        "(hpdcache_mux)"
+      ],
+      "width": 280,
+      "row": 1,
+      "col": 1,
+      "row_name": "data_read_req_word_mux_i (hpdcache_mux)",
+      "function": "Native component",
+      "source": "REUSE; rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_mux.sv"
+    },
+    {
+      "key": "B5",
+      "label": [
+        "data_read_req_word_way_mux_i",
+        "(hpdcache_mux)"
+      ],
+      "width": 340,
+      "row": 1,
+      "col": 2,
+      "row_name": "data_read_req_word_way_mux_i (hpdcache_mux)",
+      "function": "Native component",
+      "source": "REUSE; rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_mux.sv"
+    },
+    {
+      "key": "B6",
+      "label": [
+        "flush_tag_mux_i",
+        "(hpdcache_mux)"
+      ],
+      "width": 180,
+      "row": 2,
+      "col": 0,
+      "row_name": "flush_tag_mux_i (hpdcache_mux)",
+      "function": "Native component",
+      "source": "REUSE; rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_mux.sv"
+    },
+    {
+      "key": "B7",
+      "label": [
+        "hit_tag_mux_i",
+        "(hpdcache_mux)"
+      ],
+      "width": 180,
+      "row": 2,
+      "col": 1,
+      "row_name": "hit_tag_mux_i (hpdcache_mux)",
+      "function": "Native component",
+      "source": "REUSE; rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_mux.sv"
+    },
+    {
+      "key": "B8",
+      "label": [
+        "i_dir_ways_mux",
+        "(hpdcache_mux)"
+      ],
+      "width": 180,
+      "row": 2,
+      "col": 2,
+      "row_name": "i_dir_ways_mux (hpdcache_mux)",
+      "function": "Native component",
+      "source": "REUSE; rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_mux.sv"
+    },
+    {
+      "key": "B9",
+      "label": [
+        "victim_tag_mux_i",
+        "(hpdcache_mux)"
+      ],
+      "width": 200,
+      "row": 3,
+      "col": 0,
+      "row_name": "victim_tag_mux_i (hpdcache_mux)",
+      "function": "Native component",
+      "source": "REUSE; rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_mux.sv"
+    },
+    {
+      "key": "B10",
+      "label": [
+        "dir_sram",
+        "(hpdcache_sram)"
+      ],
+      "width": 180,
+      "row": 3,
+      "col": 1,
+      "row_name": "dir_sram (hpdcache_sram)",
+      "function": "Native component",
+      "source": "REUSE; rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_sram.sv"
+    },
+    {
+      "key": "B11",
+      "label": [
+        "data_sram",
+        "(hpdcache_sram_wbyteenable)"
+      ],
+      "width": 320,
+      "row": 3,
+      "col": 2,
+      "row_name": "data_sram (hpdcache_sram_wbyteenable)",
+      "function": "Native component",
+      "source": "REUSE; rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/hpdcache_sram_wbyteenable.sv"
+    },
+    {
+      "key": "B12",
+      "label": [
+        "victim_sel_i",
+        "(hpdcache_victim_sel)"
+      ],
+      "width": 260,
+      "row": 4,
+      "col": 0,
+      "row_name": "victim_sel_i (hpdcache_victim_sel)",
+      "function": "Native component",
+      "source": "REUSE; rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/hpdcache_victim_sel.sv"
+    }
+  ],
+  "connectors": [],
+  "externals": [],
+  "interfaces": [],
+  "nets": [],
+  "legend_note": "Exact source-referenced children; generate multiplicity and active branches are specified in the component text. Containment denotes hierarchy, not invented signal connectivity. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.",
+  "library_sha256": "15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"
+}

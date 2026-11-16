@@ -1,0 +1,13 @@
+{
+  "head": {"text": "WF-003 IF-003 generic memory handshake (illustrative)"},
+  "signal": [
+    {"name": "i_clk_core", "wave": "p........."},
+    {"name": "if003_req_valid", "wave": "01.0......"},
+    {"name": "if003_req_ready", "wave": "01.0......"},
+    {"name": "if003_req_addr", "wave": "x=.xxxxxxx", "data": ["0x1000"]},
+    {"name": "if003_read_data_valid", "wave": "0....10..."},
+    {"name": "if003_read_data", "wave": "xxxxx=.xx.", "data": ["D0"]}
+  ],
+  "foot": {"text": "Illustrative only: signal names and handshake are not normative until DEC-004 selects IF-003."},
+  "config": {"hscale": 2}
+}

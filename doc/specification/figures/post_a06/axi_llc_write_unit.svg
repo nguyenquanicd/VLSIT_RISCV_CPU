@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="440" height="510" viewBox="480 340 440 510" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="480" y="340" width="440" height="510" fill="#FFFFFF"/>
+<rect x="510" y="370" width="380" height="450" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<rect x="590" y="510" width="220" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="536" text-anchor="middle">i_spill_register_b</text>
+<text x="700" y="558" text-anchor="middle">(spill_register)</text>
+<rect x="610" y="680" width="180" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="706" text-anchor="middle">i_w_stream_fifo</text>
+<text x="700" y="728" text-anchor="middle">(stream_fifo)</text>
+<text x="868" y="411" text-anchor="end">Component composition</text>
+<text x="868" y="433" text-anchor="end">(axi_llc_write_unit)</text>
+</svg>

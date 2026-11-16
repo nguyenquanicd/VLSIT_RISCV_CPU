@@ -1,0 +1,69 @@
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "cva6_hpdcache_subsystem.drawio",
+  "layout": {
+    "gap_h": 120,
+    "gap_v": 110,
+    "margin": 80,
+    "block_h": 60
+  },
+  "top": {
+    "frame_label": [
+      "Component composition",
+      "(cva6_hpdcache_subsystem)"
+    ]
+  },
+  "frame_row": [
+    "cva6_hpdcache_subsystem",
+    "Native modified component; function and change contract are specified in Section 14.",
+    "rtl/modified/cva6/core/cache_subsystem/cva6_hpdcache_subsystem.sv"
+  ],
+  "frame_interfaces": [],
+  "blocks": [
+    {
+      "key": "B0",
+      "label": [
+        "i_axi_arbiter",
+        "(cva6_hpdcache_subsystem_axi_arbiter)"
+      ],
+      "width": 440,
+      "row": 0,
+      "col": 0,
+      "row_name": "i_axi_arbiter (cva6_hpdcache_subsystem_axi_arbiter)",
+      "function": "Cache AXI source arbitration",
+      "source": "MODIFY; rtl/modified/cva6/core/cache_subsystem/cva6_hpdcache_subsystem_axi_arbiter.sv"
+    },
+    {
+      "key": "B1",
+      "label": [
+        "i_dcache",
+        "(cva6_hpdcache_wrapper)"
+      ],
+      "width": 280,
+      "row": 0,
+      "col": 1,
+      "row_name": "i_dcache (cva6_hpdcache_wrapper)",
+      "function": "Native HPDcache and probe integration",
+      "source": "MODIFY; rtl/modified/cva6/core/cache_subsystem/cva6_hpdcache_wrapper.sv"
+    },
+    {
+      "key": "B2",
+      "label": [
+        "i_cva6_icache",
+        "(cva6_icache)"
+      ],
+      "width": 160,
+      "row": 1,
+      "col": 0,
+      "row_name": "i_cva6_icache (cva6_icache)",
+      "function": "Native component",
+      "source": "MODIFY; rtl/modified/cva6/core/cache_subsystem/cva6_icache.sv"
+    }
+  ],
+  "connectors": [],
+  "externals": [],
+  "interfaces": [],
+  "nets": [],
+  "legend_note": "Exact source-referenced children; generate multiplicity and active branches are specified in the component text. Containment denotes hierarchy, not invented signal connectivity. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.",
+  "library_sha256": "15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"
+}

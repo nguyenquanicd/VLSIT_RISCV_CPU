@@ -1,0 +1,296 @@
+    {
+    "Project": "VLSIT RISC-V CPU Cluster",
+    "Module": "JSON debug file",
+    "Function": "Used to check the configuration after generation",
+    "Author": "Quan Nguyen (user)",
+    "Generator": "PC",
+    "Generator version": "3.5",
+    "Page": "VLSI Technology",
+    "Table - Configuration": [
+    {
+        "Module Name": "m_vlsit_cpucl_csr",
+        "Address Width": "32",
+        "Data Width": "32",
+        "Protocol": "AXI4-Lite",
+        "Asynchronous": "0",
+        "Strobe Mode": "HONOR",
+        "AXI Outstanding Mode": "QUEUED",
+        "AXI Read Depth": "1",
+        "AXI Write Depth": "1",
+        "AHB Endian": "LITTLE",
+        "Register Event Sideband": "0"
+    }
+    ],
+    "Table - Register Definition": [
+        {
+        "Register Name": "pmu_ctrl",
+        "Offset": "0x0000",
+        "Repeat Mode": "NONE",
+        "Count or Default": "1",
+        "Offset Stride": "4",
+        "Maximum Count": "1",
+        "Reset Value": "0x0",
+        "Descriprtion": "PMU snapshot command and completion status.",
+        "Bits": [
+            {
+                "Bit Name": "snapshot_req",
+                "Bit Type": "wo",
+                "Bit Field": "[0]",
+                "Reset Value": "0x0",
+                "Description": "Software writes 1 to request an atomic snapshot. Hardware clears this write-only request after capture; the field is not readable."
+            },
+            {
+                "Bit Name": "snapshot_done",
+                "Bit Type": "w1c",
+                "Bit Field": "[1]",
+                "Reset Value": "0x0",
+                "Description": "Sticky snapshot-complete status. Hardware sets it when capture completes; software clears it by writing 1. A new request clears the previous done state."
+            },
+            {
+                "Bit Name": "reserved",
+                "Bit Type": "ro",
+                "Bit Field": "[31:2]",
+                "Reset Value": "0x0",
+                "Description": "Reserved; reads as zero."
+            }
+          ]
+        },
+        {
+        "Register Name": "irq_en",
+        "Offset": "0x0004",
+        "Repeat Mode": "NONE",
+        "Count or Default": "1",
+        "Offset Stride": "4",
+        "Maximum Count": "1",
+        "Reset Value": "0x0",
+        "Descriprtion": "Per-counter overflow interrupt enables; bit N controls counter N.",
+        "Bits": [
+            {
+                "Bit Name": "overflow_en",
+                "Bit Type": "rw",
+                "Bit Field": "[31:0]",
+                "Reset Value": "0x0",
+                "Description": "Enable each counter's sticky overflow cause to contribute to the aggregate level interrupt."
+            }
+          ]
+        },
+        {
+        "Register Name": "irq_raw",
+        "Offset": "0x0008",
+        "Repeat Mode": "NONE",
+        "Count or Default": "1",
+        "Offset Stride": "4",
+        "Maximum Count": "1",
+        "Reset Value": "0x0",
+        "Descriprtion": "Sticky raw PMU overflow causes before interrupt masking.",
+        "Bits": [
+            {
+                "Bit Name": "overflow",
+                "Bit Type": "w1c",
+                "Bit Field": "[31:0]",
+                "Reset Value": "0x0",
+                "Description": "Hardware sets the corresponding counter bit on wrap; software writes 1 to clear. A simultaneous hardware set wins over software clear."
+            }
+          ]
+        },
+        {
+        "Register Name": "irq_sts",
+        "Offset": "0x000c",
+        "Repeat Mode": "NONE",
+        "Count or Default": "1",
+        "Offset Stride": "4",
+        "Maximum Count": "1",
+        "Reset Value": "0x0",
+        "Descriprtion": "Masked PMU interrupt causes; read-only view of irq_raw AND irq_en.",
+        "Bits": [
+            {
+                "Bit Name": "overflow_pending",
+                "Bit Type": "ro",
+                "Bit Field": "[31:0]",
+                "Reset Value": "0x0",
+                "Description": "Read-only pending causes. The aggregate level interrupt is asserted while any bit is set."
+            }
+          ]
+        },
+        {
+        "Register Name": "cpucl_coh",
+        "Offset": "0x0010",
+        "Repeat Mode": "NONE",
+        "Count or Default": "1",
+        "Offset Stride": "4",
+        "Maximum Count": "1",
+        "Reset Value": "0x0",
+        "Descriprtion": "Sticky coherence/diagnostic status; fatal eviction IRQ persists until reset.",
+        "Bits": [
+            {
+                "Bit Name": "fault",
+                "Bit Type": "w1c",
+                "Bit Field": "[0]",
+                "Reset Value": "0x0",
+                "Description": "Sticky coherence/diagnostic status; fatal eviction IRQ persists until reset."
+            },
+            {
+                "Bit Name": "reserved",
+                "Bit Type": "ro",
+                "Bit Field": "[31:1]",
+                "Reset Value": "0x0",
+                "Description": "Reserved; reads zero."
+            }
+          ]
+        },
+        {
+        "Register Name": "pmu_evt",
+        "Offset": "0x1000",
+        "Repeat Mode": "PARAMETERIZED",
+        "Count or Default": "16",
+        "Offset Stride": "4",
+        "Maximum Count": "32",
+        "Reset Value": "0x0",
+        "Descriprtion": "One event selector, hart scope, and enable bit per PMU counter.",
+        "Bits": [
+            {
+                "Bit Name": "event_id",
+                "Bit Type": "rw",
+                "Bit Field": "[15:0]",
+                "Reset Value": "0x0",
+                "Description": "Stable 16-bit selector. Confirmed source ranges and a detailed mapping draft are in Event_Map; review event definitions and new CCU tap conditions before PMU RTL generation. Unsupported, reserved, unavailable, and disabled-SPM IDs count zero."
+            },
+            {
+                "Bit Name": "scope",
+                "Bit Type": "rw",
+                "Bit Field": "[18:16]",
+                "Reset Value": "0x0",
+                "Description": "0-3 select hart 0-3; 4 aggregates all active harts by summing same-cycle occurrences; 5 selects a cluster-global event; 6-7 are reserved."
+            },
+            {
+                "Bit Name": "en",
+                "Bit Type": "rw",
+                "Bit Field": "[19]",
+                "Reset Value": "0x0",
+                "Description": "Enables this counter to accumulate the selected event."
+            },
+            {
+                "Bit Name": "reserved",
+                "Bit Type": "ro",
+                "Bit Field": "[31:20]",
+                "Reset Value": "0x0",
+                "Description": "Reserved; reads as zero."
+            }
+          ]
+        },
+        {
+        "Register Name": "pmu_count_lo",
+        "Offset": "0x2000",
+        "Repeat Mode": "PARAMETERIZED",
+        "Count or Default": "16",
+        "Offset Stride": "4",
+        "Maximum Count": "32",
+        "Reset Value": "0x0",
+        "Descriprtion": "Low word of each captured PMU counter value.",
+        "Bits": [
+            {
+                "Bit Name": "value",
+                "Bit Type": "ro",
+                "Bit Field": "[31:0]",
+                "Reset Value": "0x0",
+                "Description": "Read-only low 32 bits from the stable snapshot bank; live counter changes do not alter the captured value."
+            }
+          ]
+        },
+        {
+        "Register Name": "pmu_count_hi",
+        "Offset": "0x3000",
+        "Repeat Mode": "PARAMETERIZED",
+        "Count or Default": "16",
+        "Offset Stride": "4",
+        "Maximum Count": "32",
+        "Reset Value": "0x0",
+        "Descriprtion": "High word of each captured PMU counter value.",
+        "Bits": [
+            {
+                "Bit Name": "value",
+                "Bit Type": "ro",
+                "Bit Field": "[31:0]",
+                "Reset Value": "0x0",
+                "Description": "Read-only high 32 bits from the stable snapshot bank. Returns zero when PARA_PMU_COUNTER_W=32."
+            }
+          ]
+        },
+        {
+        "Register Name": "cpucl_fault_sts",
+        "Offset": "0x4000",
+        "Repeat Mode": "NONE",
+        "Count or Default": "1",
+        "Offset Stride": "4",
+        "Maximum Count": "1",
+        "Reset Value": "0x0",
+        "Descriprtion": "DEC-039/040: RO/reset-only. Bits 0 valid, 1 multiple, 2 addr_valid, 3 hart_valid, 4 resp_valid; others zero.",
+        "Bits": [
+            {
+                "Bit Name": "value",
+                "Bit Type": "ro",
+                "Bit Field": "[31:0]",
+                "Reset Value": "0x0",
+                "Description": "DEC-039/040: RO/reset-only. Bits 0 valid, 1 multiple, 2 addr_valid, 3 hart_valid, 4 resp_valid; others zero."
+            }
+          ]
+        },
+        {
+        "Register Name": "cpucl_fault_info",
+        "Offset": "0x4004",
+        "Repeat Mode": "NONE",
+        "Count or Default": "1",
+        "Offset Stride": "4",
+        "Maximum Count": "1",
+        "Reset Value": "0x0",
+        "Descriprtion": "First fatal: [3:0] source 1=L1, 2=LLC; [5:4] raw BRESP; [9:8] hart only if hart_valid; others zero.",
+        "Bits": [
+            {
+                "Bit Name": "value",
+                "Bit Type": "ro",
+                "Bit Field": "[31:0]",
+                "Reset Value": "0x0",
+                "Description": "First fatal: [3:0] source 1=L1, 2=LLC; [5:4] raw BRESP; [9:8] hart only if hart_valid; others zero."
+            }
+          ]
+        },
+        {
+        "Register Name": "cpucl_fault_lo",
+        "Offset": "0x4008",
+        "Repeat Mode": "NONE",
+        "Count or Default": "1",
+        "Offset Stride": "4",
+        "Maximum Count": "1",
+        "Reset Value": "0x0",
+        "Descriprtion": "Stable first-fatal physical line address bits 31:0; reset zero. No software clear.",
+        "Bits": [
+            {
+                "Bit Name": "value",
+                "Bit Type": "ro",
+                "Bit Field": "[31:0]",
+                "Reset Value": "0x0",
+                "Description": "Stable first-fatal physical line address bits 31:0; reset zero. No software clear."
+            }
+          ]
+        },
+        {
+        "Register Name": "cpucl_fault_hi",
+        "Offset": "0x400c",
+        "Repeat Mode": "NONE",
+        "Count or Default": "1",
+        "Offset Stride": "4",
+        "Maximum Count": "1",
+        "Reset Value": "0x0",
+        "Descriprtion": "Stable first-fatal physical line address bits 55:32 in bits 23:0; bits 31:24 zero.",
+        "Bits": [
+            {
+                "Bit Name": "value",
+                "Bit Type": "ro",
+                "Bit Field": "[31:0]",
+                "Reset Value": "0x0",
+                "Description": "Stable first-fatal physical line address bits 55:32 in bits 23:0; bits 31:24 zero."
+            }
+          ]
+        }
+    ]
+}

@@ -1,0 +1,65 @@
+# Cluster RTL / RTL cluster
+
+Latest completeness assessment / Đánh giá hiện trạng mới nhất: [post-A-06 audit](reports/post_a06_cluster_audit/README.md). It distinguishes connected RTL, activated simulation, lint-only behavior, source-use notices and the remaining work order. / Phân biệt RTL đã nối, chức năng đã kích hoạt trong mô phỏng, phần chỉ lint, lưu ý quyền sử dụng source và công việc tiếp theo.
+
+TOP: [`m_vlsit_riscv_cluster_axi_top`](vlsit/m_vlsit_riscv_cluster_axi_top.sv).
+Select `PARA_CPU_NUM=2` or `4`; default is 4.
+
+TOP dùng `PARA_CPU_NUM=2` hoặc `4`, mặc định 4 hart.
+
+| Directory / Thư mục | Purpose / Chức năng |
+|---|---|
+| `vlsit` | New VLSIT modules and adapters / Module và adapter VLSIT mới |
+| `third_party` | Pristine licensed upstream sources / Nguồn upstream giữ nguyên |
+| `modified` | Licensed local modifications with history / Bản sửa giữ license và history |
+| `verification` | Testbenches and replay commands / Testbench và lệnh chạy lại |
+| `reports` | Lint logs and simulation evidence / Log lint và bằng chứng mô phỏng |
+
+External CMO is enabled in the production core. See [real CBO instruction tests and TOP lint](reports/cmo_end_to_end/README.md), for historical results; current zero-warning lint and limits are in the A-06 report below.
+
+Core production đã bật external CMO. Xem test CBO thật và lint TOP tại liên kết trên; báo cáo nêu warning còn lại và giới hạn kiểm chứng.
+
+TOP lint at 2/4 harts has 0 errors and 0 warnings; see [cleanup evidence](reports/lint_cleanup/README.md). / Lint TOP 2/4 hart có 0 lỗi và 0 warning; xem bằng chứng tại liên kết trên.
+
+
+FENCE.I DEC-030/031: retirement waits for coherent clean and I-cache completion; errors trap cause 24 only after ABORT ACK. Eight real-instruction 2/4-hart M/S-mode cases pass. [Report and changed files](reports/fence_i/README.md), [replay and waveforms](verification/fence_i_end_to_end/README.md).
+
+FENCE.I giữ retirement đến khi clean coherent và I-cache hoàn tất; lỗi chỉ trap cause 24 sau ACK ABORT. Tám ca instruction thật ở 2/4 hart, M/S-mode đều pass; xem báo cáo và lệnh chạy lại tại các liên kết trên.
+
+
+FPU warning cleanup: both native simulation models and TOP lint at 2/4 harts have zero warnings; FPU equivalence and all eight real FENCE.I cases pass. [Evidence and modified files](reports/fpu_warning_fix/README.md).
+
+Đã sửa hai warning FPU: model mô phỏng và lint TOP 2/4 hart đều không còn warning; test tương đương FPU và tám ca FENCE.I thật đều pass. Báo cáo trên ghi bằng chứng và file sửa.
+
+
+Silent E→M fix: LOAD→STORE→CBO success/error, baseline CBO and FENCE.I regressions pass at 2/4 harts. No state check or warning was disabled. [Evidence](reports/e_to_m_fix/README.md).
+
+Đã sửa E→M cục bộ: LOAD→STORE→CBO thành công/lỗi, CBO gốc và FENCE.I đều pass ở 2/4 hart. Không bỏ check state hoặc tắt warning.
+
+
+A-02 DEC-038: cached AMO/LR-SC executes in coherent L1. Contended AMO and LR/SC retry, refill faults and dirty-owner ABORT faults pass at 2/4 harts, with CBO/FENCE.I regression and strict TOP lint. [Results, replay and limits](reports/atomic_coherence/README.md).
+
+A-02: AMO/LR-SC cached chạy tại L1 coherent; test tranh chấp/retry, lỗi refill và ABORT owner dirty đều pass 2/4 hart. CBO/FENCE.I và lint TOP đã chạy lại; báo cáo trên nêu giới hạn còn lại.
+
+
+A-03 DEC-036: ordinary L1 replacement waits for successful B; SLVERR/DECERR retains dirty SRAM/tag/context, drains older responses and holds fault IRQ through W1C until reset. Six real 2/4-hart cases pass, including reset recovery. [Implementation, regression and performance limits](reports/l1_eviction_retention/README.md).
+
+A-03: chỉ thay victim dirty sau B thành công; B lỗi giữ SRAM/tag/context, nhận response cũ và giữ IRQ qua W1C đến reset. Sáu ca CPU thật 2/4 hart đã pass, gồm reset recovery. Controller chờ B trước refill; A-04/A-05 đã có bằng chứng cập nhật bên dưới; fault record A-06 đã hoàn tất ở mục dưới.
+
+
+A-04 DEC-013: native PREPARE-I reconciles stale-positive directory holders after L1 eviction/refill errors. COMMIT keeps an absent cache I and publishes the pruned holder mask; ABORT preserves conservative metadata. Eight real CPU cases and A-03/atomic/CBO/FENCE.I regression pass, with zero-warning TOP lint at 2/4 harts. [Report, hashes and replay](reports/directory_holder_lifecycle/README.md).
+
+A-04: probe I hợp lệ loại holder dư khi COMMIT, cache vắng vẫn I, ABORT giữ metadata cũ. Tám ca CPU thật, regression và lint 2/4 hart pass; không tắt warning. Directory vẫn bảo thủ, không thông báo eviction tức thời. A-05 đã có bằng chứng cập nhật bên dưới; A-06 đã hoàn tất ở mục dưới.
+
+
+A-05: reserve one victim-context credit; bind child allocation and per-hart grant completion to the selected tag; cancel/relookup when the victim line is already locked. Saturation at 2/8/16 contexts, eight new CPU cases, complete AMO/LR-SC/CBO/FENCE.I regression and zero-warning TOP lint pass at 2/4 harts. [Current evidence and replay](reports/ccu_victim_escape/README.md). N physical contexts admit at most N-1 roots; default N=8 admits seven. A-06 evidence is recorded below.
+
+A-05: giữ một credit cho victim, đối chiếu đúng tag khi cấp child và hoàn tất grant, hủy reservation rồi lookup lại nếu victim đang bị khóa. Test đầy bảng 2/8/16 context, tám ca CPU mới, regression AMO/LR-SC/CBO/FENCE.I và lint TOP 2/4 hart đều PASS; lint không warning. N context vật lý nhận tối đa N-1 root, mặc định bảy root với N=8. Fault record chi tiết A-06 đã hoàn tất ở mục dưới.
+
+## A-06 — First-fatal record / Bản ghi fatal đầu tiên
+
+A-06 is implemented and verified: first fatal L1/LLC record is retained until reset; later faults set multiple. L1 identifies the exact hart; LLC uses hart_valid=0. 58 real CPU cases PASS, including ten A-06 scenarios and AMO/LR-SC/CBO/FENCE.I regression; production TOP lint at 2/4 harts has zero errors and warnings. Firmware must use the 4-KiB group map: fault 0x4000–0x400C, LLC 0x5000 (24-KiB aperture). Directed validation does not establish global coherence, OS or ASIC signoff.
+
+A-06 đã triển khai và kiểm chứng: giữ record fatal L1/LLC đầu tiên đến reset; lỗi sau đặt multiple. L1 ghi đúng hart; LLC dùng hart_valid=0. 58 ca CPU thật PASS, gồm mười ca A-06 và regression AMO/LR-SC/CBO/FENCE.I; lint TOP 2/4 hart không lỗi hoặc warning. Firmware phải dùng map cách 4 KiB: fault 0x4000–0x400C, LLC 0x5000, aperture 24 KiB. Chưa phải signoff coherence toàn cục, OS hoặc ASIC.
+
+[Validation, source hashes and replay / Kiểm chứng, hash và chạy lại](reports/fault_record_a06/README.md).

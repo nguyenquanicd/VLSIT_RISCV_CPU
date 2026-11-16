@@ -1,0 +1,93 @@
+{
+  "page_name": "CMO_CONTROLLER",
+  "out_name": "CMO_CONTROLLER.drawio",
+  "function": "CMO_CONTROLLER",
+  "initial": "ENUM_ST_CMO_IDLE",
+  "state_pattern": "^[A-Z][A-Z0-9_]+$",
+  "states": [
+    {
+      "name": "ENUM_ST_CMO_IDLE"
+    },
+    {
+      "name": "ENUM_ST_CMO_BEGIN"
+    },
+    {
+      "name": "ENUM_ST_CMO_PREPARE"
+    },
+    {
+      "name": "ENUM_ST_CMO_MAINT_REQ"
+    },
+    {
+      "name": "ENUM_ST_CMO_MAINT_WAIT"
+    },
+    {
+      "name": "ENUM_ST_CMO_FINISH_REQ"
+    },
+    {
+      "name": "ENUM_ST_CMO_FINISH_WAIT"
+    },
+    {
+      "name": "ENUM_ST_CMO_RESP"
+    }
+  ],
+  "transitions": [
+    {
+      "src": "ENUM_ST_CMO_IDLE",
+      "dst": "ENUM_ST_CMO_BEGIN",
+      "label": "w_cmd_take"
+    },
+    {
+      "src": "ENUM_ST_CMO_BEGIN",
+      "dst": "ENUM_ST_CMO_PREPARE",
+      "label": "i_ccu_begin_ready"
+    },
+    {
+      "src": "ENUM_ST_CMO_PREPARE",
+      "dst": "ENUM_ST_CMO_FINISH_REQ",
+      "label": "w_prepare_take and (prepare error or FENCE.I)"
+    },
+    {
+      "src": "ENUM_ST_CMO_PREPARE",
+      "dst": "ENUM_ST_CMO_MAINT_REQ",
+      "label": "w_prepare_take and successful CBO"
+    },
+    {
+      "src": "ENUM_ST_CMO_MAINT_REQ",
+      "dst": "ENUM_ST_CMO_FINISH_REQ",
+      "label": "i_maint_ready and i_maint_done"
+    },
+    {
+      "src": "ENUM_ST_CMO_MAINT_REQ",
+      "dst": "ENUM_ST_CMO_MAINT_WAIT",
+      "label": "i_maint_ready and not i_maint_done"
+    },
+    {
+      "src": "ENUM_ST_CMO_MAINT_WAIT",
+      "dst": "ENUM_ST_CMO_FINISH_REQ",
+      "label": "i_maint_done"
+    },
+    {
+      "src": "ENUM_ST_CMO_FINISH_REQ",
+      "dst": "ENUM_ST_CMO_RESP",
+      "label": "i_ccu_finish_ready and i_ccu_finish_done"
+    },
+    {
+      "src": "ENUM_ST_CMO_FINISH_REQ",
+      "dst": "ENUM_ST_CMO_FINISH_WAIT",
+      "label": "i_ccu_finish_ready and not i_ccu_finish_done"
+    },
+    {
+      "src": "ENUM_ST_CMO_FINISH_WAIT",
+      "dst": "ENUM_ST_CMO_RESP",
+      "label": "i_ccu_finish_done"
+    },
+    {
+      "src": "ENUM_ST_CMO_RESP",
+      "dst": "ENUM_ST_CMO_IDLE",
+      "label": "next edge after one-cycle response"
+    }
+  ],
+  "layout": {
+    "margin": 50
+  }
+}

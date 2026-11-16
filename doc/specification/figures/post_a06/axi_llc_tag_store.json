@@ -1,0 +1,121 @@
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "axi_llc_tag_store.drawio",
+  "layout": {
+    "gap_h": 120,
+    "gap_v": 110,
+    "margin": 80,
+    "block_h": 60
+  },
+  "top": {
+    "frame_label": [
+      "Component composition",
+      "(axi_llc_tag_store)"
+    ]
+  },
+  "frame_row": [
+    "axi_llc_tag_store",
+    "Native modified component; function and change contract are specified in Section 14.",
+    "rtl/common/modified/axi_llc/src/hit_miss_detect/axi_llc_tag_store.sv"
+  ],
+  "frame_interfaces": [],
+  "blocks": [
+    {
+      "key": "B0",
+      "label": [
+        "i_evict_box",
+        "(axi_llc_evict_box)"
+      ],
+      "width": 220,
+      "row": 0,
+      "col": 0,
+      "row_name": "i_evict_box (axi_llc_evict_box)",
+      "function": "Native component",
+      "source": "REUSE; rtl/common/third_party/axi_llc/src/hit_miss_detect/axi_llc_evict_box.sv"
+    },
+    {
+      "key": "B1",
+      "label": [
+        "i_tag_pattern_gen",
+        "(axi_llc_tag_pattern_gen)"
+      ],
+      "width": 300,
+      "row": 0,
+      "col": 1,
+      "row_name": "i_tag_pattern_gen (axi_llc_tag_pattern_gen)",
+      "function": "Native component",
+      "source": "REUSE; rtl/common/third_party/axi_llc/src/hit_miss_detect/axi_llc_tag_pattern_gen.sv"
+    },
+    {
+      "key": "B2",
+      "label": [
+        "i_onehot_to_bin",
+        "(onehot_to_bin)"
+      ],
+      "width": 180,
+      "row": 1,
+      "col": 0,
+      "row_name": "i_onehot_to_bin (onehot_to_bin)",
+      "function": "Native component",
+      "source": "REUSE; rtl/common/third_party/axi_llc_locked/common_cells/src/onehot_to_bin.sv"
+    },
+    {
+      "key": "B3",
+      "label": [
+        "i_shift_reg_bist",
+        "(shift_reg)"
+      ],
+      "width": 200,
+      "row": 1,
+      "col": 1,
+      "row_name": "i_shift_reg_bist (shift_reg)",
+      "function": "Native component",
+      "source": "REUSE; rtl/common/third_party/cva6/vendor/pulp-platform/common_cells/src/shift_reg.sv"
+    },
+    {
+      "key": "B4",
+      "label": [
+        "i_shift_reg_rvalid",
+        "(shift_reg)"
+      ],
+      "width": 220,
+      "row": 2,
+      "col": 0,
+      "row_name": "i_shift_reg_rvalid (shift_reg)",
+      "function": "Native component",
+      "source": "REUSE; rtl/common/third_party/cva6/vendor/pulp-platform/common_cells/src/shift_reg.sv"
+    },
+    {
+      "key": "B5",
+      "label": [
+        "i_spill_register",
+        "(spill_register)"
+      ],
+      "width": 200,
+      "row": 2,
+      "col": 1,
+      "row_name": "i_spill_register (spill_register)",
+      "function": "Native component",
+      "source": "REUSE; rtl/common/third_party/axi_llc_locked/common_cells/src/spill_register.sv"
+    },
+    {
+      "key": "B6",
+      "label": [
+        "i_tag_store",
+        "(tc_sram)"
+      ],
+      "width": 140,
+      "row": 3,
+      "col": 0,
+      "row_name": "i_tag_store (tc_sram)",
+      "function": "Native component",
+      "source": "MODIFY; rtl/common/modified/cva6/vendor/pulp-platform/tech_cells_generic/src/rtl/tc_sram.sv"
+    }
+  ],
+  "connectors": [],
+  "externals": [],
+  "interfaces": [],
+  "nets": [],
+  "legend_note": "Exact source-referenced children; generate multiplicity and active branches are specified in the component text. Containment denotes hierarchy, not invented signal connectivity. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.",
+  "library_sha256": "15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"
+}

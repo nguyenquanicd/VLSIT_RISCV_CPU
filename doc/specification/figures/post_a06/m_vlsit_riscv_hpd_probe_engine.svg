@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="840" height="340" viewBox="280 340 840 340" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="280" y="340" width="840" height="340" fill="#FFFFFF"/>
+<rect x="430" y="370" width="540" height="280" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<rect x="510" y="510" width="380" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="536" text-anchor="middle">component_boundary</text>
+<text x="700" y="558" text-anchor="middle">(m_vlsit_riscv_hpd_probe_engine)</text>
+<text x="345" y="536" text-anchor="middle">IN</text>
+<text x="345" y="558" text-anchor="middle">ports</text>
+<text x="1055" y="536" text-anchor="middle">OUT</text>
+<text x="1055" y="558" text-anchor="middle">ports</text>
+<text x="948" y="411" text-anchor="end">Component composition</text>
+<text x="948" y="433" text-anchor="end">(m_vlsit_riscv_hpd_probe_engine)</text>
+<path d="M 380 540 L 510 540" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="510,540 498,546 498,534" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 890 540 L 1020 540" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1020,540 1008,546 1008,534" fill="#000000" stroke="#000000" stroke-width="1"/>
+</svg>

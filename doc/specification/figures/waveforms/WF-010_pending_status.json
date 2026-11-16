@@ -1,0 +1,9 @@
+{
+  "head": {
+    "text": "WF-010 pending detail"
+  },
+  "signal": [],
+  "foot": {
+    "text": "PMU event encodings, overflow cause mapping, and interrupt clear sequence remain subject to CSR workbook review. This status card defines no signal timing."
+  }
+}

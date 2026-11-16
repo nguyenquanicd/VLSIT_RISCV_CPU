@@ -1,0 +1,106 @@
+{
+  "head": {
+    "text": "WF-013 AXI4-Lite SLVERR and DECERR responses"
+  },
+  "signal": [
+    {
+      "name": "i_clk_cluster",
+      "wave": "p..........."
+    },
+    {
+      "name": "i_axil_awvalid",
+      "wave": "01.0........"
+    },
+    {
+      "name": "o_axil_awready",
+      "wave": "0.10........"
+    },
+    {
+      "name": "i_axil_awaddr[31:0]",
+      "wave": "x=.xxxxxxxxx",
+      "data": [
+        "MISALIGNED"
+      ]
+    },
+    {
+      "name": "i_axil_wvalid",
+      "wave": "0.1.0......."
+    },
+    {
+      "name": "o_axil_wready",
+      "wave": "0..10......."
+    },
+    {
+      "name": "i_axil_wdata[31:0]",
+      "wave": "xx=.xxxxxxxx",
+      "data": [
+        "D0"
+      ]
+    },
+    {
+      "name": "i_axil_wstrb[3:0]",
+      "wave": "xx=.xxxxxxxx",
+      "data": [
+        "1111"
+      ]
+    },
+    {
+      "name": "o_axil_bvalid",
+      "wave": "0....1.0...."
+    },
+    {
+      "name": "i_axil_bready",
+      "wave": "0.....10...."
+    },
+    {
+      "name": "o_axil_bresp[1:0]",
+      "wave": "xxxxx=.xxxxx",
+      "data": [
+        "SLVERR"
+      ]
+    },
+    {
+      "name": "i_axil_arvalid",
+      "wave": "0......1.0.."
+    },
+    {
+      "name": "o_axil_arready",
+      "wave": "0.......10.."
+    },
+    {
+      "name": "i_axil_araddr[31:0]",
+      "wave": "xxxxxxx=.xxx",
+      "data": [
+        "UNMAPPED"
+      ]
+    },
+    {
+      "name": "o_axil_rvalid",
+      "wave": "0........1.0"
+    },
+    {
+      "name": "i_axil_rready",
+      "wave": "0.........10"
+    },
+    {
+      "name": "o_axil_rresp[1:0]",
+      "wave": "xxxxxxxxx=.x",
+      "data": [
+        "DECERR"
+      ]
+    },
+    {
+      "name": "o_axil_rdata[31:0]",
+      "wave": "xxxxxxxxx=.x",
+      "data": [
+        "0x00000000"
+      ]
+    }
+  ],
+  "foot": {
+    "text": "One legal trace; response spacing is illustrative. Misaligned writes have no CSR side effect; unmapped reads return zero."
+  },
+  "config": {
+    "hscale": 2
+  }
+}

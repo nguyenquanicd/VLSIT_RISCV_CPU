@@ -1,0 +1,11 @@
+{
+  "head": {"text": "WF-008 Result backpressure (corner)"},
+  "signal": [
+    {"name": "i_clk_core", "wave": "p........."},
+    {"name": "o_xif_result_valid", "wave": "01.111...0"},
+    {"name": "i_xif_result_ready", "wave": "0...10...."},
+    {"name": "o_xif_result_data", "wave": "x=...=.xxx", "data": ["C0", "C0"]}
+  ],
+  "foot": {"text": "result_valid is never retracted; it is held until result_ready."},
+  "config": {"hscale": 2}
+}

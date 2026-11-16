@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1520" height="850" viewBox="410 340 1520 850" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="410" y="340" width="1520" height="850" fill="#FFFFFF"/>
+<rect x="440" y="370" width="1460" height="790" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<rect x="1460" y="850" width="360" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1640" y="876" text-anchor="middle">u_vlsit_riscv_cmo_controller</text>
+<text x="1640" y="898" text-anchor="middle">(m_vlsit_riscv_cmo_controller)</text>
+<rect x="520" y="1020" width="360" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="1046" text-anchor="middle">u_vlsit_riscv_cpu_tile_array</text>
+<text x="700" y="1068" text-anchor="middle">(m_vlsit_riscv_cpu_tile_array)</text>
+<rect x="1000" y="1020" width="340" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1170" y="1046" text-anchor="middle">u_vlsit_riscv_fault_record</text>
+<text x="1170" y="1068" text-anchor="middle">(m_vlsit_riscv_fault_record)</text>
+<rect x="1530" y="1020" width="220" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1640" y="1046" text-anchor="middle">u_vlsit_riscv_pmu</text>
+<text x="1640" y="1068" text-anchor="middle">(m_vlsit_riscv_pmu)</text>
+<rect x="600" y="510" width="200" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="536" text-anchor="middle">u_vlsit_axi_llc</text>
+<text x="700" y="558" text-anchor="middle">(m_vlsit_axi_llc)</text>
+<rect x="1020" y="510" width="300" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1170" y="536" text-anchor="middle">u_vlsit_axil_reg_bridge</text>
+<text x="1170" y="558" text-anchor="middle">(m_vlsit_axil_reg_bridge)</text>
+<rect x="1530" y="510" width="220" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1640" y="536" text-anchor="middle">u_vlsit_cpucl_csr</text>
+<text x="1640" y="558" text-anchor="middle">(m_vlsit_cpucl_csr)</text>
+<rect x="540" y="680" width="320" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="706" text-anchor="middle">u_vlsit_riscv_axi_mem_mux</text>
+<text x="700" y="728" text-anchor="middle">(m_vlsit_riscv_axi_mem_mux)</text>
+<rect x="1030" y="680" width="280" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1170" y="706" text-anchor="middle">u_vlsit_riscv_axi_mmio</text>
+<text x="1170" y="728" text-anchor="middle">(m_vlsit_riscv_axi_mmio)</text>
+<rect x="1490" y="680" width="300" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1640" y="706" text-anchor="middle">u_vlsit_riscv_axi_route</text>
+<text x="1640" y="728" text-anchor="middle">(m_vlsit_riscv_axi_route)</text>
+<rect x="540" y="850" width="320" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="876" text-anchor="middle">u_vlsit_riscv_axil_decode</text>
+<text x="700" y="898" text-anchor="middle">(m_vlsit_riscv_axil_decode)</text>
+<rect x="1010" y="850" width="320" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1170" y="876" text-anchor="middle">u_vlsit_riscv_cmo_arbiter</text>
+<text x="1170" y="898" text-anchor="middle">(m_vlsit_riscv_cmo_arbiter)</text>
+<text x="1878" y="411" text-anchor="end">Component composition</text>
+<text x="1878" y="433" text-anchor="end">(m_vlsit_riscv_cluster_core)</text>
+</svg>

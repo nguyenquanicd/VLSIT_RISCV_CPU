@@ -1,0 +1,131 @@
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "m_vlsit_riscv_cluster_axi_top.drawio",
+  "layout": {
+    "gap_h": 120,
+    "gap_v": 110,
+    "margin": 80,
+    "block_h": 60
+  },
+  "top": {
+    "frame_label": [
+      "Component composition",
+      "(m_vlsit_riscv_cluster_axi_top)"
+    ]
+  },
+  "frame_row": [
+    "m_vlsit_riscv_cluster_axi_top",
+    "Expose one synchronous cluster boundary and adapt the fixed 64-bit LLC memory interface to the selected external data width.",
+    "rtl/vlsit/m_vlsit_riscv_cluster_axi_top.sv"
+  ],
+  "frame_interfaces": [
+    "AXIL",
+    "MMIO",
+    "MEM"
+  ],
+  "blocks": [
+    {
+      "key": "B0",
+      "label": [
+        "u_vlsit_riscv_cluster_core",
+        "(m_vlsit_riscv_cluster_core)"
+      ],
+      "width": 340,
+      "row": 0,
+      "col": 0,
+      "row_name": "u_vlsit_riscv_cluster_core (m_vlsit_riscv_cluster_core)",
+      "function": "Integrate CPUs, coherence control, memory/MMIO routing, maintenance, shared LLC, PMU and software diagnostics.",
+      "source": "NEW; rtl/vlsit/m_vlsit_riscv_cluster_core.sv"
+    },
+    {
+      "key": "B1",
+      "label": [
+        "u_vlsit_riscv_axi_dw_adapter",
+        "(m_vlsit_riscv_axi_dw_adapter)"
+      ],
+      "width": 360,
+      "row": 1,
+      "col": 0,
+      "row_name": "u_vlsit_riscv_axi_dw_adapter (m_vlsit_riscv_axi_dw_adapter)",
+      "function": "Convert the fixed 64-bit memory-side LLC bus to synthesis-selected external AXI data width.",
+      "source": "NEW; rtl/vlsit/m_vlsit_riscv_axi_dw_adapter.sv"
+    }
+  ],
+  "connectors": [
+    {
+      "id": "AXI64",
+      "src": "B0",
+      "src_side": "B",
+      "dst": "B1",
+      "dst_side": "T"
+    }
+  ],
+  "externals": [
+    {
+      "id": "AXIL",
+      "block": "B0",
+      "side": "L",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "AXIL",
+        "AXI"
+      ]
+    },
+    {
+      "id": "MMIO",
+      "block": "B0",
+      "side": "R",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "MMIO",
+        "AXI"
+      ]
+    },
+    {
+      "id": "MEM",
+      "block": "B1",
+      "side": "R",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "MEM",
+        "AXI"
+      ]
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "AXI64",
+      "name": "Fixed 64-bit LLC memory interface",
+      "category": "handshake",
+      "active": "core -> adapter",
+      "signals": "w_axi_llc_awid, w_axi_llc_awatop, w_axi_llc_awaddr, w_axi_llc_awlen, w_axi_llc_awsize, w_axi_llc_awburst, w_axi_llc_awlock, w_axi_llc_awcache, w_axi_llc_awprot, w_axi_llc_awqos, w_axi_llc_awregion, w_axi_llc_awvalid, w_axi_llc_awready, w_axi_llc_wdata, w_axi_llc_wstrb, w_axi_llc_wlast, w_axi_llc_wvalid, w_axi_llc_wready, w_axi_llc_bid, w_axi_llc_bresp, w_axi_llc_bvalid, w_axi_llc_bready, w_axi_llc_arid, w_axi_llc_araddr, w_axi_llc_arlen, w_axi_llc_arsize, w_axi_llc_arburst, w_axi_llc_arlock, w_axi_llc_arcache, w_axi_llc_arprot, w_axi_llc_arqos, w_axi_llc_arregion, w_axi_llc_arvalid, w_axi_llc_arready, w_axi_llc_rid, w_axi_llc_rdata, w_axi_llc_rresp, w_axi_llc_rlast, w_axi_llc_rvalid, w_axi_llc_rready, w_axi_llc_awid, w_axi_llc_awatop, w_axi_llc_awaddr, w_axi_llc_awlen, w_axi_llc_awsize"
+    },
+    {
+      "id": "AXIL",
+      "name": "AXIL boundary",
+      "category": "handshake",
+      "active": "in",
+      "signals": "i_axil_awaddr, i_axil_awprot, i_axil_awvalid, o_axil_awready, i_axil_wdata, i_axil_wstrb, i_axil_wvalid, o_axil_wready, o_axil_bresp, o_axil_bvalid, i_axil_bready, i_axil_araddr, i_axil_arprot, i_axil_arvalid, o_axil_arready, o_axil_rdata, o_axil_rresp, o_axil_rvalid, i_axil_rready"
+    },
+    {
+      "id": "MMIO",
+      "name": "MMIO boundary",
+      "category": "handshake",
+      "active": "out",
+      "signals": "o_axi_mmio_awid, o_axi_mmio_awaddr, o_axi_mmio_awlen, o_axi_mmio_awsize, o_axi_mmio_awburst, o_axi_mmio_awlock, o_axi_mmio_awcache, o_axi_mmio_awprot, o_axi_mmio_awqos, o_axi_mmio_awregion, o_axi_mmio_awvalid, i_axi_mmio_awready, o_axi_mmio_wdata, o_axi_mmio_wstrb, o_axi_mmio_wlast, o_axi_mmio_wvalid, i_axi_mmio_wready, i_axi_mmio_bid, i_axi_mmio_bresp, i_axi_mmio_bvalid, o_axi_mmio_bready, o_axi_mmio_arid, o_axi_mmio_araddr, o_axi_mmio_arlen, o_axi_mmio_arsize, o_axi_mmio_arburst, o_axi_mmio_arlock, o_axi_mmio_arcache, o_axi_mmio_arprot, o_axi_mmio_arqos, o_axi_mmio_arregion, o_axi_mmio_arvalid, i_axi_mmio_arready, i_axi_mmio_rid, i_axi_mmio_rdata, i_axi_mmio_rresp, i_axi_mmio_rlast, i_axi_mmio_rvalid, o_axi_mmio_rready"
+    },
+    {
+      "id": "MEM",
+      "name": "MEM boundary",
+      "category": "handshake",
+      "active": "out",
+      "signals": "o_axi_mem_awid, o_axi_mem_awatop, o_axi_mem_awaddr, o_axi_mem_awlen, o_axi_mem_awsize, o_axi_mem_awburst, o_axi_mem_awlock, o_axi_mem_awcache, o_axi_mem_awprot, o_axi_mem_awqos, o_axi_mem_awregion, o_axi_mem_awvalid, i_axi_mem_awready, o_axi_mem_wdata, o_axi_mem_wstrb, o_axi_mem_wlast, o_axi_mem_wvalid, i_axi_mem_wready, i_axi_mem_bid, i_axi_mem_bresp, i_axi_mem_bvalid, o_axi_mem_bready, o_axi_mem_arid, o_axi_mem_araddr, o_axi_mem_arlen, o_axi_mem_arsize, o_axi_mem_arburst, o_axi_mem_arlock, o_axi_mem_arcache, o_axi_mem_arprot, o_axi_mem_arqos, o_axi_mem_arregion, o_axi_mem_arvalid, i_axi_mem_arready, i_axi_mem_rid, i_axi_mem_rdata, i_axi_mem_rresp, i_axi_mem_rlast, i_axi_mem_rvalid, o_axi_mem_rready"
+    }
+  ],
+  "nets": [],
+  "legend_note": "Source-grounded structural TOP. AXI64 request/response bundle joins the core and width adapter; arrow denotes request initiator, responses return on the same bundle. Boot, IRQ/debug and common clock/reset are fully listed in Section 6 rather than duplicated as unconnected pads.",
+  "library_sha256": "15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"
+}
