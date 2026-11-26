@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "testcase_generator": {
+    "command": "python scripts/generators/generate_case_manifest.py --root .",
+    "input": "tests/qualification_case_matrix.json",
+    "input_sha256": "430de7815f4de9dcd40edb89d3b912f2531726989bcefa1b24524c85cadcd935",
+    "output": "tests/generated/initial_case_manifest.json",
+    "output_sha256": "0a759cbf23a7d1e29cba98f23c4d33c07867e3d8e8abfedaf13fdcc8e33e63a2",
+    "version": "1.0.0",
+    "review_status": "G0 approved; initial scope only, not full HDS closure"
+  },
+  "environment_component_generator": {
+    "generator": "scripts/generators/generate_sim_main.py",
+    "template": "scripts/generators/templates/sim_main.cpp.tpl",
+    "version": "1.0.0",
+    "review_status": "reviewed; generated per fresh run and retained with build artifacts"
+  }
+}

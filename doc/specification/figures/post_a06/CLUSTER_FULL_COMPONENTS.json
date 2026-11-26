@@ -1,0 +1,492 @@
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "CLUSTER_FULL_COMPONENTS.drawio",
+  "table_suffix": "",
+  "layout": {
+    "gap_h": 120,
+    "gap_v": 110,
+    "margin": 250,
+    "block_h": 80
+  },
+  "top": {
+    "frame_label": [
+      "2/4-HART CLUSTER CORE",
+      "(m_vlsit_riscv_cluster_core)"
+    ]
+  },
+  "frame_row": [
+    "m_vlsit_riscv_cluster_core",
+    "Complete direct-child composition of the implemented AXI cluster core. Internal D-cache coherence is inside the CPU tile array; external memory and MMIO use AXI interfaces.",
+    "Section 14.2; rtl/non_coherence_cluster/m_vlsit_riscv_cluster_core.sv"
+  ],
+  "frame_interfaces": [
+    "AXIL",
+    "MMIO",
+    "MEM",
+    "HART",
+    "PIRQ",
+    "FIRQ",
+    "CRCLK"
+  ],
+  "blocks": [
+    {
+      "key": "B0",
+      "label": [
+        "u_vlsit_axi_llc",
+        "(m_vlsit_axi_llc)"
+      ],
+      "width": 200,
+      "row": 0,
+      "col": 3,
+      "row_name": "u_vlsit_axi_llc (m_vlsit_axi_llc)",
+      "function": "Wrap the licensed native LLC with VLSIT AXI/service/maintenance and fault-event ports.",
+      "source": "NEW; rtl/common/vlsit/cache/m_vlsit_axi_llc.sv"
+    },
+    {
+      "key": "B1",
+      "label": [
+        "u_vlsit_axil_reg_bridge",
+        "(m_vlsit_axil_reg_bridge)"
+      ],
+      "width": 300,
+      "row": 1,
+      "col": 3,
+      "row_name": "u_vlsit_axil_reg_bridge (m_vlsit_axil_reg_bridge)",
+      "function": "Translate AXI4-Lite LLC-service accesses into the pinned PULP RegBus request/response form.",
+      "source": "NEW; rtl/common/vlsit/control/m_vlsit_axil_reg_bridge.sv"
+    },
+    {
+      "key": "B2",
+      "label": [
+        "u_vlsit_cpucl_csr",
+        "(m_vlsit_cpucl_csr)"
+      ],
+      "width": 220,
+      "row": 2,
+      "col": 2,
+      "row_name": "u_vlsit_cpucl_csr (m_vlsit_cpucl_csr)",
+      "function": "Implement workbook-defined AXI4-Lite PMU controls, snapshot words, IRQ/diagnostic status and read-only fatal records.",
+      "source": "GENERATED; rtl/common/vlsit/csr/RTL/m_vlsit_cpucl_csr.sv"
+    },
+    {
+      "key": "B3",
+      "label": [
+        "u_vlsit_riscv_axi_mem_mux",
+        "(m_vlsit_riscv_axi_mem_mux)"
+      ],
+      "width": 320,
+      "row": 0,
+      "col": 2,
+      "row_name": "u_vlsit_riscv_axi_mem_mux (m_vlsit_riscv_axi_mem_mux)",
+      "function": "Arbitrate per-hart memory traffic while preserving source identity and response routing.",
+      "source": "NEW; rtl/common/vlsit/interconnect/m_vlsit_riscv_axi_mem_mux.sv"
+    },
+    {
+      "key": "B4",
+      "label": [
+        "u_vlsit_riscv_axi_mmio",
+        "(m_vlsit_riscv_axi_mmio)"
+      ],
+      "width": 280,
+      "row": 1,
+      "col": 0,
+      "row_name": "u_vlsit_riscv_axi_mmio (m_vlsit_riscv_axi_mmio)",
+      "function": "Provide a separate non-coherent AXI4 device egress for active harts.",
+      "source": "NEW; rtl/common/vlsit/interconnect/m_vlsit_riscv_axi_mmio.sv"
+    },
+    {
+      "key": "B5",
+      "label": [
+        "u_vlsit_riscv_axi_route",
+        "(m_vlsit_riscv_axi_route)"
+      ],
+      "width": 300,
+      "row": 0,
+      "col": 1,
+      "row_name": "u_vlsit_riscv_axi_route (m_vlsit_riscv_axi_route)",
+      "function": "Classify and route one hart slot to cacheable memory, normal-uncached bypass, device MMIO or a local error response. Four generated slots are indexed 0 to 3; two- and four-hart builds activate the configured slots.",
+      "source": "NEW; rtl/common/vlsit/interconnect/m_vlsit_riscv_axi_route.sv"
+    },
+    {
+      "key": "B6",
+      "label": [
+        "u_vlsit_riscv_axil_decode",
+        "(m_vlsit_riscv_axil_decode)"
+      ],
+      "width": 320,
+      "row": 2,
+      "col": 3,
+      "row_name": "u_vlsit_riscv_axil_decode (m_vlsit_riscv_axil_decode)",
+      "function": "Decode one external AXI4-Lite control port into cluster CSR and LLC service targets.",
+      "source": "NEW; rtl/common/vlsit/control/m_vlsit_riscv_axil_decode.sv"
+    },
+    {
+      "key": "B7",
+      "label": [
+        "u_vlsit_riscv_cmo_arbiter",
+        "(m_vlsit_riscv_cmo_arbiter)"
+      ],
+      "width": 320,
+      "row": 1,
+      "col": 1,
+      "row_name": "u_vlsit_riscv_cmo_arbiter (m_vlsit_riscv_cmo_arbiter)",
+      "function": "Select one hart's retirement-blocking maintenance request and preserve its completion destination.",
+      "source": "NEW; rtl/common/vlsit/maintenance/m_vlsit_riscv_cmo_arbiter.sv"
+    },
+    {
+      "key": "B8",
+      "label": [
+        "u_vlsit_riscv_cmo_controller",
+        "(m_vlsit_riscv_cmo_controller)"
+      ],
+      "width": 360,
+      "row": 1,
+      "col": 2,
+      "row_name": "u_vlsit_riscv_cmo_controller (m_vlsit_riscv_cmo_controller)",
+      "function": "Sequence CCU preparation, optional per-line LLC maintenance, terminal COMMIT/ABORT and the hart completion response.",
+      "source": "NEW; rtl/common/vlsit/maintenance/m_vlsit_riscv_cmo_controller.sv"
+    },
+    {
+      "key": "B9",
+      "label": [
+        "u_vlsit_riscv_cpu_tile_array",
+        "(m_vlsit_riscv_cpu_tile_array)"
+      ],
+      "width": 360,
+      "row": 0,
+      "col": 0,
+      "row_name": "u_vlsit_riscv_cpu_tile_array (m_vlsit_riscv_cpu_tile_array)",
+      "function": "Replicate two or four active CVA6 tiles; coordinate the internal MESI D-cache directory, tagged probes, address classification, maintenance retirement and event capture.",
+      "source": "NEW; rtl/common/vlsit/cpu/m_vlsit_riscv_cpu_tile_array.sv"
+    },
+    {
+      "key": "B10",
+      "label": [
+        "u_vlsit_riscv_fault_record",
+        "(m_vlsit_riscv_fault_record)"
+      ],
+      "width": 340,
+      "row": 2,
+      "col": 1,
+      "row_name": "u_vlsit_riscv_fault_record (m_vlsit_riscv_fault_record)",
+      "function": "Capture the first fatal ordinary L1 or shared LLC writeback error until reset.",
+      "source": "NEW; rtl/common/vlsit/diagnostics/m_vlsit_riscv_fault_record.sv"
+    },
+    {
+      "key": "B11",
+      "label": [
+        "u_vlsit_riscv_pmu",
+        "(m_vlsit_riscv_pmu)"
+      ],
+      "width": 220,
+      "row": 2,
+      "col": 0,
+      "row_name": "u_vlsit_riscv_pmu (m_vlsit_riscv_pmu)",
+      "function": "Integrate source event packing, scope selection, counters, atomic snapshots and aggregate overflow interrupt.",
+      "source": "NEW; rtl/common/vlsit/pmu/m_vlsit_riscv_pmu.sv"
+    }
+  ],
+  "connectors": [
+    {
+      "id": "TAXI",
+      "src": "B9",
+      "src_side": "R",
+      "dst": "B5",
+      "dst_side": "L"
+    },
+    {
+      "id": "MREQ",
+      "src": "B5",
+      "src_side": "R",
+      "dst": "B3",
+      "dst_side": "L"
+    },
+    {
+      "id": "DAXI",
+      "src": "B5",
+      "src_side": "B",
+      "dst": "B4",
+      "dst_side": "R"
+    },
+    {
+      "id": "AXI",
+      "src": "B3",
+      "src_side": "R",
+      "dst": "B0",
+      "dst_side": "L"
+    },
+    {
+      "id": "REG",
+      "src": "B1",
+      "src_side": "T",
+      "dst": "B0",
+      "dst_side": "B"
+    },
+    {
+      "id": "CSR",
+      "src": "B6",
+      "src_side": "L",
+      "dst": "B2",
+      "dst_side": "R"
+    },
+    {
+      "id": "LLCR",
+      "src": "B6",
+      "src_side": "T",
+      "dst": "B1",
+      "dst_side": "B"
+    },
+    {
+      "id": "CMOR",
+      "src": "B9",
+      "src_side": "R",
+      "dst": "B7",
+      "dst_side": "T"
+    },
+    {
+      "id": "CMOA",
+      "src": "B7",
+      "src_side": "R",
+      "dst": "B8",
+      "dst_side": "L"
+    },
+    {
+      "id": "CCU",
+      "src": "B8",
+      "src_side": "L",
+      "dst": "B9",
+      "dst_side": "B"
+    },
+    {
+      "id": "MAINT",
+      "src": "B8",
+      "src_side": "T",
+      "dst": "B0",
+      "dst_side": "B"
+    },
+    {
+      "id": "FCSR",
+      "src": "B10",
+      "src_side": "R",
+      "dst": "B2",
+      "dst_side": "L"
+    }
+  ],
+  "externals": [
+    {
+      "id": "AXIL",
+      "block": "B6",
+      "side": "R",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "AXIL",
+        "control"
+      ]
+    },
+    {
+      "id": "MMIO",
+      "block": "B4",
+      "side": "L",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "MMIO",
+        "AXI4 device"
+      ]
+    },
+    {
+      "id": "MEM",
+      "block": "B0",
+      "side": "R",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "MEM",
+        "AXI4+ATOP"
+      ]
+    },
+    {
+      "id": "PIRQ",
+      "block": "B11",
+      "side": "L",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "PMU IRQ",
+        "aggregate"
+      ]
+    },
+    {
+      "id": "FIRQ",
+      "block": "B2",
+      "side": "B",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "FAULT IRQ",
+        "aggregate"
+      ]
+    },
+    {
+      "id": "CRCLK",
+      "block": "B9",
+      "side": "T",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "CLOCK/RESET",
+        "cluster"
+      ]
+    },
+    {
+      "id": "HART",
+      "block": "B9",
+      "side": "L",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "HART CTRL",
+        "boot / IRQ / debug"
+      ]
+    }
+  ],
+  "nets": [],
+  "interfaces": [
+    {
+      "id": "TAXI",
+      "name": "Per-hart AXI request/response and address attributes",
+      "category": "handshake",
+      "active": "u_vlsit_riscv_cpu_tile_array -> u_vlsit_riscv_axi_route; response signals return on the same bundle",
+      "signals": "w_route_arready [3:0]; w_route_awready [3:0]; w_route_bid [3:0] [3:0]; w_route_bresp [3:0] [1:0]; w_route_bvalid [3:0]; w_route_rdata [3:0] [63:0]; w_route_rid [3:0] [3:0]; w_route_rlast [3:0]; w_route_rresp [3:0] [1:0]; w_route_rvalid [3:0]; w_route_wready [3:0]; w_tile_axi_ar_region_err [3:0]; w_tile_axi_ar_region_match [3:0]; w_tile_axi_ar_region_type [3:0][1:0]; w_tile_axi_araddr [3:0][63:0]; w_tile_axi_arburst [3:0][1:0]; w_tile_axi_arcache [3:0][3:0]; w_tile_axi_arid [3:0][3:0]; w_tile_axi_arlen [3:0][7:0]; w_tile_axi_arlock [3:0]; w_tile_axi_arprot [3:0][2:0]; w_tile_axi_arqos [3:0][3:0]; w_tile_axi_arregion [3:0][3:0]; w_tile_axi_arsize [3:0][2:0]; w_tile_axi_arvalid [3:0]; w_tile_axi_aw_region_err [3:0]; w_tile_axi_aw_region_match [3:0]; w_tile_axi_aw_region_type [3:0][1:0]; w_tile_axi_awaddr [3:0][63:0]; w_tile_axi_awatop [3:0][5:0]; w_tile_axi_awburst [3:0][1:0]; w_tile_axi_awcache [3:0][3:0]; w_tile_axi_awid [3:0][3:0]; w_tile_axi_awlen [3:0][7:0]; w_tile_axi_awlock [3:0]; w_tile_axi_awprot [3:0][2:0]; w_tile_axi_awqos [3:0][3:0]; w_tile_axi_awregion [3:0][3:0]; w_tile_axi_awsize [3:0][2:0]; w_tile_axi_awvalid [3:0]; w_tile_axi_bready [3:0]; w_tile_axi_rready [3:0]; w_tile_axi_wdata [3:0][63:0]; w_tile_axi_wlast [3:0]; w_tile_axi_wstrb [3:0][7:0]; w_tile_axi_wvalid [3:0]"
+    },
+    {
+      "id": "MREQ",
+      "name": "Normal memory AXI request/response bundle",
+      "category": "handshake",
+      "active": "u_vlsit_riscv_axi_route -> u_vlsit_riscv_axi_mem_mux; response signals return on the same bundle",
+      "signals": "w_mem_mux_src_arready [3:0]; w_mem_mux_src_awready [3:0]; w_mem_mux_src_bid [3:0][3:0]; w_mem_mux_src_bresp [3:0][1:0]; w_mem_mux_src_bvalid [3:0]; w_mem_mux_src_rdata [3:0][63:0]; w_mem_mux_src_rid [3:0][3:0]; w_mem_mux_src_rlast [3:0]; w_mem_mux_src_rresp [3:0][1:0]; w_mem_mux_src_rvalid [3:0]; w_mem_mux_src_wready [3:0]; w_route_mem_araddr [3:0] [63:0]; w_route_mem_arburst [3:0] [1:0]; w_route_mem_arcache [3:0] [3:0]; w_route_mem_arid [3:0] [3:0]; w_route_mem_arlen [3:0] [7:0]; w_route_mem_arlock [3:0]; w_route_mem_arprot [3:0] [2:0]; w_route_mem_arqos [3:0] [3:0]; w_route_mem_arregion [3:0] [3:0]; w_route_mem_arsize [3:0] [2:0]; w_route_mem_arvalid [3:0]; w_route_mem_awaddr [3:0] [63:0]; w_route_mem_awatop [3:0] [5:0]; w_route_mem_awburst [3:0] [1:0]; w_route_mem_awcache [3:0] [3:0]; w_route_mem_awid [3:0] [3:0]; w_route_mem_awlen [3:0] [7:0]; w_route_mem_awlock [3:0]; w_route_mem_awprot [3:0] [2:0]; w_route_mem_awqos [3:0] [3:0]; w_route_mem_awregion [3:0] [3:0]; w_route_mem_awsize [3:0] [2:0]; w_route_mem_awvalid [3:0]; w_route_mem_bready [3:0]; w_route_mem_rready [3:0]; w_route_mem_wdata [3:0] [63:0]; w_route_mem_wlast [3:0]; w_route_mem_wstrb [3:0] [7:0]; w_route_mem_wvalid [3:0]"
+    },
+    {
+      "id": "DAXI",
+      "name": "Device MMIO AXI request/response bundle",
+      "category": "handshake",
+      "active": "u_vlsit_riscv_axi_route -> u_vlsit_riscv_axi_mmio; response signals return on the same bundle",
+      "signals": "w_mmio_mux_src_arready [3:0]; w_mmio_mux_src_awready [3:0]; w_mmio_mux_src_bid [3:0][3:0]; w_mmio_mux_src_bresp [3:0][1:0]; w_mmio_mux_src_bvalid [3:0]; w_mmio_mux_src_rdata [3:0][63:0]; w_mmio_mux_src_rid [3:0][3:0]; w_mmio_mux_src_rlast [3:0]; w_mmio_mux_src_rresp [3:0][1:0]; w_mmio_mux_src_rvalid [3:0]; w_mmio_mux_src_wready [3:0]; w_route_mmio_araddr [3:0] [63:0]; w_route_mmio_arburst [3:0] [1:0]; w_route_mmio_arcache [3:0] [3:0]; w_route_mmio_arid [3:0] [3:0]; w_route_mmio_arlen [3:0] [7:0]; w_route_mmio_arlock [3:0]; w_route_mmio_arprot [3:0] [2:0]; w_route_mmio_arqos [3:0] [3:0]; w_route_mmio_arregion [3:0] [3:0]; w_route_mmio_arsize [3:0] [2:0]; w_route_mmio_arvalid [3:0]; w_route_mmio_awaddr [3:0] [63:0]; w_route_mmio_awburst [3:0] [1:0]; w_route_mmio_awcache [3:0] [3:0]; w_route_mmio_awid [3:0] [3:0]; w_route_mmio_awlen [3:0] [7:0]; w_route_mmio_awlock [3:0]; w_route_mmio_awprot [3:0] [2:0]; w_route_mmio_awqos [3:0] [3:0]; w_route_mmio_awregion [3:0] [3:0]; w_route_mmio_awsize [3:0] [2:0]; w_route_mmio_awvalid [3:0]; w_route_mmio_bready [3:0]; w_route_mmio_rready [3:0]; w_route_mmio_wdata [3:0] [63:0]; w_route_mmio_wlast [3:0]; w_route_mmio_wstrb [3:0] [7:0]; w_route_mmio_wvalid [3:0]"
+    },
+    {
+      "id": "AXI",
+      "name": "LLC-side AXI request/response bundle",
+      "category": "handshake",
+      "active": "u_vlsit_riscv_axi_mem_mux -> u_vlsit_axi_llc; response signals return on the same bundle",
+      "signals": "w_llc_axi_req_araddr [63:0]; w_llc_axi_req_arburst [1:0]; w_llc_axi_req_arcache [3:0]; w_llc_axi_req_arid [5:0]; w_llc_axi_req_arlen [7:0]; w_llc_axi_req_arlock; w_llc_axi_req_arprot [2:0]; w_llc_axi_req_arqos [3:0]; w_llc_axi_req_arregion [3:0]; w_llc_axi_req_arsize [2:0]; w_llc_axi_req_arvalid; w_llc_axi_req_awaddr [63:0]; w_llc_axi_req_awatop [5:0]; w_llc_axi_req_awburst [1:0]; w_llc_axi_req_awcache [3:0]; w_llc_axi_req_awid [5:0]; w_llc_axi_req_awlen [7:0]; w_llc_axi_req_awlock; w_llc_axi_req_awprot [2:0]; w_llc_axi_req_awqos [3:0]; w_llc_axi_req_awregion [3:0]; w_llc_axi_req_awsize [2:0]; w_llc_axi_req_awvalid; w_llc_axi_req_bready; w_llc_axi_req_rready; w_llc_axi_req_wdata [63:0]; w_llc_axi_req_wlast; w_llc_axi_req_wstrb [7:0]; w_llc_axi_req_wvalid; w_llc_axi_rsp_arready; w_llc_axi_rsp_awready; w_llc_axi_rsp_bid [5:0]; w_llc_axi_rsp_bresp [1:0]; w_llc_axi_rsp_bvalid; w_llc_axi_rsp_rdata [63:0]; w_llc_axi_rsp_rid [5:0]; w_llc_axi_rsp_rlast; w_llc_axi_rsp_rresp [1:0]; w_llc_axi_rsp_rvalid; w_llc_axi_rsp_wready"
+    },
+    {
+      "id": "REG",
+      "name": "LLC service RegBus request/response",
+      "category": "handshake",
+      "active": "u_vlsit_axil_reg_bridge -> u_vlsit_axi_llc; response signals return on the same bundle",
+      "signals": "w_llc_reg_req_addr [6:0]; w_llc_reg_req_valid; w_llc_reg_req_wdata [31:0]; w_llc_reg_req_wr; w_llc_reg_req_wstrb [3:0]; w_llc_reg_rsp_err; w_llc_reg_rsp_rdata [31:0]; w_llc_reg_rsp_ready"
+    },
+    {
+      "id": "CSR",
+      "name": "AXI4-Lite CSR target 0",
+      "category": "handshake",
+      "active": "u_vlsit_riscv_axil_decode -> u_vlsit_cpucl_csr; response signals return on the same bundle",
+      "signals": "w_axil_target_araddr[0] [1:0][31:0]; w_axil_target_arprot[0] [1:0][2:0]; w_axil_target_arready[0] [1:0]; w_axil_target_arvalid[0] [1:0]; w_axil_target_awaddr[0] [1:0][31:0]; w_axil_target_awprot[0] [1:0][2:0]; w_axil_target_awready[0] [1:0]; w_axil_target_awvalid[0] [1:0]; w_axil_target_bready[0] [1:0]; w_axil_target_bresp[0] [1:0][1:0]; w_axil_target_bvalid[0] [1:0]; w_axil_target_rdata[0] [1:0][31:0]; w_axil_target_rready[0] [1:0]; w_axil_target_rresp[0] [1:0][1:0]; w_axil_target_rvalid[0] [1:0]; w_axil_target_wdata[0] [1:0][31:0]; w_axil_target_wready[0] [1:0]; w_axil_target_wstrb[0] [1:0][3:0]; w_axil_target_wvalid[0] [1:0]"
+    },
+    {
+      "id": "LLCR",
+      "name": "AXI4-Lite LLC service target 1",
+      "category": "handshake",
+      "active": "u_vlsit_riscv_axil_decode -> u_vlsit_axil_reg_bridge; response signals return on the same bundle",
+      "signals": "w_axil_target_araddr[1] [1:0][31:0]; w_axil_target_arprot[1] [1:0][2:0]; w_axil_target_arready[1] [1:0]; w_axil_target_arvalid[1] [1:0]; w_axil_target_awaddr[1] [1:0][31:0]; w_axil_target_awprot[1] [1:0][2:0]; w_axil_target_awready[1] [1:0]; w_axil_target_awvalid[1] [1:0]; w_axil_target_bready[1] [1:0]; w_axil_target_bresp[1] [1:0][1:0]; w_axil_target_bvalid[1] [1:0]; w_axil_target_rdata[1] [1:0][31:0]; w_axil_target_rready[1] [1:0]; w_axil_target_rresp[1] [1:0][1:0]; w_axil_target_rvalid[1] [1:0]; w_axil_target_wdata[1] [1:0][31:0]; w_axil_target_wready[1] [1:0]; w_axil_target_wstrb[1] [1:0][3:0]; w_axil_target_wvalid[1] [1:0]"
+    },
+    {
+      "id": "CMOR",
+      "name": "Per-hart retirement maintenance request and completion",
+      "category": "handshake",
+      "active": "u_vlsit_riscv_cpu_tile_array -> u_vlsit_riscv_cmo_arbiter; response signals return on the same bundle",
+      "signals": "w_cmo_req_op [3:0][1:0]; w_cmo_req_pa_line [3:0][51:0]; w_cmo_req_pc [3:0][63:0]; w_cmo_req_ready [3:0]; w_cmo_req_vaddr [3:0][63:0]; w_cmo_req_valid [3:0]; w_cmo_rsp_done [3:0]; w_cmo_rsp_err [3:0]"
+    },
+    {
+      "id": "CMOA",
+      "name": "Selected maintenance request and response",
+      "category": "handshake",
+      "active": "u_vlsit_riscv_cmo_arbiter -> u_vlsit_riscv_cmo_controller; response signals return on the same bundle",
+      "signals": "w_cmo_done; w_cmo_error; w_cmo_hart [1:0]; w_cmo_op [1:0]; w_cmo_pa_line [51:0]; w_cmo_pc [63:0]; w_cmo_ready; w_cmo_vaddr [63:0]; w_cmo_valid"
+    },
+    {
+      "id": "CCU",
+      "name": "Tagged CCU maintenance begin, prepare and terminal handshake",
+      "category": "handshake",
+      "active": "u_vlsit_riscv_cmo_controller -> u_vlsit_riscv_cpu_tile_array; response signals return on the same bundle",
+      "signals": "w_cmo_ccu_begin_hart [1:0]; w_cmo_ccu_begin_op [1:0]; w_cmo_ccu_begin_pa_line [51:0]; w_cmo_ccu_begin_ready; w_cmo_ccu_begin_valid; w_cmo_ccu_begin_wback_en; w_cmo_ccu_finish_commit; w_cmo_ccu_finish_done; w_cmo_ccu_finish_ready; w_cmo_ccu_finish_tag [$clog2(PARA_COH_TXN_NUM)-1:0]; w_cmo_ccu_finish_valid; w_cmo_ccu_prepare_err; w_cmo_ccu_prepare_ready; w_cmo_ccu_prepare_tag [$clog2(PARA_COH_TXN_NUM)-1:0]; w_cmo_ccu_prepare_valid"
+    },
+    {
+      "id": "MAINT",
+      "name": "Per-line LLC maintenance request and completion",
+      "category": "handshake",
+      "active": "u_vlsit_riscv_cmo_controller -> u_vlsit_axi_llc; response signals return on the same bundle",
+      "signals": "w_maint_done; w_maint_error; w_maint_op [1:0]; w_maint_pa_line [51:0]; w_maint_ready; w_maint_valid"
+    },
+    {
+      "id": "FCSR",
+      "name": "First-fatal status, information and address words",
+      "category": "custom",
+      "active": "u_vlsit_riscv_fault_record -> u_vlsit_cpucl_csr; response signals return on the same bundle",
+      "signals": "w_fault_addr_hi [31:0]; w_fault_addr_lo [31:0]; w_fault_info [31:0]; w_fault_sts [31:0]"
+    },
+    {
+      "id": "AXIL",
+      "name": "External AXI4-Lite CSR/LLC control",
+      "category": "handshake",
+      "active": "SoC manager -> cluster",
+      "signals": "i_axil_awaddr [31:0]; i_axil_awprot [2:0]; i_axil_awvalid; o_axil_awready; i_axil_wdata [31:0]; i_axil_wstrb [3:0]; i_axil_wvalid; o_axil_wready; o_axil_bresp [1:0]; o_axil_bvalid; i_axil_bready; i_axil_araddr [31:0]; i_axil_arprot [2:0]; i_axil_arvalid; o_axil_arready; o_axil_rdata [31:0]; o_axil_rresp [1:0]; o_axil_rvalid; i_axil_rready"
+    },
+    {
+      "id": "MMIO",
+      "name": "External non-coherent AXI4 MMIO",
+      "category": "handshake",
+      "active": "Cluster -> SoC subordinate; responses return to cluster",
+      "signals": "o_axi_mmio_awid [5:0]; o_axi_mmio_awaddr [63:0]; o_axi_mmio_awlen [7:0]; o_axi_mmio_awsize [2:0]; o_axi_mmio_awburst [1:0]; o_axi_mmio_awlock; o_axi_mmio_awcache [3:0]; o_axi_mmio_awprot [2:0]; o_axi_mmio_awqos [3:0]; o_axi_mmio_awregion [3:0]; o_axi_mmio_awvalid; i_axi_mmio_awready; o_axi_mmio_wdata [63:0]; o_axi_mmio_wstrb [7:0]; o_axi_mmio_wlast; o_axi_mmio_wvalid; i_axi_mmio_wready; i_axi_mmio_bid [5:0]; i_axi_mmio_bresp [1:0]; i_axi_mmio_bvalid; o_axi_mmio_bready; o_axi_mmio_arid [5:0]; o_axi_mmio_araddr [63:0]; o_axi_mmio_arlen [7:0]; o_axi_mmio_arsize [2:0]; o_axi_mmio_arburst [1:0]; o_axi_mmio_arlock; o_axi_mmio_arcache [3:0]; o_axi_mmio_arprot [2:0]; o_axi_mmio_arqos [3:0]; o_axi_mmio_arregion [3:0]; o_axi_mmio_arvalid; i_axi_mmio_arready; i_axi_mmio_rid [5:0]; i_axi_mmio_rdata [63:0]; i_axi_mmio_rresp [1:0]; i_axi_mmio_rlast; i_axi_mmio_rvalid; o_axi_mmio_rready"
+    },
+    {
+      "id": "MEM",
+      "name": "External AXI4+AWATOP memory",
+      "category": "handshake",
+      "active": "Cluster -> SoC memory; responses return to cluster",
+      "signals": "o_axi_mem_awid [6:0]; o_axi_mem_awatop [5:0]; o_axi_mem_awaddr [63:0]; o_axi_mem_awlen [7:0]; o_axi_mem_awsize [2:0]; o_axi_mem_awburst [1:0]; o_axi_mem_awlock; o_axi_mem_awcache [3:0]; o_axi_mem_awprot [2:0]; o_axi_mem_awqos [3:0]; o_axi_mem_awregion [3:0]; o_axi_mem_awvalid; i_axi_mem_awready; o_axi_mem_wdata [63:0]; o_axi_mem_wstrb [7:0]; o_axi_mem_wlast; o_axi_mem_wvalid; i_axi_mem_wready; i_axi_mem_bid [6:0]; i_axi_mem_bresp [1:0]; i_axi_mem_bvalid; o_axi_mem_bready; o_axi_mem_arid [6:0]; o_axi_mem_araddr [63:0]; o_axi_mem_arlen [7:0]; o_axi_mem_arsize [2:0]; o_axi_mem_arburst [1:0]; o_axi_mem_arlock; o_axi_mem_arcache [3:0]; o_axi_mem_arprot [2:0]; o_axi_mem_arqos [3:0]; o_axi_mem_arregion [3:0]; o_axi_mem_arvalid; i_axi_mem_arready; i_axi_mem_rid [6:0]; i_axi_mem_rdata [63:0]; i_axi_mem_rresp [1:0]; i_axi_mem_rlast; i_axi_mem_rvalid; o_axi_mem_rready"
+    },
+    {
+      "id": "PIRQ",
+      "name": "Aggregated PMU level interrupt",
+      "category": "custom",
+      "active": "PMU -> SoC",
+      "signals": "o_int_pmu"
+    },
+    {
+      "id": "FIRQ",
+      "name": "Aggregated fatal/coherence diagnostic interrupt",
+      "category": "custom",
+      "active": "Cluster -> SoC",
+      "signals": "w_cpucl_coh_fault; reg_l1_evict_fault; o_int_fault"
+    },
+    {
+      "id": "CRCLK",
+      "name": "Cluster clock and active-low reset",
+      "category": "custom",
+      "active": "SoC -> all active cluster components",
+      "signals": "i_clk_cluster; i_rst_n_cluster (active-low reset, distributed to every direct child)"
+    },
+    {
+      "id": "HART",
+      "name": "Per-hart boot, interrupt and debug boundary",
+      "category": "custom",
+      "active": "SoC/debug module -> cluster; debug-mode status returns",
+      "signals": "i_boot_addr [63:0]; i_int_msip [3:0]; i_int_mtip [3:0]; i_int_meip [3:0]; i_int_ssip [3:0]; i_int_stip [3:0]; i_int_seip [3:0]; i_hart_debug_req [3:0]; o_hart_debug_mode [3:0]"
+    }
+  ],
+  "legend_note": "All 12 direct child instances of m_vlsit_riscv_cluster_core are shown. The top row shows the per-hart AXI route, normal-memory mux and LLC; the middle row shows device egress, maintenance control and LLC service bridge; the bottom row shows PMU, fault record and AXI4-Lite control. Arrows show primary data/control paths and the fault-record CSR path. For legibility, secondary PMU event-source and LLC/L1 fault-source bundles are detailed in HDS Sections 6 and 14 and are not separate arrows here. The route generates four hart slots indexed 0..3; PARA_CPU_NUM activates two or four. Nested CVA6/HPDcache/MESI and internal CCU hierarchy is expanded in Section 14 component diagrams. Signal names and block provenance for shown paths are listed on BLOCK_INFORMATION. Responses return on the same protocol bundle.",
+  "library_sha256": "15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"
+}

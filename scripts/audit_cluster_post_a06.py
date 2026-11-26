@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'verification/non_coherence_cluster/reports/post_a06_cluster_audit'
 BASE = ROOT / 'lint/non_coherence_cluster/full_integration'
 FILELIST_BASE = ROOT / 'rtl/non_coherence_cluster/filelists/full_integration'
-DOC_OUT = ROOT / 'doc/reports/post_a06_cluster_audit'
+DOC_OUT = ROOT / 'project_support/reports/post_a06_cluster_audit'
 TOP = 'm_vlsit_riscv_cluster_axi_top'
 
 def sha(path):

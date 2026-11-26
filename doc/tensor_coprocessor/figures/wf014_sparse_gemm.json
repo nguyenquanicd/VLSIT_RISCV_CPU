@@ -1,0 +1,133 @@
+{
+  "head": {
+    "text": "WF-014 OP-008 per-tile metadata validation and paired-MAC (illustrative ordering only)",
+    "tick": 0
+  },
+  "signal": [
+    [
+      "CV-X-IF command/result",
+      {
+        "name": "i_clk_core",
+        "wave": "p..............................."
+      },
+      {
+        "name": "i_xif_issue_valid",
+        "wave": "01000000000000000000000000000000"
+      },
+      {
+        "name": "o_xif_issue_ready",
+        "wave": "01000000000000000000000000000000"
+      },
+      {
+        "name": "o_xif_issue_resp_accept",
+        "wave": "01000000000000000000000000000000"
+      },
+      {
+        "name": "i_xif_commit_valid",
+        "wave": "00010000000000000000000000000000"
+      },
+      {
+        "name": "i_xif_commit_kill",
+        "wave": "00000000000000000000000000000000"
+      },
+      {
+        "name": "o_xif_result_valid",
+        "wave": "00000000000000000000000000000100"
+      },
+      {
+        "name": "i_xif_result_ready",
+        "wave": "00000000000000000000000000000100"
+      },
+      {
+        "name": "o_xif_result_we",
+        "wave": "00000000000000000000000000000100"
+      },
+      {
+        "name": "i_xif_issue_req_instr[31:0]",
+        "wave": "x=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "data": [
+          "OP-008"
+        ]
+      },
+      {
+        "name": "o_xif_result_data",
+        "wave": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx=xx",
+        "data": [
+          "OK"
+        ]
+      }
+    ],
+    [
+      "IF-003 phases (conceptual)",
+      {
+        "name": "Descriptor fetch",
+        "wave": "00001110000000000000000000000000"
+      },
+      {
+        "name": "Descriptor validated",
+        "wave": "00000001000000000000000000000000"
+      },
+      {
+        "name": "Coefficient vector read",
+        "wave": "00000000100000000000000000000000"
+      },
+      {
+        "name": "Metadata tile 0 read",
+        "wave": "00000000010000000000000000000000"
+      },
+      {
+        "name": "Metadata tile 0 validated",
+        "wave": "00000000000100000000000000000000"
+      },
+      {
+        "name": "Full coefficient vector validated",
+        "wave": "00000000000010000000000000000000"
+      },
+      {
+        "name": "Numeric tile 0 request",
+        "wave": "00000000000001000000000000000000"
+      },
+      {
+        "name": "Numeric tile 0 ready",
+        "wave": "00000000000000100000000000000000"
+      },
+      {
+        "name": "Metadata tile 1 prefetch",
+        "wave": "00000000000000001000000000000000"
+      },
+      {
+        "name": "Metadata tile 1 validated",
+        "wave": "00000000000000000010000000000000"
+      },
+      {
+        "name": "Numeric tile 1 request",
+        "wave": "00000000000000000001000000000000"
+      },
+      {
+        "name": "Numeric tile 1 ready",
+        "wave": "00000000000000000000100000000000"
+      }
+    ],
+    [
+      "Compute and completion (conceptual)",
+      {
+        "name": "Paired MAC tile 0",
+        "wave": "00000000000000011111000000000000"
+      },
+      {
+        "name": "Paired MAC tile 1",
+        "wave": "00000000000000000000011111000000"
+      },
+      {
+        "name": "All C writes successful",
+        "wave": "00000000000000000000000000001000"
+      }
+    ]
+  ],
+  "foot": {
+    "text": "Illustrative ordering only. Coefficient and selector checks gate tile 0. Each later tile needs its own validated selectors."
+  },
+  "config": {
+    "hscale": 1
+  }
+}

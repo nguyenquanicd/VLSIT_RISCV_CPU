@@ -1,0 +1,254 @@
+{
+  "scope": "Retained vendor README references only; snapshots remain in link_audit.json.",
+  "findings": [
+    {
+      "path": "project_support/third_party/culsans/README.md",
+      "scope": "preserved",
+      "link": "../../../rtl/common/third_party/culsans/tests/integration",
+      "line": 80,
+      "reason": "missing_target",
+      "target": "rtl/common/third_party/culsans/tests/integration"
+    },
+    {
+      "path": "project_support/third_party/culsans/tests/README.md",
+      "scope": "preserved",
+      "link": "../../../../rtl/common/third_party/culsans/tests/unit",
+      "line": 9,
+      "reason": "missing_target",
+      "target": "rtl/common/third_party/culsans/tests/unit"
+    },
+    {
+      "path": "project_support/third_party/culsans_cva6_pinned/README.md",
+      "scope": "preserved",
+      "link": "../../../rtl/common/third_party/culsans_cva6_pinned/docs/01_cva6_user/_static/ariane_overview.png",
+      "line": 11,
+      "reason": "missing_target",
+      "target": "rtl/common/third_party/culsans_cva6_pinned/docs/01_cva6_user/_static/ariane_overview.png"
+    },
+    {
+      "path": "project_support/third_party/culsans_cva6_pinned/README.md",
+      "scope": "preserved",
+      "link": "../../../rtl/common/third_party/culsans_cva6_pinned/docs/01_cva6_user/_static/fpga_bd.png",
+      "line": 219,
+      "reason": "missing_target",
+      "target": "rtl/common/third_party/culsans_cva6_pinned/docs/01_cva6_user/_static/fpga_bd.png"
+    },
+    {
+      "path": "project_support/third_party/culsans_cva6_pinned/vendor/openhwgroup/cvfpu/README.license.md",
+      "scope": "preserved",
+      "link": "../../../../../../rtl/common/third_party/culsans_cva6_pinned/vendor/openhwgroup/cvfpu/vendor/opene906",
+      "line": 5,
+      "reason": "missing_target",
+      "target": "rtl/common/third_party/culsans_cva6_pinned/vendor/openhwgroup/cvfpu/vendor/opene906"
+    },
+    {
+      "path": "project_support/third_party/culsans_cva6_pinned/vendor/openhwgroup/cvfpu/README.md",
+      "scope": "preserved",
+      "link": "../../../../../../rtl/common/third_party/culsans_cva6_pinned/vendor/openhwgroup/cvfpu/docs/README.md",
+      "line": 120,
+      "reason": "missing_target",
+      "target": "rtl/common/third_party/culsans_cva6_pinned/vendor/openhwgroup/cvfpu/docs/README.md"
+    },
+    {
+      "path": "project_support/third_party/culsans_cva6_pinned/vendor/openhwgroup/cvfpu/README.md",
+      "scope": "preserved",
+      "link": "../../../../../../rtl/common/third_party/culsans_cva6_pinned/vendor/openhwgroup/cvfpu/docs/CONTRIBUTING.md",
+      "line": 128,
+      "reason": "missing_target",
+      "target": "rtl/common/third_party/culsans_cva6_pinned/vendor/openhwgroup/cvfpu/docs/CONTRIBUTING.md"
+    },
+    {
+      "path": "project_support/third_party/culsans_cva6_pinned/vendor/openhwgroup/cvfpu/README.md",
+      "scope": "preserved",
+      "link": "../../../../../../rtl/common/third_party/culsans_cva6_pinned/vendor/openhwgroup/cvfpu/docs/CHANGELOG.md",
+      "line": 134,
+      "reason": "missing_target",
+      "target": "rtl/common/third_party/culsans_cva6_pinned/vendor/openhwgroup/cvfpu/docs/CHANGELOG.md"
+    },
+    {
+      "path": "project_support/third_party/culsans_cva6_pinned/vendor/openhwgroup/cvfpu/README.md",
+      "scope": "preserved",
+      "link": "../../../../../../rtl/common/third_party/culsans_cva6_pinned/vendor/openhwgroup/cvfpu/docs/CHANGELOG.md",
+      "line": 139,
+      "reason": "missing_target",
+      "target": "rtl/common/third_party/culsans_cva6_pinned/vendor/openhwgroup/cvfpu/docs/CHANGELOG.md"
+    },
+    {
+      "path": "project_support/third_party/culsans_cva6_pinned/vendor/openhwgroup/cvfpu/README.md",
+      "scope": "preserved",
+      "link": "../../../../../../rtl/common/third_party/culsans_cva6_pinned/vendor/openhwgroup/cvfpu/vendor/opene906",
+      "line": 145,
+      "reason": "missing_target",
+      "target": "rtl/common/third_party/culsans_cva6_pinned/vendor/openhwgroup/cvfpu/vendor/opene906"
+    },
+    {
+      "path": "project_support/third_party/culsans_cva6_pinned/vendor/openhwgroup/cvfpu/README.md",
+      "scope": "preserved",
+      "link": "../../../../../../rtl/common/third_party/culsans_cva6_pinned/vendor/openhwgroup/cvfpu/docs/fig/oprecomp_logo_inline1.png",
+      "line": 198,
+      "reason": "missing_target",
+      "target": "rtl/common/third_party/culsans_cva6_pinned/vendor/openhwgroup/cvfpu/docs/fig/oprecomp_logo_inline1.png"
+    },
+    {
+      "path": "project_support/third_party/culsans_cva6_pinned/vendor/planv/ace/README.md",
+      "scope": "preserved",
+      "link": "../../../../../../rtl/common/third_party/culsans_cva6_pinned/vendor/planv/ace/doc/ace_ccu_top.md",
+      "line": 9,
+      "reason": "missing_target",
+      "target": "rtl/common/third_party/culsans_cva6_pinned/vendor/planv/ace/doc/ace_ccu_top.md"
+    },
+    {
+      "path": "project_support/third_party/culsans_cva6_pinned/vendor/planv/ace/README.md",
+      "scope": "preserved",
+      "link": "../../../../../../rtl/common/third_party/culsans_cva6_pinned/vendor/planv/ace/LICENSE",
+      "line": 13,
+      "reason": "missing_target",
+      "target": "rtl/common/third_party/culsans_cva6_pinned/vendor/planv/ace/LICENSE"
+    },
+    {
+      "path": "project_support/third_party/culsans_cva6_pinned/vendor/pulp-platform/axi/README.md",
+      "scope": "preserved",
+      "link": "../../../../../../rtl/common/third_party/culsans_cva6_pinned/vendor/pulp-platform/axi/doc/axi_demux.md",
+      "line": 29,
+      "reason": "missing_target",
+      "target": "rtl/common/third_party/culsans_cva6_pinned/vendor/pulp-platform/axi/doc/axi_demux.md"
+    },
+    {
+      "path": "project_support/third_party/culsans_cva6_pinned/vendor/pulp-platform/axi/README.md",
+      "scope": "preserved",
+      "link": "../../../../../../rtl/common/third_party/culsans_cva6_pinned/vendor/pulp-platform/axi/doc/axi_lite_demux.md",
+      "line": 44,
+      "reason": "missing_target",
+      "target": "rtl/common/third_party/culsans_cva6_pinned/vendor/pulp-platform/axi/doc/axi_lite_demux.md"
+    },
+    {
+      "path": "project_support/third_party/culsans_cva6_pinned/vendor/pulp-platform/axi/README.md",
+      "scope": "preserved",
+      "link": "../../../../../../rtl/common/third_party/culsans_cva6_pinned/vendor/pulp-platform/axi/doc/axi_lite_mailbox.md",
+      "line": 48,
+      "reason": "missing_target",
+      "target": "rtl/common/third_party/culsans_cva6_pinned/vendor/pulp-platform/axi/doc/axi_lite_mailbox.md"
+    },
+    {
+      "path": "project_support/third_party/culsans_cva6_pinned/vendor/pulp-platform/axi/README.md",
+      "scope": "preserved",
+      "link": "../../../../../../rtl/common/third_party/culsans_cva6_pinned/vendor/pulp-platform/axi/doc/axi_lite_mux.md",
+      "line": 49,
+      "reason": "missing_target",
+      "target": "rtl/common/third_party/culsans_cva6_pinned/vendor/pulp-platform/axi/doc/axi_lite_mux.md"
+    },
+    {
+      "path": "project_support/third_party/culsans_cva6_pinned/vendor/pulp-platform/axi/README.md",
+      "scope": "preserved",
+      "link": "../../../../../../rtl/common/third_party/culsans_cva6_pinned/vendor/pulp-platform/axi/doc/axi_lite_xbar.md",
+      "line": 53,
+      "reason": "missing_target",
+      "target": "rtl/common/third_party/culsans_cva6_pinned/vendor/pulp-platform/axi/doc/axi_lite_xbar.md"
+    },
+    {
+      "path": "project_support/third_party/culsans_cva6_pinned/vendor/pulp-platform/axi/README.md",
+      "scope": "preserved",
+      "link": "../../../../../../rtl/common/third_party/culsans_cva6_pinned/vendor/pulp-platform/axi/doc/axi_mux.md",
+      "line": 56,
+      "reason": "missing_target",
+      "target": "rtl/common/third_party/culsans_cva6_pinned/vendor/pulp-platform/axi/doc/axi_mux.md"
+    },
+    {
+      "path": "project_support/third_party/culsans_cva6_pinned/vendor/pulp-platform/axi/README.md",
+      "scope": "preserved",
+      "link": "../../../../../../rtl/common/third_party/culsans_cva6_pinned/vendor/pulp-platform/axi/doc/axi_xbar.md",
+      "line": 65,
+      "reason": "missing_target",
+      "target": "rtl/common/third_party/culsans_cva6_pinned/vendor/pulp-platform/axi/doc/axi_xbar.md"
+    },
+    {
+      "path": "project_support/third_party/culsans_cva6_pinned/vendor/pulp-platform/axi/README.md",
+      "scope": "preserved",
+      "link": "../../../../../../rtl/common/third_party/culsans_cva6_pinned/vendor/pulp-platform/axi/.gitlab-ci.yml",
+      "line": 125,
+      "reason": "missing_target",
+      "target": "rtl/common/third_party/culsans_cva6_pinned/vendor/pulp-platform/axi/.gitlab-ci.yml"
+    },
+    {
+      "path": "project_support/third_party/cva6/vendor/pulp-platform/axi/README.md",
+      "scope": "preserved",
+      "link": "../../../../../../rtl/common/third_party/cva6/vendor/pulp-platform/axi/doc/axi_demux.md",
+      "line": 29,
+      "reason": "missing_target",
+      "target": "rtl/common/third_party/cva6/vendor/pulp-platform/axi/doc/axi_demux.md"
+    },
+    {
+      "path": "project_support/third_party/cva6/vendor/pulp-platform/axi/README.md",
+      "scope": "preserved",
+      "link": "../../../../../../rtl/common/third_party/cva6/vendor/pulp-platform/axi/doc/axi_lite_demux.md",
+      "line": 41,
+      "reason": "missing_target",
+      "target": "rtl/common/third_party/cva6/vendor/pulp-platform/axi/doc/axi_lite_demux.md"
+    },
+    {
+      "path": "project_support/third_party/cva6/vendor/pulp-platform/axi/README.md",
+      "scope": "preserved",
+      "link": "../../../../../../rtl/common/third_party/cva6/vendor/pulp-platform/axi/doc/axi_lite_mailbox.md",
+      "line": 43,
+      "reason": "missing_target",
+      "target": "rtl/common/third_party/cva6/vendor/pulp-platform/axi/doc/axi_lite_mailbox.md"
+    },
+    {
+      "path": "project_support/third_party/cva6/vendor/pulp-platform/axi/README.md",
+      "scope": "preserved",
+      "link": "../../../../../../rtl/common/third_party/cva6/vendor/pulp-platform/axi/doc/axi_lite_mux.md",
+      "line": 44,
+      "reason": "missing_target",
+      "target": "rtl/common/third_party/cva6/vendor/pulp-platform/axi/doc/axi_lite_mux.md"
+    },
+    {
+      "path": "project_support/third_party/cva6/vendor/pulp-platform/axi/README.md",
+      "scope": "preserved",
+      "link": "../../../../../../rtl/common/third_party/cva6/vendor/pulp-platform/axi/doc/axi_lite_xbar.md",
+      "line": 48,
+      "reason": "missing_target",
+      "target": "rtl/common/third_party/cva6/vendor/pulp-platform/axi/doc/axi_lite_xbar.md"
+    },
+    {
+      "path": "project_support/third_party/cva6/vendor/pulp-platform/axi/README.md",
+      "scope": "preserved",
+      "link": "../../../../../../rtl/common/third_party/cva6/vendor/pulp-platform/axi/doc/axi_mux.md",
+      "line": 51,
+      "reason": "missing_target",
+      "target": "rtl/common/third_party/cva6/vendor/pulp-platform/axi/doc/axi_mux.md"
+    },
+    {
+      "path": "project_support/third_party/cva6/vendor/pulp-platform/axi/README.md",
+      "scope": "preserved",
+      "link": "../../../../../../rtl/common/third_party/cva6/vendor/pulp-platform/axi/doc/axi_xbar.md",
+      "line": 56,
+      "reason": "missing_target",
+      "target": "rtl/common/third_party/cva6/vendor/pulp-platform/axi/doc/axi_xbar.md"
+    },
+    {
+      "path": "project_support/third_party/cva6/vendor/pulp-platform/axi/README.md",
+      "scope": "preserved",
+      "link": "../../../../../../rtl/common/third_party/cva6/vendor/pulp-platform/axi/.gitlab-ci.yml",
+      "line": 99,
+      "reason": "missing_target",
+      "target": "rtl/common/third_party/cva6/vendor/pulp-platform/axi/.gitlab-ci.yml"
+    },
+    {
+      "path": "project_support/third_party/register_interface/vendor/lowrisc_opentitan/util/reggen/README.md",
+      "scope": "preserved",
+      "link": "../../../../../../../rtl/common/third_party/register_interface/vendor/lowrisc_opentitan/util/reggen/{{<",
+      "line": 23,
+      "reason": "missing_target",
+      "target": "rtl/common/third_party/register_interface/vendor/lowrisc_opentitan/util/reggen/{{<"
+    },
+    {
+      "path": "project_support/third_party/register_interface/vendor/lowrisc_opentitan/util/reggen/README.md",
+      "scope": "preserved",
+      "link": "../../../../../../../rtl/common/third_party/register_interface/vendor/lowrisc_opentitan/util/reggen/{{<",
+      "line": 40,
+      "reason": "missing_target",
+      "target": "rtl/common/third_party/register_interface/vendor/lowrisc_opentitan/util/reggen/{{<"
+    }
+  ],
+  "count": 31
+}

@@ -1,15 +1,82 @@
 {
-  "head": {"text": "WF-001 GEMM issue and result (success)"},
+  "head": {
+    "text": "WF-001 GEMM status and tensor write (success)"
+  },
   "signal": [
-    {"name": "i_clk_core", "wave": "p........."},
-    {"name": "i_xif_issue_valid", "wave": "01.0......"},
-    {"name": "o_xif_issue_ready", "wave": "01.0......"},
-    {"name": "i_xif_issue_req_instr[31:0]", "wave": "x=.xxxxxxx", "data": ["GEMM"]},
-    {"name": "o_xif_issue_resp_accept", "wave": "01.0......"},
-    {"name": "o_xif_result_valid", "wave": "0.....10.."},
-    {"name": "i_xif_result_ready", "wave": "0.....10.."},
-    {"name": "o_xif_result_we", "wave": "xxxxx=0xxx", "data": ["0"]}
+    {
+      "name": "i_clk_core",
+      "wave": "p............."
+    },
+    {
+      "name": "i_xif_issue_valid",
+      "wave": "01000000000000"
+    },
+    {
+      "name": "o_xif_issue_ready",
+      "wave": "01000000000000"
+    },
+    {
+      "name": "i_xif_issue_req_instr[31:0]",
+      "wave": "x=xxxxxxxxxxxx",
+      "data": [
+        "OP-001"
+      ]
+    },
+    {
+      "name": "o_xif_issue_resp_accept",
+      "wave": "01000000000000"
+    },
+    {
+      "name": "o_xif_issue_resp_writeback",
+      "wave": "01000000000000"
+    },
+    {
+      "name": "i_xif_commit_valid",
+      "wave": "00010000000000"
+    },
+    {
+      "name": "i_xif_commit_kill",
+      "wave": "xxx0xxxxxxxxxx"
+    },
+    {
+      "name": "if003_desc_validated (conceptual)",
+      "wave": "00000010000000"
+    },
+    {
+      "name": "if003_output_writes_drained (conceptual)",
+      "wave": "00000000001000"
+    },
+    {
+      "name": "o_xif_result_valid",
+      "wave": "00000000000100"
+    },
+    {
+      "name": "i_xif_result_ready",
+      "wave": "00000000000100"
+    },
+    {
+      "name": "o_xif_result_rd",
+      "wave": "xxxxxxxxxxx=xx",
+      "data": [
+        "x12"
+      ]
+    },
+    {
+      "name": "o_xif_result_we",
+      "wave": "xxxxxxxxxxx1xx"
+    },
+    {
+      "name": "o_xif_result_data",
+      "wave": "xxxxxxxxxxx=xx",
+      "data": [
+        "0"
+      ]
+    }
   ],
-  "foot": {"text": "Completion only; GEMM tensor C is written through IF-003. Compute latency is illustrative."},
-  "config": {"hscale": 2}
+  "foot": {
+    "text": "GEMM C goes through IF-003. CV-X-IF writes success status to x12 after output writes drain."
+  },
+  "config": {
+    "hscale": 3
+  }
 }

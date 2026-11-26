@@ -18,9 +18,9 @@ import sys
 import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / 'doc/architecture_figures/cluster_architecture'
+OUT = ROOT / 'project_support/architecture_figures/cluster_architecture'
 SKILL = Path(r'C:\Users\PC\.codex\skills\vlsit-rtl-hierarchy-diagram')
-DOC = ROOT / 'VLSIT_RISCV_CPU_Cluster_Architecture.md'
+DOC = ROOT / 'doc/specification/architecture/VLSIT_RISCV_CPU_Cluster_Architecture.md'
 
 
 def specification():
@@ -120,7 +120,7 @@ def analysis(spec):
     rows = ['# Cluster architecture diagram analysis','',
         '## 1. Scope and evidence',
         'User approved document-source substitution and level N=1. Top: proposed cluster. '
-        'Source: ../../VLSIT_RISCV_CPU_Cluster_Architecture.md. RTL files inspected: none. '
+        'Source: doc/specification/architecture/VLSIT_RISCV_CPU_Cluster_Architecture.md. RTL files inspected: none. '
         'All blocks and links are proposed architectural subsystems, not implemented module instances. '
         'At level 1 the CPU bank is one architectural array containing N independent tiles; it is not a claim that one CPU replaces N instances. '
         'No standard protocol compliance or pulse timing is inferred. Library and layout rules still apply.','',

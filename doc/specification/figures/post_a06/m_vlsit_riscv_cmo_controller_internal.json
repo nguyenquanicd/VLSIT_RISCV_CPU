@@ -1,0 +1,285 @@
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "m_vlsit_riscv_cmo_controller_internal.drawio",
+  "layout": {
+    "gap_h": 120,
+    "gap_v": 110,
+    "margin": 80,
+    "block_h": 60
+  },
+  "top": {
+    "frame_label": [
+      "Internal functional blocks",
+      "(m_vlsit_riscv_cmo_controller)"
+    ]
+  },
+  "frame_row": [
+    "m_vlsit_riscv_cmo_controller",
+    "Sequence CCU preparation, LLC maintenance and terminal COMMIT or ABORT for one CMO.",
+    "rtl/common/vlsit/maintenance/m_vlsit_riscv_cmo_controller.sv"
+  ],
+  "frame_interfaces": [
+    "CMDI",
+    "CCUB",
+    "LLCM",
+    "RSPO"
+  ],
+  "blocks": [
+    {
+      "key": "B0",
+      "label": [
+        "command_capture",
+        "(retained op, hart, line)"
+      ],
+      "width": 300,
+      "row": 0,
+      "col": 0,
+      "row_name": "command_capture (retained op, hart, line)",
+      "function": "Take one CBO or FENCE.I command and keep op, hart, line, PC, virtual address and tag until the response.",
+      "source": "rtl/common/vlsit/maintenance/m_vlsit_riscv_cmo_controller.sv:94-146"
+    },
+    {
+      "key": "B1",
+      "label": [
+        "fsm_next_state",
+        "(p_com_fsm_cmo_nxt)"
+      ],
+      "width": 220,
+      "row": 0,
+      "col": 1,
+      "row_name": "fsm_next_state (p_com_fsm_cmo_nxt)",
+      "function": "Choose the next of eight states from CCU, LLC and terminal handshakes; an error or FENCE.I skips the LLC step.",
+      "source": "rtl/common/vlsit/maintenance/m_vlsit_riscv_cmo_controller.sv:156-282"
+    },
+    {
+      "key": "B2",
+      "label": [
+        "fsm_state_reg",
+        "(p_ff_fsm_cmo)"
+      ],
+      "width": 180,
+      "row": 0,
+      "col": 2,
+      "row_name": "fsm_state_reg (p_ff_fsm_cmo)",
+      "function": "Hold the controller state.",
+      "source": "rtl/common/vlsit/maintenance/m_vlsit_riscv_cmo_controller.sv:148-155"
+    },
+    {
+      "key": "B3",
+      "label": [
+        "ccu_begin_prepare",
+        "(o_ccu_begin_*)"
+      ],
+      "width": 200,
+      "row": 1,
+      "col": 0,
+      "row_name": "ccu_begin_prepare (o_ccu_begin_*)",
+      "function": "Request a CCU transaction and take the PREPARE result and tag.",
+      "source": "rtl/common/vlsit/maintenance/m_vlsit_riscv_cmo_controller.sv:62-71,140"
+    },
+    {
+      "key": "B4",
+      "label": [
+        "llc_maintenance",
+        "(o_maint_*)"
+      ],
+      "width": 180,
+      "row": 1,
+      "col": 1,
+      "row_name": "llc_maintenance (o_maint_*)",
+      "function": "Issue native per-line LLC clean or invalidate for a successful CBO and wait for done or error.",
+      "source": "rtl/common/vlsit/maintenance/m_vlsit_riscv_cmo_controller.sv:72-81"
+    },
+    {
+      "key": "B5",
+      "label": [
+        "ccu_finish",
+        "(o_ccu_finish_*)"
+      ],
+      "width": 200,
+      "row": 1,
+      "col": 2,
+      "row_name": "ccu_finish (o_ccu_finish_*)",
+      "function": "Send COMMIT, or ABORT on any error, and wait until the context is done.",
+      "source": "rtl/common/vlsit/maintenance/m_vlsit_riscv_cmo_controller.sv:82-86"
+    },
+    {
+      "key": "B6",
+      "label": [
+        "hart_response",
+        "(o_cmo_done, o_cmo_error)"
+      ],
+      "width": 300,
+      "row": 2,
+      "col": 2,
+      "row_name": "hart_response (o_cmo_done, o_cmo_error)",
+      "function": "Answer the hart only after all terminal ACKs: success, or an error with cause 7 (CBO) or 24 (FENCE.I).",
+      "source": "rtl/common/vlsit/maintenance/m_vlsit_riscv_cmo_controller.sv:40-60"
+    }
+  ],
+  "connectors": [
+    {
+      "id": "CAP",
+      "src": "B0",
+      "src_side": "R",
+      "dst": "B1",
+      "dst_side": "L"
+    },
+    {
+      "id": "NEXT",
+      "src": "B1",
+      "src_side": "R",
+      "dst": "B2",
+      "dst_side": "L"
+    },
+    {
+      "id": "BEG",
+      "src": "B0",
+      "src_side": "B",
+      "dst": "B3",
+      "dst_side": "T"
+    },
+    {
+      "id": "PREP",
+      "src": "B3",
+      "src_side": "R",
+      "dst": "B4",
+      "dst_side": "L"
+    },
+    {
+      "id": "MNT",
+      "src": "B4",
+      "src_side": "R",
+      "dst": "B5",
+      "dst_side": "L"
+    },
+    {
+      "id": "RSP",
+      "src": "B5",
+      "src_side": "B",
+      "dst": "B6",
+      "dst_side": "T"
+    }
+  ],
+  "externals": [
+    {
+      "id": "CMDI",
+      "block": "B0",
+      "side": "T",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "CMO COMMAND",
+        "op, hart, line"
+      ]
+    },
+    {
+      "id": "CCUB",
+      "block": "B3",
+      "side": "L",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "CCU BEGIN",
+        "op, line, hart"
+      ]
+    },
+    {
+      "id": "LLCM",
+      "block": "B4",
+      "side": "B",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "LLC MAINTENANCE",
+        "op, line"
+      ]
+    },
+    {
+      "id": "RSPO",
+      "block": "B6",
+      "side": "R",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "HART RESPONSE",
+        "done, error"
+      ]
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "CAP",
+      "name": "Captured command to FSM",
+      "category": "custom",
+      "active": "B0 -> B1",
+      "signals": "i_cmo_op, i_cmo_pa_line, i_cmo_hart"
+    },
+    {
+      "id": "NEXT",
+      "name": "Next state to state register",
+      "category": "custom",
+      "active": "B1 -> B2",
+      "signals": "reg_cmo_op"
+    },
+    {
+      "id": "BEG",
+      "name": "Command to CCU begin",
+      "category": "handshake",
+      "active": "B0 -> B3",
+      "signals": "o_ccu_begin_valid, i_ccu_begin_ready, o_ccu_begin_op, o_ccu_begin_pa_line, o_ccu_begin_hart, o_ccu_begin_wback_en"
+    },
+    {
+      "id": "PREP",
+      "name": "PREPARE result to maintenance",
+      "category": "handshake",
+      "active": "B3 -> B4",
+      "signals": "i_ccu_prepare_valid, o_ccu_prepare_ready, i_ccu_prepare_tag, i_ccu_prepare_err"
+    },
+    {
+      "id": "MNT",
+      "name": "Maintenance result to finish",
+      "category": "handshake",
+      "active": "B4 -> B5",
+      "signals": "i_maint_done, i_maint_error"
+    },
+    {
+      "id": "RSP",
+      "name": "Finish result to hart response",
+      "category": "handshake",
+      "active": "B5 -> B6",
+      "signals": "o_ccu_finish_valid, i_ccu_finish_ready, o_ccu_finish_tag, o_ccu_finish_commit, i_ccu_finish_done"
+    },
+    {
+      "id": "CMDI",
+      "name": "Command inputs",
+      "category": "handshake",
+      "active": "in",
+      "signals": "i_cmo_valid, o_cmo_ready, i_cmo_op, i_cmo_pa_line, i_cmo_vaddr, i_cmo_pc, i_cmo_hart"
+    },
+    {
+      "id": "CCUB",
+      "name": "CCU begin outputs",
+      "category": "handshake",
+      "active": "out",
+      "signals": "o_ccu_begin_valid, o_ccu_begin_op, o_ccu_begin_pa_line, o_ccu_begin_hart, o_ccu_begin_wback_en"
+    },
+    {
+      "id": "LLCM",
+      "name": "LLC maintenance outputs",
+      "category": "handshake",
+      "active": "out",
+      "signals": "o_maint_valid, i_maint_ready, o_maint_op, o_maint_pa_line"
+    },
+    {
+      "id": "RSPO",
+      "name": "Hart response outputs",
+      "category": "handshake",
+      "active": "out",
+      "signals": "o_cmo_done, o_cmo_error, o_cmo_vaddr, o_cmo_pc, o_cmo_hart"
+    }
+  ],
+  "nets": [],
+  "legend_note": "Functional decomposition of one RTL module. The module has no child instance except where a box names one, so the boxes are logic groups named after the RTL processes, generate blocks and registers cited in the source column. Arrows show the main request or data direction; responses return on the same bundle.",
+  "library_sha256": "15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"
+}

@@ -1,0 +1,2582 @@
+{
+  "spec": "doc/tensor_coprocessor/VLSIT_TENSOR_COPROCESSOR_HDS.md",
+  "front_matter": {
+    "document_type": "asic_ip_design_specification",
+    "document_id": "TENSOR-COPROCESSOR-SPEC",
+    "title": "Tensor Coprocessor Design Specification",
+    "ip_name": "tensor coprocessor",
+    "version": "0.1",
+    "status": "Draft",
+    "language": "SystemVerilog IEEE 1800-2017",
+    "rtl_rules": "VLSIT_RTL_Design_Rule.md",
+    "csr_spec": "TENSOR_COPROCESSOR_CSR.xlsx"
+  },
+  "sections": [
+    {
+      "level": 2,
+      "title": "Document map",
+      "chars": 1573,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "1. Purpose, scope, and product context",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "1.1 Purpose and scope",
+      "chars": 1971,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "1.2 Deployment assumptions",
+      "chars": 1254,
+      "tables": 1,
+      "req_ids": [
+        "REQ-SEC-001"
+      ],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "1.3 Feature summary",
+      "chars": 1720,
+      "tables": 1,
+      "req_ids": [
+        "REQ-FUNC-001",
+        "REQ-FUNC-002",
+        "REQ-FUNC-003",
+        "REQ-FUNC-004",
+        "REQ-FUNC-005",
+        "REQ-FUNC-006",
+        "REQ-FUNC-007",
+        "REQ-FUNC-014",
+        "REQ-IF-001",
+        "REQ-IF-002",
+        "REQ-PARAM-001",
+        "REQ-PARAM-002",
+        "REQ-PARAM-003",
+        "REQ-PARAM-004",
+        "REQ-PARAM-005",
+        "REQ-PARAM-006",
+        "REQ-PARAM-010",
+        "REQ-PERF-002",
+        "REQ-REG-001"
+      ],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "1.4 Real-world applications of the features",
+      "chars": 5670,
+      "tables": 1,
+      "req_ids": [
+        "REQ-FUNC-001",
+        "REQ-FUNC-002",
+        "REQ-FUNC-003",
+        "REQ-FUNC-004",
+        "REQ-FUNC-005",
+        "REQ-FUNC-006",
+        "REQ-FUNC-007",
+        "REQ-FUNC-014",
+        "REQ-IF-001",
+        "REQ-IF-002",
+        "REQ-PARAM-001",
+        "REQ-PARAM-002",
+        "REQ-PARAM-003",
+        "REQ-PARAM-004",
+        "REQ-PARAM-005",
+        "REQ-PARAM-006",
+        "REQ-PARAM-008",
+        "REQ-PARAM-010",
+        "REQ-PERF-002",
+        "REQ-REG-001"
+      ],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "1 GHz",
+        "2 GHz"
+      ]
+    },
+    {
+      "level": 2,
+      "title": "2. Normative references and precedence",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "2.1 Normative references",
+      "chars": 4303,
+      "tables": 1,
+      "req_ids": [
+        "REQ-IF-005",
+        "REQ-SEC-001"
+      ],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "2.2 Source-of-truth and conflict handling",
+      "chars": 1123,
+      "tables": 0,
+      "req_ids": [
+        "REQ-IF-005"
+      ],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "2.3 Compliance declaration",
+      "chars": 571,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "3. Requirements and traceability",
+      "chars": 86425,
+      "tables": 1,
+      "req_ids": [
+        "REQ-CLK-001",
+        "REQ-ERR-001",
+        "REQ-ERR-002",
+        "REQ-ERR-003",
+        "REQ-ERR-004",
+        "REQ-ERR-005",
+        "REQ-FUNC-001",
+        "REQ-FUNC-002",
+        "REQ-FUNC-003",
+        "REQ-FUNC-004",
+        "REQ-FUNC-005",
+        "REQ-FUNC-006",
+        "REQ-FUNC-007",
+        "REQ-FUNC-008",
+        "REQ-FUNC-009",
+        "REQ-FUNC-010",
+        "REQ-FUNC-011",
+        "REQ-FUNC-012",
+        "REQ-FUNC-013",
+        "REQ-FUNC-014",
+        "REQ-FUNC-015",
+        "REQ-FUNC-016",
+        "REQ-FUNC-017",
+        "REQ-FUNC-018",
+        "REQ-FUNC-019",
+        "REQ-FUNC-020",
+        "REQ-FUNC-021",
+        "REQ-FUNC-022",
+        "REQ-FUNC-023",
+        "REQ-IF-001",
+        "REQ-IF-002",
+        "REQ-IF-003",
+        "REQ-IF-004",
+        "REQ-IF-005",
+        "REQ-IF-006",
+        "REQ-IF-007",
+        "REQ-IF-008",
+        "REQ-IF-009",
+        "REQ-IF-010",
+        "REQ-MEM-001",
+        "REQ-PARAM-001",
+        "REQ-PARAM-002",
+        "REQ-PARAM-003",
+        "REQ-PARAM-004",
+        "REQ-PARAM-005",
+        "REQ-PARAM-006",
+        "REQ-PARAM-007",
+        "REQ-PARAM-008",
+        "REQ-PARAM-009",
+        "REQ-PARAM-010",
+        "REQ-PARAM-011",
+        "REQ-PARAM-012",
+        "REQ-PARAM-013",
+        "REQ-PERF-001",
+        "REQ-PERF-002",
+        "REQ-PERF-003",
+        "REQ-REG-001",
+        "REQ-RESET-001",
+        "REQ-RESET-002",
+        "REQ-SEC-001",
+        "REQ-SEC-002",
+        "REQ-SEC-003"
+      ],
+      "tests": [
+        "TEST-029",
+        "TEST-030"
+      ],
+      "properties": [
+        "COV-011",
+        "SVA-012"
+      ],
+      "quantified": [
+        "009 byte",
+        "1 byte",
+        "13 bits",
+        "16 bits",
+        "2 bytes",
+        "32 bits",
+        "64 MiB",
+        "64 bytes",
+        "8 bytes"
+      ]
+    },
+    {
+      "level": 2,
+      "title": "4. Features and configurations",
+      "chars": 2057,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "2 GHz"
+      ]
+    },
+    {
+      "level": 2,
+      "title": "5. Architecture",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "5.1 Overview and block responsibilities",
+      "chars": 2370,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "5.2 Block diagram",
+      "chars": 9811,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "5.3 Transaction and dataflow",
+      "chars": 49924,
+      "tables": 2,
+      "req_ids": [],
+      "tests": [
+        "TEST-022",
+        "TEST-026",
+        "TEST-029"
+      ],
+      "properties": [
+        "COV-005",
+        "SVA-011"
+      ],
+      "quantified": [
+        "150 ns",
+        "200 ns",
+        "50 ns",
+        "64 bytes",
+        "896 bytes"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "5.4 Invariants",
+      "chars": 1553,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "6. External interfaces and ports",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "6.1 Interface inventory",
+      "chars": 14624,
+      "tables": 3,
+      "req_ids": [
+        "REQ-ERR-003",
+        "REQ-MEM-001"
+      ],
+      "tests": [
+        "TEST-047"
+      ],
+      "properties": [],
+      "quantified": [
+        "024 bytes",
+        "128 KiB",
+        "16 KiB",
+        "192 bits",
+        "2 GHz",
+        "2 KiB",
+        "256 bits",
+        "32 KiB",
+        "64 KiB",
+        "64 bytes"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "6.2 Current port list and interface completion status",
+      "chars": 17758,
+      "tables": 2,
+      "req_ids": [],
+      "tests": [
+        "TEST-015"
+      ],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "6.3 Protocol behavior",
+      "chars": 33292,
+      "tables": 5,
+      "req_ids": [
+        "REQ-ERR-001",
+        "REQ-ERR-003",
+        "REQ-FUNC-006",
+        "REQ-FUNC-007",
+        "REQ-IF-001",
+        "REQ-IF-002",
+        "REQ-IF-004",
+        "REQ-IF-005",
+        "REQ-IF-008",
+        "REQ-PARAM-003"
+      ],
+      "tests": [
+        "TEST-014",
+        "TEST-019",
+        "TEST-024"
+      ],
+      "properties": [],
+      "quantified": [
+        "048 bytes",
+        "16 KiB",
+        "2 GHz",
+        "2 KiB",
+        "256 bits",
+        "256 bytes",
+        "256 ns",
+        "32 KiB",
+        "384 bytes",
+        "4 KiB",
+        "512 ns",
+        "800 ns"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "6.4 Interrupts and events",
+      "chars": 3024,
+      "tables": 1,
+      "req_ids": [
+        "REQ-ERR-004"
+      ],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "7. Clock, reset, and power",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "7.1 Clock domains",
+      "chars": 2555,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "1 GHz",
+        "1.5 GHz",
+        "1.953125 GHz",
+        "2 GHz"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "7.2 CDC and RDC",
+      "chars": 4420,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "7.3 Reset domains and sequencing",
+      "chars": 5585,
+      "tables": 1,
+      "req_ids": [
+        "REQ-ERR-003"
+      ],
+      "tests": [
+        "TEST-007"
+      ],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "7.4 Power intent (if applicable)",
+      "chars": 169,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "8. Parameters and elaboration configurations",
+      "chars": 29816,
+      "tables": 2,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "1 MiB",
+        "1 cycle",
+        "128 KiB",
+        "128 MiB",
+        "16.25 KiB",
+        "256 MiB",
+        "32 MiB",
+        "33 MiB",
+        "512 MiB",
+        "64 MiB",
+        "64 bytes",
+        "864 bytes",
+        "896 bytes"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "8.1 Pipeline-boundary configuration analysis",
+      "chars": 28380,
+      "tables": 4,
+      "req_ids": [],
+      "tests": [
+        "TEST-011",
+        "TEST-045"
+      ],
+      "properties": [],
+      "quantified": [
+        "000 ns",
+        "005 cycles",
+        "024 cycles",
+        "088 MiB",
+        "1.00 GHz",
+        "1.20 GHz",
+        "1.6 GHz",
+        "1.8 GHz",
+        "2 GHz",
+        "20 ns",
+        "20.83 ns",
+        "214.125 KiB",
+        "25 cycles",
+        "256 MiB",
+        "320 MiB",
+        "512 MiB",
+        "64 KiB",
+        "64 MiB",
+        "837.5 ns"
+      ]
+    },
+    {
+      "level": 2,
+      "title": "9. Data representation and arithmetic",
+      "chars": 3557,
+      "tables": 1,
+      "req_ids": [
+        "REQ-IF-009"
+      ],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "9.1 Operation and precision qualification",
+      "chars": 18950,
+      "tables": 2,
+      "req_ids": [
+        "REQ-FUNC-020",
+        "REQ-FUNC-021",
+        "REQ-FUNC-022"
+      ],
+      "tests": [
+        "TEST-010"
+      ],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "10. Detailed functional behavior",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "10.1 Modes and state transitions",
+      "chars": 7286,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [
+        "TEST-022"
+      ],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "10.2 Operations",
+      "chars": 4854,
+      "tables": 1,
+      "req_ids": [
+        "REQ-FUNC-014"
+      ],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "10.2.1 Runtime algorithm selection and transformer workload coverage",
+      "chars": 43633,
+      "tables": 10,
+      "req_ids": [
+        "REQ-IF-009"
+      ],
+      "tests": [
+        "TEST-020"
+      ],
+      "properties": [],
+      "quantified": [
+        "1 byte",
+        "128 KiB",
+        "136 bytes",
+        "16 MiB",
+        "16 ns",
+        "2 GHz",
+        "2 bytes",
+        "2.05 us",
+        "256 KiB",
+        "256 MiB",
+        "256 ns",
+        "262 us",
+        "32 bits",
+        "341 ns",
+        "4 KiB",
+        "4 bytes",
+        "47 bytes",
+        "504 ns",
+        "512 KiB",
+        "512 MiB",
+        "512 ns",
+        "64 KiB",
+        "64 bytes",
+        "8 KiB"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "10.2.2 Algorithm-level behavior and logic design",
+      "chars": 123758,
+      "tables": 16,
+      "req_ids": [
+        "REQ-ERR-003",
+        "REQ-FUNC-022"
+      ],
+      "tests": [
+        "TEST-038",
+        "TEST-040",
+        "TEST-043",
+        "TEST-044",
+        "TEST-049"
+      ],
+      "properties": [],
+      "quantified": [
+        "0.5 MiB",
+        "009 byte",
+        "024 KiB",
+        "024 cycles",
+        "088 bytes",
+        "096 cycles",
+        "1 KiB",
+        "1 MiB",
+        "1 bytes",
+        "1.44 MiB",
+        "1.75 KiB",
+        "112 KiB",
+        "113.8 ns",
+        "128 KiB",
+        "128 MiB",
+        "128 bytes",
+        "128 cycles",
+        "129 KiB",
+        "131.07 us",
+        "132 MiB",
+        "136 KiB",
+        "148 MiB",
+        "16 KiB",
+        "16 MiB",
+        "16 bits",
+        "16 bytes",
+        "16 cycles",
+        "16.1 KiB",
+        "16.384 us",
+        "16.75 MiB",
+        "160.125 KiB",
+        "163.840 us",
+        "17 bits",
+        "192 KiB",
+        "192 MiB",
+        "192.25 KiB",
+        "196 MiB",
+        "2 GHz",
+        "2 MiB",
+        "2.02 MiB",
+        "2.37 MiB",
+        "2.47 MiB",
+        "20 bits",
+        "20.50 MiB",
+        "200 ns",
+        "200.25 KiB",
+        "204.8 ns",
+        "224 KiB",
+        "24 MiB",
+        "240 KiB",
+        "256 KiB",
+        "256 bytes",
+        "256 cycles",
+        "26 KiB",
+        "260 MiB",
+        "262.144 us",
+        "280 KiB",
+        "280 bytes",
+        "3.02 MiB",
+        "32 KiB",
+        "32 MiB",
+        "32 bits",
+        "32.25 KiB",
+        "328 bytes",
+        "33 MiB",
+        "33.03 us",
+        "341.3 ns",
+        "36 MiB",
+        "384 KiB",
+        "392 KiB",
+        "4 KiB",
+        "4 MiB",
+        "4 bytes",
+        "4.096 us",
+        "40 bits",
+        "409.6 ns",
+        "424.25 KiB",
+        "440.25 KiB",
+        "448 bytes",
+        "464 bytes",
+        "504.25 KiB",
+        "512 KiB",
+        "512 cycles",
+        "52 KiB",
+        "524.29 us",
+        "60.2 ns",
+        "608 KiB",
+        "632.25 KiB",
+        "64 KiB",
+        "64 MiB",
+        "64 bytes",
+        "664 bytes",
+        "68 MiB",
+        "768 bytes",
+        "769 KiB",
+        "8 KiB",
+        "8 MiB",
+        "832 bytes",
+        "888.25 KiB",
+        "92.25 KiB",
+        "96 MiB"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "10.2.3 Complete instruction-set and datapath contract",
+      "chars": 617,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "10.3 Cycle-level behavior",
+      "chars": 41151,
+      "tables": 2,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "10.4 Arbitration, buffering, and throughput",
+      "chars": 2953,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [
+        "TEST-010"
+      ],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "10.5 Memories and storage",
+      "chars": 11526,
+      "tables": 4,
+      "req_ids": [
+        "REQ-PARAM-005"
+      ],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "128 bits",
+        "133.750 KiB",
+        "214.125 KiB",
+        "256 KiB",
+        "257.750 KiB",
+        "385.750 KiB",
+        "512 KiB",
+        "513.750 KiB",
+        "82 KiB",
+        "858.250 KiB"
+      ]
+    },
+    {
+      "level": 2,
+      "title": "11. Register and programming model",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "11.1 CSR specification source",
+      "chars": 1065,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "11.2 Software sequences",
+      "chars": 14420,
+      "tables": 3,
+      "req_ids": [
+        "REQ-ERR-003"
+      ],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "64 bytes"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "11.3 CSR connection to the design",
+      "chars": 8147,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [
+        "TEST-017",
+        "TEST-025"
+      ],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "11.4 APB access behavior of the CSR",
+      "chars": 601,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "12. Error handling and recovery",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "12.1 Runtime status ABI",
+      "chars": 16952,
+      "tables": 2,
+      "req_ids": [
+        "REQ-ERR-003",
+        "REQ-RESET-002"
+      ],
+      "tests": [
+        "TEST-017"
+      ],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "12.2 Scalar-result failures and software-visible payload",
+      "chars": 4644,
+      "tables": 1,
+      "req_ids": [
+        "REQ-ERR-004"
+      ],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "13. Performance, power, and area",
+      "chars": 79756,
+      "tables": 7,
+      "req_ids": [
+        "REQ-PERF-001",
+        "REQ-PERF-002",
+        "REQ-PERF-003"
+      ],
+      "tests": [
+        "TEST-012",
+        "TEST-017",
+        "TEST-025",
+        "TEST-030",
+        "TEST-038",
+        "TEST-040",
+        "TEST-043",
+        "TEST-047"
+      ],
+      "properties": [],
+      "quantified": [
+        "0.5 ns",
+        "088 MiB",
+        "1 GHz",
+        "1 ns",
+        "1.6 GHz",
+        "1.8 GHz",
+        "1.953125 GHz",
+        "10 MiB",
+        "100 MHz",
+        "12 cycles",
+        "128 KiB",
+        "2 GHz",
+        "2 us",
+        "20 ns",
+        "21.11 ns",
+        "272 MiB",
+        "280 KiB",
+        "280 MiB",
+        "300 ns",
+        "32 cycles",
+        "38 cycles",
+        "384 KiB",
+        "4 cycles",
+        "48 KiB",
+        "512 cycles",
+        "608 KiB",
+        "64 KiB",
+        "8 MiB",
+        "80 ns"
+      ]
+    },
+    {
+      "level": 2,
+      "title": "14. RTL implementation contract",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "14.1 Required coding baseline",
+      "chars": 462,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "14.2 RTL hierarchy",
+      "chars": 1334,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "14.3 Synthesis assumptions",
+      "chars": 401,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "15. Verification specification",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "15.1 Scope and strategy",
+      "chars": 208,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "15.2 Requirement-based test plan",
+      "chars": 55527,
+      "tables": 1,
+      "req_ids": [
+        "REQ-CLK-001",
+        "REQ-ERR-001",
+        "REQ-ERR-002",
+        "REQ-ERR-003",
+        "REQ-ERR-004",
+        "REQ-ERR-005",
+        "REQ-FUNC-001",
+        "REQ-FUNC-002",
+        "REQ-FUNC-003",
+        "REQ-FUNC-004",
+        "REQ-FUNC-006",
+        "REQ-FUNC-007",
+        "REQ-FUNC-008",
+        "REQ-FUNC-009",
+        "REQ-FUNC-010",
+        "REQ-FUNC-013",
+        "REQ-FUNC-014",
+        "REQ-FUNC-015",
+        "REQ-FUNC-016",
+        "REQ-FUNC-017",
+        "REQ-FUNC-019",
+        "REQ-FUNC-021",
+        "REQ-FUNC-022",
+        "REQ-FUNC-023",
+        "REQ-IF-001",
+        "REQ-IF-002",
+        "REQ-IF-003",
+        "REQ-IF-004",
+        "REQ-IF-005",
+        "REQ-IF-006",
+        "REQ-IF-007",
+        "REQ-IF-008",
+        "REQ-IF-009",
+        "REQ-MEM-001",
+        "REQ-PARAM-001",
+        "REQ-PARAM-002",
+        "REQ-PARAM-003",
+        "REQ-PARAM-005",
+        "REQ-PARAM-006",
+        "REQ-PARAM-007",
+        "REQ-PARAM-008",
+        "REQ-PARAM-009",
+        "REQ-PARAM-010",
+        "REQ-PARAM-011",
+        "REQ-PARAM-012",
+        "REQ-PERF-001",
+        "REQ-PERF-002",
+        "REQ-PERF-003",
+        "REQ-REG-001",
+        "REQ-RESET-001",
+        "REQ-RESET-002",
+        "REQ-SEC-001",
+        "REQ-SEC-002",
+        "REQ-SEC-003"
+      ],
+      "tests": [
+        "TEST-001",
+        "TEST-002",
+        "TEST-003",
+        "TEST-004",
+        "TEST-005",
+        "TEST-006",
+        "TEST-007",
+        "TEST-008",
+        "TEST-009",
+        "TEST-010",
+        "TEST-011",
+        "TEST-012",
+        "TEST-013",
+        "TEST-014",
+        "TEST-015",
+        "TEST-016",
+        "TEST-017",
+        "TEST-018",
+        "TEST-019",
+        "TEST-020",
+        "TEST-021",
+        "TEST-022",
+        "TEST-023",
+        "TEST-024",
+        "TEST-025",
+        "TEST-026",
+        "TEST-027",
+        "TEST-028",
+        "TEST-029",
+        "TEST-030",
+        "TEST-031",
+        "TEST-032",
+        "TEST-033",
+        "TEST-034",
+        "TEST-035",
+        "TEST-036",
+        "TEST-037",
+        "TEST-038",
+        "TEST-039",
+        "TEST-040",
+        "TEST-041",
+        "TEST-042",
+        "TEST-043",
+        "TEST-044",
+        "TEST-045",
+        "TEST-046",
+        "TEST-047",
+        "TEST-048",
+        "TEST-049",
+        "TEST-050"
+      ],
+      "properties": [],
+      "quantified": [
+        "4 KiB",
+        "896 bytes"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "15.3 Assertions and coverage",
+      "chars": 16901,
+      "tables": 1,
+      "req_ids": [
+        "REQ-ERR-001",
+        "REQ-ERR-002",
+        "REQ-ERR-003",
+        "REQ-ERR-004",
+        "REQ-ERR-005",
+        "REQ-FUNC-001",
+        "REQ-FUNC-009",
+        "REQ-FUNC-014",
+        "REQ-IF-001",
+        "REQ-IF-003",
+        "REQ-IF-004",
+        "REQ-IF-005",
+        "REQ-IF-006",
+        "REQ-IF-007",
+        "REQ-IF-008",
+        "REQ-PARAM-003",
+        "REQ-PARAM-005",
+        "REQ-PARAM-007",
+        "REQ-PARAM-009",
+        "REQ-PARAM-010",
+        "REQ-PARAM-011",
+        "REQ-PARAM-012",
+        "REQ-PARAM-013",
+        "REQ-PERF-002",
+        "REQ-RESET-002",
+        "REQ-SEC-001",
+        "REQ-SEC-002",
+        "REQ-SEC-003"
+      ],
+      "tests": [],
+      "properties": [
+        "COV-001",
+        "COV-002",
+        "COV-003",
+        "COV-004",
+        "COV-005",
+        "COV-006",
+        "COV-007",
+        "COV-008",
+        "COV-009",
+        "COV-010",
+        "COV-011",
+        "COV-012",
+        "COV-013",
+        "COV-014",
+        "COV-015",
+        "COV-016",
+        "COV-017",
+        "SVA-001",
+        "SVA-002",
+        "SVA-003",
+        "SVA-004",
+        "SVA-005",
+        "SVA-006",
+        "SVA-007",
+        "SVA-008",
+        "SVA-009",
+        "SVA-010",
+        "SVA-011",
+        "SVA-012",
+        "SVA-013",
+        "SVA-014",
+        "SVA-015",
+        "SVA-016",
+        "SVA-017",
+        "SVA-018"
+      ],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "15.4 Formal, CDC, and RDC",
+      "chars": 842,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [
+        "TEST-007"
+      ],
+      "properties": [
+        "SVA-004"
+      ],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "16. DFT and testability",
+      "chars": 604,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "17. Physical design and timing integration",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "17.1 Timing constraints and budgets",
+      "chars": 2253,
+      "tables": 3,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "17.2 Physical assumptions",
+      "chars": 350,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "18. Security, safety, and reliability",
+      "chars": 4691,
+      "tables": 1,
+      "req_ids": [
+        "REQ-SEC-001",
+        "REQ-SEC-002",
+        "REQ-SEC-003"
+      ],
+      "tests": [
+        "TEST-046"
+      ],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "19. Requirement-to-verification traceability",
+      "chars": 14664,
+      "tables": 1,
+      "req_ids": [
+        "REQ-CLK-001",
+        "REQ-ERR-001",
+        "REQ-ERR-002",
+        "REQ-ERR-003",
+        "REQ-ERR-004",
+        "REQ-ERR-005",
+        "REQ-FUNC-001",
+        "REQ-FUNC-002",
+        "REQ-FUNC-003",
+        "REQ-FUNC-004",
+        "REQ-FUNC-005",
+        "REQ-FUNC-006",
+        "REQ-FUNC-007",
+        "REQ-FUNC-008",
+        "REQ-FUNC-009",
+        "REQ-FUNC-010",
+        "REQ-FUNC-011",
+        "REQ-FUNC-012",
+        "REQ-FUNC-013",
+        "REQ-FUNC-014",
+        "REQ-FUNC-015",
+        "REQ-FUNC-016",
+        "REQ-FUNC-017",
+        "REQ-FUNC-018",
+        "REQ-FUNC-019",
+        "REQ-FUNC-020",
+        "REQ-FUNC-021",
+        "REQ-FUNC-022",
+        "REQ-FUNC-023",
+        "REQ-IF-001",
+        "REQ-IF-002",
+        "REQ-IF-003",
+        "REQ-IF-004",
+        "REQ-IF-005",
+        "REQ-IF-006",
+        "REQ-IF-007",
+        "REQ-IF-008",
+        "REQ-IF-009",
+        "REQ-IF-010",
+        "REQ-MEM-001",
+        "REQ-PARAM-001",
+        "REQ-PARAM-002",
+        "REQ-PARAM-003",
+        "REQ-PARAM-004",
+        "REQ-PARAM-005",
+        "REQ-PARAM-006",
+        "REQ-PARAM-007",
+        "REQ-PARAM-008",
+        "REQ-PARAM-009",
+        "REQ-PARAM-010",
+        "REQ-PARAM-011",
+        "REQ-PARAM-012",
+        "REQ-PARAM-013",
+        "REQ-PERF-001",
+        "REQ-PERF-002",
+        "REQ-PERF-003",
+        "REQ-REG-001",
+        "REQ-RESET-001",
+        "REQ-RESET-002",
+        "REQ-SEC-001",
+        "REQ-SEC-002",
+        "REQ-SEC-003"
+      ],
+      "tests": [
+        "TEST-001",
+        "TEST-002",
+        "TEST-003",
+        "TEST-004",
+        "TEST-005",
+        "TEST-006",
+        "TEST-007",
+        "TEST-008",
+        "TEST-009",
+        "TEST-010",
+        "TEST-011",
+        "TEST-012",
+        "TEST-013",
+        "TEST-014",
+        "TEST-015",
+        "TEST-016",
+        "TEST-017",
+        "TEST-018",
+        "TEST-019",
+        "TEST-020",
+        "TEST-021",
+        "TEST-022",
+        "TEST-023",
+        "TEST-024",
+        "TEST-025",
+        "TEST-026",
+        "TEST-027",
+        "TEST-028",
+        "TEST-029",
+        "TEST-030",
+        "TEST-031",
+        "TEST-032",
+        "TEST-033",
+        "TEST-034",
+        "TEST-035",
+        "TEST-036",
+        "TEST-037",
+        "TEST-038",
+        "TEST-039",
+        "TEST-040",
+        "TEST-041",
+        "TEST-042",
+        "TEST-043",
+        "TEST-044",
+        "TEST-045",
+        "TEST-046",
+        "TEST-047",
+        "TEST-048",
+        "TEST-049",
+        "TEST-050"
+      ],
+      "properties": [
+        "COV-006",
+        "COV-007",
+        "COV-008",
+        "COV-009",
+        "COV-010",
+        "COV-011",
+        "COV-012",
+        "COV-013",
+        "COV-014",
+        "COV-016",
+        "COV-017",
+        "SVA-001",
+        "SVA-003",
+        "SVA-004",
+        "SVA-005",
+        "SVA-006",
+        "SVA-007",
+        "SVA-008",
+        "SVA-009",
+        "SVA-010",
+        "SVA-011",
+        "SVA-012",
+        "SVA-013",
+        "SVA-014",
+        "SVA-015",
+        "SVA-016",
+        "SVA-017",
+        "SVA-018"
+      ],
+      "quantified": [
+        "896 bytes"
+      ]
+    },
+    {
+      "level": 2,
+      "title": "20. Assumptions, dependencies, and decisions",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "20.1 Detailed architecture review",
+      "chars": 16243,
+      "tables": 1,
+      "req_ids": [
+        "REQ-ERR-003",
+        "REQ-FUNC-007",
+        "REQ-PARAM-003",
+        "REQ-PERF-002",
+        "REQ-SEC-001",
+        "REQ-SEC-003"
+      ],
+      "tests": [
+        "TEST-009"
+      ],
+      "properties": [],
+      "quantified": [
+        "2 GHz",
+        "64 bytes"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "20.2 Decisions required to close the architecture",
+      "chars": 102708,
+      "tables": 1,
+      "req_ids": [
+        "REQ-ERR-001",
+        "REQ-ERR-002",
+        "REQ-ERR-003",
+        "REQ-ERR-004",
+        "REQ-ERR-005",
+        "REQ-FUNC-003",
+        "REQ-FUNC-004",
+        "REQ-FUNC-008",
+        "REQ-FUNC-009",
+        "REQ-FUNC-012",
+        "REQ-FUNC-014",
+        "REQ-FUNC-015",
+        "REQ-FUNC-016",
+        "REQ-FUNC-017",
+        "REQ-FUNC-018",
+        "REQ-FUNC-019",
+        "REQ-FUNC-020",
+        "REQ-FUNC-021",
+        "REQ-FUNC-022",
+        "REQ-FUNC-023",
+        "REQ-IF-003",
+        "REQ-IF-005",
+        "REQ-IF-007",
+        "REQ-IF-008",
+        "REQ-IF-009",
+        "REQ-PARAM-003",
+        "REQ-PARAM-005",
+        "REQ-PARAM-009",
+        "REQ-PARAM-010",
+        "REQ-PARAM-011",
+        "REQ-PARAM-012",
+        "REQ-PARAM-013",
+        "REQ-PERF-001",
+        "REQ-PERF-002",
+        "REQ-PERF-003",
+        "REQ-RESET-002",
+        "REQ-SEC-001",
+        "REQ-SEC-003"
+      ],
+      "tests": [
+        "TEST-003",
+        "TEST-017",
+        "TEST-020",
+        "TEST-022",
+        "TEST-024",
+        "TEST-030",
+        "TEST-038",
+        "TEST-040",
+        "TEST-046"
+      ],
+      "properties": [
+        "COV-005",
+        "COV-011",
+        "SVA-012"
+      ],
+      "quantified": [
+        "1 MiB",
+        "1 byte",
+        "128 KiB",
+        "128 MiB",
+        "132 MiB",
+        "16 MiB",
+        "16.25 KiB",
+        "2 GHz",
+        "2 bytes",
+        "256 MiB",
+        "256 bytes",
+        "32 KiB",
+        "32 MiB",
+        "33 MiB",
+        "40 bits",
+        "512 MiB",
+        "512 bytes",
+        "64 KiB",
+        "64 MiB",
+        "64 bytes",
+        "8 bytes",
+        "896 bytes"
+      ]
+    },
+    {
+      "level": 2,
+      "title": "21. Glossary",
+      "chars": 393,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "22. References used to shape this template",
+      "chars": 1423,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    }
+  ],
+  "requirements": {
+    "REQ-FUNC-001": {
+      "statement": "The IP shall accept an offloaded custom tensor instruction on the CV-X-IF issue interface, decode it, and return exactly one result transaction for each accepted instruction that is committed and not killed, as required by the result interface contract.",
+      "source": "REF-001 §5.5.6, §5.5.8, §5.5.11",
+      "verification": "Simulation / protocol checker"
+    },
+    "REQ-FUNC-002": {
+      "statement": "The IP shall compute a GEMM $C = A \\cdot B + C$ over the operand tile sizes implied by the systolic-array dimensions.",
+      "source": "REF-002 §4",
+      "verification": "Simulation / formal"
+    },
+    "REQ-FUNC-003": {
+      "statement": "The IP shall provide an INT8 datapath always, and BF16/FP16 datapaths when `PARA_DATA_PREC` selects them. A datapath capability alone does not qualify every operation/precision combination: issue shall accept only pairs listed as release-qualified in §9.1. Integer MAC accumulation uses `PARA_ACCUM_W`; BF16/FP16 pairs use the FP32 accumulator method scoped in §9.1, with OP-001 rounding and order fixed by DEC-068.",
+      "source": "User answer 2026-11-15; qualification rule added by DEC-017",
+      "verification": "Elaboration and per-operation precision reference checks"
+    },
+    "REQ-FUNC-004": {
+      "statement": "When enabled by `PARA_ALGORITHM_MASK[3]`, OP-002 shall execute exactly one descriptor-selected mode (`ADD`, `BIAS_ADD`, `RESIDUAL_ADD`, `SCALE`, `ACT_ONLY`, or `SWIGLU`) per command, with the operand shapes, broadcasting, arithmetic order, precision behavior, activation, and conversion rules defined in REQ-FUNC-018 and §9.1/§10.2.2. The selector may change on the next command; it is immutable for the active command.",
+      "source": "User request 2026-11-15; DEC-056",
+      "verification": "Bit-accurate independent reference for every mode/precision and command-to-command mode switching"
+    },
+    "REQ-FUNC-005": {
+      "statement": "When enabled by `PARA_ALGORITHM_MASK[2]`, the IP shall provide stable row softmax and LayerNorm exactly as specified by REQ-FUNC-021/022, including per-operation shape caps, descriptor modes, deterministic FP32 arithmetic, exceptional-value status, and whole-command output invalidation.",
+      "source": "User request 2026-11-15; DEC-059/060",
+      "verification": "Fixed-order numerical reference, mode/precision and cap-boundary tests, masked-row and numeric-fault tests, no-DMA rejection, and whole-output invalidation"
+    },
+    "REQ-FUNC-006": {
+      "statement": "The IP shall obtain operands and write results through exactly the access path selected by PARA_MEM_PATH.",
+      "source": "user answer 2026-11-15",
+      "verification": "Simulation"
+    },
+    "REQ-MEM-001": {
+      "statement": "Enabled bulk storage shall bind to one or more independently configurable IF-006 banks. Each bank shall have a build-static depth, word width, read latency, port profile and backend. Reject builds that cannot fit all simultaneously live allocations or whose selected macro cannot satisfy the declared access contract.",
+      "source": "User direction; IF-006 and Section 10.5",
+      "verification": "Elaboration and bank-interface simulation with behavioral and macro adapters"
+    },
+    "REQ-IF-001": {
+      "statement": "The tensor-enabled CVA6 host shall use `X_ISSUE_REGISTER_SPLIT=0` for this release. Under REF-001 §5.5.6–5.5.8, issue and register transactions are coupled; the coprocessor shall drive `issue_ready` and `register_ready` identically. For a descriptor command, `issue_resp.register_read` shall request `rs1` on RV64 and `rs1` plus `rs2` on RV32. The coprocessor shall accept and allocate a command only when a command context is available and every requested source lane is valid; it shall capture the required values atomically on the joint issue/register handshake and shall not expect a later or reordered register packet. An issue response with `accept=0` allocates no execution context or result. Commit/kill traffic remains associated by `(hartid,id)` and obeys REF-001. REF-001 §5.5.8 defines `commit_kill=0` as the CPU guarantee that the instruction and older instructions are no longer speculative and will not be killed; it is not equivalent to issue acceptance or architectural retirement. Under user-selected DEC-033/034, CVA6 shall delay non-kill commit until a per-hart irrevocability frontier proves the command and all older instructions can no longer be flushed. The host shall not emit non-kill commit in the issue-acceptance cycle. The frontier may pass an older CV-X-IF command already marked non-kill even while that command awaits its result; this permits later tensor commands to receive authorization and overlap descriptor prefetch/compute. It shall not pass an older instruction that can still raise an exception or cause a flush. On a squash, CVA6 shall send the required per-hart kill boundary. The coprocessor shall capture command operands at acceptance but shall not fetch a descriptor, access tensor data, write output, or return a result until the matching delayed non-kill commit. Coprocessor valid signals shall not be retracted.",
+      "source": "User decisions 2026-11-18; DEC-024/033; REF-001 §5.5.6–5.5.8, 5.6, 5.7",
+      "verification": "CV-X-IF protocol checker; coupled-ready behavior, source-valid stalls, atomic pointer capture, delayed commit ordering, kill handling, fault-resolved frontier, older-exception safety, queue-full backpressure, and no-early-DMA simulations"
+    },
+    "REQ-IF-002": {
+      "statement": "When the CSR block is present, the IP shall answer APB4 reads/writes to the register block defined by the CSR workbook.",
+      "source": "REF-005",
+      "verification": "Simulation"
+    },
+    "REQ-IF-003": {
+      "statement": "In descriptor mode, the descriptor pointer shall be a 64-bit DMA-visible byte address formed only from the matching accepted CV-X-IF register transaction. On RV32, its low word shall come from the register value selected by instruction `rs1`, and its high word from the value selected by `rs2`; `issue_resp.register_read` shall request both source lanes. On RV64, it shall come from the value selected by `rs1`, with `rs2` unused and not requested. The adapter shall capture values only on the corresponding register handshake and associate them with the command's `(hartid,id)` context. Descriptor-command runtime flags shall reside in the descriptor. The pointer shall be captured in that command's context; misalignment, arithmetic wrap, or an address not representable by the implemented AXI address port shall complete with TC_ERR_ADDRESS without issuing a malformed AXI request. A request denied by the SoC aperture firewall follows REQ-SEC-003 and returns the corresponding AXI error status.",
+      "source": "User decision 2026-11-16; DEC-002; REF-001 §5.5.6–5.5.7",
+      "verification": "Operand/descriptor-fetch simulation, handshake reordering, and address-range assertions"
+    },
+    "REQ-IF-004": {
+      "statement": "`rd=x0` shall be rejected at issue in mode 0 and for every scalar-result opcode. In mode 2, a tensor/status opcode may use `rd=x0`; the command still returns its required CV-X-IF completion transaction with `issue_resp.writeback=0` and `result.we=0`, and accepted-command errors are reported by the sticky CSR record. The result class and writeback request shall be determined entirely from the instruction at issue; a fetched descriptor shall not change them. For all accepted commands, `result.we` shall match the writeback declaration made at issue.",
+      "source": "User decision 2026-11-16; DEC-010; REF-001 §5.5.11",
+      "verification": "Issue-decode and writeback-consistency simulation/assertions"
+    },
+    "REQ-IF-005": {
+      "statement": "The 32-bit tensor command shall use RISC-V `custom-0` (`inst[6:0]=7'b0001011`, `0x0B`) and encode `operation_id` in instruction bits `[31:25]` (`funct7`) and `precision_id` in bits `[14:12]` (`funct3`), using the R-type field layout in REF-011 §2.2. Precision codes shall be `3'b000=INT8`, `3'b001=BF16`, and `3'b010=FP16`; `3'b011` through `3'b111` are reserved and shall be rejected at issue. The selected `precision_id` applies uniformly to all tensor-element operands and outputs of that command; mixed operand formats are not supported in the first release, and a descriptor cannot override the selected format. The operation ID shall determine the result class and exactly one `PARA_ALGORITHM_MASK` family at issue, and shall resolve to one fixed input schema for the elaborated build; `PARA_ARGMAX_IMPL` selects OP-004's build-specific schema. Different result classes or mask families shall use different operation IDs. A descriptor may select a submode only within the operation ID's family and result class; it shall not override them. No payload-mode bit is encoded in the instruction; if an operation supports both inline-register and descriptor forms, each form shall use a distinct operation ID. Shape, stride, mask, and algorithm-specific submode fields reside in the descriptor for descriptor commands. OP-xxx labels are specification identifiers, not numeric instruction codes; the numeric `operation_id` assignments are the table in Section 10.2.1 and DEC-015; `0x00` and `0x0A`-`0x7F` are reserved.",
+      "source": "User decision 2026-11-16; REF-011 §2.2/§35.1; DEC-002/013/014",
+      "verification": "Instruction decode, assembler/disassembler agreement, precision selection, reserved-code rejection, and descriptor non-override simulation"
+    },
+    "REQ-IF-006": {
+      "statement": "The selected CVA6 host shall generate delayed CV-X-IF non-kill commit from a per-hart, scoreboard-age-ordered fault-resolved frontier. For each candidate, every older non-tensor entry must have a final no-exception/no-redirect outcome across execution/writeback, branch, LSU translation/protection/access-fault handling, CSR/commit-stage checks, and any configured fence/controller redirect source; debug/interrupt arbitration shall suppress authorization if a trap is selected in that cycle, with post-authorization disposition governed by DEC-035. A prior CV-X-IF entry may be passed only after its own non-kill commit, without waiting for its result. After a selected post-authorization interrupt/debug event, the host shall block issue and further non-kill authorization of younger work for that hart, while unrelated harts remain eligible. A same-cycle selected squash/trap takes priority and kills the earliest affected accepted, not-yet-authorized CV-X-IF command and its younger suffix. Transaction IDs shall not be numerically sorted to infer age. After non-kill authorization, the host shall not kill the command or lose its result/context; post-authorization interrupt/debug handling follows selected DEC-035 and REQ-IF-007. The host shall expose this proof internally to the CV-X-IF driver; no new tensor IP port is implied. Retirement-only gating is bring-up fallback and does not satisfy first-release performance signoff.",
+      "source": "User selected fault-resolved frontier 2026-11-18; DEC-033/034; CVA6 scoreboard, LSU, branch, CSR, and controller integration",
+      "verification": "Directed + constrained-random integration tests for all fault sources, same-cycle squash priority, ID wrap, no pre-authorization DMA, no post-authorization kill, and N/N+1 overlap"
+    },
+    "REQ-IF-007": {
+      "statement": "For a selected interrupt/debug event on hart H while one or more older CV-X-IF commands are non-kill committed but not yet architecturally retired, the CVA6 host shall latch the selected event and its cause/source for H, stop issuing younger work and stop non-kill-authorizing younger commands for H, and kill any accepted but not-yet-authorized CV-X-IF suffix. It shall not block independent work from other harts. Every already-authorized command on H shall retain its `(hartid,id)`, destination, and result context, complete successfully or through its defined accepted-error result, and retire in program order before handler/debug entry. The event shall remain pending until precise entry; the trap/debug PC shall identify the next architectural instruction after the drained prefix. Additional events shall remain pending or be re-arbitrated according to native CVA6 priority so no event is lost or lower-priority state overwrites a higher-priority selected event. No tensor-IP interrupt/debug port is required. Missing AXI responses still invoke full-SoC reset per DEC-029. Maximum event-entry latency is not signed off until bounded and measured under DEC-018.",
+      "source": "User decision 2026-11-18; DEC-035; CV-X-IF REF-001 §5.5.8, 5.5.11",
+      "verification": "TEST-029, TEST-030, SVA-012, COV-011"
+    },
+    "REQ-SEC-001": {
+      "statement": "In the selected tensor-enabled CVA6 host, the current privilege mode shall be checked for every assigned tensor instruction (`custom-0` with `funct7=0x01..0x09`) before any CV-X-IF issue request is asserted. Only the trusted nonvirtual S-mode and M-mode domains may proceed to CV-X-IF. A host with active guest execution shall suppress tensor issue from that guest. In U-mode, CVA6 shall suppress the CV-X-IF issue request and raise an illegal-instruction synchronous exception (exception code 2) in the originating hart. A denied instruction shall allocate no coprocessor context and cause no CV-X-IF handshake, tensor CSR write, AXI request, local-SRAM write, or tensor result. No privilege/ASID/PID sideband shall be added to CV-X-IF. The gate is per hart and covers all precision field values for the assigned tensor operation IDs. This authorizes the S/M software trust domain only; it does not isolate processes within S-mode. DMA address protection remains the responsibility of the DEC-025 SoC AXI firewall and buffer-allocation policy.",
+      "source": "User decision 2026-11-17; DEC-025/027; REF-001 §5.5.6; REF-012 §3.1.15",
+      "verification": "Host instruction-level simulation, CV-X-IF issue suppression assertions, trap-cause check, and no-side-effect checks across privilege modes and harts"
+    },
+    "REQ-SEC-002": {
+      "statement": "U-mode applications shall use the trusted S-mode driver as their only path to the accelerator; U-mode shall not issue tensor instructions directly. The driver API shall accept operation parameters, validated dimensions/strides, and opaque buffer handles plus offsets, not caller-supplied physical DMA addresses or a user-owned hardware descriptor pointer. Before issuing, the driver shall verify handle ownership or explicit sharing rights, read/write direction, element size, dimensions, nonnegative strides, checked address-span arithmetic without wrap, base/span/outer-pitch alignment under `PARA_DMA_ALIGN_BYTES`, 64-byte descriptor alignment, permitted aliasing, and containment of every descriptor and tensor byte range within the SoC firewall aperture. Release 1 has no scatter-gather descriptor or IOVA translation: each referenced tensor range shall resolve to one contiguous DMA-visible physical span; the driver shall reject a noncontiguous mapping or copy through a driver-managed contiguous buffer. The driver shall use the REQ-IF-009 byte-span formula and matching build/operation rules, create the hardware descriptor in kernel-owned DMA-visible memory, keep it immutable and inaccessible for user writes until completion, and issue the CV-X-IF instruction from S-mode using that descriptor address. It shall pin/retain buffer ownership until all AXI traffic is drained and the CV-X-IF result is retired. For non-coherent DMA it shall clean descriptor/input cache lines and issue the required memory fence before launch; for output buffers it shall clean and invalidate dirty cache lines before launch, then invalidate output lines after all DMA responses are drained and before successful user access. Tensor buffers shall use `PARA_DMA_ALIGN_BYTES`-aligned bases and declared spans, with operation-defined outer pitches aligned to the same value; descriptors remain 64-byte aligned. No DMA buffer or descriptor may share a CPU cache line with unrelated data. On failure, tensor-output buffers remain invalid under REQ-ERR-003 and shall not be returned as valid output. U-mode shall not access the APB CSR/error-record aperture; the driver may report sanitized status but shall not expose unrelated physical fault addresses.",
+      "source": "User decision 2026-11-18; DEC-025/027/030; REQ-ERR-003; REQ-IF-003",
+      "verification": "Driver/core integration tests for forged/stale/cross-owner handles, bounds/overflow, permissions, aliasing, noncontiguous spans, descriptor protection, multi-hart alias/dirty-output cache ownership, failed-producer suppression in a dependent sequence, device-only producer/consumer visibility, CSR access, and no-issue-on-rejection"
+    },
+    "REQ-SEC-003": {
+      "statement": "The SoC integration shall configure the tensor DMA firewall with immutable build-time constants `TCOP_DMA_BASE` and `TCOP_DMA_LIMIT` defining the half-open physical aperture `[BASE,LIMIT)`, with `BASE<LIMIT`; the same constants shall be supplied to the trusted S-mode driver. For each AXI4 burst, the firewall shall calculate the complete byte span using checked arithmetic, including `AxADDR`, `AxLEN`, `AxSIZE`, and the defined burst-addressing rules, and decide the whole burst before forwarding any address or data downstream. A burst that wraps, starts outside the aperture, or crosses a boundary shall be denied in full. For a denied read, the firewall shall return exactly `ARLEN+1` read beats with zero `RDATA`, `RRESP=SLVERR` on every beat, the original `ARID`, and `RLAST=1` only on the final beat; it shall hold each response beat and its payload stable while `RVALID && !RREADY`, and shall not forward the AR request. For a denied write, it shall accept the AW request, consume exactly `AWLEN+1` W beats including the final `WLAST` beat without forwarding AW or W downstream, then return one `BRESP=SLVERR` with the original `AWID`, held stable through `BREADY` backpressure. This uses `SLVERR` because the address targets the SoC memory map but the firewall's access policy rejects it; `DECERR` remains the response for an address that the downstream interconnect cannot decode. In-aperture requests pass through and downstream response codes are preserved. A returned AXI error maps to `TC_ERR_AXI_READ` or `TC_ERR_AXI_WRITE`; no new status code is added. The firewall shall preserve the AXI4 requirement to complete every beat of an accepted read burst despite an error (REF-013, Part A3, Table A3-5 and A3-59..A3-60). `BASE/LIMIT`, permissions, and firewall placement are SoC integration constants/configuration, not tensor CSR state.",
+      "source": "User decision 2026-11-18; DEC-025/031/032; REQ-SEC-002; REF-013",
+      "verification": "Boundary, wrap, read-beat count/ID/RLAST, write-beat drain/B timing, backpressure stability, response mapping, and no downstream access tests"
+    },
+    "REQ-CLK-001": {
+      "statement": "The IP shall operate on a single core clock domain for the datapath; the optional CSR block shall use an asynchronous APB clock with an approved synchronizer.",
+      "source": "REF-003 CLK-01",
+      "verification": "CDC analysis"
+    },
+    "REQ-RESET-001": {
+      "statement": "The IP shall asynchronously assert and synchronously deassert reset per receiving domain, and clear all control/valid state to a defined idle value.",
+      "source": "REF-003 RST-02",
+      "verification": "Reset test"
+    },
+    "REQ-RESET-002": {
+      "statement": "A normal functional core reset shall be sequenced only after tensor-command quiesce and drain: stop accepting new tensor commands, resolve pending commit/kill and finish DMA for authorized work, consume every response for accepted AXI reads/writes, and wait for any OP-003 scalar-check fence to be acknowledged before clearing command/ID state. The tensor IP shall not implement local AXI abort, timeout completion, or isolation. If an accepted AXI request fails to return its required response before the SoC watchdog timeout, the SoC shall initiate a full SoC reset as the sole recovery action. That reset shall reset all CPU harts, the tensor IP, the AXI interconnect, and every on-SoC transaction agent that can retain or return the outstanding transaction; release shall ensure no pre-reset response can be matched to a post-reset command. The in-flight CV-X-IF instruction is abandoned by reset and produces no tensor result or local timeout status. Any possibly written output is invalid under REQ-ERR-003. Watchdog threshold/owner, reset-domain coverage/release, reset-cause capture, and software restart behavior are SoC integration details in DEC-029; ordinary functional reset still uses the quiesce/drain sequence in DEC-028.",
+      "source": "User decisions 2026-11-17; DEC-023/028/029/021",
+      "verification": "Normal quiesce/drain plus scalar-fence release and full-SoC timeout-reset sequencing"
+    },
+    "REQ-REG-001": {
+      "statement": "When the CSR block is present, offset 0x0 shall be the read-only version register with major[31:16] and minor[15:0].",
+      "source": "REF-005",
+      "verification": "Simulation"
+    },
+    "REQ-PARAM-001": {
+      "statement": "The systolic-array dimensions shall be elaboration-time parameters restricted to the legal set of §8.",
+      "source": "user answer 2026-11-15",
+      "verification": "Elaboration/lint"
+    },
+    "REQ-PARAM-002": {
+      "statement": "Precision datapath capability shall be an elaboration-time parameter; `PARA_DATA_PREC=0` shall provide INT8 only and `=1` shall provide INT8, BF16, and FP16 datapaths. The operation/precision pairs legal in a release remain limited to §9.1; presence of a datapath shall not imply support for every operation in that precision. Each accepted command shall latch one supported, release-qualified command-wide precision and use it consistently for every tensor input/output element and all of that command's tiles; a descriptor shall not specify a different format per operand. Illegal parameter values, absent precisions, and unqualified operation/precision pairs shall be rejected as defined in §12.",
+      "source": "User answer 2026-11-15; runtime precision behavior; DEC-017",
+      "verification": "Elaboration/lint, command-to-command precision switching, and uniform-format checks"
+    },
+    "REQ-PARAM-003": {
+      "statement": "The algorithm capability mask shall independently include or exclude the defined operation families at elaboration; illegal dependencies shall be rejected. Elaboration shall fail if an enabled family has no structurally legal candidate `(operation_id, precision_id)` pair in the selected precision and control build. An engineering build may exercise candidate pairs. A released build shall expose only its qualified pairs and shall not advertise a family with no qualified pair. Each operation ID shall map to exactly one capability-mask family known at issue. The instruction precision and operation ID pair shall also be checked against the released operation/precision matrix in §9.1. A descriptor shall not change either selection. If the family is disabled, the precision is absent from the build, or the pair is not release-qualified, issue shall be refused with `issue_resp.accept=0`, no queue allocation, and no result. An invalid algorithm-specific descriptor mode discovered after acceptance shall complete with `TC_ERR_DESCRIPTOR_MODE` per §12.",
+      "source": "User decisions 2026-11-15/16; DEC-002/013/015/017; REF-001 §5.5.6",
+      "verification": "Elaboration checks; issue-acceptance/result-count checks; post-accept descriptor-mode fault checks"
+    },
+    "REQ-PARAM-004": {
+      "statement": "Release 1 shall elaborate only `PARA_MEM_PATH=0`, with fixed AXI4 manager ports and banked local SRAM. Unsupported parameter values shall fail elaboration. The selected path shall preserve descriptor, operand and result ownership and ordering. CV-X-IF memory ports shall not be assumed for REF-001 v1.0.1-dev.0.",
+      "source": "user answer 2026-11-15; REF-001 §5.5.9–§5.5.10",
+      "verification": "Elaboration/lint and path-specific protocol verification"
+    },
+    "REQ-PARAM-005": {
+      "statement": "The IP shall provide elaboration-time configuration for five pipeline boundaries: operand capture, multiplier/product-combine output to accumulator input, accumulator-to-epilogue, post-processing output, and memory response. PE forwarding and accumulator feedback remain fixed. Every legal configuration shall preserve arithmetic results, transaction ordering, and handshake behavior. Legal values/configurations shall be enumerated in §8 before RTL freeze.",
+      "source": "User request 2026-11-15",
+      "verification": "Elaboration, equivalence, protocol checks, and static timing analysis"
+    },
+    "REQ-ERR-001": {
+      "statement": "The IP shall reject an unknown opcode at issue and shall complete every accepted, committed, non-killed command that encounters an illegal operand configuration or detected execution error after all accepted AXI requests have returned responses and traffic is drained; the observable error encoding shall follow DEC-010. AXI `SLVERR`/`DECERR` and detected protocol faults with a returned response follow the normal per-command error completion path. If a required `R/B` response does not arrive before the SoC timeout watchdog expires, the SoC shall perform the full SoC reset required by REQ-RESET-002; the interrupted CV-X-IF instruction is abandoned, and no tensor result, `TC_ERR_AXI_TIMEOUT`, or tensor-local CSR completion is generated. Concurrent command faults select the highest-priority status in DEC-012 only when all required responses arrive and a normal command completion is possible; AXI error data shall not enter numerical classification. Another queued command shall not be corrupted during normal error completion.",
+      "source": "REF-001 §5.5.11; product behavior; user decisions 2026-11-16/17; DEC-029",
+      "verification": "Response-error and missing-response fault injection; full-SoC reset sequencing"
+    },
+    "REQ-ERR-002": {
+      "statement": "When APB CSR is present, the first accepted, committed, non-killed command error shall atomically capture hartid, CV-X-IF transaction ID, final DEC-012 status, associated DMA byte address, AXI transaction ID, and the reserved-zero detail field in the one-entry sticky record. Fields without an applicable value are zero. In release 1, `tcop_err_detail.detail` shall read zero for every status and has no subcode semantics under DEC-020. APB snapshot publication must be acknowledged in CLK-CORE before the failed command asserts result_valid (DEC-072). After it is safely retired, the scheduler shall not start a younger queued command until software clears err_valid with W1C and the clear acknowledgment has crossed into CLK-CORE. The record remains unchanged while valid. Under DEC-076 an APB-visible ordinary record asserts the level service IRQ. Both IRQ and bounded fallback polling schedule the same serialized service, which attributes the record by generation and writes W1C exactly once. Fenced OP-003 does not assert this IRQ. For ordinary commands, issue may continue until the command queue is full, with normal backpressure and ordering. OP-003 is additionally governed by REQ-ERR-004: the global scalar fence prevents any younger command from being accepted until the zero result has been checked and acknowledged.",
+      "source": "User decisions 2026-11-16; DEC-010/012/020/021",
+      "verification": "Queued error injection, multi-fault priority, atomic-record retention, W1C/CDC, scalar-fence, and resume verification"
+    },
+    "REQ-ERR-003": {
+      "statement": "For an accepted command with a tensor-output destination, any post-acceptance execution error invalidates the entire command output, whether or not any output beat/tile has reached memory. The hardware shall not promise rollback or per-tile validity. For errors with returned AXI responses, it shall stop launching unstarted work, finish both AW and W obligations for every write whose AW or W has already been offered, and collect their eligible B responses before reporting an execution-error completion. Success shall be reported only after every required output write response is successful. After an execution error or any reset that interrupts the command, including the full SoC reset triggered by an AXI timeout, software shall not consume the destination; it shall reinitialize or reallocate the destination and retry the entire command. Software shall keep the destination cache-line aligned and exclusively owned by the accelerator until completion, then apply the required non-coherent cache maintenance before CPU access. This requirement does not create a tensor-memory output for scalar-only commands.",
+      "source": "User decision 2026-11-17; DEC-022/023/029",
+      "verification": "Inject returned errors and timeout reset after partial writes; verify invalid-output software contract and full-command retry"
+    },
+    "REQ-ERR-004": {
+      "statement": "OP-003 REDUCE shall use a global scalar-result fence in PARA_CTRL_MODE=2. The privileged driver shall hold a system-wide tensor-submission lock shared by all connected harts, wait for tcop_sts.busy=0, wait for the service hart to reconcile any earlier ordinary error, take exclusive CSR ownership under DEC-075, then issue OP-003 with rd!=x0. Hardware shall independently accept OP-003 only at a clean global boundary with no other accepted CV-X-IF command/operand/commit context, queued/active command, result transaction, outstanding AXI transaction, or valid first-error record; otherwise it shall apply issue backpressure (issue_ready=0) without accepting or rejecting the instruction. The top-level arbiter shall accept at most one tensor instruction across all hart endpoints per CLK-CORE cycle; simultaneous requests are arbitrated, and OP-003 acceptance excludes any other acceptance in that cycle. Acceptance shall atomically assert a global fence and block later tensor-instruction acceptance from every hart using normal issue backpressure. The fence remains through result backpressure. A nonzero result releases it at result handshake. A zero result, whether valid or the selected error payload, retires the CV-X-IF result but keeps tcop_sts.busy=1 and the fence asserted until software checks err_valid, reads the full record if valid, W1C-clears an error if present, writes tcop_ctrl.scalar_ack=1, and the clear/acknowledge handshakes reach CLK-CORE. At this point err_valid=0 identifies a valid zero; err_valid=1 before W1C identifies this OP-003 failure. A scalar-ack write with no pending zero-result check shall be discarded and shall not authorize a future command. A kill before non-kill commit cancels the command and its reserved fence without a result. Ordinary quiesce/reset waits for fence release. The CSR request crosses asynchronously as a held request until consumed; error-record W1C is synchronized before release.",
+      "source": "User decision 2026-11-17; DEC-010/021; CSR map v1.1",
+      "verification": "Clean-boundary admission, atomic all-hart gating, valid-zero/error-zero discrimination, APB W1C/ack CDC order, spurious ack, kill, quiesce, and multi-hart verification"
+    },
+    "REQ-ERR-005": {
+      "statement": "For accepted INT8 OP-001 dense GEMM and OP-008 2:4 sparse GEMM, after descriptor/schema, shape, address and all checked tensor-span validation but before any numeric activation/weight-value read, array launch, MAC or output write, compute a conservative per-output-accumulator magnitude bound: B=Nprod*128*128+128*Naddends, where Nprod=K for OP-001 and Nprod=K/2 for OP-008 because the operation schedules exactly two product slots per four K positions; Naddends counts present initial-C, bias and residual terms (0..3). Each addend is signed INT8 in the same accumulator integer scale. Do not trust descriptor-claimed bounds. Use non-wrapping extended or saturating bound arithmetic; proceed only when B<=2^(PARA_ACCUM_W-1)-1. If over the limit, return TC_ERR_ACCUM_RANGE with the issue-time result class, no metadata/numeric tensor DMA, MAC or output write, record the mode-2 CSR error when present, and invalidate the whole destination. For OP-008, after the bound passes, validate each scheduled metadata tile before fetching that tiles activation or packed-weight numeric values; a malformed tile returns TC_ERR_SPARSE_METADATA, performs no numeric read/MAC/output write for that tile, stops unstarted tiles, drains active work, and invalidates the whole destination. Earlier valid tiles may already have read operands or written partial output; software shall discard the entire destination. Any AXI failure follows DEC-012. Descriptor/schema/span errors occur before the bound and suppress it.",
+      "source": "User decisions 2026-11-18 and 2026-11-19; DEC-017/036/063; §9.1",
+      "verification": "Bound boundary/addend extrema; no numeric traffic on over-bound; per-tile malformed metadata isolation; partial-output invalidation; deterministic status and CSR tests"
+    },
+    "REQ-PERF-001": {
+      "statement": "For dense INT8 GEMM, every active PE across the selected arrays shall sustain one MAC result per cycle after pipeline fill. For valid INT8 2:4 sparse commands, the paired-MAC datapath shall accept two selected product slots per assigned PE per cycle after pipeline fill; a packed value may be zero, so report selected-product rate rather than claiming every product is numerically nonzero. Other sparse precisions shall have separately reported throughput. Memory, metadata, backpressure, and legal-configuration stalls shall be reported separately.",
+      "source": "User answer 2026-11-15; paired sparse lanes selected 2026-11-15; DEC-062",
+      "verification": "Simulation / analysis"
+    },
+    "REQ-FUNC-007": {
+      "statement": "Each accepted command shall latch its operation_id from funct7[31:25], precision from funct3[14:12], and operation-specific mode from its own descriptor/inline payload. The command queue shall normally accept a following command with a different mode while an earlier command executes when space is available; OP-003 is the explicit exception and its global scalar fence in REQ-ERR-004 backpressures issue from every hart until release. All metadata shall remain isolated per command. The selected operation, precision, and mode are immutable from acceptance through completion. The operation ID determines result class at issue and a descriptor cannot override it. A family disabled by the elaboration-time capability mask is refused at issue with accept=0; an unsupported value inside an accepted descriptor returns TC_ERR_DESCRIPTOR_MODE. Neither case may corrupt another command.",
+      "source": "User request 2026-11-15; user decisions 2026-11-16/17; REF-001 §5.5.6; REF-011 §2.2; REQ-ERR-004",
+      "verification": "Directed/constrained-random simulation with field decoding, mode changes, issue rejection, accepted descriptor-mode errors, and OP-003 fence behavior"
+    },
+    "REQ-PERF-002": {
+      "statement": "For every released configuration, the design team shall report latency (1) as measured p50/p95/p99 product KPIs under named workloads and traffic/backpressure conditions and (2) as a deterministic conditional upper bound under a separately signed host safe-frontier, shape, queue, result-ready, memory-service, SRAM, and arbitration envelope. Use these timestamps: `T_accept` is the accepted CV-X-IF issue handshake; `T_commit` is its matching non-kill safe-commit; `T_result_valid` is the first cycle the result is presented; `T_result_fire` is the result-valid/result-ready handshake; `T_event` is interrupt/debug event selection; `T_handler` is precise handler/debug entry. Report accept-to-commit host delay, commit-to-result-valid accelerator delay, result-valid hold/backpressure, accept-to-result-fire end-to-end completion, and event-to-handler-entry separately; killed-before-commit commands have no tensor latency/result. A percentile is not a worst-case guarantee. The conditional hard bound is valid only while every signed assumption holds; if safe-frontier resolution, result-ready, or AXI service is unbounded, no finite accept-to-fire/handler-entry bound may be claimed. A missing AXI response that reaches the SoC watchdog causes full-SoC reset, so no result or handler-entry guarantee applies across that fatal event. Also report sustained throughput, utilization, and issue stalls; multi-hart configurations shall measure OP-003 global-fence impact separately from its zero-result CSR/W1C/acknowledgment interval. Numeric latency thresholds, throughput targets, workload sample protocol, and service guarantees remain open under DEC-018/039; the first-build OP-001/OP-008 M/N/product/tile/span caps are selected by DEC-064.",
+      "source": "User request 2026-11-15; DEC-018/021/029/033/035/039",
+      "verification": "Cycle-accurate simulation, trace and system workload measurement; derive conditional bounds from host frontier, maximum shape/backlog, and approved service envelopes; report every timestamp interval and OP-003 fence/zero-check overhead separately"
+    },
+    "REQ-FUNC-008": {
+      "statement": "When enabled, the IP shall execute exact tiled attention with per-tile softmax state and the causal/non-causal masking behavior defined in §9–10, without writing the full score matrix to external memory. Before Q/K/V numeric reads, it shall validate `head_count` against `PARA_MAX_ATTN_HEADS=64`, query/context lengths against `PARA_MAX_ATTN_Q/KV=2,048`, each head's V feature width against `PARA_MAX_ATTN_V_HEAD_WIDTH=128`, and descriptor-derived aggregate Q/K and V widths against `PARA_MAX_ATTN_QK_WIDTH=PARA_MAX_ATTN_V_WIDTH=4,096`; zero, over-cap, or unrepresentable dimensions return `TC_ERR_SHAPE` with no numeric operand DMA or output write. First-release attention heads use uniform per-head dimensions; aggregate width is `head_count × per_head_feature_width`, checked for overflow. The QK+PV MAC work bound is `batch_count × Lq × Lkv × (W_QK + W_V)` and shall use checked multiplication; row/softmax work also depends on `batch_count × head_count × Lq`. A zero, over-cap, or unrepresentable head count returns `TC_ERR_SHAPE`. The first build shall accept `batch_count` in 1..`PARA_MAX_ATTN_BATCH=4`; zero or above-cap values return `TC_ERR_SHAPE` after descriptor validation and before Q/K/V numeric reads. DEC-044 selects one descriptor with per-sample tensor mapping; DEC-046 selects bounded sample waves whose actual concurrency is limited by both `PARA_ATTN_MAX_ACTIVE_SAMPLES` and `PARA_ATTN_MAX_ACTIVE_CONTEXTS`; release values and SRAM resources remain subject to DEC-048 signoff. DEC-045 selects keeping each active query/head tile's `m/l/o` in SRAM through its K/V loop; DEC-047 selects DMA-managed tile SRAM backed by non-coherent AXI4; DEC-048 selects build-static tile/context parameters and DEC-049 sets the per-head V-width cap. Exact tile/burst dimensions and memory service remain subject to implementation signoff.",
+      "source": "User request 2026-11-15; algorithm approach supported by REF-006/007; numeric contract DEC-058/REQ-FUNC-020",
+      "verification": "Simulation against exact reference, shape-boundary/no-DMA checks, SRAM sizing analysis, and memory-traffic analysis"
+    },
+    "REQ-FUNC-009": {
+      "statement": "Release 1 OP-008 supports INT8 only. Let N be logical output channels and G=K/4. For q=g*N+n (0<=g<G, 0<=n<N), metadata nibble bits[1:0]=p0 and bits[3:2]=p1 select K positions 4g+p0 and 4g+p1. A group is valid iff p0<p1, giving nibble values 0x4, 0x8, 0x9, 0xC, 0xD, 0xE. Even q uses the low nibble, odd q the high nibble; if N*G is odd, the unused final high nibble is zero. Packed signed INT8 values follow `[g][n][slot]`; slot 0 maps to p0 and slot 1 to p1. A stored zero is legal and still consumes a lane. Checked spans are 2*N*G bytes for values and ceil(N*G/2) bytes for metadata. Validate all descriptor shapes, addresses and spans first. Then, for each scheduled sparse tile, fetch and validate every metadata nibble and relevant tail padding before any activation or packed-weight numeric read, MAC or output write for that tile. A malformed tile returns `TC_ERR_SPARSE_METADATA`, has no numeric reads/MAC/output for that tile, stops unstarted tiles and drains prior work; earlier tiles may have partial writes, but the entire command destination is invalid under REQ-ERR-003 and software discards it. Metadata validation for the next tile may overlap current-tile compute when staging resources allow; no invalid selector may control an activation gather. The two selected products are formed in parallel, combined and applied as one accumulator update.",
+      "source": "User request and paired-lane choice 2026-11-15; DEC-007/062/063; REF-008",
+      "verification": "All six legal codes; invalid nibble/tail; checked spans; payload mapping; zero slots; per-tile no-data-on-error; partial-output invalidation; AXI/error priority and prefetch overlap"
+    },
+    "REQ-FUNC-010": {
+      "statement": "When enabled, the IP shall execute low-latency vector/decode operations with the selected precision and result contract equivalent to the corresponding mathematical operation. The family includes matrix-vector/small-M projection and OP-004 greedy-token selection using the elaborated implementation defined by REQ-FUNC-014/REQ-PARAM-010; the operation ID fixes its scalar result class at issue.",
+      "source": "User request 2026-11-15; scalar greedy-token operation selected 2026-11-16",
+      "verification": "Simulation and batch-one latency benchmark"
+    },
+    "REQ-FUNC-011": {
+      "statement": "The runtime shall be able to select dense tiled GEMM independently of fused attention and structured sparse GEMM; these modes shall report distinct latency and throughput results.",
+      "source": "User request 2026-11-15",
+      "verification": "Directed simulation and mode-specific benchmarks"
+    },
+    "REQ-PARAM-006": {
+      "statement": "The elaboration-time algorithm capability mask shall gate synthesis of optional algorithm hardware; each enabled family shall be selectable at runtime, while a family absent from the build shall be refused at issue with `accept=0`, no queue entry, and no result. Descriptor-only invalid modes discovered after acceptance shall use `TC_ERR_DESCRIPTOR_MODE`.",
+      "source": "User request 2026-11-15; user decision 2026-11-16",
+      "verification": "Elaboration, synthesis hierarchy review, issue-rejection and post-accept descriptor-mode simulation"
+    },
+    "REQ-FUNC-012": {
+      "statement": "When enabled by `PARA_ALGORITHM_MASK[6]`, the IP shall execute OP-009 kernelized causal linear attention only with the fixed release-1 `feature_map_id=0 ELU_PLUS_ONE` contract in REQ-FUNC-023. It shall use BF16/FP16 Q/K/V/output, FP32 recurrent state and normalization, causal update-before-output semantics, explicit RESET/CONTINUE state handling, finite per-operation shape/work/state caps, and the specified state-record validation. It is an approximation and shall never be reported as standard softmax attention or selected automatically as a fallback for OP-005.",
+      "source": "User decision 2026-11-15; DEC-008/061; REF-009",
+      "verification": "Fixed-reference simulation; state reset/continue; cap/no-DMA; feature-map error; numeric/state errors; model-quality study"
+    },
+    "REQ-PARAM-007": {
+      "statement": "The command-context capacity shall be an elaboration-time parameter with a minimum of two outstanding descriptors, counting the active command: one command may execute while at least one following command with a different mode waits in the queue. Queue-full behavior shall apply backpressure without losing, reordering, or mixing commands.",
+      "source": "User request 2026-11-15; queueing recommendation in §10.2.1",
+      "verification": "Elaboration and queue-full/backpressure simulation"
+    },
+    "REQ-PARAM-008": {
+      "statement": "The number of systolic-array instances shall be selected by an elaboration-time parameter from the legal set in §8; the generated hierarchy and ideal peak-throughput calculation shall match the selected count.",
+      "source": "User request 2026-11-15",
+      "verification": "Elaboration, hierarchy inspection, synthesis resource count, and analytical peak calculation"
+    },
+    "REQ-PARAM-009": {
+      "statement": "An operation ID whose successful result is written as scalar data to an integer GPR shall be supported only when PARA_CTRL_MODE=2 includes APB CSR and shall require rd!=x0. This includes OP-003 REDUCE and OP-004 greedy-token index. Such IDs shall be rejected at issue in mode 0 or when rd=x0. For an accepted OP-004 failure, rd shall receive TC_INVALID_TOKEN_INDEX (all ones at XLEN), and the sticky CSR shall capture hartid, CV-X-IF id, and status before completion; the maximum legal vocabulary length shall exclude the sentinel. Software may use non-sentinel OP-004 results immediately. On the sentinel path, the submitting driver obtains the saved error by command handle. The DEC-075 service hart owns the ordinary OP-004 CSR read and W1C. For an accepted OP-003 failure, rd shall receive zero and the sticky CSR shall capture the error before completion. The global scalar fence in REQ-ERR-004 makes err_valid=0 after a zero result mean success and err_valid=1 mean the fenced OP-003 failure; software shall send tcop_ctrl.scalar_ack=1 only after inspecting that state and reading/W1C-clearing any error. CSR offsets and the read/W1C/ack sequence are defined in §11; `tcop_err_detail.detail` is reserved zero in release 1 per DEC-020.",
+      "source": "User decisions 2026-11-16/17; DEC-010/020/021",
+      "verification": "Build/issue checks and scalar-fence/error-path simulation"
+    },
+    "REQ-FUNC-013": {
+      "statement": "The scheduler shall assign independent output tiles or attention heads to available arrays and preserve each command's mode, precision, transaction ID, and result ownership. GEMM K-reduction and attention online-softmax state shall remain attached to the owning output tile; any cross-array reduction shall follow the operation's defined arithmetic order and rounding rules.",
+      "source": "User request 2026-11-15; multi-array implementation requirement",
+      "verification": "Multi-array simulation against a tiled reference and transaction-order assertions"
+    },
+    "REQ-FUNC-014": {
+      "statement": "When enabled, the IP shall support greedy-token selection (`ARGMAX`) over a completed logits vector, using the implementation selected at elaboration by `PARA_ARGMAX_IMPL`: standalone logits-vector reduction when `=0`, or fused final vocabulary projection plus argmax when `=1`. Both variants shall return the unsigned index of a maximum-valued element through the same scalar-result operation ID, require `PARA_CTRL_MODE=2` and `rd!=x0`, and use the sticky CSR error path on failure. Compare each candidate at the highest precision still available at the argmax input: standalone compares the exact values decoded from the descriptor-declared storage format without another lossy conversion; fused BF16/FP16 projection starts each channel at FP32 +0 and performs one RNE FP32 FMA per logical feature in increasing order, carrying the value through tile boundaries. It adds optional model bias once in FP32 RNE after the dot and compares that FP32 score directly. Operands and bias widen exactly and FP arithmetic preserves gradual underflow and IEEE signed zero (DEC-069). fused INT8 projection compares `a_j*M_j*2^(e_j-31)` using the validated per-channel REQUANT8 vector before lossy rounding. INT8 fused bias is unsupported in release 1. A common positive activation scale cancels, but per-channel weight scales do not, so raw accumulators shall not be compared. The fixed-width exact compare algorithm is normative in companion §10.3. At every lane/tile/array merge, update the winner when the candidate score is greater, or when scores are exactly equal in that compare representation and the candidate token index is smaller; do not use an epsilon or completion-arrival order. No softmax is computed for argmax. For every valid FP16/BF16 standalone candidate or FP32 fused candidate, any NaN shall fail OP-004 with `TC_ERR_NUMERIC_NAN`; `-Inf` shall be excluded as a masked candidate; `+Inf` shall be a valid maximum and ties use the lower-index rule; if every valid candidate is `-Inf`, OP-004 shall fail with `TC_ERR_ARGMAX_NO_VALID_LOGIT`. Numerically equal signed zeros tie. Fused projection handles FP infinity/NaN per OP-004, including infinity from FP32 overflow and NaN from invalid IEEE arithmetic. It does not apply the OP-001 non-finite rejection policy. Invalid/padding lanes shall be ignored before classification. The descriptor shall require `1 <= vocab_length <= PARA_MAX_ARGMAX_VOCAB`; the first bounded build sets `PARA_MAX_ARGMAX_VOCAB=65,536` for both `PARA_ARGMAX_IMPL` values, and zero or over-cap length shall return `TC_ERR_SHAPE` after descriptor validation but before any logits, activation, or vocabulary-weight numeric read. For fused `PARA_ARGMAX_IMPL=1`, the descriptor shall require `1 <= input_width <= PARA_MAX_ARGMAX_INPUT=4,096`; its encoding shall represent 4,096 (minimum 13 bits; exact offset/width is in companion §10.3), and zero or over-cap width shall return `TC_ERR_SHAPE` before activation or vocabulary-weight numeric reads. On either accepted numeric failure, capture CSR status before completing with `TC_INVALID_TOKEN_INDEX` and `result.we=1`. Detection shall stop issuing unstarted tiles, safely drain accepted memory/array work, then complete the command. The descriptor shall identify the selected input schema and be rejected if it disagrees with the built implementation. The maximum legal vocabulary length shall be less than `2^XLEN`, reserving `TC_INVALID_TOKEN_INDEX = {XLEN{1'b1}}` for accepted execution errors. Bit-identical compare-domain scores shall produce the same token index across implementations; if storage and fused accumulator precisions differ, a close-score winner may differ because standalone cannot recover bits already rounded away. Runtime application-supplied logit bias is deferred; if added later, the descriptor shall name its vector/sparse-list format and IF-003 address, and the adjustment shall be added before the same comparator. This operation does not implement top-k/top-p or stochastic sampling.",
+      "source": "User decisions 2026-11-16; DEC-005/010; compare, tie, and non-finite policies selected 2026-11-16",
+      "verification": "Reference simulation across compare formats, lane/tile/array ties, NaN/+Inf/-Inf, vocabulary cap boundaries, sentinel boundary, and accepted read faults"
+    },
+    "REQ-FUNC-015": {
+      "statement": "OP-001 shall define logical matrices A[M,K], B[K,N], and C[M,N] independent of storage orientation. Its descriptor shall provide independent transpose_A and transpose_B flags restricted to 0 or 1; both flags are runtime-selectable in every build with algorithm-mask bit 0 enabled. Flag 0 uses row-major storage in logical order; flag 1 treats the input as row-major storage of the transposed physical shape. The logical element addresses are A_base+i*S_A_M+k*S_A_K, B_base+k*S_B_K+j*S_B_N, and C_base+i*S_C_M+j*S_C_N. For transpose_A=0 require S_A_K=element_bytes and S_A_M>=K*element_bytes; for transpose_A=1 require S_A_M=element_bytes and S_A_K>=M*element_bytes. For transpose_B=0 require S_B_N=element_bytes and S_B_K>=N*element_bytes; for transpose_B=1 require S_B_K=element_bytes and S_B_N>=K*element_bytes. C output is always logical row-major with S_C_N=element_bytes and S_C_M>=N*element_bytes; output transpose is unsupported. All products and pitches use checked arithmetic; invalid flag values return TC_ERR_DESCRIPTOR_MODE, and a shape/stride mismatch returns TC_ERR_SHAPE before numeric tensor DMA. The exact byte offsets are fixed in the instruction-set companion §10.3.",
+      "source": "User decision 2026-11-19; DEC-051/052; REQ-IF-009; §10.2.2",
+      "verification": "Directed simulation of all four transpose combinations, padded pitches, invalid flags/layouts, and no numeric DMA on invalid descriptors"
+    },
+    "REQ-FUNC-016": {
+      "statement": "For INT8 OP-001/OP-008, use symmetric signed INT8 activations, weights, and outputs with zero-point 0. Activation scale is common across K; weight scale is per logical output channel j; output scale is common to the output tensor. The OP body uses the DEC-050 tensor-reference fields for one physically contiguous rank-1 requantization metadata vector with extent N and byte stride 8; its physical base and declared allocation span meet REQ-IF-009 alignment. The required coefficient payload is 8*N bytes. The rank-1 record stride stays 8 bytes. The vector has exactly N 8-byte little-endian records, one for each logical output channel: bytes 0..3 `multiplier_q31` unsigned, byte 4 `exponent` signed two's-complement, bytes 5..7 reserved zero. A valid `multiplier_q31` is 0x40000000..0x7fffffff; a valid exponent is -31..+31. The pair represents r_j = (multiplier_q31 / 2^31) * 2^exponent, approximating (activation_scale * weight_scale[j]) / output_scale. The S-mode driver forms the pair from finite positive scales using nearest-even mantissa rounding and rejects nonrepresentable ratios; coefficient-format rounding error is at most 2^-31 relative to the target ratio, excluding source-scale error. After descriptor/schema, shape/address/span, and conservative accumulator-bound validation have succeeded, and before numeric activation/weight reads, array launch, MAC, or output writes, hardware shall read and validate the complete coefficient vector. For OP-008, this full-vector check may overlap validation of the first metadata tile when staging resources permit; no numeric activation/packed-weight read for that tile may start until both checks pass. Invalid multiplier, exponent, or nonzero reserved bytes returns `TC_ERR_REQUANT_COEFF`; invalid base alignment/span returns `TC_ERR_ADDRESS`. For each accumulator A_j, form signed P_j = A_j * multiplier_q31 in a signed intermediate of `PARA_ACCUM_W+32` bits; set shift = 31 - exponent (0..62), round P_j / 2^shift to nearest with exact ties to even, then saturate to [-128,127]. Define signed rounding symmetrically by rounding the magnitude and restoring the sign. Saturation, not wrap or truncation, produces the INT8 output. Apply permitted initial-C/bias/residual addends before this conversion. Requantization is pipelined with output channels; the whole coefficient vector is prevalidated before any tensor numeric data or output is touched. Activation order is specified by DEC-055.",
+      "source": "User decision 2026-11-19; DEC-017/036/053/054/055; REQ-IF-005; Sections 9.1 and 10.2.2",
+      "verification": "Bit-exact tests for signed products, coefficient encoding/bounds, exponent endpoints, ties-to-even, saturation, channel alignment, no numeric reads/output on invalid coefficients, accumulator range, and output invalidation"
+    },
+    "REQ-FUNC-017": {
+      "statement": "For fused INT8 OP-001/OP-008, the descriptor shall select `ACT_NONE`, `ACT_RELU`, or `ACT_LUT8`; unsupported values shall complete with `TC_ERR_DESCRIPTOR_MODE` before tensor numeric reads. The fixed order is accumulator-domain initial-C/bias/residual addends, DEC-053/054 requantization and INT8 saturation, optional activation, then output write. `ACT_RELU` clamps signed INT8 q to max(q,0). `ACT_LUT8` uses a 256-byte table embedded in the fixed operation schema; the signed INT8 preactivation bit pattern indexes the table, and each entry is signed INT8 output. The S-mode model packer generates `LUT[u8(q)] = sat8(round_to_nearest_ties_to_even(f(q*output_scale)/output_scale))` for its selected unary function f; hardware guarantees exact table lookup only. `ACT_NONE` and `ACT_RELU` require the table bytes to be zero; otherwise return `TC_ERR_DESCRIPTOR_FORMAT`. LUT8 adds no tensor DMA or command. Model accuracy for quantized GELU/SiLU/ReLU6 tables remains a model qualification item. SwiGLU is two-input and shall use OP-002, not this unary fused-GEMM mode.",
+      "source": "User instruction to follow the recommended INT8 epilogue; DEC-053/055",
+      "verification": "Exhaustive 256-entry table mapping, mode changes, invalid-mode/reserved-byte no-DMA checks, and model-reference comparison"
+    },
+    "REQ-FUNC-018": {
+      "statement": "OP-002 uses one operation mode and one activation mode per command. After validating op2_mode, select the build-time entry PARA_MAX_ELEMWISE_ELEMENTS[op2_mode]. For valid active X extents E, start count at 1 and reject before multiplication if count > floor(cap/E). Unused dimensions, padding and broadcast bias do not contribute to the element count. Independently, after validating present references, checked-sum their declared span_bytes by direction: X plus enabled RHS or bias for reads, and Y for writes. Count each enabled reference once, including its allocation padding, even when read-only references alias. Compare the sums against PARA_MAX_ELEMWISE_READ_SPAN_BYTES and PARA_MAX_ELEMWISE_WRITE_SPAN_BYTES. An element/span cap violation or cumulative sum overflow returns TC_ERR_SHAPE before numeric operand DMA, compute or output writes. REQ-IF-009 still governs malformed individual references. `op2_mode` values are `0=ADD`, `1=BIAS_ADD`, `2=RESIDUAL_ADD`, `3=SCALE`, `4=ACT_ONLY`, `5=SWIGLU`; values 6..255 return `TC_ERR_DESCRIPTOR_MODE`. `activation_mode` values are `0=NONE`, `1=RELU`, `2=GELU_TANH`, `3=SILU`, `4=LUT8`; values 5..255 return `TC_ERR_DESCRIPTOR_MODE`. ADD/RESIDUAL_ADD require equal shapes; BIAS_ADD adds a 1-D vector to the last axis; SCALE and ACT_ONLY are unary same-shape modes; SWIGLU requires equal gate/up shapes and intrinsically computes `SiLU(gate)*up`, so its activation_mode shall be NONE. ACT_ONLY requires a non-NONE activation. INT8 OP-002 uses signed symmetric values with zero-point 0 and one common real scale for all inputs/output in the command: ADD/BIAS_ADD/RESIDUAL_ADD use signed 16-bit exact integer addition then saturate once to [-128,127]; SCALE uses signed 32-bit `scale_q16_16`, alpha=`scale_q16_16/2^16`, computes the signed 40-bit product `x*scale_q16_16`, rounds nearest-even after a 16-bit shift, and saturates; ACT_ONLY applies the selected activation; SWIGLU first maps gate through the descriptor's 256-byte SiLU LUT, multiplies by up in signed 16 bits, then applies the DEC-054 Q31 coefficient record representing the common input scale and saturates to INT8. INT8 RELU is signed max(q,0); INT8 nonlinear GELU and SiLU use a software-generated LUT8. Encoding GELU_TANH or SILU as the OP-002 activation selector in INT8 mode returns TC_ERR_DESCRIPTOR_MODE. In SwiGLU the SiLU LUT is intrinsic and uses activation_mode=NONE. For INT8 ADD/BIAS_ADD/RESIDUAL_ADD/SCALE, optional activation is applied after the single saturation; ACT_ONLY does not add or requantize. LUT8 table entries are signed INT8 and are indexed by the preactivation raw byte; for modes other than SWIGLU the table must be zero unless activation_mode=LUT8. All INT8 arithmetic has defined widths and no wrap. BF16/FP16 inputs are exactly widened to IEEE FP32; each arithmetic node rounds to FP32 nearest-even. ADD/BIAS_ADD/RESIDUAL_ADD add in the stated order, SCALE multiplies by the descriptor FP32 scalar, ACT_ONLY evaluates the activation, and SWIGLU evaluates SiLU(gate)*up; output converts once to command precision using nearest-even, preserves subnormals and signed zero, overflows to signed infinity, and canonicalizes NaN. FP32 GELU_TANH uses `0.5*x*(1+tanh(0.7978845608*(x+0.044715*x^3)))`; FP32 SILU uses `x/(1+exp(-x))`. The shared pipelined function unit shall produce absolute error <=2^-10 for finite inputs in [-10,10]; GELU_TANH returns signed zero for -Inf and +Inf for +Inf; SILU returns -0 for -Inf and +Inf for +Inf; all NaN inputs produce the canonical quiet NaN. INT8 SWIGLU uses the named SiLU LUT and DEC-054 coefficient; unsupported mode/activation pairs or malformed reserved bytes are rejected before tensor numeric reads/output writes.",
+      "source": "User instruction to follow recommended OP-002 submode/numeric closure; DEC-056",
+      "verification": "Independent bit-accurate model; all mode/activation pairs; saturation/tie cases; NaN/Inf/zero; malformed descriptors; no-DMA rejection"
+    },
+    "REQ-FUNC-019": {
+      "statement": "OP-003 reduces exactly one descriptor-selected vector using `reduce_mode=0 SUM` or `1 MAX`; other values return `TC_ERR_DESCRIPTOR_MODE`. The first build sets `PARA_MAX_REDUCE_ELEMENTS=1,048,576`; length must be 1..cap and is checked before numeric reads. INT8 SUM uses an exact signed 32-bit accumulator and returns the signed raw-integer sum sign-extended to XLEN; the first-build cap proves the worst magnitude is <=134,217,728. Any release-1 build with OP-003 must cap the vector at no more than 16,777,216 elements so the worst negative sum fits signed 32 bits. INT8 MAX uses signed comparison and returns the sign-extended winning INT8 value. BF16/FP16 SUM widens inputs to FP32 and uses a fixed, index-based balanced binary tree over logical indices; absent leaves are +0, each node rounds to FP32 nearest-even, and array/tile completion order shall not change pairing. BF16/FP16 MAX compares decoded values, returns the winning input's original 16-bit encoding zero-extended to XLEN, and resolves equal signed zeros in favor of +0. For either floating reduction, any input NaN or intermediate NaN (including +Inf + -Inf in SUM) returns `TC_ERR_NUMERIC_NAN`, `rd=0`; otherwise infinities follow IEEE arithmetic/comparison. SUM output converts FP32 once to command precision nearest-even; the low 16 bits of `rd` contain the BF16/FP16 encoding and upper bits are zero. Successful scalar results require `PARA_CTRL_MODE=2` and `rd!=x0`. Evaluate the zero-result fence trigger on the complete integer GPR writeback bits. A floating-point negative zero encoding such as 0x8000 is a nonzero payload and releases the fence on the result handshake. On accepted failure the issue-time scalar result class is preserved, rd is zero, and the global scalar fence/CSR protocol distinguishes failure from a valid zero. Internal reductions used by attention, softmax, layer normalization, or argmax remain inside their tensor command and never write an intermediate GPR.",
+      "source": "User instruction to follow recommendations; DEC-057",
+      "verification": "Independent integer/FP reference; exact tree pairing; mode/shape boundaries; zero/error fence; NaN/Inf/signed-zero cases; no-DMA rejection"
+    },
+    "REQ-FUNC-020": {
+      "statement": "OP-005 exact attention accepts only BF16/FP16 tensor operands/results and widens Q/K/V to FP32. A descriptor supplies finite positive binary32 `attention_scale`; a non-finite/nonpositive scalar returns `TC_ERR_DESCRIPTOR_FORMAT` before operand DMA, and the software packer normally sets RNE(1/sqrt(Dqk)). `mask_mode=0 NONE`, `1 CAUSAL`, or `2 BOOL`; other encodings return `TC_ERR_DESCRIPTOR_MODE` before numeric DMA; causal mode uses per-sample unsigned 32-bit `query_position_start[b]` and key index k is valid iff `k <= query_position_start[b] + query_index`, with key positions based at zero; checked overflow of any `query_position_start[b] + Lq - 1` returns `TC_ERR_SHAPE` before numeric DMA. BOOL uses one byte per (batch, query, key), any nonzero byte meaning valid and the same mask shared across heads. For NONE/BOOL, query_position_start shall be zero; non-BOOL modes have no mask tensor. No additive bias, sliding-window, or arbitrary broadcast mask is supported. QK is an increasing-feature-index FP32 fused multiply-add chain with RNE after every FMA, then multiplied by attention_scale and rounded FP32. Use the DEC-070 per-row empty-state and centered-exp rules. For every query row and nonempty K/V tile, invalid positions are excluded before max; update `m_new=max(m,rowmax(scores))`, `alpha=exp(m-m_new)`, `p_k=exp(score_k-m_new)` for valid keys and zero otherwise, `l_scaled=RNE(alpha*l)`, `l_tile=fixed-balanced-sum(p)` with RNE at each tree node, `l_new=RNE(l_scaled+l_tile)`, `o_scaled=RNE(alpha*o)`, `o_tile=fixed-balanced-sum(RNE(p_k*V_k))` with RNE at each product/tree node, and `o_new=RNE(o_scaled+o_tile)`. Tiles are processed in increasing key order; sums within each tile use a fixed balanced tree in increasing key index. `m/l/o` are FP32, `o/l` uses a pipelined reciprocal, and the final output converts once to command precision nearest-even. `exp(x)` is within absolute error 2^-20 on [-16,0], returns zero for x<-16, returns exactly 1 for x=0, and clamps outputs to [0,1]; reciprocal relative error is <=2^-20 for finite denominators in [1,2,049]. An all-masked row returns `TC_ERR_NO_VALID_ATTENTION_ROW`. Classify Q/K/V for valid query/key pairs only. Masked and padded pairs bypass QK and P×V arithmetic and contribute exact +0 leaves to the probability and weighted-value sums. Any valid-pair NaN input or generated NaN returns `TC_ERR_NUMERIC_NAN`. Infinity in a valid operand or another non-finite score/state/output returns `TC_ERR_NUMERIC_NONFINITE`. This applies even if the probability of a valid pair later becomes zero. An AXI fault on any issued transaction follows DEC-012. Accepted numeric errors stop unstarted tiles, drain accepted work, capture CSR status when present, and invalidate the whole command output.",
+      "source": "DEC-058",
+      "verification": "Fixed-tree FP32 reference; mask/causal boundaries; exp/reciprocal error; finite/non-finite values; all-masked rows and first valid tile after skips; tile-size and command fault behavior"
+    },
+    "REQ-FUNC-021": {
+      "statement": "OP-006 row softmax shall accept only BF16/FP16 logits and produce probabilities in the same command precision. Its descriptor supplies `row_count` and `row_length`, both nonzero, with `row_count<=PARA_MAX_SOFTMAX_ROWS=65,536`, `row_length<=PARA_MAX_SOFTMAX_ROW_LENGTH=65,536`, and checked `row_count*row_length<=PARA_MAX_SOFTMAX_TOTAL_ELEMENTS=16,777,216`; invalid/overflowing shape returns `TC_ERR_SHAPE` before numeric tensor DMA. Rows are inner-dimension contiguous with schema-defined row padding only. `mask_mode=0 NONE` or `1 BOOL`; other values return `TC_ERR_DESCRIPTOR_MODE`. BOOL supplies one byte per logical element, nonzero=valid; masked logits are ignored and output probability is exact +0. A row with no valid element returns `TC_ERR_NO_VALID_SOFTMAX_ROW`; any row error invalidates the entire command output. Valid logits widen to FP32 and must be finite: NaN returns `TC_ERR_NUMERIC_NAN`, infinity returns `TC_ERR_NUMERIC_NONFINITE`; masked logits are excluded from classification/arithmetic. Per row, max and sum use fixed balanced trees over increasing logical indices, padded to next power of two with max identity -Inf and sum identity +0; every sum node rounds FP32 nearest-even. Compute `d_i=RNE(x_i-m)` and apply the DEC-070 centered-exp classifier before evaluating `e_i`. Then compute `z=fixed_tree_sum(e_i)`, `p_i=RNE(e_i*rcp(z))`. Exp absolute error <=2^-20 on [-16,0], exactly 1 at zero, +0 below -16, clamped to [0,1]. Pipelined reciprocal relative error <=2^-20 for finite z in [1,65,536]. Convert valid probabilities once to command precision nearest-even; masked outputs are +0. Input, mask, and output spans shall be pairwise disjoint. Accepted numeric errors drain traffic, follow DEC-012, and invalidate every output row.",
+      "source": "DEC-059",
+      "verification": "Fixed-tree reference; function bounds through maximum row length; masks/empty row; NaN/Inf; shape, alias, and output invalidation"
+    },
+    "REQ-FUNC-022": {
+      "statement": "OP-007 LayerNorm shall accept BF16/FP16 input, optional same-precision gamma/beta vectors, and same-precision output. Descriptor supplies `row_count`, `row_width`, `affine_enable`, and finite binary32 `epsilon` in [2^-24,1]; invalid epsilon returns `TC_ERR_DESCRIPTOR_FORMAT` before numeric operand DMA. `affine_enable=0` requires the entire gamma and beta TREF64 records to be all zero and performs no gamma/beta DMA; `=1` requires contiguous gamma/beta vectors of exactly `row_width` elements. Input/output rows are feature-contiguous with schema-defined row padding only. Require row_count and row_width in 1..65,536 and checked product <=16,777,216 using `PARA_MAX_LN_ROWS`, `PARA_MAX_LN_ROW_WIDTH`, `PARA_MAX_LN_TOTAL_ELEMENTS`; violations return `TC_ERR_SHAPE` before numeric DMA. For each row, widen x to FP32, form leaves `(n,mu,M2)=(1,x_i,+0)` in increasing feature order, pad to next power of two with identity `(0,+0,+0)`, then merge a fixed balanced tree independent of tile/array completion. For nonempty A/B states define `n=nA+nB`, `delta=RNE(muB-muA)`, `r=RNE(nB/n)`, `mu=RNE(muA+RNE(delta*r))`, `f=RNE((nA*nB)/n)`, `cross=RNE(RNE(delta*delta)*f)`, `M2=RNE(M2A+RNE(M2B+cross))`; empty state merges as identity. Use population variance `var=RNE(M2/row_width)`, `v_eps=RNE(var+epsilon)`, and pipelined `invstd=rsqrt(v_eps)` with relative error <=2^-20 over finite positive FP32 inputs [2^-24, largest finite FP32]. Compute `centered=RNE(x_i-mu)`, `normalized=RNE(centered*invstd)`; if affine, `scaled=RNE(normalized*gamma_i)`, `y=RNE(scaled+beta_i)`, else y=normalized; convert once to command precision nearest-even. Input/parameter/generated NaN returns `TC_ERR_NUMERIC_NAN`; infinity input or other non-finite Welford/rsqrt/affine/output intermediate returns `TC_ERR_NUMERIC_NONFINITE`. Input, enabled gamma/beta, and output spans shall be pairwise disjoint. Accepted errors drain traffic, follow DEC-012, and invalidate complete output.",
+      "source": "DEC-060",
+      "verification": "Fixed-tree reference; epsilon/affine; rsqrt; NaN/Inf; shape/alias; no-DMA and whole-output invalidation"
+    },
+    "REQ-FUNC-023": {
+      "statement": "OP-009 shall implement causal kernelized linear attention with fixed `feature_map_id=0 ELU_PLUS_ONE`: for FP32 x, `phi(x)=RNE(x+1)` when x>0 and `phi(x)=exp_fp32(x)` when x<=0. Q/K/V/output use command precision BF16 or FP16; every S/z state element and state payload is IEEE FP32. For each sample/head/token t, update state before output: `S_t[r,d]=RNE(S_(t-1)[r,d]+RNE(phi(k_t[r])*v_t[d]))`, `z_t[r]=RNE(z_(t-1)[r]+phi(k_t[r]))`; then `num[d]` and `den` are fixed balanced sums over r in increasing feature index, of `RNE(phi(q_t[r])*S_t[r,d])` and `RNE(phi(q_t[r])*z_t[r])`, padded to a power of two with +0 and RNE at every node. Classify den before the magnitude test. NaN returns `TC_ERR_NUMERIC_NAN` and infinity returns `TC_ERR_NUMERIC_NONFINITE`; a finite `den<2^-126` returns `TC_ERR_LINEAR_ZERO_DENOM`. Use a pipelined reciprocal with relative error <=2^-20 for finite FP32 den in [2^-126, largest finite FP32], compute `y[d]=RNE(num[d]*rcp(den))`, and convert once to command precision nearest-even. Feature-map exp has absolute error <=2^-20 on [-16,0], exact 1 at zero, and +0 below -16; x>0 uses FP32 RNE addition. `state_mode=0 RESET` requires the entire state-input TREF64 record to be all zero, starts S/z at +0 and emits final state; `state_mode=1 CONTINUE` reads and validates one state record per sample. A successful RESET or CONTINUE processes exactly the descriptor's sequence_length new tokens for every sample. Other values return `TC_ERR_DESCRIPTOR_MODE`. Each state record has a 64-byte little-endian header followed by FP32 payload: bytes 0..3 magic `TLAS`; 4..5 major=1; 6..7 header_bytes=64; 8 feature_map_id=0; 9 command precision echo; 10 state_format=1 (FP32); 11 reserved=0; 12..15 head_count; 16..19 Q/K feature width R; 20..23 V width Dv; 24..31 processed-token count; 32..35 payload_bytes=4*H*R*(Dv+1); 36..63 zero. Payload order is head, feature row r, then Dv S values followed by z[r], all little-endian FP32. Each sample record is 64-byte aligned and separated by `state_sample_stride_bytes=align_up(64+payload_bytes,max(64,PARA_DMA_ALIGN_BYTES))`, where `payload_bytes=4*H*R*(Dv+1)`. For each OP-009 state TREF64, `extent[0]=batch_count`, `stride_bytes[0]=state_sample_stride_bytes`, and `span_bytes >= (batch_count-1)*state_sample_stride_bytes + 64 + payload_bytes`, checked without overflow; this full-record rule replaces the ordinary 4-byte element span for this record dimension. State base and sample stride are aligned to max(64,PARA_DMA_ALIGN_BYTES) and input/output state spans are disjoint. The bytes between one record payload and the next record start are alignment padding. Their values are unspecified, and the engine neither interprets them nor asserts write strobes for them. Reserved header bytes still require zero. CONTINUE requires a matching header, nonzero old token count, finite S/z, z>=0, and no token-count overflow; mismatch or negative finite z returns `TC_ERR_LINEAR_STATE`. RESET requires zero state-input base/stride and performs no state-input DMA. First-build caps are batch<=4, sequence<=65,536, heads<=64, R/Dv<=128, aggregate H*R and H*Dv<=4,096, state elements `batch*H*R*(Dv+1)<=16,777,216`, and checked MAC-equivalent work `batch*sequence*H*R*(2*Dv+2)<=17,179,869,184`; violations return `TC_ERR_SHAPE` before state/Q/K/V numeric DMA or output write. NaN/non-finite Q/K/V/state/intermediates return numeric errors under DEC-012. Accepted errors drain traffic and invalidate context/state outputs; distinct input/output state preserves the prior committed state for retry. OP-009 is not mathematically equivalent to OP-005 and is supported only for a model trained/qualified for this exact formula.",
+      "source": "DEC-061",
+      "verification": "Fixed recurrence reference; state reset/continue/header validation; function/reciprocal bounds; cap/no-DMA; zero denominator; error handling; model-quality evaluation"
+    },
+    "REQ-PARAM-010": {
+      "statement": "`PARA_ARGMAX_IMPL` shall select one greedy-token implementation at elaboration: `0=standalone logits-vector ARGMAX`, `1=fused final vocabulary projection plus ARGMAX`. The parameter shall not be writable at runtime. Both builds shall use the fixed highest-available-precision comparator and lower-index exact-tie rule in REQ-FUNC-014; no user-selectable tie-policy or compare-precision parameter is present in this release. Standalone compare precision is derived from the descriptor-declared logits format. Fused INT8 OP-004 compares the exact per-channel-scale-adjusted scores derived from the signed `PARA_ACCUM_W`-bit accumulator and validated REQUANT8 records, as specified in REQ-FUNC-014 and companion §10.3. Fused BF16/FP16 compares the FP32 score after any enabled bias and before output rounding. When the selected feature is present, only the build-selected input schema is valid. Return `TC_ERR_DESCRIPTOR_FORMAT` for a header format error such as the wrong schema size. Return `TC_ERR_DESCRIPTOR_MODE` for a variant mismatch after the format checks pass, per REQ-IF-008. Application logit bias is deferred to a later ABI extension.",
+      "source": "User decision 2026-11-16; performance trade-off recorded in DEC-005; comparator rule selected 2026-11-16",
+      "verification": "Elaborate both values, inspect generated hierarchy, test matching/mismatching descriptors, and compare against path-specific numeric references"
+    },
+    "REQ-PARAM-011": {
+      "statement": "OP-001/OP-008 descriptors shall encode K as an unsigned 32-bit field. Each elaborated build shall explicitly set PARA_MAX_K to a value in 1..2^32-1; the first build shall use 16,384, and any later released build shall record its selected value. The parameter shall cap K for OP-001/OP-008 across supported precision pairs, and the trusted S-mode driver shall use the same build constant for pre-issue validation. Hardware remains authoritative: K=0, K>PARA_MAX_K, or an OP-008 K not divisible by four completes an accepted command with TC_ERR_SHAPE before numeric operand reads, MAC, or output writes. For INT8 OP-001/OP-008 whose K passes shape checks, perform the DEC-017/036 bound check; if the arithmetic bound fails, return TC_ERR_ACCUM_RANGE. In a PARA_ACCUM_W=32 build, the range status is reachable only when PARA_MAX_K exceeds the operation-specific safe boundary; for PARA_ACCUM_W=48/64, no unsigned 32-bit K reaches this INT8 bound. PARA_MAX_K limits the reduction dimension only; it does not by itself guarantee a maximum command completion time. A release latency bound also requires the M/N/product/tile/span limits in REQ-PARAM-013, operation/precision scope, queue/backpressure limits, and an explicit memory-service assumption under DEC-018/039.",
+      "source": "User decision 2026-11-18; DEC-037/038; §8/§9.1",
+      "verification": "Elaboration range tests; descriptor K boundary, OP-008 divisibility, driver/hardware constant consistency, shape-vs-accumulator error tests, and command-latency analysis under stated shape/memory bounds"
+    },
+    "REQ-IF-008": {
+      "statement": "Every descriptor command shall use one fixed, versioned schema selected by the instruction `operation_id` and elaborated input variant; `PARA_ARGMAX_IMPL` selects the OP-004 variant. Every schema begins with the exact 64-byte common header in §10.2.1: literal `TCOP` magic; schema version 1.0; `header_bytes=64`; instruction `operation_id` and zero-extended `precision_id` echoes; exact total `schema_bytes`; build `implementation_variant`; and zero in all reserved bytes. All multibyte integers are little-endian. Descriptor bases shall be 64-byte aligned, and each schema shall have an exact build-time-known total size that is a positive multiple of 64 bytes. After matching non-kill commit, the IP shall reject an unaligned descriptor pointer as `TC_ERR_ADDRESS` without descriptor DMA; it shall read exactly the 64-byte header, validate every echo/constant and reserved byte against the instruction/build, and return `TC_ERR_DESCRIPTOR_FORMAT` for malformed fields before tensor operand/output DMA. An `implementation_variant` mismatch returns `TC_ERR_DESCRIPTOR_MODE` only after all header format checks, including `schema_bytes` against the build-selected size, pass. The expected schema size shall be derived from operation/build, not trusted from the descriptor; fetch no more than that exact size. Descriptor fetch remains gated by captured sources and matching non-kill commit.",
+      "source": "User decisions 2026-11-18/19; DEC-026/040",
+      "verification": "Simulation/assertions for alignment, every header-field mismatch/reserved-byte case, schema selection, bounded fetch length, and no tensor numeric DMA before valid header"
+    },
+    "REQ-IF-009": {
+      "statement": "Every release-1 tensor reference shall use the 64-byte `TREF64` record in the instruction-set companion §10.1: unsigned 64-bit physical byte `base_addr`, unsigned 64-bit allocated `span_bytes`, four unsigned 32-bit logical extents, and four unsigned 64-bit byte strides, all little-endian. Slot-defined rank/format/axis order fixes the meaning of the fields; unused extents and strides are zero. Ordinary tensor elements use command precision (INT8=1 byte; BF16/FP16=2 bytes); explicitly typed auxiliary records include OP-001/008 `REQUANT8`, OP-008 selector bytes, Boolean masks, and OP-009 FP32 state. The selected format determines element_bytes before checked span calculation. Every required extent is nonzero and within caps; each operation names the contiguous axis and permits only schema-defined padded pitches with checked nested strides. Transpose/alternate order is legal only when explicit. Arbitrary/gather strides and zero-stride broadcast are unsupported unless a named submode permits them. Output elements may not self-overlap. The full descriptor range and writable references shall be disjoint from every other present reference, counted over the full declared allocation including padding. Read-only references can alias except in OP-006 and OP-007, which require pairwise-disjoint references. No release-1 schema permits in-place output. Follow companion §10.1 for the half-open overlap rule. Hardware and driver compute `element_bytes + sum((extent[d]-1)*stride[d])` over only the operation-defined active rank dimensions (unused zero-extent dimensions are excluded), using checked multiply/add, and require the result <= `span_bytes`; both check base+span and implemented address width. Wrap or an unrepresentable address returns `TC_ERR_ADDRESS` in the IP before numeric DMA, and an illegal extent or pitch layout returns `TC_ERR_SHAPE`. The driver separately checks the complete declared range against the SoC aperture before issue. The firewall enforces the aperture on each issued burst; an observed denial maps to the corresponding AXI read/write error under REQ-SEC-003. A violation of the independent pitch alignment requirement returns `TC_ERR_ADDRESS` when the layout is otherwise legal. An allocation shorter than its required footprint also returns `TC_ERR_ADDRESS`. The driver uses the full declared span, including padding, for aperture preflight. The IP uses declared spans for the applicable aggregate caps. The firewall checks the complete advertised span of each burst. Exact slot maps and operation-specific layouts are in companion §10.3. Every present tensor TREF64 `base_addr` and `span_bytes` shall be a multiple of `PARA_DMA_ALIGN_BYTES`; every operation-defined independent row/batch pitch shall also be a multiple, except the fixed compact OP-008 packed-value lane/group strides in DEC-062. The OP-008 packed reader shall stream the compact byte layout and correctly split internal unaligned burst edges. `PARA_DMA_ALIGN_BYTES` is a positive power of two at least as large as 64 bytes, one AXI data beat, and one CPU cache line; it is static per build and shared with the S-mode driver. Descriptor bases remain 64-byte aligned. OP-009 state bases and record strides use `max(64,PARA_DMA_ALIGN_BYTES)`. Any alignment violation returns `TC_ERR_ADDRESS` before numeric tensor access.",
+      "source": "User decisions 2026-11-19; DEC-050/051/061/065",
+      "verification": "Checked-span model comparison; operation-specific format/stride/alignment/alias boundaries; driver/hardware agreement; no numeric DMA for illegal spans; OP-009 state header/sample-stride validation"
+    },
+    "REQ-IF-010": {
+      "statement": "Each release-1 operation/build shall use exactly the fixed descriptor body size and field map in the instruction-set companion §10. The fixed sizes are 832 (OP-001), 640 (OP-002), 192 (OP-003), 192/384 (OP-004 variants 0/1), 448 (OP-005), 320 (OP-006), 384 (OP-007), 896 (OP-008), and 512 (OP-009) bytes; no schema exceeds `PARA_MAX_DESCRIPTOR_BYTES=896`. After a valid header, the IP shall fetch only the selected exact body size, validate every reserved byte/field and every `TREF64` before numeric tensor reads/output writes, and use the phase and group priority in companion §10.4 (DEC-071). Apply aggregate allocation caps only after the individual references are valid. A body size/schema mismatch returns `TC_ERR_DESCRIPTOR_FORMAT`; illegal mode/variant returns `TC_ERR_DESCRIPTOR_MODE`; invalid shape or pitch layout returns `TC_ERR_SHAPE`. A too-short allocation, misalignment or unrepresentable address returns `TC_ERR_ADDRESS`. An AXI firewall denial uses the specified AXI status. Driver constants and operation encoder shall be generated from the same normative map.",
+      "source": "DEC-040/065; §10.2/10.3 companion",
+      "verification": "Field-offset/reserved/enum/presence/shape/span/address matrix; exact bounded fetch length; malformed descriptors cause no tensor numeric DMA, array launch, or output write"
+    },
+    "REQ-PERF-003": {
+      "statement": "For each LLM workload benchmark, system tracing shall capture `T_request` when the trusted S-mode inference service accepts the request, `T_prefill_done` when prompt prefill/KV state is ready, and `T_token[n]` when output token `n` is delivered to the caller. Report prefill throughput as `N_prompt/(T_prefill_done-T_request)`, time-to-first-token as `T_token[0]-T_request`, inter-token latency as `T_token[n]-T_token[n-1]` for `n>=1`, and steady decode rate as `(N_generated-1)/(T_token[N_generated-1]-T_token[0])` for at least two generated tokens. Report p50/p95/p99 for TTFT and inter-token latency, and report the measured prompt/output token counts. Also capture the CV-X-IF intervals in REQ-PERF-002 so product-service delay and accelerator/host command delay can be distinguished.",
+      "source": "User decisions 2026-11-18; DEC-018/039",
+      "verification": "System-level trace checks timestamp boundaries and recomputes metrics; correlate request/token events with CV-X-IF command trace"
+    },
+    "REQ-PARAM-012": {
+      "statement": "Every descriptor operation shall have finite elaboration-time maxima for every dimension affecting work, traffic, tiles, or state. Before numeric reads, compute, or output writes, hardware shall validate dimensions and use checked arithmetic for counts, byte spans, and tile counts. Zero, over-cap, or unrepresentable shape returns `TC_ERR_SHAPE` with no tensor numeric DMA. First build: `PARA_MAX_REDUCE_ELEMENTS=1,048,576`; `PARA_MAX_SOFTMAX_ROWS=65,536`, `PARA_MAX_SOFTMAX_ROW_LENGTH=65,536`, `PARA_MAX_SOFTMAX_TOTAL_ELEMENTS=16,777,216`; `PARA_MAX_LN_ROWS=65,536`, `PARA_MAX_LN_ROW_WIDTH=65,536`, `PARA_MAX_LN_TOTAL_ELEMENTS=16,777,216`; and OP-009 caps batch=4, sequence=65,536, heads=64, per-head R/Dv=128, aggregate widths=4,096, state elements=16,777,216, and MAC-equivalent work=17,179,869,184. `PARA_LINEAR_MAX_ACTIVE_CONTEXTS` is required per released build and must fit with state/staging buffers in `PARA_MEM_SRAM_BYTES`. The trusted S-mode driver shall use matching build constants; DEC-018 benchmark points are not legal maxima.",
+      "source": "User decisions 2026-11-18/19; DEC-018/057/059/060/061",
+      "verification": "Boundary/overflow/no-DMA validation for every per-operation cap"
+    },
+    "REQ-PARAM-013": {
+      "statement": "OP-001/OP-008 shall validate, before any tensor-data DMA, `1<=M<=PARA_MAX_GEMM_M`, `1<=N<=PARA_MAX_GEMM_N`, `1<=K<=PARA_MAX_K`, checked logical products `M*N*K` for dense and `M*N*(K/2)` for sparse, `ceil(M/PARA_MAC_ROW)*ceil(N/PARA_MAC_COL)<=PARA_MAX_GEMM_OUTPUT_TILES`, and the checked sums of input and output tensor-reference spans against `PARA_MAX_GEMM_READ_SPAN_BYTES` and `PARA_MAX_GEMM_WRITE_SPAN_BYTES`. First-build values are M=N=16,384; products=2^35; output tiles=4,096; read span=64 MiB; write span=64 MiB. A zero, over-cap, or unrepresentable value returns `TC_ERR_SHAPE` before tensor-data DMA, array launch, MAC, or output write. `PARA_MAX_GEMM_READ_SPAN_BYTES` counts each declared input reference once, including padding and auxiliary metadata; it is a logical-span cap, not actual AXI traffic. Each released configuration shall separately bound worst-case repeated tile reads/writes from its actual schedule and include those bytes and service assumptions in the REQ-PERF-002 hard-latency analysis. S-mode software may split a larger logical GEMM along M and/or N into non-overlapping output submatrices, never K; if any chunk fails, it shall discard the complete logical output and rerun the whole software transaction.",
+      "source": "User authorized recommended C path 2026-11-19; DEC-018/064; §§8, 9.1, 10.2.2",
+      "verification": "Boundary/overflow tests for every cap; no tensor-data DMA on precheck failure; traffic-bound analysis includes tile rereads and array configuration"
+    }
+  },
+  "traceability": {
+    "REQ-FUNC-001": {
+      "module": "m_cvxif_adapter",
+      "test": "TEST-001",
+      "method": "simulation"
+    },
+    "REQ-FUNC-002": {
+      "module": "m_systolic_array, m_accum",
+      "test": "TEST-002",
+      "method": "simulation"
+    },
+    "REQ-FUNC-003": {
+      "module": "m_accum",
+      "test": "TEST-003",
+      "method": "simulation"
+    },
+    "REQ-FUNC-004": {
+      "module": "m_elemwise, m_mem_path, descriptor validator, command context",
+      "test": "TEST-004, TEST-038",
+      "method": "All OP-002 modes, selected arithmetic order/precision, command-to-command mode change"
+    },
+    "REQ-FUNC-005": {
+      "module": "m_reduce",
+      "test": "TEST-004",
+      "method": "simulation"
+    },
+    "REQ-FUNC-006": {
+      "module": "m_mem_path",
+      "test": "TEST-001",
+      "method": "simulation"
+    },
+    "REQ-MEM-001": {
+      "module": "m_mem_path, IF-006 storage adapters and build bank map",
+      "test": "TEST-011",
+      "method": "Check capacity, port profile, fixed read return, byte mask, backend equivalence and quiesce"
+    },
+    "REQ-IF-001": {
+      "module": "m_cvxif_adapter",
+      "test": "TEST-001, TEST-015, TEST-022, TEST-029, TEST-050, SVA-001, SVA-006, SVA-011",
+      "method": "CV-X-IF protocol checker; split=0 coupled handshake, source-valid stalls, fault-resolved commit/kill authorization, and no-early-DMA simulation"
+    },
+    "REQ-IF-002": {
+      "module": "m_csr",
+      "test": "TEST-008",
+      "method": "APB4 readback, register access and reset-map checks"
+    },
+    "REQ-IF-003": {
+      "module": "m_cvxif_adapter, m_mem_path",
+      "test": "TEST-015, TEST-022, TEST-029, SVA-003, SVA-006, SVA-011",
+      "method": "RV32/RV64 coupled source capture, descriptor fetch, commit authorization, and AXI address-range simulation/assertions"
+    },
+    "REQ-IF-004": {
+      "module": "m_cvxif_adapter",
+      "test": "TEST-018, SVA-005",
+      "method": "`rd=x0` legality and issue/result writeback consistency"
+    },
+    "REQ-IF-005": {
+      "module": "m_cvxif_adapter, operation dispatcher",
+      "test": "TEST-010",
+      "method": "`funct7` operation-ID decode, `funct3` precision decode, reserved-code rejection, assembler/disassembler equivalence"
+    },
+    "REQ-IF-006": {
+      "module": "CVA6 safe-frontier tracker, scoreboard, LSU/branch/CSR/controller integration",
+      "test": "TEST-022, TEST-029, TEST-030, TEST-047, SVA-011, COV-010",
+      "method": "Per-entry fault-resolution completeness, age-ordered kill, same-cycle squash priority, DEC-035 post-authorization interrupt/debug deferral, and no-early-DMA verification"
+    },
+    "REQ-IF-007": {
+      "module": "CVA6 per-hart interrupt/debug deferral, issue gate, safe-frontier tracker, scoreboard/result retirement",
+      "test": "TEST-029, TEST-030, TEST-047, SVA-012, COV-011",
+      "method": "Event retention, no younger authorization, ordered drain, precise entry, multi-hart independence, and worst-case latency"
+    },
+    "REQ-SEC-001": {
+      "module": "selected CVA6 decode/dispatch before CV-X-IF",
+      "test": "TEST-026, TEST-027, SVA-010, COV-007",
+      "method": "U-mode trap/issue suppression; S/M pass-through; per-hart no-side-effect checks"
+    },
+    "REQ-SEC-002": {
+      "module": "S-mode driver, user-buffer/descriptor validation, m_mem_path, SoC AXI firewall, CSR address map",
+      "test": "TEST-027, TEST-028, TEST-046, TEST-048, COV-008",
+      "method": "Handle ownership, checked spans/aperture, descriptor protection, non-coherent cache contract, output invalidation, and CSR denial"
+    },
+    "REQ-SEC-003": {
+      "module": "SoC AXI firewall, tensor DMA path, S-mode driver platform constants",
+      "test": "TEST-028, COV-009",
+      "method": "Static aperture consistency; full burst range and overflow checks; error completion and no downstream access"
+    },
+    "REQ-ERR-002": {
+      "module": "`m_cvxif_adapter`, `m_csr`, error-drain scheduler",
+      "test": "TEST-017, TEST-019, TEST-047, SVA-004",
+      "method": "Atomic first-error record, multi-fault priority, W1C CDC, pause/resume and error completion"
+    },
+    "REQ-CLK-001": {
+      "module": "m_csr",
+      "test": "TEST-007",
+      "method": "CDC"
+    },
+    "REQ-RESET-001": {
+      "module": "all",
+      "test": "TEST-006",
+      "method": "reset test"
+    },
+    "REQ-RESET-002": {
+      "module": "`m_tensor_copro`, `m_mem_path`, SoC reset controller and AXI fabric",
+      "test": "TEST-024, SVA-008",
+      "method": "Ordinary quiesce/drain; missing-response watchdog and full-SoC reset coverage/release; stale-response safety"
+    },
+    "REQ-REG-001": {
+      "module": "m_csr",
+      "test": "TEST-008",
+      "method": "simulation"
+    },
+    "REQ-PARAM-001": {
+      "module": "m_tensor_copro",
+      "test": "TEST-009",
+      "method": "elaboration/lint"
+    },
+    "REQ-PARAM-002": {
+      "module": "m_tensor_copro, command context",
+      "test": "TEST-009, TEST-010",
+      "method": "elaboration/lint, command-to-command precision switching, and uniform-format checks"
+    },
+    "REQ-PARAM-003": {
+      "module": "m_tensor_copro, issue decoder and driver build configuration",
+      "test": "TEST-009, TEST-010, TEST-019",
+      "method": "elaboration/lint, hardware acceptance versus published capability rows and driver build binding"
+    },
+    "REQ-PARAM-004": {
+      "module": "m_tensor_copro",
+      "test": "TEST-009",
+      "method": "elaboration/lint"
+    },
+    "REQ-PARAM-005": {
+      "module": "m_tensor_copro, m_systolic_array, m_accum",
+      "test": "TEST-011, TEST-049",
+      "method": "elaboration, equivalence, protocol checks, STA"
+    },
+    "REQ-PARAM-006": {
+      "module": "m_tensor_copro, operation units",
+      "test": "TEST-009, TEST-010",
+      "method": "elaboration, synthesis hierarchy, runtime mode rejection"
+    },
+    "REQ-PARAM-007": {
+      "module": "m_cvxif_adapter",
+      "test": "TEST-013",
+      "method": "elaboration and queue/backpressure simulation"
+    },
+    "REQ-PARAM-008": {
+      "module": "m_tensor_copro",
+      "test": "TEST-014, TEST-049",
+      "method": "elaboration, hierarchy inspection, synthesis resource count"
+    },
+    "REQ-PARAM-009": {
+      "module": "m_cvxif_adapter, m_csr, command context",
+      "test": "TEST-016, TEST-020, TEST-025, TEST-039, SVA-009, COV-006",
+      "method": "Mode dependency, OP-003 global fence, CSR error attribution, and queued-command simulation"
+    },
+    "REQ-ERR-001": {
+      "module": "m_cvxif_adapter, m_mem_path, error classifier",
+      "test": "TEST-005, TEST-019, TEST-023, TEST-028, TEST-031, TEST-032, TEST-033, TEST-034, TEST-037, TEST-038, TEST-039, TEST-040, TEST-041, TEST-042, TEST-043, TEST-045, TEST-046",
+      "method": "issue rejection and post-accept status-code fault injection, including drain with partial output"
+    },
+    "REQ-ERR-003": {
+      "module": "`m_mem_path`, output scheduler, software driver",
+      "test": "TEST-023, TEST-024, TEST-027, TEST-031, TEST-034, TEST-036, TEST-040, TEST-041, TEST-042, TEST-043, TEST-045, TEST-048, SVA-007",
+      "method": "Whole-command destination invalidation, write drain, no success before all B responses, and software retry contract"
+    },
+    "REQ-ERR-004": {
+      "module": "m_cvxif_adapter, global issue arbiter, m_csr, scheduler",
+      "test": "TEST-016, TEST-025, TEST-039, TEST-047, SVA-009, COV-006",
+      "method": "Clean-boundary admission, all-hart backpressure, zero-result attribution, one-shot scalar ack/W1C CDC, busy, kill, and quiesce"
+    },
+    "REQ-ERR-005": {
+      "module": "descriptor validator, `m_mem_path`, operation controller, `m_systolic_array`, `m_accum`, error classifier",
+      "test": "TEST-031, TEST-032, TEST-036, TEST-044, SVA-013, COV-012",
+      "method": "Non-wrapping range calculation before operand traffic; stable status; no compute/output on range failure"
+    },
+    "REQ-PERF-001": {
+      "module": "m_systolic_array, sparse paired-MAC lanes",
+      "test": "TEST-044, TEST-049",
+      "method": "active-PE steady service and workload utilization by array and pipeline build"
+    },
+    "REQ-FUNC-007": {
+      "module": "m_cvxif_adapter, operation dispatcher",
+      "test": "TEST-010",
+      "method": "directed/constrained-random simulation with a different mode queued behind the active command"
+    },
+    "REQ-PERF-002": {
+      "module": "m_tensor_copro and workload testbench",
+      "test": "TEST-012, TEST-030, TEST-047, TEST-050, COV-011",
+      "method": "cycle-accurate benchmark, frontier and global scheduler bounds, memory/service ledger, result/CSR backpressure, STA"
+    },
+    "REQ-PERF-003": {
+      "module": "trusted S-mode inference service, workload testbench, system trace",
+      "test": "TEST-012, TEST-048",
+      "method": "Request/token timestamp capture, TTFT/ITL/prompt-throughput/decode-rate calculation, and correlation with CV-X-IF trace"
+    },
+    "REQ-FUNC-008": {
+      "module": "m_systolic_array, m_reduce, attention schedule",
+      "test": "TEST-010, TEST-033, TEST-034, TEST-040, TEST-048",
+      "method": "exact-reference simulation, shape-boundary/no-DMA checks, and memory-traffic analysis"
+    },
+    "REQ-FUNC-009": {
+      "module": "m_systolic_array sparse metadata/payload loader, tile validator, selector, paired MAC and local adder",
+      "test": "TEST-010, TEST-044, SVA-016",
+      "method": "Six legal nibbles; per-tile validation-before-data; group/value order; zero payload; late error invalidation and drain"
+    },
+    "REQ-FUNC-010": {
+      "module": "m_systolic_array, m_cvxif_adapter, m_reduce",
+      "test": "TEST-010, TEST-012, TEST-020",
+      "method": "mode simulation, batch-one benchmark, and argmax reference comparison"
+    },
+    "REQ-FUNC-011": {
+      "module": "m_systolic_array, operation dispatcher",
+      "test": "TEST-010, TEST-012",
+      "method": "mode correctness and separate PPA measurements"
+    },
+    "REQ-FUNC-012": {
+      "module": "attention schedule and m_reduce",
+      "test": "TEST-010",
+      "method": "approximate-reference simulation and model-level accuracy analysis"
+    },
+    "REQ-FUNC-013": {
+      "module": "m_cvxif_adapter, m_systolic_array, m_accum",
+      "test": "TEST-014",
+      "method": "multi-array tiled simulation and transaction-order assertions"
+    },
+    "REQ-FUNC-014": {
+      "module": "m_mem_path, m_reduce, m_systolic_array, m_cvxif_adapter, m_csr",
+      "test": "TEST-020",
+      "method": "standalone/fused argmax reference, scalar-result ABI and accepted-error simulation"
+    },
+    "REQ-FUNC-015": {
+      "module": "descriptor validator, OP-001 address generator, m_systolic_array, m_mem_path",
+      "test": "TEST-035",
+      "method": "All four transpose combinations, logical-index address mapping, padded pitches, status mapping, no numeric DMA for invalid layout"
+    },
+    "REQ-FUNC-016": {
+      "module": "m_accum, m_elemwise/requantizer, descriptor validator, m_mem_path",
+      "test": "TEST-036, TEST-037, TEST-044, SVA-016",
+      "method": "DEC-053/054 per-channel fixed-point conversion, 8-byte coefficient records, prevalidation ordering, product width, ties-to-even, saturation, zero-point, channel alignment, whole-command error behavior"
+    },
+    "REQ-FUNC-017": {
+      "module": "m_elemwise/activation LUT, descriptor validator, m_mem_path",
+      "test": "TEST-037",
+      "method": "INT8 fixed order; ACT_NONE/RELU/LUT8 mapping, embedded table, command-to-command mode switching, no-DMA rejection"
+    },
+    "REQ-FUNC-018": {
+      "module": "m_elemwise, FP32 activation pipeline, descriptor validator, m_mem_path",
+      "test": "TEST-038",
+      "method": "OP-002 mode matrix, broadcast/shape rules, Q16.16/Q31 integer arithmetic, FP32 node rounding, nonlinear error/special values, table/coefficient validation"
+    },
+    "REQ-FUNC-019": {
+      "module": "m_reduce, descriptor validator, m_mem_path, scalar-result/fence controller",
+      "test": "TEST-039",
+      "method": "Scalar mode/precision, fixed sum tree, integer bound, FP exception handling, GPR bit encoding and zero-result fence"
+    },
+    "REQ-FUNC-020": {
+      "module": "m_systolic_array, m_reduce, attention scheduler, m_mem_path, descriptor validator",
+      "test": "TEST-040",
+      "method": "FP32 FMA/tree order, masks, online state, exp/reciprocal error, non-finite/all-masked errors and whole-output invalidation"
+    },
+    "REQ-FUNC-021": {
+      "module": "m_reduce, m_elemwise special-function pipeline, descriptor validator, m_mem_path",
+      "test": "TEST-041",
+      "method": "Softmax row/mask shape, fixed max/sum trees, exp/reciprocal error, masked +0, exceptional values, empty row and whole-output invalidation"
+    },
+    "REQ-FUNC-022": {
+      "module": "m_reduce Welford tree, rsqrt/affine pipeline, descriptor validator, m_mem_path",
+      "test": "TEST-042",
+      "method": "Fixed Welford merge order, population variance, epsilon, affine modes, rsqrt bound, exceptional values and whole-output invalidation"
+    },
+    "REQ-FUNC-023": {
+      "module": "feature-map unit, FP32 recurrent-state datapath, m_mem_path, descriptor/state validator",
+      "test": "TEST-043",
+      "method": "ELU+1 function, causal recurrence order, state header/layout validation, denominator guard, state-preserving error behavior, and checked work/state caps"
+    },
+    "REQ-PARAM-010": {
+      "module": "m_tensor_copro, m_mem_path, m_reduce, m_systolic_array",
+      "test": "TEST-020, TEST-021",
+      "method": "elaboration-time generate selection, hierarchy exclusion, descriptor-schema guard"
+    },
+    "REQ-PARAM-011": {
+      "module": "descriptor validator, driver build constants, operation controller, m_mem_path, m_systolic_array, m_accum",
+      "test": "TEST-032, TEST-045, SVA-014, COV-013",
+      "method": "Fixed-width K decode, build cap enforcement, sparse K divisibility, and distinct shape/range error paths"
+    },
+    "REQ-IF-008": {
+      "module": "descriptor validator, m_cvxif_adapter, m_mem_path",
+      "test": "TEST-015, TEST-019, TEST-022, TEST-046, TEST-050, SVA-003, SVA-011",
+      "method": "Per-operation/build schema selection; alignment/status mapping; each fixed header field, echo, and reserved-zero check; bounded fetch; no tensor numeric traffic before header validation"
+    },
+    "REQ-IF-009": {
+      "module": "descriptor body validator, operation address generators, m_mem_path, S-mode driver",
+      "test": "TEST-015, TEST-019, TEST-027, TEST-035, TEST-044, TEST-046, SVA-003",
+      "method": "TREF64 base/span/extents/strides, checked span/end arithmetic, shape/address distinction, no SG/IOVA, contiguous mapping, driver/hardware agreement and no numeric DMA for invalid spans"
+    },
+    "REQ-IF-010": {
+      "module": "descriptor validator, descriptor staging buffer, operation controllers, S-mode driver generator",
+      "test": "TEST-046, SVA-018, COV-017",
+      "method": "Fixed operation/build schema sizes/offsets, exact bounded fetch, TREF64 checks, format/mode/shape/address status distinction and pre-numeric-DMA rejection"
+    },
+    "REQ-PARAM-012": {
+      "module": "operation-specific descriptor validators, driver build constants, operation controller, m_mem_path",
+      "test": "TEST-033, TEST-034, TEST-035, TEST-039, TEST-040, TEST-041, TEST-042, TEST-043, SVA-015, COV-014",
+      "method": "Per-operation dimension caps, checked derived products/tile counts, boundary rejection, and no numeric DMA/output for invalid shapes"
+    },
+    "REQ-PARAM-013": {
+      "module": "descriptor validator, driver build constants, tile scheduler, m_mem_path, completion/error path",
+      "test": "TEST-045, SVA-017, COV-016",
+      "method": "Checked M/N/product/tile/logical-span caps before tensor-data DMA; release traffic model includes actual tile rereads"
+    }
+  },
+  "requirement_areas": {
+    "FUNC": 23,
+    "MEM": 1,
+    "IF": 10,
+    "SEC": 3,
+    "CLK": 1,
+    "RESET": 2,
+    "REG": 1,
+    "PARAM": 13,
+    "ERR": 5,
+    "PERF": 3
+  },
+  "open_items": [
+    "ASM-001",
+    "ASM-002",
+    "ASM-003",
+    "ASM-004",
+    "DEP-001",
+    "DEP-002",
+    "DEP-003"
+  ],
+  "decisions": [
+    "DEC-001",
+    "DEC-002",
+    "DEC-003",
+    "DEC-004",
+    "DEC-005",
+    "DEC-006",
+    "DEC-007",
+    "DEC-008",
+    "DEC-009",
+    "DEC-010",
+    "DEC-011",
+    "DEC-012",
+    "DEC-013",
+    "DEC-014",
+    "DEC-015",
+    "DEC-016",
+    "DEC-017",
+    "DEC-018",
+    "DEC-019",
+    "DEC-020",
+    "DEC-021",
+    "DEC-022",
+    "DEC-023",
+    "DEC-024",
+    "DEC-025",
+    "DEC-026",
+    "DEC-027",
+    "DEC-028",
+    "DEC-029",
+    "DEC-030",
+    "DEC-031",
+    "DEC-032",
+    "DEC-033",
+    "DEC-034",
+    "DEC-035",
+    "DEC-036",
+    "DEC-037",
+    "DEC-038",
+    "DEC-039",
+    "DEC-040",
+    "DEC-041",
+    "DEC-042",
+    "DEC-043",
+    "DEC-044",
+    "DEC-045",
+    "DEC-046",
+    "DEC-047",
+    "DEC-048",
+    "DEC-049",
+    "DEC-050",
+    "DEC-051",
+    "DEC-052",
+    "DEC-053",
+    "DEC-054",
+    "DEC-055",
+    "DEC-056",
+    "DEC-057",
+    "DEC-058",
+    "DEC-059",
+    "DEC-060",
+    "DEC-061",
+    "DEC-062",
+    "DEC-063",
+    "DEC-064",
+    "DEC-065",
+    "DEC-066",
+    "DEC-067",
+    "DEC-068",
+    "DEC-069",
+    "DEC-070",
+    "DEC-071",
+    "DEC-072",
+    "DEC-073",
+    "DEC-074",
+    "DEC-075",
+    "DEC-076"
+  ],
+  "tests": [
+    "TEST-001",
+    "TEST-002",
+    "TEST-003",
+    "TEST-004",
+    "TEST-005",
+    "TEST-006",
+    "TEST-007",
+    "TEST-008",
+    "TEST-009",
+    "TEST-010",
+    "TEST-011",
+    "TEST-012",
+    "TEST-013",
+    "TEST-014",
+    "TEST-015",
+    "TEST-016",
+    "TEST-017",
+    "TEST-018",
+    "TEST-019",
+    "TEST-020",
+    "TEST-021",
+    "TEST-022",
+    "TEST-023",
+    "TEST-024",
+    "TEST-025",
+    "TEST-026",
+    "TEST-027",
+    "TEST-028",
+    "TEST-029",
+    "TEST-030",
+    "TEST-031",
+    "TEST-032",
+    "TEST-033",
+    "TEST-034",
+    "TEST-035",
+    "TEST-036",
+    "TEST-037",
+    "TEST-038",
+    "TEST-039",
+    "TEST-040",
+    "TEST-041",
+    "TEST-042",
+    "TEST-043",
+    "TEST-044",
+    "TEST-045",
+    "TEST-046",
+    "TEST-047",
+    "TEST-048",
+    "TEST-049",
+    "TEST-050"
+  ],
+  "properties": [
+    "COV-001",
+    "COV-002",
+    "COV-003",
+    "COV-004",
+    "COV-005",
+    "COV-006",
+    "COV-007",
+    "COV-008",
+    "COV-009",
+    "COV-010",
+    "COV-011",
+    "COV-012",
+    "COV-013",
+    "COV-014",
+    "COV-015",
+    "COV-016",
+    "COV-017",
+    "SVA-001",
+    "SVA-002",
+    "SVA-003",
+    "SVA-004",
+    "SVA-005",
+    "SVA-006",
+    "SVA-007",
+    "SVA-008",
+    "SVA-009",
+    "SVA-010",
+    "SVA-011",
+    "SVA-012",
+    "SVA-013",
+    "SVA-014",
+    "SVA-015",
+    "SVA-016",
+    "SVA-017",
+    "SVA-018"
+  ],
+  "quantified_claims": [
+    "0.5 MiB",
+    "0.5 ns",
+    "000 ns",
+    "005 cycles",
+    "009 byte",
+    "024 KiB",
+    "024 bytes",
+    "024 cycles",
+    "048 bytes",
+    "088 MiB",
+    "088 bytes",
+    "096 cycles",
+    "1 GHz",
+    "1 KiB",
+    "1 MiB",
+    "1 byte",
+    "1 bytes",
+    "1 cycle",
+    "1 ns",
+    "1.00 GHz",
+    "1.20 GHz",
+    "1.44 MiB",
+    "1.5 GHz",
+    "1.6 GHz",
+    "1.75 KiB",
+    "1.8 GHz",
+    "1.953125 GHz",
+    "10 MiB",
+    "10.3 Cycle",
+    "100 MHz",
+    "112 KiB",
+    "113.8 ns",
+    "12 cycles",
+    "128 KiB",
+    "128 MiB",
+    "128 bits",
+    "128 bytes",
+    "128 cycles",
+    "129 KiB",
+    "13 bits",
+    "131.07 us",
+    "132 MiB",
+    "133.750 KiB",
+    "136 KiB",
+    "136 bytes",
+    "148 MiB",
+    "150 ns",
+    "16 KiB",
+    "16 MiB",
+    "16 bits",
+    "16 bytes",
+    "16 cycles",
+    "16 ns",
+    "16.1 KiB",
+    "16.25 KiB",
+    "16.384 us",
+    "16.75 MiB",
+    "160.125 KiB",
+    "163.840 us",
+    "17 bits",
+    "192 KiB",
+    "192 MiB",
+    "192 bits",
+    "192.25 KiB",
+    "196 MiB",
+    "2 GHz",
+    "2 KiB",
+    "2 MiB",
+    "2 bytes",
+    "2 us",
+    "2.02 MiB",
+    "2.05 us",
+    "2.37 MiB",
+    "2.47 MiB",
+    "20 bits",
+    "20 ns",
+    "20.50 MiB",
+    "20.83 ns",
+    "200 ns",
+    "200.25 KiB",
+    "204.8 ns",
+    "21.11 ns",
+    "214.125 KiB",
+    "224 KiB",
+    "24 MiB",
+    "240 KiB",
+    "25 cycles",
+    "256 KiB",
+    "256 MiB",
+    "256 bits",
+    "256 bytes",
+    "256 cycles",
+    "256 ns",
+    "257.750 KiB",
+    "26 KiB",
+    "260 MiB",
+    "262 us",
+    "262.144 us",
+    "272 MiB",
+    "280 KiB",
+    "280 MiB",
+    "280 bytes",
+    "3.02 MiB",
+    "300 ns",
+    "32 KiB",
+    "32 MiB",
+    "32 bits",
+    "32 cycles",
+    "32.25 KiB",
+    "320 MiB",
+    "328 bytes",
+    "33 MiB",
+    "33.03 us",
+    "341 ns",
+    "341.3 ns",
+    "36 MiB",
+    "38 cycles",
+    "384 KiB",
+    "384 bytes",
+    "385.750 KiB",
+    "392 KiB",
+    "4 KiB",
+    "4 MiB",
+    "4 bytes",
+    "4 cycles",
+    "4.096 us",
+    "40 bits",
+    "409.6 ns",
+    "424.25 KiB",
+    "440.25 KiB",
+    "448 bytes",
+    "464 bytes",
+    "47 bytes",
+    "48 KiB",
+    "50 ns",
+    "504 ns",
+    "504.25 KiB",
+    "512 KiB",
+    "512 MiB",
+    "512 bytes",
+    "512 cycles",
+    "512 ns",
+    "513.750 KiB",
+    "52 KiB",
+    "524.29 us",
+    "60.2 ns",
+    "608 KiB",
+    "632.25 KiB",
+    "64 KiB",
+    "64 MiB",
+    "64 bytes",
+    "664 bytes",
+    "68 MiB",
+    "768 bytes",
+    "769 KiB",
+    "8 KiB",
+    "8 MiB",
+    "8 bytes",
+    "80 ns",
+    "800 ns",
+    "82 KiB",
+    "832 bytes",
+    "837.5 ns",
+    "858.250 KiB",
+    "864 bytes",
+    "888.25 KiB",
+    "896 bytes",
+    "92.25 KiB",
+    "96 MiB"
+  ],
+  "coverage": {
+    "requirements": 62,
+    "tests": 50,
+    "properties": 35,
+    "requirements_without_test": [],
+    "requirements_without_verification": []
+  },
+  "counts": {
+    "sections": 69,
+    "tables": 98,
+    "open_items": 7,
+    "decisions": 76
+  }
+}

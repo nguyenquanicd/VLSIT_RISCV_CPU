@@ -1,0 +1,246 @@
+//////////////////////////////////////////////////////////////////////////////
+//
+// Copyright 2021 OpenHW Group
+//
+// Licensed under the Solderpad Hardware Licence, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://solderpad.org/licenses/
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+// SPDX-License-Identifier: Apache-2.0 WITH SHL-2.0
+//
+///////////////////////////////////////////////////////////////////////////////
+//
+// Manifest for the CVA6 CORE RTL model.
+//   - This is a CORE-ONLY manifest.
+//   - Relevant synthesis and simulation scripts/Makefiles must set the shell
+//     ENV variable CVA6_REPO_DIR.
+//
+///////////////////////////////////////////////////////////////////////////////
+
+//FPGA memories
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/vendor/pulp-platform/fpga-support/rtl/SyncDpRam.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/vendor/pulp-platform/fpga-support/rtl/AsyncDpRam.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/vendor/pulp-platform/fpga-support/rtl/AsyncThreePortRam.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/vendor/pulp-platform/fpga-support/rtl/SyncThreePortRam.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/vendor/pulp-platform/fpga-support/rtl/SyncDpRam_ind_r_w.sv
+
++incdir+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/include/
++incdir+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/vendor/pulp-platform/common_cells/include/
++incdir+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/vendor/pulp-platform/common_cells/src/
++incdir+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/vendor/pulp-platform/axi/include/
++incdir+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/common/local/util/
++incdir+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/utils/ecc
+
+// Floating point unit
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cvfpu/src/fpnew_pkg.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cvfpu/src/fpnew_cast_multi.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cvfpu/src/fpnew_classifier.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cvfpu/vendor/opene906/E906_RTL_FACTORY/gen_rtl/clk/rtl/gated_clk_cell.v
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cvfpu/vendor/opene906/E906_RTL_FACTORY/gen_rtl/fdsu/rtl/pa_fdsu_ctrl.v
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cvfpu/vendor/opene906/E906_RTL_FACTORY/gen_rtl/fdsu/rtl/pa_fdsu_ff1.v
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cvfpu/vendor/opene906/E906_RTL_FACTORY/gen_rtl/fdsu/rtl/pa_fdsu_pack_single.v
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cvfpu/vendor/opene906/E906_RTL_FACTORY/gen_rtl/fdsu/rtl/pa_fdsu_prepare.v
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cvfpu/vendor/opene906/E906_RTL_FACTORY/gen_rtl/fdsu/rtl/pa_fdsu_round_single.v
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cvfpu/vendor/opene906/E906_RTL_FACTORY/gen_rtl/fdsu/rtl/pa_fdsu_special.v
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cvfpu/vendor/opene906/E906_RTL_FACTORY/gen_rtl/fdsu/rtl/pa_fdsu_srt_single.v
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cvfpu/vendor/opene906/E906_RTL_FACTORY/gen_rtl/fdsu/rtl/pa_fdsu_top.v
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cvfpu/vendor/opene906/E906_RTL_FACTORY/gen_rtl/fpu/rtl/pa_fpu_dp.v
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cvfpu/vendor/opene906/E906_RTL_FACTORY/gen_rtl/fpu/rtl/pa_fpu_frbus.v
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cvfpu/vendor/opene906/E906_RTL_FACTORY/gen_rtl/fpu/rtl/pa_fpu_src_type.v
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cvfpu/vendor/openc910/C910_RTL_FACTORY/gen_rtl/vfdsu/rtl/ct_vfdsu_ctrl.v
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cvfpu/vendor/openc910/C910_RTL_FACTORY/gen_rtl/vfdsu/rtl/ct_vfdsu_double.v
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cvfpu/vendor/openc910/C910_RTL_FACTORY/gen_rtl/vfdsu/rtl/ct_vfdsu_ff1.v
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cvfpu/vendor/openc910/C910_RTL_FACTORY/gen_rtl/vfdsu/rtl/ct_vfdsu_pack.v
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cvfpu/vendor/openc910/C910_RTL_FACTORY/gen_rtl/vfdsu/rtl/ct_vfdsu_prepare.v
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cvfpu/vendor/openc910/C910_RTL_FACTORY/gen_rtl/vfdsu/rtl/ct_vfdsu_round.v
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cvfpu/vendor/openc910/C910_RTL_FACTORY/gen_rtl/vfdsu/rtl/ct_vfdsu_scalar_dp.v
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cvfpu/vendor/openc910/C910_RTL_FACTORY/gen_rtl/vfdsu/rtl/ct_vfdsu_srt_radix16_bound_table.v
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cvfpu/vendor/openc910/C910_RTL_FACTORY/gen_rtl/vfdsu/rtl/ct_vfdsu_srt_radix16_with_sqrt.v
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cvfpu/vendor/openc910/C910_RTL_FACTORY/gen_rtl/vfdsu/rtl/ct_vfdsu_srt.v
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cvfpu/vendor/openc910/C910_RTL_FACTORY/gen_rtl/vfdsu/rtl/ct_vfdsu_top.v
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cvfpu/src/fpnew_divsqrt_th_32.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cvfpu/src/fpnew_divsqrt_th_64_multi.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cvfpu/src/fpnew_divsqrt_multi.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cvfpu/src/fpnew_fma_multi.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cvfpu/src/fpnew_fma.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cvfpu/src/fpnew_noncomp.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cvfpu/src/fpnew_opgroup_block.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cvfpu/src/fpnew_opgroup_fmt_slice.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cvfpu/src/fpnew_opgroup_multifmt_slice.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cvfpu/src/fpnew_rounding.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cvfpu/src/fpnew_top.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/culsans_cva6_pinned/vendor/openhwgroup/cvfpu/src/fpu_div_sqrt_mvp/hdl/defs_div_sqrt_mvp.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/culsans_cva6_pinned/vendor/openhwgroup/cvfpu/src/fpu_div_sqrt_mvp/hdl/control_mvp.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/culsans_cva6_pinned/vendor/openhwgroup/cvfpu/src/fpu_div_sqrt_mvp/hdl/div_sqrt_top_mvp.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/culsans_cva6_pinned/vendor/openhwgroup/cvfpu/src/fpu_div_sqrt_mvp/hdl/iteration_div_sqrt_mvp.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/culsans_cva6_pinned/vendor/openhwgroup/cvfpu/src/fpu_div_sqrt_mvp/hdl/norm_div_sqrt_mvp.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/culsans_cva6_pinned/vendor/openhwgroup/cvfpu/src/fpu_div_sqrt_mvp/hdl/nrbd_nrsc_mvp.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/culsans_cva6_pinned/vendor/openhwgroup/cvfpu/src/fpu_div_sqrt_mvp/hdl/preprocess_mvp.sv
+
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/include/config_pkg.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cva6/core/include/cv64a6_imafdc_sv39_hpdcache_wb_config_pkg.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/include/riscv_pkg.sv
+// Note: depends on fpnew_pkg, above
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/include/ariane_pkg.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cva6/vendor/pulp-platform/axi/src/axi_pkg.sv
+
+// Packages
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/include/wt_cache_pkg.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/include/std_cache_pkg.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/verification/common/third_party/cva6/core/include/instr_tracer_pkg.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cva6/core/include/build_config_pkg.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/include/aes_pkg.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/include/triggers_pkg.sv
+
+//CVXIF
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/cvxif_compressed_if_driver.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/cvxif_issue_register_commit_if_driver.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/cvxif_example/include/cvxif_instr_pkg.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/cvxif_fu.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/cvxif_example/cvxif_example_coprocessor.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/cvxif_example/instr_decoder.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/cvxif_example/compressed_instr_decoder.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/cvxif_example/copro_alu.sv
+
+// Common Cells
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/vendor/pulp-platform/common_cells/src/cf_math_pkg.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/vendor/pulp-platform/common_cells/src/fifo_v3.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cva6/vendor/pulp-platform/common_cells/src/lfsr.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/vendor/pulp-platform/common_cells/src/lfsr_8bit.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/vendor/pulp-platform/common_cells/src/stream_arbiter.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/vendor/pulp-platform/common_cells/src/stream_arbiter_flushable.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/vendor/pulp-platform/common_cells/src/stream_mux.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cva6/vendor/pulp-platform/common_cells/src/stream_demux.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/vendor/pulp-platform/common_cells/src/lzc.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cva6/vendor/pulp-platform/common_cells/src/rr_arb_tree.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/vendor/pulp-platform/common_cells/src/shift_reg.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/vendor/pulp-platform/common_cells/src/unread.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/vendor/pulp-platform/common_cells/src/popcount.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/vendor/pulp-platform/common_cells/src/exp_backoff.sv
+
+// Common Cells for example coprocessor
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/vendor/pulp-platform/common_cells/src/counter.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/vendor/pulp-platform/common_cells/src/delta_counter.sv
+
+// Top-level source files (not necessarily instantiated at the top of the cva6).
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cva6/core/cva6.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/cva6_rvfi_probes.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cva6/core/alu.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/alu_wrapper.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cva6/core/aes.sv
+// Note: depends on fpnew_pkg, above
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cva6/core/fpu_wrap.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/branch_unit.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/compressed_decoder.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/macro_decoder.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cva6/core/controller.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/zcmt_decoder.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/csr_buffer.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cva6/core/csr_regfile.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/trigger_module.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cva6/core/decoder.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cva6/core/ex_stage.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/instr_realign.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/id_stage.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cva6/core/issue_read_operands.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/issue_stage.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cva6/core/load_unit.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cva6/core/load_store_unit.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/lsu_bypass.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cva6/core/mult.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/multiplier.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cva6/core/serdiv.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cva6/core/perf_counters.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cva6/core/ariane_regfile_ff.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/ariane_regfile_fpga.sv
+// NOTE: scoreboard.sv modified for DSIM (unchanged for other simulators)
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cva6/core/scoreboard.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cva6/core/raw_checker.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cva6/core/store_buffer.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/amo_buffer.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cva6/core/store_unit.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cva6/core/commit_stage.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/axi_shim.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/cva6_accel_first_pass_decoder_stub.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/acc_dispatcher.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cva6/core/cva6_fifo_v3.sv
+
+// What is "frontend"?
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/frontend/btb.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/frontend/bht.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/frontend/bht2lvl.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/frontend/ras.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/frontend/instr_scan.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/frontend/instr_queue.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/frontend/frontend.sv
+
+// Cache subsystem
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/cache_subsystem/wt_dcache_ctrl.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/cache_subsystem/wt_dcache_mem.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/cache_subsystem/wt_dcache_missunit.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/cache_subsystem/wt_dcache_wbuffer.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/cache_subsystem/wt_dcache.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cva6/core/cache_subsystem/cva6_icache.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cva6/core/cache_subsystem/wt_cache_subsystem.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/cache_subsystem/wt_axi_adapter.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/cache_subsystem/tag_cmp.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/cache_subsystem/axi_adapter.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/cache_subsystem/miss_handler.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/cache_subsystem/cache_ctrl.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cva6/core/cache_subsystem/cva6_icache_axi_wrapper.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/cache_subsystem/std_cache_subsystem.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/cache_subsystem/std_nbdcache.sv
+-f C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/rv32_profile/filelists/hpdcache_rv32.Flist
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/utils/ecc/prim_secded_36_29_dec.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/utils/ecc/prim_secded_36_29_enc.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/utils/ecc/prim_secded_39_32_dec.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/utils/ecc/prim_secded_39_32_enc.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/utils/ecc/prim_secded_55_48_dec.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/utils/ecc/prim_secded_55_48_enc.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/utils/ecc/prim_secded_72_64_dec.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/utils/ecc/prim_secded_72_64_enc.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/utils/ecc/prim_secded_pkg.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/hpdcache_cva6_pinned/rtl/src/utils/hpdcache_mem_resp_demux.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/utils/hpdcache_mem_to_axi_read.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/hpdcache_cva6_pinned/rtl/src/utils/hpdcache_mem_to_axi_write.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/include/dummy_l15_pkg.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cva6/core/cache_subsystem/cva6_hpdcache_subsystem.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cva6/core/cache_subsystem/cva6_hpdcache_subsystem_axi_arbiter.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cva6/core/cache_subsystem/cva6_hpdcache_if_adapter.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cva6/core/cache_subsystem/cva6_hpdcache_wrapper.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/macros/behav/hpdcache_sram_1rw.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/macros/behav/hpdcache_sram_wbyteenable_1rw.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/macros/behav/hpdcache_sram_wmask_1rw.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/macros/behav/hpdcache_sram_ecc_1rw.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/macros/behav/hpdcache_sram_wbyteenable_ecc_1rw.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/hpdcache_cva6_pinned/rtl/src/common/macros/behav/hpdcache_sram_wmask_ecc_1rw.sv
+
+// Physical Memory Protection
+// NOTE: pmp.sv modified for DSIM (unchanged for other simulators)
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/pmp/src/pmp.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/pmp/src/pmp_entry.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/pmp/src/pmp_data_if.sv
+
+// Tracer (behavioral code, not RTL)
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/verification/common/third_party/cva6/common/local/util/instr_tracer.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/common/local/util/tc_sram_wrapper.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/common/local/util/tc_sram_wrapper_cache_techno.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cva6/vendor/pulp-platform/tech_cells_generic/src/rtl/tc_sram.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cva6/common/local/util/sram.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cva6/common/local/util/sram_cache.sv
+
+// MMU 
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cva6/core/cva6_mmu/cva6_mmu.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/third_party/cva6/core/cva6_mmu/cva6_ptw.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cva6/core/cva6_mmu/cva6_tlb.sv
+C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/common/modified/cva6/core/cva6_mmu/cva6_shared_tlb.sv
+
+// end of manifest

@@ -1,0 +1,279 @@
+{
+  "byte_order": "little",
+  "major": 1,
+  "minor": 0,
+  "config_offset": 64,
+  "config_bytes": 64,
+  "descriptor_alignment": 64,
+  "max_descriptor_bytes": 896,
+  "major_opcode": 11,
+  "precision_ids": {
+    "int8": 0,
+    "bf16": 1,
+    "fp16": 2
+  },
+  "header_fields": [
+    ["magic", 0, 4],
+    ["schema_major", 4, 2],
+    ["schema_minor", 6, 2],
+    ["header_bytes", 8, 2],
+    ["operation_id_echo", 10, 1],
+    ["precision_id_echo", 11, 1],
+    ["schema_bytes", 12, 4],
+    ["implementation_variant", 16, 1]
+  ],
+  "tref_fields": [
+    ["base_addr", 0, 8],
+    ["span_bytes", 8, 8],
+    ["extent", 16, 16],
+    ["stride_bytes", 32, 32]
+  ],
+  "tlas_header": {
+    "size": 64,
+    "magic": "TLAS",
+    "major": 1,
+    "feature_map_id": 0,
+    "state_format": 1,
+    "fields": [
+      ["magic", 0, 4],
+      ["major", 4, 2],
+      ["header_bytes", 6, 2],
+      ["feature_map_id", 8, 1],
+      ["precision_id_echo", 9, 1],
+      ["state_format", 10, 1],
+      ["head_count", 12, 4],
+      ["qk_head_width", 16, 4],
+      ["v_head_width", 20, 4],
+      ["processed_token_count", 24, 8],
+      ["payload_bytes", 32, 4]
+    ]
+  },
+  "schemas": [
+    {
+      "name": "gemm",
+      "operation": 1,
+      "variant": 0,
+      "size": 832,
+      "config": [
+        [
+          "m",
+          64,
+          4
+        ],
+        [
+          "n",
+          68,
+          4
+        ],
+        [
+          "k",
+          72,
+          4
+        ],
+        ["flags", 76, 4],
+        ["activation", 80, 1]
+      ],
+      "references": [
+        "a",
+        "b",
+        "output",
+        "initial_c",
+        "bias",
+        "residual",
+        "requant"
+      ],
+      "inline_lut_bytes": 256
+    },
+    {
+      "name": "elemwise",
+      "operation": 2,
+      "variant": 0,
+      "size": 640,
+      "config": [
+        ["rank", 64, 1],
+        ["mode", 65, 1],
+        ["activation", 66, 1],
+        ["scale_q16_16", 68, 4],
+        ["scale_fp32_bits", 72, 4],
+        ["swiglu_multiplier_q31", 76, 4],
+        ["swiglu_exponent", 80, 1]
+      ],
+      "references": [
+        "x",
+        "rhs",
+        "output",
+        "bias"
+      ],
+      "inline_lut_bytes": 256
+    },
+    {
+      "name": "reduce",
+      "operation": 3,
+      "variant": 0,
+      "size": 192,
+      "config": [
+        ["mode", 64, 1]
+      ],
+      "references": [
+        "input"
+      ],
+      "inline_lut_bytes": 0
+    },
+    {
+      "name": "argmax_standalone",
+      "operation": 4,
+      "variant": 0,
+      "size": 192,
+      "config": [
+        ["vocab_length", 64, 4]
+      ],
+      "references": [
+        "logits"
+      ],
+      "inline_lut_bytes": 0
+    },
+    {
+      "name": "argmax_fused",
+      "operation": 4,
+      "variant": 1,
+      "size": 384,
+      "config": [
+        ["vocab_length", 64, 4],
+        ["input_width", 68, 4],
+        ["bias_enable", 72, 1]
+      ],
+      "references": [
+        "input",
+        "weights",
+        "bias",
+        "requant"
+      ],
+      "inline_lut_bytes": 0
+    },
+    {
+      "name": "exact_attention",
+      "operation": 5,
+      "variant": 0,
+      "size": 448,
+      "config": [
+        ["batch_count", 64, 4],
+        ["head_count", 68, 4],
+        ["lq", 72, 4],
+        ["lkv", 76, 4],
+        ["dqk", 80, 4],
+        ["dv", 84, 4],
+        ["mask_mode", 88, 1],
+        ["attention_scale_fp32_bits", 92, 4],
+        ["query_position_start", 96, 16]
+      ],
+      "references": [
+        "q",
+        "k",
+        "v",
+        "output",
+        "mask"
+      ],
+      "inline_lut_bytes": 0
+    },
+    {
+      "name": "softmax",
+      "operation": 6,
+      "variant": 0,
+      "size": 320,
+      "config": [
+        ["row_count", 64, 4],
+        ["row_length", 68, 4],
+        ["mask_mode", 72, 1]
+      ],
+      "references": [
+        "input",
+        "output",
+        "mask"
+      ],
+      "inline_lut_bytes": 0
+    },
+    {
+      "name": "layernorm",
+      "operation": 7,
+      "variant": 0,
+      "size": 384,
+      "config": [
+        ["row_count", 64, 4],
+        ["row_width", 68, 4],
+        ["affine_enable", 72, 1],
+        ["epsilon_fp32_bits", 76, 4]
+      ],
+      "references": [
+        "input",
+        "output",
+        "gamma",
+        "beta"
+      ],
+      "inline_lut_bytes": 0
+    },
+    {
+      "name": "sparse_gemm",
+      "operation": 8,
+      "variant": 0,
+      "size": 896,
+      "config": [
+        [
+          "m",
+          64,
+          4
+        ],
+        [
+          "n",
+          68,
+          4
+        ],
+        [
+          "k",
+          72,
+          4
+        ],
+        ["flags", 76, 4],
+        ["activation", 80, 1]
+      ],
+      "references": [
+        "a",
+        "packed_weights",
+        "metadata",
+        "output",
+        "initial_c",
+        "bias",
+        "residual",
+        "requant"
+      ],
+      "inline_lut_bytes": 256
+    },
+    {
+      "name": "linear_attention",
+      "operation": 9,
+      "variant": 0,
+      "size": 512,
+      "config": [
+        ["batch_count", 64, 4],
+        ["sequence_length", 68, 4],
+        ["head_count", 72, 4],
+        [
+          "r",
+          76,
+          4
+        ],
+        ["dv", 80, 4],
+        ["state_mode", 84, 1],
+        ["feature_map_id", 85, 1]
+      ],
+      "references": [
+        "q",
+        "k",
+        "v",
+        "output",
+        "state_input",
+        "state_output"
+      ],
+      "inline_lut_bytes": 0
+    }
+  ]
+}

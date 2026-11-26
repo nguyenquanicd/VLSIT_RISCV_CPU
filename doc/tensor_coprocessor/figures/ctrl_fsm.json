@@ -24,6 +24,9 @@
       "name": "ENUM_ST_WRITEBACK"
     },
     {
+      "name": "ENUM_ST_ERR_DRAIN"
+    },
+    {
       "name": "ENUM_ST_ERROR"
     }
   ],
@@ -31,17 +34,17 @@
     {
       "src": "ENUM_ST_IDLE",
       "dst": "ENUM_ST_DECODE",
-      "label": "issue_valid and accept"
+      "label": "issue accepted"
     },
     {
       "src": "ENUM_ST_DECODE",
       "dst": "ENUM_ST_FETCH",
-      "label": "decode done"
+      "label": "descriptor/control ready"
     },
     {
       "src": "ENUM_ST_DECODE",
-      "dst": "ENUM_ST_ERROR",
-      "label": "illegal op"
+      "dst": "ENUM_ST_ERR_DRAIN",
+      "label": "accepted descriptor fault"
     },
     {
       "src": "ENUM_ST_FETCH",
@@ -49,24 +52,49 @@
       "label": "operands ready"
     },
     {
+      "src": "ENUM_ST_FETCH",
+      "dst": "ENUM_ST_ERR_DRAIN",
+      "label": "read/descriptor fault"
+    },
+    {
       "src": "ENUM_ST_COMPUTE",
       "dst": "ENUM_ST_POST",
-      "label": "tile complete"
+      "label": "tile phase complete"
+    },
+    {
+      "src": "ENUM_ST_COMPUTE",
+      "dst": "ENUM_ST_ERR_DRAIN",
+      "label": "execution fault"
+    },
+    {
+      "src": "ENUM_ST_POST",
+      "dst": "ENUM_ST_FETCH",
+      "label": "more tiles or phases"
     },
     {
       "src": "ENUM_ST_POST",
       "dst": "ENUM_ST_WRITEBACK",
-      "label": "post done"
+      "label": "command complete"
+    },
+    {
+      "src": "ENUM_ST_POST",
+      "dst": "ENUM_ST_ERR_DRAIN",
+      "label": "postprocess fault"
     },
     {
       "src": "ENUM_ST_WRITEBACK",
       "dst": "ENUM_ST_IDLE",
-      "label": "result_ready"
+      "label": "result handshake"
+    },
+    {
+      "src": "ENUM_ST_ERR_DRAIN",
+      "dst": "ENUM_ST_ERROR",
+      "label": "drained; status captured"
     },
     {
       "src": "ENUM_ST_ERROR",
       "dst": "ENUM_ST_IDLE",
-      "label": "result_ready"
+      "label": "error result handshake"
     }
   ],
   "layout": {

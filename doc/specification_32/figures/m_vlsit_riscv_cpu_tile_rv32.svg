@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1340" height="710" viewBox="260 240 1340 710" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="260" y="240" width="1340" height="710" fill="#FFFFFF"/>
+<rect x="510" y="370" width="1060" height="450" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<rect x="960" y="510" width="220" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1070" y="536" text-anchor="middle">u_dont_touch_cva6</text>
+<text x="1070" y="558" text-anchor="middle">(cva6, RV32 config)</text>
+<rect x="590" y="680" width="220" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="706" text-anchor="middle">line_addr_adapter</text>
+<text x="700" y="728" text-anchor="middle">(30-bit to 52-bit)</text>
+<rect x="590" y="510" width="220" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="536" text-anchor="middle">vaddr_adapter</text>
+<text x="700" y="558" text-anchor="middle">(32-bit to 64-bit)</text>
+<rect x="930" y="680" width="280" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1070" y="706" text-anchor="middle">axi_record_slicer</text>
+<text x="1070" y="728" text-anchor="middle">(unchanged, 64-bit AXI)</text>
+<rect x="1330" y="680" width="160" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1410" y="706" text-anchor="middle">region_decode</text>
+<text x="1410" y="728" text-anchor="middle">(unchanged)</text>
+<text x="1070" y="891" text-anchor="middle">AXI4 + AWATOP</text>
+<text x="1070" y="913" text-anchor="middle">64-bit to route</text>
+<text x="1410" y="891" text-anchor="middle">REGION CLASS</text>
+<text x="1410" y="913" text-anchor="middle">to route</text>
+<text x="1548" y="411" text-anchor="end">Internal functional blocks</text>
+<text x="1548" y="433" text-anchor="end">(m_vlsit_riscv_cpu_tile)</text>
+<text x="830" y="526" text-anchor="middle">VA</text>
+<text x="830" y="606" text-anchor="middle">LINE</text>
+<text x="1115" y="646" text-anchor="middle">AXI</text>
+<text x="1235" y="696" text-anchor="middle">WIN</text>
+<text x="375" y="706" text-anchor="middle">COHERENCE LINES</text>
+<text x="375" y="728" text-anchor="middle">52-bit to CCU</text>
+<text x="700" y="291" text-anchor="middle">BOOT / HART ID</text>
+<text x="700" y="313" text-anchor="middle">64-bit tile ports</text>
+<path d="M 590 710 L 460 710" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="460,710 472,704 472,716" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 700 320 L 700 510" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="700,510 694,498 706,498" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1070 740 L 1070 870" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1070,870 1064,858 1076,858" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1410 740 L 1410 870" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1410,870 1404,858 1416,858" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 810 540 L 960 540" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="960,540 948,546 948,534" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1210 710 L 1330 710" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1330,710 1318,716 1318,704" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1180 540 L 1200 540 L 1200 660 L 1070 660 L 1070 680" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1070,680 1064,668 1076,668" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1070 570 L 1070 620 L 830 620 L 830 710 L 810 710" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="810,710 822,704 822,716" fill="#000000" stroke="#000000" stroke-width="1"/>
+</svg>

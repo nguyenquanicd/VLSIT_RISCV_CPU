@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "approval_gate": "G0; no stimulus, simulation, formal run, coverage collection or new verification code until named G0 approval.",
+  "requirement_inventory": {
+    "path": "verification/plan/requirements.txt",
+    "hds": "doc/specification/VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS.md",
+    "active_hds_requirements": 57,
+    "deferred_hds_requirements": [
+      "REQ-IF-004"
+    ],
+    "protocol_clause_obligations": [
+      "PROTO-AXI-A3.2",
+      "PROTO-AXI-A7.2",
+      "PROTO-AXI-B1.1",
+      "PROTO-AXI-B1.2",
+      "PROTO-AXI-E1.1"
+    ]
+  },
+  "functional_coverage": {
+    "target": "Every active in-scope requirement and protocol clause has a passing independently checked test for every applicable configuration/dimension in scope_matrix.json.",
+    "dimensions": [
+      "normal",
+      "boundary",
+      "backpressure",
+      "concurrency",
+      "error",
+      "reset",
+      "recovery"
+    ],
+    "closure": "All applicable obligation IDs must be observed or separately dispositioned by the designer; no inferred closure from code coverage."
+  },
+  "assertion_coverage": {
+    "target": "Every planned safety/liveness assertion is activated and reaches both its intended antecedent and outcome; vacuous proofs are reported, not credited.",
+    "fairness": "Liveness claims require explicit eventual READY/response/ACK fairness. No finite completion is claimed under the HDS no-timeout missing-ACK contract."
+  },
+  "mutation_coverage": {
+    "target": "Run checker-focused and selected RTL fault mutations; report killed, survived, invalid, and equivalent mutants separately.",
+    "policy": "No production RTL edits; mutations run in disposable copies and every mutant has a retained diff and replay command."
+  },
+  "code_coverage": {
+    "tool": "Verilator 5.053 candidate; exact binary hash/version/options captured in qualification and run manifests.",
+    "metrics": {
+      "line": 100,
+      "expression": 100,
+      "toggle": 100
+    },
+    "metric_note": "Expression coverage is the user-approved replacement for condition coverage; it is not labeled condition coverage and is reported as its own metric.",
+    "denominator": "Exact active TOP filelist closure in active_rtl_source_scope.json: at least 119 confirmed threshold files (35 VLSIT-created/generated and 84 active modified licensed-source copies). Measure full HDL content of each such file, not only changed diff lines. There are 343 additional active source files under third_party paths; those are only excluded after comparison to exact pinned upstream revisions. Any local difference is added to the threshold. Two verification-support sources are outside DUT coverage.",
+    "aggregation": "Report each metric independently by configuration and as a set union across applicable configurations. Never average percentages. A configuration-specific generate branch is covered in its applicable configuration; every in-scope branch must appear in at least one applicable configuration.",
+    "waivers": "No code-coverage exclusion is assumed. Any unreachable/illegal point is a coverage hole until proven and separately approved; 100% is not lowered or replaced by an automatic waiver.",
+    "source_manifest": "verification/plan/active_rtl_source_scope.json; compare third_party candidate sources to exact pinned revisions and finalize classification before G1. Capture the exact run source snapshot and hashes before first credited run. Any RTL/filelist/hash drift after G0 invalidates the frozen plan until reviewed.",
+    "third_party_policy": "Directory location alone does not establish third-party unchanged status. No locally modified source may be excluded from the 100% project-owned target."
+  },
+  "configuration_campaign": {
+    "top_matrix": "All 8 combinations PARA_CPU_NUM={2,4} × PARA_AXI_MEM_DATA_W={32,64,128,256}; elaboration and memory-path smoke for each. Full CPU/software/coherence regression at 2/4 hart × 64-bit baseline; run additional full software cases at other widths if an adapter/top discrepancy is found.",
+    "orthogonal_parameter_sweeps": [
+      "PARA_COH_TXN_NUM={2,8,16}",
+      "PARA_PMU_COUNTER_NUM={1,16,32} × PARA_PMU_COUNTER_W={32,64}",
+      "PARA_ADDR_REGION_NUM={1,16}",
+      "default production LLC geometry"
+    ],
+    "reset": "Use coordinated reset for cluster, connected AXI fabric/target transaction state and internal coherence agents; backing memory retains contents; no pre-reset response is allowed after release."
+  },
+  "evidence_policy": {
+    "legacy": "Existing simulation/lint reports and 58 historical CPU cases are archival context only until cold-replayed against a frozen source snapshot and the new independent checkers.",
+    "replay": "One verification/sim/Makefile is the sole public command entry point; each command records exact argv, cwd, environment delta, tool version, timeout, seed, exit status, stdout/stderr, source/input hashes and run ID.",
+    "retention": "Never overwrite old evidence. Every testcase, memory model, generated environment component, filelist and root command used in a run is retained under verification/sim."
+  },
+  "limitations": [
+    "External ACE profile is deferred.",
+    "No Fmax/area/power/STA signoff: PDK, SRAM views, SDC, PVT and workload constraints are absent.",
+    "SoC-dependent global hart-ID assignment and external debug clock/reset/auth policy remain integration dependencies.",
+    "The selected PULP AXI4 + AWATOP extension must not be described as AXI4 base or full AXI5."
+  ],
+  "risk": "The strict 100% target includes all 84 active modified upstream modules, including CVA6, HPDcache, LLC and supporting logic. Full architectural/FPU/MMU/exception coverage may be needed; existing 58 directed CPU scenarios alone cannot be assumed sufficient."
+}

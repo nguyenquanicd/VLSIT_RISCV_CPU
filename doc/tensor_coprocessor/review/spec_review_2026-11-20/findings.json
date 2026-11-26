@@ -1,0 +1,385 @@
+{
+  "report": "REVIEW_VLSIT_TENSOR_COPROCESSOR.md",
+  "findings": [
+    {
+      "id": "F-001",
+      "severity": "Blocker",
+      "label": "FACT",
+      "locator": "§20.1 RV-017, §3.1 REQ-IF-006, REQ-IF-007",
+      "cells": [
+        "F-001",
+        "Blocker",
+        "integration_effort",
+        "FACT: The host commit frontier the IP depends on has no mapped CVA6 implementation",
+        "Frontier commit của host mà IP phụ thuộc chưa có hiện thực CVA6 được ánh xạ",
+        "§20.1 RV-017, §3.1 REQ-IF-006, REQ-IF-007"
+      ]
+    },
+    {
+      "id": "F-002",
+      "severity": "Major",
+      "label": "INFERENCE",
+      "locator": "§13 PPA-001, §7.1, §1.2",
+      "cells": [
+        "F-002",
+        "Major",
+        "asic_feasibility",
+        "INFERENCE: The 2 GHz goal has no technology basis and shares the host clock",
+        "Mục tiêu 2 GHz không có cơ sở công nghệ và dùng chung clock với host",
+        "§13 PPA-001, §7.1, §1.2"
+      ]
+    },
+    {
+      "id": "F-003",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§13 PPA-004, PPA-007, §6.1.1",
+      "cells": [
+        "F-003",
+        "Major",
+        "performance",
+        "FACT: 64 TOPS peak has no sustained target and the first memory path is one 256-bit AXI port",
+        "Đỉnh 64 TOPS không có mục tiêu duy trì và đường nhớ đầu tiên là một cổng AXI 256 bit",
+        "§13 PPA-004, PPA-007, §6.1.1"
+      ]
+    },
+    {
+      "id": "F-004",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§20.1 RV-002, §13 PPA-005, PPA-006, PPA-010",
+      "cells": [
+        "F-004",
+        "Major",
+        "performance",
+        "FACT: Latency and tokens-per-second targets are still TBD",
+        "Mục tiêu latency và token mỗi giây vẫn là TBD",
+        "§20.1 RV-002, §13 PPA-005, PPA-006, PPA-010"
+      ]
+    },
+    {
+      "id": "F-011",
+      "severity": "Major",
+      "label": "INFERENCE",
+      "locator": "§3.1 REQ-ERR-004, §7.2 CDC-005, CDC-006",
+      "cells": [
+        "F-011",
+        "Major",
+        "clock_reset_cdc",
+        "INFERENCE: The OP-003 zero-result fence stalls every hart across an asynchronous round trip",
+        "Fence kết quả bằng 0 của OP-003 làm dừng mọi hart qua một vòng không đồng bộ",
+        "§3.1 REQ-ERR-004, §7.2 CDC-005, CDC-006"
+      ]
+    },
+    {
+      "id": "F-019",
+      "severity": "Major",
+      "label": "INFERENCE",
+      "locator": "§1.2, §1.4 FEAT-002, FEAT-006",
+      "cells": [
+        "F-019",
+        "Major",
+        "§1.2, §1.4 FEAT-002, FEAT-006",
+        "INFERENCE: §1.2 says target shapes and the accuracy and latency envelope remain open, yet FEAT-002 and FEAT-006 size the IP at 65.536 TOPS and up to 2.048 TB/s on-chip injection; Arm's edge NPU Ethos-U85 is published at 128 to 2048 MACs per cycle, 256 GOPS to 4 TOPS at 1 GHz with transformer support, so the stated target is 16 times larger than that edge class.",
+        "INFERENCE: §1.2 nói target shape và envelope độ chính xác và latency còn mở, nhưng FEAT-002 và FEAT-006 định cỡ IP ở 65,536 TOPS và tới 2,048 TB/s cấp on-chip; NPU edge Ethos-U85 của Arm được công bố 128 đến 2048 MAC mỗi chu kỳ, 256 GOPS đến 4 TOPS ở 1 GHz có hỗ trợ transformer, nên mục tiêu nêu ra lớn gấp 16 lần lớp edge đó.",
+        "Tie the array count to a named model and an SoC power and area budget."
+      ]
+    },
+    {
+      "id": "F-009",
+      "severity": "Minor",
+      "label": "FACT",
+      "locator": "§20.1 RV-016, §10 line 1572, DEC-073, REQ-FUNC-010",
+      "cells": [
+        "F-009",
+        "Minor",
+        "§20.1 RV-016, §10 line 1572, DEC-073, REQ-FUNC-010",
+        "FACT: A matrix-vector and small-M dataflow profile exists (REQ-FUNC-010, §10 line 1972), but RV-016 (Critical) notes that a 1 by K by K by V projection on a 32-row output-stationary mapping occupies one PE row (3.125 percent) and DEC-073 leaves the build tile geometry and latency evidence open, so the occupancy of the fused OP-004 build is not defined.",
+        "FACT: Đã có profile dataflow matrix-vector và small-M (REQ-FUNC-010, §10 dòng 1972), nhưng RV-016 (Critical) nêu phép chiếu 1 x K nhân K x V trên mapping output-stationary 32 hàng chỉ dùng một hàng PE (3,125 phần trăm) và DEC-073 để mở hình học tile và bằng chứng latency của bản build, nên occupancy của build OP-004 fused chưa được xác định.",
+        "Characterize the fused dataflow (direct, split-K or vector lanes) and state its occupancy before the ABI freeze."
+      ]
+    },
+    {
+      "id": "F-010",
+      "severity": "Minor",
+      "label": "INFERENCE",
+      "locator": "§20.2 DEC-006, §20.1 RV-003",
+      "cells": [
+        "F-010",
+        "Minor",
+        "§20.2 DEC-006, §20.1 RV-003",
+        "INFERENCE: The first release schedules one active command across all arrays and hands over at completion; row softmax, layer normalization and argmax are limited by exp, reciprocal and reduction lanes (PPA-008) while the MAC arrays are idle.",
+        "INFERENCE: Bản đầu lập lịch một lệnh đang chạy trên mọi array và chuyển tại thời điểm hoàn tất; row softmax, layer normalization và argmax bị giới hạn bởi lane exp, reciprocal và reduction (PPA-008) trong khi array MAC rảnh.",
+        "Report utilization per operation and decide when cross-command overlap is required."
+      ]
+    },
+    {
+      "id": "F-022",
+      "severity": "Observation",
+      "label": "FACT",
+      "locator": "§13, §20.2 DEC-016, REQ-IF-007, PPA-010",
+      "cells": [
+        "F-022",
+        "Observation",
+        "§13, §20.2 DEC-016, REQ-IF-007, PPA-010",
+        "FACT: The roofline now separates 8.2 TOPS at T=128 from the 64 TOPS goal, the control FSM has ERR_DRAIN, the CSR record holds hart, ID and status, DEC-016 separates the tensor top from the cluster, and REQ-IF-007 and PPA-010 give an interrupt and debug handler-entry bound.",
+        "FACT: Roofline nay tách 8,2 TOPS ở T=128 khỏi mục tiêu 64 TOPS, FSM điều khiển có ERR_DRAIN, bản ghi CSR chứa hart, ID và status, DEC-016 tách top tensor khỏi cluster, và REQ-IF-007 cùng PPA-010 đưa ra ràng buộc handler-entry cho ngắt và debug.",
+        "Keep these and track the open items of F-001, F-004 and F-009."
+      ]
+    },
+    {
+      "id": "F-008",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§2.1 REF-001, §2.3, §6 IF-001",
+      "cells": [
+        "F-008",
+        "Major",
+        "§2.1 REF-001, §2.3, §6 IF-001",
+        "FACT: REF-001 names the Core-V eXtension interface Release v1.0.1-dev.0 (Development, 2024-05-23) as the protocol authority, while the locally converted reference is the v1.0.0 document (file vlsit_cvxif_openhw_core_v_xif_v1_0_0.md); the two can differ in clause numbers and behavior.",
+        "FACT: REF-001 gọi Core-V eXtension interface Release v1.0.1-dev.0 (Development, 2024-05-23) là chuẩn giao thức, trong khi bản chuyển đổi cục bộ là tài liệu v1.0.0 (file vlsit_cvxif_openhw_core_v_xif_v1_0_0.md); hai bản có thể khác số clause và hành vi.",
+        "Pin the ratified v1.0.0 or record the exact development commit and the differences."
+      ]
+    },
+    {
+      "id": "F-011",
+      "severity": "Major",
+      "label": "INFERENCE",
+      "locator": "§3.1 REQ-ERR-004, §7.2 CDC-005, CDC-006",
+      "cells": [
+        "F-011",
+        "Major",
+        "§3.1 REQ-ERR-004, §7.2 CDC-005, CDC-006",
+        "INFERENCE: REQ-ERR-004 holds a global all-hart issue stall for an OP-003 result of zero until software reads and clears the error record and writes scalar_ack through APB (CDC-005, CDC-006); zero is a common result (a sum of zeros, a max after ReLU), so the slow path is frequent and a software error could hold the stall.",
+        "INFERENCE: REQ-ERR-004 giữ stall issue toàn bộ hart khi kết quả OP-003 bằng 0 cho đến khi phần mềm đọc và xóa error record và ghi scalar_ack qua APB (CDC-005, CDC-006); 0 là kết quả phổ biến (tổng các số 0, max sau ReLU), nên đường chậm xảy ra thường xuyên và lỗi phần mềm có thể giữ stall.",
+        "Measure the zero-result frequency and consider returning an error flag in the result instead."
+      ]
+    },
+    {
+      "id": "F-021",
+      "severity": "Minor",
+      "label": "FACT",
+      "locator": "§20.2 ASM-002, §6.2, §3.1 REQ-PARAM-004",
+      "cells": [
+        "F-021",
+        "Minor",
+        "§20.2 ASM-002, §6.2, §3.1 REQ-PARAM-004",
+        "FACT: ASM-002 (packed CV-X-IF payload ports) is open, PPA-007 gives a 256-bit, 16-read, 8-write candidate and §17.1.2 marks IF-003 sizing TBD, so the top-level module boundary is not frozen even though the parameter caps are.",
+        "FACT: ASM-002 (port payload CV-X-IF dạng packed) còn mở, PPA-007 đưa ứng viên 256 bit, 16 read, 8 write và §17.1.2 đánh dấu kích thước IF-003 là TBD, nên ranh giới module top chưa được chốt dù các cap tham số đã chốt.",
+        "Freeze the port list and the AXI data-path sizing together."
+      ]
+    },
+    {
+      "id": "F-002",
+      "severity": "Major",
+      "label": "INFERENCE",
+      "locator": "§13 PPA-001, §7.1, §1.2",
+      "cells": [
+        "F-002",
+        "Major",
+        "§13 PPA-001, §7.1, §1.2",
+        "INFERENCE: PPA-001 sets at least 1 GHz and a 2 GHz characterization point for CFG-64TOPS at an SS corner, while §1.2 selects no technology; the tensor datapath shares CLK-CORE with the CVA6 host (§7.1). The related cluster synthesis (ARM sc12 55LPx RVT, ss 1.08 V 125 C) measured a 3.40 ns CVA6 critical path, and a published GF22 FDX synthesis reports about 1.09 GHz at 0.72 V and -40 C, so the host alone bounds the clock.",
+        "INFERENCE: PPA-001 đặt tối thiểu 1 GHz và điểm khảo sát 2 GHz cho CFG-64TOPS ở corner SS, trong khi §1.2 chưa chọn công nghệ; datapath tensor dùng chung CLK-CORE với host CVA6 (§7.1). Synthesis cluster liên quan (ARM sc12 55LPx RVT, ss 1,08 V 125 C) đo đường dài nhất CVA6 là 3,40 ns, và một synthesis GF22 FDX đã công bố báo khoảng 1,09 GHz ở 0,72 V và -40 C, nên riêng host đã giới hạn clock.",
+        "Choose the technology and corner, and gate the accumulator-loop architecture on a processing-element experiment."
+      ]
+    },
+    {
+      "id": "F-007",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§17.1.2, §17.1.1",
+      "cells": [
+        "F-007",
+        "Major",
+        "§17.1.2, §17.1.1",
+        "FACT: §17.1.2 lists CV-X-IF and APB budgets as 'integrator' and the IF-003 tensor-data path as burst and width TBD with SDC after port sizing; CLK-CORE has no period or uncertainty.",
+        "FACT: §17.1.2 liệt kê ngân sách CV-X-IF và APB là 'integrator' và đường dữ liệu tensor IF-003 là burst và độ rộng TBD với SDC sau khi chốt kích thước port; CLK-CORE không có period hay uncertainty.",
+        "State a port-group budget as a percent of the period and the register-output rule."
+      ]
+    },
+    {
+      "id": "F-005",
+      "severity": "Major",
+      "label": "INFERENCE",
+      "locator": "§13 PPA-002, PPA-003",
+      "cells": [
+        "F-005",
+        "Major",
+        "§13 PPA-002, PPA-003",
+        "INFERENCE: PPA-002 and PPA-003 are qualitative. As a structural proxy, 16 arrays of 32 by 32 PEs hold 16,384 accumulators of 32 bits, so at least 524,288 accumulator flops; using the 10.56 um2 average sequential cell of the supplied ARM sc12 55LPx RVT synthesis this is about 5.5 mm2 before multipliers, operand registers and SRAM (proxy, not a mapped number for this design).",
+        "INFERENCE: PPA-002 và PPA-003 chỉ định tính. Theo proxy cấu trúc, 16 array 32 x 32 PE có 16.384 accumulator 32 bit, tức ít nhất 524.288 flop accumulator; dùng sequential cell trung bình 10,56 um2 của synthesis ARM sc12 55LPx RVT đã cấp thì khoảng 5,5 mm2 chưa tính multiplier, thanh ghi operand và SRAM (proxy, không phải số mapped của thiết kế này).",
+        "Add a structural area table and a power estimation method with assumptions."
+      ]
+    },
+    {
+      "id": "F-003",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§13 PPA-004, PPA-007, §6.1.1",
+      "cells": [
+        "F-003",
+        "Major",
+        "§13 PPA-004, PPA-007, §6.1.1",
+        "FACT: PPA-004 states an ideal peak of 65.536 TOPS (16 arrays of 32 by 32 at 2 GHz) and FEAT-006 says it needs up to 2.048 TB/s of on-chip operand injection; PPA-007 gives the first target as one 256-bit AXI port with minimum SoC bandwidth, SRAM and arbitration left to sign-off, and §6.1.1 says the port does not sustain 64 TOPS for every workload.",
+        "FACT: PPA-004 nêu đỉnh lý tưởng 65,536 TOPS (16 array 32 x 32 ở 2 GHz) và FEAT-006 nói cần tới 2,048 TB/s cấp operand on-chip; PPA-007 đặt mục tiêu đầu tiên là một cổng AXI 256 bit với băng thông SoC tối thiểu, SRAM và arbitration để lại cho sign-off, và §6.1.1 nói cổng này không duy trì 64 TOPS cho mọi workload.",
+        "Add a sustained-throughput requirement per workload and the bandwidth it implies."
+      ]
+    },
+    {
+      "id": "F-004",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§20.1 RV-002, §13 PPA-005, PPA-006, PPA-010",
+      "cells": [
+        "F-004",
+        "Major",
+        "§20.1 RV-002, §13 PPA-005, PPA-006, PPA-010",
+        "FACT: RV-002 (Critical) says numeric latency targets remain TBD and its follow-up asks the team to supply them; PPA-005, PPA-006 and PPA-010 only define what to report, and the earlier 50 ms per token figure is called a preliminary example.",
+        "FACT: RV-002 (Critical) nói mục tiêu latency dạng số vẫn TBD và follow-up yêu cầu team cung cấp; PPA-005, PPA-006 và PPA-010 chỉ định nghĩa cần báo cáo gì, và con số 50 ms mỗi token trước đây được gọi là ví dụ sơ bộ.",
+        "Set numeric TTFT, inter-token and handler-entry targets for a named model."
+      ]
+    },
+    {
+      "id": "F-006",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§16, §7.1, §13 PPA-003",
+      "cells": [
+        "F-006",
+        "Major",
+        "§16, §7.1, §13 PPA-003",
+        "FACT: §7.1 and §16 state there is no internal clock gating and the clock-gating test enable is N/A, while PPA-003 sets the power goal as datapath-active only; an array of 16,384 MACs that is idle between commands would still toggle its clock tree.",
+        "FACT: §7.1 và §16 nêu không có clock gating bên trong và test enable cho clock gating là N/A, trong khi PPA-003 đặt mục tiêu công suất là chỉ datapath active; array 16.384 MAC không hoạt động giữa các lệnh vẫn toggle cây clock.",
+        "Allow approved ICG cells with a test-enable port or require operand isolation, and align PPA-003."
+      ]
+    },
+    {
+      "id": "F-012",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§20.1 RV-022, §20.2 DEC-029, REQ-RESET-002",
+      "cells": [
+        "F-012",
+        "Major",
+        "§20.1 RV-022, §20.2 DEC-029, REQ-RESET-002",
+        "FACT: AXI4 has no cancel for an accepted transaction; the user rejected tensor-local abort and DEC-029 selects full SoC reset after a watchdog timeout, with the host waiting on a pending result in the meantime.",
+        "FACT: AXI4 không có hủy cho transaction đã nhận; người dùng đã bác tensor-local abort và DEC-029 chọn reset toàn SoC sau timeout của watchdog, trong lúc đó host chờ result đang treo.",
+        "Keep the approved decision and require a SoC watchdog and interrupt path."
+      ]
+    },
+    {
+      "id": "F-013",
+      "severity": "Minor",
+      "label": "FACT",
+      "locator": "§18, §20.2 DEC-025",
+      "cells": [
+        "F-013",
+        "Minor",
+        "§18, §20.2 DEC-025",
+        "FACT: §18 lists 'optional parity on MEM-001' with simulation as the check and no ECC requirement for the banks that hold weights, accumulators or recurrent state, and no error-injection requirement for them.",
+        "FACT: §18 liệt kê 'parity tùy chọn trên MEM-001' với simulation là cách kiểm và không có yêu cầu ECC cho các bank giữ weight, accumulator hay trạng thái recurrent, cũng không có yêu cầu error-injection.",
+        "Decide the protection level per memory."
+      ]
+    },
+    {
+      "id": "F-014",
+      "severity": "Minor",
+      "label": "FACT",
+      "locator": "§18, §20.2 DEC-025, REQ-SEC-002, REQ-SEC-003",
+      "cells": [
+        "F-014",
+        "Minor",
+        "§18, §20.2 DEC-025, REQ-SEC-002, REQ-SEC-003",
+        "FACT: The DMA firewall is an immutable BASE and LIMIT aperture and the spec states it does not isolate S-mode code or two U-mode clients; §18 marks information leakage open for multi-tenant operation and a single global CSR record exposes physical error addresses.",
+        "FACT: Firewall DMA là aperture BASE và LIMIT bất biến và spec nêu nó không cô lập mã S-mode hay hai client U-mode; §18 đánh dấu rò rỉ thông tin là mở cho vận hành đa tenant và một CSR record toàn cục lộ địa chỉ vật lý khi lỗi.",
+        "State single-tenant as the supported scope or specify per-client isolation."
+      ]
+    },
+    {
+      "id": "F-015",
+      "severity": "Minor",
+      "label": "FACT",
+      "locator": "§15.3, §15.2",
+      "cells": [
+        "F-015",
+        "Minor",
+        "§15.3, §15.2",
+        "FACT: The specification has 35 properties (for example SVA-001) and cover points but no section sets a line, toggle, functional or assertion-coverage threshold.",
+        "FACT: Đặc tả có 35 property (ví dụ SVA-001) và cover point nhưng không mục nào đặt ngưỡng coverage line, toggle, functional hoặc assertion.",
+        "Set coverage thresholds per release configuration."
+      ]
+    },
+    {
+      "id": "F-016",
+      "severity": "Observation",
+      "label": "FACT",
+      "locator": "§4 CFG-BASE, CFG-FULL, CFG-64TOPS",
+      "cells": [
+        "F-016",
+        "Observation",
+        "§4 CFG-BASE, CFG-FULL, CFG-64TOPS",
+        "FACT: The configuration table states 'Planned; simulation/lint have not run because tensor RTL is absent' for CFG-BASE and 'Analytical only' for CFG-64TOPS, so the 76 decisions and 62 requirements have not been exercised.",
+        "FACT: Bảng cấu hình ghi 'Planned; simulation/lint have not run because tensor RTL is absent' cho CFG-BASE và 'Analytical only' cho CFG-64TOPS, nên 76 decision và 62 requirement chưa được thử nghiệm.",
+        "Record this as the status of the review."
+      ]
+    },
+    {
+      "id": "F-017",
+      "severity": "Minor",
+      "label": "FACT",
+      "locator": "front matter line 6, §20.1",
+      "cells": [
+        "F-017",
+        "Minor",
+        "front matter line 6, §20.1",
+        "FACT: The front matter still says version 0.1 and no revision history exists although the document grew to 76 decisions; §20.1 embeds a review-findings table (RV-001 to RV-022) in the normative text, and the file has about 4,400 lines averaging more than 200 characters.",
+        "FACT: Front matter vẫn ghi version 0.1 và không có lịch sử revision dù tài liệu đã lên 76 decision; §20.1 nhúng bảng phát hiện review (RV-001 đến RV-022) trong văn bản chuẩn, và file có khoảng 4.400 dòng, trung bình hơn 200 ký tự mỗi dòng.",
+        "Add a revision table and move the review table to a separate file."
+      ]
+    },
+    {
+      "id": "F-018",
+      "severity": "Minor",
+      "label": "FACT",
+      "locator": "FACT: The README links the 2026-11-17 review and the architecture-options analysis but not the re-review, and the 2026-11-17 re-review cites an HDS of 1,743 lines while the file now has 4,356 lines; the status of each earlier finding is not recorded in the specification.",
+      "cells": [
+        "F-018",
+        "Minor",
+        "README.md Review row, doc/tensor_coprocessor/review",
+        "FACT: The README links the 2026-11-17 review and the architecture-options analysis but not the re-review, and the 2026-11-17 re-review cites an HDS of 1,743 lines while the file now has 4,356 lines; the status of each earlier finding is not recorded in the specification.",
+        "FACT: README liên kết review 2026-11-17 và phân tích lựa chọn kiến trúc nhưng không liên kết re-review, và re-review 2026-11-17 dẫn HDS 1.743 dòng trong khi file nay có 4.356 dòng; trạng thái từng phát hiện trước đó không được ghi trong đặc tả.",
+        "Link the re-review and record a status per earlier finding."
+      ]
+    },
+    {
+      "id": "F-001",
+      "severity": "Blocker",
+      "label": "FACT",
+      "locator": "§20.1 RV-017, §3.1 REQ-IF-006, REQ-IF-007",
+      "cells": [
+        "F-001",
+        "Blocker",
+        "§20.1 RV-017, §3.1 REQ-IF-006, REQ-IF-007",
+        "FACT: REQ-IF-006 and REQ-IF-007 require a per-hart, age-ordered fault-resolved commit frontier and a kill rule; RV-017 states the signal mapping and host RTL remain P0, and the pinned CVA6 driver emits commit from issue-valid and ready with commit_kill tied to zero, so DMA could start before an older load or branch fault.",
+        "FACT: REQ-IF-006 và REQ-IF-007 yêu cầu frontier commit theo tuổi, đã giải quyết fault, và quy tắc kill cho từng hart; RV-017 nêu ánh xạ tín hiệu và RTL host vẫn là P0, và driver CVA6 đã pin phát commit từ issue-valid và ready với commit_kill nối 0, nên DMA có thể bắt đầu trước khi load hoặc branch cũ hơn gây fault.",
+        "Specify the CVA6 change as a requirement with its signal map before RTL start."
+      ]
+    },
+    {
+      "id": "F-020",
+      "severity": "Major",
+      "label": "INFERENCE",
+      "locator": "§1.4, §13 PPA-004, PPA-006",
+      "cells": [
+        "F-020",
+        "Major",
+        "§1.4, §13 PPA-004, PPA-006",
+        "INFERENCE: Arm states the Ethos-U85 reaches 4 TOPS in silicon in a 2048-MAC configuration; the open Gemmini generator offers a 16 by 16 systolic array of 512 ops per cycle over RoCC and a configuration study estimates 41.49 percent of peak for one workload. This specification gives peak only, with no sustained, area or power evidence to place it against them.",
+        "INFERENCE: Arm nêu Ethos-U85 đạt 4 TOPS trên silicon ở cấu hình 2048 MAC; generator mã nguồn mở Gemmini có array systolic 16 x 16 (512 ops mỗi chu kỳ) qua RoCC và một nghiên cứu cấu hình ước tính 41,49 phần trăm đỉnh cho một workload. Đặc tả này chỉ nêu đỉnh, không có bằng chứng duy trì, diện tích hay công suất để đặt cạnh chúng.",
+        "Add a comparison row set with sustained utilization and area per TOPS once available."
+      ]
+    }
+  ],
+  "matrix_rows": 0,
+  "matrix_non_match": 0
+}

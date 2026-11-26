@@ -33,7 +33,9 @@
     "RES",
     "MEM",
     "APB",
-    "CRCLK"
+    "CRCLK",
+    "QREQ",
+    "QACK"
   ],
   "blocks": [
     {
@@ -187,7 +189,7 @@
       "dir": "in",
       "pos": 0,
       "text": [
-        "CV-X-IF INPUTS",
+        "CVA6 / CV-X-IF COMMAND",
         "issue + register + commit"
       ]
     },
@@ -198,7 +200,7 @@
       "dir": "out",
       "pos": 0,
       "text": [
-        "CV-X-IF result / completion"
+        "STATUS / SCALAR TO CVA6"
       ]
     },
     {
@@ -208,8 +210,8 @@
       "dir": "out",
       "pos": 0,
       "text": [
-        "IF-003 AXI4 BURST + SRAM",
-        "read/write requests out; data/responses in"
+        "IF-003 SoC AXI4 FABRIC",
+        "descriptor, operands, tensor output"
       ]
     },
     {
@@ -220,7 +222,7 @@
       "pos": 0,
       "text": [
         "APB",
-        "APB4 register access"
+        "SoC APB4 manager"
       ]
     },
     {
@@ -232,6 +234,28 @@
       "text": [
         "CRCLK",
         "core and APB clock/reset domains"
+      ]
+    },
+    {
+      "id": "QREQ",
+      "block": "U_CVXIF_ADAPTER",
+      "side": "L",
+      "dir": "in",
+      "pos": 1,
+      "text": [
+        "QREQ",
+        "i_quiesce_req"
+      ]
+    },
+    {
+      "id": "QACK",
+      "block": "U_CVXIF_ADAPTER",
+      "side": "T",
+      "dir": "out",
+      "pos": 1,
+      "text": [
+        "QACK",
+        "o_quiesce_ack"
       ]
     }
   ],
@@ -253,10 +277,24 @@
     },
     {
       "id": "MEM",
-      "name": "IF-003 non-coherent AXI4 burst DMA plus banked local SRAM",
+      "name": "IF-003 non-coherent AXI4 to the SoC memory fabric",
       "category": "custom",
       "active": "mixed: coprocessor requests/outputs; memory system returns operands/responses",
-      "signals": "AXI4 AR/AW/W/R/B channels; internal banked SRAM ports. Widths, IDs, burst limits, arbitration, and SRAM timing remain TBD in DEC-004"
+      "signals": "AXI4 AR/AW/W/R/B channels through SoC firewall. SRAM ports stay internal. Bus sizing and timing per DEC-004"
+    },
+    {
+      "id": "QREQ",
+      "name": "IF-004 ordinary-reset quiesce request",
+      "category": "custom",
+      "active": "SoC reset controller -> tensor coprocessor",
+      "signals": "i_quiesce_req; active-high level request stops new commands and drains accepted work before reset"
+    },
+    {
+      "id": "QACK",
+      "name": "IF-004 ordinary-reset quiesce acknowledgment",
+      "category": "custom",
+      "active": "tensor coprocessor -> SoC reset controller",
+      "signals": "o_quiesce_ack; active-high level acknowledgment only after accepted CV-X-IF commands/results, OP-003 fence, and all AXI transactions are drained; no abort/isolation"
     },
     {
       "id": "APB",

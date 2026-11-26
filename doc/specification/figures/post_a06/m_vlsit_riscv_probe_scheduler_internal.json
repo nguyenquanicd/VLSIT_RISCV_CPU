@@ -1,0 +1,272 @@
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "m_vlsit_riscv_probe_scheduler_internal.drawio",
+  "layout": {
+    "gap_h": 120,
+    "gap_v": 110,
+    "margin": 80,
+    "block_h": 60
+  },
+  "top": {
+    "frame_label": [
+      "Internal functional blocks",
+      "(m_vlsit_riscv_probe_scheduler)"
+    ]
+  },
+  "frame_row": [
+    "m_vlsit_riscv_probe_scheduler",
+    "Schedule one tagged probe per cache and route the matching response.",
+    "rtl/common/vlsit/coherence/m_vlsit_riscv_probe_scheduler.sv"
+  ],
+  "frame_interfaces": [
+    "CTXI",
+    "PRBO",
+    "RSPI",
+    "ACKO"
+  ],
+  "blocks": [
+    {
+      "key": "B0",
+      "label": [
+        "claim_arbiter",
+        "(p_com_probe_claim)"
+      ],
+      "width": 220,
+      "row": 0,
+      "col": 0,
+      "row_name": "claim_arbiter (p_com_probe_claim)",
+      "function": "Grant one new context per cycle, and only when every hart slot of its expected mask is free (REQ-MEM-024).",
+      "source": "rtl/common/vlsit/coherence/m_vlsit_riscv_probe_scheduler.sv:134-183"
+    },
+    {
+      "key": "B1",
+      "label": [
+        "phase_owner_slots",
+        "(per-hart owner tag)"
+      ],
+      "width": 240,
+      "row": 0,
+      "col": 1,
+      "row_name": "phase_owner_slots (per-hart owner tag)",
+      "function": "Keep, for each hart, the tag of the context that owns its probe slot from PREPARE to COMMIT or ABORT.",
+      "source": "rtl/common/vlsit/coherence/m_vlsit_riscv_probe_scheduler.sv:233-309"
+    },
+    {
+      "key": "B2",
+      "label": [
+        "target_select",
+        "(p_com_probe_sel)"
+      ],
+      "width": 200,
+      "row": 1,
+      "col": 0,
+      "row_name": "target_select (p_com_probe_sel)",
+      "function": "Scan active contexts round robin for each hart and pick only expected targets that have not acknowledged yet.",
+      "source": "rtl/common/vlsit/coherence/m_vlsit_riscv_probe_scheduler.sv:185-212"
+    },
+    {
+      "key": "B3",
+      "label": [
+        "probe_request_regs",
+        "(per-hart request)"
+      ],
+      "width": 220,
+      "row": 1,
+      "col": 1,
+      "row_name": "probe_request_regs (per-hart request)",
+      "function": "Hold tag, line, phase, target state and write-back enable stable while the cache is not ready.",
+      "source": "rtl/common/vlsit/coherence/m_vlsit_riscv_probe_scheduler.sv:214-232"
+    },
+    {
+      "key": "B4",
+      "label": [
+        "active_probe_tracker",
+        "(p_ff_probe_schedule)"
+      ],
+      "width": 260,
+      "row": 2,
+      "col": 1,
+      "row_name": "active_probe_tracker (p_ff_probe_schedule)",
+      "function": "Remember which probe is outstanding on each hart and its phase-owner association.",
+      "source": "rtl/common/vlsit/coherence/m_vlsit_riscv_probe_scheduler.sv:233-309"
+    },
+    {
+      "key": "B5",
+      "label": [
+        "ack_match_buffer",
+        "(response match)"
+      ],
+      "width": 200,
+      "row": 2,
+      "col": 0,
+      "row_name": "ack_match_buffer (response match)",
+      "function": "Match response tag, line and phase, hold the ACK until the transaction table accepts it, and drain a mismatch into a diagnostic event.",
+      "source": "rtl/common/vlsit/coherence/m_vlsit_riscv_probe_scheduler.sv:214-309"
+    }
+  ],
+  "connectors": [
+    {
+      "id": "CLM",
+      "src": "B0",
+      "src_side": "R",
+      "dst": "B1",
+      "dst_side": "L"
+    },
+    {
+      "id": "CTX",
+      "src": "B0",
+      "src_side": "B",
+      "dst": "B2",
+      "dst_side": "T"
+    },
+    {
+      "id": "SEL",
+      "src": "B2",
+      "src_side": "R",
+      "dst": "B3",
+      "dst_side": "L"
+    },
+    {
+      "id": "OWN",
+      "src": "B1",
+      "src_side": "B",
+      "dst": "B3",
+      "dst_side": "T"
+    },
+    {
+      "id": "ACT",
+      "src": "B3",
+      "src_side": "B",
+      "dst": "B4",
+      "dst_side": "T"
+    },
+    {
+      "id": "MTCH",
+      "src": "B4",
+      "src_side": "L",
+      "dst": "B5",
+      "dst_side": "R"
+    }
+  ],
+  "externals": [
+    {
+      "id": "CTXI",
+      "block": "B0",
+      "side": "T",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "CONTEXT STATE",
+        "expected, received"
+      ]
+    },
+    {
+      "id": "PRBO",
+      "block": "B3",
+      "side": "R",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "PROBE REQUEST",
+        "to cache"
+      ]
+    },
+    {
+      "id": "RSPI",
+      "block": "B5",
+      "side": "B",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "PROBE RESPONSE",
+        "from cache"
+      ]
+    },
+    {
+      "id": "ACKO",
+      "block": "B5",
+      "side": "L",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "ACK",
+        "to txn table"
+      ]
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "CLM",
+      "name": "Claim result to owner slots",
+      "category": "handshake",
+      "active": "B0 -> B1",
+      "signals": "i_ctx_valid, i_ctx_ack_expected, i_ctx_phase_active"
+    },
+    {
+      "id": "CTX",
+      "name": "Eligible context to target select",
+      "category": "custom",
+      "active": "B0 -> B2",
+      "signals": "i_ctx_valid, i_ctx_ack_expected, i_ctx_ack_received"
+    },
+    {
+      "id": "SEL",
+      "name": "Selected target to request register",
+      "category": "handshake",
+      "active": "B2 -> B3",
+      "signals": "o_probe_req_valid, i_probe_req_ready"
+    },
+    {
+      "id": "OWN",
+      "name": "Owner tag to request register",
+      "category": "custom",
+      "active": "B1 -> B3",
+      "signals": "o_probe_req_tag"
+    },
+    {
+      "id": "ACT",
+      "name": "Accepted probe to tracker",
+      "category": "custom",
+      "active": "B3 -> B4",
+      "signals": "o_probe_req_pa_line, o_probe_req_phase, o_probe_req_target_state, o_probe_req_wback_en"
+    },
+    {
+      "id": "MTCH",
+      "name": "Tracker to ACK match",
+      "category": "custom",
+      "active": "B4 -> B5",
+      "signals": "i_probe_rsp_tag, i_probe_rsp_pa_line, i_probe_rsp_phase"
+    },
+    {
+      "id": "CTXI",
+      "name": "Context inputs",
+      "category": "custom",
+      "active": "in",
+      "signals": "i_ctx_valid, i_ctx_pa_line, i_ctx_phase, i_ctx_ack_expected, i_ctx_ack_received, i_ctx_phase_active, i_ctx_target_state, i_ctx_wback_en"
+    },
+    {
+      "id": "PRBO",
+      "name": "Probe request outputs",
+      "category": "handshake",
+      "active": "out",
+      "signals": "o_probe_req_valid, o_probe_req_tag, o_probe_req_pa_line, o_probe_req_phase, o_probe_req_target_state, o_probe_req_wback_en"
+    },
+    {
+      "id": "RSPI",
+      "name": "Probe response inputs",
+      "category": "handshake",
+      "active": "in",
+      "signals": "i_probe_rsp_valid, i_probe_rsp_tag, i_probe_rsp_pa_line, i_probe_rsp_phase, i_probe_rsp_state, i_probe_rsp_err, i_probe_rsp_wback_done"
+    },
+    {
+      "id": "ACKO",
+      "name": "ACK outputs",
+      "category": "handshake",
+      "active": "out",
+      "signals": "o_ack_valid, o_ack_tag, o_ack_phase, o_ack_state, o_ack_err, o_ack_wback_done, o_coh_proto_diag_event"
+    }
+  ],
+  "nets": [],
+  "legend_note": "Functional decomposition of one RTL module. The module has no child instance except where a box names one, so the boxes are logic groups named after the RTL processes, generate blocks and registers cited in the source column. Arrows show the main request or data direction; responses return on the same bundle.",
+  "library_sha256": "15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"
+}

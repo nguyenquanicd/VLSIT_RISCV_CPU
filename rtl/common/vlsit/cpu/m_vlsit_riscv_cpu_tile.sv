@@ -23,6 +23,8 @@
  *              Export native HPDcache performance event indicators.
  * 2026-11-15 - Quan Nguyen and Codex - VLSI Technology page:
  *              Export oldest pending CBO operation and address metadata.
+ * 2026-11-20 - Modified by Quan Nguyen and Codex - VLSI Technology page:
+ *              Correct MEIP/SEIP bit ordering at the CVA6 irq_i boundary (R-02).
  * Rule note    : This functional adapter contains one CVA6 instance and required flat-port mapping.
  */
 `timescale 1ns/1ps
@@ -394,7 +396,8 @@ module m_vlsit_riscv_cpu_tile #(
     .rst_ni(i_rst_n_tile),
     .boot_addr_i(i_boot_addr),
     .hart_id_i(i_hart_id),
-    .irq_i({i_int_meip, i_int_seip}),
+    // CVA6 maps irq_i[0] to MEIP and irq_i[1] to SEIP.
+    .irq_i({i_int_seip, i_int_meip}),
     .ipi_i(i_int_msip),
     .time_irq_i(i_int_mtip),
     .s_ipi_i(i_int_ssip),

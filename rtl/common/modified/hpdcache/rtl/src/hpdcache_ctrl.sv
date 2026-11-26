@@ -9,6 +9,9 @@
  *  Creation Date : April, 2021
  *  Description   : HPDcache controller
  *  History       :
+ *  2026-11-26 - Quan Nguyen and Claude - VLSI Technology page:
+ *    OPEN-X32-CBO4 (DEC-046): take atomic permission only on an E/M grant
+ *    (S kept for LR); an S grant must not block probes while the AMO waits.
  *  2026-11-14 - Quan Nguyen and Codex - VLSI Technology page:
  *    Route the directory E state to the protocol engine for Shared write-hit
  *    replay through exclusive ownership acquisition.
@@ -108,6 +111,7 @@ import hpdcache_pkg::*;
     input  logic                  coh_probe_flush_pending_i,
     input  logic                  coh_atomic_grant_i,
     input  hpdcache_nline_t        coh_atomic_grant_nline_i,
+    input  logic                  coh_atomic_grant_unique_i,
     // Current Stage-1 request and selected victim lines for lock observation.
     output logic                  coh_access_line_valid_o,
     output hpdcache_nline_t       coh_access_nline_o,
@@ -908,22 +912,27 @@ import hpdcache_pkg::*;
     // Keep the newly acquired line until that atomic executes; otherwise two
     // contenders can endlessly steal ownership between refill and replay.
     logic atomic_pending_q, atomic_permission_q;
+    logic atomic_lr_q;
     hpdcache_nline_t atomic_nline_q;
     always_ff @(posedge clk_i or negedge rst_ni) begin : atomic_permission_ff
         if (!rst_ni) begin
             atomic_pending_q <= 1'b0;
             atomic_permission_q <= 1'b0;
             atomic_nline_q <= '0;
+            atomic_lr_q <= 1'b0;
         end else begin
             if (st1_req_valid_q && st1_req_is_amo && !st1_req_is_uncacheable &&
                 !st1_req_abort && !atomic_pending_q) begin
                 atomic_pending_q <= 1'b1;
                 atomic_nline_q <= st1_req_nline;
+                atomic_lr_q <= st1_req_is_amo_lr;
                 atomic_permission_q <= st1_dir_hit &&
                                    (st1_dir_hit_dirty || st1_dir_hit_exclusive || st1_req_is_amo_lr) &&
                                    !st1_coh_line_locked;
             end
+            // DEC-046: an S grant gives no permission (except LR), so probes complete before the unique grant.
             if (atomic_pending_q && coh_atomic_grant_i &&
+                (coh_atomic_grant_unique_i || atomic_lr_q) &&
                 (coh_atomic_grant_nline_i == atomic_nline_q)) begin
                 atomic_permission_q <= 1'b1;
             end

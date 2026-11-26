@@ -1,0 +1,557 @@
+// Copyright 2023 Commissariat a l'Energie Atomique et aux Energies
+//                Alternatives (CEA)
+//
+// Licensed under the Solderpad Hardware License, Version 2.1 (the “License”);
+// you may not use this file except in compliance with the License.
+// SPDX-License-Identifier: Apache-2.0 WITH SHL-2.1
+// You may obtain a copy of the License at https://solderpad.org/licenses/
+//
+// Authors: Cesar Fuguet
+// Date: February, 2023
+// Description: Wrapper for the Core-V High-Performance L1 data cache (CV-HPDcache)
+// VLSIT Modification History:
+// 2026-11-14 - Quan Nguyen and Codex - VLSI Technology page:
+//   Export matched HPDcache flush B-response metadata to the subsystem boundary.
+// 2026-11-14 - Quan Nguyen and Codex - VLSI Technology page:
+//   Export the exact-line MSHR/refill busy query through the cache wrapper.
+// 2026-11-14 - Quan Nguyen and Codex - VLSI Technology page:
+//   Export CCU line-lock vectors to HPDcache for request and victim replay.
+// 2026-11-14 - Quan Nguyen and Codex - VLSI Technology page:
+//   Route the tagged PREPARE/COMMIT/ABORT request and held response to HPDcache.
+// 2026-11-14 - Quan Nguyen and Codex - VLSI Technology page:
+//   Carry HPDcache miss ownership request/grant signals through the cache wrapper.
+// 2026-11-15 - Quan Nguyen and Codex - VLSI Technology page:
+//   Export the live Stage-1 request and replacement-victim line observations.
+// 2026-11-15 - Quan Nguyen and Codex - VLSI Technology page:
+//   Export native HPDcache PMU indicators without changing their source logic.
+// 2026-11-15 - Quan Nguyen and Codex - VLSI Technology page:
+//   Include replay/refill/pipeline drain in the retirement store-empty indication.
+
+`include "hpdcache_typedef.svh"
+
+// 2026-11-15 - Quan Nguyen and Codex - VLSI Technology page:
+// DEC-030/031: retain FENCE.I through coherent clean completion and precise fault.
+// Change: Connect coherent FENCE.I walker sidebands to native HPDcache.
+// 2026-11-15 - Quan Nguyen and Codex - VLSI Technology page:
+// DEC-038/A-02: preserve cached atomic errors and precise retirement fault state.
+module cva6_hpdcache_wrapper
+//  Parameters
+//  {{{
+#(
+    parameter config_pkg::cva6_cfg_t CVA6Cfg = config_pkg::cva6_cfg_empty,
+    parameter hpdcache_pkg::hpdcache_cfg_t HPDcacheCfg = '0,
+    parameter type dcache_req_i_t = logic,
+    parameter type dcache_req_o_t = logic,
+    parameter int NumPorts = 4,
+    parameter int NrHwPrefetchers = 4,
+
+    parameter type hpdcache_mem_addr_t = logic,
+    parameter type hpdcache_mem_id_t = logic,
+    parameter type hpdcache_mem_data_t = logic,
+    parameter type hpdcache_mem_be_t = logic,
+    parameter type hpdcache_mem_req_t = logic,
+    parameter type hpdcache_mem_req_w_t = logic,
+    parameter type hpdcache_mem_resp_r_t = logic,
+    parameter type hpdcache_mem_resp_w_t = logic,
+    parameter type hpdcache_req_offset_t = logic,
+    parameter type hpdcache_data_word_t = logic,
+    parameter type hpdcache_req_data_t = logic,
+    parameter type hpdcache_req_be_t = logic,
+    parameter type hpdcache_req_sid_t = logic,
+    parameter type hpdcache_req_tid_t = logic,
+    parameter type hpdcache_tag_t = logic,
+    parameter type hpdcache_req_t = logic,
+    parameter type hpdcache_rsp_t = logic,
+    parameter type hpdcache_wbuf_timecnt_t = logic,
+    parameter type hpdcache_data_be_t = logic,
+
+    localparam type hpdcache_nline_t = logic [HPDcacheCfg.nlineWidth-1:0]
+)
+//  }}}
+
+//  Ports
+//  {{{
+(
+
+    // Subsystem Clock - SUBSYSTEM
+    input logic clk_i,
+    // Asynchronous reset active low - SUBSYSTEM
+    input logic rst_ni,
+
+    //  D$
+    //  {{{
+    //    Cache management
+    // Data cache enable - CSR_REGFILE
+    input  logic dcache_enable_i,
+    // Data cache flush - CONTROLLER
+    // DEC-030/031 coherent instruction synchronization.
+    input logic fence_sync_i,
+    output logic fence_line_valid_o,
+    input logic fence_line_ready_i,
+    output logic [CVA6Cfg.PLEN-5:0] fence_line_o,
+    input logic fence_line_done_i,
+    input logic fence_line_error_i,
+    output logic fence_error_o,
+    output logic [CVA6Cfg.PLEN-5:0] fence_error_line_o,
+    input  logic dcache_flush_i,
+    // Flush acknowledge - CONTROLLER
+    output logic dcache_flush_ack_o,
+    // Load or store miss - PERF_COUNTERS
+    output logic dcache_miss_o,
+    // Native HPDcache event vector in ascending Event_Map ID order.
+    output logic [15:0] dcache_perf_event_o,
+
+    // AMO request/response - EX_STAGE
+    input  ariane_pkg::amo_req_t                 dcache_amo_req_i,
+    output ariane_pkg::amo_resp_t                dcache_amo_resp_o,
+    output logic dcache_amo_error_o,
+    // Data cache input request/response ports - EX_STAGE
+    input  dcache_req_i_t         [NumPorts-1:0] dcache_req_ports_i,
+    output dcache_req_o_t         [NumPorts-1:0] dcache_req_ports_o,
+    // Data cache scrubber enable - CSR_REGFILE
+    input  logic                                 dcache_scrub_enable_i,
+    // Data cache scrubber period - CSR_REGFILE
+    input  logic                  [         5:0] dcache_scrub_period_i,
+    // Data cache scrub cycle - CSR_REGFILE
+    output logic                                 dcache_scrub_cycle_o,
+    // Data cache data error corrected - CSR_REGFILE
+    output logic                                 dcache_dat_cor_err_o,
+    // Data cache data error detected but not corrected - CSR_REGFILE
+    output logic                                 dcache_dat_unc_err_o,
+    // Data cache tag error corrected - CSR_REGFILE
+    output logic                                 dcache_dir_cor_err_o,
+    // Data cache tag error detected but not corrected - CSR_REGFILE
+    output logic                                 dcache_dir_unc_err_o,
+
+    // Write buffer status - EX_STAGE
+    output logic wbuffer_empty_o,
+    output logic wbuffer_not_ni_o,
+
+    //  Hardware memory prefetcher configuration
+    input  logic [NrHwPrefetchers-1:0]       hwpf_base_set_i,
+    input  logic [NrHwPrefetchers-1:0][63:0] hwpf_base_i,
+    output logic [NrHwPrefetchers-1:0][63:0] hwpf_base_o,
+    input  logic [NrHwPrefetchers-1:0]       hwpf_param_set_i,
+    input  logic [NrHwPrefetchers-1:0][63:0] hwpf_param_i,
+    output logic [NrHwPrefetchers-1:0][63:0] hwpf_param_o,
+    input  logic [NrHwPrefetchers-1:0]       hwpf_throttle_set_i,
+    input  logic [NrHwPrefetchers-1:0][63:0] hwpf_throttle_i,
+    output logic [NrHwPrefetchers-1:0][63:0] hwpf_throttle_o,
+    output logic [               63:0]       hwpf_status_o,
+
+    input  logic              dcache_mem_req_read_ready_i,
+    output logic              dcache_mem_req_read_valid_o,
+    output hpdcache_mem_req_t dcache_mem_req_read_o,
+
+    output logic                 dcache_mem_resp_read_ready_o,
+    input  logic                 dcache_mem_resp_read_valid_i,
+    input  hpdcache_mem_resp_r_t dcache_mem_resp_read_i,
+
+    input logic            dcache_mem_resp_read_inval_i,
+    input hpdcache_nline_t dcache_mem_resp_read_inval_nline_i,
+
+    input  logic              dcache_mem_req_write_ready_i,
+    output logic              dcache_mem_req_write_valid_o,
+    output hpdcache_mem_req_t dcache_mem_req_write_o,
+
+    input  logic                dcache_mem_req_write_data_ready_i,
+    output logic                dcache_mem_req_write_data_valid_o,
+    output hpdcache_mem_req_w_t dcache_mem_req_write_data_o,
+
+    output logic                 dcache_mem_resp_write_ready_o,
+    input  logic                 dcache_mem_resp_write_valid_i,
+    input  hpdcache_mem_resp_w_t dcache_mem_resp_write_i,
+
+    output logic                 coh_flush_ack_valid_o,
+    output logic [HPDcacheCfg.nlineWidth-1:0] coh_flush_ack_nline_o,
+    output logic [1:0]           coh_flush_ack_origin_o,
+    output logic                 coh_flush_ack_error_o,
+    output logic                 coh_flush_rsp_invalid_o,
+    input  logic                 coh_probe_query_valid_i,
+    input  hpdcache_nline_t      coh_probe_query_nline_i,
+    output logic                 coh_probe_line_busy_o,
+    output logic                 coh_access_line_valid_o,
+    output hpdcache_nline_t      coh_access_nline_o,
+    output logic                 coh_victim_line_valid_o,
+    output hpdcache_nline_t      coh_victim_nline_o,
+    input  logic [15:0]           coh_line_lock_valid_i,
+    input  logic [15:0][HPDcacheCfg.nlineWidth-1:0] coh_line_lock_nline_i,
+    input  logic                  coh_probe_req_valid_i,
+    output logic                  coh_probe_req_ready_o,
+    input  logic [3:0]            coh_probe_req_tag_i,
+    input  hpdcache_nline_t       coh_probe_req_nline_i,
+    input  logic [1:0]            coh_probe_req_phase_i,
+    input  logic [1:0]            coh_probe_req_target_state_i,
+    input  logic                  coh_probe_req_wback_en_i,
+    output logic                  coh_probe_rsp_valid_o,
+    input  logic                  coh_probe_rsp_ready_i,
+    output logic [3:0]            coh_probe_rsp_tag_o,
+    output hpdcache_nline_t       coh_probe_rsp_nline_o,
+    output logic [1:0]            coh_probe_rsp_phase_o,
+    output logic [1:0]            coh_probe_rsp_state_o,
+    output logic                  coh_probe_rsp_err_o,
+    output logic                  coh_probe_rsp_wback_done_o,
+    output logic                  coh_own_req_valid_o,
+    input  logic                  coh_own_req_ready_i,
+    output logic [2:0]            coh_own_req_id_o,
+    output hpdcache_nline_t       coh_own_req_nline_o,
+    output logic [1:0]            coh_own_req_kind_o,
+    input  logic                  coh_own_gnt_valid_i,
+    output logic                  coh_own_gnt_ready_o,
+    input  logic [2:0]            coh_own_gnt_id_i,
+    input  hpdcache_nline_t       coh_own_gnt_nline_i,
+    input  logic [1:0]            coh_own_gnt_state_i,
+    input  logic                  coh_own_gnt_err_i
+);
+
+  localparam int HPDCACHE_NREQUESTERS = NumPorts + 1;
+
+  typedef logic [63:0] hwpf_stride_param_t;
+
+  logic                        dcache_req_valid[HPDCACHE_NREQUESTERS];
+  logic                        dcache_req_ready[HPDCACHE_NREQUESTERS];
+  hpdcache_req_t               dcache_req      [HPDCACHE_NREQUESTERS];
+  logic                        dcache_req_abort[HPDCACHE_NREQUESTERS];
+  hpdcache_tag_t               dcache_req_tag  [HPDCACHE_NREQUESTERS];
+  hpdcache_pkg::hpdcache_pma_t dcache_req_pma  [HPDCACHE_NREQUESTERS];
+  logic                        dcache_rsp_valid[HPDCACHE_NREQUESTERS];
+  hpdcache_rsp_t               dcache_rsp      [HPDCACHE_NREQUESTERS];
+  logic dcache_read_miss, dcache_write_miss;
+  logic dcache_uncached_req_evt;
+  logic native_wbuffer_empty;
+  logic native_cpu_idle;
+  assign wbuffer_empty_o = native_wbuffer_empty && native_cpu_idle;
+  logic dcache_cmo_req_evt;
+  logic dcache_write_req_evt;
+  logic dcache_read_req_evt;
+  logic dcache_prefetch_req_evt;
+  logic dcache_req_on_hold_evt;
+  logic dcache_rtab_rollback_evt;
+  logic dcache_stall_refill_evt;
+  logic dcache_stall_evt;
+
+  logic                                   [                1:0] snoop_valid;
+  logic                                   [                1:0] snoop_abort;
+  hpdcache_req_offset_t                   [                1:0] snoop_addr_offset;
+  hpdcache_tag_t                          [                1:0] snoop_addr_tag;
+  logic                                   [                1:0] snoop_phys_indexed;
+
+  hwpf_stride_pkg::hwpf_stride_throttle_t [NrHwPrefetchers-1:0] hwpf_throttle_in;
+  hwpf_stride_pkg::hwpf_stride_throttle_t [NrHwPrefetchers-1:0] hwpf_throttle_out;
+
+  generate
+    dcache_req_i_t dcache_req_ports[NumPorts - 1];
+
+    for (genvar r = 0; r < (NumPorts - 1); r++) begin : gen_cva6_hpdcache_load_if_adapter
+      assign dcache_req_ports[r] = dcache_req_ports_i[r];
+
+      cva6_hpdcache_if_adapter #(
+          .CVA6Cfg              (CVA6Cfg),
+          .HPDcacheCfg          (HPDcacheCfg),
+          .hpdcache_tag_t       (hpdcache_tag_t),
+          .hpdcache_req_offset_t(hpdcache_req_offset_t),
+          .hpdcache_req_sid_t   (hpdcache_req_sid_t),
+          .hpdcache_req_t       (hpdcache_req_t),
+          .hpdcache_rsp_t       (hpdcache_rsp_t),
+          .dcache_req_i_t       (dcache_req_i_t),
+          .dcache_req_o_t       (dcache_req_o_t),
+          .InvalidateOnFlush    (1'b0),
+          .IsLoadPort           (1'b1)
+      ) i_cva6_hpdcache_load_if_adapter (
+          .clk_i,
+          .rst_ni,
+
+          .hpdcache_req_sid_i(hpdcache_req_sid_t'(r)),
+
+          .cva6_req_i     (dcache_req_ports[r]),
+          .cva6_req_o     (dcache_req_ports_o[r]),
+          .cva6_amo_req_i ('0),
+          .cva6_amo_resp_o(  /* unused */),
+          .cva6_amo_error_o(),
+
+          .cva6_dcache_flush_i    (1'b0),
+          .cva6_dcache_flush_ack_o(  /* unused */),
+
+          .hpdcache_req_valid_o(dcache_req_valid[r]),
+          .hpdcache_req_ready_i(dcache_req_ready[r]),
+          .hpdcache_req_o      (dcache_req[r]),
+          .hpdcache_req_abort_o(dcache_req_abort[r]),
+          .hpdcache_req_tag_o  (dcache_req_tag[r]),
+          .hpdcache_req_pma_o  (dcache_req_pma[r]),
+
+          .hpdcache_rsp_valid_i(dcache_rsp_valid[r]),
+          .hpdcache_rsp_i      (dcache_rsp[r])
+      );
+    end
+
+    cva6_hpdcache_if_adapter #(
+        .CVA6Cfg              (CVA6Cfg),
+        .HPDcacheCfg          (HPDcacheCfg),
+        .hpdcache_tag_t       (hpdcache_tag_t),
+        .hpdcache_req_offset_t(hpdcache_req_offset_t),
+        .hpdcache_req_sid_t   (hpdcache_req_sid_t),
+        .hpdcache_req_t       (hpdcache_req_t),
+        .hpdcache_rsp_t       (hpdcache_rsp_t),
+        .dcache_req_i_t       (dcache_req_i_t),
+        .dcache_req_o_t       (dcache_req_o_t),
+        .InvalidateOnFlush    (CVA6Cfg.DcacheInvalidateOnFlush),
+        .IsLoadPort           (1'b0)
+    ) i_cva6_hpdcache_store_if_adapter (
+        .clk_i,
+        .rst_ni,
+
+        .hpdcache_req_sid_i(hpdcache_req_sid_t'(NumPorts - 1)),
+
+        .cva6_req_i     (dcache_req_ports_i[NumPorts-1]),
+        .cva6_req_o     (dcache_req_ports_o[NumPorts-1]),
+        .cva6_amo_req_i (dcache_amo_req_i),
+        .cva6_amo_resp_o(dcache_amo_resp_o),
+        .cva6_amo_error_o(dcache_amo_error_o),
+
+        .cva6_dcache_flush_i    (dcache_flush_i),
+        .cva6_dcache_flush_ack_o(dcache_flush_ack_o),
+
+        .hpdcache_req_valid_o(dcache_req_valid[NumPorts-1]),
+        .hpdcache_req_ready_i(dcache_req_ready[NumPorts-1]),
+        .hpdcache_req_o      (dcache_req[NumPorts-1]),
+        .hpdcache_req_abort_o(dcache_req_abort[NumPorts-1]),
+        .hpdcache_req_tag_o  (dcache_req_tag[NumPorts-1]),
+        .hpdcache_req_pma_o  (dcache_req_pma[NumPorts-1]),
+
+        .hpdcache_rsp_valid_i(dcache_rsp_valid[NumPorts-1]),
+        .hpdcache_rsp_i      (dcache_rsp[NumPorts-1])
+    );
+  endgenerate
+
+  //  Snoop load port
+  assign snoop_valid[0] = dcache_req_valid[1] & dcache_req_ready[1],
+      snoop_abort[0] = dcache_req_abort[1],
+      snoop_addr_offset[0] = dcache_req[1].addr_offset,
+      snoop_addr_tag[0] = dcache_req_tag[1],
+      snoop_phys_indexed[0] = dcache_req[1].phys_indexed;
+
+  //  Snoop Store/AMO port
+  assign snoop_valid[1] = dcache_req_valid[NumPorts-1] & dcache_req_ready[NumPorts-1],
+      snoop_abort[1] = dcache_req_abort[NumPorts-1],
+      snoop_addr_offset[1] = dcache_req[NumPorts-1].addr_offset,
+      snoop_addr_tag[1] = dcache_req_tag[NumPorts-1],
+      snoop_phys_indexed[1] = dcache_req[NumPorts-1].phys_indexed;
+
+  generate
+    for (genvar h = 0; h < NrHwPrefetchers; h++) begin : gen_hwpf_throttle
+      assign hwpf_throttle_in[h] = hwpf_stride_pkg::hwpf_stride_throttle_t'(hwpf_throttle_i[h]);
+      assign hwpf_throttle_o[h]  = hwpf_stride_pkg::hwpf_stride_param_t'(hwpf_throttle_out[h]);
+    end
+  endgenerate
+
+  hwpf_stride_wrapper #(
+      .HPDcacheCfg          (HPDcacheCfg),
+      .NUM_HW_PREFETCH      (NrHwPrefetchers),
+      .NUM_SNOOP_PORTS      (2),
+      .hpdcache_tag_t       (hpdcache_tag_t),
+      .hpdcache_req_offset_t(hpdcache_req_offset_t),
+      .hpdcache_req_data_t  (hpdcache_req_data_t),
+      .hpdcache_req_be_t    (hpdcache_req_be_t),
+      .hpdcache_req_sid_t   (hpdcache_req_sid_t),
+      .hpdcache_req_tid_t   (hpdcache_req_tid_t),
+      .hpdcache_req_t       (hpdcache_req_t),
+      .hpdcache_rsp_t       (hpdcache_rsp_t)
+  ) i_hwpf_stride_wrapper (
+      .clk_i,
+      .rst_ni,
+
+      .hwpf_stride_base_set_i    (hwpf_base_set_i),
+      .hwpf_stride_base_i        (hwpf_base_i),
+      .hwpf_stride_base_o        (hwpf_base_o),
+      .hwpf_stride_param_set_i   (hwpf_param_set_i),
+      .hwpf_stride_param_i       (hwpf_param_i),
+      .hwpf_stride_param_o       (hwpf_param_o),
+      .hwpf_stride_throttle_set_i(hwpf_throttle_set_i),
+      .hwpf_stride_throttle_i    (hwpf_throttle_in),
+      .hwpf_stride_throttle_o    (hwpf_throttle_out),
+      .hwpf_stride_status_o      (hwpf_status_o),
+
+      .snoop_valid_i       (snoop_valid),
+      .snoop_abort_i       (snoop_abort),
+      .snoop_addr_offset_i (snoop_addr_offset),
+      .snoop_addr_tag_i    (snoop_addr_tag),
+      .snoop_phys_indexed_i(snoop_phys_indexed),
+
+      .hpdcache_req_sid_i(hpdcache_req_sid_t'(NumPorts)),
+
+      .hpdcache_req_valid_o(dcache_req_valid[NumPorts]),
+      .hpdcache_req_ready_i(dcache_req_ready[NumPorts]),
+      .hpdcache_req_o      (dcache_req[NumPorts]),
+      .hpdcache_req_abort_o(dcache_req_abort[NumPorts]),
+      .hpdcache_req_tag_o  (dcache_req_tag[NumPorts]),
+      .hpdcache_req_pma_o  (dcache_req_pma[NumPorts]),
+      .hpdcache_rsp_valid_i(dcache_rsp_valid[NumPorts]),
+      .hpdcache_rsp_i      (dcache_rsp[NumPorts])
+  );
+
+  hpdcache #(
+      .HPDcacheCfg          (HPDcacheCfg),
+      .wbuf_timecnt_t       (hpdcache_wbuf_timecnt_t),
+      .hpdcache_tag_t       (hpdcache_tag_t),
+      .hpdcache_data_word_t (hpdcache_data_word_t),
+      .hpdcache_data_be_t   (hpdcache_data_be_t),
+      .hpdcache_req_offset_t(hpdcache_req_offset_t),
+      .hpdcache_req_data_t  (hpdcache_req_data_t),
+      .hpdcache_req_be_t    (hpdcache_req_be_t),
+      .hpdcache_req_sid_t   (hpdcache_req_sid_t),
+      .hpdcache_req_tid_t   (hpdcache_req_tid_t),
+      .hpdcache_req_t       (hpdcache_req_t),
+      .hpdcache_rsp_t       (hpdcache_rsp_t),
+      .hpdcache_mem_addr_t  (hpdcache_mem_addr_t),
+      .hpdcache_mem_id_t    (hpdcache_mem_id_t),
+      .hpdcache_mem_data_t  (hpdcache_mem_data_t),
+      .hpdcache_mem_be_t    (hpdcache_mem_be_t),
+      .hpdcache_mem_req_t   (hpdcache_mem_req_t),
+      .hpdcache_mem_req_w_t (hpdcache_mem_req_w_t),
+      .hpdcache_mem_resp_r_t(hpdcache_mem_resp_r_t),
+      .hpdcache_mem_resp_w_t(hpdcache_mem_resp_w_t)
+  ) i_hpdcache (
+        .fence_sync_i,
+        .fence_line_valid_o,
+        .fence_line_ready_i,
+        .fence_line_o,
+        .fence_line_done_i,
+        .fence_line_error_i,
+        .fence_error_o,
+        .fence_error_line_o,
+      .clk_i,
+      .rst_ni,
+
+      .wbuf_flush_i(dcache_flush_i),
+
+      .core_req_valid_i(dcache_req_valid),
+      .core_req_ready_o(dcache_req_ready),
+      .core_req_i      (dcache_req),
+      .core_req_abort_i(dcache_req_abort),
+      .core_req_tag_i  (dcache_req_tag),
+      .core_req_pma_i  (dcache_req_pma),
+
+      .core_rsp_valid_o(dcache_rsp_valid),
+      .core_rsp_o      (dcache_rsp),
+
+      .mem_req_read_ready_i(dcache_mem_req_read_ready_i),
+      .mem_req_read_valid_o(dcache_mem_req_read_valid_o),
+      .mem_req_read_o      (dcache_mem_req_read_o),
+
+      .mem_resp_read_ready_o(dcache_mem_resp_read_ready_o),
+      .mem_resp_read_valid_i(dcache_mem_resp_read_valid_i),
+      .mem_resp_read_i      (dcache_mem_resp_read_i),
+
+      .mem_resp_read_inval_i      (dcache_mem_resp_read_inval_i),
+      .mem_resp_read_inval_nline_i(dcache_mem_resp_read_inval_nline_i),
+
+      .mem_req_write_ready_i(dcache_mem_req_write_ready_i),
+      .mem_req_write_valid_o(dcache_mem_req_write_valid_o),
+      .mem_req_write_o      (dcache_mem_req_write_o),
+
+      .mem_req_write_data_ready_i(dcache_mem_req_write_data_ready_i),
+      .mem_req_write_data_valid_o(dcache_mem_req_write_data_valid_o),
+      .mem_req_write_data_o      (dcache_mem_req_write_data_o),
+
+      .mem_resp_write_ready_o(dcache_mem_resp_write_ready_o),
+      .mem_resp_write_valid_i(dcache_mem_resp_write_valid_i),
+      .mem_resp_write_i      (dcache_mem_resp_write_i),
+
+      .flush_ack_valid_o     (coh_flush_ack_valid_o),
+      .flush_ack_nline_o     (coh_flush_ack_nline_o),
+      .flush_ack_origin_o    (coh_flush_ack_origin_o),
+      .flush_ack_error_o     (coh_flush_ack_error_o),
+      .flush_rsp_invalid_o   (coh_flush_rsp_invalid_o),
+      .coh_probe_query_valid_i,
+      .coh_probe_query_nline_i,
+      .coh_probe_line_busy_o,
+      .coh_access_line_valid_o,
+      .coh_access_nline_o,
+      .coh_victim_line_valid_o,
+      .coh_victim_nline_o,
+      .coh_line_lock_valid_i,
+      .coh_line_lock_nline_i,
+      .coh_probe_req_valid_i(coh_probe_req_valid_i),
+      .coh_probe_req_ready_o(coh_probe_req_ready_o),
+      .coh_probe_req_tag_i(coh_probe_req_tag_i),
+      .coh_probe_req_nline_i(coh_probe_req_nline_i),
+      .coh_probe_req_phase_i(coh_probe_req_phase_i),
+      .coh_probe_req_target_state_i(coh_probe_req_target_state_i),
+      .coh_probe_req_wback_en_i(coh_probe_req_wback_en_i),
+      .coh_probe_rsp_valid_o(coh_probe_rsp_valid_o),
+      .coh_probe_rsp_ready_i(coh_probe_rsp_ready_i),
+      .coh_probe_rsp_tag_o(coh_probe_rsp_tag_o),
+      .coh_probe_rsp_nline_o(coh_probe_rsp_nline_o),
+      .coh_probe_rsp_phase_o(coh_probe_rsp_phase_o),
+      .coh_probe_rsp_state_o(coh_probe_rsp_state_o),
+      .coh_probe_rsp_err_o(coh_probe_rsp_err_o),
+      .coh_probe_rsp_wback_done_o(coh_probe_rsp_wback_done_o),
+      .coh_own_req_valid_o,
+      .coh_own_req_ready_i,
+      .coh_own_req_id_o,
+      .coh_own_req_nline_o,
+      .coh_own_req_kind_o,
+      .coh_own_gnt_valid_i,
+      .coh_own_gnt_ready_o,
+      .coh_own_gnt_id_i,
+      .coh_own_gnt_nline_i,
+      .coh_own_gnt_state_i,
+      .coh_own_gnt_err_i,
+
+      .evt_cache_write_miss_o (dcache_write_miss),
+      .evt_cache_read_miss_o  (dcache_read_miss),
+      .evt_cache_dir_unc_err_o(dcache_dir_unc_err_o),
+      .evt_cache_dir_cor_err_o(dcache_dir_cor_err_o),
+      .evt_cache_dat_unc_err_o(dcache_dat_unc_err_o),
+      .evt_cache_dat_cor_err_o(dcache_dat_cor_err_o),
+      .evt_scrub_complete_o   (dcache_scrub_cycle_o),
+      .evt_uncached_req_o     (dcache_uncached_req_evt),
+      .evt_cmo_req_o          (dcache_cmo_req_evt),
+      .evt_write_req_o        (dcache_write_req_evt),
+      .evt_read_req_o         (dcache_read_req_evt),
+      .evt_prefetch_req_o     (dcache_prefetch_req_evt),
+      .evt_req_on_hold_o      (dcache_req_on_hold_evt),
+      .evt_rtab_rollback_o    (dcache_rtab_rollback_evt),
+      .evt_stall_refill_o     (dcache_stall_refill_evt),
+      .evt_stall_o            (dcache_stall_evt),
+
+      .wbuf_empty_o(native_wbuffer_empty),
+      .coh_cpu_idle_o(native_cpu_idle),
+
+      .cfg_enable_i                       (dcache_enable_i),
+      .cfg_wbuf_threshold_i               (3'd2),
+      .cfg_wbuf_reset_timecnt_on_write_i  (1'b1),
+      .cfg_wbuf_sequential_waw_i          (1'b0),
+      .cfg_wbuf_inhibit_write_coalescing_i(1'b0),
+      .cfg_prefetch_updt_plru_i           (1'b1),
+      .cfg_error_on_cacheable_amo_i       (1'b0),
+      .cfg_rtab_single_entry_i            (1'b0),
+      .cfg_default_wb_i                   (1'b0),
+      .cfg_scrub_enable_i                 (dcache_scrub_enable_i),
+      .cfg_scrub_period_i                 (dcache_scrub_period_i),
+      .cfg_scrub_restart_i                (1'b0)
+  );
+
+  // Keep source pulse/level semantics; bit index maps directly to the Event_Map ID offset.
+  assign dcache_perf_event_o = {
+    dcache_stall_evt,
+    dcache_stall_refill_evt,
+    dcache_rtab_rollback_evt,
+    dcache_req_on_hold_evt,
+    dcache_prefetch_req_evt,
+    dcache_read_req_evt,
+    dcache_write_req_evt,
+    dcache_cmo_req_evt,
+    dcache_uncached_req_evt,
+    dcache_scrub_cycle_o,
+    dcache_dat_cor_err_o,
+    dcache_dat_unc_err_o,
+    dcache_dir_cor_err_o,
+    dcache_dir_unc_err_o,
+    dcache_read_miss,
+    dcache_write_miss
+  };
+  assign dcache_miss_o = dcache_read_miss, wbuffer_not_ni_o = wbuffer_empty_o;
+  //  }}}
+
+endmodule : cva6_hpdcache_wrapper

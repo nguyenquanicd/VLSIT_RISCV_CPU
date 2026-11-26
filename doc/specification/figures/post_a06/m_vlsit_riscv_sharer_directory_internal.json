@@ -1,0 +1,293 @@
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "m_vlsit_riscv_sharer_directory_internal.drawio",
+  "layout": {
+    "gap_h": 120,
+    "gap_v": 110,
+    "margin": 80,
+    "block_h": 60
+  },
+  "top": {
+    "frame_label": [
+      "Internal functional blocks",
+      "(m_vlsit_riscv_sharer_directory)"
+    ]
+  },
+  "frame_row": [
+    "m_vlsit_riscv_sharer_directory",
+    "Per-bank lookup, reservation, victim choice and update of the sharer directory.",
+    "rtl/common/vlsit/coherence/m_vlsit_riscv_sharer_directory.sv"
+  ],
+  "frame_interfaces": [
+    "REQ",
+    "RSPO",
+    "UPD"
+  ],
+  "blocks": [
+    {
+      "key": "B0",
+      "label": [
+        "bank_op_arbiter",
+        "(p_com_dir_ready)"
+      ],
+      "width": 200,
+      "row": 0,
+      "col": 0,
+      "row_name": "bank_op_arbiter (p_com_dir_ready)",
+      "function": "Pick one lookup, update or cancel per bank and cycle by round robin, after eligibility checks against the set reservation and the response slot.",
+      "source": "rtl/common/vlsit/coherence/m_vlsit_riscv_sharer_directory.sv:364-432"
+    },
+    {
+      "key": "B1",
+      "label": [
+        "set_reservation",
+        "(reg_dir_resv_*)"
+      ],
+      "width": 200,
+      "row": 0,
+      "col": 1,
+      "row_name": "set_reservation (reg_dir_resv_*)",
+      "function": "Hold one reservation tag per set from a lookup until its update or cancel; only the owner tag may release it.",
+      "source": "rtl/common/vlsit/coherence/m_vlsit_riscv_sharer_directory.sv:111-112"
+    },
+    {
+      "key": "B2",
+      "label": [
+        "read_stage",
+        "(gen_read_pipe)"
+      ],
+      "width": 180,
+      "row": 1,
+      "col": 0,
+      "row_name": "read_stage (gen_read_pipe)",
+      "function": "Profile 2: register set, tag, response tag and the read data for one cycle. Profile 0/1: pass the request straight through.",
+      "source": "rtl/common/vlsit/coherence/m_vlsit_riscv_sharer_directory.sv:176-226"
+    },
+    {
+      "key": "B3",
+      "label": [
+        "payload_array",
+        "(gen_way x8)"
+      ],
+      "width": 160,
+      "row": 1,
+      "col": 1,
+      "row_name": "payload_array (gen_way x8)",
+      "function": "Eight ways per set: tag, holder mask, owner and MESI state. Synchronous 1RW storage in profile 2.",
+      "source": "rtl/common/vlsit/coherence/m_vlsit_riscv_sharer_directory.sv:228-259"
+    },
+    {
+      "key": "B4",
+      "label": [
+        "valid_plru_flops",
+        "(reg_dir_valid, reg_dir_plru)"
+      ],
+      "width": 340,
+      "row": 1,
+      "col": 2,
+      "row_name": "valid_plru_flops (reg_dir_valid, reg_dir_plru)",
+      "function": "Per-way valid bits and seven-bit tree PLRU per set, kept in flops with reset.",
+      "source": "rtl/common/vlsit/coherence/m_vlsit_riscv_sharer_directory.sv:109-110"
+    },
+    {
+      "key": "B5",
+      "label": [
+        "hit_victim_select",
+        "(p_com_dir_lookup)"
+      ],
+      "width": 220,
+      "row": 2,
+      "col": 1,
+      "row_name": "hit_victim_select (p_com_dir_lookup)",
+      "function": "Compare the tag with all eight ways, prefer an invalid way, otherwise choose the PLRU victim and report its holders.",
+      "source": "rtl/common/vlsit/coherence/m_vlsit_riscv_sharer_directory.sv:261-362,456-466"
+    },
+    {
+      "key": "B6",
+      "label": [
+        "lookup_response_reg",
+        "(reg_lookup_*)"
+      ],
+      "width": 220,
+      "row": 2,
+      "col": 0,
+      "row_name": "lookup_response_reg (reg_lookup_*)",
+      "function": "Register hit, way, victim, holders, owner and state with the response tag until the CCU accepts it.",
+      "source": "rtl/common/vlsit/coherence/m_vlsit_riscv_sharer_directory.sv:113-121,159-167"
+    },
+    {
+      "key": "B7",
+      "label": [
+        "update_writer",
+        "(p_ff_dir_storage)"
+      ],
+      "width": 220,
+      "row": 2,
+      "col": 2,
+      "row_name": "update_writer (p_ff_dir_storage)",
+      "function": "Write the committed entry and the PLRU update at the reserved way, or release the reservation on cancel.",
+      "source": "rtl/common/vlsit/coherence/m_vlsit_riscv_sharer_directory.sv:434-454,468-543"
+    }
+  ],
+  "connectors": [
+    {
+      "id": "OP",
+      "src": "B0",
+      "src_side": "R",
+      "dst": "B1",
+      "dst_side": "L"
+    },
+    {
+      "id": "RD",
+      "src": "B0",
+      "src_side": "B",
+      "dst": "B2",
+      "dst_side": "T"
+    },
+    {
+      "id": "ADDR",
+      "src": "B2",
+      "src_side": "R",
+      "dst": "B3",
+      "dst_side": "L"
+    },
+    {
+      "id": "WAYS",
+      "src": "B3",
+      "src_side": "B",
+      "dst": "B5",
+      "dst_side": "T"
+    },
+    {
+      "id": "PLRU",
+      "src": "B4",
+      "src_side": "B",
+      "dst": "B5",
+      "dst_side": "R"
+    },
+    {
+      "id": "RSP",
+      "src": "B5",
+      "src_side": "L",
+      "dst": "B6",
+      "dst_side": "R"
+    },
+    {
+      "id": "WR",
+      "src": "B7",
+      "src_side": "T",
+      "dst": "B4",
+      "dst_side": "B"
+    }
+  ],
+  "externals": [
+    {
+      "id": "REQ",
+      "block": "B0",
+      "side": "T",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "LOOKUP / UPDATE / CANCEL",
+        "valid, set, tag"
+      ]
+    },
+    {
+      "id": "RSPO",
+      "block": "B6",
+      "side": "L",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "LOOKUP RESPONSE",
+        "hit, way, holders"
+      ]
+    },
+    {
+      "id": "UPD",
+      "block": "B7",
+      "side": "B",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "UPDATE DATA",
+        "way, holders, owner, state"
+      ]
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "OP",
+      "name": "Selected operation and eligibility",
+      "category": "handshake",
+      "active": "B0 -> B1",
+      "signals": "w_lookup_eligible, w_update_eligible, w_cancel_eligible, w_dir_op_selected, w_dir_op_selected_valid"
+    },
+    {
+      "id": "RD",
+      "name": "Lookup issue to read stage",
+      "category": "handshake",
+      "active": "B0 -> B2",
+      "signals": "w_lookup_hs, w_lookup_set, w_lookup_tag, w_read_slot_ready"
+    },
+    {
+      "id": "ADDR",
+      "name": "Set address to payload array",
+      "category": "custom",
+      "active": "B2 -> B3",
+      "signals": "w_eval_set, w_ram_addr"
+    },
+    {
+      "id": "WAYS",
+      "name": "Eight-way entries to the compare",
+      "category": "custom",
+      "active": "B3 -> B5",
+      "signals": "w_lookup_entry, w_lookup_valid_ways"
+    },
+    {
+      "id": "PLRU",
+      "name": "PLRU state to victim choice",
+      "category": "custom",
+      "active": "B4 -> B5",
+      "signals": "w_lookup_plru, w_lookup_valid_ways"
+    },
+    {
+      "id": "RSP",
+      "name": "Compare result to response register",
+      "category": "handshake",
+      "active": "B5 -> B6",
+      "signals": "w_lookup_hit, w_lookup_hit_way, w_lookup_victim_way, w_lookup_victim_pa_line, w_lookup_holders, w_lookup_owner, w_lookup_state"
+    },
+    {
+      "id": "WR",
+      "name": "Update write to valid and PLRU flops",
+      "category": "custom",
+      "active": "B7 -> B4",
+      "signals": "w_update_hs, w_update_set, i_update_way"
+    },
+    {
+      "id": "REQ",
+      "name": "Request inputs",
+      "category": "handshake",
+      "active": "in",
+      "signals": "i_lookup_valid, i_update_valid, i_cancel_valid, i_lookup_tag, i_update_tag"
+    },
+    {
+      "id": "RSPO",
+      "name": "Response outputs",
+      "category": "handshake",
+      "active": "out",
+      "signals": "o_lookup_rsp_valid, o_lookup_hit, o_lookup_rsp_tag, o_lookup_way, o_lookup_victim_valid, o_lookup_holders, o_lookup_owner, o_lookup_state"
+    },
+    {
+      "id": "UPD",
+      "name": "Update data inputs",
+      "category": "custom",
+      "active": "in",
+      "signals": "i_update_way, i_update_holders, i_update_owner, i_update_state"
+    }
+  ],
+  "nets": [],
+  "legend_note": "Functional decomposition of one directory bank (four identical banks). The module has no child instance, so the boxes are logic groups named after the RTL generate blocks, processes and registers cited in the source column. Arrows show the direction of the main data path; the lookup response returns through the response register. Valid bits, PLRU and reservation stay in flops when the payload becomes a RAM wrapper (REQ-MEM-025).",
+  "library_sha256": "15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"
+}

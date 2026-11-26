@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "python": "C:/Users/PC/AppData/Local/Programs/Python/Python312/python.exe",
+  "verilator": "C:/Users/PC/Tools/oss-cad-suite/bin/verilator_bin.exe",
+  "verilator_coverage": "C:/Users/PC/Tools/oss-cad-suite/bin/verilator_coverage_bin_dbg.exe",
+  "compiler": "C:/Users/PC/Tools/msys64/ucrt64/bin/g++.exe",
+  "runtime_include": "C:/Users/PC/Tools/oss-cad-suite/share/verilator/include",
+  "observed_versions": {
+    "python": "Python 3.12.10",
+    "verilator": "Verilator 5.053 devel rev v5.052-119-g014c9820d (mod)",
+    "gcc": "g++.exe (Rev4, Built by MSYS2 project) 16.2.0"
+  },
+  "build_jobs": 1,
+  "path": "C:/Users/PC/Tools/msys64/ucrt64/bin;C:/Users/PC/Tools/msys64/usr/bin;C:/Users/PC/Tools/oss-cad-suite/bin;C:/Users/PC/AppData/Local/Programs/Python/Python312;C:/Windows/system32;C:/Windows;C:/Windows/System32/Wbem;C:/Windows/System32/WindowsPowerShell/v1.0"
+}

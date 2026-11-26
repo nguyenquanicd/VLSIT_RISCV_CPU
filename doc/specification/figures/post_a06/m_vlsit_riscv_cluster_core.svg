@@ -1,42 +1,93 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1520" height="850" viewBox="410 340 1520 850" font-family="Arial, Helvetica, sans-serif" font-size="18">
 <rect x="410" y="340" width="1520" height="850" fill="#FFFFFF"/>
 <rect x="440" y="370" width="1460" height="790" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
-<rect x="1460" y="850" width="360" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
-<text x="1640" y="876" text-anchor="middle">u_vlsit_riscv_cmo_controller</text>
-<text x="1640" y="898" text-anchor="middle">(m_vlsit_riscv_cmo_controller)</text>
+<rect x="1500" y="850" width="300" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1650" y="876" text-anchor="middle">u_vlsit_riscv_axi_route</text>
+<text x="1650" y="898" text-anchor="middle">(m_vlsit_riscv_axi_route)</text>
 <rect x="520" y="1020" width="360" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
-<text x="700" y="1046" text-anchor="middle">u_vlsit_riscv_cpu_tile_array</text>
-<text x="700" y="1068" text-anchor="middle">(m_vlsit_riscv_cpu_tile_array)</text>
-<rect x="1000" y="1020" width="340" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
-<text x="1170" y="1046" text-anchor="middle">u_vlsit_riscv_fault_record</text>
-<text x="1170" y="1068" text-anchor="middle">(m_vlsit_riscv_fault_record)</text>
-<rect x="1530" y="1020" width="220" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
-<text x="1640" y="1046" text-anchor="middle">u_vlsit_riscv_pmu</text>
-<text x="1640" y="1068" text-anchor="middle">(m_vlsit_riscv_pmu)</text>
-<rect x="600" y="510" width="200" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
-<text x="700" y="536" text-anchor="middle">u_vlsit_axi_llc</text>
-<text x="700" y="558" text-anchor="middle">(m_vlsit_axi_llc)</text>
-<rect x="1020" y="510" width="300" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
-<text x="1170" y="536" text-anchor="middle">u_vlsit_axil_reg_bridge</text>
-<text x="1170" y="558" text-anchor="middle">(m_vlsit_axil_reg_bridge)</text>
-<rect x="1530" y="510" width="220" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
-<text x="1640" y="536" text-anchor="middle">u_vlsit_cpucl_csr</text>
-<text x="1640" y="558" text-anchor="middle">(m_vlsit_cpucl_csr)</text>
-<rect x="540" y="680" width="320" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
-<text x="700" y="706" text-anchor="middle">u_vlsit_riscv_axi_mem_mux</text>
-<text x="700" y="728" text-anchor="middle">(m_vlsit_riscv_axi_mem_mux)</text>
-<rect x="1030" y="680" width="280" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
-<text x="1170" y="706" text-anchor="middle">u_vlsit_riscv_axi_mmio</text>
-<text x="1170" y="728" text-anchor="middle">(m_vlsit_riscv_axi_mmio)</text>
-<rect x="1490" y="680" width="300" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
-<text x="1640" y="706" text-anchor="middle">u_vlsit_riscv_axi_route</text>
-<text x="1640" y="728" text-anchor="middle">(m_vlsit_riscv_axi_route)</text>
+<text x="700" y="1046" text-anchor="middle">u_vlsit_riscv_cmo_controller</text>
+<text x="700" y="1068" text-anchor="middle">(m_vlsit_riscv_cmo_controller)</text>
+<rect x="1020" y="1020" width="320" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1180" y="1046" text-anchor="middle">u_vlsit_riscv_cmo_arbiter</text>
+<text x="1180" y="1068" text-anchor="middle">(m_vlsit_riscv_cmo_arbiter)</text>
+<rect x="1510" y="1020" width="280" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1650" y="1046" text-anchor="middle">u_vlsit_riscv_axi_mmio</text>
+<text x="1650" y="1068" text-anchor="middle">(m_vlsit_riscv_axi_mmio)</text>
+<rect x="550" y="510" width="300" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="536" text-anchor="middle">u_vlsit_axil_reg_bridge</text>
+<text x="700" y="558" text-anchor="middle">(m_vlsit_axil_reg_bridge)</text>
+<rect x="1020" y="510" width="320" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1180" y="536" text-anchor="middle">u_vlsit_riscv_axil_decode</text>
+<text x="1180" y="558" text-anchor="middle">(m_vlsit_riscv_axil_decode)</text>
+<rect x="1540" y="510" width="220" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1650" y="536" text-anchor="middle">u_vlsit_cpucl_csr</text>
+<text x="1650" y="558" text-anchor="middle">(m_vlsit_cpucl_csr)</text>
+<rect x="600" y="680" width="200" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="706" text-anchor="middle">u_vlsit_axi_llc</text>
+<text x="700" y="728" text-anchor="middle">(m_vlsit_axi_llc)</text>
+<rect x="1070" y="680" width="220" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1180" y="706" text-anchor="middle">u_vlsit_riscv_pmu</text>
+<text x="1180" y="728" text-anchor="middle">(m_vlsit_riscv_pmu)</text>
+<rect x="1480" y="680" width="340" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1650" y="706" text-anchor="middle">u_vlsit_riscv_fault_record</text>
+<text x="1650" y="728" text-anchor="middle">(m_vlsit_riscv_fault_record)</text>
 <rect x="540" y="850" width="320" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
-<text x="700" y="876" text-anchor="middle">u_vlsit_riscv_axil_decode</text>
-<text x="700" y="898" text-anchor="middle">(m_vlsit_riscv_axil_decode)</text>
-<rect x="1010" y="850" width="320" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
-<text x="1170" y="876" text-anchor="middle">u_vlsit_riscv_cmo_arbiter</text>
-<text x="1170" y="898" text-anchor="middle">(m_vlsit_riscv_cmo_arbiter)</text>
-<text x="1878" y="411" text-anchor="end">Component composition</text>
+<text x="700" y="876" text-anchor="middle">u_vlsit_riscv_axi_mem_mux</text>
+<text x="700" y="898" text-anchor="middle">(m_vlsit_riscv_axi_mem_mux)</text>
+<rect x="1000" y="850" width="360" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1180" y="876" text-anchor="middle">u_vlsit_riscv_cpu_tile_array</text>
+<text x="1180" y="898" text-anchor="middle">(m_vlsit_riscv_cpu_tile_array)</text>
+<text x="1878" y="411" text-anchor="end">Child connectivity</text>
 <text x="1878" y="433" text-anchor="end">(m_vlsit_riscv_cluster_core)</text>
+<text x="1218" y="942" text-anchor="middle">CMOQ</text>
+<text x="920" y="1088" text-anchor="middle">CMOA</text>
+<text x="795" y="958" text-anchor="middle">MNT</text>
+<text x="968" y="912" text-anchor="middle">CMOT</text>
+<text x="1400" y="876" text-anchor="middle">TILE</text>
+<text x="1213" y="772" text-anchor="middle">EVT</text>
+<text x="1683" y="772" text-anchor="middle">RTF</text>
+<text x="965" y="688" text-anchor="middle">MEM</text>
+<text x="1688" y="942" text-anchor="middle">MMIO</text>
+<text x="693" y="772" text-anchor="middle">LLC</text>
+<text x="733" y="602" text-anchor="middle">SVC</text>
+<text x="885" y="606" text-anchor="middle">FLT</text>
+<text x="980" y="748" text-anchor="middle">LEVT</text>
+<text x="1688" y="602" text-anchor="middle">FREC</text>
+<text x="1420" y="578" text-anchor="middle">PMUC</text>
+<text x="875" y="526" text-anchor="middle">BRG</text>
+<text x="1365" y="516" text-anchor="middle">CSR</text>
+<path d="M 1180 910 L 1180 1020" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1180,1020 1174,1008 1186,1008" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1020 1060 L 880 1060" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="880,1060 892,1054 892,1066" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 750 1020 L 750 930 L 880 930 L 880 760 L 750 760 L 750 740" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="750,740 756,752 744,752" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1360 890 L 1500 890" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1500,890 1488,896 1488,884" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1180 850 L 1180 740" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1180,740 1186,752 1174,752" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1650 850 L 1650 740" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1650,740 1656,752 1644,752" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1500 870 L 1460 870 L 1460 660 L 920 660 L 920 870 L 886 870 A 6 6 0 0 0 874 870 L 860 870" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="860,870 872,864 872,876" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1650 910 L 1650 1020" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1650,1020 1644,1008 1656,1008" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 660 850 L 660 740" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="660,740 666,752 654,752" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 700 570 L 700 680" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="700,680 694,668 706,668" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 800 700 L 880 700 L 880 620 L 1420 620 L 1420 654 A 6 6 0 0 0 1420 666 L 1420 700 L 1454 700 A 6 6 0 0 1 1466 700 L 1480 700" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1480,700 1468,706 1468,694" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 800 720 L 914 720 A 6 6 0 0 1 926 720 L 1070 720" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1070,720 1058,726 1058,714" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1650 680 L 1650 570" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1650,570 1656,582 1644,582" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1020 540 L 850 540" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="850,540 862,534 862,546" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1340 530 L 1540 530" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1540,530 1528,536 1528,524" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 880 1040 L 930 1040 L 930 880 L 1000 880" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1000,880 988,886 988,874" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1290 710 L 1380 710 L 1380 666 A 6 6 0 0 1 1380 654 L 1380 626 A 6 6 0 0 1 1380 614 L 1380 550 L 1540 550" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1540,550 1528,556 1528,544" fill="#000000" stroke="#000000" stroke-width="1"/>
 </svg>

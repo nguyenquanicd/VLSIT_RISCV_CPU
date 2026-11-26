@@ -1,0 +1,125 @@
+{
+  "head": {
+    "text": "WF-016 DEC-033 delayed non-kill commit and N+1 descriptor prefetch overlap",
+    "tick": 0
+  },
+  "signal": [
+    {
+      "name": "i_clk_core",
+      "wave": "p..............."
+    },
+    {
+      "name": "older_load_pending (conceptual)",
+      "wave": "0111100000000000"
+    },
+    {
+      "name": "older_load_resolves_clean (conceptual)",
+      "wave": "0000100000000000"
+    },
+    {
+      "name": "i_xif_issue_valid",
+      "wave": "0101000000000000"
+    },
+    {
+      "name": "o_xif_issue_ready",
+      "wave": "0101000000000000"
+    },
+    {
+      "name": "i_xif_issue_req_id",
+      "wave": "x=.=............",
+      "data": [
+        "N",
+        "N+1"
+      ]
+    },
+    {
+      "name": "i_xif_issue_req_instr[31:0]",
+      "wave": "x=.=............",
+      "data": [
+        "GEMM N",
+        "GEMM N+1"
+      ]
+    },
+    {
+      "name": "o_xif_issue_resp_accept",
+      "wave": "0101000000000000"
+    },
+    {
+      "name": "i_xif_register_valid",
+      "wave": "0101000000000000"
+    },
+    {
+      "name": "o_xif_register_ready",
+      "wave": "0101000000000000"
+    },
+    {
+      "name": "i_xif_register_id",
+      "wave": "x=.=............",
+      "data": [
+        "N",
+        "N+1"
+      ]
+    },
+    {
+      "name": "i_xif_register_rs_valid",
+      "wave": "0101000000000000"
+    },
+    {
+      "name": "i_xif_commit_valid",
+      "wave": "0000010010000000"
+    },
+    {
+      "name": "i_xif_commit_id",
+      "wave": "xxxxx=..=.......",
+      "data": [
+        "N",
+        "N+1"
+      ]
+    },
+    {
+      "name": "i_xif_commit_kill",
+      "wave": "0000000000000000"
+    },
+    {
+      "name": "o_axi_tensor_arvalid (header AR only)",
+      "wave": "0000001001000000"
+    },
+    {
+      "name": "i_axi_tensor_arready",
+      "wave": "0000001001000000"
+    },
+    {
+      "name": "descriptor_owner_xif_id (conceptual)",
+      "wave": "xxxxxx=..=......",
+      "data": [
+        "N",
+        "N+1"
+      ]
+    },
+    {
+      "name": "compute_N_active (conceptual)",
+      "wave": "0000000111111110"
+    },
+    {
+      "name": "o_xif_result_valid (N)",
+      "wave": "0000000000000010"
+    },
+    {
+      "name": "i_xif_result_ready",
+      "wave": "0000000000000010"
+    },
+    {
+      "name": "o_xif_result_id",
+      "wave": "xxxxxxxxxxxxxx=.",
+      "data": [
+        "N"
+      ]
+    }
+  ],
+  "foot": {
+    "text": "Illustrative ordering only; no fixed latency is implied. Issue and register are coupled (X_ISSUE_REGISTER_SPLIT=0). No non-kill commit or DMA occurs in the issue cycle. N is authorized only after the older load resolves; N+1 is separately authorized while N computes, allowing its descriptor read to overlap. Descriptor ownership is internal context tracking; AXI IDs are not CV-X-IF IDs. Only header address handshakes are shown. Header data and body fetches are omitted."
+  },
+  "config": {
+    "hscale": 2
+  }
+}

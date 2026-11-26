@@ -1,9 +1,9 @@
 # VLSIT RISC-V CPU Cluster RTL Port Plan — Draft
 
 > **Status:** Plan V3 approved on 2026-11-08 for AXI-profile RTL implementation.  
-> **Source of truth:** `VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS.md`, version 0.27, plus the pinned upstream source revisions in `doc/third_party/README.md`.  
+> **Source of truth:** `VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS.md`, version 0.27, plus the pinned upstream source revisions in `project_support/third_party/README.md`.  
 > **Trạng thái:** Plan V3 đã được duyệt ngày 2026-11-08 để triển khai RTL profile AXI.  
-> **Nguồn chuẩn:** `VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS.md`, phiên bản 0.27 và các revision upstream đã pin trong `doc/third_party/README.md`.
+> **Nguồn chuẩn:** `VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS.md`, phiên bản 0.27 và các revision upstream đã pin trong `project_support/third_party/README.md`.
 
 ## 1. Purpose / Mục đích
 
@@ -132,7 +132,7 @@ Nhóm port CSR/PMU theo workbook draft và Mục 6.2, 11 HDS. Vector event theo 
 
 ### 5.6 Pinned-source interface audit / Đối chiếu interface với source đã pin
 
-This audit was performed against the exact revisions listed in `doc/third_party/README.md` on 2026-11-07. It is a source inspection, not an elaboration or compatibility result.
+This audit was performed against the exact revisions listed in `project_support/third_party/README.md` on 2026-11-07. It is a source inspection, not an elaboration or compatibility result.
 
 | Pinned module | Native ports and parameters observed | Consequence for this design |
 |---|---|---|
@@ -245,6 +245,6 @@ Plan V3 đã được duyệt. Trước khi sửa một file RTL upstream, phả
 
 ## FENCE.I integration checkpoint — 2026-11-15 / Mốc tích hợp FENCE.I
 
-EN: The licensed modification set now includes `hpdcache_cmo.sv`, `commit_stage.sv`, `controller.sv`, `csr_regfile.sv`, and `cva6_icache.sv`. The walker has request/ready/line and terminal done/error sidebands; retirement retains completion until the I-cache flush ACK on success, or raises architectural cause 24 after CCU ABORT completion on failure. CSR/trap logic distinguishes that cause from native `DEBUG_REQUEST`. Legacy WT/AXI I-cache wrappers explicitly leave the added completion output unused. The production cluster uses the HPDcache path. See the [file-level report](../reports/fence_i/README.md) for the complete changed-file list and actual verification scope.
+EN: The licensed modification set now includes `hpdcache_cmo.sv`, `commit_stage.sv`, `controller.sv`, `csr_regfile.sv`, and `cva6_icache.sv`. The walker has request/ready/line and terminal done/error sidebands; retirement retains completion until the I-cache flush ACK on success, or raises architectural cause 24 after CCU ABORT completion on failure. CSR/trap logic distinguishes that cause from native `DEBUG_REQUEST`. Legacy WT/AXI I-cache wrappers explicitly leave the added completion output unused. The production cluster uses the HPDcache path. See the [file-level report](../../project_support/reports/fence_i/README.md) for the complete changed-file list and actual verification scope.
 
 VI: Nhóm bản sao giữ license nay gồm thêm walker CMO, retirement, controller, CSR/trap và I-cache. Walker có request/ready/line và done/error cuối giao dịch. Retirement chờ I-cache flush ACK khi thành công; khi lỗi chỉ phát cause 24 sau CCU ABORT completion. CSR/trap phân biệt cause này với `DEBUG_REQUEST` gốc. Hai wrapper I-cache WT/AXI cũ để ngõ ACK mới không dùng một cách tường minh; cluster production dùng đường HPDcache. Báo cáo trên liệt kê file sửa và phạm vi kiểm chứng thực tế.

@@ -1,0 +1,125 @@
+{
+  "head": {
+    "text": "WF-015 OP-009 kernelized causal linear attention (illustrative ordering only)",
+    "tick": 0
+  },
+  "signal": [
+    [
+      "CV-X-IF command/result",
+      {
+        "name": "i_clk_core",
+        "wave": "p...................................."
+      },
+      {
+        "name": "i_xif_issue_valid",
+        "wave": "0100000000000000000000000000000000000"
+      },
+      {
+        "name": "o_xif_issue_ready",
+        "wave": "0100000000000000000000000000000000000"
+      },
+      {
+        "name": "o_xif_issue_resp_accept",
+        "wave": "0100000000000000000000000000000000000"
+      },
+      {
+        "name": "i_xif_commit_valid",
+        "wave": "0001000000000000000000000000000000000"
+      },
+      {
+        "name": "i_xif_commit_kill",
+        "wave": "0000000000000000000000000000000000000"
+      },
+      {
+        "name": "o_xif_result_valid",
+        "wave": "0000000000000000000000000000000000100"
+      },
+      {
+        "name": "i_xif_result_ready",
+        "wave": "0000000000000000000000000000000000100"
+      },
+      {
+        "name": "o_xif_result_we",
+        "wave": "0000000000000000000000000000000000100"
+      },
+      {
+        "name": "i_xif_issue_req_instr[31:0]",
+        "wave": "x=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "data": [
+          "OP-009"
+        ]
+      },
+      {
+        "name": "o_xif_result_data",
+        "wave": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=xx",
+        "data": [
+          "OK"
+        ]
+      }
+    ],
+    [
+      "IF-003 phases (conceptual)",
+      {
+        "name": "Descriptor fetch",
+        "wave": "0000111000000000000000000000000000000"
+      },
+      {
+        "name": "Descriptor validated",
+        "wave": "0000000100000000000000000000000000000"
+      },
+      {
+        "name": "CONTINUE checkpoint read",
+        "wave": "0000000010000000000000000000000000000"
+      },
+      {
+        "name": "TLAS state validated",
+        "wave": "0000000000100000000000000000000000000"
+      },
+      {
+        "name": "Token 0 Q/K/V request",
+        "wave": "0000000000010000000000000000000000000"
+      },
+      {
+        "name": "Token 0 Q/K/V ready",
+        "wave": "0000000000001000000000000000000000000"
+      },
+      {
+        "name": "Token 1 Q/K/V prefetch",
+        "wave": "0000000000000000010000000000000000000"
+      },
+      {
+        "name": "Token 1 Q/K/V ready",
+        "wave": "0000000000000000000010000000000000000"
+      }
+    ],
+    [
+      "Compute and completion (conceptual)",
+      {
+        "name": "ELU_PLUS_ONE feature map",
+        "wave": "0000000000000111000000110000000000000"
+      },
+      {
+        "name": "S/z FP32 updates",
+        "wave": "0000000000000000111000001110000000000"
+      },
+      {
+        "name": "Numerator and denominator",
+        "wave": "0000000000000000000110000001110000000"
+      },
+      {
+        "name": "Token 0 numeric checks pass",
+        "wave": "0000000000000000000001000000000000000"
+      },
+      {
+        "name": "Context and checkpoint writes successful",
+        "wave": "0000000000000000000000000000000001000"
+      }
+    ]
+  ],
+  "foot": {
+    "text": "Illustrative ordering only. Next-token reads overlap state work. Token 1 update follows token 0 checks. TLAS and context writes finish before result."
+  },
+  "config": {
+    "hscale": 1
+  }
+}

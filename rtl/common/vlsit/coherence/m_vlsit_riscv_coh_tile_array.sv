@@ -6,6 +6,8 @@
  * Date         : 2026-11-14
  * Description  : Connects per-hart tile coherence adapters to the shared MESI fabric.
  * Specification: VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS.md, Plan V3/V4
+ * History      : Quan Nguyen and Codex - VLSI Technology page.
+ *                DEC-045: Add optional cluster boundary timing profile support.
  */
 `timescale 1ns/1ps
 
@@ -22,6 +24,14 @@ module m_vlsit_riscv_coh_tile_array #(
   // Parameter values: 2 through 16; default is 8.
   // Parameter unit: contexts.
   parameter logic [31:0] PARA_COH_TXN_NUM = 32'd8,
+  // Parameter Description: register the release of handshake gates.
+  // Parameter values: 0 = legacy, 1 = registered; default is 0.
+  // Parameter unit: mode
+  parameter logic [31:0] PARA_REGISTER_RESET_RELEASE = 32'd0,
+  // Parameter Description: use synchronous directory storage.
+  // Parameter values: 0 = legacy, 1 = synchronous; default is 0.
+  // Parameter unit: mode
+  parameter logic [31:0] PARA_DIR_SYNC_READ = 32'd0,
   localparam logic [31:0] LPARA_COH_TAG_W = (PARA_COH_TXN_NUM > 32'd1)
                                            ? 32'($clog2(PARA_COH_TXN_NUM)) : 32'd1
 ) (
@@ -138,6 +148,7 @@ module m_vlsit_riscv_coh_tile_array #(
   // Each tile boundary buffers ownership/grant traffic and owns its PREPARE locks.
   for (genvar tile_idx = 0; tile_idx < PARA_CPU_NUM; tile_idx++) begin : gen_tile_adapter
     m_vlsit_riscv_tile_coh_adapter #(
+      .PARA_REGISTER_RESET_RELEASE(PARA_REGISTER_RESET_RELEASE),
       .PARA_COH_TXN_NUM(PARA_COH_TXN_NUM)
     ) u_vlsit_riscv_tile_coh_adapter (
       .i_clk_cluster(i_clk_cluster),
@@ -211,6 +222,7 @@ module m_vlsit_riscv_coh_tile_array #(
 
   // The shared fabric arbitrates directory access and manages tagged MESI transitions.
   m_vlsit_riscv_coh_fabric #(
+    .PARA_DIR_SYNC_READ(PARA_DIR_SYNC_READ),
     .PARA_CMO_EN(PARA_CMO_EN),
     .PARA_CPU_NUM(PARA_CPU_NUM),
     .PARA_COH_TXN_NUM(PARA_COH_TXN_NUM)

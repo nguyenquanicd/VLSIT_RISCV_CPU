@@ -8,12 +8,22 @@
  *   Document the 24-KiB control aperture and its maximum legal base address.
  * Description  : Structural AXI-profile top with an external memory width adapter.
  * Change History:
+ * 2026-11-20 - Modified by Quan Nguyen and Codex - VLSI Technology page:
+ *              Clarify that the AXI4-Lite CSR and LLC-service aperture is 24 KiB (R-18).
  * 2026-11-14 - Quan Nguyen and Codex - VLSI Technology page:
  *              Add approved sticky fault interrupt boundary (DEC-036).
  * 2026-11-14 - Quan Nguyen and Codex - VLSI Technology page:
  *              Add the shared compile-time PMA/router region table (DEC-037).
  * 2026-11-14 - Quan Nguyen and Codex - VLSI Technology page:
  *              Add parameterized memory AXI width adapter (DEC-034).
+ * 2026-11-20 - Modified by Quan Nguyen and Codex - VLSI Technology page:
+ *              Add compile-time low-latency/cluster-timing profile selection;
+ *              profile 1 enables AXI cuts outside CVA6 internals.
+ * History      : Quan Nguyen and Codex - VLSI Technology page.
+ *                DEC-045: Add optional cluster boundary timing profile support.
+ *                HDS 0.34: Reject unsupported AXI TOP parameter values.
+ * History      : Quan Nguyen and Codex - VLSI Technology page.
+ *                HDS 0.35: Size external hart IRQ/debug vectors by PARA_CPU_NUM.
  */
 `timescale 1ns/1ps
 
@@ -22,6 +32,10 @@ module m_vlsit_riscv_cluster_axi_top #(
   // Parameter values: 2 or 4; default is 4.
   // Parameter unit: harts.
   parameter logic [31:0] PARA_CPU_NUM = 32'd4,
+  // Parameter Description: compile-time cluster timing profile; CVA6 internals are unchanged.
+  // Parameter values: 0 = baseline, 1 = tile cuts, 2 = boundary profile.
+  // Parameter unit: profile index.
+  parameter logic [31:0] PARA_TIMING_PROFILE = 32'd0,
   // Parameter Description: number of independent coherence transaction contexts.
   // Parameter values: 2 through 16; default is 8.
   // Parameter unit: contexts.
@@ -38,7 +52,8 @@ module m_vlsit_riscv_cluster_axi_top #(
   // Parameter values: power of two and at least 2; default is 2.
   // Parameter unit: blocks.
   parameter logic [31:0] PARA_LLC_BLOCK_NUM = 32'd2,
-  // Parameter Description: AXI4-Lite base address for the 4-KiB CSR and LLC windows.
+  // Parameter Description: AXI4-Lite base address for the 24-KiB cluster CSR
+  // and LLC-service aperture.
   // Parameter values: 4-KiB aligned addresses from 0 through 0xFFFFA000; default is 0.
   // Parameter unit: bytes.
   parameter logic [31:0] PARA_AXIL_BASE_ADDR = 32'h0000_0000,
@@ -77,7 +92,8 @@ module m_vlsit_riscv_cluster_axi_top #(
   // Parameter Description: bits [1:0] carry class; upper bits must be zero.
   // Parameter values: 0 cacheable, 1 normal uncached, 2 MMIO; 3 is reserved.
   // Parameter unit: none.
-  parameter logic [31:0] PARA_ADDR_REGION_TYPE [0:15] = '{default:32'd0}
+  parameter logic [31:0] PARA_ADDR_REGION_TYPE [0:15] = '{default:32'd0},
+  localparam logic [31:0] LPARA_TIMING_PROFILE_BOUNDARY = 32'd2
 ) (
   // Clock and reset
   input  wire                              i_clk_cluster,
@@ -85,14 +101,14 @@ module m_vlsit_riscv_cluster_axi_top #(
 
   // Boot, interrupt, debug, and PMU status
   input  wire  [63:0]                      i_boot_addr,
-  input  wire  [3:0]                       i_int_msip,
-  input  wire  [3:0]                       i_int_mtip,
-  input  wire  [3:0]                       i_int_meip,
-  input  wire  [3:0]                       i_int_ssip,
-  input  wire  [3:0]                       i_int_stip,
-  input  wire  [3:0]                       i_int_seip,
-  input  wire  [3:0]                       i_hart_debug_req,
-  output logic [3:0]                       o_hart_debug_mode,
+  input  wire  [PARA_CPU_NUM-1:0]          i_int_msip,
+  input  wire  [PARA_CPU_NUM-1:0]          i_int_mtip,
+  input  wire  [PARA_CPU_NUM-1:0]          i_int_meip,
+  input  wire  [PARA_CPU_NUM-1:0]          i_int_ssip,
+  input  wire  [PARA_CPU_NUM-1:0]          i_int_stip,
+  input  wire  [PARA_CPU_NUM-1:0]          i_int_seip,
+  input  wire  [PARA_CPU_NUM-1:0]          i_hart_debug_req,
+  output logic [PARA_CPU_NUM-1:0]          o_hart_debug_mode,
   output logic                             o_int_pmu,
   output logic                             o_int_fault,
 
@@ -201,6 +217,36 @@ module m_vlsit_riscv_cluster_axi_top #(
   output logic                             o_axi_mem_rready
 );
 
+  // Reject unsupported external configurations before elaborating the AXI TOP.
+  if ((PARA_CPU_NUM != 32'd2) & (PARA_CPU_NUM != 32'd4)) begin : gen_bad_cpu_num
+    $error("PARA_CPU_NUM must be 2 or 4");
+  end
+  if (PARA_TIMING_PROFILE > LPARA_TIMING_PROFILE_BOUNDARY) begin : gen_bad_profile
+    $error("PARA_TIMING_PROFILE must be 0, 1, or 2");
+  end
+  if ((PARA_COH_TXN_NUM < 32'd2) | (PARA_COH_TXN_NUM > 32'd16)) begin : gen_bad_contexts
+    $error("PARA_COH_TXN_NUM must be in 2..16");
+  end
+  if ((PARA_AXI_MEM_DATA_W != 32'd32) & (PARA_AXI_MEM_DATA_W != 32'd64)
+      & (PARA_AXI_MEM_DATA_W != 32'd128) & (PARA_AXI_MEM_DATA_W != 32'd256)) begin : gen_bad_axi_width
+    $error("PARA_AXI_MEM_DATA_W must be 32, 64, 128, or 256");
+  end
+  if ((PARA_PMU_COUNTER_NUM < 32'd1) | (PARA_PMU_COUNTER_NUM > 32'd32)
+      | ((PARA_PMU_COUNTER_W != 32'd32) & (PARA_PMU_COUNTER_W != 32'd64))) begin : gen_bad_pmu
+    $error("PMU requires 1..32 counters with width 32 or 64");
+  end
+  if ((PARA_ADDR_REGION_NUM < 32'd1) | (PARA_ADDR_REGION_NUM > 32'd16)) begin : gen_bad_region_num
+    $error("PARA_ADDR_REGION_NUM must be in 1..16");
+  end
+  if ((|PARA_AXIL_BASE_ADDR[11:0]) | (PARA_AXIL_BASE_ADDR > 32'hffff_a000)) begin : gen_bad_csr_base
+    $error("PARA_AXIL_BASE_ADDR must be 4-KiB aligned and no higher than 0xffffa000");
+  end
+  if ((PARA_LLC_WAY_NUM < 32'd1) | (PARA_LLC_WAY_NUM > 32'd32)
+      | (PARA_LLC_NO_LINES <= 32'd2) | ($countones(PARA_LLC_NO_LINES) != 32'd1)
+      | (PARA_LLC_BLOCK_NUM < 32'd2) | ($countones(PARA_LLC_BLOCK_NUM) != 32'd1)) begin : gen_bad_llc
+    $error("LLC requires 1..32 ways, power-of-two lines per way >2 and blocks per line >=2");
+  end
+
   // Fixed-width memory-side signals connect the core's 64-bit LLC port to the converter.
   logic [6:0]                             w_axi_llc_awid;
   logic [5:0]                             w_axi_llc_awatop;
@@ -243,9 +289,245 @@ module m_vlsit_riscv_cluster_axi_top #(
   logic                               w_axi_llc_rvalid;
   logic                               w_axi_llc_rready;
 
+  logic [6:0] w_axi_top_mem_awid;
+  logic [5:0] w_axi_top_mem_awatop;
+  logic [63:0] w_axi_top_mem_awaddr;
+  logic [7:0] w_axi_top_mem_awlen;
+  logic [2:0] w_axi_top_mem_awsize;
+  logic [1:0] w_axi_top_mem_awburst;
+  logic w_axi_top_mem_awlock;
+  logic [3:0] w_axi_top_mem_awcache;
+  logic [2:0] w_axi_top_mem_awprot;
+  logic [3:0] w_axi_top_mem_awqos;
+  logic [3:0] w_axi_top_mem_awregion;
+  logic w_axi_top_mem_awvalid;
+  logic w_axi_top_mem_awready;
+  logic [PARA_AXI_MEM_DATA_W-1:0] w_axi_top_mem_wdata;
+  logic [PARA_AXI_MEM_DATA_W/8-1:0] w_axi_top_mem_wstrb;
+  logic w_axi_top_mem_wlast;
+  logic w_axi_top_mem_wvalid;
+  logic w_axi_top_mem_wready;
+  logic [6:0] w_axi_top_mem_bid;
+  logic [1:0] w_axi_top_mem_bresp;
+  logic w_axi_top_mem_bvalid;
+  logic w_axi_top_mem_bready;
+  logic [6:0] w_axi_top_mem_arid;
+  logic [63:0] w_axi_top_mem_araddr;
+  logic [7:0] w_axi_top_mem_arlen;
+  logic [2:0] w_axi_top_mem_arsize;
+  logic [1:0] w_axi_top_mem_arburst;
+  logic w_axi_top_mem_arlock;
+  logic [3:0] w_axi_top_mem_arcache;
+  logic [2:0] w_axi_top_mem_arprot;
+  logic [3:0] w_axi_top_mem_arqos;
+  logic [3:0] w_axi_top_mem_arregion;
+  logic w_axi_top_mem_arvalid;
+  logic w_axi_top_mem_arready;
+  logic [6:0] w_axi_top_mem_rid;
+  logic [PARA_AXI_MEM_DATA_W-1:0] w_axi_top_mem_rdata;
+  logic [1:0] w_axi_top_mem_rresp;
+  logic w_axi_top_mem_rlast;
+  logic w_axi_top_mem_rvalid;
+  logic w_axi_top_mem_rready;
+  logic [5:0] w_axi_top_mmio_awid;
+  logic [63:0] w_axi_top_mmio_awaddr;
+  logic [7:0] w_axi_top_mmio_awlen;
+  logic [2:0] w_axi_top_mmio_awsize;
+  logic [1:0] w_axi_top_mmio_awburst;
+  logic w_axi_top_mmio_awlock;
+  logic [3:0] w_axi_top_mmio_awcache;
+  logic [2:0] w_axi_top_mmio_awprot;
+  logic [3:0] w_axi_top_mmio_awqos;
+  logic [3:0] w_axi_top_mmio_awregion;
+  logic w_axi_top_mmio_awvalid;
+  logic w_axi_top_mmio_awready;
+  logic [63:0] w_axi_top_mmio_wdata;
+  logic [7:0] w_axi_top_mmio_wstrb;
+  logic w_axi_top_mmio_wlast;
+  logic w_axi_top_mmio_wvalid;
+  logic w_axi_top_mmio_wready;
+  logic [5:0] w_axi_top_mmio_bid;
+  logic [1:0] w_axi_top_mmio_bresp;
+  logic w_axi_top_mmio_bvalid;
+  logic w_axi_top_mmio_bready;
+  logic [5:0] w_axi_top_mmio_arid;
+  logic [63:0] w_axi_top_mmio_araddr;
+  logic [7:0] w_axi_top_mmio_arlen;
+  logic [2:0] w_axi_top_mmio_arsize;
+  logic [1:0] w_axi_top_mmio_arburst;
+  logic w_axi_top_mmio_arlock;
+  logic [3:0] w_axi_top_mmio_arcache;
+  logic [2:0] w_axi_top_mmio_arprot;
+  logic [3:0] w_axi_top_mmio_arqos;
+  logic [3:0] w_axi_top_mmio_arregion;
+  logic w_axi_top_mmio_arvalid;
+  logic w_axi_top_mmio_arready;
+  logic [5:0] w_axi_top_mmio_rid;
+  logic [63:0] w_axi_top_mmio_rdata;
+  logic [1:0] w_axi_top_mmio_rresp;
+  logic w_axi_top_mmio_rlast;
+  logic w_axi_top_mmio_rvalid;
+  logic w_axi_top_mmio_rready;
+
+  // Each external AXI channel has an independent elastic cut.
+  if (PARA_TIMING_PROFILE == LPARA_TIMING_PROFILE_BOUNDARY) begin : gen_mem_aw_cut
+    typedef logic [$bits({o_axi_mem_awid, o_axi_mem_awatop, o_axi_mem_awaddr, o_axi_mem_awlen, o_axi_mem_awsize, o_axi_mem_awburst, o_axi_mem_awlock, o_axi_mem_awcache, o_axi_mem_awprot, o_axi_mem_awqos, o_axi_mem_awregion})-1:0] payload_type_def;
+    spill_register #(.T(payload_type_def)) u_dont_touch_spill_register (
+      .clk_i(i_clk_cluster), .rst_ni(i_rst_n_cluster),
+      .valid_i(w_axi_top_mem_awvalid), .ready_o(w_axi_top_mem_awready),
+      .data_i({w_axi_top_mem_awid, w_axi_top_mem_awatop, w_axi_top_mem_awaddr, w_axi_top_mem_awlen, w_axi_top_mem_awsize, w_axi_top_mem_awburst, w_axi_top_mem_awlock, w_axi_top_mem_awcache, w_axi_top_mem_awprot, w_axi_top_mem_awqos, w_axi_top_mem_awregion}),
+      .valid_o(o_axi_mem_awvalid), .ready_i(i_axi_mem_awready),
+      .data_o({o_axi_mem_awid, o_axi_mem_awatop, o_axi_mem_awaddr, o_axi_mem_awlen, o_axi_mem_awsize, o_axi_mem_awburst, o_axi_mem_awlock, o_axi_mem_awcache, o_axi_mem_awprot, o_axi_mem_awqos, o_axi_mem_awregion})
+    );
+  end else begin : gen_mem_aw_direct
+    assign o_axi_mem_awvalid = w_axi_top_mem_awvalid;
+    assign w_axi_top_mem_awready = i_axi_mem_awready;
+    assign {o_axi_mem_awid, o_axi_mem_awatop, o_axi_mem_awaddr, o_axi_mem_awlen, o_axi_mem_awsize, o_axi_mem_awburst, o_axi_mem_awlock, o_axi_mem_awcache, o_axi_mem_awprot, o_axi_mem_awqos, o_axi_mem_awregion} = {w_axi_top_mem_awid, w_axi_top_mem_awatop, w_axi_top_mem_awaddr, w_axi_top_mem_awlen, w_axi_top_mem_awsize, w_axi_top_mem_awburst, w_axi_top_mem_awlock, w_axi_top_mem_awcache, w_axi_top_mem_awprot, w_axi_top_mem_awqos, w_axi_top_mem_awregion};
+  end
+
+  if (PARA_TIMING_PROFILE == LPARA_TIMING_PROFILE_BOUNDARY) begin : gen_mem_w_cut
+    typedef logic [$bits({o_axi_mem_wdata, o_axi_mem_wstrb, o_axi_mem_wlast})-1:0] payload_type_def;
+    spill_register #(.T(payload_type_def)) u_dont_touch_spill_register (
+      .clk_i(i_clk_cluster), .rst_ni(i_rst_n_cluster),
+      .valid_i(w_axi_top_mem_wvalid), .ready_o(w_axi_top_mem_wready),
+      .data_i({w_axi_top_mem_wdata, w_axi_top_mem_wstrb, w_axi_top_mem_wlast}),
+      .valid_o(o_axi_mem_wvalid), .ready_i(i_axi_mem_wready),
+      .data_o({o_axi_mem_wdata, o_axi_mem_wstrb, o_axi_mem_wlast})
+    );
+  end else begin : gen_mem_w_direct
+    assign o_axi_mem_wvalid = w_axi_top_mem_wvalid;
+    assign w_axi_top_mem_wready = i_axi_mem_wready;
+    assign {o_axi_mem_wdata, o_axi_mem_wstrb, o_axi_mem_wlast} = {w_axi_top_mem_wdata, w_axi_top_mem_wstrb, w_axi_top_mem_wlast};
+  end
+
+  if (PARA_TIMING_PROFILE == LPARA_TIMING_PROFILE_BOUNDARY) begin : gen_mem_b_cut
+    typedef logic [$bits({i_axi_mem_bid, i_axi_mem_bresp})-1:0] payload_type_def;
+    spill_register #(.T(payload_type_def)) u_dont_touch_spill_register (
+      .clk_i(i_clk_cluster), .rst_ni(i_rst_n_cluster),
+      .valid_i(i_axi_mem_bvalid), .ready_o(o_axi_mem_bready),
+      .data_i({i_axi_mem_bid, i_axi_mem_bresp}),
+      .valid_o(w_axi_top_mem_bvalid), .ready_i(w_axi_top_mem_bready),
+      .data_o({w_axi_top_mem_bid, w_axi_top_mem_bresp})
+    );
+  end else begin : gen_mem_b_direct
+    assign w_axi_top_mem_bvalid = i_axi_mem_bvalid;
+    assign o_axi_mem_bready = w_axi_top_mem_bready;
+    assign {w_axi_top_mem_bid, w_axi_top_mem_bresp} = {i_axi_mem_bid, i_axi_mem_bresp};
+  end
+
+  if (PARA_TIMING_PROFILE == LPARA_TIMING_PROFILE_BOUNDARY) begin : gen_mem_ar_cut
+    typedef logic [$bits({o_axi_mem_arid, o_axi_mem_araddr, o_axi_mem_arlen, o_axi_mem_arsize, o_axi_mem_arburst, o_axi_mem_arlock, o_axi_mem_arcache, o_axi_mem_arprot, o_axi_mem_arqos, o_axi_mem_arregion})-1:0] payload_type_def;
+    spill_register #(.T(payload_type_def)) u_dont_touch_spill_register (
+      .clk_i(i_clk_cluster), .rst_ni(i_rst_n_cluster),
+      .valid_i(w_axi_top_mem_arvalid), .ready_o(w_axi_top_mem_arready),
+      .data_i({w_axi_top_mem_arid, w_axi_top_mem_araddr, w_axi_top_mem_arlen, w_axi_top_mem_arsize, w_axi_top_mem_arburst, w_axi_top_mem_arlock, w_axi_top_mem_arcache, w_axi_top_mem_arprot, w_axi_top_mem_arqos, w_axi_top_mem_arregion}),
+      .valid_o(o_axi_mem_arvalid), .ready_i(i_axi_mem_arready),
+      .data_o({o_axi_mem_arid, o_axi_mem_araddr, o_axi_mem_arlen, o_axi_mem_arsize, o_axi_mem_arburst, o_axi_mem_arlock, o_axi_mem_arcache, o_axi_mem_arprot, o_axi_mem_arqos, o_axi_mem_arregion})
+    );
+  end else begin : gen_mem_ar_direct
+    assign o_axi_mem_arvalid = w_axi_top_mem_arvalid;
+    assign w_axi_top_mem_arready = i_axi_mem_arready;
+    assign {o_axi_mem_arid, o_axi_mem_araddr, o_axi_mem_arlen, o_axi_mem_arsize, o_axi_mem_arburst, o_axi_mem_arlock, o_axi_mem_arcache, o_axi_mem_arprot, o_axi_mem_arqos, o_axi_mem_arregion} = {w_axi_top_mem_arid, w_axi_top_mem_araddr, w_axi_top_mem_arlen, w_axi_top_mem_arsize, w_axi_top_mem_arburst, w_axi_top_mem_arlock, w_axi_top_mem_arcache, w_axi_top_mem_arprot, w_axi_top_mem_arqos, w_axi_top_mem_arregion};
+  end
+
+  if (PARA_TIMING_PROFILE == LPARA_TIMING_PROFILE_BOUNDARY) begin : gen_mem_r_cut
+    typedef logic [$bits({i_axi_mem_rid, i_axi_mem_rdata, i_axi_mem_rresp, i_axi_mem_rlast})-1:0] payload_type_def;
+    spill_register #(.T(payload_type_def)) u_dont_touch_spill_register (
+      .clk_i(i_clk_cluster), .rst_ni(i_rst_n_cluster),
+      .valid_i(i_axi_mem_rvalid), .ready_o(o_axi_mem_rready),
+      .data_i({i_axi_mem_rid, i_axi_mem_rdata, i_axi_mem_rresp, i_axi_mem_rlast}),
+      .valid_o(w_axi_top_mem_rvalid), .ready_i(w_axi_top_mem_rready),
+      .data_o({w_axi_top_mem_rid, w_axi_top_mem_rdata, w_axi_top_mem_rresp, w_axi_top_mem_rlast})
+    );
+  end else begin : gen_mem_r_direct
+    assign w_axi_top_mem_rvalid = i_axi_mem_rvalid;
+    assign o_axi_mem_rready = w_axi_top_mem_rready;
+    assign {w_axi_top_mem_rid, w_axi_top_mem_rdata, w_axi_top_mem_rresp, w_axi_top_mem_rlast} = {i_axi_mem_rid, i_axi_mem_rdata, i_axi_mem_rresp, i_axi_mem_rlast};
+  end
+
+  if (PARA_TIMING_PROFILE == LPARA_TIMING_PROFILE_BOUNDARY) begin : gen_mmio_aw_cut
+    typedef logic [$bits({o_axi_mmio_awid, o_axi_mmio_awaddr, o_axi_mmio_awlen, o_axi_mmio_awsize, o_axi_mmio_awburst, o_axi_mmio_awlock, o_axi_mmio_awcache, o_axi_mmio_awprot, o_axi_mmio_awqos, o_axi_mmio_awregion})-1:0] payload_type_def;
+    spill_register #(.T(payload_type_def)) u_dont_touch_spill_register (
+      .clk_i(i_clk_cluster), .rst_ni(i_rst_n_cluster),
+      .valid_i(w_axi_top_mmio_awvalid), .ready_o(w_axi_top_mmio_awready),
+      .data_i({w_axi_top_mmio_awid, w_axi_top_mmio_awaddr, w_axi_top_mmio_awlen, w_axi_top_mmio_awsize, w_axi_top_mmio_awburst, w_axi_top_mmio_awlock, w_axi_top_mmio_awcache, w_axi_top_mmio_awprot, w_axi_top_mmio_awqos, w_axi_top_mmio_awregion}),
+      .valid_o(o_axi_mmio_awvalid), .ready_i(i_axi_mmio_awready),
+      .data_o({o_axi_mmio_awid, o_axi_mmio_awaddr, o_axi_mmio_awlen, o_axi_mmio_awsize, o_axi_mmio_awburst, o_axi_mmio_awlock, o_axi_mmio_awcache, o_axi_mmio_awprot, o_axi_mmio_awqos, o_axi_mmio_awregion})
+    );
+  end else begin : gen_mmio_aw_direct
+    assign o_axi_mmio_awvalid = w_axi_top_mmio_awvalid;
+    assign w_axi_top_mmio_awready = i_axi_mmio_awready;
+    assign {o_axi_mmio_awid, o_axi_mmio_awaddr, o_axi_mmio_awlen, o_axi_mmio_awsize, o_axi_mmio_awburst, o_axi_mmio_awlock, o_axi_mmio_awcache, o_axi_mmio_awprot, o_axi_mmio_awqos, o_axi_mmio_awregion} = {w_axi_top_mmio_awid, w_axi_top_mmio_awaddr, w_axi_top_mmio_awlen, w_axi_top_mmio_awsize, w_axi_top_mmio_awburst, w_axi_top_mmio_awlock, w_axi_top_mmio_awcache, w_axi_top_mmio_awprot, w_axi_top_mmio_awqos, w_axi_top_mmio_awregion};
+  end
+
+  if (PARA_TIMING_PROFILE == LPARA_TIMING_PROFILE_BOUNDARY) begin : gen_mmio_w_cut
+    typedef logic [$bits({o_axi_mmio_wdata, o_axi_mmio_wstrb, o_axi_mmio_wlast})-1:0] payload_type_def;
+    spill_register #(.T(payload_type_def)) u_dont_touch_spill_register (
+      .clk_i(i_clk_cluster), .rst_ni(i_rst_n_cluster),
+      .valid_i(w_axi_top_mmio_wvalid), .ready_o(w_axi_top_mmio_wready),
+      .data_i({w_axi_top_mmio_wdata, w_axi_top_mmio_wstrb, w_axi_top_mmio_wlast}),
+      .valid_o(o_axi_mmio_wvalid), .ready_i(i_axi_mmio_wready),
+      .data_o({o_axi_mmio_wdata, o_axi_mmio_wstrb, o_axi_mmio_wlast})
+    );
+  end else begin : gen_mmio_w_direct
+    assign o_axi_mmio_wvalid = w_axi_top_mmio_wvalid;
+    assign w_axi_top_mmio_wready = i_axi_mmio_wready;
+    assign {o_axi_mmio_wdata, o_axi_mmio_wstrb, o_axi_mmio_wlast} = {w_axi_top_mmio_wdata, w_axi_top_mmio_wstrb, w_axi_top_mmio_wlast};
+  end
+
+  if (PARA_TIMING_PROFILE == LPARA_TIMING_PROFILE_BOUNDARY) begin : gen_mmio_b_cut
+    typedef logic [$bits({i_axi_mmio_bid, i_axi_mmio_bresp})-1:0] payload_type_def;
+    spill_register #(.T(payload_type_def)) u_dont_touch_spill_register (
+      .clk_i(i_clk_cluster), .rst_ni(i_rst_n_cluster),
+      .valid_i(i_axi_mmio_bvalid), .ready_o(o_axi_mmio_bready),
+      .data_i({i_axi_mmio_bid, i_axi_mmio_bresp}),
+      .valid_o(w_axi_top_mmio_bvalid), .ready_i(w_axi_top_mmio_bready),
+      .data_o({w_axi_top_mmio_bid, w_axi_top_mmio_bresp})
+    );
+  end else begin : gen_mmio_b_direct
+    assign w_axi_top_mmio_bvalid = i_axi_mmio_bvalid;
+    assign o_axi_mmio_bready = w_axi_top_mmio_bready;
+    assign {w_axi_top_mmio_bid, w_axi_top_mmio_bresp} = {i_axi_mmio_bid, i_axi_mmio_bresp};
+  end
+
+  if (PARA_TIMING_PROFILE == LPARA_TIMING_PROFILE_BOUNDARY) begin : gen_mmio_ar_cut
+    typedef logic [$bits({o_axi_mmio_arid, o_axi_mmio_araddr, o_axi_mmio_arlen, o_axi_mmio_arsize, o_axi_mmio_arburst, o_axi_mmio_arlock, o_axi_mmio_arcache, o_axi_mmio_arprot, o_axi_mmio_arqos, o_axi_mmio_arregion})-1:0] payload_type_def;
+    spill_register #(.T(payload_type_def)) u_dont_touch_spill_register (
+      .clk_i(i_clk_cluster), .rst_ni(i_rst_n_cluster),
+      .valid_i(w_axi_top_mmio_arvalid), .ready_o(w_axi_top_mmio_arready),
+      .data_i({w_axi_top_mmio_arid, w_axi_top_mmio_araddr, w_axi_top_mmio_arlen, w_axi_top_mmio_arsize, w_axi_top_mmio_arburst, w_axi_top_mmio_arlock, w_axi_top_mmio_arcache, w_axi_top_mmio_arprot, w_axi_top_mmio_arqos, w_axi_top_mmio_arregion}),
+      .valid_o(o_axi_mmio_arvalid), .ready_i(i_axi_mmio_arready),
+      .data_o({o_axi_mmio_arid, o_axi_mmio_araddr, o_axi_mmio_arlen, o_axi_mmio_arsize, o_axi_mmio_arburst, o_axi_mmio_arlock, o_axi_mmio_arcache, o_axi_mmio_arprot, o_axi_mmio_arqos, o_axi_mmio_arregion})
+    );
+  end else begin : gen_mmio_ar_direct
+    assign o_axi_mmio_arvalid = w_axi_top_mmio_arvalid;
+    assign w_axi_top_mmio_arready = i_axi_mmio_arready;
+    assign {o_axi_mmio_arid, o_axi_mmio_araddr, o_axi_mmio_arlen, o_axi_mmio_arsize, o_axi_mmio_arburst, o_axi_mmio_arlock, o_axi_mmio_arcache, o_axi_mmio_arprot, o_axi_mmio_arqos, o_axi_mmio_arregion} = {w_axi_top_mmio_arid, w_axi_top_mmio_araddr, w_axi_top_mmio_arlen, w_axi_top_mmio_arsize, w_axi_top_mmio_arburst, w_axi_top_mmio_arlock, w_axi_top_mmio_arcache, w_axi_top_mmio_arprot, w_axi_top_mmio_arqos, w_axi_top_mmio_arregion};
+  end
+
+  if (PARA_TIMING_PROFILE == LPARA_TIMING_PROFILE_BOUNDARY) begin : gen_mmio_r_cut
+    typedef logic [$bits({i_axi_mmio_rid, i_axi_mmio_rdata, i_axi_mmio_rresp, i_axi_mmio_rlast})-1:0] payload_type_def;
+    spill_register #(.T(payload_type_def)) u_dont_touch_spill_register (
+      .clk_i(i_clk_cluster), .rst_ni(i_rst_n_cluster),
+      .valid_i(i_axi_mmio_rvalid), .ready_o(o_axi_mmio_rready),
+      .data_i({i_axi_mmio_rid, i_axi_mmio_rdata, i_axi_mmio_rresp, i_axi_mmio_rlast}),
+      .valid_o(w_axi_top_mmio_rvalid), .ready_i(w_axi_top_mmio_rready),
+      .data_o({w_axi_top_mmio_rid, w_axi_top_mmio_rdata, w_axi_top_mmio_rresp, w_axi_top_mmio_rlast})
+    );
+  end else begin : gen_mmio_r_direct
+    assign w_axi_top_mmio_rvalid = i_axi_mmio_rvalid;
+    assign o_axi_mmio_rready = w_axi_top_mmio_rready;
+    assign {w_axi_top_mmio_rid, w_axi_top_mmio_rdata, w_axi_top_mmio_rresp, w_axi_top_mmio_rlast} = {i_axi_mmio_rid, i_axi_mmio_rdata, i_axi_mmio_rresp, i_axi_mmio_rlast};
+  end
+
+  // Adapt the external hart count to the four internal tile slots.
+  logic [3:0] w_hart_debug_mode;
+  assign o_hart_debug_mode = w_hart_debug_mode[PARA_CPU_NUM-1:0];
+
   // The cluster core keeps its native LLC memory interface at 64 bits.
   m_vlsit_riscv_cluster_core #(
     .PARA_CPU_NUM(PARA_CPU_NUM),
+    .PARA_TIMING_PROFILE(PARA_TIMING_PROFILE),
     .PARA_COH_TXN_NUM(PARA_COH_TXN_NUM),
     .PARA_LLC_WAY_NUM(PARA_LLC_WAY_NUM),
     .PARA_LLC_NO_LINES(PARA_LLC_NO_LINES),
@@ -263,14 +545,14 @@ module m_vlsit_riscv_cluster_axi_top #(
     .i_clk_cluster(i_clk_cluster),
     .i_rst_n_cluster(i_rst_n_cluster),
     .i_boot_addr(i_boot_addr),
-    .i_int_msip(i_int_msip),
-    .i_int_mtip(i_int_mtip),
-    .i_int_meip(i_int_meip),
-    .i_int_ssip(i_int_ssip),
-    .i_int_stip(i_int_stip),
-    .i_int_seip(i_int_seip),
-    .i_hart_debug_req(i_hart_debug_req),
-    .o_hart_debug_mode(o_hart_debug_mode),
+    .i_int_msip(4'(i_int_msip)),
+    .i_int_mtip(4'(i_int_mtip)),
+    .i_int_meip(4'(i_int_meip)),
+    .i_int_ssip(4'(i_int_ssip)),
+    .i_int_stip(4'(i_int_stip)),
+    .i_int_seip(4'(i_int_seip)),
+    .i_hart_debug_req(4'(i_hart_debug_req)),
+    .o_hart_debug_mode(w_hart_debug_mode),
     .o_int_pmu(o_int_pmu),
     .o_int_fault(o_int_fault),
     .i_axil_awaddr(i_axil_awaddr),
@@ -292,45 +574,45 @@ module m_vlsit_riscv_cluster_axi_top #(
     .o_axil_rresp(o_axil_rresp),
     .o_axil_rvalid(o_axil_rvalid),
     .i_axil_rready(i_axil_rready),
-    .o_axi_mmio_awid(o_axi_mmio_awid),
-    .o_axi_mmio_awaddr(o_axi_mmio_awaddr),
-    .o_axi_mmio_awlen(o_axi_mmio_awlen),
-    .o_axi_mmio_awsize(o_axi_mmio_awsize),
-    .o_axi_mmio_awburst(o_axi_mmio_awburst),
-    .o_axi_mmio_awlock(o_axi_mmio_awlock),
-    .o_axi_mmio_awcache(o_axi_mmio_awcache),
-    .o_axi_mmio_awprot(o_axi_mmio_awprot),
-    .o_axi_mmio_awqos(o_axi_mmio_awqos),
-    .o_axi_mmio_awregion(o_axi_mmio_awregion),
-    .o_axi_mmio_awvalid(o_axi_mmio_awvalid),
-    .i_axi_mmio_awready(i_axi_mmio_awready),
-    .o_axi_mmio_wdata(o_axi_mmio_wdata),
-    .o_axi_mmio_wstrb(o_axi_mmio_wstrb),
-    .o_axi_mmio_wlast(o_axi_mmio_wlast),
-    .o_axi_mmio_wvalid(o_axi_mmio_wvalid),
-    .i_axi_mmio_wready(i_axi_mmio_wready),
-    .i_axi_mmio_bid(i_axi_mmio_bid),
-    .i_axi_mmio_bresp(i_axi_mmio_bresp),
-    .i_axi_mmio_bvalid(i_axi_mmio_bvalid),
-    .o_axi_mmio_bready(o_axi_mmio_bready),
-    .o_axi_mmio_arid(o_axi_mmio_arid),
-    .o_axi_mmio_araddr(o_axi_mmio_araddr),
-    .o_axi_mmio_arlen(o_axi_mmio_arlen),
-    .o_axi_mmio_arsize(o_axi_mmio_arsize),
-    .o_axi_mmio_arburst(o_axi_mmio_arburst),
-    .o_axi_mmio_arlock(o_axi_mmio_arlock),
-    .o_axi_mmio_arcache(o_axi_mmio_arcache),
-    .o_axi_mmio_arprot(o_axi_mmio_arprot),
-    .o_axi_mmio_arqos(o_axi_mmio_arqos),
-    .o_axi_mmio_arregion(o_axi_mmio_arregion),
-    .o_axi_mmio_arvalid(o_axi_mmio_arvalid),
-    .i_axi_mmio_arready(i_axi_mmio_arready),
-    .i_axi_mmio_rid(i_axi_mmio_rid),
-    .i_axi_mmio_rdata(i_axi_mmio_rdata),
-    .i_axi_mmio_rresp(i_axi_mmio_rresp),
-    .i_axi_mmio_rlast(i_axi_mmio_rlast),
-    .i_axi_mmio_rvalid(i_axi_mmio_rvalid),
-    .o_axi_mmio_rready(o_axi_mmio_rready),
+    .o_axi_mmio_awid(w_axi_top_mmio_awid),
+    .o_axi_mmio_awaddr(w_axi_top_mmio_awaddr),
+    .o_axi_mmio_awlen(w_axi_top_mmio_awlen),
+    .o_axi_mmio_awsize(w_axi_top_mmio_awsize),
+    .o_axi_mmio_awburst(w_axi_top_mmio_awburst),
+    .o_axi_mmio_awlock(w_axi_top_mmio_awlock),
+    .o_axi_mmio_awcache(w_axi_top_mmio_awcache),
+    .o_axi_mmio_awprot(w_axi_top_mmio_awprot),
+    .o_axi_mmio_awqos(w_axi_top_mmio_awqos),
+    .o_axi_mmio_awregion(w_axi_top_mmio_awregion),
+    .o_axi_mmio_awvalid(w_axi_top_mmio_awvalid),
+    .i_axi_mmio_awready(w_axi_top_mmio_awready),
+    .o_axi_mmio_wdata(w_axi_top_mmio_wdata),
+    .o_axi_mmio_wstrb(w_axi_top_mmio_wstrb),
+    .o_axi_mmio_wlast(w_axi_top_mmio_wlast),
+    .o_axi_mmio_wvalid(w_axi_top_mmio_wvalid),
+    .i_axi_mmio_wready(w_axi_top_mmio_wready),
+    .i_axi_mmio_bid(w_axi_top_mmio_bid),
+    .i_axi_mmio_bresp(w_axi_top_mmio_bresp),
+    .i_axi_mmio_bvalid(w_axi_top_mmio_bvalid),
+    .o_axi_mmio_bready(w_axi_top_mmio_bready),
+    .o_axi_mmio_arid(w_axi_top_mmio_arid),
+    .o_axi_mmio_araddr(w_axi_top_mmio_araddr),
+    .o_axi_mmio_arlen(w_axi_top_mmio_arlen),
+    .o_axi_mmio_arsize(w_axi_top_mmio_arsize),
+    .o_axi_mmio_arburst(w_axi_top_mmio_arburst),
+    .o_axi_mmio_arlock(w_axi_top_mmio_arlock),
+    .o_axi_mmio_arcache(w_axi_top_mmio_arcache),
+    .o_axi_mmio_arprot(w_axi_top_mmio_arprot),
+    .o_axi_mmio_arqos(w_axi_top_mmio_arqos),
+    .o_axi_mmio_arregion(w_axi_top_mmio_arregion),
+    .o_axi_mmio_arvalid(w_axi_top_mmio_arvalid),
+    .i_axi_mmio_arready(w_axi_top_mmio_arready),
+    .i_axi_mmio_rid(w_axi_top_mmio_rid),
+    .i_axi_mmio_rdata(w_axi_top_mmio_rdata),
+    .i_axi_mmio_rresp(w_axi_top_mmio_rresp),
+    .i_axi_mmio_rlast(w_axi_top_mmio_rlast),
+    .i_axi_mmio_rvalid(w_axi_top_mmio_rvalid),
+    .o_axi_mmio_rready(w_axi_top_mmio_rready),
     .o_axi_mem_awid(w_axi_llc_awid),
     .o_axi_mem_awatop(w_axi_llc_awatop),
     .o_axi_mem_awaddr(w_axi_llc_awaddr),
@@ -419,46 +701,46 @@ module m_vlsit_riscv_cluster_axi_top #(
     .o_axi_llc_rlast(w_axi_llc_rlast),
     .o_axi_llc_rvalid(w_axi_llc_rvalid),
     .i_axi_llc_rready(w_axi_llc_rready),
-    .o_axi_mem_awid(o_axi_mem_awid),
-    .o_axi_mem_awatop(o_axi_mem_awatop),
-    .o_axi_mem_awaddr(o_axi_mem_awaddr),
-    .o_axi_mem_awlen(o_axi_mem_awlen),
-    .o_axi_mem_awsize(o_axi_mem_awsize),
-    .o_axi_mem_awburst(o_axi_mem_awburst),
-    .o_axi_mem_awlock(o_axi_mem_awlock),
-    .o_axi_mem_awcache(o_axi_mem_awcache),
-    .o_axi_mem_awprot(o_axi_mem_awprot),
-    .o_axi_mem_awqos(o_axi_mem_awqos),
-    .o_axi_mem_awregion(o_axi_mem_awregion),
-    .o_axi_mem_awvalid(o_axi_mem_awvalid),
-    .i_axi_mem_awready(i_axi_mem_awready),
-    .o_axi_mem_wdata(o_axi_mem_wdata),
-    .o_axi_mem_wstrb(o_axi_mem_wstrb),
-    .o_axi_mem_wlast(o_axi_mem_wlast),
-    .o_axi_mem_wvalid(o_axi_mem_wvalid),
-    .i_axi_mem_wready(i_axi_mem_wready),
-    .i_axi_mem_bid(i_axi_mem_bid),
-    .i_axi_mem_bresp(i_axi_mem_bresp),
-    .i_axi_mem_bvalid(i_axi_mem_bvalid),
-    .o_axi_mem_bready(o_axi_mem_bready),
-    .o_axi_mem_arid(o_axi_mem_arid),
-    .o_axi_mem_araddr(o_axi_mem_araddr),
-    .o_axi_mem_arlen(o_axi_mem_arlen),
-    .o_axi_mem_arsize(o_axi_mem_arsize),
-    .o_axi_mem_arburst(o_axi_mem_arburst),
-    .o_axi_mem_arlock(o_axi_mem_arlock),
-    .o_axi_mem_arcache(o_axi_mem_arcache),
-    .o_axi_mem_arprot(o_axi_mem_arprot),
-    .o_axi_mem_arqos(o_axi_mem_arqos),
-    .o_axi_mem_arregion(o_axi_mem_arregion),
-    .o_axi_mem_arvalid(o_axi_mem_arvalid),
-    .i_axi_mem_arready(i_axi_mem_arready),
-    .i_axi_mem_rid(i_axi_mem_rid),
-    .i_axi_mem_rdata(i_axi_mem_rdata),
-    .i_axi_mem_rresp(i_axi_mem_rresp),
-    .i_axi_mem_rlast(i_axi_mem_rlast),
-    .i_axi_mem_rvalid(i_axi_mem_rvalid),
-    .o_axi_mem_rready(o_axi_mem_rready)
+    .o_axi_mem_awid(w_axi_top_mem_awid),
+    .o_axi_mem_awatop(w_axi_top_mem_awatop),
+    .o_axi_mem_awaddr(w_axi_top_mem_awaddr),
+    .o_axi_mem_awlen(w_axi_top_mem_awlen),
+    .o_axi_mem_awsize(w_axi_top_mem_awsize),
+    .o_axi_mem_awburst(w_axi_top_mem_awburst),
+    .o_axi_mem_awlock(w_axi_top_mem_awlock),
+    .o_axi_mem_awcache(w_axi_top_mem_awcache),
+    .o_axi_mem_awprot(w_axi_top_mem_awprot),
+    .o_axi_mem_awqos(w_axi_top_mem_awqos),
+    .o_axi_mem_awregion(w_axi_top_mem_awregion),
+    .o_axi_mem_awvalid(w_axi_top_mem_awvalid),
+    .i_axi_mem_awready(w_axi_top_mem_awready),
+    .o_axi_mem_wdata(w_axi_top_mem_wdata),
+    .o_axi_mem_wstrb(w_axi_top_mem_wstrb),
+    .o_axi_mem_wlast(w_axi_top_mem_wlast),
+    .o_axi_mem_wvalid(w_axi_top_mem_wvalid),
+    .i_axi_mem_wready(w_axi_top_mem_wready),
+    .i_axi_mem_bid(w_axi_top_mem_bid),
+    .i_axi_mem_bresp(w_axi_top_mem_bresp),
+    .i_axi_mem_bvalid(w_axi_top_mem_bvalid),
+    .o_axi_mem_bready(w_axi_top_mem_bready),
+    .o_axi_mem_arid(w_axi_top_mem_arid),
+    .o_axi_mem_araddr(w_axi_top_mem_araddr),
+    .o_axi_mem_arlen(w_axi_top_mem_arlen),
+    .o_axi_mem_arsize(w_axi_top_mem_arsize),
+    .o_axi_mem_arburst(w_axi_top_mem_arburst),
+    .o_axi_mem_arlock(w_axi_top_mem_arlock),
+    .o_axi_mem_arcache(w_axi_top_mem_arcache),
+    .o_axi_mem_arprot(w_axi_top_mem_arprot),
+    .o_axi_mem_arqos(w_axi_top_mem_arqos),
+    .o_axi_mem_arregion(w_axi_top_mem_arregion),
+    .o_axi_mem_arvalid(w_axi_top_mem_arvalid),
+    .i_axi_mem_arready(w_axi_top_mem_arready),
+    .i_axi_mem_rid(w_axi_top_mem_rid),
+    .i_axi_mem_rdata(w_axi_top_mem_rdata),
+    .i_axi_mem_rresp(w_axi_top_mem_rresp),
+    .i_axi_mem_rlast(w_axi_top_mem_rlast),
+    .i_axi_mem_rvalid(w_axi_top_mem_rvalid),
+    .o_axi_mem_rready(w_axi_top_mem_rready)
   );
 
 endmodule

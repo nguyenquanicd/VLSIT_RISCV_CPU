@@ -1,0 +1,232 @@
+{
+  "schema_version": 2,
+  "commands": [
+    {
+      "command": [
+        "C:/Users/PC/Tools/oss-cad-suite/bin/verilator_bin.exe",
+        "--binary",
+        "--hierarchical",
+        "-j",
+        "1",
+        "--verilate-jobs",
+        "1",
+        "-fno-inline",
+        "--assert",
+        "--timing",
+        "--timescale",
+        "1ns/1ps",
+        "--top-module",
+        "tb",
+        "-CFLAGS",
+        "-std=gnu++20 -O0",
+        "-MAKEFLAGS",
+        "OPT_FAST=-O0 OPT_SLOW=-O0 OPT_GLOBAL=-O0",
+        "-o",
+        "Vtb.exe",
+        "--Mdir",
+        "C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/lint/non_coherence_cluster/hierarchy_tool_probe_001/obj",
+        "C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/lint/non_coherence_cluster/hierarchy_tool_probe_001/parts.vlt",
+        "C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/lint/non_coherence_cluster/hierarchy_tool_probe_001/tb.sv"
+      ],
+      "log": "C:\\HQuan\\102_MyGithub\\VLSIT_RISCV_CPU\\lint\\non_coherence_cluster\\hierarchy_tool_probe_001\\build.log",
+      "start_ns": 1795210332811629300,
+      "start_available_bytes": 2045726720,
+      "run_initial_available_bytes": 2045726720,
+      "early_stop_available_bytes": 1073741824,
+      "minimum_start_available_bytes": 1073741824,
+      "max_ram_drop_bytes": 1090519040,
+      "ram_guard_margin_bytes": 0,
+      "ram_floor_bytes": 1073741824,
+      "disk_floor_bytes": 2147483648,
+      "samples": [
+        {
+          "elapsed_s": 0.0,
+          "available_bytes": 2045726720,
+          "total_bytes": 16357158912,
+          "load_percent": 87,
+          "disk_free_bytes": 8543727616
+        },
+        {
+          "elapsed_s": 0.11,
+          "available_bytes": 1970089984,
+          "total_bytes": 16357158912,
+          "load_percent": 87,
+          "disk_free_bytes": 8543727616
+        },
+        {
+          "elapsed_s": 0.25,
+          "available_bytes": 2007019520,
+          "total_bytes": 16357158912,
+          "load_percent": 87,
+          "disk_free_bytes": 8543485952
+        },
+        {
+          "elapsed_s": 0.39,
+          "available_bytes": 1958244352,
+          "total_bytes": 16357158912,
+          "load_percent": 88,
+          "disk_free_bytes": 8543227904
+        },
+        {
+          "elapsed_s": 0.52,
+          "available_bytes": 1879949312,
+          "total_bytes": 16357158912,
+          "load_percent": 88,
+          "disk_free_bytes": 8543100928
+        },
+        {
+          "elapsed_s": 0.66,
+          "available_bytes": 1832812544,
+          "total_bytes": 16357158912,
+          "load_percent": 88,
+          "disk_free_bytes": 8542572544
+        },
+        {
+          "elapsed_s": 0.88,
+          "available_bytes": 1777790976,
+          "total_bytes": 16357158912,
+          "load_percent": 89,
+          "disk_free_bytes": 8538316800
+        },
+        {
+          "elapsed_s": 1.03,
+          "available_bytes": 1711497216,
+          "total_bytes": 16357158912,
+          "load_percent": 89,
+          "disk_free_bytes": 8538120192
+        },
+        {
+          "elapsed_s": 1.14,
+          "available_bytes": 1649098752,
+          "total_bytes": 16357158912,
+          "load_percent": 89,
+          "disk_free_bytes": 8537903104
+        },
+        {
+          "elapsed_s": 1.25,
+          "available_bytes": 1568239616,
+          "total_bytes": 16357158912,
+          "load_percent": 90,
+          "disk_free_bytes": 8537640960
+        },
+        {
+          "elapsed_s": 1.41,
+          "available_bytes": 1516912640,
+          "total_bytes": 16357158912,
+          "load_percent": 90,
+          "disk_free_bytes": 8542048256
+        },
+        {
+          "elapsed_s": 1.52,
+          "available_bytes": 1461424128,
+          "total_bytes": 16357158912,
+          "load_percent": 91,
+          "disk_free_bytes": 8541433856
+        },
+        {
+          "elapsed_s": 1.64,
+          "available_bytes": 1415774208,
+          "total_bytes": 16357158912,
+          "load_percent": 91,
+          "disk_free_bytes": 8540909568
+        },
+        {
+          "elapsed_s": 1.77,
+          "available_bytes": 1369559040,
+          "total_bytes": 16357158912,
+          "load_percent": 91,
+          "disk_free_bytes": 8534917120
+        },
+        {
+          "elapsed_s": 2.14,
+          "available_bytes": 1369534464,
+          "total_bytes": 16357158912,
+          "load_percent": 91,
+          "disk_free_bytes": 8534585344
+        },
+        {
+          "elapsed_s": 2.27,
+          "available_bytes": 1350393856,
+          "total_bytes": 16357158912,
+          "load_percent": 91,
+          "disk_free_bytes": 8539860992
+        },
+        {
+          "elapsed_s": 2.39,
+          "available_bytes": 1337827328,
+          "total_bytes": 16357158912,
+          "load_percent": 91,
+          "disk_free_bytes": 8536109056
+        },
+        {
+          "elapsed_s": 2.52,
+          "available_bytes": 1324150784,
+          "total_bytes": 16357158912,
+          "load_percent": 91,
+          "disk_free_bytes": 8535703552
+        },
+        {
+          "elapsed_s": 2.64,
+          "available_bytes": 1297670144,
+          "total_bytes": 16357158912,
+          "load_percent": 92,
+          "disk_free_bytes": 8535109632
+        },
+        {
+          "elapsed_s": 2.77,
+          "available_bytes": 1288175616,
+          "total_bytes": 16357158912,
+          "load_percent": 92,
+          "disk_free_bytes": 8534257664
+        },
+        {
+          "elapsed_s": 2.92,
+          "available_bytes": 1670594560,
+          "total_bytes": 16357158912,
+          "load_percent": 89,
+          "disk_free_bytes": 8529043456
+        },
+        {
+          "elapsed_s": 3.03,
+          "available_bytes": 1640382464,
+          "total_bytes": 16357158912,
+          "load_percent": 89,
+          "disk_free_bytes": 8528588800
+        },
+        {
+          "elapsed_s": 3.12,
+          "available_bytes": 1639104512,
+          "total_bytes": 16357158912,
+          "load_percent": 89,
+          "disk_free_bytes": 8531447808
+        },
+        {
+          "elapsed_s": 3.14,
+          "available_bytes": 1639038976,
+          "total_bytes": 16357158912,
+          "load_percent": 89,
+          "disk_free_bytes": 8531447808
+        }
+      ],
+      "status": "completed",
+      "process_tree": true,
+      "minimum_disk_free_bytes": 8528588800,
+      "minimum_available_bytes": 1288175616,
+      "end_available_bytes": 1639038976,
+      "max_observed_available_ram_drop_bytes": 757551104,
+      "duration_s": 3.13,
+      "stop_reason": null
+    }
+  ],
+  "minimum_available_bytes": 1288175616,
+  "initial_available_bytes": 2045726720,
+  "status": "completed",
+  "ram_floor_bytes": 1073741824,
+  "early_stop_available_bytes": 1073741824,
+  "minimum_start_available_bytes": 1073741824,
+  "max_ram_drop_bytes": 1090519040,
+  "ram_guard_margin_bytes": 0,
+  "disk_floor_bytes": 2147483648,
+  "minimum_disk_free_bytes": 8528588800,
+  "max_observed_available_ram_drop_bytes": 757551104
+}

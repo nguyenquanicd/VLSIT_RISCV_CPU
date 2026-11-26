@@ -1,0 +1,304 @@
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "m_vlsit_riscv_hpd_probe_engine_internal.drawio",
+  "layout": {
+    "gap_h": 120,
+    "gap_v": 110,
+    "margin": 80,
+    "block_h": 60
+  },
+  "top": {
+    "frame_label": [
+      "Internal functional blocks",
+      "(m_vlsit_riscv_hpd_probe_engine)"
+    ]
+  },
+  "frame_row": [
+    "m_vlsit_riscv_hpd_probe_engine",
+    "Execute tagged PREPARE and COMMIT or ABORT against HPDcache metadata and write-back.",
+    "rtl/common/vlsit/coherence/m_vlsit_riscv_hpd_probe_engine.sv"
+  ],
+  "frame_interfaces": [
+    "PRQ",
+    "LKPI",
+    "FLSO",
+    "UPDO",
+    "PRS"
+  ],
+  "blocks": [
+    {
+      "key": "B0",
+      "label": [
+        "probe_payload_regs",
+        "(p_ff_probe_payload)"
+      ],
+      "width": 240,
+      "row": 0,
+      "col": 0,
+      "row_name": "probe_payload_regs (p_ff_probe_payload)",
+      "function": "Hold probe tag, line, target state, observed state, way, hit, error and write-back status.",
+      "source": "rtl/common/vlsit/coherence/m_vlsit_riscv_hpd_probe_engine.sv:294-445"
+    },
+    {
+      "key": "B1",
+      "label": [
+        "probe_fsm_next",
+        "(p_com_probe_nxt)"
+      ],
+      "width": 200,
+      "row": 0,
+      "col": 1,
+      "row_name": "probe_fsm_next (p_com_probe_nxt)",
+      "function": "Eleven-state next-state logic for PREPARE, COMMIT and ABORT.",
+      "source": "rtl/common/vlsit/coherence/m_vlsit_riscv_hpd_probe_engine.sv:191-284"
+    },
+    {
+      "key": "B2",
+      "label": [
+        "probe_state_reg",
+        "(p_ff_probe_state)"
+      ],
+      "width": 220,
+      "row": 0,
+      "col": 2,
+      "row_name": "probe_state_reg (p_ff_probe_state)",
+      "function": "Hold the explicit FSM state on the cache clock.",
+      "source": "rtl/common/vlsit/coherence/m_vlsit_riscv_hpd_probe_engine.sv:285-293"
+    },
+    {
+      "key": "B3",
+      "label": [
+        "metadata_lookup",
+        "(o_lookup_*)"
+      ],
+      "width": 180,
+      "row": 1,
+      "col": 0,
+      "row_name": "metadata_lookup (o_lookup_*)",
+      "function": "Look the line up in the HPDcache tag array and capture hit, way, state and error.",
+      "source": "rtl/common/vlsit/coherence/m_vlsit_riscv_hpd_probe_engine.sv:133-190"
+    },
+    {
+      "key": "B4",
+      "label": [
+        "dirty_flush",
+        "(o_flush_*)"
+      ],
+      "width": 140,
+      "row": 1,
+      "col": 1,
+      "row_name": "dirty_flush (o_flush_*)",
+      "function": "For an actual dirty M hit with write-back enabled, start a native flush and wait for the accepted B result.",
+      "source": "rtl/common/vlsit/coherence/m_vlsit_riscv_hpd_probe_engine.sv:133-190"
+    },
+    {
+      "key": "B5",
+      "label": [
+        "state_update",
+        "(o_state_update_*)"
+      ],
+      "width": 220,
+      "row": 1,
+      "col": 2,
+      "row_name": "state_update (o_state_update_*)",
+      "function": "On a matching COMMIT, write the target MESI state into a real hit; absence stays I and allocates no line.",
+      "source": "rtl/common/vlsit/coherence/m_vlsit_riscv_hpd_probe_engine.sv:133-190"
+    },
+    {
+      "key": "B6",
+      "label": [
+        "probe_response_reg",
+        "(o_probe_rsp_*)"
+      ],
+      "width": 220,
+      "row": 2,
+      "col": 0,
+      "row_name": "probe_response_reg (o_probe_rsp_*)",
+      "function": "Return prepared state, error and write-back done; payload stays stable while ready is low.",
+      "source": "rtl/common/vlsit/coherence/m_vlsit_riscv_hpd_probe_engine.sv:133-190"
+    }
+  ],
+  "connectors": [
+    {
+      "id": "PAY",
+      "src": "B0",
+      "src_side": "R",
+      "dst": "B1",
+      "dst_side": "L"
+    },
+    {
+      "id": "NXT",
+      "src": "B1",
+      "src_side": "R",
+      "dst": "B2",
+      "dst_side": "L"
+    },
+    {
+      "id": "LKP",
+      "src": "B0",
+      "src_side": "B",
+      "dst": "B3",
+      "dst_side": "T"
+    },
+    {
+      "id": "FLS",
+      "src": "B3",
+      "src_side": "R",
+      "dst": "B4",
+      "dst_side": "L"
+    },
+    {
+      "id": "UPD",
+      "src": "B4",
+      "src_side": "R",
+      "dst": "B5",
+      "dst_side": "L"
+    },
+    {
+      "id": "RESP",
+      "src": "B3",
+      "src_side": "B",
+      "dst": "B6",
+      "dst_side": "T"
+    }
+  ],
+  "externals": [
+    {
+      "id": "PRQ",
+      "block": "B0",
+      "side": "T",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "PROBE REQUEST",
+        "tag, line, phase"
+      ]
+    },
+    {
+      "id": "LKPI",
+      "block": "B3",
+      "side": "L",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "METADATA LOOKUP",
+        "to HPDcache"
+      ]
+    },
+    {
+      "id": "FLSO",
+      "block": "B4",
+      "side": "B",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "FLUSH",
+        "to HPDcache"
+      ]
+    },
+    {
+      "id": "UPDO",
+      "block": "B5",
+      "side": "B",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "STATE UPDATE",
+        "to HPDcache"
+      ]
+    },
+    {
+      "id": "PRS",
+      "block": "B6",
+      "side": "L",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "PROBE RESPONSE",
+        "state, err"
+      ]
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "PAY",
+      "name": "Payload to FSM",
+      "category": "custom",
+      "active": "B0 -> B1",
+      "signals": "i_probe_req_tag, i_probe_req_nline, i_probe_req_phase, i_probe_req_target_state, i_probe_req_wback_en"
+    },
+    {
+      "id": "NXT",
+      "name": "Next state to state register",
+      "category": "custom",
+      "active": "B1 -> B2",
+      "signals": "i_lookup_rsp_hit, i_flush_ack_valid, i_state_update_ready"
+    },
+    {
+      "id": "LKP",
+      "name": "Payload to lookup",
+      "category": "handshake",
+      "active": "B0 -> B3",
+      "signals": "o_lookup_valid, i_lookup_ready, o_lookup_tag, o_lookup_nline, i_lookup_rsp_valid, o_lookup_rsp_ready, i_lookup_rsp_tag, i_lookup_rsp_nline, i_lookup_rsp_way, i_lookup_rsp_hit, i_lookup_rsp_state, i_lookup_rsp_err"
+    },
+    {
+      "id": "FLS",
+      "name": "Lookup result to flush",
+      "category": "handshake",
+      "active": "B3 -> B4",
+      "signals": "o_flush_valid, i_flush_ready, o_flush_nline, o_flush_way, i_flush_ack_valid, i_flush_ack_nline, i_flush_ack_err"
+    },
+    {
+      "id": "UPD",
+      "name": "Flush result to state update",
+      "category": "handshake",
+      "active": "B4 -> B5",
+      "signals": "o_state_update_valid, i_state_update_ready, o_state_update_nline, o_state_update_way, o_state_update_state"
+    },
+    {
+      "id": "RESP",
+      "name": "Lookup result to response",
+      "category": "handshake",
+      "active": "B3 -> B6",
+      "signals": "i_lookup_rsp_state, i_lookup_rsp_err, o_probe_rsp_wback_done"
+    },
+    {
+      "id": "PRQ",
+      "name": "Probe request inputs",
+      "category": "handshake",
+      "active": "in",
+      "signals": "i_probe_req_valid, o_probe_req_ready, i_probe_req_tag, i_probe_req_nline, i_probe_req_phase, i_probe_req_target_state, i_probe_req_wback_en"
+    },
+    {
+      "id": "LKPI",
+      "name": "Lookup outputs",
+      "category": "handshake",
+      "active": "out",
+      "signals": "o_lookup_valid, o_lookup_tag, o_lookup_nline"
+    },
+    {
+      "id": "FLSO",
+      "name": "Flush outputs",
+      "category": "handshake",
+      "active": "out",
+      "signals": "o_flush_valid, o_flush_nline, o_flush_way"
+    },
+    {
+      "id": "UPDO",
+      "name": "State update outputs",
+      "category": "handshake",
+      "active": "out",
+      "signals": "o_state_update_valid, o_state_update_nline, o_state_update_way, o_state_update_state"
+    },
+    {
+      "id": "PRS",
+      "name": "Probe response outputs",
+      "category": "handshake",
+      "active": "out",
+      "signals": "o_probe_rsp_valid, i_probe_rsp_ready, o_probe_rsp_tag, o_probe_rsp_nline, o_probe_rsp_phase, o_probe_rsp_state, o_probe_rsp_err, o_probe_rsp_wback_done"
+    }
+  ],
+  "nets": [],
+  "legend_note": "Functional decomposition of one RTL module. The module has no child instance except where a box names one, so the boxes are logic groups named after the RTL processes, generate blocks and registers cited in the source column. Arrows show the main request or data direction; responses return on the same bundle.",
+  "library_sha256": "15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"
+}

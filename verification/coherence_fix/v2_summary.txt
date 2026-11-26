@@ -1,0 +1,94 @@
+BUILD rv32 2h: built C:\HQuan\102_MyGithub\VLSIT_RISCV_CPU\verification\rv32_profile\build\rv32_2h_p0\Vtb_rv32_cluster.exe in 148s
+BUILD rv32 4h: built C:\HQuan\102_MyGithub\VLSIT_RISCV_CPU\verification\rv32_profile\build\rv32_4h_p0\Vtb_rv32_cluster.exe in 298s
+BUILD rv64 2h: built C:\HQuan\102_MyGithub\VLSIT_RISCV_CPU\verification\rv32_profile\build\rv64_2h_p0\Vtb_rv32_cluster.exe in 191s
+BUILD rv64 4h: built C:\HQuan\102_MyGithub\VLSIT_RISCV_CPU\verification\rv32_profile\build\rv64_4h_p0\Vtb_rv32_cluster.exe in 309s
+BUILD base64 4h: built C:\HQuan\102_MyGithub\VLSIT_RISCV_CPU\verification\rv32_profile\build\rv64_4h_p0_base\Vtb_rv32_cluster.exe in 372s
+"tc": "TC-01", "xlen": 32, "harts": 2, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 34, "failed": 0
+"tc": "TC-02", "xlen": 32, "harts": 2, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 78, "failed": 0
+"tc": "TC-03", "xlen": 32, "harts": 2, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 76, "failed": 0
+"tc": "TC-04", "xlen": 32, "harts": 2, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 12, "failed": 0
+"tc": "TC-05", "xlen": 32, "harts": 2, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 9, "failed": 0
+"tc": "TC-06", "xlen": 32, "harts": 2, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 17, "failed": 0
+"tc": "TC-07", "xlen": 32, "harts": 2, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 15, "failed": 0
+"tc": "TC-08", "xlen": 32, "harts": 2, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 18, "failed": 0
+"tc": "TC-09", "xlen": 32, "harts": 2, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 7, "failed": 0
+"tc": "TC-10", "xlen": 32, "harts": 2, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 6, "failed": 0
+"tc": "TC-01", "xlen": 32, "harts": 4, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 68, "failed": 0
+"tc": "TC-02", "xlen": 32, "harts": 4, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 156, "failed": 0
+"tc": "TC-03", "xlen": 32, "harts": 4, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 152, "failed": 0
+"tc": "TC-04", "xlen": 32, "harts": 4, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 36, "failed": 0
+"tc": "TC-05", "xlen": 32, "harts": 4, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 9, "failed": 0
+"tc": "TC-06", "xlen": 32, "harts": 4, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 33, "failed": 0
+"tc": "TC-07", "xlen": 32, "harts": 4, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 15, "failed": 0
+"tc": "TC-08", "xlen": 32, "harts": 4, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 36, "failed": 0
+"tc": "TC-09", "xlen": 32, "harts": 4, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 7, "failed": 0
+"tc": "TC-10", "xlen": 32, "harts": 4, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 12, "failed": 0
+PART2 "tc": "TC-07", "xlen": 32, "harts": 4, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 15, "failed": 0
+PART3 "tc": "TC-07", "xlen": 32, "harts": 4, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 15, "failed": 0
+"tc": "TC-04", "xlen": 64, "harts": 2, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 12, "failed": 0
+"tc": "TC-05", "xlen": 64, "harts": 2, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 9, "failed": 0
+"tc": "TC-06", "xlen": 64, "harts": 2, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 17, "failed": 0
+"tc": "TC-07", "xlen": 64, "harts": 2, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 15, "failed": 0
+"tc": "TC-09", "xlen": 64, "harts": 2, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 7, "failed": 0
+"tc": "TC-10", "xlen": 64, "harts": 2, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 6, "failed": 0
+"tc": "TC-04", "xlen": 64, "harts": 4, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 36, "failed": 0
+"tc": "TC-05", "xlen": 64, "harts": 4, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 9, "failed": 0
+"tc": "TC-06", "xlen": 64, "harts": 4, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 33, "failed": 0
+"tc": "TC-07", "xlen": 64, "harts": 4, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 15, "failed": 0
+"tc": "TC-09", "xlen": 64, "harts": 4, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 7, "failed": 0
+"tc": "TC-10", "xlen": 64, "harts": 4, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 12, "failed": 0
+PART2 "tc": "TC-07", "xlen": 64, "harts": 4, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 15, "failed": 0
+PART3 "tc": "TC-07", "xlen": 64, "harts": 4, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 15, "failed": 0
+BASE-NEG "tc": "TC-07", "xlen": 64, "harts": 4, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 1, "verdict": "FAIL", "passed": 5, "failed": 7
+SVA hits:
+runs/TC-01_rv32_4h_p0 A46 0 0 A47 0 0 
+runs/TC-02_rv32_4h_p0 A46 4 0 A47 0 0 
+runs/TC-03_rv32_4h_p0 A46 0 0 A47 0 0 
+runs/TC-04_rv32_4h_p0 A46 28 0 A47 0 0 
+runs/TC-05_rv32_4h_p0 A46 17 0 A47 0 0 
+runs/TC-06_rv32_4h_p0 A46 115 0 A47 0 0 
+runs/TC-07_rv32_4h_p0 A46 87 0 A47 0 0 
+runs/TC-08_rv32_4h_p0 A46 24 0 A47 0 0 
+runs/TC-09_rv32_4h_p0 A46 3 0 A47 0 0 
+runs/TC-10_rv32_4h_p0 A46 4 0 A47 0 0 
+runs/TC-04_rv64_4h_p0 A46 28 0 A47 0 0 
+runs/TC-05_rv64_4h_p0 A46 17 0 A47 0 0 
+runs/TC-06_rv64_4h_p0 A46 124 0 A47 0 0 
+runs/TC-07_rv64_4h_p0 A46 94 0 A47 0 0 
+runs/TC-07_rv64_4h_v2_base_neg A46 4 0 A47 0 0 
+SUITES:
+v2_atomic_2h_amo_fault.out | PASS: real atomic access-fault harts=2 case=1 cycles=542
+v2_atomic_2h_lr_fault.out | PASS: real atomic access-fault harts=2 case=2 cycles=542
+v2_atomic_2h_lrsc_contention.out | PASS: real cached AMO/LR-SC harts=2 cycles=3251 dirty_owner_transfers=16
+v2_atomic_2h_owner_fault.out | PASS: real atomic access-fault harts=2 case=3 cycles=719
+v2_atomic_2h_success.out | PASS: real cached AMO/LR-SC harts=2 cycles=2875 dirty_owner_transfers=20
+v2_atomic_4h_amo_fault.out | PASS: real atomic access-fault harts=4 case=1 cycles=558
+v2_atomic_4h_lr_fault.out | PASS: real atomic access-fault harts=4 case=2 cycles=558
+v2_atomic_4h_lrsc_contention.out | PASS: real cached AMO/LR-SC harts=4 cycles=6585 dirty_owner_transfers=60
+v2_atomic_4h_owner_fault.out | PASS: real atomic access-fault harts=4 case=3 cycles=817
+v2_atomic_4h_success.out | PASS: real cached AMO/LR-SC harts=4 cycles=3492 dirty_owner_transfers=36
+v2_cmo_2h_e0.out | PASS: real CVA6 CBO through arbiter/CCU/LLC; harts=2 error=0 cycles=728
+v2_cmo_2h_e0_lf.out | PASS: real CVA6 CBO through arbiter/CCU/LLC; harts=2 error=0 cycles=730
+v2_cmo_2h_e1.out | PASS: real CVA6 CBO through arbiter/CCU/LLC; harts=2 error=1 cycles=605
+v2_cmo_2h_e1_lf.out | PASS: real CVA6 CBO through arbiter/CCU/LLC; harts=2 error=1 cycles=607
+v2_cmo_4h_e0.out | PASS: real CVA6 CBO through arbiter/CCU/LLC; harts=4 error=0 cycles=952
+v2_cmo_4h_e0_lf.out | PASS: real CVA6 CBO through arbiter/CCU/LLC; harts=4 error=0 cycles=956
+v2_cmo_4h_e1.out | PASS: real CVA6 CBO through arbiter/CCU/LLC; harts=4 error=1 cycles=705
+v2_cmo_4h_e1_lf.out | PASS: real CVA6 CBO through arbiter/CCU/LLC; harts=4 error=1 cycles=709
+v2_fence_2h_e0.out | PASS: real CVA6 FENCE.I through arbiter/CCU/LLC; harts=2 error=0 cycles=940
+v2_fence_2h_e0_s.out | PASS: real CVA6 FENCE.I through arbiter/CCU/LLC; harts=2 error=0 cycles=1065
+v2_fence_2h_e1.out | PASS: real CVA6 FENCE.I through arbiter/CCU/LLC; harts=2 error=1 cycles=1023
+v2_fence_2h_e1_s.out | PASS: real CVA6 FENCE.I through arbiter/CCU/LLC; harts=2 error=1 cycles=1148
+v2_fence_4h_e0.out | PASS: real CVA6 FENCE.I through arbiter/CCU/LLC; harts=4 error=0 cycles=1019
+v2_fence_4h_e0_s.out | PASS: real CVA6 FENCE.I through arbiter/CCU/LLC; harts=4 error=0 cycles=1144
+v2_fence_4h_e1.out | PASS: real CVA6 FENCE.I through arbiter/CCU/LLC; harts=4 error=1 cycles=1172
+v2_fence_4h_e1_s.out | PASS: real CVA6 FENCE.I through arbiter/CCU/LLC; harts=4 error=1 cycles=1297
+v2_holder_2h_amo_refill_error.out | PASS: real holder lifecycle harts=2 case=2 cycles=1782
+v2_holder_2h_clean_eviction.out | PASS: real holder lifecycle harts=2 case=1 cycles=2214
+v2_holder_2h_dirty.out | PASS: real holder lifecycle harts=2 case=0 cycles=2342
+v2_holder_2h_lr_refill_error.out | PASS: real holder lifecycle harts=2 case=3 cycles=1782
+v2_holder_4h_amo_refill_error.out | PASS: real holder lifecycle harts=4 case=2 cycles=2105
+v2_holder_4h_clean_eviction.out | PASS: real holder lifecycle harts=4 case=1 cycles=2578
+v2_holder_4h_dirty.out | PASS: real holder lifecycle harts=4 case=0 cycles=2746
+v2_holder_4h_lr_refill_error.out | PASS: real holder lifecycle harts=4 case=3 cycles=2105
+V2_DONE

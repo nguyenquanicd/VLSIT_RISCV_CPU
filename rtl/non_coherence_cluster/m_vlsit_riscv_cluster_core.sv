@@ -8,12 +8,19 @@
  *   DEC-039/040: capture reset-only fatal metadata and expose RO fault CSR.
  * Description  : Integrates CPU tiles, AXI routing, shared LLC, CSR, and PMU.
  * Change History:
+ * 2026-11-20 - Modified by Quan Nguyen and Codex - VLSI Technology page:
+ *              Move CSR/LLC service declarations before first use; correct stale
+ *              CMO integration comment (R-03, R-18).
  * 2026-11-15 - Quan Nguyen and Codex - VLSI Technology page:
  *              Create the first structural AXI-profile core integration.
  * 2026-11-15 - Quan Nguyen and Codex - VLSI Technology page:
  *              Route per-hart pending CBO metadata from CVA6 tiles to the core boundary.
  * 2026-11-15 - Quan Nguyen and Codex - VLSI Technology page:
  *              Route retained LLC writeback fault to cluster status/interrupt.
+ * 2026-11-20 - Modified by Quan Nguyen and Codex - VLSI Technology page:
+ *              Propagate the compile-time timing profile to per-hart AXI routing.
+ * History      : Quan Nguyen and Codex - VLSI Technology page.
+ *                DEC-045: Add optional cluster boundary timing profile support.
  */
 // 2026-11-15 - Quan Nguyen and Codex - VLSI Technology page:
 // DEC-036/A-03: retain ordinary-eviction fatal IRQ until cluster reset.
@@ -26,6 +33,10 @@ module m_vlsit_riscv_cluster_core #(
   // Parameter values: 2 or 4; default is 4.
   // Parameter unit: harts.
   parameter logic [31:0] PARA_CPU_NUM = 32'd4,
+  // Parameter Description: compile-time cluster timing profile; CVA6 internals are unchanged.
+  // Parameter values: 0 = baseline, 1 = tile cuts, 2 = boundary profile.
+  // Parameter unit: profile index.
+  parameter logic [31:0] PARA_TIMING_PROFILE = 32'd0,
   // Parameter Description: number of independent coherence transaction contexts.
   // Parameter values: 2 through 16; default is 8.
   // Parameter unit: contexts.
@@ -78,6 +89,7 @@ module m_vlsit_riscv_cluster_core #(
   // Parameter values: 0 cacheable, 1 normal uncached, 2 MMIO; 3 is reserved.
   // Parameter unit: none.
   parameter logic [31:0] PARA_ADDR_REGION_TYPE [0:15] = '{default:32'd0},
+  localparam logic [31:0] LPARA_TIMING_PROFILE_BOUNDARY = 32'd2,
   localparam logic [31:0] LPARA_LLC_TEST_EN = 32'd0,
   localparam logic [31:0] LPARA_CPU_NUM_DUAL = 32'd2) (
   // Clock and reset
@@ -202,6 +214,37 @@ module m_vlsit_riscv_cluster_core #(
   output logic                             o_axi_mem_rready
 );
 
+  // PMU and fault CSR signals (declared before their use in module instances).
+  logic w_pmu_ctrl_snapshot_req;
+  logic w_pmu_ctrl_snapshot_req_clear;
+  logic w_pmu_ctrl_snapshot_done;
+  logic w_pmu_ctrl_snapshot_done_wdata;
+  logic w_pmu_ctrl_snapshot_done_we;
+  logic [31:0] w_irq_en_overflow_en;
+  logic [31:0] w_irq_raw_overflow;
+  logic [31:0] w_irq_raw_overflow_wdata;
+  logic w_irq_raw_overflow_we;
+  logic [31:0] w_irq_sts_overflow_pending;
+  logic w_cpucl_coh_fault;
+  logic w_cpucl_coh_fault_wdata;
+  logic w_cpucl_coh_fault_we;
+  logic [PARA_PMU_COUNTER_NUM-1:0][15:0] w_pmu_evt_event_id;
+  logic [PARA_PMU_COUNTER_NUM-1:0][2:0] w_pmu_evt_scope;
+  logic [PARA_PMU_COUNTER_NUM-1:0] w_pmu_evt_en;
+  logic [PARA_PMU_COUNTER_NUM-1:0][31:0] w_pmu_count_lo_value;
+  logic [PARA_PMU_COUNTER_NUM-1:0][31:0] w_pmu_count_hi_value;
+  logic w_fault_set_event;
+
+  // LLC service bridge request/response signals (declared before module instances).
+  logic w_llc_reg_req_valid;
+  logic w_llc_reg_req_wr;
+  logic [6:0] w_llc_reg_req_addr;
+  logic [31:0] w_llc_reg_req_wdata;
+  logic [3:0] w_llc_reg_req_wstrb;
+  logic w_llc_reg_rsp_ready;
+  logic [31:0] w_llc_reg_rsp_rdata;
+  logic w_llc_reg_rsp_err;
+
   // External CMO path uses native retirement, shared CCU contexts, and LLC service.
   logic [3:0] w_cmo_req_valid;
   logic [3:0] w_cmo_req_ready;
@@ -243,7 +286,11 @@ module m_vlsit_riscv_cluster_core #(
     .o_cmo_pa_line(w_cmo_pa_line),.o_cmo_vaddr(w_cmo_vaddr),.o_cmo_pc(w_cmo_pc),
     .o_cmo_hart(w_cmo_hart),.i_cmo_done(w_cmo_done),.i_cmo_err(w_cmo_error)
   );
-  m_vlsit_riscv_cmo_controller #(.PARA_CPU_NUM(PARA_CPU_NUM),.PARA_COH_TXN_NUM(PARA_COH_TXN_NUM)) u_vlsit_riscv_cmo_controller (
+  m_vlsit_riscv_cmo_controller #(
+    .PARA_CPU_NUM(PARA_CPU_NUM),
+    .PARA_COH_TXN_NUM(PARA_COH_TXN_NUM),
+    .PARA_REGISTER_RESET_RELEASE(32'(PARA_TIMING_PROFILE == LPARA_TIMING_PROFILE_BOUNDARY))
+  ) u_vlsit_riscv_cmo_controller (
     .i_clk_cluster, .i_rst_n_cluster,
     .i_cmo_valid(w_cmo_valid),.o_cmo_ready(w_cmo_ready),.i_cmo_op(w_cmo_op),
     .i_cmo_pa_line(w_cmo_pa_line),.i_cmo_vaddr(w_cmo_vaddr),.i_cmo_pc(w_cmo_pc),
@@ -332,8 +379,7 @@ module m_vlsit_riscv_cluster_core #(
   logic [3:0] w_tile_axi_ar_region_err;
   logic [3:0][21:0] w_tile_perf_event;
   logic [3:0][15:0] w_tile_hpdcache_perf_event;
-  // Routed to the core boundary; the shared CMO controller/retirement handshake
-  // is not yet connected, so these metadata taps are currently observation-only.
+  // CMO request metadata is routed to the shared arbiter and retirement controller.
   logic [3:0] w_tile_cmo_entry_valid;
   logic [3:0][7:0] w_tile_cmo_entry_op;
   logic [3:0][51:0] w_tile_cmo_entry_pa_line;
@@ -480,6 +526,8 @@ module m_vlsit_riscv_cluster_core #(
 
   // Address-table classification and per-hart AXI routing.
   m_vlsit_riscv_cpu_tile_array #(
+      .PARA_REGISTER_RESET_RELEASE(32'(PARA_TIMING_PROFILE == LPARA_TIMING_PROFILE_BOUNDARY)),
+    .PARA_DIR_SYNC_READ(32'(PARA_TIMING_PROFILE == LPARA_TIMING_PROFILE_BOUNDARY)),
     .PARA_CMO_EN(32'd1),
     .PARA_CPU_NUM(PARA_CPU_NUM),
     .PARA_COH_TXN_NUM(PARA_COH_TXN_NUM),
@@ -595,7 +643,9 @@ module m_vlsit_riscv_cluster_core #(
   );
 
   for (genvar tile_idx = 0; tile_idx < 4; tile_idx++) begin : gen_axi_route
-    m_vlsit_riscv_axi_route u_vlsit_riscv_axi_route (
+    m_vlsit_riscv_axi_route #(
+      .PARA_TIMING_PROFILE(PARA_TIMING_PROFILE)
+    ) u_vlsit_riscv_axi_route (
         .i_clk_cluster(i_clk_cluster),
         .i_rst_n_cluster(i_rst_n_cluster),
         .i_awid(w_tile_axi_awid[tile_idx]),
@@ -1059,7 +1109,8 @@ module m_vlsit_riscv_cluster_core #(
   m_vlsit_riscv_pmu #(
     .PARA_CPU_NUM(PARA_CPU_NUM),
     .PARA_PMU_CNT_NUM(PARA_PMU_COUNTER_NUM),
-    .PARA_PMU_CNT_W(PARA_PMU_COUNTER_W)
+    .PARA_PMU_CNT_W(PARA_PMU_COUNTER_W),
+    .PARA_TIMING_PROFILE(PARA_TIMING_PROFILE)
   ) u_vlsit_riscv_pmu (
     .i_clk_cluster(i_clk_cluster), .i_rst_n_cluster(i_rst_n_cluster),
     .i_hart_active(w_hart_active[PARA_CPU_NUM-1:0]),
@@ -1099,27 +1150,6 @@ module m_vlsit_riscv_cluster_core #(
   logic [1:0][1:0] w_axil_target_rresp;
   logic [1:0] w_axil_target_rvalid;
   logic [1:0] w_axil_target_rready;
-
-  // PMU and fault CSR signals.
-  logic w_pmu_ctrl_snapshot_req;
-  logic w_pmu_ctrl_snapshot_req_clear;
-  logic w_pmu_ctrl_snapshot_done;
-  logic w_pmu_ctrl_snapshot_done_wdata;
-  logic w_pmu_ctrl_snapshot_done_we;
-  logic [31:0] w_irq_en_overflow_en;
-  logic [31:0] w_irq_raw_overflow;
-  logic [31:0] w_irq_raw_overflow_wdata;
-  logic w_irq_raw_overflow_we;
-  logic [31:0] w_irq_sts_overflow_pending;
-  logic w_cpucl_coh_fault;
-  logic w_cpucl_coh_fault_wdata;
-  logic w_cpucl_coh_fault_we;
-  logic [PARA_PMU_COUNTER_NUM-1:0][15:0] w_pmu_evt_event_id;
-  logic [PARA_PMU_COUNTER_NUM-1:0][2:0] w_pmu_evt_scope;
-  logic [PARA_PMU_COUNTER_NUM-1:0] w_pmu_evt_en;
-  logic [PARA_PMU_COUNTER_NUM-1:0][31:0] w_pmu_count_lo_value;
-  logic [PARA_PMU_COUNTER_NUM-1:0][31:0] w_pmu_count_hi_value;
-  logic w_fault_set_event;
 
   m_vlsit_riscv_axil_decode #(.PARA_AXIL_BASE_ADDR(PARA_AXIL_BASE_ADDR))
   u_vlsit_riscv_axil_decode (
@@ -1194,15 +1224,5 @@ module m_vlsit_riscv_cluster_core #(
     .i_reg_rsp_ready(w_llc_reg_rsp_ready), .i_reg_rsp_rdata(w_llc_reg_rsp_rdata),
     .i_reg_rsp_err(w_llc_reg_rsp_err)
   );
-
-  logic w_llc_reg_req_valid;
-  logic w_llc_reg_req_wr;
-  logic [6:0] w_llc_reg_req_addr;
-  logic [31:0] w_llc_reg_req_wdata;
-  logic [3:0] w_llc_reg_req_wstrb;
-  logic w_llc_reg_rsp_ready;
-  logic [31:0] w_llc_reg_rsp_rdata;
-  logic w_llc_reg_rsp_err;
-
 
 endmodule

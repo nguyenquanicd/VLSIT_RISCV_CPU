@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1390" height="820" viewBox="210 270 1390 820" font-family="Arial, Helvetica, sans-serif" font-size="18">
-<rect x="210" y="270" width="1390" height="820" fill="#FFFFFF"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="1360" height="880" viewBox="240 210 1360 880" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="240" y="210" width="1360" height="880" fill="#FFFFFF"/>
 <rect x="560" y="400" width="860" height="560" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
 <rect x="600" y="500" width="200" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
 <text x="700" y="536" text-anchor="middle">u_cvxif_adapter</text>
@@ -22,13 +22,17 @@
 <rect x="650" y="840" width="100" height="80" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
 <text x="700" y="876" text-anchor="middle">u_csr</text>
 <text x="700" y="898" text-anchor="middle">(m_csr)</text>
-<text x="375" y="536" text-anchor="middle">CV-X-IF INPUTS</text>
-<text x="375" y="558" text-anchor="middle">issue + register + commit</text>
-<text x="700" y="342" text-anchor="middle">CV-X-IF result / completion</text>
-<text x="1350" y="1031" text-anchor="middle">IF-003 AXI4 BURST + SRAM</text>
-<text x="1350" y="1053" text-anchor="middle">read/write requests out; data/responses in</text>
-<text x="1060" y="321" text-anchor="middle">CRCLK</text>
-<text x="1060" y="343" text-anchor="middle">core and APB clock/reset domains</text>
+<text x="405" y="481" text-anchor="middle">CVA6 / CV-X-IF COMMAND</text>
+<text x="405" y="503" text-anchor="middle">issue + register + commit</text>
+<text x="465" y="591" text-anchor="middle">QREQ</text>
+<text x="465" y="613" text-anchor="middle">i_quiesce_req</text>
+<text x="505" y="357" text-anchor="middle">STATUS / SCALAR TO CVA6</text>
+<text x="835" y="346" text-anchor="middle">QACK</text>
+<text x="835" y="368" text-anchor="middle">o_quiesce_ack</text>
+<text x="1350" y="1031" text-anchor="middle">IF-003 SoC AXI4 FABRIC</text>
+<text x="1350" y="1053" text-anchor="middle">descriptor, operands, tensor output</text>
+<text x="1060" y="261" text-anchor="middle">CRCLK</text>
+<text x="1060" y="283" text-anchor="middle">core and APB clock/reset domains</text>
 <text x="1398" y="441" text-anchor="end">TOP</text>
 <text x="1398" y="463" text-anchor="end">(m_tensor_copro)</text>
 <text x="705" y="628" text-anchor="middle">ISS</text>
@@ -39,16 +43,20 @@
 <text x="1043" y="612" text-anchor="middle">ATN</text>
 <text x="1185" y="696" text-anchor="middle">STO</text>
 <text x="700" y="1031" text-anchor="middle">APB</text>
-<text x="700" y="1053" text-anchor="middle">APB4 register access</text>
+<text x="700" y="1053" text-anchor="middle">SoC APB4 manager</text>
 <path d="M 700 1010 L 700 920" fill="none" stroke="#000000" stroke-width="2.0"/>
 <polygon points="700,920 706,932 694,932" fill="#000000" stroke="#000000" stroke-width="1"/>
-<path d="M 510 540 L 600 540" fill="none" stroke="#000000" stroke-width="2.0"/>
-<polygon points="600,540 588,546 588,534" fill="#000000" stroke="#000000" stroke-width="1"/>
-<path d="M 700 500 L 700 350" fill="none" stroke="#000000" stroke-width="2.0"/>
-<polygon points="700,350 706,362 694,362" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 510 520 L 600 520" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="600,520 588,526 588,514" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 510 560 L 600 560" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="600,560 588,566 588,554" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 660 500 L 660 350" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="660,350 666,362 654,362" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 750 500 L 750 350" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="750,350 756,362 744,362" fill="#000000" stroke="#000000" stroke-width="1"/>
 <path d="M 1350 750 L 1350 1010" fill="none" stroke="#000000" stroke-width="2.0"/>
 <polygon points="1350,1010 1344,998 1356,998" fill="#000000" stroke="#000000" stroke-width="1"/>
-<path d="M 1060 350 L 1060 500" fill="none" stroke="#000000" stroke-width="2.0"/>
+<path d="M 1060 290 L 1060 500" fill="none" stroke="#000000" stroke-width="2.0"/>
 <polygon points="1060,500 1054,488 1066,488" fill="#000000" stroke="#000000" stroke-width="1"/>
 <path d="M 1120 520 L 1240 520" fill="none" stroke="#000000" stroke-width="2.0"/>
 <polygon points="1240,520 1228,526 1228,514" fill="#000000" stroke="#000000" stroke-width="1"/>

@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "reasons": [],
+  "warnings": [],
+  "counts": {
+    "Critical": 1,
+    "High": 11,
+    "Medium": 8,
+    "Low": 2
+  },
+  "findings": 22,
+  "waived": 2,
+  "fixed": 18,
+  "waiver_budget": 10,
+  "waiver_usage": "2/10",
+  "open_critical": 0,
+  "sampling": 1.0,
+  "closure_rate": 0.9
+}

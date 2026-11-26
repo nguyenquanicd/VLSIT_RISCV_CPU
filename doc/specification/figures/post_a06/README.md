@@ -1,37 +1,25 @@
-# Current component and FSM figures / Sơ đồ component và FSM hiện tại
+# Cluster block diagrams and FSMs / Sơ đồ khối và FSM cluster
 
-This package contains **117 component compositions**, **two focused working-flow diagrams**, and **ten FSM figures for six controllers**. The CCU has one complete graph and four phase views; those phase views are not additional hardware controllers. Selected source files may declare optional/unused modules; filelist membership is not proof of elaboration or functional activation.
+65 component diagrams, two working flows and ten FSM views for six controllers. A component diagram exists only when it shows something: child instances with their wire connections (for example the cluster core), or the internal functional blocks of a module that has no child (six VLSIT coherence and maintenance modules, files `*_internal`). One-box diagrams were removed. CCU phase views belong to the same controller.
 
-Bộ hình có **117 sơ đồ component**, **hai sơ đồ working flow** và **mười hình cho sáu FSM**. CCU có một hình tổng và bốn view theo phase; không phải năm controller độc lập. Source được chọn trong filelist có thể chứa module/nhánh tùy chọn chưa hoạt động.
+65 sơ đồ component, hai luồng hoạt động và mười hình FSM cho sáu controller. Sơ đồ component chỉ giữ khi có nội dung: instance con kèm kết nối dây (ví dụ cluster core) hoặc các khối chức năng bên trong module không có instance con (sáu module coherence và maintenance của VLSIT, file `*_internal`). Các sơ đồ một khối đã bị bỏ. Các view theo phase CCU thuộc cùng một controller.
 
-- [TOP SVG](m_vlsit_riscv_cluster_axi_top.svg) · [editable TOP draw.io](m_vlsit_riscv_cluster_axi_top.drawio)
-- [Memory data flow](CLUSTER_DATA_FLOW.svg) · [draw.io](CLUSTER_DATA_FLOW.drawio)
-- [Retirement–CCU–LLC maintenance flow](CLUSTER_CMO_FLOW.svg) · [draw.io](CLUSTER_CMO_FLOW.drawio)
-- [CCU lookup/victim](CCU_LOOKUP_VICTIM.svg), [prepare/CMO](CCU_PREPARE_CMO.svg), [commit/release](CCU_COMMIT_RELEASE.svg), [abort/release](CCU_ABORT_RELEASE.svg)
-- [Component/source inventory](component_inventory.json) · [validation summary](validation.json)
+- [TOP SVG](m_vlsit_riscv_cluster_axi_top.svg) · [TOP draw.io](m_vlsit_riscv_cluster_axi_top.drawio).
+- [Memory data flow / Luồng bộ nhớ](CLUSTER_DATA_FLOW.svg) · [Maintenance flow / Luồng maintenance](CLUSTER_CMO_FLOW.svg).
 
-Every component has a same-stem JSON, two-tab `.drawio` (`BLOCK_DIAGRAM`, `BLOCK_INFORMATION`), SVG and build log. The HDS Section 14 embeds its diagram with function, flow, state/storage owner, interface, error/stall constraints and validation boundary. Package/configuration source files have a change contract rather than a fictitious instantiable block diagram. A leaf diagram depicts its boundary; it does not invent internal RTL submodules.
+| Controller / Bộ điều khiển | FSM view / Hình FSM | Editable source / Nguồn chỉnh sửa |
+|---|---|---|
+| CCU context | [SVG](CCU_CONTEXT.svg) | [draw.io](CCU_CONTEXT.drawio) |
+| CMO controller | [SVG](CMO_CONTROLLER.svg) | [draw.io](CMO_CONTROLLER.drawio) |
+| HPDcache probe | [SVG](HPD_PROBE.svg) | [draw.io](HPD_PROBE.drawio) |
+| AXI4-Lite–RegBus bridge | [SVG](AXIL_REGBUS.svg) | [draw.io](AXIL_REGBUS.drawio) |
+| HPDcache miss permission | [SVG](HPD_MISS_PERMISSION.svg) | [draw.io](HPD_MISS_PERMISSION.drawio) |
+| HPDcache flush capture | [SVG](HPD_FLUSH_CAPTURE.svg) | [draw.io](HPD_FLUSH_CAPTURE.drawio) |
 
-Mỗi component có JSON, draw.io hai tab, SVG và log. Section 14 mô tả chức năng, flow, chủ thể giữ state/data, interface và giới hạn verify. File package/config không có diagram module giả. Leaf chỉ thể hiện boundary; không thêm module RTL không tồn tại.
+CCU phase views / View theo phase: [lookup/victim](CCU_LOOKUP_VICTIM.svg) · [prepare/CMO](CCU_PREPARE_CMO.svg) · [commit/release](CCU_COMMIT_RELEASE.svg) · [abort/release](CCU_ABORT_RELEASE.svg).
 
-FSM sources preserve actual state names and transition guards. T-numbers in the CCU views map to the full graph and the transition tables. An entry state in a phase view is not a new reset state. Full-word guards remain in the HDS even where labels are shortened on the figure.
+[Component inventory / Danh sách component](component_inventory.json) · [Figure validation / Kiểm tra hình](validation.json) · [Build reports / Báo cáo tạo hình](../../../../project_support/specification/figures/post_a06/).
 
-FSM dùng đúng tên state của source; T-number liên kết view với graph tổng và bảng guard. Điểm vào phase không phải reset state mới. Nhãn rút gọn không thay điều kiện chuyển state đầy đủ.
+The HDS defines guards and timing; figures do not establish simulation coverage. / HDS định nghĩa guard và timing; hình không chứng minh coverage mô phỏng.
 
-Replay from project root:
-
-```sh
-python scripts/build_cluster_detail_diagrams.py --post-a06 prepare
-python scripts/build_cluster_detail_diagrams.py --post-a06 draw
-python scripts/build_cluster_detail_diagrams.py --post-a06 render-fsm
-python scripts/build_cluster_detail_diagrams.py --post-a06 assemble
-python scripts/build_cluster_detail_diagrams.py --post-a06 check
-```
-
-The project adapter restores the FSM edge prototype after the installed skill adds styles rejected by its own symbol validator. It revalidates the original library symbols, preserves oval states, attached arrow endpoints and transition labels in SVG, and changes no installed skill file. Component builds use the installed micro-specification builder. No warning/geometry validator is disabled.
-
-Script dự án xử lý hai điểm không tương thích của tool cài đặt: style edge bị validator từ chối và SVG làm mất oval/nhãn FSM. Symbol vẫn lấy từ thư viện VLSIT và được validate lại; không sửa skill cài đặt hoặc tắt kiểm tra. TOP, data flow và view CCU đã được kiểm tra ảnh preview.
-
-The generic spec checker reports one language finding because the project requires bilingual English–Vietnamese documents while skill R-005 requests English-only. All other checked structural/port/traceability/figure findings were corrected; this language exception is explicit, not a claimed clean native checker exit. No CPU simulation, synthesis or new RTL validation is implied by document rendering.
-
-Checker spec còn một finding ngôn ngữ do yêu cầu song ngữ của dự án; không báo giả checker exit 0. Các kiểm tra cấu trúc, port, truy vết và hình khác đã được sửa. Vẽ tài liệu không tạo thêm bằng chứng mô phỏng hoặc signoff.
+[Specification / Đặc tả](../../VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS.md) · [CSR](../../VLSIT_RISCV_CPU_Cluster_CSR.xlsx) · [Block diagram / Sơ đồ khối](m_vlsit_riscv_cluster_axi_top.svg) · [FSM](CCU_CONTEXT.svg) · [Waveforms / Dạng sóng](../waveforms/README.md)

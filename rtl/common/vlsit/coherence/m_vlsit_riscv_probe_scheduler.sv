@@ -6,6 +6,9 @@
  * Date         : 2026-11-08
  * Description  : Schedules tagged probes and routes D-cache responses to the transaction table.
  * Change History:
+ * 2026-11-20 - Modified by Quan Nguyen and Codex - VLSI Technology page:
+ *              DEC-043/REQ-MEM-024: atomically reserve all expected hart
+ *              probe-service slots before issuing any PREPARE request.
  * 2026-11-14 - Quan Nguyen and Codex - VLSI Technology page:
  *              Retain/forward explicit PREPARE writeback enable;
  *              true INVAL disables writeback (REQ-MEM-015, DEC-028).
@@ -28,7 +31,8 @@ module m_vlsit_riscv_probe_scheduler #(
   // Parameter unit: contexts
   parameter logic [31:0] PARA_COH_TXN_NUM = 32'd8,
   localparam logic [31:0] LPARA_COH_TAG_W = (PARA_COH_TXN_NUM > 32'd1)
-                                            ? 32'($clog2(PARA_COH_TXN_NUM)) : 32'd1
+                                            ? 32'($clog2(PARA_COH_TXN_NUM)) : 32'd1,
+  localparam logic [31:0] LPARA_COH_PHASE_PREPARE = 32'd0
 ) (
   // Clock and reset
   input  wire                                           i_clk_cluster,
@@ -81,7 +85,15 @@ module m_vlsit_riscv_probe_scheduler #(
   logic [PARA_CPU_NUM-1:0][1:0] reg_req_target_state;
   logic [PARA_CPU_NUM-1:0] reg_req_wback_en;
   logic [PARA_CPU_NUM-1:0][LPARA_COH_TAG_W-1:0] reg_rr_ptr;
-  // One cache keeps its PREPARE context until successful terminal response.
+  // One fair context arbiter claims each complete PREPARE target mask.
+  logic [LPARA_COH_TAG_W-1:0] reg_claim_rr_ptr;
+  logic w_claim_found;
+  logic [LPARA_COH_TAG_W-1:0] w_claim_tag;
+  logic [PARA_COH_TXN_NUM-1:0][31:0] w_claim_scan_idx;
+  logic [PARA_COH_TXN_NUM-1:0] w_claim_needed;
+  logic [PARA_COH_TXN_NUM-1:0] w_claim_all_owned;
+  logic [PARA_COH_TXN_NUM-1:0] w_claim_available;
+  // Every target cache keeps the atomically claimed owner through terminal response.
   // Phase transport completion alone does not release the cache service slot.
   logic [PARA_CPU_NUM-1:0] reg_phase_owner_valid;
   logic [PARA_CPU_NUM-1:0][LPARA_COH_TAG_W-1:0] reg_phase_owner_tag;
@@ -117,7 +129,59 @@ module m_vlsit_riscv_probe_scheduler #(
   assign o_ack_err = reg_ack_err;
   assign o_ack_wback_done = reg_ack_wback_done;
 
-  // Select one unissued expected target per idle hart with round-robin context priority.
+  // Claim every expected target before any PREPARE request can be issued.
+  // A blocked context holds no partial set of per-hart service slots.
+  always_comb begin : p_com_probe_claim
+    w_claim_found = 1'b0;
+    w_claim_tag = '0;
+    w_claim_scan_idx = '0;
+    w_claim_needed = '0;
+    w_claim_all_owned = '0;
+    w_claim_available = '0;
+    for (int ctx_idx = 0; ctx_idx < PARA_COH_TXN_NUM; ctx_idx++) begin
+      w_claim_all_owned[ctx_idx] = 1'b1;
+      w_claim_available[ctx_idx] = 1'b1;
+      if (i_ctx_valid[ctx_idx]
+          & i_ctx_phase_active[ctx_idx]
+          & (i_ctx_phase[ctx_idx] == 2'(LPARA_COH_PHASE_PREPARE))) begin
+        for (int hart_idx = 0; hart_idx < PARA_CPU_NUM; hart_idx++) begin
+          if (i_ctx_ack_expected[ctx_idx][hart_idx]) begin
+            w_claim_needed[ctx_idx] = 1'b1;
+            if (~reg_phase_owner_valid[hart_idx]
+                | (reg_phase_owner_tag[hart_idx] != LPARA_COH_TAG_W'(ctx_idx)))
+              w_claim_all_owned[ctx_idx] = 1'b0;
+            if (reg_phase_owner_valid[hart_idx]
+                & (reg_phase_owner_tag[hart_idx] != LPARA_COH_TAG_W'(ctx_idx)))
+              w_claim_available[ctx_idx] = 1'b0;
+            else if (~reg_phase_owner_valid[hart_idx]
+                     & (reg_req_valid[hart_idx]
+                        | reg_probe_active[hart_idx]
+                        | reg_ack_valid[hart_idx]))
+              w_claim_available[ctx_idx] = 1'b0;
+          end
+        end
+      end
+    end
+    for (int offset_idx = 0; offset_idx < PARA_COH_TXN_NUM; offset_idx++) begin
+      w_claim_scan_idx[offset_idx] = 32'(reg_claim_rr_ptr) + 32'(offset_idx);
+      if (w_claim_scan_idx[offset_idx] >= PARA_COH_TXN_NUM)
+        w_claim_scan_idx[offset_idx] = w_claim_scan_idx[offset_idx]
+                                     - PARA_COH_TXN_NUM;
+      if (~w_claim_found
+          & i_ctx_valid[w_claim_scan_idx[offset_idx]]
+          & i_ctx_phase_active[w_claim_scan_idx[offset_idx]]
+          & (i_ctx_phase[w_claim_scan_idx[offset_idx]]
+             == 2'(LPARA_COH_PHASE_PREPARE))
+          & w_claim_needed[w_claim_scan_idx[offset_idx]]
+          & ~w_claim_all_owned[w_claim_scan_idx[offset_idx]]
+          & w_claim_available[w_claim_scan_idx[offset_idx]]) begin
+        w_claim_found = 1'b1;
+        w_claim_tag = LPARA_COH_TAG_W'(w_claim_scan_idx[offset_idx]);
+      end
+    end
+  end
+
+  // Select requests only from a context that owns this hart's phase slot.
   always_comb begin : p_com_probe_sel
     w_pick_found = '0;
     w_pick_tag = '0;
@@ -132,9 +196,9 @@ module m_vlsit_riscv_probe_scheduler #(
                                              - PARA_COH_TXN_NUM;
           if (i_ctx_valid[w_scan_idx[hart_idx][offset_idx]]
               & i_ctx_phase_active[w_scan_idx[hart_idx][offset_idx]]
-              & (~reg_phase_owner_valid[hart_idx]
-                 | (reg_phase_owner_tag[hart_idx]
-                    == LPARA_COH_TAG_W'(w_scan_idx[hart_idx][offset_idx])))
+              & reg_phase_owner_valid[hart_idx]
+              & (reg_phase_owner_tag[hart_idx]
+                 == LPARA_COH_TAG_W'(w_scan_idx[hart_idx][offset_idx]))
               & i_ctx_ack_expected[w_scan_idx[hart_idx][offset_idx]][hart_idx]
               & ~i_ctx_ack_received[w_scan_idx[hart_idx][offset_idx]][hart_idx]
               & ~w_pick_found[hart_idx]) begin
@@ -175,6 +239,7 @@ module m_vlsit_riscv_probe_scheduler #(
       reg_req_target_state <= '0;
       reg_req_wback_en <= '0;
       reg_rr_ptr <= '0;
+      reg_claim_rr_ptr <= '0;
       reg_probe_active <= '0;
       reg_phase_owner_valid <= '0;
       reg_phase_owner_tag <= '0;
@@ -188,6 +253,19 @@ module m_vlsit_riscv_probe_scheduler #(
       reg_ack_err <= '0;
       reg_ack_wback_done <= '0;
     end else begin
+      if (w_claim_found) begin
+        // Install all phase owners on the same edge, before request issue.
+        for (int hart_idx = 0; hart_idx < PARA_CPU_NUM; hart_idx++) begin
+          if (i_ctx_ack_expected[w_claim_tag][hart_idx]) begin
+            reg_phase_owner_valid[hart_idx] <= 1'b1;
+            reg_phase_owner_tag[hart_idx] <= w_claim_tag;
+          end
+        end
+        if ((32'(w_claim_tag) + 32'd1) == PARA_COH_TXN_NUM)
+          reg_claim_rr_ptr <= '0;
+        else
+          reg_claim_rr_ptr <= w_claim_tag + 1'b1;
+      end
       for (int hart_idx = 0; hart_idx < PARA_CPU_NUM; hart_idx++) begin
         if (~reg_req_valid[hart_idx] & ~reg_probe_active[hart_idx]
             & ~reg_ack_valid[hart_idx] & w_pick_found[hart_idx]) begin
@@ -205,10 +283,6 @@ module m_vlsit_riscv_probe_scheduler #(
           reg_active_tag[hart_idx] <= reg_req_tag[hart_idx];
           reg_active_pa_line[hart_idx] <= reg_req_pa_line[hart_idx];
           reg_active_phase[hart_idx] <= reg_req_phase[hart_idx];
-          if (reg_req_phase[hart_idx] == 2'd0) begin
-            reg_phase_owner_valid[hart_idx] <= 1'b1;
-            reg_phase_owner_tag[hart_idx] <= reg_req_tag[hart_idx];
-          end
           if ((32'(reg_req_tag[hart_idx]) + 32'd1) == PARA_COH_TXN_NUM)
             reg_rr_ptr[hart_idx] <= '0;
           else

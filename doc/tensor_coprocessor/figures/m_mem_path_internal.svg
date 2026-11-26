@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1620" height="880" viewBox="220 240 1620 880" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="220" y="240" width="1620" height="880" fill="#FFFFFF"/>
+<rect x="510" y="370" width="1100" height="620" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<rect x="610" y="510" width="180" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="536" text-anchor="middle">aperture_check</text>
+<text x="700" y="558" text-anchor="middle">(BASE / LIMIT)</text>
+<rect x="930" y="510" width="260" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1060" y="536" text-anchor="middle">axi_read_arbiter</text>
+<text x="1060" y="558" text-anchor="middle">(active / descriptor)</text>
+<rect x="1310" y="510" width="220" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1420" y="536" text-anchor="middle">read_credit_tracker</text>
+<text x="1420" y="558" text-anchor="middle">(16 credits)</text>
+<rect x="590" y="680" width="220" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="706" text-anchor="middle">descriptor_staging</text>
+<text x="700" y="728" text-anchor="middle">(header, body bank)</text>
+<rect x="960" y="680" width="200" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1060" y="706" text-anchor="middle">response_tracker</text>
+<text x="1060" y="728" text-anchor="middle">(owner by ID)</text>
+<rect x="1310" y="680" width="220" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1420" y="706" text-anchor="middle">operand_sram_banks</text>
+<text x="1420" y="728" text-anchor="middle">(banked SRAM)</text>
+<rect x="1310" y="850" width="220" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1420" y="876" text-anchor="middle">result_write_engine</text>
+<text x="1420" y="898" text-anchor="middle">(output tiles)</text>
+<text x="1060" y="1061" text-anchor="middle">AXI R</text>
+<text x="1060" y="1083" text-anchor="middle">read data, resp</text>
+<text x="1735" y="706" text-anchor="middle">OPERAND TILES</text>
+<text x="1735" y="728" text-anchor="middle">to array</text>
+<text x="1420" y="1061" text-anchor="middle">AXI B</text>
+<text x="1420" y="1083" text-anchor="middle">write response</text>
+<text x="355" y="876" text-anchor="middle">AXI AW / W</text>
+<text x="355" y="898" text-anchor="middle">write address, data</text>
+<text x="1588" y="411" text-anchor="end">Internal functional blocks</text>
+<text x="1588" y="433" text-anchor="end">(m_mem_path)</text>
+<text x="815" y="526" text-anchor="middle">RNG</text>
+<text x="1215" y="526" text-anchor="middle">CRD</text>
+<text x="1093" y="602" text-anchor="middle">TRK</text>
+<text x="850" y="696" text-anchor="middle">DESC</text>
+<text x="1185" y="696" text-anchor="middle">OPD</text>
+<text x="1453" y="772" text-anchor="middle">OUT</text>
+<text x="1060" y="291" text-anchor="middle">AXI AR</text>
+<text x="1060" y="313" text-anchor="middle">read address</text>
+<path d="M 1060 510 L 1060 320" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1060,320 1066,332 1054,332" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1060 1040 L 1060 740" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1060,740 1066,752 1054,752" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1530 710 L 1660 710" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1660,710 1648,716 1648,704" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1420 1040 L 1420 910" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1420,910 1426,922 1414,922" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1310 880 L 1066 880 A 6 6 0 0 0 1054 880 L 460 880" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="460,880 472,874 472,886" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 790 540 L 930 540" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="930,540 918,546 918,534" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1190 540 L 1310 540" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1310,540 1298,546 1298,534" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1060 570 L 1060 680" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1060,680 1054,668 1066,668" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 960 710 L 810 710" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="810,710 822,704 822,716" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1160 710 L 1310 710" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1310,710 1298,716 1298,704" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1420 740 L 1420 850" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1420,850 1414,838 1426,838" fill="#000000" stroke="#000000" stroke-width="1"/>
+</svg>

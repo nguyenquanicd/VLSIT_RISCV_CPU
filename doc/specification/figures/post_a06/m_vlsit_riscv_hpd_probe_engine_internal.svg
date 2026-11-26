@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1340" height="880" viewBox="250 240 1340 880" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="250" y="240" width="1340" height="880" fill="#FFFFFF"/>
+<rect x="500" y="370" width="1060" height="620" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<rect x="580" y="510" width="240" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="536" text-anchor="middle">probe_payload_regs</text>
+<text x="700" y="558" text-anchor="middle">(p_ff_probe_payload)</text>
+<rect x="940" y="510" width="200" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1040" y="536" text-anchor="middle">probe_fsm_next</text>
+<text x="1040" y="558" text-anchor="middle">(p_com_probe_nxt)</text>
+<rect x="1260" y="510" width="220" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1370" y="536" text-anchor="middle">probe_state_reg</text>
+<text x="1370" y="558" text-anchor="middle">(p_ff_probe_state)</text>
+<rect x="610" y="680" width="180" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="706" text-anchor="middle">metadata_lookup</text>
+<text x="700" y="728" text-anchor="middle">(o_lookup_*)</text>
+<rect x="970" y="680" width="140" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1040" y="706" text-anchor="middle">dirty_flush</text>
+<text x="1040" y="728" text-anchor="middle">(o_flush_*)</text>
+<rect x="1260" y="680" width="220" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1370" y="706" text-anchor="middle">state_update</text>
+<text x="1370" y="728" text-anchor="middle">(o_state_update_*)</text>
+<rect x="590" y="850" width="220" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="876" text-anchor="middle">probe_response_reg</text>
+<text x="700" y="898" text-anchor="middle">(o_probe_rsp_*)</text>
+<text x="365" y="706" text-anchor="middle">METADATA LOOKUP</text>
+<text x="365" y="728" text-anchor="middle">to HPDcache</text>
+<text x="1040" y="1061" text-anchor="middle">FLUSH</text>
+<text x="1040" y="1083" text-anchor="middle">to HPDcache</text>
+<text x="1370" y="1061" text-anchor="middle">STATE UPDATE</text>
+<text x="1370" y="1083" text-anchor="middle">to HPDcache</text>
+<text x="370" y="876" text-anchor="middle">PROBE RESPONSE</text>
+<text x="370" y="898" text-anchor="middle">state, err</text>
+<text x="1538" y="411" text-anchor="end">Internal functional blocks</text>
+<text x="1538" y="433" text-anchor="end">(m_vlsit_riscv_hpd_probe_engine)</text>
+<text x="845" y="526" text-anchor="middle">PAY</text>
+<text x="1165" y="526" text-anchor="middle">NXT</text>
+<text x="733" y="602" text-anchor="middle">LKP</text>
+<text x="815" y="696" text-anchor="middle">FLS</text>
+<text x="1135" y="696" text-anchor="middle">UPD</text>
+<text x="738" y="772" text-anchor="middle">RESP</text>
+<text x="700" y="291" text-anchor="middle">PROBE REQUEST</text>
+<text x="700" y="313" text-anchor="middle">tag, line, phase</text>
+<path d="M 700 320 L 700 510" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="700,510 694,498 706,498" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 610 710 L 450 710" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="450,710 462,704 462,716" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1040 740 L 1040 1040" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1040,1040 1034,1028 1046,1028" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1370 740 L 1370 1040" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1370,1040 1364,1028 1376,1028" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 590 880 L 450 880" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="450,880 462,874 462,886" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 820 540 L 940 540" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="940,540 928,546 928,534" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1140 540 L 1260 540" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1260,540 1248,546 1248,534" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 700 570 L 700 680" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="700,680 694,668 706,668" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 790 710 L 970 710" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="970,710 958,716 958,704" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1110 710 L 1260 710" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1260,710 1248,716 1248,704" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 700 740 L 700 850" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="700,850 694,838 706,838" fill="#000000" stroke="#000000" stroke-width="1"/>
+</svg>

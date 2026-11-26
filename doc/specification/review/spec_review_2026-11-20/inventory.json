@@ -1,0 +1,2027 @@
+{
+  "spec": "doc/specification/VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS.md",
+  "front_matter": {
+    "document_type": "asic_ip_design_specification",
+    "document_id": "VLSIT-RISCV-DUAL-QUAD-CPU-CLUSTER",
+    "title": "VLSIT RISC-V Dual/Quad CPU Cluster Design Specification",
+    "ip_name": "VLSIT RISC-V Dual/Quad CPU Cluster",
+    "version": "0.33",
+    "status": "Draft - detailed post-A-06 component/FSM/interface contract; qualification and explicit open items remain",
+    "language": "English and Vietnamese",
+    "rtl_rules": "VLSIT_RTL_Design_Rule.md v2",
+    "csr_spec": "VLSIT_RISCV_CPU_Cluster_CSR.xlsx"
+  },
+  "sections": [
+    {
+      "level": 2,
+      "title": "Document map",
+      "chars": 498,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "1. Purpose, scope, and product context",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "1.1 Purpose and scope",
+      "chars": 2536,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "1.2 Deployment assumptions",
+      "chars": 1132,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "1.3 Feature summary",
+      "chars": 1389,
+      "tables": 1,
+      "req_ids": [
+        "REQ-DBG-001",
+        "REQ-IF-001",
+        "REQ-IF-002",
+        "REQ-IF-003",
+        "REQ-IF-004",
+        "REQ-MEM-001",
+        "REQ-MEM-002",
+        "REQ-MEM-007",
+        "REQ-MEM-015",
+        "REQ-MEM-018",
+        "REQ-PMU-001",
+        "REQ-SYS-001"
+      ],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "256 KiB"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "1.4 Real-world applications of the features",
+      "chars": 3923,
+      "tables": 1,
+      "req_ids": [
+        "REQ-DBG-001",
+        "REQ-IF-001",
+        "REQ-IF-002",
+        "REQ-IF-003",
+        "REQ-IF-004",
+        "REQ-MEM-001",
+        "REQ-MEM-002",
+        "REQ-MEM-007",
+        "REQ-MEM-015",
+        "REQ-MEM-018",
+        "REQ-PMU-001",
+        "REQ-PMU-002",
+        "REQ-SYS-001"
+      ],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "16 bytes",
+        "256 KiB",
+        "64 bits"
+      ]
+    },
+    {
+      "level": 2,
+      "title": "2. Normative references and precedence",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "2.1 Normative references",
+      "chars": 3805,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "2.2 Source-of-truth and conflict handling",
+      "chars": 1805,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "2.3 Compliance declaration",
+      "chars": 1213,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "4 bits",
+        "4 byte",
+        "6 bits",
+        "7 bits"
+      ]
+    },
+    {
+      "level": 2,
+      "title": "3. Requirements and traceability",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "3.1 Normative requirements",
+      "chars": 33300,
+      "tables": 1,
+      "req_ids": [
+        "REQ-CLK-001",
+        "REQ-DBG-001",
+        "REQ-ERR-001",
+        "REQ-ERR-002",
+        "REQ-ERR-003",
+        "REQ-IF-001",
+        "REQ-IF-002",
+        "REQ-IF-003",
+        "REQ-IF-004",
+        "REQ-IF-005",
+        "REQ-IF-006",
+        "REQ-IF-007",
+        "REQ-IF-008",
+        "REQ-IF-009",
+        "REQ-IF-010",
+        "REQ-IF-011",
+        "REQ-IF-012",
+        "REQ-IRQ-001",
+        "REQ-IRQ-002",
+        "REQ-MEM-001",
+        "REQ-MEM-002",
+        "REQ-MEM-003",
+        "REQ-MEM-004",
+        "REQ-MEM-005",
+        "REQ-MEM-006",
+        "REQ-MEM-007",
+        "REQ-MEM-008",
+        "REQ-MEM-009",
+        "REQ-MEM-010",
+        "REQ-MEM-011",
+        "REQ-MEM-012",
+        "REQ-MEM-013",
+        "REQ-MEM-014",
+        "REQ-MEM-015",
+        "REQ-MEM-016",
+        "REQ-MEM-017",
+        "REQ-MEM-018",
+        "REQ-MEM-019",
+        "REQ-MEM-020",
+        "REQ-MEM-021",
+        "REQ-MEM-022",
+        "REQ-MEM-023",
+        "REQ-MEM-024",
+        "REQ-PD-001",
+        "REQ-PERF-006",
+        "REQ-PERF-007",
+        "REQ-PMU-001",
+        "REQ-PMU-002",
+        "REQ-PMU-003",
+        "REQ-PMU-004",
+        "REQ-PMU-005",
+        "REQ-PMU-006",
+        "REQ-PMU-007",
+        "REQ-PMU-008",
+        "REQ-RST-001",
+        "REQ-SYS-001",
+        "REQ-SYS-002",
+        "REQ-SYS-003",
+        "REQ-SYS-004",
+        "REQ-VER-001",
+        "REQ-VER-002"
+      ],
+      "tests": [
+        "TEST-014",
+        "TEST-036",
+        "TEST-047",
+        "TEST-050",
+        "TEST-051",
+        "TEST-057"
+      ],
+      "properties": [],
+      "quantified": [
+        "16 bytes",
+        "256 KiB",
+        "64 bits"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "3.2 Requirement change control",
+      "chars": 560,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "4. Features and configurations",
+      "chars": 1868,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "5. Architecture",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "5.1 Overview and block responsibilities",
+      "chars": 2485,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "5.2 Block diagram",
+      "chars": 30873,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "5.3 Transaction and dataflow",
+      "chars": 13414,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "5.4 Invariants",
+      "chars": 1399,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "5.5 Component provenance",
+      "chars": 731,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "6. External interfaces and ports",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "6.1 Interface inventory",
+      "chars": 1993,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "6.2 Complete AXI-profile port list",
+      "chars": 20299,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "6.3 Internal interface contracts",
+      "chars": 3109,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "6.4 Interrupt and debug obligations",
+      "chars": 778,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "7. Clock, reset, and power",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "7.1 Clock domains",
+      "chars": 586,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "7.2 CDC and RDC",
+      "chars": 930,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "7.3 Reset domains and sequencing",
+      "chars": 1269,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "7.4 Power intent",
+      "chars": 546,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "8. Parameters and elaboration configurations",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "8.1 Current RTL defaults and qualification limits",
+      "chars": 1458,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "64 bits"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "8.2 Address arrays, identity and line representation",
+      "chars": 1176,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "52 bits"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "8.3 Compile-time timing profiles",
+      "chars": 2568,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "9. Data representation and arithmetic",
+      "chars": 1555,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "128 bits",
+        "16 bytes",
+        "2 bits",
+        "64 bit"
+      ]
+    },
+    {
+      "level": 2,
+      "title": "10. Detailed functional behavior",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "10.1 Modes and state transitions",
+      "chars": 37066,
+      "tables": 10,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "10.2 Operations",
+      "chars": 3068,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "10.2.1 Internal D-cache MESI protocol",
+      "chars": 4527,
+      "tables": 2,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "16 bytes"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "10.2.3 System-wide Zicbom maintenance",
+      "chars": 20836,
+      "tables": 1,
+      "req_ids": [
+        "REQ-MEM-018"
+      ],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "16 byte",
+        "16 bytes"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "10.2.2 Coherence performance and IPC evaluation",
+      "chars": 6284,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "16 bytes"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "10.2.4 Deadlock avoidance, forward progress, and worst-case stalls / Tránh deadlock, bảo đảm tiến triển và stall xấu nhất",
+      "chars": 16637,
+      "tables": 2,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "16 bytes",
+        "8 byte"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "10.3 Waveform plan",
+      "chars": 13472,
+      "tables": 1,
+      "req_ids": [
+        "REQ-IF-011",
+        "REQ-MEM-013",
+        "REQ-MEM-017",
+        "REQ-MEM-018",
+        "REQ-MEM-019",
+        "REQ-MEM-024"
+      ],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "10.4 Timing boundaries",
+      "chars": 983,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "10.5 End-to-end working flows and storage ownership",
+      "chars": 6208,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "10.6 Native non-enum lifecycles",
+      "chars": 1799,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "11. Register and programming model",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "11.1 Canonical workbook and generator",
+      "chars": 1537,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "4 KiB"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "11.2 Software programming and use flow",
+      "chars": 4101,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "11.3 Field connections and storage ownership",
+      "chars": 1589,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "11.4 Access and update behavior",
+      "chars": 914,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "11.5 ABI preservation in this documentation revision",
+      "chars": 524,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "12. Error handling and recovery",
+      "chars": 2944,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "13. Performance, power, and area",
+      "chars": 4079,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "14. RTL implementation contract",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "14.1 Required coding baseline",
+      "chars": 728,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "14.2 Current source hierarchy and component inventory",
+      "chars": 5144,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "14.3 Shared implementation rules and figure interpretation",
+      "chars": 448,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "14.4 New and generated component contracts / Component mới và sinh tự động",
+      "chars": 217092,
+      "tables": 35,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "12 bits",
+        "256 KiB",
+        "256 bits",
+        "6 bits",
+        "64 bits",
+        "7 bits",
+        "8 bytes"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "14.5 Modified native source contracts / Hợp đồng source native đã sửa",
+      "chars": 412585,
+      "tables": 82,
+      "req_ids": [
+        "REQ-MEM-012"
+      ],
+      "tests": [],
+      "properties": [],
+      "quantified": [
+        "32 bit",
+        "64bit"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "14.6 Synthesis and qualification boundary",
+      "chars": 412,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "15. Verification specification",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "15.1 Scope and strategy",
+      "chars": 1182,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "15.2 Requirement-based test plan",
+      "chars": 23178,
+      "tables": 1,
+      "req_ids": [
+        "REQ-CLK-001",
+        "REQ-DBG-001",
+        "REQ-ERR-001",
+        "REQ-ERR-002",
+        "REQ-ERR-003",
+        "REQ-IF-001",
+        "REQ-IF-002",
+        "REQ-IF-003",
+        "REQ-IF-004",
+        "REQ-IF-005",
+        "REQ-IF-006",
+        "REQ-IF-007",
+        "REQ-IF-008",
+        "REQ-IF-009",
+        "REQ-IF-010",
+        "REQ-IF-011",
+        "REQ-IF-012",
+        "REQ-IRQ-001",
+        "REQ-IRQ-002",
+        "REQ-MEM-001",
+        "REQ-MEM-002",
+        "REQ-MEM-003",
+        "REQ-MEM-004",
+        "REQ-MEM-005",
+        "REQ-MEM-006",
+        "REQ-MEM-007",
+        "REQ-MEM-008",
+        "REQ-MEM-009",
+        "REQ-MEM-010",
+        "REQ-MEM-011",
+        "REQ-MEM-012",
+        "REQ-MEM-013",
+        "REQ-MEM-014",
+        "REQ-MEM-015",
+        "REQ-MEM-016",
+        "REQ-MEM-017",
+        "REQ-MEM-018",
+        "REQ-MEM-019",
+        "REQ-MEM-020",
+        "REQ-MEM-021",
+        "REQ-MEM-022",
+        "REQ-MEM-023",
+        "REQ-MEM-024",
+        "REQ-PD-001",
+        "REQ-PERF-006",
+        "REQ-PMU-001",
+        "REQ-PMU-002",
+        "REQ-PMU-003",
+        "REQ-PMU-004",
+        "REQ-PMU-005",
+        "REQ-PMU-006",
+        "REQ-PMU-007",
+        "REQ-PMU-008",
+        "REQ-RST-001",
+        "REQ-SYS-001",
+        "REQ-SYS-002",
+        "REQ-SYS-003",
+        "REQ-SYS-004",
+        "REQ-VER-001",
+        "REQ-VER-002"
+      ],
+      "tests": [
+        "TEST-001",
+        "TEST-002",
+        "TEST-003",
+        "TEST-004",
+        "TEST-005",
+        "TEST-006",
+        "TEST-007",
+        "TEST-008",
+        "TEST-009",
+        "TEST-010",
+        "TEST-011",
+        "TEST-012",
+        "TEST-013",
+        "TEST-014",
+        "TEST-015",
+        "TEST-016",
+        "TEST-017",
+        "TEST-018",
+        "TEST-019",
+        "TEST-020",
+        "TEST-021",
+        "TEST-022",
+        "TEST-023",
+        "TEST-024",
+        "TEST-025",
+        "TEST-026",
+        "TEST-027",
+        "TEST-028",
+        "TEST-029",
+        "TEST-030",
+        "TEST-031",
+        "TEST-032",
+        "TEST-033",
+        "TEST-034",
+        "TEST-035",
+        "TEST-036",
+        "TEST-037",
+        "TEST-038",
+        "TEST-039",
+        "TEST-040",
+        "TEST-041",
+        "TEST-042",
+        "TEST-043",
+        "TEST-044",
+        "TEST-045",
+        "TEST-046",
+        "TEST-047",
+        "TEST-048",
+        "TEST-049",
+        "TEST-051",
+        "TEST-052",
+        "TEST-053",
+        "TEST-054",
+        "TEST-055",
+        "TEST-056",
+        "TEST-057",
+        "TEST-058",
+        "TEST-059",
+        "TEST-060",
+        "TEST-061"
+      ],
+      "properties": [],
+      "quantified": [
+        "256 KiB",
+        "256 bits"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "15.3 Assertions and coverage",
+      "chars": 3683,
+      "tables": 0,
+      "req_ids": [
+        "REQ-ERR-003",
+        "REQ-MEM-024"
+      ],
+      "tests": [
+        "TEST-050"
+      ],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "15.4 Formal, CDC, and RDC",
+      "chars": 1487,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "15.5 Current ordinary-eviction test definition",
+      "chars": 365,
+      "tables": 1,
+      "req_ids": [
+        "REQ-ERR-003"
+      ],
+      "tests": [
+        "TEST-050"
+      ],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "16. DFT and testability",
+      "chars": 628,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "17. Physical design and timing integration",
+      "chars": 0,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "17.1 Timing constraints and budgets",
+      "chars": 1746,
+      "tables": 3,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "17.2 Physical assumptions",
+      "chars": 601,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "18. Security, safety, and reliability",
+      "chars": 1360,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "19. Requirement-to-verification traceability",
+      "chars": 8137,
+      "tables": 1,
+      "req_ids": [
+        "REQ-CLK-001",
+        "REQ-DBG-001",
+        "REQ-ERR-001",
+        "REQ-ERR-002",
+        "REQ-IF-001",
+        "REQ-IF-002",
+        "REQ-IF-003",
+        "REQ-IF-004",
+        "REQ-IF-005",
+        "REQ-IF-006",
+        "REQ-IF-007",
+        "REQ-IF-008",
+        "REQ-IF-009",
+        "REQ-IF-010",
+        "REQ-IF-011",
+        "REQ-IF-012",
+        "REQ-IRQ-001",
+        "REQ-IRQ-002",
+        "REQ-MEM-001",
+        "REQ-MEM-002",
+        "REQ-MEM-003",
+        "REQ-MEM-004",
+        "REQ-MEM-005",
+        "REQ-MEM-006",
+        "REQ-MEM-007",
+        "REQ-MEM-008",
+        "REQ-MEM-009",
+        "REQ-MEM-010",
+        "REQ-MEM-011",
+        "REQ-MEM-012",
+        "REQ-MEM-013",
+        "REQ-MEM-014",
+        "REQ-MEM-015",
+        "REQ-MEM-016",
+        "REQ-MEM-017",
+        "REQ-MEM-018",
+        "REQ-MEM-019",
+        "REQ-MEM-020",
+        "REQ-MEM-021",
+        "REQ-MEM-022",
+        "REQ-MEM-023",
+        "REQ-MEM-024",
+        "REQ-PD-001",
+        "REQ-PERF-006",
+        "REQ-PMU-001",
+        "REQ-PMU-002",
+        "REQ-PMU-003",
+        "REQ-PMU-004",
+        "REQ-PMU-005",
+        "REQ-PMU-006",
+        "REQ-PMU-007",
+        "REQ-PMU-008",
+        "REQ-RST-001",
+        "REQ-SYS-001",
+        "REQ-SYS-002",
+        "REQ-SYS-003",
+        "REQ-SYS-004",
+        "REQ-VER-001",
+        "REQ-VER-002"
+      ],
+      "tests": [
+        "TEST-001",
+        "TEST-002",
+        "TEST-003",
+        "TEST-004",
+        "TEST-005",
+        "TEST-006",
+        "TEST-007",
+        "TEST-008",
+        "TEST-009",
+        "TEST-010",
+        "TEST-011",
+        "TEST-012",
+        "TEST-013",
+        "TEST-014",
+        "TEST-015",
+        "TEST-016",
+        "TEST-017",
+        "TEST-018",
+        "TEST-019",
+        "TEST-020",
+        "TEST-021",
+        "TEST-022",
+        "TEST-023",
+        "TEST-024",
+        "TEST-025",
+        "TEST-026",
+        "TEST-027",
+        "TEST-028",
+        "TEST-029",
+        "TEST-030",
+        "TEST-031",
+        "TEST-032",
+        "TEST-033",
+        "TEST-034",
+        "TEST-035",
+        "TEST-036",
+        "TEST-037",
+        "TEST-038",
+        "TEST-039",
+        "TEST-040",
+        "TEST-041",
+        "TEST-042",
+        "TEST-043",
+        "TEST-044",
+        "TEST-045",
+        "TEST-046",
+        "TEST-047",
+        "TEST-048",
+        "TEST-049",
+        "TEST-051",
+        "TEST-052",
+        "TEST-053",
+        "TEST-055",
+        "TEST-056",
+        "TEST-057"
+      ],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "19.1 Fatal ordinary writeback traceability",
+      "chars": 291,
+      "tables": 1,
+      "req_ids": [
+        "REQ-ERR-003"
+      ],
+      "tests": [
+        "TEST-050",
+        "TEST-054"
+      ],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "20. Assumptions, dependencies, and decisions",
+      "chars": 28892,
+      "tables": 1,
+      "req_ids": [
+        "REQ-ERR-003",
+        "REQ-IF-009",
+        "REQ-IF-010",
+        "REQ-IF-011",
+        "REQ-MEM-007",
+        "REQ-MEM-012",
+        "REQ-MEM-013",
+        "REQ-MEM-014",
+        "REQ-MEM-015",
+        "REQ-MEM-017",
+        "REQ-MEM-018",
+        "REQ-MEM-019",
+        "REQ-MEM-021",
+        "REQ-MEM-022",
+        "REQ-PMU-007",
+        "REQ-PMU-008",
+        "REQ-SYS-001",
+        "REQ-SYS-003",
+        "REQ-SYS-004"
+      ],
+      "tests": [
+        "TEST-020",
+        "TEST-029",
+        "TEST-032",
+        "TEST-033",
+        "TEST-035",
+        "TEST-039",
+        "TEST-041",
+        "TEST-042",
+        "TEST-044",
+        "TEST-045",
+        "TEST-047",
+        "TEST-048",
+        "TEST-050",
+        "TEST-051"
+      ],
+      "properties": [],
+      "quantified": [
+        "16 bytes",
+        "3 bits"
+      ]
+    },
+    {
+      "level": 3,
+      "title": "20.1 Current unresolved contracts and release blockers",
+      "chars": 1189,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "20.2 Confirmed first-fatal decisions",
+      "chars": 410,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "20.3 Register-model inconsistencies found during this rewrite",
+      "chars": 573,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "20.4 Reset clarification",
+      "chars": 821,
+      "tables": 1,
+      "req_ids": [
+        "REQ-IF-003",
+        "REQ-RST-001"
+      ],
+      "tests": [
+        "TEST-014",
+        "TEST-036"
+      ],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "20.5 Probe-service slot ownership",
+      "chars": 647,
+      "tables": 1,
+      "req_ids": [
+        "REQ-MEM-024"
+      ],
+      "tests": [
+        "TEST-056"
+      ],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 3,
+      "title": "20.6 Cluster timing-profile selection",
+      "chars": 999,
+      "tables": 1,
+      "req_ids": [
+        "REQ-PERF-006",
+        "REQ-PERF-007"
+      ],
+      "tests": [
+        "TEST-057"
+      ],
+      "properties": [],
+      "quantified": [
+        "1.04167 ns",
+        "1.25 ns"
+      ]
+    },
+    {
+      "level": 2,
+      "title": "21. Glossary",
+      "chars": 5679,
+      "tables": 1,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    },
+    {
+      "level": 2,
+      "title": "22. References used to shape this template",
+      "chars": 3993,
+      "tables": 0,
+      "req_ids": [],
+      "tests": [],
+      "properties": [],
+      "quantified": []
+    }
+  ],
+  "requirements": {
+    "REQ-SYS-001": {
+      "statement": "The cluster shall elaborate with PARA_CPU_NUM equal to 2 or 4, default to 4, and assign active hart indices contiguously from zero.",
+      "source": "User decision; DEC-019; Section 8",
+      "verification": "Elaboration and hierarchy check"
+    },
+    "REQ-SYS-002": {
+      "statement": "Every active tile shall use the selected cv64a6_imafdc_sv39_hpdcache_wb configuration unless a new approved spec revision changes it.",
+      "source": "User decision; REF-004",
+      "verification": "Configuration/package comparison"
+    },
+    "REQ-SYS-003": {
+      "statement": "The cluster shall provide one shared 64-bit `i_boot_addr` input and connect it to `boot_addr_i` of every active CVA6 hart. The SoC shall hold the value stable while reset is asserted and through reset release. All harts begin at that address; boot software may branch on `mhartid` for per-hart startup.",
+      "source": "User decision; DEC-021",
+      "verification": "Boot-address fanout and two/four-hart startup test"
+    },
+    "REQ-SYS-004": {
+      "statement": "The cluster's license-preserving local CVA6 configuration copy shall set `CVA6ConfigCvxifEn=0`. The cluster shall expose no CVXIF accelerator ports; if the pinned source signature retains native CVXIF pins, the licensed integration boundary shall leave them inactive. The pristine upstream configuration shall remain unchanged.",
+      "source": "User decision; DEC-022",
+      "verification": "Config comparison, elaboration, and inactive-native-pin check"
+    },
+    "REQ-PERF-006": {
+      "statement": "`PARA_TIMING_PROFILE` shall select a synthesis-time cluster timing configuration: 0 preserves the low-latency AXI/PMU paths; 1 enables registered spill-register cuts on each hart's memory and MMIO AXI route and registers PMU event counts/enables before counter update. Profile 1 shall preserve AXI payload/ID/sideband ordering and count each sampled PMU event once. Its snapshot request shall be acknowledged only after the pending event pipeline drains. No profile may modify CVA6 internal logic or its instruction/data pipelines. The profile is not a runtime switch and makes no Fmax/IPC guarantee.",
+      "source": "User decision; DEC-044; Sections 8.3 and 13",
+      "verification": "Full-CPU profile matrix; AXI stability/ordering checks; PMU event/snapshot scoreboard; source diff audit proving no CVA6 internal source change"
+    },
+    "REQ-PERF-007": {
+      "statement": "Profile 2 shall cut each external memory and MMIO AXI channel independently, pipeline PMU source and overflow, and use banked synchronous directory lookup.",
+      "source": "DEC-045, Section 8.3",
+      "verification": "TEST-057–061 on profiles 0 and 2 and post-route STA"
+    },
+    "REQ-MEM-001": {
+      "statement": "Every active hart's D-cache shall participate in one internal MESI coherence domain for cacheable shared memory. The current implementation phase shall provide the AXI profile only.",
+      "source": "User decisions; DEC-007, DEC-008",
+      "verification": "MESI state-transition tests, multi-hart litmus, dirty-owner tests, and formal invariants"
+    },
+    "REQ-MEM-005": {
+      "statement": "The CCU shall use a per-line sharer directory to target only D-caches recorded as possible holders; it shall collect tagged probe status responses and complete every required owner AXI writeback before granting E/S/M. It shall not broadcast every request to all active harts.",
+      "source": "User decisions; DEC-007, DEC-013, DEC-027",
+      "verification": "Directory-targeting tests, tagged probe/writeback scoreboard, and MESI state checks"
+    },
+    "REQ-MEM-006": {
+      "statement": "Coherence arbitration shall lock only the target physical cache line: same-line CPU requests shall wait until the current probe/refill transaction resolves; unrelated lines shall remain eligible subject to directory, cache-bank, port, MSHR, CCU, LLC, and AXI resource conflicts.",
+      "source": "User decisions; DEC-008, DEC-013",
+      "verification": "Same-line collision and independent-line progress tests"
+    },
+    "REQ-MEM-007": {
+      "statement": "D-cache coherence shall not snoop I-caches. Software that modifies executable memory shall perform the platform-required inter-hart notification and each executing hart shall execute `FENCE.I` before fetching the changed instructions. `FENCE.I` synchronizes only the executing hart's instruction stream; it shall not be treated as a remote-hart broadcast.",
+      "source": "User decision; DEC-009; REF-013",
+      "verification": "Self-modifying-code integration and per-hart FENCE.I test"
+    },
+    "REQ-MEM-008": {
+      "statement": "The directory shall never omit an active D-cache that may hold a line. Successful clean/dirty L1 eviction and failed post-grant refill may leave stale-positive holder bits. An error-free matching PREPARE-I shall prove absence; successful COMMIT shall prune that holder, while ABORT shall preserve conservative metadata. An absent cache shall ACK COMMIT with I without allocating S/E/M, and an empty committed mask shall become I. A stale extra sharer bit may cause a harmless probe, which shall be reconciled; a missing sharer bit shall not permit stale data or conflicting ownership. Directory metadata shall be committed only with the corresponding cache-state transition.",
+      "source": "User decision; DEC-013; exact update handshakes are implementation detail",
+      "verification": "Directory invariant assertions and cache/directory refinement checks"
+    },
+    "REQ-MEM-009": {
+      "statement": "The CCU shall support `PARA_COH_TXN_NUM` active coherence transactions, default 8 and legal from 2 through 16. The total includes victim children; CPU/CMO roots shall require two free entries so one credit remains available exclusively to non-recursive victim work (at most N-1 roots). Root admission shall not gate terminal completion/release. Each child allocation and each per-hart grant load/release shall affect only its selected context tag. Every active transaction shall have a slot-derived tag unique among active entries. Probe/response traffic shall carry that tag and target hart identity; a tag shall not be reused until all prepare/commit/abort responses for the previous use have drained.",
+      "source": "User decisions; DEC-013, DEC-015",
+      "verification": "2/8/16-slot elaboration, tag reuse, backpressure, and response-reordering tests"
+    },
+    "REQ-MEM-010": {
+      "statement": "The sharer directory shall be independent of and non-inclusive with the LLC, use four banks and eight ways, and contain `PARA_CPU_NUM × 2,048` entries: 4,096 for two harts and 8,192 for four harts. LLC eviction alone shall not invalidate a private D-cache line. A directory replacement with active holders shall prepare targeted invalidations and complete any M-owner writeback before replacing the entry.",
+      "source": "User decisions; DEC-014, DEC-027",
+      "verification": "Directory geometry, LLC-eviction independence, full-set replacement, owner-writeback and dirty-victim tests"
+    },
+    "REQ-MEM-011": {
+      "statement": "The directory shall select one of four banks using the two least-significant bits of the line address, equivalent to physical-address bits `[5:4]` for the selected 16-byte line (`line_addr[1:0] = physical_address[5:4]`); each bank shall arbitrate one operation per cycle, allowing different-bank operations to proceed concurrently and serializing same-bank conflicts. Each private D-cache shall queue up to `PARA_COH_TXN_NUM` probes and service one probe at a time.",
+      "source": "User decisions; DEC-014, DEC-015",
+      "verification": "Bank-conflict, cross-bank overlap, and per-cache probe queue tests"
+    },
+    "REQ-MEM-012": {
+      "statement": "A coherence probe shall use two phases. PREPARE locks the target line, waits for same-line miss/refill completion, and reports the stable MESI state without changing stable MESI state. If the target is M, it shall write the complete 16-byte line to the LLC through that hart's existing HPDcache AXI path; the cache shall retain M and the line lock until COMMIT or ABORT. PREPARE ACK shall wait for the matching LLC B response. A B error fails PREPARE, triggers ABORT for every prepared target, and shall not update the directory or grant the requester. The probe response carries writeback completion/status, not the 128-bit line payload. After all required PREPARE responses and data obligations succeed, COMMIT applies the target state to resident lines and returns an acknowledgement; a cache proved absent in PREPARE remains I and performs no allocation or RAM update. The CCU shall update directory metadata and grant permission only after every required COMMIT acknowledgement. A permission grant admits the requester's normal HPDcache refill; CPU completion follows refill.",
+      "source": "User decisions; DEC-016, DEC-027",
+      "verification": "Prepare-state invariants, owner AXI writeback/B response, B-error ABORT, commit ordering, and concurrent-line tests"
+    },
+    "REQ-MEM-013": {
+      "statement": "PREPARE, COMMIT, and ABORT have no acknowledgement timeout. The CCU shall retain the line lock and transaction slot until every required phase ACK arrives or reset occurs. During PREPARE wait, stable cache MESI and directory metadata remain unchanged; no COMMIT, requester grant, or directory update may occur. A pre-COMMIT error sends ABORT to every targeted cache; caches release their local line locks only after accepting ABORT and preserve their pre-transaction stable state. During COMMIT wait, no rollback is allowed; the directory remains unchanged and the requester is not granted until all COMMIT ACKs arrive. A missing ACK can stall that line indefinitely. Independent lines may progress only with independent slots and resources. Reset clears cache and directory valid state and is the only recovery. Repeated COMMIT with the same tag is idempotent.",
+      "source": "User decisions; DEC-016, DEC-018; reset contract",
+      "verification": "Missing PREPARE/COMMIT/ABORT ACK, independent-line progress, and reset-recovery tests"
+    },
+    "REQ-MEM-014": {
+      "statement": "Each directory bank shall select only eligible transaction slots using round-robin arbitration and expose a registered `valid/ready` grant that remains stable while not ready. An ineligible request shall not occupy that grant. A matching reservation-owner terminal update/cancel shall not be blocked by another slot's ineligible request, as detailed in REQ-MEM-019. The priority pointer resets to slot 0 and advances to the slot after an accepted grant. Each bank accepts at most one grant per cycle; independent banks may grant concurrently. Each 8-way set stores seven tree-PLRU bits, reset to zero; victim-walk bit 0 selects the left child and bit 1 the right child. A committed access/allocation updates each traversed bit away from the accessed way. Select the lowest-index invalid way before replacement; a full set follows the seven-bit tree. If the victim is locked/reserved or cannot obtain a transaction context, keep that request pending and allow other eligible bank operations to proceed. If another active context locks the victim line, cancel the parent reservation before retrying directory lookup; do not retain that reservation while waiting for the conflicting context to access the set.",
+      "source": "User decision; DEC-020/032",
+      "verification": "Round-robin fairness, stable eligible grant under backpressure, owner terminal escape, PLRU and cross-bank tests"
+    },
+    "REQ-MEM-015": {
+      "statement": "Zicbom cache-block operations shall be routed through the cluster CMO controller and serialized by the shared CCU line lock. `CBO.CLEAN` shall write any dirty L1 owner line through the owner's HPDcache AXI path, then clean the matching LLC line to external memory; retain valid copies and change the sole M owner to E only after both writebacks succeed. `CBO.FLUSH` shall perform the same clean-to-memory sequence, then invalidate all matching L1 D-cache copies and the LLC copy only after successful memory B response. `CBO.INVAL` shall follow CVA6's CBIE-decoded operation: a true invalidate locks and invalidates matching L1 and LLC copies without writeback, including discarding dirty copies at commit; when decoded as flush, it follows `CBO.FLUSH`. True-invalidate PREPARE shall not issue owner writeback. An LLC CMO miss shall not allocate/refill a line.",
+      "source": "User decisions; DEC-028; RISC-V CMO rules REF-012",
+      "verification": "All op × L1/LLC hit-state × dirty-state combinations, DMA-visibility sequence, per-line lock and MESI/directory refinement"
+    },
+    "REQ-MEM-016": {
+      "statement": "The LLC shall provide a per-line maintenance service with tag lookup, same-line exclusion, clean, and invalidate operations. A clean shall retain the valid tag and clear dirty only after successful full-line AXI writeback; invalidate shall clear the tag only at its specified commit point. Any non-OKAY memory B response shall be returned to the CMO controller and shall leave the LLC valid/dirty/tag state unchanged. If the L1 M owner has already supplied the line to the LLC, that owner shall retain M and its line lock until CMO commit/abort; a later memory error shall not update the directory or invalidate the L1 copy.",
+      "source": "User decision; DEC-028; pinned `axi_llc` source audit",
+      "verification": "AXI B error injection at owner and LLC writeback; tag/data preservation; no premature invalidation; retry test"
+    },
+    "REQ-MEM-017": {
+      "statement": "A CBO instruction shall remain at the CVA6 retirement head until the complete CMO succeeds or its error recovery finishes; younger instructions shall not retire past it. On success, retire the CBO exactly once. If a writeback-required operation (`CBO.CLEAN`, `CBO.FLUSH`, or `CBO.INVAL` decoded as flush) receives an owner/LLC writeback error, preserve recoverable cache state, wait for every required ABORT acknowledgement, suppress CBO retirement, and raise a precise synchronous Store/AMO access-fault exception (`mcause/scause` exception code 7) with the CBO's original effective address in `mtval`/`stval` and its instruction PC in `mepc`/`sepc`. A true invalidate does not write back and has no writeback B-error path. The local CVA6 integration shall propagate CMO completion/error to commit logic; it shall not treat request acceptance as completion.",
+      "source": "User decision; DEC-029; RISC-V CMO trap rules REF-012",
+      "verification": "Delayed success/error, no-younger-retire, exact-once retirement, exception cause/PC/tval, ABORT completion, and retry-state checks"
+    },
+    "REQ-MEM-018": {
+      "statement": "With `DcacheFlushOnFenceI=1`, a local `FENCE.I` shall remain at the retirement head and block younger retirement while the hart's D-cache is scanned. Each dirty M line shall be locked and written through its HPDcache AXI path into the shared LLC; the CCU shall commit the owner from M to E only after successful LLC acceptance and keep the directory holder consistent. `FENCE.I` shall not request LLC-to-external-memory writeback solely for instruction-fetch synchronization. After all required L1-to-LLC transfers complete, invalidate the executing hart's I-cache and fetch pipeline before retiring `FENCE.I`. If an L1-to-LLC B response is non-OKAY, preserve the failed line's M state and directory holder, send ABORT, and wait for every required ABORT acknowledgement without timeout; do not invalidate the local I-cache/fetch pipeline or retire `FENCE.I`. After ABORT completes, raise a precise synchronous custom maintenance exception (exception code 24, `REF-014`) at the `FENCE.I` PC; write the failed physical line's aligned base address to `mtval` or `stval` according to the selected trap privilege. The handler may correct the cause and return to the faulting PC to retry `FENCE.I`.",
+      "source": "User decisions; DEC-030/031; selected CVA6 configuration; REF-013/014",
+      "verification": "Success and B-error FENCE.I tests; check no younger retirement, ABORT completion before trap, cause/PC/aligned physical line address, failed M/directory preservation, no local fetch invalidation on error, and no LLC-to-DRAM write request"
+    },
+    "REQ-MEM-019": {
+      "statement": "Each directory bank shall determine whether lookup/update/cancel requests are eligible before arbitration. An update or cancel matching the active set-reservation owner is a terminal operation and shall have an escape path that cannot be blocked by a valid but ineligible request from another transaction. A matching owner cancel shall be accepted and clear that reservation even if another transaction's update remains valid; a matching owner update shall commit and release the reservation. Only one directory operation may be accepted per bank per cycle. Round-robin arbitration shall be fair among continuously eligible transaction slots; when the bank accepts one operation per cycle, a continuously eligible slot shall be selected within one full round of eligible slots.",
+      "source": "Review finding CC-01; v0.19 directory liveness contract; DEC-032",
+      "verification": "Exact CC-01 reproducer; same-set update/cancel escape; eligible-slot fairness assertions; WF-020"
+    },
+    "REQ-MEM-020": {
+      "statement": "The CCU, directory, caches, and AXI writeback path shall obey the resource-ordering contract in Section 10.2.4: no directory bank port or cache tag/data-array port may be held while waiting for an ACK/B response that requires that resource; line locks and transaction contexts may remain held as specified by DEC-018. A cache must not wait for new CCU permission to complete a refill that is itself blocking the probe needed for that permission.",
+      "source": "Review finding CC-01; v0.19 resource wait-graph analysis",
+      "verification": "Formal wait-for graph review; same-line refill/probe stress; resource ownership assertions"
+    },
+    "REQ-MEM-021": {
+      "statement": "A response receiver shall accept each transport-valid internal probe ACK when its response buffer can accept it, independent of whether its tag/line/phase matches an active context. Only a unique expected response may update transaction state. Stale, duplicate, unknown-tag, wrong-hart, wrong-line, or wrong-phase responses shall be consumed and discarded, shall not modify any transaction/cache/directory state, and shall set the coherence-protocol diagnostic.",
+      "source": "Review finding CC-02; v0.19 response-drain contract; DEC-033",
+      "verification": "Duplicate/stale/mismatched ACK drain test; confirm a following valid ACK is accepted; diagnostic status test"
+    },
+    "REQ-MEM-022": {
+      "statement": "Each per-slot bank request shall represent one pending operation token. A bank arbiter shall consume an accepted token exactly once and disarm that slot until it samples `i_req_valid[slot]=0`; a later assertion rearms the slot for a new token. This prevents a delayed VALID deassertion from receiving a duplicate grant. While a grant is stalled, its valid and slot identity shall remain stable, and the request's bank and operation payload shall remain stable. Each bank still accepts at most one token per cycle; different slots may be accepted in adjacent cycles.",
+      "source": "Review finding CC-03; v0.19 request-token contract; DEC-035",
+      "verification": "Delayed-deassertion/duplicate-grant test; stable grant and rearm assertions"
+    },
+    "REQ-MEM-023": {
+      "statement": "An active transaction context shall retain its tag, line, requester/owner, transaction kind, target MESI state, phase, expected/received ACK masks, owner-writeback completion/status, and LLC/AXI completion/status until commit/abort is complete and all required responses drain. Starting a new phase shall not clear fields required by later phases. A probe scheduler shall use state associated with the matching context, not an uncorrelated live value. The owner-data obligation is satisfied only by a matching successful B for actual dirty M when writeback is required, or by validated no-data-needed E/I proof. An actual M writeback success shall never be inferred from stale directory metadata; COMMIT shall not proceed after a writeback error.",
+      "source": "Review finding CC-03; v0.19 context-retention contract; DEC-027/035",
+      "verification": "PREPARE-to-COMMIT/ABORT context-retention test; target-state and B-response association checks"
+    },
+    "REQ-MEM-024": {
+      "statement": "Before issuing any PREPARE probe, the probe scheduler shall atomically reserve the per-hart service slot of every hart in that context's expected-probe mask. A claim is granted only when every required slot is available; otherwise the context reserves no hart slot and remains eligible for a later fair claim. At most one new context claim is granted per cycle, and the round-robin claim pointer advances after a grant. Once granted, every target slot shall retain the same context tag through PREPARE and until a successful matching COMMIT or ABORT response is accepted. Probe requests to the reserved harts may then progress independently. Transactions with disjoint target masks may proceed concurrently after successive claims.",
+      "source": "DEC-043; Section 10.2.4",
+      "verification": "Cross-claim directed test, same-tag owner assertions, disjoint-target progress, and wait-for/resource formal checks"
+    },
+    "REQ-MEM-002": {
+      "statement": "The shared LLC shall default to 4 ways, 4096 lines per way, 2 64-bit blocks per line, and 16 bytes per line, for 256 KiB total capacity.",
+      "source": "User decision; REF-008",
+      "verification": "Parameter/elaboration check"
+    },
+    "REQ-MEM-003": {
+      "statement": "LLC geometry shall be static after synthesis; software shall not change total capacity or enable SPM mode.",
+      "source": "User decision; REF-008",
+      "verification": "CSR access test and RTL inspection"
+    },
+    "REQ-MEM-004": {
+      "statement": "LLC BIST and flush requests shall follow the selected axi_llc behavior; traffic shall not be treated as usable until the applicable BIST-ready condition is met.",
+      "source": "REF-008",
+      "verification": "BIST/flush sequence simulation"
+    },
+    "REQ-IF-001": {
+      "statement": "The cluster shall expose one 32-bit-address, 32-bit-data AXI4-Lite Subordinate port for cluster CSR and LLC service windows.",
+      "source": "User decision; REF-001",
+      "verification": "AXI4-Lite protocol checker"
+    },
+    "REQ-IF-002": {
+      "statement": "The cluster shall expose a non-coherent AXI4 Manager interface for peripheral/device traffic.",
+      "source": "User requirement; REF-001",
+      "verification": "AXI4 protocol checker and address-attribute tests"
+    },
+    "REQ-IF-003": {
+      "statement": "The AXI memory profile shall expose the pinned PULP AXI4 interface with its 6-bit AWATOP extension, without external snoop channels; software/SoC shall maintain cache visibility for external DMA. The AWATOP extension does not make the port a full AMBA AXI5 interface.",
+      "source": "User decision; DEC-023, DEC-042; REF-001",
+      "verification": "AWATOP pass-through/atomic response test and DMA visibility review"
+    },
+    "REQ-IF-004": {
+      "statement": "A future ACE profile may expose external coherent-memory channels after a separate ACE boundary specification and approval; it is not part of the current RTL phase.",
+      "source": "Deferred scope decision",
+      "verification": "Future ACE protocol checker and snoop tests"
+    },
+    "REQ-IF-005": {
+      "statement": "AXI and ACE source payloads shall remain stable while VALID is high and READY is low, and responses shall be accepted only on VALID and READY handshakes.",
+      "source": "REF-001",
+      "verification": "Protocol assertions"
+    },
+    "REQ-IF-006": {
+      "statement": "The current delivery shall expose one fixed-port AXI structural top. Any future ACE top shall be a separate fixed-port module and requires a new approved specification phase.",
+      "source": "User scope decision; VLSIT PRT-03",
+      "verification": "Port-list/elaboration audit"
+    },
+    "REQ-IF-007": {
+      "statement": "AXI4-Lite writes shall honor WSTRB; aligned unmapped CSR addresses shall return DECERR and reads shall return zero.",
+      "source": "REF-009; user-selected CSR generator v3.5",
+      "verification": "Generated-CSR protocol simulation"
+    },
+    "REQ-IF-008": {
+      "statement": "The cluster-local AXI4-Lite aperture shall contain five 4-KiB CSR groups at offsets `0x0000–0x4FFF` and a 4-KiB LLC-service window at `0x5000–0x5FFF`; the absolute SoC base is integration-defined and at least 4-KiB aligned. Unassigned offsets are reserved: reads return zero with DECERR and writes have no side effect with DECERR.",
+      "source": "Approved CSR workbook; DEC-017",
+      "verification": "Window boundary, reserved-offset, and base-alignment tests"
+    },
+    "REQ-IF-009": {
+      "statement": "The memory egress shall preserve the six-bit AWATOP field and all standard AXI4 transaction fields from the LLC. Uncached LR/SC shall use AXI4 exclusive-access signaling (`ARLOCK`/`AWLOCK`); uncached AMO shall use only the AWATOP encodings generated by the pinned HPDcache/PULP AXI sources. The SoC integration shall connect the port to a target/fabric implementing both required mechanisms, or place a verified atomic-service bridge before a fabric that lacks them. The bridge shall execute each supported atomic operation at the memory serialization point and preserve ID/response/error association. A filter that returns SLVERR is not an atomic bridge. AWATOP follows the applicable AMBA 5 E1.1 atomic semantics for this supported subset; the cluster does not claim full AXI5 conformance.",
+      "source": "User decision; DEC-023, DEC-042; pinned PULP `axi_llc`, AXI package and HPDcache sources",
+      "verification": "TEST-036, TEST-047; LR/SC and AMO end-to-end atomicity; unsupported-fabric integration check"
+    },
+    "REQ-IF-010": {
+      "statement": "LLC-service accesses in local window `0x5000–0x5FFF` shall pass through a new VLSIT AXI4-Lite-to-RegBus bridge to the unchanged pinned LLC register interface. AXI AW and W may handshake independently; the bridge shall issue one complete write only after both are captured and shall return the matching response.",
+      "source": "User decision; DEC-024; `axi_llc_reg_wrap` source audit",
+      "verification": "Independent AW/W order, backpressure, response association, and error tests"
+    },
+    "REQ-IF-011": {
+      "statement": "One synthesis-time address-region table shall be the source of truth for both the cluster router and CVA6 PMA attributes. The adapter shall derive CVA6 `CachedRegion*` entries only from class `00` and `NonIdempotent*` entries only from class `10`; class `01` remains idempotent and uncached by being outside both lists. It shall support one cacheable normal-memory entry (default base `0x80000000`, size 1 GiB), plus configurable normal-uncached and MMIO entries, up to 16 total. Cacheable and normal-uncached requests shall use the memory path; normal-uncached traffic shall bypass LLC allocation. MMIO shall bypass CCU/LLC. Entries shall be non-overlapping, 16-byte aligned, and confined to PLEN=56. Unmatched or boundary-crossing accesses shall receive a local error without external AXI traffic. The default table shall contain only the cacheable entry; the SoC supplies uncached/MMIO entries.",
+      "source": "User decision; DEC-037; selected CVA6 PMA capacity and LLC mapping",
+      "verification": "TEST-051, PMA/router parity, overlap/boundary/error tests"
+    },
+    "REQ-IF-012": {
+      "statement": "`PARA_AXI_MEM_DATA_W` shall select external memory data width from `{32,64,128,256}` bits. The native CVA6/HPDcache/LLC datapath remains 64-bit; the adapter shall preserve byte addresses, IDs, responses, strobes, ordering and the 16-byte coherence-line contract for every supported width. MMIO remains 64-bit and AXI4-Lite remains 32-bit.",
+      "source": "User decision; DEC-034",
+      "verification": "TEST-047, width elaboration, transfer and error matrix"
+    },
+    "REQ-PMU-001": {
+      "statement": "The cluster PMU shall support PARA_PMU_COUNTER_NUM counters, legal range 1–32 and default 16.",
+      "source": "User decision, 2026-11-06",
+      "verification": "Parameter-boundary elaboration"
+    },
+    "REQ-PMU-002": {
+      "statement": "PMU counter width shall be configurable as 32 or 64 bits; the proposed default is 64 bits. Counters shall wrap modulo 2^W.",
+      "source": "User decision; default tracked in Section 20",
+      "verification": "Counter boundary simulation"
+    },
+    "REQ-PMU-003": {
+      "statement": "An accepted software snapshot request shall atomically capture all PMU counters and keep the snapshot stable until the next accepted request or reset. `snapshot_done` is sticky: hardware sets it when capture completes, and software must clear it by W1C before issuing the next snapshot request. A request does not clear the previous `snapshot_done` value.",
+      "source": "User decision, 2026-11-06; clarified 2026-11-16",
+      "verification": "Snapshot, concurrent increment, sticky-done, W1C rearm, and second-request tests"
+    },
+    "REQ-PMU-004": {
+      "statement": "PMU overflow causes shall be sticky and software-visible; one aggregate level interrupt shall remain asserted while any enabled pending cause remains.",
+      "source": "User decision, 2026-11-06",
+      "verification": "Overflow, mask, clear, and interrupt tests"
+    },
+    "REQ-PMU-005": {
+      "statement": "Every PMU counter shall select either one active hart (scope 0–3), all active harts (scope 4), or a cluster-global event (scope 5); scopes 6–7 are reserved.",
+      "source": "User decision, 2026-11-06",
+      "verification": "Scope encoding, 2/4-hart and event-source tests"
+    },
+    "REQ-PMU-006": {
+      "statement": "Aggregate per-hart events shall add the number of occurrences across active harts in each cycle; simultaneous events from four harts increment the selected counter by four.",
+      "source": "User decision, 2026-11-06",
+      "verification": "Multi-hart simultaneous-event scoreboard"
+    },
+    "REQ-PMU-007": {
+      "statement": "The 16-bit `event_id` shall use the fixed source ranges and complete source mapping in workbook `Event_Map`: CVA6 `0x0001–0x0016`, HPDcache `0x0100–0x010F`, LLC `0x0200–0x0217` and `0x0240–0x0243`, and VLSIT CCU `0x0300–0x030B`. The workbook is the selector-code source of truth. Unknown/reserved IDs, disabled SPM events, unavailable sources, and invalid scope/source combinations shall contribute zero.",
+      "source": "User decision; DEC-025; pinned source audit",
+      "verification": "Exact ID/source scoreboard; reserved and unavailable ID tests"
+    },
+    "REQ-PMU-008": {
+      "statement": "Per-hart event sources shall expose one sampled indicator per hart; scope 0–3 selects one active hart and scope 4 sums indicators across active harts. For scope 5, CCU transaction/handshake IDs `0x0300–0x0307` and `0x030B` shall count actual occurrences each cycle, up to four, using 3-bit taps. CCU stall IDs `0x0308–0x030A` shall count one per cycle while asserted. Each single-instance LLC event field contributes one when `.active` is high; `.num_bytes` is not accumulated. CVA6 sources that OR-reduce commit ports contribute at most one per hart per cycle.",
+      "source": "User decision; DEC-026; pinned CVA6, HPDcache, and LLC source semantics",
+      "verification": "Multi-occurrence CCU, held-stall, descriptor, aggregate, counter increment, and wrap tests"
+    },
+    "REQ-DBG-001": {
+      "statement": "The cluster shall expose per-hart debug request and debug-mode/status connections; the DTM and Debug Module shall remain outside the cluster.",
+      "source": "User decision; REF-007",
+      "verification": "Hart-by-hart debug integration test"
+    },
+    "REQ-IRQ-001": {
+      "statement": "Platform interrupt inputs shall be level-sensitive and routed only to the addressed active hart; inputs for absent harts shall be ignored.",
+      "source": "Proposed interface contract; ASM-004",
+      "verification": "Directed interrupt routing tests"
+    },
+    "REQ-IRQ-002": {
+      "statement": "For each active hart, `i_int_ssip` and `i_int_stip` shall be ORed with the corresponding software-writable `mip` state to form the effective pending view used by interrupt logic and CSR reads. External levels shall not be copied into software-writable state by CSR read-modify-write operations. Gate SSIP with `RVS && SoftwareInterruptEn` and STIP with `RVS`.",
+      "source": "REF-006; selected CVA6 configuration",
+      "verification": "Assert/deassert each external level; verify MIP/SIP visibility, interrupt delivery, software clear/set, and no sticky state after external deassertion"
+    },
+    "REQ-CLK-001": {
+      "statement": "All cluster AXI/ACE/AXI4-Lite ports and internal active harts shall use the cluster clock unless a separately specified CDC bridge is inserted outside the cluster.",
+      "source": "Integration assumption",
+      "verification": "CDC analysis and clock-domain lint"
+    },
+    "REQ-RST-001": {
+      "statement": "Reset shall clear cluster valid/control state, coherence/cache valid state, in-flight internal tags, and generated CSR fields to workbook reset values. The SoC shall provide asynchronous assertion if used and synchronized deassertion to the cluster clock. When resetting with transactions in flight, the SoC shall reset the connected AXI fabric/target transaction state and internal coherence agents as one coordinated reset event; no response to a pre-reset request may be delivered after cluster reset deassertion. Backing-memory contents are not cleared, but an externally accepted transaction may have committed before reset and its outcome is not reported across reset; software shall reinitialize affected data.",
+      "source": "User decision; DEC-041; ASM-005",
+      "verification": "TEST-014 reset injection, stale-response exclusion, and post-reset recovery"
+    },
+    "REQ-ERR-001": {
+      "statement": "AXI/ACE error responses shall be returned to the originating request path without changing the transaction ID or fabricating successful data.",
+      "source": "REF-001",
+      "verification": "Error injection and response association tests"
+    },
+    "REQ-ERR-002": {
+      "statement": "An unsupported or malformed internal address/control request shall not silently alter architectural cache or CSR state.",
+      "source": "Product requirement",
+      "verification": "Negative tests and assertions"
+    },
+    "REQ-ERR-003": {
+      "statement": "An ordinary dirty-eviction writeback failure shall preserve recoverable dirty data and retain the affected transaction/line lock until reset. It shall assert a sticky asynchronous `o_int_fault` and expose a reset-only first-fatal CSR record under DEC-039/040, including actual victim line address, source, exact AXI B response, L1 hart identity or LLC hart_valid=0, and a later/simultaneous-event multiple flag. Already issued AXI responses shall still be drained; no successful completion, automatic retry or retroactive precise exception at an already retired store shall be fabricated. Reset is the recovery. CBO and FENCE.I retain REQ-MEM-017/018.",
+      "source": "User selected asynchronous fault, DEC-036",
+      "verification": "TEST-050"
+    },
+    "REQ-PD-001": {
+      "statement": "The cluster shall not claim a frequency, area, or power limit until a library, PVT corner, SDC, and activity workload are supplied.",
+      "source": "User decision",
+      "verification": "Review of constraints and reports"
+    },
+    "REQ-VER-001": {
+      "statement": "Verification shall derive expected behavior from this specification, RISC-V architectural models, and the applicable protocol standards; generated RTL shall not be the golden reference.",
+      "source": "User direction from prior verification-flow decision",
+      "verification": "Verification-plan review"
+    },
+    "REQ-VER-002": {
+      "statement": "Each supported CPU-count/profile combination shall have an independent reproducible test target and saved command/log manifest.",
+      "source": "Project verification policy",
+      "verification": "Build-flow audit"
+    }
+  },
+  "traceability": {
+    "REQ-SYS-003": {
+      "module": "AXI top and CPU tile array",
+      "test": "TEST-032",
+      "method": "Boot-address fanout and two/four-hart startup"
+    },
+    "REQ-PERF-006": {
+      "module": "TOP → cluster core → per-hart AXI routes and PMU",
+      "test": "TEST-057–061",
+      "method": "Five full-CPU scenarios at timing profile 1, 2/4 harts; AXI channel stability/ordering and PMU event/snapshot scoreboard; compare low-latency profile reference"
+    },
+    "REQ-SYS-004": {
+      "module": "License-preserving CVA6 configuration copy and CPU tile boundary",
+      "test": "TEST-034",
+      "method": "Config delta, disabled CVXIF, no cluster ports, inactive source pins if present"
+    },
+    "REQ-MEM-001": {
+      "module": "MESI CCU and modified HPDcache",
+      "test": "TEST-002, TEST-019",
+      "method": "MESI scoreboard/formal"
+    },
+    "REQ-MEM-005": {
+      "module": "MESI CCU and probe fanout",
+      "test": "TEST-002, TEST-020",
+      "method": "Probe status and owner AXI writeback/B-response scoreboard"
+    },
+    "REQ-MEM-006": {
+      "module": "HPDcache probe control and CCU line locks",
+      "test": "TEST-021, TEST-025",
+      "method": "Same-line race and independent-line progress"
+    },
+    "REQ-MEM-008": {
+      "module": "Sharer directory and HPDcache state updates",
+      "test": "TEST-024, TEST-052",
+      "method": "Directory/reference-model refinement and no-false-negative assertions"
+    },
+    "REQ-MEM-010": {
+      "module": "Sharer directory",
+      "test": "TEST-024",
+      "method": "Geometry and non-inclusive replacement/refinement checks"
+    },
+    "REQ-MEM-014": {
+      "module": "`m_vlsit_riscv_coh_bank_arb` and sharer-directory banks",
+      "test": "TEST-033, TEST-048, TEST-053",
+      "method": "Full-table victim escape, reservation conflict cancellation, round-robin fairness, stable grant under backpressure, tree-PLRU state/victim checks, invalid-way selection, locked-victim and cross-bank progress"
+    },
+    "REQ-MEM-015": {
+      "module": "CMO controller, shared CCU context/line lock, HPDcache and LLC maintenance path",
+      "test": "TEST-038",
+      "method": "CBO operation semantics, holder transitions, no-refill behavior, DMA visibility and same-line serialization"
+    },
+    "REQ-MEM-016": {
+      "module": "Modified `axi_llc` tag, maintenance and write-response path",
+      "test": "TEST-039, TEST-040",
+      "method": "Per-line hit/miss service, B-error propagation, tag/data preservation and no premature commit"
+    },
+    "REQ-MEM-017": {
+      "module": "CVA6 CBO decode/store/commit path plus CMO controller",
+      "test": "TEST-039",
+      "method": "Precise pre-retirement fault, no younger retirement, original PC/effective address, and post-ABORT exception delivery"
+    },
+    "REQ-MEM-007": {
+      "module": "I-cache/software coherence contract",
+      "test": "TEST-022, TEST-041",
+      "method": "RISC-V per-hart executable-memory publication sequence"
+    },
+    "REQ-MEM-018": {
+      "module": "CVA6 FENCE.I controller, HPDcache owner writeback, CCU, trap path, and local I-cache/fetch invalidation",
+      "test": "TEST-041, TEST-042",
+      "method": "Success: L1-to-LLC acceptance before local fetch sync and retirement; failure: ABORT ACKs before cause-24 trap, aligned physical line base in mtval/stval, M/directory retained; no LLC-to-DRAM request"
+    },
+    "REQ-MEM-019": {
+      "module": "Sharer directory bank arbitration and reservation owner escape",
+      "test": "TEST-044",
+      "method": "CC-01 directed reproduction, cancel/update handshake, eligible-slot fairness and reservation assertions"
+    },
+    "REQ-MEM-020": {
+      "module": "CCU, sharer directory, HPDcache probe controller, AXI writeback path",
+      "test": "TEST-046",
+      "method": "Resource wait-for graph, same-line refill/probe ordering, and independent resource ownership"
+    },
+    "REQ-MEM-021": {
+      "module": "Transaction table and probe-response receiver",
+      "test": "TEST-045",
+      "method": "Stale/duplicate/mismatched ACK drain, no state mutation, subsequent valid ACK acceptance, diagnostic status"
+    },
+    "REQ-MEM-022": {
+      "module": "Bank arbiter and transaction request source",
+      "test": "TEST-048",
+      "method": "Exactly-once token consumption, stable stalled grant, VALID-low rearm, no duplicate grant"
+    },
+    "REQ-MEM-023": {
+      "module": "Transaction table, probe scheduler, owner writeback response path",
+      "test": "TEST-049",
+      "method": "Context/target-state/status retention across PREPARE/COMMIT/ABORT; matching B response gates commit"
+    },
+    "REQ-MEM-024": {
+      "module": "Probe scheduler all-target claim arbiter and per-hart phase-owner slots",
+      "test": "TEST-056",
+      "method": "Atomic all-target reservation, no split ownership, round-robin claim fairness, and disjoint-target progress"
+    },
+    "REQ-MEM-004": {
+      "module": "LLC wrapper",
+      "test": "TEST-004",
+      "method": "BIST/flush simulation"
+    },
+    "REQ-IF-008": {
+      "module": "AXI4-Lite decoder, CSR and LLC service window",
+      "test": "TEST-028",
+      "method": "Window and reserved-offset checks"
+    },
+    "REQ-IF-003": {
+      "module": "AXI top",
+      "test": "TEST-007",
+      "method": "DMA/cache-maintenance integration"
+    },
+    "REQ-IF-004": {
+      "module": "Future ACE top and proxy",
+      "test": "TEST-008",
+      "method": "Future ACE checker and snoop scoreboard"
+    },
+    "REQ-IF-006": {
+      "module": "Current AXI structural top",
+      "test": "TEST-016",
+      "method": "Port-list and elaboration audit"
+    },
+    "REQ-PMU-003": {
+      "module": "PMU snapshot bank",
+      "test": "TEST-010",
+      "method": "Snapshot scoreboard"
+    },
+    "REQ-PMU-004": {
+      "module": "PMU/IRQ CSR",
+      "test": "TEST-011",
+      "method": "Interrupt/CSR simulation"
+    },
+    "REQ-PMU-005": {
+      "module": "PMU selector scope logic",
+      "test": "Scope portion of TEST-009",
+      "method": "Per-hart/aggregate/cluster event-source tests"
+    },
+    "REQ-PMU-006": {
+      "module": "PMU event aggregation",
+      "test": "TEST-023",
+      "method": "Sum simultaneous event occurrences"
+    },
+    "REQ-IF-009": {
+      "module": "LLC PULP AXI4/AWATOP memory path and SoC atomic-service boundary",
+      "test": "TEST-036, TEST-047",
+      "method": "End-to-end cached/uncached LR/SC and AMO atomicity; exclusive/AWATOP/ID/response preservation"
+    },
+    "REQ-IF-010": {
+      "module": "AXI4-Lite-to-RegBus bridge",
+      "test": "TEST-037",
+      "method": "AW/W decoupling, strobe, backpressure and response association"
+    },
+    "REQ-IF-011": {
+      "module": "Address-region parameter adapter, per-tile CVA6 PMA configuration, CPU address router, and LLC cache window",
+      "test": "TEST-051",
+      "method": "PMA/router parity, all three region classes, LLC bypass/no-allocation, invalid-table rejection, boundary and local-error behavior"
+    },
+    "REQ-IF-012": {
+      "module": "External memory width adapter",
+      "test": "TEST-047",
+      "method": "Widths 32/64/128/256; IDs, byte lanes, ordering, responses, AWATOP/exclusive preservation"
+    },
+    "REQ-DBG-001": {
+      "module": "Debug adapter",
+      "test": "TEST-012",
+      "method": "Hart-by-hart integration"
+    },
+    "REQ-IRQ-001": {
+      "module": "CPU tile array",
+      "test": "TEST-013",
+      "method": "Interrupt routing simulation"
+    },
+    "REQ-IRQ-002": {
+      "module": "Modified CVA6 CSR read/interrupt view",
+      "test": "TEST-043",
+      "method": "External/software MIP merge and non-sticky CSR read-modify-write"
+    },
+    "REQ-CLK-001": {
+      "module": "Cluster wrapper and all interface boundaries",
+      "test": "TEST-018",
+      "method": "Clock-domain lint and CDC analysis"
+    },
+    "REQ-ERR-002": {
+      "module": "AXI/MMIO decoders and coherence request validation",
+      "test": "TEST-017",
+      "method": "Malformed address/control negative tests"
+    },
+    "REQ-PD-001": {
+      "module": "Timing/physical integration package",
+      "test": "TEST-055",
+      "method": "Review constraints and signoff reports for prohibited claims"
+    },
+    "REQ-ERR-003": {
+      "module": "Native L1/LLC B-qualified retention; first-fatal record; sticky IRQ; RO CSR",
+      "test": "TEST-050 and TEST-054; A-03/A-06 real CPU and units",
+      "method": "Directed checks pass; broad reset/traffic stress remains open"
+    }
+  },
+  "requirement_areas": {
+    "SYS": 4,
+    "PERF": 2,
+    "MEM": 24,
+    "IF": 12,
+    "PMU": 8,
+    "DBG": 1,
+    "IRQ": 2,
+    "CLK": 1,
+    "RST": 1,
+    "ERR": 3,
+    "PD": 1,
+    "VER": 2
+  },
+  "open_items": [
+    "ASM-001",
+    "ASM-002",
+    "ASM-003",
+    "ASM-004",
+    "ASM-005",
+    "ASM-006",
+    "ASM-007",
+    "DEP-001",
+    "DEP-002",
+    "DEP-003",
+    "DEP-004",
+    "DEP-005",
+    "DEP-006",
+    "DEP-007",
+    "DEP-008",
+    "DEP-010",
+    "DEP-011",
+    "DEP-012",
+    "DEP-013",
+    "DEP-014",
+    "DEP-015",
+    "DEP-016",
+    "DEP-017",
+    "DEP-018",
+    "DEP-019",
+    "DEP-020",
+    "DEP-021",
+    "DEP-022",
+    "DEP-023",
+    "DEP-024",
+    "DEP-025"
+  ],
+  "decisions": [
+    "DEC-001",
+    "DEC-002",
+    "DEC-003",
+    "DEC-004",
+    "DEC-005",
+    "DEC-006",
+    "DEC-007",
+    "DEC-008",
+    "DEC-009",
+    "DEC-010",
+    "DEC-011",
+    "DEC-013",
+    "DEC-014",
+    "DEC-015",
+    "DEC-016",
+    "DEC-017",
+    "DEC-018",
+    "DEC-019",
+    "DEC-020",
+    "DEC-021",
+    "DEC-022",
+    "DEC-023",
+    "DEC-024",
+    "DEC-025",
+    "DEC-026",
+    "DEC-027",
+    "DEC-028",
+    "DEC-029",
+    "DEC-030",
+    "DEC-031",
+    "DEC-032",
+    "DEC-033",
+    "DEC-034",
+    "DEC-035",
+    "DEC-036",
+    "DEC-037",
+    "DEC-038",
+    "DEC-039",
+    "DEC-040",
+    "DEC-041",
+    "DEC-042",
+    "DEC-043",
+    "DEC-044",
+    "DEC-045"
+  ],
+  "tests": [
+    "TEST-001",
+    "TEST-002",
+    "TEST-003",
+    "TEST-004",
+    "TEST-005",
+    "TEST-006",
+    "TEST-007",
+    "TEST-008",
+    "TEST-009",
+    "TEST-010",
+    "TEST-011",
+    "TEST-012",
+    "TEST-013",
+    "TEST-014",
+    "TEST-015",
+    "TEST-016",
+    "TEST-017",
+    "TEST-018",
+    "TEST-019",
+    "TEST-020",
+    "TEST-021",
+    "TEST-022",
+    "TEST-023",
+    "TEST-024",
+    "TEST-025",
+    "TEST-026",
+    "TEST-027",
+    "TEST-028",
+    "TEST-029",
+    "TEST-030",
+    "TEST-031",
+    "TEST-032",
+    "TEST-033",
+    "TEST-034",
+    "TEST-035",
+    "TEST-036",
+    "TEST-037",
+    "TEST-038",
+    "TEST-039",
+    "TEST-040",
+    "TEST-041",
+    "TEST-042",
+    "TEST-043",
+    "TEST-044",
+    "TEST-045",
+    "TEST-046",
+    "TEST-047",
+    "TEST-048",
+    "TEST-049",
+    "TEST-050",
+    "TEST-051",
+    "TEST-052",
+    "TEST-053",
+    "TEST-054",
+    "TEST-055",
+    "TEST-056",
+    "TEST-057",
+    "TEST-058",
+    "TEST-059",
+    "TEST-060",
+    "TEST-061"
+  ],
+  "properties": [],
+  "quantified_claims": [
+    "1.04167 ns",
+    "1.25 ns",
+    "12 bits",
+    "128 bits",
+    "16 byte",
+    "16 bytes",
+    "2 bits",
+    "256 KiB",
+    "256 bits",
+    "3 bits",
+    "32 bit",
+    "4 KiB",
+    "4 bits",
+    "4 byte",
+    "52 bits",
+    "6 bits",
+    "64 bit",
+    "64 bits",
+    "64bit",
+    "7 bits",
+    "8 byte",
+    "8 bytes"
+  ],
+  "coverage": {
+    "requirements": 61,
+    "tests": 61,
+    "properties": 0,
+    "requirements_without_test": [
+      "REQ-SYS-002",
+      "REQ-MEM-011",
+      "REQ-MEM-012",
+      "REQ-MEM-013",
+      "REQ-MEM-003",
+      "REQ-IF-005",
+      "REQ-IF-007",
+      "REQ-PMU-002",
+      "REQ-PMU-007",
+      "REQ-PMU-008",
+      "REQ-ERR-001",
+      "REQ-VER-002"
+    ],
+    "requirements_without_verification": []
+  },
+  "counts": {
+    "sections": 83,
+    "tables": 178,
+    "open_items": 31,
+    "decisions": 44
+  }
+}

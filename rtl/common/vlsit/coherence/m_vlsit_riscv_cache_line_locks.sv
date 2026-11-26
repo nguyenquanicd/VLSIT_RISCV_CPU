@@ -8,6 +8,8 @@
  * Specification: REQ-MEM-006/009/012; no timeout, and no lock-table eviction.
  * Contract     : Per-tag lock vectors gate/replay CPU accesses and victim use.
  *                Already admitted refills must drain independently of these outputs.
+ * History      : Quan Nguyen and Codex - VLSI Technology page.
+ *                DEC-045: Add optional cluster boundary timing profile support.
  */
 // 2026-11-15 - Quan Nguyen and Codex - VLSI Technology page:
 // DEC-038/A-02: separate registered native lock vectors from admission bypass.
@@ -18,6 +20,10 @@ module m_vlsit_riscv_cache_line_locks #(
   // Parameter values: 2 through 16; default is 8.
   // Parameter unit: contexts.
   parameter logic [31:0] PARA_COH_TXN_NUM = 32'd8,
+  // Parameter Description: register the release of handshake gates.
+  // Parameter values: 0 = legacy, 1 = registered; default is 0.
+  // Parameter unit: mode
+  parameter logic [31:0] PARA_REGISTER_RESET_RELEASE = 32'd0,
   localparam logic [31:0] LPARA_COH_TAG_W = (PARA_COH_TXN_NUM > 32'd1)
                                            ? 32'($clog2(PARA_COH_TXN_NUM)) : 32'd1
 ) (
@@ -48,6 +54,22 @@ module m_vlsit_riscv_cache_line_locks #(
   output logic [PARA_COH_TXN_NUM-1:0][51:0] o_line_lock_pa_line
 );
 
+  logic w_handshake_active;
+
+  // Clear immediately on reset and admit handshakes after the first active edge.
+  if (PARA_REGISTER_RESET_RELEASE == 32'd1) begin : gen_reset_release
+    logic reg_handshake_active;
+    always_ff @(posedge i_clk_cluster, negedge i_rst_n_cluster) begin : p_ff_reset_release
+      if (!i_rst_n_cluster)
+        reg_handshake_active <= 1'b0;
+      else
+        reg_handshake_active <= 1'b1;
+    end
+    assign w_handshake_active = reg_handshake_active;
+  end else begin : gen_reset_direct
+    assign w_handshake_active = i_rst_n_cluster;
+  end
+
   logic [PARA_COH_TXN_NUM-1:0] reg_lock_valid;
   logic [PARA_COH_TXN_NUM-1:0][51:0] reg_lock_pa_line;
   logic w_acquire_tag_legal;
@@ -74,10 +96,10 @@ module m_vlsit_riscv_cache_line_locks #(
           & (32'(i_acquire_tag) != 32'(slot_idx)))
         w_acquire_conflict = 1'b1;
     end
-    o_acquire_ready = i_rst_n_cluster & w_acquire_tag_legal
+    o_acquire_ready = w_handshake_active & w_acquire_tag_legal
                        & w_acquire_slot_ready & ~w_acquire_conflict
                        & ~(i_release_valid & (i_release_tag == i_acquire_tag));
-    o_diag_event = i_rst_n_cluster
+    o_diag_event = w_handshake_active
                     & ((i_release_valid & ~w_release_match)
                        | (i_acquire_valid & ~w_acquire_tag_legal));
   end

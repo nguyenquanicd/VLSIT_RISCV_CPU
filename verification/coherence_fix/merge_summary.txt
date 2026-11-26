@@ -1,0 +1,39 @@
+BUILD rv32 4h: built C:\HQuan\102_MyGithub\VLSIT_RISCV_CPU\verification\rv32_profile\build\rv32_4h_p0\Vtb_rv32_cluster.exe in 199s
+BUILD rv64 4h: built C:\HQuan\102_MyGithub\VLSIT_RISCV_CPU\verification\rv32_profile\build\rv64_4h_p0\Vtb_rv32_cluster.exe in 274s
+BUILD rv32 2h: built C:\HQuan\102_MyGithub\VLSIT_RISCV_CPU\verification\rv32_profile\build\rv32_2h_p0\Vtb_rv32_cluster.exe in 124s
+BUILD rv64 2h: built C:\HQuan\102_MyGithub\VLSIT_RISCV_CPU\verification\rv32_profile\build\rv64_2h_p0\Vtb_rv32_cluster.exe in 139s
+"tc": "TC-01", "xlen": 32, "harts": 4, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 68, "failed": 0
+"tc": "TC-02", "xlen": 32, "harts": 4, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 156, "failed": 0
+"tc": "TC-03", "xlen": 32, "harts": 4, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 152, "failed": 0
+"tc": "TC-04", "xlen": 32, "harts": 4, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 36, "failed": 0
+"tc": "TC-05", "xlen": 32, "harts": 4, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 9, "failed": 0
+"tc": "TC-06", "xlen": 32, "harts": 4, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 33, "failed": 0
+"tc": "TC-07", "xlen": 32, "harts": 4, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 15, "failed": 0
+"tc": "TC-08", "xlen": 32, "harts": 4, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 36, "failed": 0
+"tc": "TC-09", "xlen": 32, "harts": 4, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 7, "failed": 0
+"tc": "TC-10", "xlen": 32, "harts": 4, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 12, "failed": 0
+"tc": "TC-01", "xlen": 32, "harts": 2, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 34, "failed": 0
+"tc": "TC-02", "xlen": 32, "harts": 2, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 78, "failed": 0
+"tc": "TC-03", "xlen": 32, "harts": 2, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 76, "failed": 0
+"tc": "TC-04", "xlen": 32, "harts": 2, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 12, "failed": 0
+"tc": "TC-05", "xlen": 32, "harts": 2, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 9, "failed": 0
+"tc": "TC-06", "xlen": 32, "harts": 2, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 17, "failed": 0
+"tc": "TC-07", "xlen": 32, "harts": 2, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 15, "failed": 0
+"tc": "TC-08", "xlen": 32, "harts": 2, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 18, "failed": 0
+"tc": "TC-09", "xlen": 32, "harts": 2, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 7, "failed": 0
+"tc": "TC-10", "xlen": 32, "harts": 2, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 6, "failed": 0
+"tc": "TC-04", "xlen": 64, "harts": 4, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 36, "failed": 0
+"tc": "TC-05", "xlen": 64, "harts": 4, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 9, "failed": 0
+"tc": "TC-06", "xlen": 64, "harts": 4, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 33, "failed": 0
+"tc": "TC-07", "xlen": 64, "harts": 4, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 15, "failed": 0
+"tc": "TC-09", "xlen": 64, "harts": 4, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 7, "failed": 0
+"tc": "TC-10", "xlen": 64, "harts": 4, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 12, "failed": 0
+"tc": "TC-04", "xlen": 64, "harts": 2, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 12, "failed": 0
+"tc": "TC-05", "xlen": 64, "harts": 2, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 9, "failed": 0
+"tc": "TC-06", "xlen": 64, "harts": 2, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 17, "failed": 0
+"tc": "TC-07", "xlen": 64, "harts": 2, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 15, "failed": 0
+"tc": "TC-09", "xlen": 64, "harts": 2, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 7, "failed": 0
+"tc": "TC-10", "xlen": 64, "harts": 2, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 0, "verdict": "PASS", "passed": 6, "failed": 0
+BUILD pre-merge base64 4h: built C:\HQuan\102_MyGithub\VLSIT_RISCV_CPU\verification\rv32_profile\build\rv64_4h_p0_base\Vtb_rv32_cluster.exe in 245s
+PRE-MERGE-NEG "tc": "TC-07", "xlen": 64, "harts": 4, "profile": 0, "fault": 0, "boot_hi": 0, "rc": 1, "verdict": "FAIL", "passed": 5, "failed": 7
+MERGE_DONE

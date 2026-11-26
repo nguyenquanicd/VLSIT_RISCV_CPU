@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1550" height="710" viewBox="400 240 1550 710" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="400" y="240" width="1550" height="710" fill="#FFFFFF"/>
+<rect x="430" y="370" width="1280" height="450" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<rect x="1040" y="510" width="240" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1160" y="536" text-anchor="middle">reset_release_gate</text>
+<text x="1160" y="558" text-anchor="middle">(p_ff_reset_release)</text>
+<rect x="600" y="510" width="200" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="536" text-anchor="middle">request_entry_reg</text>
+<text x="700" y="558" text-anchor="middle">(p_ff_req_entry)</text>
+<rect x="1430" y="510" width="200" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1530" y="536" text-anchor="middle">grant_entry_reg</text>
+<text x="1530" y="558" text-anchor="middle">(p_ff_gnt_entry)</text>
+<rect x="1010" y="680" width="300" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1160" y="706" text-anchor="middle">probe_gate</text>
+<text x="1160" y="728" text-anchor="middle">(o_cache_probe_req_valid)</text>
+<rect x="510" y="680" width="380" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="706" text-anchor="middle">u_vlsit_riscv_cache_line_locks</text>
+<text x="700" y="728" text-anchor="middle">(m_vlsit_riscv_cache_line_locks)</text>
+<text x="1160" y="891" text-anchor="middle">PROBE TO CACHE</text>
+<text x="1160" y="913" text-anchor="middle">tag, line, phase</text>
+<text x="1835" y="706" text-anchor="middle">PROBE REQUEST</text>
+<text x="1835" y="728" text-anchor="middle">from fabric</text>
+<text x="1688" y="411" text-anchor="end">Internal functional blocks</text>
+<text x="1688" y="433" text-anchor="end">(m_vlsit_riscv_tile_coh_adapter)</text>
+<text x="1198" y="602" text-anchor="middle">GATE</text>
+<text x="930" y="696" text-anchor="middle">LOCK</text>
+<text x="733" y="602" text-anchor="middle">REQ</text>
+<text x="700" y="291" text-anchor="middle">CACHE REQUEST</text>
+<text x="700" y="313" text-anchor="middle">id, line, kind</text>
+<text x="1840" y="536" text-anchor="middle">CACHE GRANT</text>
+<text x="1840" y="558" text-anchor="middle">id, state, err</text>
+<path d="M 700 320 L 700 510" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="700,510 694,498 706,498" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1630 540 L 1760 540" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1760,540 1748,546 1748,534" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1160 740 L 1160 870" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1160,870 1154,858 1166,858" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1760 710 L 1310 710" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1310,710 1322,704 1322,716" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1160 570 L 1160 680" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1160,680 1154,668 1166,668" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 890 710 L 1010 710" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1010,710 998,716 998,704" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 700 570 L 700 680" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="700,680 694,668 706,668" fill="#000000" stroke="#000000" stroke-width="1"/>
+</svg>

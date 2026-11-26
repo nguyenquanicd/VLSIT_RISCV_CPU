@@ -1,0 +1,231 @@
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "m_vlsit_riscv_coh_txn_table_internal.drawio",
+  "layout": {
+    "gap_h": 120,
+    "gap_v": 110,
+    "margin": 80,
+    "block_h": 60
+  },
+  "top": {
+    "frame_label": [
+      "Internal functional blocks",
+      "(m_vlsit_riscv_coh_txn_table)"
+    ]
+  },
+  "frame_row": [
+    "m_vlsit_riscv_coh_txn_table",
+    "Own the lifetime and identity of each active coherence transaction.",
+    "rtl/common/vlsit/coherence/m_vlsit_riscv_coh_txn_table.sv"
+  ],
+  "frame_interfaces": [
+    "ALCI",
+    "PHSI",
+    "ACKI",
+    "CTXO"
+  ],
+  "blocks": [
+    {
+      "key": "B0",
+      "label": [
+        "slot_allocator",
+        "(p_com_coh_alloc)"
+      ],
+      "width": 200,
+      "row": 0,
+      "col": 1,
+      "row_name": "slot_allocator (p_com_coh_alloc)",
+      "function": "Find a free slot, keep the reserved victim credit, and return the new context tag.",
+      "source": "rtl/common/vlsit/coherence/m_vlsit_riscv_coh_txn_table.sv:185-198"
+    },
+    {
+      "key": "B1",
+      "label": [
+        "control_ready",
+        "(p_com_coh_ctl_ready)"
+      ],
+      "width": 260,
+      "row": 0,
+      "col": 0,
+      "row_name": "control_ready (p_com_coh_ctl_ready)",
+      "function": "Decide which release, phase-start and owner-capture requests can be taken in this cycle.",
+      "source": "rtl/common/vlsit/coherence/m_vlsit_riscv_coh_txn_table.sv:152-183"
+    },
+    {
+      "key": "B2",
+      "label": [
+        "context_registers",
+        "(p_ff_coh_context)"
+      ],
+      "width": 220,
+      "row": 1,
+      "col": 1,
+      "row_name": "context_registers (p_ff_coh_context)",
+      "function": "Per slot: valid, line, source, kind, target state, phase, expected and received masks, owner, write-back and error state.",
+      "source": "rtl/common/vlsit/coherence/m_vlsit_riscv_coh_txn_table.sv:240-332"
+    },
+    {
+      "key": "B3",
+      "label": [
+        "ack_matcher",
+        "(p_com_coh_ack_match)"
+      ],
+      "width": 260,
+      "row": 1,
+      "col": 2,
+      "row_name": "ack_matcher (p_com_coh_ack_match)",
+      "function": "Accept only a unique expected ACK for a live tag and phase; stale, duplicate or wrong-phase ACKs change nothing.",
+      "source": "rtl/common/vlsit/coherence/m_vlsit_riscv_coh_txn_table.sv:200-238"
+    },
+    {
+      "key": "B4",
+      "label": [
+        "context_status_out",
+        "(o_ctx_*)"
+      ],
+      "width": 220,
+      "row": 2,
+      "col": 1,
+      "row_name": "context_status_out (o_ctx_*)",
+      "function": "Present every slot to the probe scheduler and the fabric: masks, phase done, owner and error flags.",
+      "source": "rtl/common/vlsit/coherence/m_vlsit_riscv_coh_txn_table.sv:1-150"
+    }
+  ],
+  "connectors": [
+    {
+      "id": "ALOC",
+      "src": "B0",
+      "src_side": "B",
+      "dst": "B2",
+      "dst_side": "T"
+    },
+    {
+      "id": "CTRL",
+      "src": "B1",
+      "src_side": "R",
+      "dst": "B0",
+      "dst_side": "L"
+    },
+    {
+      "id": "ACK",
+      "src": "B3",
+      "src_side": "L",
+      "dst": "B2",
+      "dst_side": "R"
+    },
+    {
+      "id": "STAT",
+      "src": "B2",
+      "src_side": "B",
+      "dst": "B4",
+      "dst_side": "T"
+    }
+  ],
+  "externals": [
+    {
+      "id": "ALCI",
+      "block": "B0",
+      "side": "R",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "ALLOC REQUEST",
+        "line, kind, state"
+      ]
+    },
+    {
+      "id": "PHSI",
+      "block": "B1",
+      "side": "L",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "PHASE / RELEASE",
+        "start, capture, release"
+      ]
+    },
+    {
+      "id": "ACKI",
+      "block": "B3",
+      "side": "R",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "ACK",
+        "tag, phase, err"
+      ]
+    },
+    {
+      "id": "CTXO",
+      "block": "B4",
+      "side": "B",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "CONTEXT STATUS",
+        "to scheduler, fabric"
+      ]
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "ALOC",
+      "name": "Allocated slot to registers",
+      "category": "custom",
+      "active": "B0 -> B2",
+      "signals": "o_alloc_tag, i_alloc_src, i_alloc_req_id, i_alloc_pa_line, i_alloc_kind, i_alloc_target_state, i_alloc_wback_en"
+    },
+    {
+      "id": "CTRL",
+      "name": "Control ready to allocator",
+      "category": "handshake",
+      "active": "B1 -> B0",
+      "signals": "o_alloc_ready, o_release_ready, o_phase_start_ready, o_owner_capture_ready"
+    },
+    {
+      "id": "ACK",
+      "name": "Matched ACK to registers",
+      "category": "custom",
+      "active": "B3 -> B2",
+      "signals": "i_ack_tag, i_ack_phase, i_ack_err, i_ack_wback_done"
+    },
+    {
+      "id": "STAT",
+      "name": "Registers to status output",
+      "category": "custom",
+      "active": "B2 -> B4",
+      "signals": "o_ctx_valid, o_ctx_phase, o_ctx_ack_expected, o_ctx_ack_received"
+    },
+    {
+      "id": "ALCI",
+      "name": "Allocation inputs",
+      "category": "handshake",
+      "active": "in",
+      "signals": "i_alloc_valid, i_alloc_src, i_alloc_req_id, i_alloc_pa_line, i_alloc_kind, i_alloc_target_state, i_alloc_wback_en"
+    },
+    {
+      "id": "PHSI",
+      "name": "Phase and release inputs",
+      "category": "handshake",
+      "active": "in",
+      "signals": "i_release_valid, i_release_tag, i_phase_start_valid, i_phase_start_tag, i_phase_start, i_phase_expected, i_owner_capture_valid, i_owner_capture_tag, i_owner_capture_present, i_owner_capture_hart"
+    },
+    {
+      "id": "ACKI",
+      "name": "ACK inputs",
+      "category": "handshake",
+      "active": "in",
+      "signals": "i_ack_valid, o_ack_ready, i_ack_tag, i_ack_phase, i_ack_err, i_ack_wback_done"
+    },
+    {
+      "id": "CTXO",
+      "name": "Context status outputs",
+      "category": "custom",
+      "active": "out",
+      "signals": "o_ctx_valid, o_ctx_src, o_ctx_req_id, o_ctx_pa_line, o_ctx_kind, o_ctx_phase, o_ctx_ack_expected, o_ctx_ack_received, o_ctx_phase_active, o_ctx_phase_done, o_ctx_phase_err, o_ctx_owner_wback_done, o_ctx_target_state, o_ctx_wback_en, o_ctx_owner_known, o_ctx_owner_present, o_ctx_owner_hart, o_ctx_txn_err, o_ctx_owner_wback_err, o_coh_proto_diag_event"
+    }
+  ],
+  "nets": [],
+  "legend_note": "Functional decomposition of one RTL module. The module has no child instance except where a box names one, so the boxes are logic groups named after the RTL processes, generate blocks and registers cited in the source column. Arrows show the main request or data direction; responses return on the same bundle.",
+  "library_sha256": "15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"
+}

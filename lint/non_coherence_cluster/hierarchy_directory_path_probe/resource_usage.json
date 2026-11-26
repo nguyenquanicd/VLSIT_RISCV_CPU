@@ -1,0 +1,53 @@
+{
+  "schema_version": 2,
+  "commands": [
+    {
+      "command": [
+        "C:/Users/PC/Tools/oss-cad-suite/bin/verilator_bin.exe",
+        "-f",
+        "C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/lint/non_coherence_cluster/hierarchy_directory_path_probe/corrected_args.f",
+        "--Mdir",
+        "C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/lint/non_coherence_cluster/hierarchy_directory_path_probe/obj",
+        "-f",
+        "C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/lint/non_coherence_cluster/hierarchy_directory_path_probe/sources.f"
+      ],
+      "log": "C:\\HQuan\\102_MyGithub\\VLSIT_RISCV_CPU\\lint\\non_coherence_cluster\\hierarchy_directory_path_probe\\directory.log",
+      "start_ns": 1795210948555465100,
+      "start_available_bytes": 972238848,
+      "run_initial_available_bytes": 972238848,
+      "early_stop_available_bytes": 1073741824,
+      "minimum_start_available_bytes": 1073741824,
+      "max_ram_drop_bytes": 1090519040,
+      "ram_guard_margin_bytes": 0,
+      "ram_floor_bytes": 1073741824,
+      "disk_floor_bytes": 2147483648,
+      "samples": [
+        {
+          "elapsed_s": 0.0,
+          "available_bytes": 972238848,
+          "total_bytes": 16357158912,
+          "load_percent": 94,
+          "disk_free_bytes": 9821863936
+        }
+      ],
+      "status": "stopped_before_start",
+      "end_available_bytes": 972238848,
+      "minimum_available_bytes": 972238848,
+      "minimum_disk_free_bytes": 9821863936,
+      "duration_s": 0.0,
+      "stop_reason": "preflight RAM below approved hard floor (1073741824 bytes)"
+    }
+  ],
+  "minimum_available_bytes": 972238848,
+  "initial_available_bytes": 972238848,
+  "status": "stopped_by_guard",
+  "ram_floor_bytes": 1073741824,
+  "early_stop_available_bytes": 1073741824,
+  "minimum_start_available_bytes": 1073741824,
+  "max_ram_drop_bytes": 1090519040,
+  "ram_guard_margin_bytes": 0,
+  "disk_floor_bytes": 2147483648,
+  "minimum_disk_free_bytes": 9821863936,
+  "max_observed_available_ram_drop_bytes": 0,
+  "last_stop_reason": "preflight RAM below approved hard floor (1073741824 bytes)"
+}

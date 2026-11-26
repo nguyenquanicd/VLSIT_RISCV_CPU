@@ -1,0 +1,250 @@
+{
+  "doc/specification/VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS.md": {
+    "before_sha256": "75d82de832704c02e77d65fe72f3800819e9c7eac12e658c01c8eff88ee7c8af",
+    "after_sha256": "997d4170e3561a66f164265c86ae13acbb862499ff3608088e17cdbd70fdc7a9"
+  },
+  "README.md": {
+    "before_sha256": "19720de100705d7563483e170066923e70ebab5bd9bfd746530a082189657a0c",
+    "after_sha256": "884d080dbd995bb0de882845d3c1df1a343019e359d59ee6992e3f736a27a6d4"
+  },
+  "project_support/rtl_layout/modified/README.md": {
+    "before_sha256": "c11e08a220eef225ed4db935378b8c8d7d763b593192e7ebd4df76585c49446c",
+    "after_sha256": "2ba913687f187e20651ee1e952037ce243f8185d3bf6f0b34839a6d68ba9fac6"
+  },
+  "project_support/rtl_layout/vlsit/README.md": {
+    "before_sha256": "12348121017267d68d4a645b8a58afc39be5e780422b76595a37235cfc02c78c",
+    "after_sha256": "847d9618ff0c29d470eaa8340efba3f13a14f792c044e8990e169fd4ab9715e1"
+  },
+  "project_support/tools/README.md": {
+    "before_sha256": "0614d2dd00ad8c9def9950d806feeea0115edc58975a3471e9c33514353a179a",
+    "after_sha256": "12059d3087ad44b82139d852b080b0d5426516c921a683384c945e5ba92c57af"
+  },
+  "project_support/reports/atomic_coherence/README.md": {
+    "before_sha256": "836598937eef2f58537a6dce3cc9e691f0385496d3db8d3963f7c8fc11ef66d8",
+    "after_sha256": "b7a9a22d3a66519ee1d4de23331b57b090d79a45b10a5ca2ab5444740e328cc4"
+  },
+  "project_support/reports/cache_locks/README.md": {
+    "before_sha256": "8bdc1c20a11c3d89233c376b469e8e7ec14607465ee7bdbfeb89a4a06a4b29c1",
+    "after_sha256": "1e22ce0dc0cfb4c96d807fa167c3a63d038601579412ecba6d18cee858ff3089"
+  },
+  "project_support/reports/ccu_victim_escape/README.md": {
+    "before_sha256": "10a92b91a99f1baf7e7f9e4cb120d53f292b993ca72fe7f8526689ae22388011",
+    "after_sha256": "cafb69d3f195f3f9414b8b9279c0ec84d2c999b853537f8361bb2676a98939f6"
+  },
+  "project_support/reports/cluster_completeness_audit/README.md": {
+    "before_sha256": "9a03bfdaaea93c593e783f8d8665d4f074c6c1420c2c464cf320641d41a7a942",
+    "after_sha256": "173864d92d04c86407122719a4d971b34b73b31863e294476c19a5e6d906648b"
+  },
+  "project_support/reports/cmo_end_to_end/README.md": {
+    "before_sha256": "204eb988db631921a68a8bf1fbcb564df52af864eddd56d5061770059607646e",
+    "after_sha256": "498da13b317370e7a9b2be8ca168681d55aaccb709e9ea8617f2c101e33fbb46"
+  },
+  "project_support/reports/cmo_metadata/README.md": {
+    "before_sha256": "fbec134b31deca03f2e84156bcbda8047607bc868f8daa3b23cb65f63cdc9777",
+    "after_sha256": "434923e5172277cb6d6c69c6b498d1c8506157b4bfb9cb06d672b4890fad8425"
+  },
+  "project_support/reports/cmo_tile/README.md": {
+    "before_sha256": "9fe9bf1a184e7790d8a5fe1640def22cf9bda8b6e88ff84c2e0b105349e12286",
+    "after_sha256": "cd94bd52eec5ed4726b46a445c12c83d1a185bdd58fc60e7120ad26c4cf575fd"
+  },
+  "project_support/reports/directory_holder_lifecycle/README.md": {
+    "before_sha256": "b1ded89ce65b34e56f9d38870dc34f1c743939d2330c0f7c46ddf0b729aac94c",
+    "after_sha256": "c9367e8f32c6afb0c87421b8366da2904d50c59222223dab4485ffacb331ed63"
+  },
+  "project_support/reports/e_to_m_fix/README.md": {
+    "before_sha256": "bfe001b3173e66156b630826b295a874ae6bb78dcf9aca2e35fed98d5b1b7b17",
+    "after_sha256": "7464d940a007e87ae5b369f647457b0d9bc036266ce6b69029704b05c4c394ff"
+  },
+  "project_support/reports/fault_record_a06/README.md": {
+    "before_sha256": "31aae5503bd020a87caabdf97a461021d2e54c63ab39f7468014f7e64c14aedf",
+    "after_sha256": "485ec4cac4ec4e54c4fff9daf912ce32effd4fb0f47c0ee5892e2deb3966d0dd"
+  },
+  "project_support/reports/fence_i/README.md": {
+    "before_sha256": "bc6d8ce6bd773b78d4ae4b5de2b8f8053cd9779ba0b215ce00885d93c92929ea",
+    "after_sha256": "d3c223861313dd60cad6c1cec74b053e18cda0a3536481e5484c951410df7a9d"
+  },
+  "project_support/reports/fpu_warning_fix/README.md": {
+    "before_sha256": "29d3b75c52e273d9ca9bc51ec15ec1e5d12cee93af3dadedd0512b244b323fac",
+    "after_sha256": "3fe169850813c20ae68956e15071a5bc6ea8117799c63074ba7c0c41a78d84c5"
+  },
+  "project_support/reports/full_integration/README.md": {
+    "before_sha256": "2086f0a07d5ff68c0b6085056c97ec9a292f9bf5e963dd4d6238fd8488995f0c",
+    "after_sha256": "57503f644f055550aa297135cb1b75870db5f40a47beab8d05b53a857c8c307b"
+  },
+  "project_support/reports/hpdcache_flush/README.md": {
+    "before_sha256": "fd42ae9ec7b7bdd4a41dac772584bdfff1f85fbabac8df055bf734e2bafc7402",
+    "after_sha256": "26a027984f6f717348e6cd025a905ccebf9a7b5d7ad3eaa8bb1d728d14464b57"
+  },
+  "project_support/reports/l1_eviction_retention/README.md": {
+    "before_sha256": "6dc052d56823329274479eab679537b009228f3ff0fa48414dbd1b95d3ad2a93",
+    "after_sha256": "a1d804654b72a49b00ad6290c3ab4da727bc3061e8b71ed8c37aaab68edb2a47"
+  },
+  "project_support/reports/lint_cleanup/README.md": {
+    "before_sha256": "db83bbc0471a138a3639697bb53014be8001dca3cfc9c73b2c45a2702fc293e5",
+    "after_sha256": "70024300c9cfa0b363852e21c9278dde1e8122af778c88cb1703bbf602ec0deb"
+  },
+  "project_support/reports/llc_wrapper/README.md": {
+    "before_sha256": "a14bb6621bcb842a4926e5966229577240309ca9f00790b8cd77e5137e567dd4",
+    "after_sha256": "67109112efcba2714d2b3fba1397e640023ae716b7bc15f44b130f6d94bdcf3d"
+  },
+  "project_support/reports/mmio/README.md": {
+    "before_sha256": "877409fd668a7dc56d35f66dfb0aa4e5f54c972a91d21f8018074273358b1b71",
+    "after_sha256": "10aceb1f8690bf809bd7384cbcfc9e3e0069db1e53aa0754a06d429b598ac89c"
+  },
+  "project_support/reports/post_a06_cluster_audit/README.md": {
+    "before_sha256": "35d922c21fe1714fd854b024cbee59de1bee3aecb6584d049201e83376662f1f",
+    "after_sha256": "26eb8fe33da5106e8d0b36f03cc4fb431140e9d1a49cba8dc4b8492577fcc1ed"
+  },
+  "project_support/verification/common/README.md": {
+    "before_sha256": "726d987a0004e296086be94b6b81bcc17f33b82424c9b2e5871f3fde2647399c",
+    "after_sha256": "4c7ea4cbbaa4609063a56a6e8c5ce78565b327958c357e2488b557ee9f3fbbca"
+  },
+  "project_support/verification/common/addr_region_table/README.md": {
+    "before_sha256": "4838e50df31f7cfe2fdeb72e9954f88f0a346388fbf5c2453968eb3fbd557225",
+    "after_sha256": "77c55ba12def9374ff1729c748f47e53fefb80470731a366d84d4d43139cbe29"
+  },
+  "project_support/verification/common/axi_dw_adapter/README.md": {
+    "before_sha256": "a51e12ed6daa15601e00b4ce31b1b295114b7c20ae2855db82d6170399277f32",
+    "after_sha256": "c3fefe6b2c64aac1e2e39848f9dc0dc023183977247ac54ca946650bc6bb965e"
+  },
+  "project_support/verification/common/axi_mem_mux/README.md": {
+    "before_sha256": "7c66b12a9f6bc824d9a20b126304a7d90c015f3aff028da75598fd44186bc301",
+    "after_sha256": "bc31a2a498e585a21962fbea2be79d2814cd93c378322e0044d456bee0f49a5d"
+  },
+  "project_support/verification/common/axi_region_route/README.md": {
+    "before_sha256": "6403e6df17633759c2863d965e98bb9867787bf476a172490b6b313f0f67e771",
+    "after_sha256": "9d8ce11ac20101f9a3b2dafbb824ec746e2d391337f252fdb198c17d9f41154c"
+  },
+  "project_support/verification/common/cmo_controller/README.md": {
+    "before_sha256": "333871b5a985b459087e3afd191dc726ac2f1899b4715d966d5e4e4b9fe2b347",
+    "after_sha256": "26bb5ce3cb5c75ce5cb18e4c58b6a6ff1ec6c5aa5c5fe40ff7c40fbed5c315f6"
+  },
+  "project_support/verification/common/cmo_metadata/README.md": {
+    "before_sha256": "7d6ed1f6f89207997e951e21054825b0fa2d3a24b52e72514cc5d218c76c5f69",
+    "after_sha256": "59ec2ffdf411377e21d4ba88d714964aa2510b32c3626e06fc77674943710200"
+  },
+  "project_support/verification/common/coherence/README.md": {
+    "before_sha256": "b6025d3806f54d89a6c4e2829c3c86d8d4d48f0d4764e4eee0a15ace44069941",
+    "after_sha256": "bda9bddc2d2790d7f67a85ab5b56cf9e8d3e72a57c72415fc04c2f31f24759eb"
+  },
+  "project_support/verification/common/coh_tile_array/README.md": {
+    "before_sha256": "761d60a13dc53ecc95a5c3b26dbb881bfff83868c69cbb8703e67bd1d80dc96d",
+    "after_sha256": "208ed308e97b861f21922edf7afaeaa4a1de406bd4881d0bf07d3d9c1b898a5b"
+  },
+  "project_support/verification/common/hpdcache_ownership/README.md": {
+    "before_sha256": "b03378866acb121e04cdf81bbbb0883390784ff6b3d5cab3f3cfd43e30b66685",
+    "after_sha256": "ebdf1c1378ba911cc109fe3e007688c7d8b8c5e12be836d8bc79d3bb764f3706"
+  },
+  "project_support/verification/common/hpd_probe_engine/README.md": {
+    "before_sha256": "b8a2a3b6e1b8392562e1291a8e67deebf66903a1c792cd2496c31701e5b23451",
+    "after_sha256": "71d3d58fe6a5945661fb8490555cfb8b11aeee8788d437d603e2fcb4bac409e1"
+  },
+  "project_support/verification/common/tile_coh_adapter/README.md": {
+    "before_sha256": "c67ec3c9b51278bc8e5bf408afb4c82feae6f78d3c3c84e4d3db4fa9c6b25d2b",
+    "after_sha256": "eb0a71165e8156a5bac2413447a3968798ff1095b64ab20330e7e4c29ced9f2c"
+  },
+  "project_support/verification/non_coherence_cluster/atomic_end_to_end/README.md": {
+    "before_sha256": "9cdfa93df6689a9f8a14ba4b89a73d0db5131fd64006a44a496708396bf3f388",
+    "after_sha256": "a9913188785d4c1a4a810d448e7c0fe247ea885beca784a9d0ebe4580157df1b"
+  },
+  "project_support/verification/non_coherence_cluster/ccu_victim_escape/README.md": {
+    "before_sha256": "c17364843bb08d5e0f8ed0eaf3b0050f8a72f80020f00515b85b583d61f8cc20",
+    "after_sha256": "e1aa8b405b22042d073360c94f3f501202b774c2415a5dcd28e1997c1d5a152c"
+  },
+  "project_support/verification/non_coherence_cluster/cluster_completeness_audit/README.md": {
+    "before_sha256": "71caefda4c2ba652cd9924101cf29851be610cc72d21bc0d696647d41708cf43",
+    "after_sha256": "85de0e76196c8e2f28823cb0a93a055875133648d07dd59d04055f48126196be"
+  },
+  "project_support/verification/non_coherence_cluster/cmo_end_to_end/README.md": {
+    "before_sha256": "21bf606665b312070590eedd126ea721d781ba1110d133940ab2b6a0eaa496e9",
+    "after_sha256": "c522a1f8a59119534d1c6291fff7edfc5c49a65219ea2d669e7d66e23b50b382"
+  },
+  "project_support/verification/non_coherence_cluster/directory_holder_end_to_end/README.md": {
+    "before_sha256": "d657fc5d532ce76349ac5aca11cd4a3a76d33d532afdaa55e95e29e620178bb9",
+    "after_sha256": "f936d3591604a039dcd0a10a35650cc4924c075b7de850698a13a1868573aa70"
+  },
+  "project_support/verification/non_coherence_cluster/e_to_m_fix/README.md": {
+    "before_sha256": "5e5d46946d90424e6165248c7d66cf83c26e471d55d0275b749b3e762c7fc412",
+    "after_sha256": "3bc9b6a3158658b727d1c46d9bfe3204b65824ac7d329477b4cf0647749be79b"
+  },
+  "project_support/verification/non_coherence_cluster/fault_record_a06/README.md": {
+    "before_sha256": "f1ffb83e48a4d67ee86e17c41180b7ba443ac16dd7b07392b49d9b2655ea936a",
+    "after_sha256": "02eacf353050d060125e066a60700b8cbec0479551baa9056e5673f8544a6380"
+  },
+  "project_support/verification/non_coherence_cluster/fence_i_end_to_end/README.md": {
+    "before_sha256": "81cbade1db46215abba39478f9544d8e15c258028a3101eb6cee4a5d78e00678",
+    "after_sha256": "a247e85095e504d1d61e988f2d92b692e2673e0ac91fc396cda5a0ed80e19eef"
+  },
+  "project_support/verification/non_coherence_cluster/fpu_warning_fix/README.md": {
+    "before_sha256": "2399e75d28841225b9680be5d405ad6878b033f8abc2fbd4d5744ef3c2ab0438",
+    "after_sha256": "dcd9690bbb90ecad160e050cc0385cd3aa7bc18e13afcd6cd0188833e797236e"
+  },
+  "project_support/verification/non_coherence_cluster/l1_eviction_end_to_end/README.md": {
+    "before_sha256": "c0e15379f84e0029e86eaabbc6ee66191a298cadbe9bdce93eca2266cdc1043f",
+    "after_sha256": "b60feb8b95b1320d4aa3f41fc15b6760c6556fdb64d276fb9539fdff744ff11b"
+  },
+  "verification/plan/README.md": {
+    "before_sha256": "f56ffc1ee80205f2216f345c9ec15433158d7bc28f5fc546691d768fd5d37460",
+    "after_sha256": "94e36ee150700421f58794b2d911aea5e7dfc8c9ce48032a9ac5352892c2e584"
+  },
+  "verification/sim/docs/00_plan/README.md": {
+    "before_sha256": "f56ffc1ee80205f2216f345c9ec15433158d7bc28f5fc546691d768fd5d37460",
+    "after_sha256": "7cb759e583d9434de5feef5eef8ddd7017304fef7dfa8274beb3898c304aba19"
+  },
+  "verification/sim/README.md": {
+    "before_sha256": "e9a2d5120780156b78e7d2e9c218cfd702471073821456f03c8036d73bbb53a5",
+    "after_sha256": "0e104645f3126ebe5af0c307f48cdb9ef6432703b0a39d202573084e2cb09457"
+  },
+  "project_support/third_party/cva6/config/gen_from_riscv_config/README.md": {
+    "before_sha256": "ee05d6c0eb8eea74329f88d17f12db736610a13bf23980b51ca8a52c339d16a3",
+    "after_sha256": "82b0840f8bf8e3defcf58e81920fcf275c0fb5531128438a0511306553dbe9ef"
+  },
+  "project_support/third_party/culsans_cva6_pinned/README.md": {
+    "before_sha256": "a659d05a1f66de6132ed1d7cfd63ec35daa5f04825ecbbc818ee3e542ae94fb4",
+    "after_sha256": "eb52f3c5daca6fc749d737235f95fec37d66a83dec49cef0ae7aa8b7f9d6ca9c"
+  },
+  "project_support/maintenance/layout_migration/README.md": {
+    "before_sha256": "70036f02d988d1a770fdbff8f68a422146aea5b2d2e7673a9760b74fba49d980",
+    "after_sha256": "1c7fb6081b97777bb7803eab4d9159ffaca4d1bd02c1ac8959db804bf6da8e28"
+  },
+  "project_support/third_party/cva6/README.md": {
+    "before_sha256": "60c88cc173bad8238dc92a344ec2116d501db07ca190187d117ae44e8504359a",
+    "after_sha256": "6a0c9ce3c352821a399fafa92eac44bd701ca7d051f96d5469642f7c04cc3141"
+  },
+  "project_support/third_party/cva6/verif/README.md": {
+    "before_sha256": "24e9db14c1c21a4a71b8acd302b3520ea6fed3c4b72c01cf1f6f3862982767df",
+    "after_sha256": "9a63598792f0447a7c93b804cf7230c618c57c705788a6f4af3a6df3d1e82ac3"
+  },
+  "project_support/third_party/hpdcache/README.md": {
+    "before_sha256": "4eedab116fe5b5f12765e4ddbe41ac7cdbd52cb3c00206b753d586ac330fb907",
+    "after_sha256": "093f63d9011fdad7d2fe7d6c492a0abc47258bc5e58f348e5fdb81b29d6ebce8"
+  },
+  "project_support/third_party/hpdcache_cva6_pinned/README.md": {
+    "before_sha256": "a4fc7457157814e89b0c99a1df142af38a12988fae8c470c37eb1af4a047c71d",
+    "after_sha256": "d092d1b1fdfcfef1373d95683dcb35196d7a95ef56bff9ad9009f3ef6172f493"
+  },
+  "project_support/third_party/hpdcache/rtl/tb/qemu_plugin/README.md": {
+    "before_sha256": "a03044565c0f80aa0cd02596db29b3cc0c884df9a1b732ba6709c5b32b89e421",
+    "after_sha256": "c252ed8b50bcf18b11b9bf550bdc5432c4650a4a4dd35ada204a82820c2f6215"
+  },
+  "project_support/third_party/hpdcache_cva6_pinned/rtl/tb/qemu_plugin/README.md": {
+    "before_sha256": "0c5f0c02ba3ca1f91f57912d93557a8d4bbc93a9df1ad153add70e5f13866a85",
+    "after_sha256": "c252ed8b50bcf18b11b9bf550bdc5432c4650a4a4dd35ada204a82820c2f6215"
+  },
+  "project_support/third_party/cva6/corev_apu/instr_tracing/README.md": {
+    "before_sha256": "f143e64928bd1fbed65cbbc2255f68aed1a326e8a35f91ca1b808b00e38d3066",
+    "after_sha256": "e6f910ca25a71ab7506d64fa7a79cc785fcfccc935093312cd9696084506946a"
+  },
+  "project_support/README.md": {
+    "before_sha256": "ab32f1658f49452ad71886f6bdce0de9c1c771720532c728431fa8f3257e047e",
+    "after_sha256": "048561c993020cd623da93bd99b161a350afa29771f801e5ba3aa121cf5ad625"
+  },
+  "project_support/third_party/README.md": {
+    "before_sha256": "7d7382217f1193b891888614e64cde70d6d7bf6fea48040c4e49bf1069cbd53f",
+    "after_sha256": "2b769a37f51211397843e8f3ef5ea93b227e9ffee32032d34ee57c91fb2d1b3b"
+  },
+  "project_support/documentation_audit_20261116/README.md": {
+    "before_sha256": null,
+    "after_sha256": "7dec57437f77972fb25e3aee828d022b5fb163f8c4a3291cd645e72e7d110aa9"
+  }
+}

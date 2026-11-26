@@ -1,0 +1,387 @@
+{
+ "ip": "VLSIT RISC-V Dual/Quad CPU Cluster",
+ "reviewed_spec": "doc/specification/VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS.md",
+ "date": "2026-11-20",
+ "areas": [
+  {
+   "id": "application_fit",
+   "weight": 1.0,
+   "score": 3,
+   "justification": "The deployment table names an industrial Linux SMP gateway and the excluded list is explicit, but §1.2 states the application is proposed and not user-confirmed and §1.4 values are proposals."
+  },
+  {
+   "id": "features",
+   "weight": 1.0,
+   "score": 4,
+   "justification": "Eleven FEAT rows each map to a requirement; only the deferred ACE configurations blur the scope."
+  },
+  {
+   "id": "functions",
+   "weight": 1.5,
+   "score": 3,
+   "justification": "Coherence, CMO and FENCE.I are specified down to phases and error order, and DEC-043 closes the circular wait, but fairness of the atomic claim and the directory sizing are open."
+  },
+  {
+   "id": "interfaces",
+   "weight": 1.5,
+   "score": 3,
+   "justification": "AXI4, AWATOP and AXI4-Lite contracts are declared with deviations, but the external interrupt to CVA6 mapping and PPROT policy are not specified."
+  },
+  {
+   "id": "clock_reset_cdc",
+   "weight": 1.5,
+   "score": 3,
+   "justification": "One synchronous clock and a coordinated reset contract are clear; reset used as handshake data, WFI and clock gating versus probes, and reset-only fatal recovery are not governed."
+  },
+  {
+   "id": "parameters",
+   "weight": 1.0,
+   "score": 3,
+   "justification": "§8.1 bounds every parameter, but profile 2 and the internal directory switch are missing from it and no elaboration-time legality check exists."
+  },
+  {
+   "id": "data_representation",
+   "weight": 0.5,
+   "score": 4,
+   "justification": "§9 gives widths, encodings and truncation for every quantity; only the profile-dependent PMU skew is undefined."
+  },
+  {
+   "id": "asic_feasibility",
+   "weight": 1.5,
+   "score": 2,
+   "justification": "The acceptance target in DEC-045 is not reachable by the measured design and the directory has no macro-replaceable storage boundary."
+  },
+  {
+   "id": "sdc_timing",
+   "weight": 1.5,
+   "score": 2,
+   "justification": "§17 has no clock period, no I/O budget and no exception, while the real flow uses 1.04167 ns with 40 percent I/O delays."
+  },
+  {
+   "id": "area_power",
+   "weight": 1.0,
+   "score": 2,
+   "justification": "No area or power proxy is stated although synthesis shows the directory at 56 percent of the logic area; REQ-PD-001 defers all numbers."
+  },
+  {
+   "id": "performance",
+   "weight": 1.5,
+   "score": 2,
+   "justification": "§13 lists cases and formulas but no cycle, latency or throughput value, and the profiles add latency without a number."
+  },
+  {
+   "id": "software_ease",
+   "weight": 1.0,
+   "score": 3,
+   "justification": "The workbook and the §11.2 flow are usable; there is no version or configuration register and no hart start control."
+  },
+  {
+   "id": "dft",
+   "weight": 1.0,
+   "score": 2,
+   "justification": "§16 delegates scan, MBIST and ATPG to the SoC; the top has no test port and the LLC test enable is tied to zero."
+  },
+  {
+   "id": "security_ras",
+   "weight": 1.0,
+   "score": 2,
+   "justification": "No ECC or parity decision, PPROT policy open, reset-only fatal recovery and no timeouts; no safety claim is made."
+  },
+  {
+   "id": "verification_quality",
+   "weight": 1.5,
+   "score": 3,
+   "justification": "61 tests are traced, but there are no named properties, no coverage threshold and the OPEN-DV areas hid real defects."
+  },
+  {
+   "id": "documentation",
+   "weight": 0.5,
+   "score": 3,
+   "justification": "Identifiers, decisions and a traceability matrix exist; REQ-PERF-007 is untraced, 31 open items carry no owner or date and the document is 9.7k lines."
+  },
+  {
+   "id": "integration_effort",
+   "weight": 1.0,
+   "score": 3,
+   "justification": "Contracts exist in many sections; no single integration checklist lists the SoC obligations."
+  },
+  {
+   "id": "market_position",
+   "weight": 1.0,
+   "score": 3,
+   "justification": "Coherent multicore with a shared LLC is in line with commercial Linux clusters, but I/O coherence, L2 ECC and a frequency claim are missing."
+  }
+ ],
+ "findings": [
+  {
+   "id": "F-001",
+   "area": "asic_feasibility",
+   "severity": "Blocker",
+   "label": "FACT",
+   "locator": "§20 DEC-044/DEC-045, §8.3, REQ-PD-001",
+   "title": "Acceptance target is unreachable by the measured design",
+   "detail": "DEC-045 requires timing checks at 1.25 ns and 1.04167 ns while DEC-044 forbids any change to the CVA6 pipeline; the synthesis report of dual_gf55_800.zip shows a 3.40 ns critical path of 46 cells (WNS -2.47 ns, 312,168 failing endpoints) and the CVA6 internals alone sit at about 3.4 ns.",
+   "action": "Replace the fixed targets by a period sweep (2.0 to 3.5 ns) and record the accepted period per corner; separate the PPA target from the timing-profile mechanism."
+  },
+  {
+   "id": "F-002",
+   "area": "sdc_timing",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "§17.1, DEP-007",
+   "title": "No interface timing budget or executable constraint in the specification",
+   "detail": "§17.1 says no SDC can be written and leaves the period and I/O delays to the SoC, but the flow uses create_clock 1.04167 ns, 1 percent uncertainty and 0.4167 ns input and output delay, which leaves 0.208 ns for an input-to-output path and about 0.5 ns for input-to-register paths.",
+   "action": "Add an interface timing contract: every output from a flop, no combinational input-to-output path, and a stated budget per port group."
+  },
+  {
+   "id": "F-003",
+   "area": "clock_reset_cdc",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "§7.3, §8.3, REQ-RST-001",
+   "title": "Reset is used as handshake data and nothing forbids it",
+   "detail": "The RTL derives the ready and valid enable directly from the reset pin in profiles 0 and 1 (w_handshake_active = i_rst_n_cluster, tile_coh_adapter.sv:136 and axi_route.sv:425); only profile 2 registers the release (§8.3). The report shows i_rst_n_cluster as the start point of an input-to-register path (-2.16 ns) and of an input-to-output path (-0.60 ns).",
+   "action": "Add a rule that the reset port never appears in a ready or valid expression, and register the release in every profile."
+  },
+  {
+   "id": "F-004",
+   "area": "verification_quality",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "REQ-PERF-007, §15.2 TEST-057 to TEST-061, §19",
+   "title": "REQ-PERF-007 is untraced and its tests run only profile 1",
+   "detail": "REQ-PERF-007 cites TEST-057 to TEST-061 on profiles 0 and 2, but the five tests are written for profile 1 and §19 has no row for REQ-PERF-007.",
+   "action": "Parameterize the five tests over profiles 0, 1 and 2 and add the REQ-PERF-007 row."
+  },
+  {
+   "id": "F-005",
+   "area": "parameters",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "§8.1, REQ-PERF-006, REQ-PERF-007",
+   "title": "Parameter table lists two timing profiles; RTL and §8.3 use three",
+   "detail": "§8.1 gives PARA_TIMING_PROFILE as 0 or 1 while §8.3, DEC-045 and RTL (LPARA_TIMING_PROFILE_BOUNDARY = 2) define profile 2; the RTL also adds PARA_DIR_SYNC_READ, driven from profile 2, which no section documents.",
+   "action": "Update the §8.1 legal range and document PARA_DIR_SYNC_READ as internal or public."
+  },
+  {
+   "id": "F-006",
+   "area": "asic_feasibility",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "§8.3, DEP-013, REQ-MEM-010",
+   "title": "Directory storage is inline flops, not a macro-replaceable RAM",
+   "detail": "§8.3 says the directory uses synchronous 1RW storage per way with macro mapping left to synthesis, but the RTL keeps the arrays as reg_entry inside m_vlsit_riscv_sharer_directory with no RAM module boundary; synthesis maps them to 206,600 flops (74 percent of 280,306) and 2.82 mm2 (56 percent of 4.998 mm2).",
+   "action": "Add a RAM wrapper module with a fixed interface and keep valid, PLRU and reservation in flops."
+  },
+  {
+   "id": "F-007",
+   "area": "area_power",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "§13, REQ-PD-001",
+   "title": "No area or power proxy although a mapped number exists",
+   "detail": "§13 states that no area or power figure is available. The synthesis report gives a mapped number (ARM sc12 55LPx RVT, ss_nominal_max_1p08v_125c, Design Compiler X-2025.06-SP5): 4.998 mm2 and 280,250 sequential cells for two harts, with every SRAM macro excluded.",
+   "action": "Record a proxy table (flip-flop counts per block, storage bits) and the mapped number with its library and corner."
+  },
+  {
+   "id": "F-008",
+   "area": "performance",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "§13, REQ-PERF-006, TEST-046",
+   "title": "Performance is stated as cases and formulas with no value",
+   "detail": "Every row of the §13 table is qualitative, the profiles add 'registered latency' with no cycle count, and TEST-046 only reports observed values.",
+   "action": "Add measured cycles for hit, clean miss, dirty-owner transfer and CBO, and the latency delta of each profile."
+  },
+  {
+   "id": "F-009",
+   "area": "application_fit",
+   "severity": "Major",
+   "label": "INFERENCE",
+   "locator": "FEAT-010, §1.4, REQ-MEM-015",
+   "title": "Gateway DMA depends on 16-byte CBO with no throughput budget",
+   "detail": "The application hands network buffers to non-coherent DMA through per-line CBO operations on 16-byte lines (FEAT-010); a 1500-byte packet needs about 94 operations, each a serialized CCU transaction, and no section gives a rate requirement or a limit on this cost.",
+   "action": "Add a CBO throughput requirement or decide an I/O-coherent port (OPEN-ACE-MAP)."
+  },
+  {
+   "id": "F-010",
+   "area": "interfaces",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "§6 i_int_meip, REQ-IRQ-001, TEST-013",
+   "title": "External interrupt to CVA6 mapping is not specified",
+   "detail": "The interface table names per-hart MEIP and SEIP inputs and TEST-013 checks only that each vector reaches the addressed hart; no requirement ties i_int_meip to mip.MEIP and i_int_seip to mip.SEIP. The RTL had the two swapped at the CVA6 boundary (irq_i); the current source carries a correction.",
+   "action": "Add the mapping requirement and a test of mip.MEIP, mip.SEIP, delegation and WFI wake-up."
+  },
+  {
+   "id": "F-011",
+   "area": "software_ease",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "§11.5, OPEN-ABI, REQ-SYS-003",
+   "title": "No version or configuration register and no hart start control",
+   "detail": "§11.5 records that the ABI has no version register at offset zero; firmware cannot read the hart count, the profile or the LLC geometry, and REQ-SYS-003 starts all harts at one boot address so software must park them by mhartid.",
+   "action": "Add a read-only version and configuration register and decide whether a hart-start control is in scope."
+  },
+  {
+   "id": "F-012",
+   "area": "parameters",
+   "severity": "Minor",
+   "label": "FACT",
+   "locator": "REQ-SYS-001, §8.1",
+   "title": "No elaboration-time legality check of parameters",
+   "detail": "REQ-SYS-001 says the cluster shall elaborate only for 2 or 4 harts, but no source under rtl/non_coherence_cluster or rtl/common/vlsit/{cpu,coherence} contains an elaboration error, and the active-hart masks treat any value other than 2 as 4.",
+   "action": "Add generate-time checks for every §8.1 parameter."
+  },
+  {
+   "id": "F-013",
+   "area": "functions",
+   "severity": "Major",
+   "label": "INFERENCE",
+   "locator": "§15.2 TEST-056, §20 DEC-043, REQ-MEM-024",
+   "title": "Atomic probe-slot claim can starve a wide-mask context",
+   "detail": "A PREPARE context is granted only when every slot in its mask is free; narrow contexts can claim single slots again and again, so a context needing three or four slots may never find them all free; the round-robin pointer orders contexts but does not reserve slots, and TEST-056 covers one two-context case.",
+   "action": "Add an aging rule and a fairness property for the wide-mask claim."
+  },
+  {
+   "id": "F-014",
+   "area": "performance",
+   "severity": "Major",
+   "label": "INFERENCE",
+   "locator": "REQ-MEM-010, DEC-014, §13",
+   "title": "Directory capacity equals the L1 D-cache capacity",
+   "detail": "The directory holds PARA_CPU_NUM x 2,048 entries, the same count as the private D-cache lines; any set conflict forces a replacement that invalidates a live L1 line, and stale-positive holders (REQ-MEM-008) occupy entries, yet no section quantifies the extra invalidations.",
+   "action": "Measure conflict invalidations and decide an over-provision factor, now cheap once the storage is a RAM."
+  },
+  {
+   "id": "F-015",
+   "area": "security_ras",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "§18, §12, DEP-013",
+   "title": "No ECC or parity decision for L1, LLC and directory",
+   "detail": "§18 makes ECC depend on macros and tool flow, the selected CVA6 configuration sets DcacheEccEnable to 0, and an industrial gateway is the stated application; a detected memory error has no defined path other than the reset-only fatal record.",
+   "action": "Decide ECC or parity per array and record the error response."
+  },
+  {
+   "id": "F-016",
+   "area": "security_ras",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "§3.1 REQ-MEM-013, §3.1 REQ-ERR-003, §20 DEC-018",
+   "title": "No timeout and reset-only recovery: one stuck hart stops the cluster",
+   "detail": "PREPARE, COMMIT and ABORT have no acknowledgement timeout (REQ-MEM-013); an ordinary dirty-eviction error is recoverable only by reset (REQ-ERR-003); there is no per-hart reset, so a missing response holds a slot and line lock until the whole cluster resets.",
+   "action": "Keep the approved decision and require a SoC watchdog that resets the cluster."
+  },
+  {
+   "id": "F-017",
+   "area": "dft",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "§16, REQ-PD-001",
+   "title": "All DFT is delegated to the SoC and the top has no test port",
+   "detail": "§16 leaves scan, MBIST and ATPG to the SoC; the top exposes no scan or test-enable port, the LLC test enable is tied to zero (cluster_core.sv:93, 967), the flow uses automatic clock gating with PREICG cells, and §16 requires test-enable behavior for any gating without defining the port.",
+   "action": "Define the DFT hand-off: test-enable port, scan clock and reset handling, MBIST interface for L1, LLC and directory RAM."
+  },
+  {
+   "id": "F-018",
+   "area": "security_ras",
+   "severity": "Minor",
+   "label": "FACT",
+   "locator": "§18, DEP-006",
+   "title": "PPROT and debug authorization policy undecided",
+   "detail": "§18 states PPROT handling must be configured explicitly but no decision exists, so any AXI4-Lite master can flush the LLC or change the PMU; DEP-006 leaves debug authorization to the SoC.",
+   "action": "Choose a PPROT rule for the control windows."
+  },
+  {
+   "id": "F-019",
+   "area": "interfaces",
+   "severity": "Minor",
+   "label": "INFERENCE",
+   "locator": "REF-007, §2.1",
+   "title": "Debug specification revision is 0.13.2",
+   "detail": "REF-007 pins the RISC-V Debug Specification 0.13.2, while a later ratified 1.0 revision adds halt groups and per-hart reset; the specification does not say which later features are out of scope.",
+   "action": "State the revision basis and the excluded features."
+  },
+  {
+   "id": "F-020",
+   "area": "documentation",
+   "severity": "Minor",
+   "label": "FACT",
+   "locator": "§20 ASM and DEP tables, §21",
+   "title": "31 open items without owner or date; a 9.7k-line single document",
+   "detail": "The inventory finds 31 open items (ASM-001 to ASM-007, DEP-001 to DEP-025) with a status text but no owner or due date; the document is about 9,700 lines, and the revision history sits only in the preface.",
+   "action": "Add owner and date columns and a revision table."
+  },
+  {
+   "id": "F-021",
+   "area": "verification_quality",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "§15.3, §15.4",
+   "title": "No named properties and no coverage threshold",
+   "detail": "The inventory finds no property identifiers; §15.3 lists required assertions in prose and states that coverage thresholds are not yet selected, while §15.4 names formal and liveness analyses with no property list.",
+   "action": "Assign PROP identifiers, link them to requirements and set the coverage thresholds."
+  },
+  {
+   "id": "F-022",
+   "area": "verification_quality",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "§15.1, OPEN-DV",
+   "title": "Features marked Required are verified by lint only",
+   "detail": "OPEN-DV lists PMU, native LLC service, MMIO and uncached ATOP, IRQ, debug and WFI and random coherence as not yet functionally closed; the earlier interrupt swap and the LLC bridge double response were in exactly these areas.",
+   "action": "Make a functional test a sign-off condition for each Required feature."
+  },
+  {
+   "id": "F-023",
+   "area": "clock_reset_cdc",
+   "severity": "Major",
+   "label": "INFERENCE",
+   "locator": "§7.4, REQ-MEM-013",
+   "title": "No rule that a halted or WFI hart still answers probes",
+   "detail": "§7.4 only says WFI behavior must be checked against CVA6; because probes have no timeout, a hart whose cache clock is gated in WFI or whose cache stops in debug halt would hold every line it owns and hang the cluster.",
+   "action": "Add a requirement that the cache and probe endpoint stay clocked and responsive in WFI and debug halt."
+  },
+  {
+   "id": "F-024",
+   "area": "features",
+   "severity": "Minor",
+   "label": "FACT",
+   "locator": "§4 CFG-ACE-2/4, FEAT-005, REQ-IF-004, TEST-008",
+   "title": "Deferred ACE configurations sit in the active tables",
+   "detail": "CFG-ACE-2, CFG-ACE-4, FEAT-005, REQ-IF-004 and TEST-008 are in the same tables as the implemented configurations although the ACE profile is not part of this RTL phase.",
+   "action": "Mark the ACE rows as deferred in a Status column."
+  },
+  {
+   "id": "F-025",
+   "area": "market_position",
+   "severity": "Major",
+   "label": "INFERENCE",
+   "locator": "§1.1, §18, REQ-PD-001",
+   "title": "Compared with commercial clusters: no I/O coherence, no L2 ECC, no frequency claim",
+   "detail": "Press coverage dated 2020 describes the Andes AX45MP cluster as up to four cores with a MESI coherence manager, an L2 cache and I/O coherence for cacheless masters, at about 2.4 GHz in 12 nm; the SiFive U74-MC is described as four U74 cores plus a monitor core with a 2 MB L2 with ECC. This IP has an internal MESI domain and a shared LLC but no external coherent port, no ECC decision and no frequency evidence.",
+   "action": "Decide the I/O-coherent port and the ECC level for the target market."
+  },
+  {
+   "id": "F-026",
+   "area": "integration_effort",
+   "severity": "Minor",
+   "label": "FACT",
+   "locator": "§1.2, §7.3, §6, ASM-003, ASM-005",
+   "title": "SoC obligations are scattered with no integration checklist",
+   "detail": "The integrator must provide a synchronized reset release, a coordinated fabric reset, an atomic-capable AXI target, software cache maintenance for DMA, SRAM views, SDC, an interrupt mapping and a Debug Module; each appears in a different section.",
+   "action": "Add one integration checklist section."
+  },
+  {
+   "id": "F-027",
+   "area": "functions",
+   "severity": "Observation",
+   "label": "FACT",
+   "locator": "REQ-MEM-024, DEC-043, §15.3",
+   "title": "Circular-wait risk of the per-hart probe slot is closed in the specification",
+   "detail": "REQ-MEM-024 and DEC-043 require all expected slots to be claimed atomically before any probe is issued, with assertions in §15.3 and TEST-056; this closes the wait cycle between two contexts that each held one hart slot and needed the other's.",
+   "action": "Keep it; add the fairness rule of F-013."
+  }
+ ]
+}

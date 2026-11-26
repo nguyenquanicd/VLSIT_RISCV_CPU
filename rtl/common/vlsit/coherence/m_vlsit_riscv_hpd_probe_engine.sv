@@ -5,6 +5,10 @@
  * AI Flow Page : https://github.com/nguyenquanicd/VLSIT_RTL_Generator_AI_Model
  * Date         : 2026-11-14
  * Description  : Serializes one HPDcache probe through lookup, optional writeback, and MESI commit.
+ * Change History:
+ * 2026-11-20 - Modified by Quan Nguyen and Codex - VLSI Technology page:
+ *              Drive protocol valids low and recover an illegal FSM encoding
+ *              to IDLE instead of propagating X or remaining stuck (R-13).
  */
 // 2026-11-15 - Quan Nguyen and Codex - VLSI Technology page:
 // DEC-013/A-04: absent PREPARE remains I at COMMIT for any target;
@@ -125,7 +129,7 @@ module m_vlsit_riscv_hpd_probe_engine #(
   logic w_flush_hs;
   logic w_state_update_hs;
 
-  // State decode covers all legal encodings; invalid states are don't-care.
+  // State decode covers legal encodings; invalid encodings produce no request.
   always_comb begin : p_com_probe_outputs
     o_probe_req_ready = 1'b0;
     o_probe_rsp_valid = 1'b0;
@@ -173,12 +177,12 @@ module m_vlsit_riscv_hpd_probe_engine #(
       ENUM_ST_FLUSH_WAIT: begin
       end
       default: begin
-        o_probe_req_ready = 'x;
-        o_probe_rsp_valid = 'x;
-        o_lookup_valid = 'x;
-        o_lookup_rsp_ready = 'x;
-        o_flush_valid = 'x;
-        o_state_update_valid = 'x;
+        o_probe_req_ready = 1'b0;
+        o_probe_rsp_valid = 1'b0;
+        o_lookup_valid = 1'b0;
+        o_lookup_rsp_ready = 1'b0;
+        o_flush_valid = 1'b0;
+        o_state_update_valid = 1'b0;
       end
     endcase
   end
@@ -265,7 +269,7 @@ module m_vlsit_riscv_hpd_probe_engine #(
         if (w_probe_rsp_hs)
           w_fsm_probe_nxt_state = ENUM_ST_IDLE;
       end
-      default: w_fsm_probe_nxt_state = probe_fsm_type_def'('x);
+      default: w_fsm_probe_nxt_state = ENUM_ST_IDLE;
     endcase
   end
 

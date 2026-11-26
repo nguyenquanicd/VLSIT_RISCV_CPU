@@ -1,0 +1,62 @@
+{
+  "schema_version": 2,
+  "commands": [
+    {
+      "command": [
+        "C:/Users/PC/Tools/oss-cad-suite/bin/verilator_bin.exe",
+        "--cc",
+        "--exe",
+        "--main",
+        "--hierarchical",
+        "--make",
+        "cmake",
+        "--assert",
+        "--timing",
+        "--top-module",
+        "tb",
+        "--Mdir",
+        "C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/lint/non_coherence_cluster/hierarchy_tool_probe_002/obj",
+        "C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/lint/non_coherence_cluster/hierarchy_tool_probe_001/parts.vlt",
+        "C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/lint/non_coherence_cluster/hierarchy_tool_probe_001/tb.sv"
+      ],
+      "log": "C:\\HQuan\\102_MyGithub\\VLSIT_RISCV_CPU\\lint\\non_coherence_cluster\\hierarchy_tool_probe_002\\plan.log",
+      "start_ns": 1795210409679616000,
+      "start_available_bytes": 950013952,
+      "run_initial_available_bytes": 950013952,
+      "early_stop_available_bytes": 1073741824,
+      "minimum_start_available_bytes": 1073741824,
+      "max_ram_drop_bytes": 1090519040,
+      "ram_guard_margin_bytes": 0,
+      "ram_floor_bytes": 1073741824,
+      "disk_floor_bytes": 2147483648,
+      "samples": [
+        {
+          "elapsed_s": 0.0,
+          "available_bytes": 950013952,
+          "total_bytes": 16357158912,
+          "load_percent": 94,
+          "disk_free_bytes": 7938985984
+        }
+      ],
+      "status": "stopped_before_start",
+      "process_tree": false,
+      "end_available_bytes": 950013952,
+      "minimum_available_bytes": 950013952,
+      "minimum_disk_free_bytes": 7938985984,
+      "duration_s": 0.0,
+      "stop_reason": "preflight RAM below approved hard floor (1073741824 bytes)"
+    }
+  ],
+  "minimum_available_bytes": 950013952,
+  "initial_available_bytes": 950013952,
+  "status": "stopped_by_guard",
+  "ram_floor_bytes": 1073741824,
+  "early_stop_available_bytes": 1073741824,
+  "minimum_start_available_bytes": 1073741824,
+  "max_ram_drop_bytes": 1090519040,
+  "ram_guard_margin_bytes": 0,
+  "disk_floor_bytes": 2147483648,
+  "minimum_disk_free_bytes": 7938985984,
+  "max_observed_available_ram_drop_bytes": 0,
+  "last_stop_reason": "preflight RAM below approved hard floor (1073741824 bytes)"
+}

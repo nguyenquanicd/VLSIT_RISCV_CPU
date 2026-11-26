@@ -1,12 +1,57 @@
 {
-  "head": {"text": "WF-002 GEMM unsupported opcode (error)"},
+  "head": {
+    "text": "WF-002 Unsupported tensor instruction (issue rejection)",
+    "tick": 0
+  },
   "signal": [
-    {"name": "i_clk_core", "wave": "p........."},
-    {"name": "i_xif_issue_valid", "wave": "01.0......"},
-    {"name": "o_xif_issue_ready", "wave": "01.0......"},
-    {"name": "i_xif_issue_req_instr[31:0]", "wave": "x=.xxxxxxx", "data": ["BAD"]},
-    {"name": "o_xif_issue_resp_accept", "wave": "00.0......"}
+    {
+      "name": "i_clk_core",
+      "wave": "p........."
+    },
+    {
+      "name": "i_xif_issue_valid",
+      "wave": "0100000000"
+    },
+    {
+      "name": "o_xif_issue_ready",
+      "wave": "0100000000"
+    },
+    {
+      "name": "i_xif_issue_req_instr[31:0]",
+      "wave": "x=xxxxxxxx",
+      "data": [
+        "Unsupported"
+      ]
+    },
+    {
+      "name": "o_xif_issue_resp_accept",
+      "wave": "0000000000"
+    },
+    {
+      "name": "i_xif_commit_valid",
+      "wave": "0000100000"
+    },
+    {
+      "name": "i_xif_commit_kill",
+      "wave": "0000100000"
+    },
+    {
+      "name": "Illegal instruction trap (conceptual)",
+      "wave": "0000010000"
+    },
+    {
+      "name": "o_axi_tensor_arvalid",
+      "wave": "0000000000"
+    },
+    {
+      "name": "o_xif_result_valid",
+      "wave": "0000000000"
+    }
   ],
-  "foot": {"text": "Unknown opcode is not accepted; the host raises illegal-instruction."},
-  "config": {"hscale": 2}
+  "foot": {
+    "text": "One issue handshake with accept=0. The host disposes of the rejected issue by kill and raises illegal instruction. No command context, DMA, or result."
+  },
+  "config": {
+    "hscale": 2
+  }
 }

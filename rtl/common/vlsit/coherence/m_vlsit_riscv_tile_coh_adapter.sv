@@ -17,6 +17,8 @@
  * 2026-11-14 - Quan Nguyen and Codex - VLSI Technology page:
  *              Gate PREPARE forwarding until the matching MSHR/refill query clears.
  * Rule note    : HIE-02: functional adapter combines transport RTL and lock instance.
+ * History      : Quan Nguyen and Codex - VLSI Technology page.
+ *                DEC-045: Add optional cluster boundary timing profile support.
  */
 // 2026-11-15 - Quan Nguyen and Codex - VLSI Technology page:
 // DEC-038/A-02: acquire a line lock only when gated cache PREPARE is admitted.
@@ -27,6 +29,10 @@ module m_vlsit_riscv_tile_coh_adapter #(
   // Parameter values: 2 through 16; default is 8.
   // Parameter unit: contexts.
   parameter logic [31:0] PARA_COH_TXN_NUM = 32'd8,
+  // Parameter Description: register the release of handshake gates.
+  // Parameter values: 0 = legacy, 1 = registered; default is 0.
+  // Parameter unit: mode
+  parameter logic [31:0] PARA_REGISTER_RESET_RELEASE = 32'd0,
   localparam logic [31:0] LPARA_COH_TAG_W = (PARA_COH_TXN_NUM > 32'd1)
                                            ? 32'($clog2(PARA_COH_TXN_NUM)) : 32'd1,
   localparam logic [31:0] LPARA_PHASE_PREPARE = 32'd0,
@@ -114,6 +120,22 @@ module m_vlsit_riscv_tile_coh_adapter #(
   output logic                              o_probe_rsp_wback_done
 );
 
+  logic w_handshake_active;
+
+  // Clear immediately on reset and admit handshakes after the first active edge.
+  if (PARA_REGISTER_RESET_RELEASE == 32'd1) begin : gen_reset_release
+    logic reg_handshake_active;
+    always_ff @(posedge i_clk_cluster, negedge i_rst_n_cluster) begin : p_ff_reset_release
+      if (!i_rst_n_cluster)
+        reg_handshake_active <= 1'b0;
+      else
+        reg_handshake_active <= 1'b1;
+    end
+    assign w_handshake_active = reg_handshake_active;
+  end else begin : gen_reset_direct
+    assign w_handshake_active = i_rst_n_cluster;
+  end
+
   // Elastic payloads hold their fields while their consumer is stalled.
   logic reg_req_valid;
   logic [2:0] reg_req_id;
@@ -135,7 +157,7 @@ module m_vlsit_riscv_tile_coh_adapter #(
   // Reserve a line only on the actual cache-side PREPARE handshake.
   assign w_lock_acquire_valid = o_cache_probe_req_valid & i_cache_probe_req_ready
                                  & (32'(i_probe_req_phase) == LPARA_PHASE_PREPARE)
-                                 & i_rst_n_cluster;
+                                 & w_handshake_active;
   // Retain the lock across PREPARE errors and terminal-response backpressure.
   assign w_lock_release_valid = i_cache_probe_rsp_valid & o_cache_probe_rsp_ready
                                  & ~i_cache_probe_rsp_err
@@ -143,14 +165,14 @@ module m_vlsit_riscv_tile_coh_adapter #(
                                     | (32'(i_cache_probe_rsp_phase) == LPARA_PHASE_ABORT));
 
   // Replace a consumed req entry on the same edge for one transfer per cycle.
-  assign o_cache_req_ready = i_rst_n_cluster & (~reg_req_valid | i_req_ready);
+  assign o_cache_req_ready = w_handshake_active & (~reg_req_valid | i_req_ready);
   assign o_req_valid = reg_req_valid;
   assign o_req_id = reg_req_id;
   assign o_req_pa_line = reg_req_pa_line;
   assign o_req_kind = reg_req_kind;
 
   // Replace a consumed gnt entry on the same edge for one transfer per cycle.
-  assign o_gnt_ready = i_rst_n_cluster & (~reg_gnt_valid | i_cache_gnt_ready);
+  assign o_gnt_ready = w_handshake_active & (~reg_gnt_valid | i_cache_gnt_ready);
   assign o_cache_gnt_valid = reg_gnt_valid;
   assign o_cache_gnt_id = reg_gnt_id;
   assign o_cache_gnt_pa_line = reg_gnt_pa_line;
@@ -159,8 +181,8 @@ module m_vlsit_riscv_tile_coh_adapter #(
 
   // Keep the PREPARE line query active while the cache drains same-line work;
   // forward the probe only after the local lock slot and busy query are clear.
-  assign o_cache_probe_req_valid = i_probe_req_valid & i_rst_n_cluster & w_probe_req_allow;
-  assign o_probe_req_ready = i_cache_probe_req_ready & i_rst_n_cluster & w_probe_req_allow;
+  assign o_cache_probe_req_valid = i_probe_req_valid & w_handshake_active & w_probe_req_allow;
+  assign o_probe_req_ready = i_cache_probe_req_ready & w_handshake_active & w_probe_req_allow;
   assign o_cache_probe_req_tag = i_probe_req_tag;
   assign o_cache_probe_req_pa_line = i_probe_req_pa_line;
   assign o_cache_probe_req_phase = i_probe_req_phase;
@@ -168,15 +190,15 @@ module m_vlsit_riscv_tile_coh_adapter #(
   assign o_cache_probe_req_wback_en = i_probe_req_wback_en;
 
   // Present the requested physical line to the cache-side admission query.
-  assign o_cache_probe_query_valid = i_probe_req_valid & i_rst_n_cluster
+  assign o_cache_probe_query_valid = i_probe_req_valid & w_handshake_active
                                      & (32'(i_probe_req_phase) == LPARA_PHASE_PREPARE);
   // Keep the cache query address paired with the active probe request.
   assign o_cache_probe_query_nline = i_probe_req_pa_line;
 
   // Return the cache's tagged probe status to the scheduler without changing
   // tag, line, phase, state, writeback status, or backpressure semantics.
-  assign o_probe_rsp_valid = i_cache_probe_rsp_valid & i_rst_n_cluster;
-  assign o_cache_probe_rsp_ready = i_probe_rsp_ready & i_rst_n_cluster;
+  assign o_probe_rsp_valid = i_cache_probe_rsp_valid & w_handshake_active;
+  assign o_cache_probe_rsp_ready = i_probe_rsp_ready & w_handshake_active;
   assign o_probe_rsp_tag = i_cache_probe_rsp_tag;
   assign o_probe_rsp_pa_line = i_cache_probe_rsp_pa_line;
   assign o_probe_rsp_phase = i_cache_probe_rsp_phase;
@@ -222,6 +244,7 @@ module m_vlsit_riscv_tile_coh_adapter #(
 
   // One local lock record per CCU tag; no timeout or forced replacement.
   m_vlsit_riscv_cache_line_locks #(
+      .PARA_REGISTER_RESET_RELEASE(PARA_REGISTER_RESET_RELEASE),
     .PARA_COH_TXN_NUM(PARA_COH_TXN_NUM)
   ) u_vlsit_riscv_cache_line_locks (
     .i_clk_cluster(i_clk_cluster),

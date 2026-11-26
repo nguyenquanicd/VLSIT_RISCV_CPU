@@ -1,0 +1,316 @@
+{
+ "rows": [
+  [
+   "TC-01",
+   "PASS",
+   34,
+   0,
+   168799,
+   "f397354c426d1ffc"
+  ],
+  [
+   "TC-02",
+   "PASS",
+   78,
+   0,
+   317968,
+   "111daae32555885c"
+  ],
+  [
+   "TC-03",
+   "FAIL",
+   14,
+   8,
+   166112,
+   "b9e91b3266643d7c"
+  ],
+  [
+   "TC-04",
+   "PASS",
+   12,
+   0,
+   194523,
+   "5b9f044a34fec875"
+  ],
+  [
+   "TC-05",
+   "PASS",
+   9,
+   0,
+   204794,
+   "494931516246205b"
+  ],
+  [
+   "TC-06",
+   "PASS",
+   17,
+   0,
+   343188,
+   "3d124d10d57d742e"
+  ],
+  [
+   "TC-07",
+   "PASS",
+   12,
+   0,
+   385862,
+   "a9db162c3fc74b63"
+  ],
+  [
+   "TC-08",
+   "PASS",
+   18,
+   0,
+   236507,
+   "d1d24238439dde19"
+  ],
+  [
+   "TC-09",
+   "PASS",
+   7,
+   0,
+   127973,
+   "55f17ec8b819c2e4"
+  ],
+  [
+   "TC-10",
+   "PASS",
+   6,
+   0,
+   104766,
+   "13589b9b5321ae6c"
+  ]
+ ],
+ "hits": {
+  "0": [
+   2,
+   0,
+   "MEM-01 AW payload stable while AWREADY low (A3.2.1)"
+  ],
+  "1": [
+   2,
+   0,
+   "MEM-02 W payload stable while WREADY low (A3.2.1)"
+  ],
+  "2": [
+   598,
+   0,
+   "MEM-03 AR payload stable while ARREADY low (A3.2.1)"
+  ],
+  "3": [
+   4,
+   0,
+   "MEM-04 AWBURST not reserved (A3.4.1)"
+  ],
+  "4": [
+   917,
+   0,
+   "MEM-05 ARBURST not reserved (A3.4.1)"
+  ],
+  "5": [
+   4,
+   0,
+   "MEM-06 AWSIZE within 64-bit bus (A3.4.1)"
+  ],
+  "6": [
+   917,
+   0,
+   "MEM-07 ARSIZE within 64-bit bus (A3.4.1)"
+  ],
+  "7": [
+   4,
+   0,
+   "MEM-08 AW INCR burst inside 4 KiB (A3.4.1)"
+  ],
+  "8": [
+   917,
+   0,
+   "MEM-09 AR INCR burst inside 4 KiB (A3.4.1)"
+  ],
+  "9": [
+   0,
+   0,
+   "MEM-10 AW WRAP length 2/4/8/16 (A3.4.1)"
+  ],
+  "10": [
+   0,
+   0,
+   "MEM-11 AR WRAP length 2/4/8/16 (A3.4.1)"
+  ],
+  "11": [
+   0,
+   0,
+   "MEM-12 AW WRAP address aligned to size (A3.4.1)"
+  ],
+  "12": [
+   0,
+   0,
+   "MEM-13 AR WRAP address aligned to size (A3.4.1)"
+  ],
+  "13": [
+   4,
+   0,
+   "MEM-14 WLAST on the final beat only (A3.4.1)"
+  ],
+  "14": [
+   4,
+   0,
+   "MEM-15 WSTRB only in active byte lanes (A3.4.3)"
+  ],
+  "15": [
+   2,
+   0,
+   "MEM-16 BID matches the AW (stimulus legality, A5.3)"
+  ],
+  "16": [
+   638,
+   0,
+   "MEM-17 RID matches the AR (stimulus legality, A5.3)"
+  ],
+  "17": [
+   638,
+   0,
+   "MEM-18 RLAST on the final beat only (A3.4.1)"
+  ],
+  "18": [
+   4,
+   0,
+   "MEM-19 AWADDR bits 63:34 zero (REQ-XL-006)"
+  ],
+  "19": [
+   917,
+   0,
+   "MEM-20 ARADDR bits 63:34 zero (REQ-XL-006)"
+  ],
+  "20": [
+   4,
+   0,
+   "MEM-21 AW address inside the cacheable region (REQ-XL-011)"
+  ],
+  "21": [
+   917,
+   0,
+   "MEM-22 AR address inside the cacheable region (REQ-XL-011)"
+  ],
+  "22": [
+   100,
+   0,
+   "MEM-23 no AWVALID/ARVALID/WVALID during reset (A3.1.2)"
+  ],
+  "23": [
+   202,
+   0,
+   "MMIO-01 AW payload stable while AWREADY low (A3.2.1)"
+  ],
+  "24": [
+   405,
+   0,
+   "MMIO-02 W payload stable while WREADY low (A3.2.1)"
+  ],
+  "25": [
+   2,
+   0,
+   "MMIO-03 AR payload stable while ARREADY low (A3.2.1)"
+  ],
+  "26": [
+   429,
+   0,
+   "MMIO-04 AWBURST not reserved (A3.4.1)"
+  ],
+  "27": [
+   5,
+   0,
+   "MMIO-05 ARBURST not reserved (A3.4.1)"
+  ],
+  "28": [
+   429,
+   0,
+   "MMIO-06 AWSIZE within 64-bit bus (A3.4.1)"
+  ],
+  "29": [
+   5,
+   0,
+   "MMIO-07 ARSIZE within 64-bit bus (A3.4.1)"
+  ],
+  "30": [
+   429,
+   0,
+   "MMIO-08 AW INCR burst inside 4 KiB (A3.4.1)"
+  ],
+  "31": [
+   5,
+   0,
+   "MMIO-09 AR INCR burst inside 4 KiB (A3.4.1)"
+  ],
+  "32": [
+   0,
+   0,
+   "MMIO-10 AW WRAP length 2/4/8/16 (A3.4.1)"
+  ],
+  "33": [
+   0,
+   0,
+   "MMIO-11 AR WRAP length 2/4/8/16 (A3.4.1)"
+  ],
+  "34": [
+   0,
+   0,
+   "MMIO-12 AW WRAP address aligned (A3.4.1)"
+  ],
+  "35": [
+   0,
+   0,
+   "MMIO-13 AR WRAP address aligned (A3.4.1)"
+  ],
+  "36": [
+   227,
+   0,
+   "MMIO-14 WLAST on the final beat only (A3.4.1)"
+  ],
+  "37": [
+   227,
+   0,
+   "MMIO-15 WSTRB only in active byte lanes (A3.4.3)"
+  ],
+  "38": [
+   227,
+   0,
+   "MMIO-16 BID matches the AW (stimulus legality, A5.3)"
+  ],
+  "39": [
+   3,
+   0,
+   "MMIO-17 RID matches the AR (stimulus legality, A5.3)"
+  ],
+  "40": [
+   3,
+   0,
+   "MMIO-18 RLAST on the final beat only (A3.4.1)"
+  ],
+  "41": [
+   429,
+   0,
+   "MMIO-19 AWADDR bits 63:34 zero (REQ-XL-006)"
+  ],
+  "42": [
+   5,
+   0,
+   "MMIO-20 ARADDR bits 63:34 zero (REQ-XL-006)"
+  ],
+  "43": [
+   429,
+   0,
+   "MMIO-21 AW address inside the MMIO region (REQ-XL-011)"
+  ],
+  "44": [
+   5,
+   0,
+   "MMIO-22 AR address inside the MMIO region (REQ-XL-011)"
+  ],
+  "45": [
+   100,
+   0,
+   "MMIO-23 no MMIO valid during reset (A3.1.2)"
+  ]
+ }
+}

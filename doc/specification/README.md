@@ -1,23 +1,17 @@
-# Cluster specification / Đặc tả cluster
+# Cluster 2/4 CPU specification / Đặc tả cluster 2/4 CPU
 
-The authoritative [HDS revision 0.29](VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS.md) describes the current AXI-only 2/4-hart cluster. It preserves approved behavior and separates design requirements, present RTL realization and actual verification evidence.
+Design contract for the CVA6 cluster with 2 or 4 harts. The HDS defines requirements; the workbook defines registers and PMU events.
 
-[HDS 0.29](VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS.md) là bản đặc tả chính của cluster AXI 2/4 hart. Bản này giữ các quyết định đã duyệt, tách yêu cầu thiết kế, cách RTL hiện thực và bằng chứng verify.
+Hợp đồng thiết kế cluster CVA6 có 2 hoặc 4 hart. HDS định nghĩa yêu cầu; workbook định nghĩa thanh ghi và event PMU.
 
-| Section / Mục | Content / Nội dung |
+| Material / Tài liệu | Link / Liên kết |
 |---|---|
-| 5 | Structural TOP and working/data-flow diagrams / Sơ đồ TOP và luồng làm việc/dữ liệu |
-| 6 | Exact TOP ports and internal bundle contracts / Port TOP và hợp đồng interface nội bộ |
-| 8 | Current parameters and qualification limits / Parameter và giới hạn đã verify |
-| 10 | Six implemented controllers, four additional readable CCU views, transition guards and end-to-end operations / FSM, điều kiện chuyển state và hoạt động đầu-cuối |
-| 11–13 | Workbook-based software sequence, errors, retention and worst-case performance / Trình tự phần mềm, lỗi, giữ dữ liệu và worst case |
-| 14 | 35 NEW/GENERATED component contracts and all 84 selected modified source contracts; adjacent composition figures and exact ports / Component mới/sinh tự động và mọi source MODIFY được chọn |
-| 15, 19, 20 | Tests, traceability and unresolved review items / Kiểm chứng, truy vết và điểm còn mở |
+| Specification / Đặc tả | [Cluster HDS (English)](VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS.md) · [Bản dịch tiếng Việt](VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS_vi.md) · [Port plan / Kế hoạch port](VLSIT_RISCV_CPU_CLUSTER_RTL_PORT_PLAN.md) |
+| CSR / Thanh ghi | [CSR workbook](VLSIT_RISCV_CPU_Cluster_CSR.xlsx) |
+| Block diagram / Sơ đồ khối | [TOP SVG](figures/post_a06/m_vlsit_riscv_cluster_axi_top.svg) · [draw.io](figures/post_a06/m_vlsit_riscv_cluster_axi_top.drawio) |
+| FSM / Máy trạng thái | [CCU SVG](figures/post_a06/CCU_CONTEXT.svg) · [CMO SVG](figures/post_a06/CMO_CONTROLLER.svg) · [All FSMs / Các FSM](figures/post_a06/README.md) |
+| Waveforms / Dạng sóng | [WF index / Mục lục WF](figures/waveforms/README.md) |
+| Coherence deadlock fixes / Sửa deadlock coherence (2026-11-27) | [HDS Section 14.7](VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS.md) (DEC-046, DEC-047): what each of the three fixes changes and why / ba bản sửa thay đổi gì và vì sao · [Change plan](HPDCACHE_ATOMIC_DEADLOCK_CHANGE_PLAN.md) |
+| Supporting design documents / Tài liệu thiết kế liên quan | [Architecture / Kiến trúc](architecture/README.md) · [References / Tham chiếu](references/README.md) · [Reviews / Review](review/README.md) |
 
-The [canonical CSR workbook](VLSIT_RISCV_CPU_Cluster_CSR.xlsx) remains the register source. No RTL or register ABI was changed. Native licensing headers are preserved. [Prior specification snapshot](revision_history/pre_detail_rewrite_20261116/VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS.md).
-
-Workbook là nguồn định nghĩa register; không sửa RTL, ABI hoặc header/license native trong lần viết lại này. Snapshot giữ nguyên bản spec trước khi viết lại.
-
-Editable figures and checks: [post-A-06 figure package](figures/post_a06/README.md). Older V1–V4 proposal figures remain historical; the current HDS embeds the new source-grounded figures.
-
-Các hình mới có draw.io và JSON đi kèm. Hình đề xuất V1–V4 cũ được giữ làm lịch sử, không thay trạng thái source hiện tại.
+[Specification / Đặc tả](VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS.md) · [CSR](VLSIT_RISCV_CPU_Cluster_CSR.xlsx) · [Block diagram / Sơ đồ khối](figures/post_a06/m_vlsit_riscv_cluster_axi_top.svg) · [FSM](figures/post_a06/CCU_CONTEXT.svg) · [Waveforms / Dạng sóng](figures/waveforms/README.md)

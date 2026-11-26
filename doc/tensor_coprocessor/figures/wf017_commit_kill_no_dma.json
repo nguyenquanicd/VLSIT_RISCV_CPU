@@ -1,0 +1,109 @@
+{
+  "head": {
+    "text": "WF-017 DEC-033 older-load exception kills accepted tensor commands before DMA",
+    "tick": 0
+  },
+  "signal": [
+    {
+      "name": "i_clk_core",
+      "wave": "p..............."
+    },
+    {
+      "name": "older_load_pending (conceptual)",
+      "wave": "0111110000000000"
+    },
+    {
+      "name": "older_load_exception (conceptual)",
+      "wave": "0000010000000000"
+    },
+    {
+      "name": "i_xif_issue_valid",
+      "wave": "0101000000000000"
+    },
+    {
+      "name": "o_xif_issue_ready",
+      "wave": "0101000000000000"
+    },
+    {
+      "name": "i_xif_issue_req_id",
+      "wave": "x=.=............",
+      "data": [
+        "N",
+        "N+1"
+      ]
+    },
+    {
+      "name": "i_xif_issue_req_instr[31:0]",
+      "wave": "x=.=............",
+      "data": [
+        "GEMM N",
+        "GEMM N+1"
+      ]
+    },
+    {
+      "name": "o_xif_issue_resp_accept",
+      "wave": "0101000000000000"
+    },
+    {
+      "name": "i_xif_register_valid",
+      "wave": "0101000000000000"
+    },
+    {
+      "name": "o_xif_register_ready",
+      "wave": "0101000000000000"
+    },
+    {
+      "name": "i_xif_register_id",
+      "wave": "x=.=............",
+      "data": [
+        "N",
+        "N+1"
+      ]
+    },
+    {
+      "name": "i_xif_register_rs_valid",
+      "wave": "0101000000000000"
+    },
+    {
+      "name": "cva6_flush (conceptual)",
+      "wave": "0000001000000000"
+    },
+    {
+      "name": "i_xif_commit_valid",
+      "wave": "0000001000000000"
+    },
+    {
+      "name": "i_xif_commit_id",
+      "wave": "xxxxxx=.........",
+      "data": [
+        "N (earliest affected)"
+      ]
+    },
+    {
+      "name": "i_xif_commit_kill",
+      "wave": "0000001000000000"
+    },
+    {
+      "name": "o_axi_tensor_arvalid",
+      "wave": "0000000000000000"
+    },
+    {
+      "name": "o_axi_tensor_awvalid",
+      "wave": "0000000000000000"
+    },
+    {
+      "name": "o_axi_tensor_wvalid",
+      "wave": "0000000000000000"
+    },
+    {
+      "name": "o_xif_result_valid",
+      "wave": "0000000000000000"
+    }
+  ],
+  "foot": {
+    "text": "Illustrative ordering only; no fixed latency is implied. N and N+1 were accepted and captured while the older load was unresolved, but neither had a matching non-kill commit. The older exception causes flush and a kill boundary at earliest affected ID N; the kill covers N and younger N+1 for that hart. No descriptor/data read, output write, or CV-X-IF result may occur for either killed command."
+  },
+  "config": {
+    "hscale": 2
+  }
+}

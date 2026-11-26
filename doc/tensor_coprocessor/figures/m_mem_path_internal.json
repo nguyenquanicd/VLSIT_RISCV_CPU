@@ -1,0 +1,304 @@
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "m_mem_path_internal.drawio",
+  "layout": {
+    "gap_h": 120,
+    "gap_v": 110,
+    "margin": 80,
+    "block_h": 60
+  },
+  "top": {
+    "frame_label": [
+      "Internal functional blocks",
+      "(m_mem_path)"
+    ]
+  },
+  "frame_row": [
+    "m_mem_path",
+    "Non-coherent AXI4 burst DMA with descriptor prefetch staging, banked SRAM and result writes.",
+    "doc/tensor_coprocessor/VLSIT_TENSOR_COPROCESSOR_HDS.md sections 5.3.2, 10.5"
+  ],
+  "frame_interfaces": [
+    "AXAR",
+    "AXRD",
+    "AXWR",
+    "AXB",
+    "TILE"
+  ],
+  "blocks": [
+    {
+      "key": "B6",
+      "label": [
+        "aperture_check",
+        "(BASE / LIMIT)"
+      ],
+      "width": 180,
+      "row": 0,
+      "col": 0,
+      "row_name": "aperture_check (BASE / LIMIT)",
+      "function": "Check every read and write burst against the static aperture before its address is offered.",
+      "source": "doc/tensor_coprocessor/VLSIT_TENSOR_COPROCESSOR_HDS.md REQ-SEC-003"
+    },
+    {
+      "key": "B0",
+      "label": [
+        "axi_read_arbiter",
+        "(active / descriptor)"
+      ],
+      "width": 260,
+      "row": 0,
+      "col": 1,
+      "row_name": "axi_read_arbiter (active / descriptor)",
+      "function": "Grant active-command reads first; grant one younger descriptor read after at most four active grants.",
+      "source": "doc/tensor_coprocessor/VLSIT_TENSOR_COPROCESSOR_HDS.md section 5.3.2"
+    },
+    {
+      "key": "B1",
+      "label": [
+        "read_credit_tracker",
+        "(16 credits)"
+      ],
+      "width": 220,
+      "row": 0,
+      "col": 2,
+      "row_name": "read_credit_tracker (16 credits)",
+      "function": "Count read credits and keep one for a younger descriptor burst whose destination space is reserved.",
+      "source": "doc/tensor_coprocessor/VLSIT_TENSOR_COPROCESSOR_HDS.md section 5.3.2"
+    },
+    {
+      "key": "B3",
+      "label": [
+        "descriptor_staging",
+        "(header, body bank)"
+      ],
+      "width": 220,
+      "row": 1,
+      "col": 0,
+      "row_name": "descriptor_staging (header, body bank)",
+      "function": "Hold the header and body of the next descriptor in its own bank and validate it before use.",
+      "source": "doc/tensor_coprocessor/VLSIT_TENSOR_COPROCESSOR_HDS.md section 5.3.2"
+    },
+    {
+      "key": "B2",
+      "label": [
+        "response_tracker",
+        "(owner by ID)"
+      ],
+      "width": 200,
+      "row": 1,
+      "col": 1,
+      "row_name": "response_tracker (owner by ID)",
+      "function": "Route each returned beat to its owner by AXI ID, command key and beat position; keep a fault with its own context.",
+      "source": "doc/tensor_coprocessor/VLSIT_TENSOR_COPROCESSOR_HDS.md section 5.3.2"
+    },
+    {
+      "key": "B4",
+      "label": [
+        "operand_sram_banks",
+        "(banked SRAM)"
+      ],
+      "width": 220,
+      "row": 1,
+      "col": 2,
+      "row_name": "operand_sram_banks (banked SRAM)",
+      "function": "Banked local SRAM and operand queues that feed the array without borrowing descriptor space.",
+      "source": "doc/tensor_coprocessor/VLSIT_TENSOR_COPROCESSOR_HDS.md section 10.5"
+    },
+    {
+      "key": "B5",
+      "label": [
+        "result_write_engine",
+        "(output tiles)"
+      ],
+      "width": 220,
+      "row": 2,
+      "col": 2,
+      "row_name": "result_write_engine (output tiles)",
+      "function": "Pack output tiles, issue write bursts and wait for every write response.",
+      "source": "doc/tensor_coprocessor/VLSIT_TENSOR_COPROCESSOR_HDS.md section 10.3"
+    }
+  ],
+  "connectors": [
+    {
+      "id": "RNG",
+      "src": "B6",
+      "src_side": "R",
+      "dst": "B0",
+      "dst_side": "L"
+    },
+    {
+      "id": "CRD",
+      "src": "B0",
+      "src_side": "R",
+      "dst": "B1",
+      "dst_side": "L"
+    },
+    {
+      "id": "TRK",
+      "src": "B0",
+      "src_side": "B",
+      "dst": "B2",
+      "dst_side": "T"
+    },
+    {
+      "id": "DESC",
+      "src": "B2",
+      "src_side": "L",
+      "dst": "B3",
+      "dst_side": "R"
+    },
+    {
+      "id": "OPD",
+      "src": "B2",
+      "src_side": "R",
+      "dst": "B4",
+      "dst_side": "L"
+    },
+    {
+      "id": "OUT",
+      "src": "B4",
+      "src_side": "B",
+      "dst": "B5",
+      "dst_side": "T"
+    }
+  ],
+  "externals": [
+    {
+      "id": "AXAR",
+      "block": "B0",
+      "side": "T",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "AXI AR",
+        "read address"
+      ]
+    },
+    {
+      "id": "AXRD",
+      "block": "B2",
+      "side": "B",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "AXI R",
+        "read data, resp"
+      ]
+    },
+    {
+      "id": "AXWR",
+      "block": "B5",
+      "side": "L",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "AXI AW / W",
+        "write address, data"
+      ]
+    },
+    {
+      "id": "AXB",
+      "block": "B5",
+      "side": "B",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "AXI B",
+        "write response"
+      ]
+    },
+    {
+      "id": "TILE",
+      "block": "B4",
+      "side": "R",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "OPERAND TILES",
+        "to array"
+      ]
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "RNG",
+      "name": "Checked address to read arbiter",
+      "category": "handshake",
+      "active": "B6 -> B0",
+      "signals": "address, burst length, direction"
+    },
+    {
+      "id": "CRD",
+      "name": "Credit grant to arbiter",
+      "category": "handshake",
+      "active": "B0 -> B1",
+      "signals": "credit request, credit release"
+    },
+    {
+      "id": "TRK",
+      "name": "Accepted read to response tracker",
+      "category": "custom",
+      "active": "B0 -> B2",
+      "signals": "AXI ID, command key, request class, expected beats"
+    },
+    {
+      "id": "DESC",
+      "name": "Descriptor beats to staging",
+      "category": "handshake",
+      "active": "B2 -> B3",
+      "signals": "descriptor data, beat position, owner"
+    },
+    {
+      "id": "OPD",
+      "name": "Operand beats to SRAM banks",
+      "category": "handshake",
+      "active": "B2 -> B4",
+      "signals": "operand data, bank, owner"
+    },
+    {
+      "id": "OUT",
+      "name": "Result tiles to write engine",
+      "category": "handshake",
+      "active": "B4 -> B5",
+      "signals": "output tile, byte strobes"
+    },
+    {
+      "id": "AXAR",
+      "name": "AXI read address outputs",
+      "category": "handshake",
+      "active": "out",
+      "signals": "ARVALID, ARREADY, ARADDR, ARLEN, ARSIZE, ARBURST, ARID"
+    },
+    {
+      "id": "AXRD",
+      "name": "AXI read data inputs",
+      "category": "handshake",
+      "active": "in",
+      "signals": "RVALID, RREADY, RDATA, RRESP, RLAST, RID"
+    },
+    {
+      "id": "AXWR",
+      "name": "AXI write outputs",
+      "category": "handshake",
+      "active": "out",
+      "signals": "AWVALID, AWREADY, AWADDR, AWLEN, WVALID, WREADY, WDATA, WSTRB, WLAST"
+    },
+    {
+      "id": "AXB",
+      "name": "AXI write response inputs",
+      "category": "handshake",
+      "active": "in",
+      "signals": "BVALID, BREADY, BRESP, BID"
+    },
+    {
+      "id": "TILE",
+      "name": "Operand tile outputs",
+      "category": "custom",
+      "active": "out",
+      "signals": "operand tile, sparse metadata, valid"
+    }
+  ],
+  "nets": [],
+  "legend_note": "Specification-level decomposition of a block that has no RTL yet. The boxes are the functions the specification assigns to the block, with the section that defines each; they are not RTL modules or instances. Arrows show the main request or data direction; responses return on the same bundle.",
+  "library_sha256": "15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"
+}

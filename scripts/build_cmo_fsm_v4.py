@@ -8,7 +8,7 @@ Inputs:
     draw.io symbol library installed with vlsit-rtl-hierarchy-diagram.
 
 Outputs:
-    doc/specification/figures/fsm/VLSIT_RISCV_CLUSTER_FSM_V4.drawio
+    project_support/specification/figures/fsm/VLSIT_RISCV_CLUSTER_FSM_V4.drawio
     The script preserves all V3 pages and appends the FSM-011 review draft.
 
 Exit codes:

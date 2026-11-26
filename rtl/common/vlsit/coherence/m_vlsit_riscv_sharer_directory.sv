@@ -14,6 +14,8 @@
  *              Qualify simultaneous UPDATE/CANCEL diagnostics with both request
  *              VALID signals to prevent default inactive payloads from blocking
  *              a reservation owner.
+ * History      : Quan Nguyen and Codex - VLSI Technology page.
+ *                DEC-045: Add optional cluster boundary timing profile support.
  */
 `timescale 1ns/1ps
 
@@ -26,6 +28,10 @@ module m_vlsit_riscv_sharer_directory #(
   // Parameter values: 2 through 16; default is 8.
   // Parameter unit: contexts
   parameter logic [31:0] PARA_COH_TXN_NUM = 32'd8,
+  // Parameter Description: use synchronous directory storage.
+  // Parameter values: 0 = legacy, 1 = synchronous; default is 0.
+  // Parameter unit: mode
+  parameter logic [31:0] PARA_DIR_SYNC_READ = 32'd0,
   localparam logic [31:0] LPARA_DIR_BANK_NUM = 32'd4,
   localparam logic [31:0] LPARA_DIR_WAY_NUM = 32'd8,
   localparam logic [31:0] LPARA_DIR_SET_NUM = PARA_CPU_NUM * 32'd64,
@@ -86,10 +92,20 @@ module m_vlsit_riscv_sharer_directory #(
   output logic [3:0]                      o_coh_proto_diag_event
 );
 
-  logic [LPARA_DIR_TAG_W-1:0] reg_dir_tag [3:0][LPARA_DIR_SET_NUM-1:0][LPARA_DIR_WAY_NUM-1:0];
-  logic [PARA_CPU_NUM-1:0] reg_dir_holders [3:0][LPARA_DIR_SET_NUM-1:0][LPARA_DIR_WAY_NUM-1:0];
-  logic [1:0] reg_dir_owner [3:0][LPARA_DIR_SET_NUM-1:0][LPARA_DIR_WAY_NUM-1:0];
-  logic [1:0] reg_dir_state [3:0][LPARA_DIR_SET_NUM-1:0][LPARA_DIR_WAY_NUM-1:0];
+  typedef struct packed {
+    logic [LPARA_DIR_TAG_W-1:0] tag;
+    logic [PARA_CPU_NUM-1:0] holders;
+    logic [1:0] owner;
+    logic [1:0] state;
+  } dir_entry_type_def;
+
+  dir_entry_type_def w_lookup_entry [3:0][LPARA_DIR_WAY_NUM-1:0];
+  logic [3:0][LPARA_DIR_WAY_NUM-1:0] w_lookup_valid_ways;
+  logic [3:0][6:0] w_lookup_plru;
+  logic [3:0] w_lookup_eval, w_read_slot_ready;
+  logic [3:0][LPARA_DIR_SET_W-1:0] w_eval_set;
+  logic [3:0][LPARA_DIR_TAG_W-1:0] w_eval_tag;
+  logic [3:0][LPARA_COH_TAG_W-1:0] w_eval_rsp_tag;
   logic reg_dir_valid [3:0][LPARA_DIR_SET_NUM-1:0][LPARA_DIR_WAY_NUM-1:0];
   logic [6:0] reg_dir_plru [3:0][LPARA_DIR_SET_NUM-1:0];
   logic reg_dir_resv_valid [3:0][LPARA_DIR_SET_NUM-1:0];
@@ -156,6 +172,91 @@ module m_vlsit_riscv_sharer_directory #(
   assign w_update_hs = i_update_valid & o_update_ready;
   assign w_cancel_hs = i_cancel_valid & o_cancel_ready;
 
+  // A bank has an elastic read stage and an independent response register.
+  for (genvar bank = 0; bank < LPARA_DIR_BANK_NUM; bank++) begin : gen_dir_bank
+    if (PARA_DIR_SYNC_READ == 32'd1) begin : gen_read_pipe
+      logic reg_read_valid;
+      logic [LPARA_DIR_SET_W-1:0] reg_read_set;
+      logic [LPARA_DIR_TAG_W-1:0] reg_read_tag;
+      logic [LPARA_COH_TAG_W-1:0] reg_read_rsp_tag;
+      logic [LPARA_DIR_WAY_NUM-1:0] reg_read_valid_ways;
+      logic [6:0] reg_read_plru;
+
+      assign w_read_slot_ready[bank] = ~reg_read_valid | w_lookup_rsp_slot_ready[bank];
+      assign w_lookup_eval[bank] = reg_read_valid;
+      assign w_eval_set[bank] = reg_read_set;
+      assign w_eval_tag[bank] = reg_read_tag;
+      assign w_eval_rsp_tag[bank] = reg_read_rsp_tag;
+      assign w_lookup_valid_ways[bank] = reg_read_valid_ways;
+      assign w_lookup_plru[bank] = reg_read_plru;
+
+      always_ff @(posedge i_clk_cluster, negedge i_rst_n_cluster) begin : p_ff_dir_read_pipe
+        if (!i_rst_n_cluster) begin
+          reg_read_valid <= 1'b0;
+          reg_read_set <= '0;
+          reg_read_tag <= '0;
+          reg_read_rsp_tag <= '0;
+          reg_read_valid_ways <= '0;
+          reg_read_plru <= '0;
+        end else begin
+          if (w_read_slot_ready[bank])
+            reg_read_valid <= w_lookup_hs[bank];
+          if (w_lookup_hs[bank]) begin
+            reg_read_set <= w_lookup_set[bank];
+            reg_read_tag <= w_lookup_tag[bank];
+            reg_read_rsp_tag <= i_lookup_tag[bank];
+            reg_read_plru <= reg_dir_plru[bank][w_lookup_set[bank]];
+            for (int way_idx = 0; way_idx < LPARA_DIR_WAY_NUM; way_idx++)
+              reg_read_valid_ways[way_idx] <= reg_dir_valid[bank][w_lookup_set[bank]][way_idx];
+          end
+        end
+      end
+    end else begin : gen_read_direct
+      assign w_read_slot_ready[bank] = w_lookup_rsp_slot_ready[bank];
+      assign w_lookup_eval[bank] = w_lookup_hs[bank];
+      assign w_eval_set[bank] = w_lookup_set[bank];
+      assign w_eval_tag[bank] = w_lookup_tag[bank];
+      assign w_eval_rsp_tag[bank] = i_lookup_tag[bank];
+      assign w_lookup_plru[bank] = reg_dir_plru[bank][w_lookup_set[bank]];
+      for (genvar way = 0; way < LPARA_DIR_WAY_NUM; way++) begin : gen_valid
+        assign w_lookup_valid_ways[bank][way] = reg_dir_valid[bank][w_lookup_set[bank]][way];
+      end
+    end
+
+    // One operation per bank per cycle. Way-local 1RW storage has no reset.
+    // Valid bits live outside the array, so a reset never requires a RAM sweep.
+    for (genvar way = 0; way < LPARA_DIR_WAY_NUM; way++) begin : gen_way
+      dir_entry_type_def reg_entry [LPARA_DIR_SET_NUM-1:0];
+      logic w_write_way;
+      dir_entry_type_def w_write_entry;
+      logic [LPARA_DIR_SET_W-1:0] w_ram_addr;
+
+      assign w_write_way = w_update_hs[bank] & (i_update_way[bank] == 3'(way));
+      assign w_write_entry = {
+        i_update_pa_line[bank][2 + LPARA_DIR_SET_W +: LPARA_DIR_TAG_W],
+        i_update_holders[bank], i_update_owner[bank], i_update_state[bank]
+      };
+      assign w_ram_addr = w_write_way ? w_update_set[bank] : w_lookup_set[bank];
+
+      if (PARA_DIR_SYNC_READ == 32'd1) begin : gen_sync_ram
+        dir_entry_type_def reg_read_entry;
+        always_ff @(posedge i_clk_cluster) begin : p_ff_dir_ram
+          if (w_write_way)
+            reg_entry[w_ram_addr] <= w_write_entry;
+          else if (w_lookup_hs[bank])
+            reg_read_entry <= reg_entry[w_ram_addr];
+        end
+        assign w_lookup_entry[bank][way] = reg_read_entry;
+      end else begin : gen_async_read
+        always_ff @(posedge i_clk_cluster) begin : p_ff_dir_write
+          if (w_write_way)
+            reg_entry[w_update_set[bank]] <= w_write_entry;
+        end
+        assign w_lookup_entry[bank][way] = reg_entry[w_lookup_set[bank]];
+      end
+    end
+  end
+
   // Find the matching line and the invalid-first, tree-PLRU replacement candidate.
   always_comb begin : p_com_dir_lookup
     w_lookup_bank_match = '0;
@@ -215,20 +316,20 @@ module m_vlsit_riscv_sharer_directory #(
       w_lookup_eligible[bank_idx] = i_lookup_valid[bank_idx]
                                   & w_lookup_bank_match[bank_idx]
                                   & ~w_lookup_set_busy[bank_idx]
-                                  & w_lookup_rsp_slot_ready[bank_idx];
+                                  & w_read_slot_ready[bank_idx];
       w_update_eligible[bank_idx] = i_update_valid[bank_idx]
                                   & w_update_bank_match[bank_idx]
                                   & ~w_update_set_busy[bank_idx];
       w_cancel_eligible[bank_idx] = i_cancel_valid[bank_idx]
                                   & w_cancel_owner_match[bank_idx];
       for (int way_idx = 0; way_idx < LPARA_DIR_WAY_NUM; way_idx++) begin
-        if (reg_dir_valid[bank_idx][w_lookup_set[bank_idx]][way_idx]
-            & (reg_dir_tag[bank_idx][w_lookup_set[bank_idx]][way_idx] == w_lookup_tag[bank_idx])
+        if (w_lookup_valid_ways[bank_idx][way_idx]
+            & (w_lookup_entry[bank_idx][way_idx].tag == w_eval_tag[bank_idx])
             & ~w_lookup_hit[bank_idx]) begin
           w_lookup_hit[bank_idx] = 1'b1;
           w_lookup_hit_way[bank_idx] = 3'(way_idx);
         end
-        if (~reg_dir_valid[bank_idx][w_lookup_set[bank_idx]][way_idx]
+        if (~w_lookup_valid_ways[bank_idx][way_idx]
             & ~w_lookup_invalid_found[bank_idx]) begin
           w_lookup_invalid_found[bank_idx] = 1'b1;
           w_lookup_victim_way[bank_idx] = 3'(way_idx);
@@ -236,27 +337,21 @@ module m_vlsit_riscv_sharer_directory #(
       end
       if (~w_lookup_hit[bank_idx]) begin
         if (~w_lookup_invalid_found[bank_idx]) begin
-          w_lookup_victim_way[bank_idx] = fun_plru_victim(reg_dir_plru[bank_idx][w_lookup_set[bank_idx]]);
+          w_lookup_victim_way[bank_idx] = fun_plru_victim(w_lookup_plru[bank_idx]);
           w_lookup_victim_valid[bank_idx] = 1'b1;
           w_lookup_victim_pa_line[bank_idx] = {
-            reg_dir_tag[bank_idx][w_lookup_set[bank_idx]][w_lookup_victim_way[bank_idx]],
-            w_lookup_set[bank_idx], 2'(bank_idx)
+            w_lookup_entry[bank_idx][w_lookup_victim_way[bank_idx]].tag,
+            w_eval_set[bank_idx], 2'(bank_idx)
           };
-          w_lookup_holders[bank_idx] = reg_dir_holders[bank_idx]
-                                       [w_lookup_set[bank_idx]][w_lookup_victim_way[bank_idx]];
-          w_lookup_owner[bank_idx] = reg_dir_owner[bank_idx]
-                                     [w_lookup_set[bank_idx]][w_lookup_victim_way[bank_idx]];
-          w_lookup_state[bank_idx] = reg_dir_state[bank_idx]
-                                     [w_lookup_set[bank_idx]][w_lookup_victim_way[bank_idx]];
+          w_lookup_holders[bank_idx] = w_lookup_entry[bank_idx][w_lookup_victim_way[bank_idx]].holders;
+          w_lookup_owner[bank_idx] = w_lookup_entry[bank_idx][w_lookup_victim_way[bank_idx]].owner;
+          w_lookup_state[bank_idx] = w_lookup_entry[bank_idx][w_lookup_victim_way[bank_idx]].state;
         end
       end else begin
         w_lookup_victim_way[bank_idx] = w_lookup_hit_way[bank_idx];
-        w_lookup_holders[bank_idx] = reg_dir_holders[bank_idx]
-                                     [w_lookup_set[bank_idx]][w_lookup_hit_way[bank_idx]];
-        w_lookup_owner[bank_idx] = reg_dir_owner[bank_idx]
-                                   [w_lookup_set[bank_idx]][w_lookup_hit_way[bank_idx]];
-        w_lookup_state[bank_idx] = reg_dir_state[bank_idx]
-                                   [w_lookup_set[bank_idx]][w_lookup_hit_way[bank_idx]];
+        w_lookup_holders[bank_idx] = w_lookup_entry[bank_idx][w_lookup_hit_way[bank_idx]].holders;
+        w_lookup_owner[bank_idx] = w_lookup_entry[bank_idx][w_lookup_hit_way[bank_idx]].owner;
+        w_lookup_state[bank_idx] = w_lookup_entry[bank_idx][w_lookup_hit_way[bank_idx]].state;
       end
       if (w_lookup_hs[bank_idx])
         w_lookup_count = w_lookup_count + 3'd1;
@@ -394,10 +489,10 @@ module m_vlsit_riscv_sharer_directory #(
       for (int bank_idx = 0; bank_idx < LPARA_DIR_BANK_NUM; bank_idx++) begin
         reg_dir_op_rr_ptr[bank_idx] <= w_dir_op_rr_ptr_nxt[bank_idx];
         if (~reg_lookup_rsp_valid[bank_idx] | i_lookup_rsp_ready[bank_idx]) begin
-          reg_lookup_rsp_valid[bank_idx] <= w_lookup_hs[bank_idx];
-          if (w_lookup_hs[bank_idx]) begin
+          reg_lookup_rsp_valid[bank_idx] <= w_lookup_eval[bank_idx];
+          if (w_lookup_eval[bank_idx]) begin
             reg_lookup_hit[bank_idx] <= w_lookup_hit[bank_idx];
-            reg_lookup_rsp_tag[bank_idx] <= i_lookup_tag[bank_idx];
+            reg_lookup_rsp_tag[bank_idx] <= w_eval_rsp_tag[bank_idx];
             reg_lookup_way[bank_idx] <= w_lookup_hit[bank_idx]
                                      ? w_lookup_hit_way[bank_idx]
                                      : w_lookup_victim_way[bank_idx];
@@ -408,9 +503,9 @@ module m_vlsit_riscv_sharer_directory #(
             reg_lookup_state[bank_idx] <= w_lookup_state[bank_idx];
           end
         end
-        if (w_lookup_hs[bank_idx] & w_lookup_hit[bank_idx])
-          reg_dir_plru[bank_idx][w_lookup_set[bank_idx]] <=
-            fun_plru_update(reg_dir_plru[bank_idx][w_lookup_set[bank_idx]],
+        if (w_lookup_eval[bank_idx] & w_lookup_rsp_slot_ready[bank_idx] & w_lookup_hit[bank_idx])
+          reg_dir_plru[bank_idx][w_eval_set[bank_idx]] <=
+            fun_plru_update(w_lookup_plru[bank_idx],
                             w_lookup_hit_way[bank_idx]);
         // Reserve the selected set for every lookup result.  A hit also needs
         // ownership of the set until the later COMMIT update or CANCEL.
@@ -430,14 +525,6 @@ module m_vlsit_riscv_sharer_directory #(
             default:
               reg_dir_valid[bank_idx][w_update_set[bank_idx]][i_update_way[bank_idx]] <= 1'b0;
           endcase
-          reg_dir_tag[bank_idx][w_update_set[bank_idx]][i_update_way[bank_idx]] <=
-            i_update_pa_line[bank_idx][2 + LPARA_DIR_SET_W +: LPARA_DIR_TAG_W];
-          reg_dir_holders[bank_idx][w_update_set[bank_idx]][i_update_way[bank_idx]] <=
-            i_update_holders[bank_idx];
-          reg_dir_owner[bank_idx][w_update_set[bank_idx]][i_update_way[bank_idx]] <=
-            i_update_owner[bank_idx];
-          reg_dir_state[bank_idx][w_update_set[bank_idx]][i_update_way[bank_idx]] <=
-            i_update_state[bank_idx];
           reg_dir_plru[bank_idx][w_update_set[bank_idx]] <=
             fun_plru_update(reg_dir_plru[bank_idx][w_update_set[bank_idx]],
                             i_update_way[bank_idx]);

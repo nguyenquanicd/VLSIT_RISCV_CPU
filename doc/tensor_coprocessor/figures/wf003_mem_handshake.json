@@ -1,13 +1,88 @@
 {
-  "head": {"text": "WF-003 IF-003 generic memory handshake (illustrative)"},
+  "head": {
+    "text": "WF-003 IF-003 two-beat AXI4 read with backpressure",
+    "tick": 0
+  },
   "signal": [
-    {"name": "i_clk_core", "wave": "p........."},
-    {"name": "if003_req_valid", "wave": "01.0......"},
-    {"name": "if003_req_ready", "wave": "01.0......"},
-    {"name": "if003_req_addr", "wave": "x=.xxxxxxx", "data": ["0x1000"]},
-    {"name": "if003_read_data_valid", "wave": "0....10..."},
-    {"name": "if003_read_data", "wave": "xxxxx=.xx.", "data": ["D0"]}
+    {
+      "name": "i_clk_core",
+      "wave": "p.........."
+    },
+    {
+      "name": "o_axi_tensor_arvalid",
+      "wave": "01110000000"
+    },
+    {
+      "name": "i_axi_tensor_arready",
+      "wave": "00010000000"
+    },
+    {
+      "name": "o_axi_tensor_araddr",
+      "wave": "x=..xxxxxxx",
+      "data": [
+        "0x1000"
+      ]
+    },
+    {
+      "name": "o_axi_tensor_arlen",
+      "wave": "x=..xxxxxxx",
+      "data": [
+        "1"
+      ]
+    },
+    {
+      "name": "o_axi_tensor_arsize",
+      "wave": "x=..xxxxxxx",
+      "data": [
+        "5"
+      ]
+    },
+    {
+      "name": "o_axi_tensor_arid",
+      "wave": "x=..xxxxxxx",
+      "data": [
+        "A"
+      ]
+    },
+    {
+      "name": "i_axi_tensor_rvalid",
+      "wave": "00000111000"
+    },
+    {
+      "name": "o_axi_tensor_rready",
+      "wave": "00000011000"
+    },
+    {
+      "name": "i_axi_tensor_rlast",
+      "wave": "00000001000"
+    },
+    {
+      "name": "i_axi_tensor_rid",
+      "wave": "xxxxx=..xxx",
+      "data": [
+        "A"
+      ]
+    },
+    {
+      "name": "i_axi_tensor_rresp",
+      "wave": "xxxxx=..xxx",
+      "data": [
+        "OKAY"
+      ]
+    },
+    {
+      "name": "i_axi_tensor_rdata",
+      "wave": "xxxxx=.=xxx",
+      "data": [
+        "D0",
+        "D1"
+      ]
+    }
   ],
-  "foot": {"text": "Illustrative only: signal names and handshake are not normative until DEC-004 selects IF-003."},
-  "config": {"hscale": 2}
+  "foot": {
+    "text": "Illustrative. AR fires once. D0 remains stable while stalled and is accepted before D1, the final beat."
+  },
+  "config": {
+    "hscale": 2
+  }
 }

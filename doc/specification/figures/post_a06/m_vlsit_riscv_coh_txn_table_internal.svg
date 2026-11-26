@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1740" height="780" viewBox="160 340 1740 780" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="160" y="340" width="1740" height="780" fill="#FFFFFF"/>
+<rect x="490" y="370" width="1140" height="620" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<rect x="960" y="510" width="200" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1060" y="536" text-anchor="middle">slot_allocator</text>
+<text x="1060" y="558" text-anchor="middle">(p_com_coh_alloc)</text>
+<rect x="570" y="510" width="260" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="536" text-anchor="middle">control_ready</text>
+<text x="700" y="558" text-anchor="middle">(p_com_coh_ctl_ready)</text>
+<rect x="950" y="680" width="220" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1060" y="706" text-anchor="middle">context_registers</text>
+<text x="1060" y="728" text-anchor="middle">(p_ff_coh_context)</text>
+<rect x="1290" y="680" width="260" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1420" y="706" text-anchor="middle">ack_matcher</text>
+<text x="1420" y="728" text-anchor="middle">(p_com_coh_ack_match)</text>
+<rect x="950" y="850" width="220" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1060" y="876" text-anchor="middle">context_status_out</text>
+<text x="1060" y="898" text-anchor="middle">(o_ctx_*)</text>
+<text x="1765" y="706" text-anchor="middle">ACK</text>
+<text x="1765" y="728" text-anchor="middle">tag, phase, err</text>
+<text x="1060" y="1061" text-anchor="middle">CONTEXT STATUS</text>
+<text x="1060" y="1083" text-anchor="middle">to scheduler, fabric</text>
+<text x="1608" y="411" text-anchor="end">Internal functional blocks</text>
+<text x="1608" y="433" text-anchor="end">(m_vlsit_riscv_coh_txn_table)</text>
+<text x="1098" y="602" text-anchor="middle">ALOC</text>
+<text x="870" y="526" text-anchor="middle">CTRL</text>
+<text x="1195" y="696" text-anchor="middle">ACK</text>
+<text x="1098" y="772" text-anchor="middle">STAT</text>
+<text x="1775" y="536" text-anchor="middle">ALLOC REQUEST</text>
+<text x="1775" y="558" text-anchor="middle">line, kind, state</text>
+<text x="315" y="536" text-anchor="middle">PHASE / RELEASE</text>
+<text x="315" y="558" text-anchor="middle">start, capture, release</text>
+<path d="M 1680 540 L 1160 540" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1160,540 1172,534 1172,546" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 440 540 L 570 540" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="570,540 558,546 558,534" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1680 710 L 1550 710" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1550,710 1562,704 1562,716" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1060 910 L 1060 1040" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1060,1040 1054,1028 1066,1028" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1060 570 L 1060 680" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1060,680 1054,668 1066,668" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 830 540 L 960 540" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="960,540 948,546 948,534" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1290 710 L 1170 710" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1170,710 1182,704 1182,716" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1060 740 L 1060 850" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1060,850 1054,838 1066,838" fill="#000000" stroke="#000000" stroke-width="1"/>
+</svg>

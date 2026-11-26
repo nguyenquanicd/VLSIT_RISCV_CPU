@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "status": "approved",
+  "campaign_id": "VLSIT_RISCV_CPU cluster full HDS qualification v1",
+  "measured_at": "2026-11-16T20:58:31Z",
+  "host": {
+    "os": "Windows 11 10.0.26200",
+    "ram_total_bytes": 16357158912,
+    "ram_available_bytes": 2580783104,
+    "ram_status": "measured",
+    "ram_measurement_reason": "",
+    "disk_path_or_volume": "C:",
+    "disk_free_bytes": 7240163328,
+    "disk_status": "measured",
+    "disk_measurement_reason": "",
+    "measurement_method": "Python 3.12.10; Win32 GlobalMemoryStatusEx for RAM and shutil.disk_usage('C:/') for disk."
+  },
+  "limits": {
+    "reserved_host_ram_bytes": 1073741824,
+    "simulation_ram_budget_bytes": 1090519040,
+    "simulation_ram_budget_status": "memory-limited target; 1040 MiB maximum run-start available-RAM decrease; just below half the earlier 2.04 GiB coverage-build decrease; not yet measured",
+    "simulation_ram_max_drop_bytes": 1090519040,
+    "simulation_ram_max_drop_mib": 1040,
+    "simulation_ram_max_drop_measurement": "Run-start GlobalMemoryStatusEx available bytes minus lowest available bytes sampled by the per-command guard. The 1040 MiB target is below half the earlier 2.04 GiB coverage-build decrease; the 640 MiB, 896 MiB, and 1024 MiB pilots stopped Verilator elaboration at sampled drops of 647 MiB, 916 MiB, and 1029 MiB before C++ generation completed.",
+    "ram_guard_margin_bytes": 134217728,
+    "ram_guard_minimum_start_bytes": 2298478592,
+    "ram_guard_admission": "A command may start only when available RAM is at least the 1 GiB hard reserve + 128 MiB sampling margin + 1040 MiB run-drop budget.",
+    "ram_guard_poll_interval_ms": 100,
+    "max_concurrent_jobs": 1,
+    "build_workers": 1,
+    "disk_stop_free_bytes": 2147483648,
+    "expected_max_run_output_bytes": 2147483648,
+    "output_estimation_method": "Proposed 2 GiB physical upper estimate with NTFS compression. Largest measured run so far is cluster_cmo_qualification_v1_002: 2,328,468,022 logical bytes and 600,969,534 stored bytes (compact.exe; 3.9:1). The estimate is over 3x that physical size; remeasure every run."
+  },
+  "waveform_policy": {
+    "default_capture": "not_captured_for_passing_runs",
+    "planned_signal_scope": "No routine full-chip dump; capture only the interface and transaction window needed for a failed scenario rerun.",
+    "planned_time_windows": "Targeted failure window around the failing request through terminal response or retirement/trap.",
+    "failure_diagnostic": "Preserve the original run and rerun the same configuration and seed with targeted waveform capture."
+  },
+  "compression": {
+    "method": "Windows NTFS transparent compression on verification/sim/runs and verification/sim/coverage; bytes remain directly readable and are checked by SHA-256 manifests/catalog.",
+    "round_trip_hash_required": true
+  },
+  "review": {
+    "reviewer": "Quan Nguyen",
+    "decision": "approved",
+    "record": "User approved the resource-bounded verification plan on 2026-11-17 and then requested a RAM-optimized execution path. Limits remain one concurrent job, one C++ build worker, a 1 GiB hard host reserve, 2 GiB disk stop threshold and 2 GiB per-run stored-output limit. The 640, 896 and 1024 MiB caps stopped TOP elaboration at sampled decreases of 647, 916 and 1029 MiB before C++ generation. The selected 1040 MiB cap is just below half the earlier 2.04 GiB coverage-build decrease. Admission requires 2.14 GiB available RAM (1 GiB reserve + 128 MiB margin + 1040 MiB run budget). The peak target remains unmeasured until a complete guarded run finishes."
+  }
+}

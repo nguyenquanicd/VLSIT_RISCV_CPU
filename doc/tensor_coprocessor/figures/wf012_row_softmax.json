@@ -1,0 +1,117 @@
+{
+  "head": {
+    "text": "WF-012 OP-006 row softmax (illustrative ordering only)",
+    "tick": 0
+  },
+  "signal": [
+    [
+      "CV-X-IF command/result",
+      {
+        "name": "i_clk_core",
+        "wave": "p..............................."
+      },
+      {
+        "name": "i_xif_issue_valid",
+        "wave": "01000000000000000000000000000000"
+      },
+      {
+        "name": "o_xif_issue_ready",
+        "wave": "01000000000000000000000000000000"
+      },
+      {
+        "name": "o_xif_issue_resp_accept",
+        "wave": "01000000000000000000000000000000"
+      },
+      {
+        "name": "i_xif_commit_valid",
+        "wave": "00010000000000000000000000000000"
+      },
+      {
+        "name": "i_xif_commit_kill",
+        "wave": "00000000000000000000000000000000"
+      },
+      {
+        "name": "o_xif_result_valid",
+        "wave": "00000000000000000000000000000100"
+      },
+      {
+        "name": "i_xif_result_ready",
+        "wave": "00000000000000000000000000000100"
+      },
+      {
+        "name": "o_xif_result_we",
+        "wave": "00000000000000000000000000000100"
+      },
+      {
+        "name": "i_xif_issue_req_instr[31:0]",
+        "wave": "x=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "data": [
+          "OP-006"
+        ]
+      },
+      {
+        "name": "o_xif_result_data",
+        "wave": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx=xx",
+        "data": [
+          "OK"
+        ]
+      }
+    ],
+    [
+      "IF-003 phases (conceptual)",
+      {
+        "name": "Descriptor fetch",
+        "wave": "00001110000000000000000000000000"
+      },
+      {
+        "name": "Descriptor validated",
+        "wave": "00000001000000000000000000000000"
+      },
+      {
+        "name": "Row 0 read request",
+        "wave": "00000000100000000000000000000000"
+      },
+      {
+        "name": "Row 0 ready",
+        "wave": "00000000010000000000000000000000"
+      },
+      {
+        "name": "Row 1 prefetch",
+        "wave": "00000000000001000000000000000000"
+      },
+      {
+        "name": "Row 1 ready",
+        "wave": "00000000000000001000000000000000"
+      }
+    ],
+    [
+      "Compute and completion (conceptual)",
+      {
+        "name": "Max reduction",
+        "wave": "00000000001000000010000000000000"
+      },
+      {
+        "name": "Centered exp",
+        "wave": "00000000000111000001110000000000"
+      },
+      {
+        "name": "Sum reduction",
+        "wave": "00000000000011100000111000000000"
+      },
+      {
+        "name": "Reciprocal and normalize",
+        "wave": "00000000000000011000000110000000"
+      },
+      {
+        "name": "Row writes successful",
+        "wave": "00000000000000000100000000001000"
+      }
+    ]
+  ],
+  "foot": {
+    "text": "Illustrative ordering only. Row 1 prefetch overlaps row 0 exp/reduction. Result follows both row writes."
+  },
+  "config": {
+    "hscale": 1
+  }
+}

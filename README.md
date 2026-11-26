@@ -1,79 +1,124 @@
-# VLSIT RISC-V CPU Cluster
+# VLSIT RISC-V CPU Cluster & Tensor Coprocessor
 
-## Directory layout / Cấu trúc thư mục
+This repository contains a configurable 2/4-CPU RISC-V cluster and the design specification for a tensor coprocessor. Start with the specifications and register workbooks below; diagrams, FSMs and waveforms are linked beside them.
 
-[Layout and commands / Cấu trúc và lệnh chạy](doc/PROJECT_LAYOUT.md).
+Repository gồm cluster RISC-V cấu hình 2/4 CPU và đặc tả tensor coprocessor. Bắt đầu từ specification và workbook thanh ghi bên dưới; các liên kết sơ đồ, FSM và waveform nằm cạnh từng thiết kế.
+
+[Documentation index / Mục lục tài liệu](doc/README.md) · [Project layout / Cấu trúc dự án](doc/PROJECT_LAYOUT.md) · [Supporting records / Hồ sơ hỗ trợ](project_support/README.md)
+
+## 1. Cluster 2/4 CPU
+
+The cluster uses CVA6 harts, private L1 caches with coherent D-caches, a shared LLC, PMU and per-hart debug connections. The current AXI profile provides AXI4-Lite control, an AXI4 memory interface with the PULP AWATOP extension, and non-coherent AXI4 MMIO. The external ACE profile is deferred. CPU count is selected before synthesis: `PARA_CPU_NUM=2` or `4`, default `4`.
+
+Cluster dùng các hart CVA6, L1 riêng với D-cache có coherence, LLC dùng chung, PMU và kết nối debug từng hart. Profile AXI hiện tại có điều khiển AXI4-Lite, bộ nhớ AXI4 mở rộng PULP AWATOP và MMIO AXI4 không coherence. Profile ACE bên ngoài chưa triển khai. Số CPU chọn trước synthesis: `PARA_CPU_NUM=2` hoặc `4`, mặc định `4`.
+
+| Item / Nội dung | Read or view / Đọc hoặc xem | Editable source / Nguồn chỉnh sửa |
+|---|---|---|
+| Specification / Đặc tả | [Cluster HDS](doc/specification/VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS.md) · [Reading guide / Hướng dẫn đọc](doc/specification/README.md) | [Architecture / Kiến trúc](doc/specification/architecture/VLSIT_RISCV_CPU_Cluster_Architecture.md) · [Port plan / Kế hoạch port](doc/specification/VLSIT_RISCV_CPU_CLUSTER_RTL_PORT_PLAN.md) |
+| CSR / Thanh ghi | [Cluster CSR workbook](doc/specification/VLSIT_RISCV_CPU_Cluster_CSR.xlsx) | Workbook defines the register map and PMU events. / Workbook định nghĩa map thanh ghi và event PMU. |
+| TOP block diagram / Sơ đồ khối TOP | [TOP SVG](doc/specification/figures/post_a06/m_vlsit_riscv_cluster_axi_top.svg) · [Core SVG](doc/specification/figures/post_a06/m_vlsit_riscv_cluster_core.svg) | [TOP draw.io](doc/specification/figures/post_a06/m_vlsit_riscv_cluster_axi_top.drawio) · [Core draw.io](doc/specification/figures/post_a06/m_vlsit_riscv_cluster_core.drawio) |
+| Memory data flow / Luồng dữ liệu bộ nhớ | [Data-flow SVG](doc/specification/figures/post_a06/CLUSTER_DATA_FLOW.svg) | [draw.io](doc/specification/figures/post_a06/CLUSTER_DATA_FLOW.drawio) |
+| Maintenance flow / Luồng cache maintenance | [Retirement–CCU–LLC SVG](doc/specification/figures/post_a06/CLUSTER_CMO_FLOW.svg) | [draw.io](doc/specification/figures/post_a06/CLUSTER_CMO_FLOW.drawio) |
+| FSM / Máy trạng thái | [CCU FSM](doc/specification/figures/post_a06/CCU_CONTEXT.svg) · [CMO controller FSM](doc/specification/figures/post_a06/CMO_CONTROLLER.svg) | [CCU draw.io](doc/specification/figures/post_a06/CCU_CONTEXT.drawio) · [CMO draw.io](doc/specification/figures/post_a06/CMO_CONTROLLER.drawio) |
+| Other components and FSMs / Các khối và FSM khác | [Figure guide / Hướng dẫn bộ hình](doc/specification/figures/post_a06/README.md) | [Figure sources / Nguồn hình](doc/specification/figures/post_a06/) |
+| Waveforms / Dạng sóng | [Waveform files / Bộ waveform](doc/specification/figures/waveforms/) · Examples below / Ví dụ bên dưới | WaveJSON `.json`, rendered `.svg` and standalone `.html`. / Có nguồn JSON, ảnh SVG và HTML độc lập. |
+
+### Waveform examples / Ví dụ waveform
+
+| Scenario / Kịch bản | View / Xem | Source / Nguồn |
+|---|---|---|
+| Dirty MESI owner / Owner MESI giữ dữ liệu dirty | [WF-002 SVG](doc/specification/figures/waveforms/WF-002_mesi_dirty_owner.svg) | [JSON](doc/specification/figures/waveforms/WF-002_mesi_dirty_owner.json) |
+| CBO writeback fault / Lỗi writeback khi thực hiện CBO | [WF-018 SVG](doc/specification/figures/waveforms/WF-018_cbo_writeback_fault.svg) | [JSON](doc/specification/figures/waveforms/WF-018_cbo_writeback_fault.json) |
+| FENCE.I synchronization / Đồng bộ FENCE.I | [WF-019 SVG](doc/specification/figures/waveforms/WF-019_fence_i_sync.svg) | [JSON](doc/specification/figures/waveforms/WF-019_fence_i_sync.json) |
+| Directory CANCEL progress / Tiến triển qua CANCEL của directory | [WF-020 SVG](doc/specification/figures/waveforms/WF-020_directory_cancel_escape.svg) | [JSON](doc/specification/figures/waveforms/WF-020_directory_cancel_escape.json) |
+| Address-region routing / Định tuyến theo vùng địa chỉ | [WF-021 SVG](doc/specification/figures/waveforms/WF-021_address_region_routing.svg) | [JSON](doc/specification/figures/waveforms/WF-021_address_region_routing.json) |
+
+Use the HDS for the timing contract. Entries marked `pending` are documented gaps. Simulation evidence and captured waveforms are linked from the [implementation audit](project_support/reports/post_a06_cluster_audit/README.md) and [FENCE.I report](project_support/reports/fence_i/README.md).
+
+Dùng HDS để xác định hợp đồng timing. Mục ghi `pending` là phần còn thiếu. Bằng chứng mô phỏng và waveform thu từ simulation được dẫn trong báo cáo audit và FENCE.I; hình minh họa trong spec không tự chứng minh RTL đã pass.
+
+### Coherence deadlock fixes, 2026-11-27 / Sửa lỗi deadlock coherence
+
+With four harts, the cluster could deadlock when several harts run atomics on one shared line while another hart runs CBO and FENCE.I. Three defects were found with the RV32 testbench (TC-07), reproduced on the 64-bit cluster, fixed, and merged into `rtl/common/`. Details: [HDS Section 14.7](doc/specification/VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS.md) (DEC-046, DEC-047) · [test report](verification/rv32_profile/REPORT.md) · [change plan](doc/specification/HPDCACHE_ATOMIC_DEADLOCK_CHANGE_PLAN.md).
+
+Khi chạy 4 hart, cluster có thể deadlock nếu nhiều hart chạy lệnh atomic trên cùng một dòng dùng chung trong lúc một hart khác chạy CBO và FENCE.I. Ba lỗi được phát hiện bằng testbench RV32 (TC-07), tái hiện được trên cluster 64-bit, đã sửa và merge vào `rtl/common/`.
+
+| Fix / Bản sửa | File | What changed / Thay đổi | Why / Vì sao |
+|---|---|---|---|
+| 1 | `hpdcache.sv`, `hpdcache_ctrl.sv` | An AMO takes atomic permission (and refuses probes of its line) only after an E/M grant, not after a Shared grant; LR keeps S. / AMO chỉ nhận quyền atomic (và chặn probe) sau grant E/M, không phải sau grant S; LR vẫn được nhận S. | From S the AMO still needs unique ownership, which waits behind the very probe it refuses: deadlock. The HDS already requires probes to complete before the unique grant. / Khi chỉ có S, AMO vẫn phải xin quyền unique, mà yêu cầu đó lại chờ sau chính probe nó đang chặn, nên deadlock. Spec vốn đã yêu cầu probe phải được hoàn tất trước grant unique. |
+| 2 | `hpdcache_rtab.sv` | The replay-table fence stays on while an AMO, uncacheable or CMO entry is queued. / Fence của RTAB giữ mức 1 khi còn entry AMO, uncached hoặc CMO. | A younger same-line load slipped in behind a queued AMO; when the AMO was re-fenced it could never leave: deadlock. / Một lệnh load cùng dòng chen vào sau AMO đang chờ; khi AMO bị fence lại thì không bao giờ rời hàng đợi được, nên deadlock. |
+| 3 | `m_vlsit_riscv_coh_fabric.sv` | A context leaves DIR_UPDATE/DIR_CANCEL only on the directory handshake that carries its own tag. / Context chỉ rời DIR_UPDATE/DIR_CANCEL khi handshake directory mang đúng tag của nó. | One handshake retired two contexts: the second lost its directory update and left its set reserved, blocking later lookups (and losing holder information). / Một handshake hoàn tất cả hai context: context thứ hai mất update directory và để lại reservation của set, làm lookup về sau bị chặn (đồng thời mất thông tin holder). |
+
+Verified on the merged RTL: lint clean; RV32 TC-01 to TC-10 PASS with 2 and 4 harts; 64-bit TC-04 to 07, 09, 10 PASS; existing atomic, CMO, FENCE.I and directory-holder suites 36/36 PASS; the pre-fix snapshot (`rtl/coherence_fix/pre_merge/`) still reproduces the hang. / Đã kiểm chứng trên RTL đã merge: lint sạch; RV32 TC-01 đến TC-10 PASS với 2 và 4 hart; 64-bit TC-04 đến 07, 09, 10 PASS; 36/36 lần chạy suite sẵn có PASS; bản trước khi sửa vẫn tái hiện được lỗi treo.
+
+## 2. Tensor coprocessor / Bộ đồng xử lý tensor
+
+The current cluster configuration disables CVXIF and exposes no CV-X-IF ports (HDS DEC-022). The tensor specification describes a future accelerator attachment; that integration remains to be defined.
+
+Cấu hình cluster hiện tại tắt CVXIF và không đưa cổng CV-X-IF ra ngoài (DEC-022). Đặc tả tensor mô tả phần kết nối accelerator cần thiết kế thêm; chưa phải cấu hình cluster đã tích hợp tensor.
+
+The draft specifies a CV-X-IF coprocessor for tensor operations, including GEMM, attention, softmax, layer normalization and vector/decode workloads. It selects non-coherent AXI4 burst DMA with banked local SRAM for tensor data and describes optional APB4 CSR control. Interface sizing and other open decisions are listed in the HDS.
+
+Bản nháp đặc tả bộ đồng xử lý CV-X-IF cho GEMM, attention, softmax, layer normalization và workload vector/decode. Đường dữ liệu đã chọn là DMA burst AXI4 không coherence kết hợp SRAM nội bộ chia bank; CSR APB4 là tùy chọn. Kích thước giao tiếp và các quyết định còn mở được ghi trong HDS.
+
+| Item / Nội dung | Read or view / Đọc hoặc xem | Editable source / Nguồn chỉnh sửa |
+|---|---|---|
+| Specification / Đặc tả | [Tensor coprocessor HDS](doc/tensor_coprocessor/VLSIT_TENSOR_COPROCESSOR_HDS.md) · [Reading guide / Hướng dẫn đọc](doc/tensor_coprocessor/README.md) | Requirements, interfaces, algorithms and open decisions. / Yêu cầu, giao tiếp, thuật toán và quyết định còn mở. |
+| CSR / Thanh ghi | [Tensor CSR workbook](doc/tensor_coprocessor/TENSOR_COPROCESSOR_CSR.xlsx) | [Register model JSON / Mô hình thanh ghi](doc/tensor_coprocessor/tcop_regs.json) |
+| Block diagram / Sơ đồ khối | [Current block-diagram SVG / Sơ đồ hiện tại](doc/tensor_coprocessor/figures/tensor_copro_block_diagram_runtime.svg) | [draw.io](doc/tensor_coprocessor/figures/tensor_copro_block_diagram_runtime.drawio) · [Diagram JSON / Nguồn sơ đồ](doc/tensor_coprocessor/figures/tensor_copro_block_diagram_runtime.json) |
+| Control FSM / FSM điều khiển | [FSM SVG](doc/tensor_coprocessor/figures/ctrl_fsm.svg) | [draw.io](doc/tensor_coprocessor/figures/ctrl_fsm.drawio) · [FSM JSON](doc/tensor_coprocessor/figures/ctrl_fsm.json) |
+| Waveforms / Dạng sóng | [Waveform files / Bộ waveform](doc/tensor_coprocessor/figures/) · Examples below / Ví dụ bên dưới | WaveJSON sources with SVG or standalone HTML views. / Nguồn WaveJSON kèm SVG hoặc HTML độc lập. |
+| CV-X-IF reference / Tham chiếu giao thức | [Converted reference / Bản Markdown](doc/tensor_coprocessor/reference/md_doc/vlsit_cvxif_openhw_core_v_xif_v1_0_0.md) | [Local PDF / PDF lưu trong dự án](doc/tensor_coprocessor/reference/protocol/cvxif_v1.0.0.pdf) |
+
+### Waveform examples / Ví dụ waveform
+
+| Scenario / Kịch bản | View / Xem | Source / Nguồn |
+|---|---|---|
+| GEMM issue/result / Nhận lệnh và trả kết quả GEMM | [WF-001 SVG](doc/tensor_coprocessor/figures/wf001_gemm_success.svg) | [JSON](doc/tensor_coprocessor/figures/wf001_gemm_success.json) |
+| Result backpressure / Giữ kết quả khi phía nhận chưa sẵn sàng | [WF-008 SVG](doc/tensor_coprocessor/figures/wf008_backpressure.svg) | [JSON](doc/tensor_coprocessor/figures/wf008_backpressure.json) |
+| AXI read error / Lỗi đọc AXI | [WF-010 SVG](doc/tensor_coprocessor/figures/wf010_argmax_read_error.svg) | [JSON](doc/tensor_coprocessor/figures/wf010_argmax_read_error.json) |
+| Exact attention / Attention chính xác | [WF-011 HTML](doc/tensor_coprocessor/figures/wf011_exact_attention.html) | [JSON](doc/tensor_coprocessor/figures/wf011_exact_attention.json) |
+| Layer normalization / Chuẩn hóa theo lớp | [WF-013 HTML](doc/tensor_coprocessor/figures/wf013_layer_norm.html) | [JSON](doc/tensor_coprocessor/figures/wf013_layer_norm.json) |
+
+Open standalone waveform HTML files locally in a browser. These tensor figures describe the specification; they do not establish a completed RTL implementation or verification result.
+
+Mở file HTML waveform bằng trình duyệt trên máy. Các hình tensor mô tả đặc tả; chưa phải bằng chứng đã hoàn tất RTL hoặc kiểm chứng.
+
+## 3. Directory layout / Cấu trúc thư mục
 
 ```text
+doc/
+  README.md                      Documentation entry / Mục lục tài liệu
+  PROJECT_LAYOUT.md              Project map and commands / Cấu trúc và lệnh chạy
+  specification/                 Cluster 2/4 CPU: HDS, CSR, architecture, figures, references
+  tensor_coprocessor/             Tensor HDS, CSR, figures, CV-X-IF reference
 rtl/
-  non_coherence_cluster/   AXI TOP and private RTL
-  coherence_cluster/      Reserved ACE profile; no ACE TOP yet
+  non_coherence_cluster/         Current AXI TOP and private RTL / TOP AXI hiện tại
+  coherence_cluster/             Reserved external ACE profile / Profile ACE dự phòng
   common/
-    third_party/
-    modified/
-    vlsit/                Grouped by function
-    filelists/
-lint/                     Lint logs
-verification/             Testbenches, simulation builds and results
-doc/                      Specifications, diagrams, reports and licenses
-scripts/                  Tools
+    third_party/                 Original upstream RTL / RTL upstream nguyên bản
+    modified/                    Local changes with license/history / Bản sửa giữ license/history
+    vlsit/                       New and generated RTL / RTL mới và sinh tự động
+    filelists/                   Shared source lists / Filelist dùng chung
+verification/                    Testbenches, programs and simulation results / Mô phỏng
+lint/                            Lint/rule configuration and results / Cấu hình và kết quả lint
+scripts/                         Generation and checking tools / Công cụ sinh và kiểm tra
+project_support/                 Reports, snapshots, vendor docs and licenses / Hồ sơ hỗ trợ
 ```
 
-The AXI profile retains internal cache coherence. / Profile AXI vẫn có coherence cache nội bộ.
-RTL contents and license headers are unchanged by this migration. / Việc di chuyển không thay đổi nội dung RTL hoặc header license.
+## 4. RTL, validation and licenses / RTL, kiểm chứng và license
 
-## English
-
-This project defines a synthesis-time configurable two- or four-hart RISC-V cluster based on OpenHW CVA6. The current implementation phase targets the AXI profile: private coherent D-caches, a shared LLC, a cluster PMU, per-hart debug routing, AXI4-Lite control, AXI4+ATOP memory traffic, and non-coherent AXI4 MMIO. The external ACE profile is deferred.
-
-### Project files
-
-| Path | Purpose |
+| Resource / Tài nguyên | Link / Liên kết |
 |---|---|
-| [`doc/specification/VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS.md`](doc/specification/VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS.md) | Functional requirements, interfaces, modes, and verification plan. |
-| [`doc/specification/VLSIT_RISCV_CPU_CLUSTER_RTL_PORT_PLAN.md`](doc/specification/VLSIT_RISCV_CPU_CLUSTER_RTL_PORT_PLAN.md) | Source audit and integration port contracts. |
-| [`doc/specification/VLSIT_RISCV_CPU_Cluster_CSR.xlsx`](doc/specification/VLSIT_RISCV_CPU_Cluster_CSR.xlsx) | CSR map and PMU event catalog source. |
-| [`doc/third_party/README.md`](doc/third_party/README.md) | Pinned source revisions and license handling. |
-| [`doc/rtl_layout/modified/README.md`](doc/rtl_layout/modified/README.md) | License-preserving upstream changes. |
-| [`rtl/common/vlsit/`](rtl/common/vlsit) | Newly authored VLSIT RTL and generated CSR RTL. |
-| [`rtl_change_review.md`](doc/review/rtl_change_review.md) | Approved Plan V4 and implementation status. |
+| Cluster TOP, 2/4 harts / TOP cluster 2/4 hart | [m_vlsit_riscv_cluster_axi_top.sv](rtl/non_coherence_cluster/m_vlsit_riscv_cluster_axi_top.sv) · [Production filelist / Filelist production](rtl/non_coherence_cluster/filelist.f) |
+| Current cluster audit / Audit cluster hiện tại | [Post-A-06 report](project_support/reports/post_a06_cluster_audit/README.md) |
+| Behavioral replay / Chạy lại kiểm chứng chức năng | [Regression Makefile](verification/non_coherence_cluster/cmo_end_to_end/Makefile) · [A-06 evidence / Bằng chứng A-06](project_support/reports/fault_record_a06/README.md) |
+| Design gaps / Điểm thiết kế còn mở | [Cluster HDS Section 20](doc/specification/VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS.md#20-assumptions-dependencies-and-decisions) · [Tensor HDS Section 20](doc/tensor_coprocessor/VLSIT_TENSOR_COPROCESSOR_HDS.md#20-assumptions-dependencies-and-decisions) |
+| Reused IP revisions / Revision IP tái sử dụng | [Source provenance / Nguồn gốc mã](doc/specification/references/THIRD_PARTY_SOURCES.md) · [Vendor source guide / Hướng dẫn source vendor](project_support/third_party/README.md) |
+| Licenses / Giấy phép | [Preserved license files / Các file license được giữ](project_support/licenses/third_party/) |
+| Documentation links / Liên kết tài liệu | [Link audit and changed files / Kiểm tra liên kết và danh sách file sửa](project_support/documentation_audit_20261116/README.md) |
+| Cleanup history / Lịch sử dọn tài liệu | [Supporting records / Hồ sơ hỗ trợ](project_support/README.md) |
 
-### Current implementation status
+Implementation status and qualification limits belong to the linked specifications and audit reports. Existing directed results do not establish complete SoC, software/OS, synthesis, STA or PPA signoff. Apply the license notices of each reused source file and its repository.
 
-**Detailed specification:** [HDS 0.29 and reading guide](doc/specification/README.md) now include source-grounded TOP/component diagrams, NEW/MODIFY provenance, exact interfaces, actual FSMs and working/data flows. This documentation update changes no production RTL or CSR ABI.
-
-**Post-A-06 audit (2026-11-16):** [Current hierarchy, simulated/lint-only features, remaining risks and work order](doc/reports/post_a06_cluster_audit/README.md). Fresh TOP lint is clean at 2/4 harts. Required control/peripheral/debug paths still need functional qualification; a restrictive `lzc.sv` source notice in the TOP filelist also needs disposition before release.
-
-**Completeness audit:** A-01 (LOAD → STORE → CBO) is fixed and passes at 2/4 harts, including ABORT/error regression. [Fix and evidence](doc/reports/e_to_m_fix/README.md). A-02 cached AMO/LR-SC livelock and precise faults also pass real CPU tests at 2/4 harts; [atomic report](doc/reports/atomic_coherence/README.md). A-03 dirty-eviction retention passes six CPU cases; [report](doc/reports/l1_eviction_retention/README.md). A-04 conservative-holder reconciliation passes eight CPU cases; [report](doc/reports/directory_holder_lifecycle/README.md). A-05 victim-context escape now passes saturation at 2/8/16 contexts and real CPU 2/4-hart regression; [current report](doc/reports/ccu_victim_escape/README.md). One credit is reserved for victim work, so default N=8 admits at most seven CPU/CMO roots. A-06 is implemented and verified: first fatal L1/LLC record is retained until reset; later faults set multiple. L1 identifies the exact hart; LLC uses hart_valid=0. 58 real CPU cases PASS, including ten A-06 scenarios and AMO/LR-SC/CBO/FENCE.I regression; production TOP lint at 2/4 harts has zero errors and warnings. Firmware must use the 4-KiB group map: fault 0x4000–0x400C, LLC 0x5000 (24-KiB aperture). Directed validation does not establish global coherence, OS or ASIC signoff. [A-06 evidence and replay](doc/reports/fault_record_a06/README.md).
-
-The AXI cluster TOP is integrated with CVA6, HPDcache, CCU, LLC and control logic. Production TOP lint passes at 2/4 harts with 0 errors and 0 warnings. Real CPU tests cover CBO maintenance and the DEC-030/031 FENCE.I path. [FENCE.I evidence](doc/reports/fence_i/README.md) includes eight M/S-mode success/error/retry tests, I-cache completion checks, actual waveforms and the changed-file list. Licensed upstream sources remain pristine under `rtl/common/third_party`; local changes live in `rtl/common/modified`.
-
-These directed checks do not establish complete CPU/SoC signoff. External ACE, full software/OS and random coherence verification, synthesis, STA and PPA remain outside the demonstrated scope. The [FPU warning cleanup](doc/reports/fpu_warning_fix/README.md) also passes: native FENCE.I models and production TOP lint have zero warnings.
-
-## Tiếng Việt
-
-**Đặc tả chi tiết:** [HDS 0.29 và hướng dẫn đọc](doc/specification/README.md) đã bổ sung sơ đồ TOP/component theo source, phân loại NEW/MODIFY, interface, FSM và working/data flow. Lần cập nhật tài liệu này không sửa RTL production hoặc ABI CSR.
-
-**Audit sau A-06 (2026-11-16):** [Hierarchy, phần đã mô phỏng, phần chỉ lint và thứ tự hoàn thiện](doc/reports/post_a06_cluster_audit/README.md). Lint TOP mới chạy không lỗi/warning ở 2/4 hart; còn thiếu kiểm chứng chức năng các đường điều khiển/peripheral/debug và cần xử lý thông báo hạn chế sử dụng `lzc.sv` trước phát hành.
-
-Dự án đặc tả cluster RISC-V cấu hình trước tổng hợp với hai hoặc bốn hart, dùng OpenHW CVA6. Giai đoạn hiện tại xây dựng profile AXI: D-cache riêng có coherence, LLC chia sẻ, PMU cluster, định tuyến debug từng hart, điều khiển AXI4-Lite, bộ nhớ AXI4+ATOP và MMIO AXI4 không coherence. Profile ACE bên ngoài được để cho giai đoạn sau.
-
-### Tệp của dự án
-
-| Đường dẫn | Chức năng |
-|---|---|
-| [`doc/specification/VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS.md`](doc/specification/VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS.md) | Yêu cầu chức năng, giao diện, cấu hình và kế hoạch kiểm chứng. |
-| [`doc/specification/VLSIT_RISCV_CPU_CLUSTER_RTL_PORT_PLAN.md`](doc/specification/VLSIT_RISCV_CPU_CLUSTER_RTL_PORT_PLAN.md) | Phân tích mã nguồn và hợp đồng port tích hợp. |
-| [`doc/specification/VLSIT_RISCV_CPU_Cluster_CSR.xlsx`](doc/specification/VLSIT_RISCV_CPU_Cluster_CSR.xlsx) | Nguồn bản đồ CSR và danh mục event PMU. |
-| [`doc/third_party/README.md`](doc/third_party/README.md) | Revision mã nguồn và yêu cầu license. |
-| [`doc/rtl_layout/modified/README.md`](doc/rtl_layout/modified/README.md) | Các thay đổi trên bản sao upstream có giữ license. |
-| [`rtl/common/vlsit/`](rtl/common/vlsit) | RTL mới của VLSIT và CSR được sinh tự động. |
-| [`rtl_change_review.md`](doc/review/rtl_change_review.md) | Plan V4 đã duyệt và trạng thái triển khai. |
-
-### Trạng thái hiện tại
-
-**Audit độ hoàn thiện:** A-01 (LOAD → STORE → CBO) đã sửa và pass ở 2/4 hart, gồm nhánh lỗi/ABORT. [Bản sửa và bằng chứng](doc/reports/e_to_m_fix/README.md). A-02 AMO/LR-SC cached đã sửa livelock và lỗi precise, test CPU thật 2/4 hart đều pass; [báo cáo atomic](doc/reports/atomic_coherence/README.md). A-03 giữ dữ liệu eviction dirty đã pass sáu ca CPU thật; [báo cáo](doc/reports/l1_eviction_retention/README.md). A-04 đối chiếu holder bảo thủ đã pass tám ca CPU; [báo cáo](doc/reports/directory_holder_lifecycle/README.md). A-05 đã kiểm chứng slot thoát cho victim ở 2/8/16 context và regression CPU 2/4 hart; [báo cáo mới nhất](doc/reports/ccu_victim_escape/README.md). Giữ một credit cho victim nên mặc định N=8 nhận tối đa bảy root CPU/CMO. A-06 đã triển khai và kiểm chứng: giữ record fatal L1/LLC đầu tiên đến reset; lỗi sau đặt multiple. L1 ghi đúng hart; LLC dùng hart_valid=0. 58 ca CPU thật PASS, gồm mười ca A-06 và regression AMO/LR-SC/CBO/FENCE.I; lint TOP 2/4 hart không lỗi hoặc warning. Firmware phải dùng map cách 4 KiB: fault 0x4000–0x400C, LLC 0x5000, aperture 24 KiB. Chưa phải signoff coherence toàn cục, OS hoặc ASIC. [Báo cáo A-06](doc/reports/fault_record_a06/README.md).
-
-TOP cluster AXI đã tích hợp CVA6, HPDcache, CCU, LLC và logic điều khiển. Lint TOP production 2/4 hart đạt 0 lỗi, 0 warning. Test CPU thật đã kiểm tra CBO và FENCE.I theo DEC-030/031. [Báo cáo FENCE.I](doc/reports/fence_i/README.md) có tám ca M/S-mode thành công/lỗi/retry, kiểm tra completion I-cache, waveform thật và danh sách file sửa. Nguồn gốc trong `rtl/common/third_party` giữ nguyên; bản sửa nằm trong `rtl/common/modified`.
-
-Các test có định hướng chưa phải signoff toàn CPU/SoC. ACE bên ngoài, phần mềm/OS đầy đủ, coherence ngẫu nhiên, synthesis, STA và PPA chưa được chứng minh bởi bộ test này. [Bản sửa warning FPU](doc/reports/fpu_warning_fix/README.md) cũng đã pass: model FENCE.I và lint TOP production đều không còn warning.
+Trạng thái triển khai và giới hạn đã kiểm chứng được ghi trong đặc tả và báo cáo liên kết. Các kết quả directed hiện có chưa xác nhận signoff toàn SoC, phần mềm/OS, synthesis, STA hoặc PPA. Cần tuân thủ thông báo license của từng file nguồn và repository tái sử dụng.

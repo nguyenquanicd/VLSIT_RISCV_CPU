@@ -1,11 +1,50 @@
 {
-  "head": {"text": "WF-008 Result backpressure (corner)"},
+  "head": {
+    "text": "WF-008 CV-X-IF result backpressure"
+  },
   "signal": [
-    {"name": "i_clk_core", "wave": "p........."},
-    {"name": "o_xif_result_valid", "wave": "01.111...0"},
-    {"name": "i_xif_result_ready", "wave": "0...10...."},
-    {"name": "o_xif_result_data", "wave": "x=...=.xxx", "data": ["C0", "C0"]}
+    {
+      "name": "i_clk_core",
+      "wave": "p........."
+    },
+    {
+      "name": "o_xif_result_valid",
+      "wave": "0111100000"
+    },
+    {
+      "name": "i_xif_result_ready",
+      "wave": "0000100000"
+    },
+    {
+      "name": "o_xif_result_data",
+      "wave": "x=...xxxxx",
+      "data": [
+        "6"
+      ]
+    },
+    {
+      "name": "o_xif_result_rd",
+      "wave": "x=...xxxxx",
+      "data": [
+        "x12"
+      ]
+    },
+    {
+      "name": "o_xif_result_we",
+      "wave": "x1...xxxxx"
+    },
+    {
+      "name": "o_xif_result_id",
+      "wave": "x=...xxxxx",
+      "data": [
+        "N"
+      ]
+    }
   ],
-  "foot": {"text": "result_valid is never retracted; it is held until result_ready."},
-  "config": {"hscale": 2}
+  "foot": {
+    "text": "The scalar result and its destination stay stable through the single valid/ready handshake."
+  },
+  "config": {
+    "hscale": 3
+  }
 }

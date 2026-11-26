@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1480" height="880" viewBox="240 240 1480 880" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="240" y="240" width="1480" height="880" fill="#FFFFFF"/>
+<rect x="510" y="370" width="1180" height="620" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<rect x="600" y="510" width="200" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="536" text-anchor="middle">bank_op_arbiter</text>
+<text x="700" y="558" text-anchor="middle">(p_com_dir_ready)</text>
+<rect x="940" y="510" width="200" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1040" y="536" text-anchor="middle">set_reservation</text>
+<text x="1040" y="558" text-anchor="middle">(reg_dir_resv_*)</text>
+<rect x="610" y="680" width="180" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="706" text-anchor="middle">read_stage</text>
+<text x="700" y="728" text-anchor="middle">(gen_read_pipe)</text>
+<rect x="960" y="680" width="160" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1040" y="706" text-anchor="middle">payload_array</text>
+<text x="1040" y="728" text-anchor="middle">(gen_way x8)</text>
+<rect x="1270" y="680" width="340" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1440" y="706" text-anchor="middle">valid_plru_flops</text>
+<text x="1440" y="728" text-anchor="middle">(reg_dir_valid, reg_dir_plru)</text>
+<rect x="930" y="850" width="220" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1040" y="876" text-anchor="middle">hit_victim_select</text>
+<text x="1040" y="898" text-anchor="middle">(p_com_dir_lookup)</text>
+<rect x="590" y="850" width="220" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="876" text-anchor="middle">lookup_response_reg</text>
+<text x="700" y="898" text-anchor="middle">(reg_lookup_*)</text>
+<rect x="1330" y="850" width="220" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1440" y="876" text-anchor="middle">update_writer</text>
+<text x="1440" y="898" text-anchor="middle">(p_ff_dir_storage)</text>
+<text x="700" y="291" text-anchor="middle">LOOKUP / UPDATE / CANCEL</text>
+<text x="700" y="313" text-anchor="middle">valid, set, tag</text>
+<text x="365" y="876" text-anchor="middle">LOOKUP RESPONSE</text>
+<text x="365" y="898" text-anchor="middle">hit, way, holders</text>
+<text x="1440" y="1061" text-anchor="middle">UPDATE DATA</text>
+<text x="1440" y="1083" text-anchor="middle">way, holders, owner, state</text>
+<text x="1668" y="411" text-anchor="end">Internal functional blocks</text>
+<text x="1668" y="433" text-anchor="end">(m_vlsit_riscv_sharer_directory)</text>
+<text x="820" y="526" text-anchor="middle">OP</text>
+<text x="728" y="602" text-anchor="middle">RD</text>
+<text x="830" y="696" text-anchor="middle">ADDR</text>
+<text x="1078" y="772" text-anchor="middle">WAYS</text>
+<text x="1170" y="816" text-anchor="middle">PLRU</text>
+<text x="835" y="866" text-anchor="middle">RSP</text>
+<text x="1518" y="772" text-anchor="middle">WR</text>
+<path d="M 700 320 L 700 510" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="700,510 694,498 706,498" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 590 880 L 460 880" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="460,880 472,874 472,886" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1440 1040 L 1440 910" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1440,910 1446,922 1434,922" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 800 540 L 940 540" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="940,540 928,546 928,534" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 700 570 L 700 680" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="700,680 694,668 706,668" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 790 710 L 960 710" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="960,710 948,716 948,704" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1040 740 L 1040 850" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1040,850 1034,838 1046,838" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 930 880 L 810 880" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="810,880 822,874 822,886" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1490 850 L 1490 740" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1490,740 1496,752 1484,752" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1400 740 L 1400 830 L 1170 830 L 1170 880 L 1150 880" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1150,880 1162,874 1162,886" fill="#000000" stroke="#000000" stroke-width="1"/>
+</svg>

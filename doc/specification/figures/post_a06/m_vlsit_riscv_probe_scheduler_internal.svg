@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1210" height="880" viewBox="290 240 1210 880" font-family="Arial, Helvetica, sans-serif" font-size="18">
+<rect x="290" y="240" width="1210" height="880" fill="#FFFFFF"/>
+<rect x="510" y="370" width="760" height="620" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<rect x="590" y="510" width="220" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="536" text-anchor="middle">claim_arbiter</text>
+<text x="700" y="558" text-anchor="middle">(p_com_probe_claim)</text>
+<rect x="940" y="510" width="240" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1060" y="536" text-anchor="middle">phase_owner_slots</text>
+<text x="1060" y="558" text-anchor="middle">(per-hart owner tag)</text>
+<rect x="600" y="680" width="200" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="706" text-anchor="middle">target_select</text>
+<text x="700" y="728" text-anchor="middle">(p_com_probe_sel)</text>
+<rect x="950" y="680" width="220" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1060" y="706" text-anchor="middle">probe_request_regs</text>
+<text x="1060" y="728" text-anchor="middle">(per-hart request)</text>
+<rect x="930" y="850" width="260" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="1060" y="876" text-anchor="middle">active_probe_tracker</text>
+<text x="1060" y="898" text-anchor="middle">(p_ff_probe_schedule)</text>
+<rect x="600" y="850" width="200" height="60" fill="#FFFFFF" stroke="#000000" stroke-width="2"/>
+<text x="700" y="876" text-anchor="middle">ack_match_buffer</text>
+<text x="700" y="898" text-anchor="middle">(response match)</text>
+<text x="1395" y="706" text-anchor="middle">PROBE REQUEST</text>
+<text x="1395" y="728" text-anchor="middle">to cache</text>
+<text x="700" y="1061" text-anchor="middle">PROBE RESPONSE</text>
+<text x="700" y="1083" text-anchor="middle">from cache</text>
+<text x="390" y="876" text-anchor="middle">ACK</text>
+<text x="390" y="898" text-anchor="middle">to txn table</text>
+<text x="1248" y="411" text-anchor="end">Internal functional blocks</text>
+<text x="1248" y="433" text-anchor="end">(m_vlsit_riscv_probe_scheduler)</text>
+<text x="835" y="526" text-anchor="middle">CLM</text>
+<text x="733" y="602" text-anchor="middle">CTX</text>
+<text x="825" y="696" text-anchor="middle">SEL</text>
+<text x="1093" y="602" text-anchor="middle">OWN</text>
+<text x="1093" y="772" text-anchor="middle">ACT</text>
+<text x="840" y="866" text-anchor="middle">MTCH</text>
+<text x="700" y="291" text-anchor="middle">CONTEXT STATE</text>
+<text x="700" y="313" text-anchor="middle">expected, received</text>
+<path d="M 700 320 L 700 510" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="700,510 694,498 706,498" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1170 710 L 1320 710" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1320,710 1308,716 1308,704" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 700 1040 L 700 910" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="700,910 706,922 694,922" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 600 880 L 460 880" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="460,880 472,874 472,886" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 810 540 L 940 540" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="940,540 928,546 928,534" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 700 570 L 700 680" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="700,680 694,668 706,668" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 800 710 L 950 710" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="950,710 938,716 938,704" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1060 570 L 1060 680" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1060,680 1054,668 1066,668" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 1060 740 L 1060 850" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="1060,850 1054,838 1066,838" fill="#000000" stroke="#000000" stroke-width="1"/>
+<path d="M 930 880 L 800 880" fill="none" stroke="#000000" stroke-width="2.0"/>
+<polygon points="800,880 812,874 812,886" fill="#000000" stroke="#000000" stroke-width="1"/>
+</svg>

@@ -11,6 +11,8 @@
  *              Export per-hart HPDcache PMU event indicators.
  * 2026-11-15 - Quan Nguyen and Codex - VLSI Technology page:
  *              Route per-hart oldest pending CBO metadata to the cluster core.
+ * History      : Quan Nguyen and Codex - VLSI Technology page.
+ *                DEC-045: Add optional cluster boundary timing profile support.
  */
 `timescale 1ns/1ps
 
@@ -27,6 +29,14 @@ module m_vlsit_riscv_cpu_tile_array #(
   // Parameter values: 2 through 16; default is 8.
   // Parameter unit: transaction contexts.
   parameter logic [31:0] PARA_COH_TXN_NUM = 32'd8,
+  // Parameter Description: register the release of handshake gates.
+  // Parameter values: 0 = legacy, 1 = registered; default is 0.
+  // Parameter unit: mode
+  parameter logic [31:0] PARA_REGISTER_RESET_RELEASE = 32'd0,
+  // Parameter Description: use synchronous directory storage.
+  // Parameter values: 0 = legacy, 1 = synchronous; default is 0.
+  // Parameter unit: mode
+  parameter logic [31:0] PARA_DIR_SYNC_READ = 32'd0,
   // Parameter Description: active address regions shared by CVA6 PMA and AXI routing.
   // Parameter values: 1 through 16; default contains the CVA6 cacheable window.
   // Parameter unit: regions.
@@ -225,6 +235,8 @@ module m_vlsit_riscv_cpu_tile_array #(
 
   // Route tagged ownership, probe, query, and line-lock channels for all active tiles.
   m_vlsit_riscv_coh_tile_array #(
+      .PARA_REGISTER_RESET_RELEASE(PARA_REGISTER_RESET_RELEASE),
+    .PARA_DIR_SYNC_READ(PARA_DIR_SYNC_READ),
     .PARA_CMO_EN(PARA_CMO_EN),
     .PARA_CPU_NUM(PARA_CPU_NUM),
     .PARA_COH_TXN_NUM(PARA_COH_TXN_NUM)

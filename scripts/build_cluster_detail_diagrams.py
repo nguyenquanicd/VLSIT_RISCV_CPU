@@ -513,7 +513,7 @@ def post_a06_main():
     import html
     micro = Path(r'C:\Users\PC\.codex\skills\vlsit-asic-ip-microspec')
     base = ROOT / 'doc/specification'
-    target = base / 'doc/architecture_figures/post_a06'
+    target = base / 'figures/post_a06'
     target.mkdir(parents=True, exist_ok=True)
     catalog = json.loads((base / 'post_a06_components.json').read_text())
     audit = loads_legacy((ROOT / 'verification/non_coherence_cluster/reports/post_a06_cluster_audit/audit.json').read_text())
@@ -1024,7 +1024,7 @@ def post_a06_main():
         reset='ENUM_ST_IDLE' if c.get('view_of') else c['initial']
         fsm_sections+=['','All unspecified guards hold the current legal state in the full FSM. Reset enters `'+reset+'`; a phase-view entry is not a new hardware reset state. Invalid-encoding behavior follows the source and is not a normal software recovery path. / Điều kiện chưa thỏa giữ state theo FSM đầy đủ; điểm vào phase không phải reset state mới.']
     (target/'fsm_contract_sections.md').write_text('\n'.join(fsm_sections)+'\n',encoding='utf-8')
-    baseline=base/'revision_history/pre_detail_rewrite_20261116'/HDS.name
+    baseline=ROOT/'project_support/specification/revision_history/pre_detail_rewrite_20261116'/HDS.name
     original=baseline.read_text(encoding='utf-8')
     # Keep all 22 template sections and their approved requirement/decision IDs;
     # consolidate historical appendices into the current implementation contract.
@@ -1211,7 +1211,7 @@ VI: Dùng đúng field workbook; snapshot là lệnh riêng, done sticky cần p
       '| OPEN-ACE-MAP | Earlier ACE-subset architectural intent versus implemented custom tagged channels | Review semantic mapping; do not claim native ACE pin compliance or external snoop service |\n'
       '| OPEN-DV | PMU/native LLC service, MMIO/uncached ATOP, IRQ/debug/WFI, random coherence, width/default LLC matrix | Complete prioritized tests from the post-A-06 audit; existing lint is not functional closure |\n'
       '| OPEN-ASIC | PDK/SRAM/clock/SDC/PVT/scan/DFT and workload targets absent | SoC inputs required for implementation and PPA/STA/signoff |\n\n')
-    sections[15]=sections[15].replace('### 15.1 Scope and strategy','### 15.1 Scope and strategy\n\nCurrent evidence: 58 actual CPU cases and 98 checked entries with source identities, plus fresh default TOP 2/4-hart lint. No CPU simulations are rerun by this document rewrite. See [post-A-06 matrix](../reports/post_a06_cluster_audit/README.md). A-06 activates external fault CSR; PMU/native LLC service/debug/uncached ATOP are not thereby verified. Directed cases are not code-coverage percentages.\n')
+    sections[15]=sections[15].replace('### 15.1 Scope and strategy','### 15.1 Scope and strategy\n\nCurrent evidence: 58 actual CPU cases and 98 checked entries with source identities, plus fresh default TOP 2/4-hart lint. No CPU simulations are rerun by this document rewrite. See [post-A-06 matrix](../../project_support/reports/post_a06_cluster_audit/README.md). A-06 activates external fault CSR; PMU/native LLC service/debug/uncached ATOP are not thereby verified. Directed cases are not code-coverage percentages.\n')
     sections[15]+=('\n### 15.5 Current ordinary-eviction test definition\n\n'
         '| Test ID | Requirement | Scenario | Expected result | Evidence |\n|---|---|---|---|---|\n'
         '| TEST-050 | REQ-ERR-003 | Ordinary dirty L1 eviction with OKAY/SLVERR/DECERR at 2/4 harts | B success permits replacement; failure retains actual victim/data/context and fatal IRQ until reset; reset recovery succeeds | A-03 six real CPU cases; current A-06 baseline replay |\n\n')
@@ -1232,16 +1232,16 @@ VI: Dùng đúng field workbook; snapshot là lệnh riêng, done sticky cần p
         lines=sections[10].splitlines()
         for idx,line in enumerate(lines):
             if line.startswith('| '+wf+' |'):
-                source='doc/architecture_figures/waveforms'+stem+'.svg'
+                source='figures/waveforms/'+stem+'.svg'
                 lines[idx]=line.replace('[WaveJSON source]',f'![{wf}]({source}); [WaveJSON source]',1)
         sections[10]='\n'.join(lines)+'\n\n'
-    sections[22]+=('\nCurrent source baseline and review evidence: [recursive production inventory](../reports/post_a06_cluster_audit/source_inventory.md), [audit](../reports/post_a06_cluster_audit/README.md), [A-06 source identities](../../verification/non_coherence_cluster/reports/fault_record_a06/results.json). The corrected recursive inventory includes the nested HPDcache filelist: 464 source files, not the earlier 419-file top-level-only count.\n\n')
+    sections[22]+=('\nCurrent source baseline and review evidence: [recursive production inventory](../../project_support/reports/post_a06_cluster_audit/source_inventory.md), [audit](../../project_support/reports/post_a06_cluster_audit/README.md), [A-06 source identities](../../verification/non_coherence_cluster/reports/fault_record_a06/results.json). The corrected recursive inventory includes the nested HPDcache filelist: 464 source files, not the earlier 419-file top-level-only count.\n\n')
     front=original[:original.index('# VLSIT RISC-V')]
     front=front.replace('version: "0.28"','version: "0.29"')
     front=re.sub(r'(?m)^status:.*$', 'status: "Draft - detailed post-A-06 component/FSM/interface contract; qualification and explicit open items remain"',front)
     intro=('# VLSIT RISC-V Dual/Quad CPU Cluster Design Specification\n\n'
            '# Đặc tả chi tiết cluster CPU RISC-V 2/4 hart VLSIT\n\n'
-           '**Revision 0.29, 2026-11-16.** Consolidated specification with current TOP/component diagrams, source-selected NEW/MODIFY/REUSE/GENERATED contracts, exact component ports, actual controller states and working/data flows. The prior revision and historical appendices are preserved in [the pre-rewrite snapshot](revision_history/pre_detail_rewrite_20261116/'+HDS.name+').\n\n'
+           '**Revision 0.29, 2026-11-16.** Consolidated specification with current TOP/component diagrams, source-selected NEW/MODIFY/REUSE/GENERATED contracts, exact component ports, actual controller states and working/data flows. The prior revision and historical appendices are preserved in [the pre-rewrite snapshot](../../project_support/specification/revision_history/pre_detail_rewrite_20261116/'+HDS.name+').\n\n'
            'This document states the approved design contract, explains its current RTL realization and separately identifies validation status. Source inspection is not a golden verification model. Conflicts and unqualified declarations remain explicit review items in Section 20; no RTL, register ABI, licensing notice or new waveform timing is changed by this rewrite.\n\n'
            'Bản này hợp nhất hợp đồng thiết kế, cách RTL hiện thực và trạng thái verify; không biến source đang có thành bằng chứng thiết kế đúng. Có sơ đồ TOP/từng component, chức năng, interface, FSM và data flow. Các mâu thuẫn/phần chưa verify ghi ở Section 20; không sửa RTL hoặc map CSR.\n\n'
            '## Document map\n\n| Sections | Use |\n|---|---|\n| 1–4 | Scope, precedence, approved requirements and configurations |\n| 5–9 | Architecture, TOP, interfaces, reset and data/configuration representation |\n| 10–13 | Actual FSMs, operations, working flows, software use, errors and worst-case performance |\n| 14 | Every new/generated component and selected modified source; adjacent diagram/interface/function/change contract |\n| 15–22 | Verification, ASIC/security constraints, traceability, decisions and references |\n\n')

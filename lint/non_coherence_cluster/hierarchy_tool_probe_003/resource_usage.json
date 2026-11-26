@@ -1,0 +1,230 @@
+{
+  "schema_version": 2,
+  "commands": [
+    {
+      "command": [
+        "C:/Users/PC/Tools/oss-cad-suite/bin/verilator_bin.exe",
+        "--cc",
+        "--exe",
+        "--main",
+        "--hierarchical",
+        "--make",
+        "json",
+        "--assert",
+        "--timing",
+        "--top-module",
+        "tb",
+        "--Mdir",
+        "C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/lint/non_coherence_cluster/hierarchy_tool_probe_003/obj",
+        "C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/lint/non_coherence_cluster/hierarchy_tool_probe_001/parts.vlt",
+        "C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/lint/non_coherence_cluster/hierarchy_tool_probe_001/tb.sv"
+      ],
+      "log": "C:\\HQuan\\102_MyGithub\\VLSIT_RISCV_CPU\\lint\\non_coherence_cluster\\hierarchy_tool_probe_003\\plan.log",
+      "start_ns": 1795210437168475000,
+      "start_available_bytes": 2227306496,
+      "run_initial_available_bytes": 2227306496,
+      "early_stop_available_bytes": 1136787456,
+      "minimum_start_available_bytes": 1073741824,
+      "max_ram_drop_bytes": 1090519040,
+      "ram_guard_margin_bytes": 0,
+      "ram_floor_bytes": 1073741824,
+      "disk_floor_bytes": 2147483648,
+      "samples": [
+        {
+          "elapsed_s": 0.0,
+          "available_bytes": 2227306496,
+          "total_bytes": 16357158912,
+          "load_percent": 86,
+          "disk_free_bytes": 8410243072
+        },
+        {
+          "elapsed_s": 0.11,
+          "available_bytes": 2242752512,
+          "total_bytes": 16357158912,
+          "load_percent": 86,
+          "disk_free_bytes": 8409645056
+        },
+        {
+          "elapsed_s": 0.12,
+          "available_bytes": 2242793472,
+          "total_bytes": 16357158912,
+          "load_percent": 86,
+          "disk_free_bytes": 8409645056
+        }
+      ],
+      "status": "completed",
+      "process_tree": false,
+      "minimum_disk_free_bytes": 8409645056,
+      "minimum_available_bytes": 2227306496,
+      "end_available_bytes": 2242793472,
+      "max_observed_available_ram_drop_bytes": 0,
+      "duration_s": 0.12,
+      "stop_reason": null
+    },
+    {
+      "command": [
+        "C:/Users/PC/Tools/oss-cad-suite/bin/verilator_bin.exe",
+        "-f",
+        "C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/lint/non_coherence_cluster/hierarchy_tool_probe_003/obj/Vleaf__hierMkJsonArgs.f",
+        "--Mdir",
+        "C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/lint/non_coherence_cluster/hierarchy_tool_probe_003/obj/Vleaf",
+        "C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/lint/non_coherence_cluster/hierarchy_tool_probe_001/tb.sv"
+      ],
+      "log": "C:\\HQuan\\102_MyGithub\\VLSIT_RISCV_CPU\\lint\\non_coherence_cluster\\hierarchy_tool_probe_003\\Vleaf.log",
+      "start_ns": 1795210455210291200,
+      "start_available_bytes": 776220672,
+      "run_initial_available_bytes": 2227306496,
+      "early_stop_available_bytes": 1136787456,
+      "minimum_start_available_bytes": 1073741824,
+      "max_ram_drop_bytes": 1090519040,
+      "ram_guard_margin_bytes": 0,
+      "ram_floor_bytes": 1073741824,
+      "disk_floor_bytes": 2147483648,
+      "samples": [
+        {
+          "elapsed_s": 0.0,
+          "available_bytes": 776220672,
+          "total_bytes": 16357158912,
+          "load_percent": 95,
+          "disk_free_bytes": 8218234880
+        }
+      ],
+      "status": "stopped_before_start",
+      "process_tree": false,
+      "end_available_bytes": 776220672,
+      "minimum_available_bytes": 776220672,
+      "minimum_disk_free_bytes": 8218234880,
+      "duration_s": 0.0,
+      "stop_reason": "preflight RAM below approved hard floor (1073741824 bytes)"
+    },
+    {
+      "command": [
+        "C:/Users/PC/Tools/oss-cad-suite/bin/verilator_bin.exe",
+        "-f",
+        "C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/lint/non_coherence_cluster/hierarchy_tool_probe_003/obj/Vleaf__hierMkJsonArgs.f",
+        "--Mdir",
+        "C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/lint/non_coherence_cluster/hierarchy_tool_probe_003/obj/Vleaf",
+        "C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/lint/non_coherence_cluster/hierarchy_tool_probe_001/tb.sv"
+      ],
+      "log": "C:\\HQuan\\102_MyGithub\\VLSIT_RISCV_CPU\\lint\\non_coherence_cluster\\hierarchy_tool_probe_003\\Vleaf_retry.log",
+      "start_ns": 1795210477519851200,
+      "start_available_bytes": 2417713152,
+      "run_initial_available_bytes": 2227306496,
+      "early_stop_available_bytes": 1136787456,
+      "minimum_start_available_bytes": 1073741824,
+      "max_ram_drop_bytes": 1090519040,
+      "ram_guard_margin_bytes": 0,
+      "ram_floor_bytes": 1073741824,
+      "disk_floor_bytes": 2147483648,
+      "samples": [
+        {
+          "elapsed_s": 0.0,
+          "available_bytes": 2417713152,
+          "total_bytes": 16357158912,
+          "load_percent": 85,
+          "disk_free_bytes": 8062431232
+        },
+        {
+          "elapsed_s": 0.11,
+          "available_bytes": 2399793152,
+          "total_bytes": 16357158912,
+          "load_percent": 85,
+          "disk_free_bytes": 8074145792
+        },
+        {
+          "elapsed_s": 0.2,
+          "available_bytes": 2413363200,
+          "total_bytes": 16357158912,
+          "load_percent": 85,
+          "disk_free_bytes": 8152129536
+        },
+        {
+          "elapsed_s": 0.31,
+          "available_bytes": 2393464832,
+          "total_bytes": 16357158912,
+          "load_percent": 85,
+          "disk_free_bytes": 8151580672
+        },
+        {
+          "elapsed_s": 0.31,
+          "available_bytes": 2393300992,
+          "total_bytes": 16357158912,
+          "load_percent": 85,
+          "disk_free_bytes": 8151580672
+        }
+      ],
+      "status": "completed",
+      "process_tree": false,
+      "minimum_disk_free_bytes": 8062431232,
+      "minimum_available_bytes": 2393300992,
+      "end_available_bytes": 2393300992,
+      "max_observed_available_ram_drop_bytes": 0,
+      "duration_s": 0.31,
+      "stop_reason": null
+    },
+    {
+      "command": [
+        "C:/Users/PC/Tools/oss-cad-suite/bin/verilator_bin.exe",
+        "-f",
+        "C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/lint/non_coherence_cluster/hierarchy_tool_probe_003/obj/Vtb__hierMkJsonArgs.f",
+        "--Mdir",
+        "C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/lint/non_coherence_cluster/hierarchy_tool_probe_003/obj",
+        "C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/lint/non_coherence_cluster/hierarchy_tool_probe_003/obj/Vleaf/leaf.sv",
+        "C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/lint/non_coherence_cluster/hierarchy_tool_probe_001/tb.sv"
+      ],
+      "log": "C:\\HQuan\\102_MyGithub\\VLSIT_RISCV_CPU\\lint\\non_coherence_cluster\\hierarchy_tool_probe_003\\Vtb_retry.log",
+      "start_ns": 1795210477860023000,
+      "start_available_bytes": 2388865024,
+      "run_initial_available_bytes": 2227306496,
+      "early_stop_available_bytes": 1136787456,
+      "minimum_start_available_bytes": 1073741824,
+      "max_ram_drop_bytes": 1090519040,
+      "ram_guard_margin_bytes": 0,
+      "ram_floor_bytes": 1073741824,
+      "disk_floor_bytes": 2147483648,
+      "samples": [
+        {
+          "elapsed_s": 0.0,
+          "available_bytes": 2388865024,
+          "total_bytes": 16357158912,
+          "load_percent": 85,
+          "disk_free_bytes": 8151576576
+        },
+        {
+          "elapsed_s": 0.11,
+          "available_bytes": 2345484288,
+          "total_bytes": 16357158912,
+          "load_percent": 85,
+          "disk_free_bytes": 8150228992
+        },
+        {
+          "elapsed_s": 0.11,
+          "available_bytes": 2345246720,
+          "total_bytes": 16357158912,
+          "load_percent": 85,
+          "disk_free_bytes": 8150228992
+        }
+      ],
+      "status": "completed",
+      "process_tree": false,
+      "minimum_disk_free_bytes": 8150228992,
+      "minimum_available_bytes": 2345246720,
+      "end_available_bytes": 2345246720,
+      "max_observed_available_ram_drop_bytes": 0,
+      "duration_s": 0.1,
+      "stop_reason": null
+    }
+  ],
+  "minimum_available_bytes": 776220672,
+  "initial_available_bytes": 2227306496,
+  "status": "completed",
+  "ram_floor_bytes": 1073741824,
+  "early_stop_available_bytes": 1136787456,
+  "minimum_start_available_bytes": 1073741824,
+  "max_ram_drop_bytes": 1090519040,
+  "ram_guard_margin_bytes": 0,
+  "disk_floor_bytes": 2147483648,
+  "minimum_disk_free_bytes": 8062431232,
+  "max_observed_available_ram_drop_bytes": 1451085824,
+  "last_stop_reason": "preflight RAM below approved hard floor (1073741824 bytes)"
+}

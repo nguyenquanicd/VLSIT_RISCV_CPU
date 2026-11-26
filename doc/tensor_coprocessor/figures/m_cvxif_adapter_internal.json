@@ -1,0 +1,285 @@
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "m_cvxif_adapter_internal.drawio",
+  "layout": {
+    "gap_h": 120,
+    "gap_v": 110,
+    "margin": 80,
+    "block_h": 60
+  },
+  "top": {
+    "frame_label": [
+      "Internal functional blocks",
+      "(m_cvxif_adapter)"
+    ]
+  },
+  "frame_row": [
+    "m_cvxif_adapter",
+    "CV-X-IF handshake, decode, admission, command queue, authorization and dispatch.",
+    "doc/tensor_coprocessor/VLSIT_TENSOR_COPROCESSOR_HDS.md section 5.3"
+  ],
+  "frame_interfaces": [
+    "ISS",
+    "CMT",
+    "RESX",
+    "CTL"
+  ],
+  "blocks": [
+    {
+      "key": "B0",
+      "label": [
+        "endpoint_decode",
+        "(per hart)"
+      ],
+      "width": 180,
+      "row": 0,
+      "col": 0,
+      "row_name": "endpoint_decode (per hart)",
+      "function": "Decode operation, precision and result class for each hart and answer the issue with accept and register-read without depending on ready.",
+      "source": "doc/tensor_coprocessor/VLSIT_TENSOR_COPROCESSOR_HDS.md section 5.3.3"
+    },
+    {
+      "key": "B1",
+      "label": [
+        "admission_arbiter",
+        "(round robin)"
+      ],
+      "width": 200,
+      "row": 0,
+      "col": 1,
+      "row_name": "admission_arbiter (round robin)",
+      "function": "Choose one eligible hart per cycle; apply source validity, the global OP-003 fence and free-slot checks without locking out other harts.",
+      "source": "doc/tensor_coprocessor/VLSIT_TENSOR_COPROCESSOR_HDS.md section 5.3.3"
+    },
+    {
+      "key": "B3",
+      "label": [
+        "operand_capture",
+        "(coupled issue/register)"
+      ],
+      "width": 280,
+      "row": 0,
+      "col": 2,
+      "row_name": "operand_capture (coupled issue/register)",
+      "function": "Capture the requested source lanes exactly once on the joint issue and register handshake.",
+      "source": "doc/tensor_coprocessor/VLSIT_TENSOR_COPROCESSOR_HDS.md section 5.3.1 (DEC-024)"
+    },
+    {
+      "key": "B4",
+      "label": [
+        "commit_kill_match",
+        "(hart, id)"
+      ],
+      "width": 200,
+      "row": 1,
+      "col": 1,
+      "row_name": "commit_kill_match (hart, id)",
+      "function": "Match each commit packet to an accepted command by hart and id; authorize descriptor fetch, DMA and result, or cancel a killed command and its suffix.",
+      "source": "doc/tensor_coprocessor/VLSIT_TENSOR_COPROCESSOR_HDS.md section 5.3.1"
+    },
+    {
+      "key": "B2",
+      "label": [
+        "command_queue",
+        "(contexts, scoreboard)"
+      ],
+      "width": 260,
+      "row": 1,
+      "col": 2,
+      "row_name": "command_queue (contexts, scoreboard)",
+      "function": "Keep accepted commands with mode, metadata, global dispatch order and the per-hart age used for kill decisions.",
+      "source": "doc/tensor_coprocessor/VLSIT_TENSOR_COPROCESSOR_HDS.md section 5.3.3"
+    },
+    {
+      "key": "B6",
+      "label": [
+        "result_return",
+        "(result, status)"
+      ],
+      "width": 200,
+      "row": 2,
+      "col": 1,
+      "row_name": "result_return (result, status)",
+      "function": "Return result and status with the matching hart and id, and keep the first-error record until it is cleared.",
+      "source": "doc/tensor_coprocessor/VLSIT_TENSOR_COPROCESSOR_HDS.md section 12.1"
+    },
+    {
+      "key": "B5",
+      "label": [
+        "dispatch_scheduler",
+        "(oldest authorized)"
+      ],
+      "width": 220,
+      "row": 2,
+      "col": 2,
+      "row_name": "dispatch_scheduler (oldest authorized)",
+      "function": "Start the oldest authorized context, route its tiles to the array copies, and gate output effects on matching authorization.",
+      "source": "doc/tensor_coprocessor/VLSIT_TENSOR_COPROCESSOR_HDS.md section 5.3.3"
+    }
+  ],
+  "connectors": [
+    {
+      "id": "DEC",
+      "src": "B0",
+      "src_side": "R",
+      "dst": "B1",
+      "dst_side": "L"
+    },
+    {
+      "id": "ADM",
+      "src": "B1",
+      "src_side": "R",
+      "dst": "B3",
+      "dst_side": "L"
+    },
+    {
+      "id": "QUE",
+      "src": "B3",
+      "src_side": "B",
+      "dst": "B2",
+      "dst_side": "T"
+    },
+    {
+      "id": "AUTH",
+      "src": "B4",
+      "src_side": "R",
+      "dst": "B2",
+      "dst_side": "L"
+    },
+    {
+      "id": "RUN",
+      "src": "B2",
+      "src_side": "B",
+      "dst": "B5",
+      "dst_side": "T"
+    },
+    {
+      "id": "DONE",
+      "src": "B5",
+      "src_side": "L",
+      "dst": "B6",
+      "dst_side": "R"
+    }
+  ],
+  "externals": [
+    {
+      "id": "ISS",
+      "block": "B0",
+      "side": "L",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "CV-X-IF ISSUE",
+        "instr, hart, id"
+      ]
+    },
+    {
+      "id": "CMT",
+      "block": "B4",
+      "side": "L",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "CV-X-IF COMMIT",
+        "hart, id, kill"
+      ]
+    },
+    {
+      "id": "RESX",
+      "block": "B6",
+      "side": "B",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "CV-X-IF RESULT",
+        "data, hart, id"
+      ]
+    },
+    {
+      "id": "CTL",
+      "block": "B5",
+      "side": "B",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "TILE DISPATCH",
+        "to compute and DMA"
+      ]
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "DEC",
+      "name": "Local decode result to arbiter",
+      "category": "handshake",
+      "active": "B0 -> B1",
+      "signals": "accept, register_read, requested source mask"
+    },
+    {
+      "id": "ADM",
+      "name": "Granted hart to operand capture",
+      "category": "handshake",
+      "active": "B1 -> B3",
+      "signals": "issue, register, grant"
+    },
+    {
+      "id": "QUE",
+      "name": "Captured command to queue",
+      "category": "custom",
+      "active": "B3 -> B2",
+      "signals": "instruction word, hart, id, rs1, rs2"
+    },
+    {
+      "id": "AUTH",
+      "name": "Authorization and kill to queue",
+      "category": "handshake",
+      "active": "B4 -> B2",
+      "signals": "commit_valid, commit_kill, hart, id"
+    },
+    {
+      "id": "RUN",
+      "name": "Queue head to dispatch",
+      "category": "custom",
+      "active": "B2 -> B5",
+      "signals": "mode, operation ID, precision, descriptor address"
+    },
+    {
+      "id": "DONE",
+      "name": "Completion to result return",
+      "category": "handshake",
+      "active": "B5 -> B6",
+      "signals": "result data, status, hart, id"
+    },
+    {
+      "id": "ISS",
+      "name": "Issue and register inputs",
+      "category": "handshake",
+      "active": "in",
+      "signals": "issue_valid, issue_req, register_valid, register, issue_ready, register_ready, issue_resp"
+    },
+    {
+      "id": "CMT",
+      "name": "Commit inputs",
+      "category": "handshake",
+      "active": "in",
+      "signals": "commit_valid, commit.hartid, commit.id, commit.commit_kill"
+    },
+    {
+      "id": "RESX",
+      "name": "Result outputs",
+      "category": "handshake",
+      "active": "out",
+      "signals": "result_valid, result_ready, result.hartid, result.id, result.data, result.rd, result.we"
+    },
+    {
+      "id": "CTL",
+      "name": "Dispatch outputs",
+      "category": "custom",
+      "active": "out",
+      "signals": "active command, mode, tile counts"
+    }
+  ],
+  "nets": [],
+  "legend_note": "Specification-level decomposition of a block that has no RTL yet. The boxes are the functions the specification assigns to the block, with the section that defines each; they are not RTL modules or instances. Arrows show the main request or data direction; responses return on the same bundle.",
+  "library_sha256": "15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"
+}

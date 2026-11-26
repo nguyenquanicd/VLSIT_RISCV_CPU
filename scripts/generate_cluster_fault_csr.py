@@ -6,7 +6,7 @@ ROOT=Path(__file__).resolve().parents[1]
 OUT=ROOT / 'verification/non_coherence_cluster/reports/fault_record_a06'
 BOOK=ROOT / 'doc/specification/VLSIT_RISCV_CPU_Cluster_CSR.xlsx'
 DEST=ROOT / 'rtl/common/vlsit/csr'
-DEBUG=ROOT / 'doc/csr/generated/Debug'
+DEBUG=ROOT / 'project_support/csr/generated/Debug'
 def digest(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def main():
  p=argparse.ArgumentParser(description=__doc__);p.add_argument('--regenerate',action='store_true');p.add_argument('--generator',type=Path,default=ROOT.parent/'APB-CSR-Generator/CSR_Generation.py');a=p.parse_args()

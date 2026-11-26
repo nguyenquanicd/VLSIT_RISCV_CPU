@@ -43,7 +43,7 @@ def main():
                    '--top-module',top,
                    '--output-split','10000','--Mdir',str(build)]
         command += [f'+incdir+{x.as_posix()}' for x in INCLUDE_DIRS]
-        command += [str(ROOT / 'rtl/common/vlsit'/f'{name}.sv') for name in (
+        command += [str(ROOT / 'rtl/common/vlsit/coherence'/f'{name}.sv') for name in (
             'm_vlsit_riscv_probe_scheduler',)]
         command += [str(Path(__file__).with_name('tb_probe_phase_owner.sv'))]
         model_log = report / f'model_{args.harts}h.log'

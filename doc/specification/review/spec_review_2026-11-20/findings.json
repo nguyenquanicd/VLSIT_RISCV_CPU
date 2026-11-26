@@ -1,0 +1,455 @@
+{
+  "report": "REVIEW_VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER.md",
+  "findings": [
+    {
+      "id": "F-001",
+      "severity": "Blocker",
+      "label": "FACT",
+      "locator": "§20 DEC-044/DEC-045, §8.3, REQ-PD-001",
+      "cells": [
+        "F-001",
+        "Blocker",
+        "asic_feasibility",
+        "FACT: Acceptance target is unreachable by the measured design",
+        "Mục tiêu nghiệm thu không đạt được với thiết kế đã đo",
+        "§20 DEC-044/DEC-045, §8.3, REQ-PD-001"
+      ]
+    },
+    {
+      "id": "F-002",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "FACT: No interface timing budget or executable constraint in the specification",
+      "cells": [
+        "F-002",
+        "Major",
+        "sdc_timing",
+        "FACT: No interface timing budget or executable constraint in the specification",
+        "Đặc tả không có ngân sách timing giao diện hoặc ràng buộc chạy được",
+        "§17.1, DEP-007"
+      ]
+    },
+    {
+      "id": "F-003",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§7.3, §8.3, REQ-RST-001",
+      "cells": [
+        "F-003",
+        "Major",
+        "clock_reset_cdc",
+        "FACT: Reset is used as handshake data and nothing forbids it",
+        "Reset được dùng như tín hiệu dữ liệu trong handshake và không có quy tắc cấm",
+        "§7.3, §8.3, REQ-RST-001"
+      ]
+    },
+    {
+      "id": "F-006",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "FACT: Directory storage is inline flops, not a macro-replaceable RAM",
+      "cells": [
+        "F-006",
+        "Major",
+        "asic_feasibility",
+        "FACT: Directory storage is inline flops, not a macro-replaceable RAM",
+        "Bộ nhớ directory là flop nằm trong module, không thể thay bằng RAM macro",
+        "§8.3, DEP-013, REQ-MEM-010"
+      ]
+    },
+    {
+      "id": "F-013",
+      "severity": "Major",
+      "label": "INFERENCE",
+      "locator": "§15.2 TEST-056, §20 DEC-043, REQ-MEM-024",
+      "cells": [
+        "F-013",
+        "Major",
+        "functions",
+        "INFERENCE: Atomic probe-slot claim can starve a wide-mask context",
+        "Việc claim slot probe nguyên tử có thể bỏ đói context có mask rộng",
+        "§15.2 TEST-056, §20 DEC-043, REQ-MEM-024"
+      ]
+    },
+    {
+      "id": "F-009",
+      "severity": "Major",
+      "label": "INFERENCE",
+      "locator": "FEAT-010, §1.4, REQ-MEM-015",
+      "cells": [
+        "F-009",
+        "Major",
+        "FEAT-010, §1.4, REQ-MEM-015",
+        "INFERENCE: The application hands network buffers to non-coherent DMA through per-line CBO operations on 16-byte lines (FEAT-010); a 1500-byte packet needs about 94 operations, each a serialized CCU transaction, and no section gives a rate requirement or a limit on this cost.",
+        "INFERENCE: Ứng dụng giao buffer mạng cho DMA không coherent bằng CBO theo từng line 16 byte (FEAT-010); một gói 1500 byte cần khoảng 94 thao tác, mỗi thao tác là một transaction CCU tuần tự, và không mục nào nêu yêu cầu tốc độ hay giới hạn.",
+        "Add a CBO throughput requirement or decide an I/O-coherent port (OPEN-ACE-MAP)."
+      ]
+    },
+    {
+      "id": "F-024",
+      "severity": "Minor",
+      "label": "FACT",
+      "locator": "§4 CFG-ACE-2/4, FEAT-005, REQ-IF-004, TEST-008",
+      "cells": [
+        "F-024",
+        "Minor",
+        "§4 CFG-ACE-2/4, FEAT-005, REQ-IF-004, TEST-008",
+        "FACT: CFG-ACE-2, CFG-ACE-4, FEAT-005, REQ-IF-004 and TEST-008 are in the same tables as the implemented configurations although the ACE profile is not part of this RTL phase.",
+        "FACT: CFG-ACE-2, CFG-ACE-4, FEAT-005, REQ-IF-004 và TEST-008 nằm cùng bảng với cấu hình đã hiện thực dù profile ACE không thuộc giai đoạn RTL này.",
+        "Mark the ACE rows as deferred in a Status column."
+      ]
+    },
+    {
+      "id": "F-013",
+      "severity": "Major",
+      "label": "INFERENCE",
+      "locator": "§15.2 TEST-056, §20 DEC-043, REQ-MEM-024",
+      "cells": [
+        "F-013",
+        "Major",
+        "§15.2 TEST-056, §20 DEC-043, REQ-MEM-024",
+        "INFERENCE: A PREPARE context is granted only when every slot in its mask is free; narrow contexts can claim single slots again and again, so a context needing three or four slots may never find them all free; the round-robin pointer orders contexts but does not reserve slots, and TEST-056 covers one two-context case.",
+        "INFERENCE: Một context PREPARE chỉ được cấp khi mọi slot trong mask đều rảnh; các context hẹp có thể liên tục claim từng slot, nên context cần ba hoặc bốn slot có thể không bao giờ thấy đủ slot rảnh; con trỏ round-robin sắp thứ tự nhưng không giữ chỗ slot, và TEST-056 chỉ phủ một ca hai context.",
+        "Add an aging rule and a fairness property for the wide-mask claim."
+      ]
+    },
+    {
+      "id": "F-027",
+      "severity": "Observation",
+      "label": "FACT",
+      "locator": "REQ-MEM-024, DEC-043, §15.3",
+      "cells": [
+        "F-027",
+        "Observation",
+        "REQ-MEM-024, DEC-043, §15.3",
+        "FACT: REQ-MEM-024 and DEC-043 require all expected slots to be claimed atomically before any probe is issued, with assertions in §15.3 and TEST-056; this closes the wait cycle between two contexts that each held one hart slot and needed the other's.",
+        "FACT: REQ-MEM-024 và DEC-043 yêu cầu claim nguyên tử mọi slot cần trước khi phát probe, có assertion ở §15.3 và TEST-056; việc này đóng vòng chờ giữa hai context mỗi cái giữ một slot hart và cần slot của cái kia.",
+        "Keep it; add the fairness rule of F-013."
+      ]
+    },
+    {
+      "id": "F-010",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§6 i_int_meip, REQ-IRQ-001, TEST-013",
+      "cells": [
+        "F-010",
+        "Major",
+        "§6 i_int_meip, REQ-IRQ-001, TEST-013",
+        "FACT: The interface table names per-hart MEIP and SEIP inputs and TEST-013 checks only that each vector reaches the addressed hart; no requirement ties i_int_meip to mip.MEIP and i_int_seip to mip.SEIP. The RTL had the two swapped at the CVA6 boundary (irq_i); the current source carries a correction.",
+        "FACT: Bảng interface nêu input MEIP và SEIP theo hart và TEST-013 chỉ kiểm vector đến đúng hart; không requirement nào gắn i_int_meip với mip.MEIP và i_int_seip với mip.SEIP. RTL từng đảo hai tín hiệu ở biên CVA6 (irq_i); source hiện tại đã sửa.",
+        "Add the mapping requirement and a test of mip.MEIP, mip.SEIP, delegation and WFI wake-up."
+      ]
+    },
+    {
+      "id": "F-019",
+      "severity": "Minor",
+      "label": "INFERENCE",
+      "locator": "REF-007, §2.1",
+      "cells": [
+        "F-019",
+        "Minor",
+        "REF-007, §2.1",
+        "INFERENCE: REF-007 pins the RISC-V Debug Specification 0.13.2, while a later ratified 1.0 revision adds halt groups and per-hart reset; the specification does not say which later features are out of scope.",
+        "INFERENCE: REF-007 pin RISC-V Debug Specification 0.13.2, trong khi bản 1.0 đã ratify sau đó có halt group và reset từng hart; đặc tả không nói tính năng nào ngoài phạm vi.",
+        "State the revision basis and the excluded features."
+      ]
+    },
+    {
+      "id": "F-003",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§7.3, §8.3, REQ-RST-001",
+      "cells": [
+        "F-003",
+        "Major",
+        "§7.3, §8.3, REQ-RST-001",
+        "FACT: The RTL derives the ready and valid enable directly from the reset pin in profiles 0 and 1 (w_handshake_active = i_rst_n_cluster, tile_coh_adapter.sv:136 and axi_route.sv:425); only profile 2 registers the release (§8.3). The report shows i_rst_n_cluster as the start point of an input-to-register path (-2.16 ns) and of an input-to-output path (-0.60 ns).",
+        "FACT: RTL lấy enable của ready và valid trực tiếp từ chân reset ở profile 0 và 1 (w_handshake_active = i_rst_n_cluster, tile_coh_adapter.sv:136 và axi_route.sv:425); chỉ profile 2 đăng ký việc nhả reset (§8.3). Report cho thấy i_rst_n_cluster là start point của path vào-thanh ghi (-2.16 ns) và vào-ra (-0.60 ns).",
+        "Add a rule that the reset port never appears in a ready or valid expression, and register the release in every profile."
+      ]
+    },
+    {
+      "id": "F-023",
+      "severity": "Major",
+      "label": "INFERENCE",
+      "locator": "§7.4, REQ-MEM-013",
+      "cells": [
+        "F-023",
+        "Major",
+        "§7.4, REQ-MEM-013",
+        "INFERENCE: §7.4 only says WFI behavior must be checked against CVA6; because probes have no timeout, a hart whose cache clock is gated in WFI or whose cache stops in debug halt would hold every line it owns and hang the cluster.",
+        "INFERENCE: §7.4 chỉ nói hành vi WFI phải đối chiếu với CVA6; vì probe không có timeout, hart có clock cache bị gate khi WFI hoặc cache dừng khi debug halt sẽ giữ mọi line nó sở hữu và làm treo cluster.",
+        "Add a requirement that the cache and probe endpoint stay clocked and responsive in WFI and debug halt."
+      ]
+    },
+    {
+      "id": "F-005",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§8.1, REQ-PERF-006, REQ-PERF-007",
+      "cells": [
+        "F-005",
+        "Major",
+        "§8.1, REQ-PERF-006, REQ-PERF-007",
+        "FACT: §8.1 gives PARA_TIMING_PROFILE as 0 or 1 while §8.3, DEC-045 and RTL (LPARA_TIMING_PROFILE_BOUNDARY = 2) define profile 2; the RTL also adds PARA_DIR_SYNC_READ, driven from profile 2, which no section documents.",
+        "FACT: §8.1 ghi PARA_TIMING_PROFILE là 0 hoặc 1 trong khi §8.3, DEC-045 và RTL (LPARA_TIMING_PROFILE_BOUNDARY = 2) định nghĩa profile 2; RTL còn thêm PARA_DIR_SYNC_READ, lấy từ profile 2, mà không mục nào mô tả.",
+        "Update the §8.1 legal range and document PARA_DIR_SYNC_READ as internal or public."
+      ]
+    },
+    {
+      "id": "F-012",
+      "severity": "Minor",
+      "label": "FACT",
+      "locator": "REQ-SYS-001, §8.1",
+      "cells": [
+        "F-012",
+        "Minor",
+        "REQ-SYS-001, §8.1",
+        "FACT: REQ-SYS-001 says the cluster shall elaborate only for 2 or 4 harts, but no source under rtl/non_coherence_cluster or rtl/common/vlsit/{cpu,coherence} contains an elaboration error, and the active-hart masks treat any value other than 2 as 4.",
+        "FACT: REQ-SYS-001 nói cluster chỉ elaborate với 2 hoặc 4 hart, nhưng không source nào trong rtl/non_coherence_cluster hoặc rtl/common/vlsit/{cpu,coherence} có lỗi elaboration, và mask hart coi mọi giá trị khác 2 là 4.",
+        "Add generate-time checks for every §8.1 parameter."
+      ]
+    },
+    {
+      "id": "F-001",
+      "severity": "Blocker",
+      "label": "FACT",
+      "locator": "§20 DEC-044/DEC-045, §8.3, REQ-PD-001",
+      "cells": [
+        "F-001",
+        "Blocker",
+        "§20 DEC-044/DEC-045, §8.3, REQ-PD-001",
+        "FACT: DEC-045 requires timing checks at 1.25 ns and 1.04167 ns while DEC-044 forbids any change to the CVA6 pipeline; the synthesis report of dual_gf55_800.zip shows a 3.40 ns critical path of 46 cells (WNS -2.47 ns, 312,168 failing endpoints) and the CVA6 internals alone sit at about 3.4 ns.",
+        "FACT: DEC-045 yêu cầu kiểm tra timing ở 1.25 ns và 1.04167 ns, DEC-044 cấm sửa pipeline CVA6; report synthesis của dual_gf55_800.zip cho đường dài nhất 3.40 ns (46 cell), WNS -2.47 ns, và riêng phần CVA6 đã ở khoảng 3.4 ns.",
+        "Replace the fixed targets by a period sweep (2.0 to 3.5 ns) and record the accepted period per corner; separate the PPA target from the timing-profile mechanism."
+      ]
+    },
+    {
+      "id": "F-006",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§8.3, DEP-013, REQ-MEM-010",
+      "cells": [
+        "F-006",
+        "Major",
+        "§8.3, DEP-013, REQ-MEM-010",
+        "FACT: §8.3 says the directory uses synchronous 1RW storage per way with macro mapping left to synthesis, but the RTL keeps the arrays as reg_entry inside m_vlsit_riscv_sharer_directory with no RAM module boundary; synthesis maps them to 206,600 flops (74 percent of 280,306) and 2.82 mm2 (56 percent of 4.998 mm2).",
+        "FACT: §8.3 nói directory dùng storage 1RW đồng bộ theo way và để mapping macro cho synthesis, nhưng RTL giữ mảng reg_entry trong m_vlsit_riscv_sharer_directory, không có ranh giới module RAM; synthesis map thành 206.600 flop (74 phần trăm của 280.306) và 2,82 mm2 (56 phần trăm của 4,998 mm2).",
+        "Add a RAM wrapper module with a fixed interface and keep valid, PLRU and reservation in flops."
+      ]
+    },
+    {
+      "id": "F-002",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§17.1, DEP-007",
+      "cells": [
+        "F-002",
+        "Major",
+        "§17.1, DEP-007",
+        "FACT: §17.1 says no SDC can be written and leaves the period and I/O delays to the SoC, but the flow uses create_clock 1.04167 ns, 1 percent uncertainty and 0.4167 ns input and output delay, which leaves 0.208 ns for an input-to-output path and about 0.5 ns for input-to-register paths.",
+        "FACT: §17.1 nói chưa thể viết SDC và để period, I/O delay cho SoC, nhưng flow dùng create_clock 1.04167 ns, uncertainty 1 phần trăm và input/output delay 0.4167 ns, chỉ còn 0.208 ns cho đường vào-ra và khoảng 0.5 ns cho đường vào-thanh ghi.",
+        "Add an interface timing contract: every output from a flop, no combinational input-to-output path, and a stated budget per port group."
+      ]
+    },
+    {
+      "id": "F-007",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§13, REQ-PD-001",
+      "cells": [
+        "F-007",
+        "Major",
+        "§13, REQ-PD-001",
+        "FACT: §13 states that no area or power figure is available. The synthesis report gives a mapped number (ARM sc12 55LPx RVT, ss_nominal_max_1p08v_125c, Design Compiler X-2025.06-SP5): 4.998 mm2 and 280,250 sequential cells for two harts, with every SRAM macro excluded.",
+        "FACT: §13 nói chưa có số diện tích hoặc công suất. Report synthesis cho số mapped (ARM sc12 55LPx RVT, ss_nominal_max_1p08v_125c, Design Compiler X-2025.06-SP5): 4,998 mm2 và 280.250 sequential cell cho hai hart, chưa gồm mọi SRAM macro.",
+        "Record a proxy table (flip-flop counts per block, storage bits) and the mapped number with its library and corner."
+      ]
+    },
+    {
+      "id": "F-008",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§13, REQ-PERF-006, TEST-046",
+      "cells": [
+        "F-008",
+        "Major",
+        "§13, REQ-PERF-006, TEST-046",
+        "FACT: Every row of the §13 table is qualitative, the profiles add 'registered latency' with no cycle count, and TEST-046 only reports observed values.",
+        "FACT: Mọi dòng của bảng §13 mang tính định tính, các profile thêm 'registered latency' mà không có số chu kỳ, và TEST-046 chỉ báo giá trị quan sát.",
+        "Add measured cycles for hit, clean miss, dirty-owner transfer and CBO, and the latency delta of each profile."
+      ]
+    },
+    {
+      "id": "F-014",
+      "severity": "Major",
+      "label": "INFERENCE",
+      "locator": "REQ-MEM-010, DEC-014, §13",
+      "cells": [
+        "F-014",
+        "Major",
+        "REQ-MEM-010, DEC-014, §13",
+        "INFERENCE: The directory holds PARA_CPU_NUM x 2,048 entries, the same count as the private D-cache lines; any set conflict forces a replacement that invalidates a live L1 line, and stale-positive holders (REQ-MEM-008) occupy entries, yet no section quantifies the extra invalidations.",
+        "INFERENCE: Directory có PARA_CPU_NUM x 2.048 entry, bằng số line của D-cache riêng; mọi xung đột set đều buộc replacement và invalidate một line L1 đang sống, và holder stale-positive (REQ-MEM-008) chiếm entry, nhưng không mục nào định lượng số invalidation thêm.",
+        "Measure conflict invalidations and decide an over-provision factor, now cheap once the storage is a RAM."
+      ]
+    },
+    {
+      "id": "F-011",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§11.5, OPEN-ABI, REQ-SYS-003",
+      "cells": [
+        "F-011",
+        "Major",
+        "§11.5, OPEN-ABI, REQ-SYS-003",
+        "FACT: §11.5 records that the ABI has no version register at offset zero; firmware cannot read the hart count, the profile or the LLC geometry, and REQ-SYS-003 starts all harts at one boot address so software must park them by mhartid.",
+        "FACT: §11.5 ghi ABI không có thanh ghi version ở offset 0; firmware không đọc được số hart, profile hay hình học LLC, và REQ-SYS-003 khởi động mọi hart cùng boot address nên phần mềm phải tự park theo mhartid.",
+        "Add a read-only version and configuration register and decide whether a hart-start control is in scope."
+      ]
+    },
+    {
+      "id": "F-017",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§16, REQ-PD-001",
+      "cells": [
+        "F-017",
+        "Major",
+        "§16, REQ-PD-001",
+        "FACT: §16 leaves scan, MBIST and ATPG to the SoC; the top exposes no scan or test-enable port, the LLC test enable is tied to zero (cluster_core.sv:93, 967), the flow uses automatic clock gating with PREICG cells, and §16 requires test-enable behavior for any gating without defining the port.",
+        "FACT: §16 để scan, MBIST và ATPG cho SoC; top không có cổng scan hoặc test-enable, test enable của LLC nối cố định 0 (cluster_core.sv:93, 967), flow dùng clock gating tự động với cell PREICG, và §16 đòi hành vi test-enable cho mọi gating mà không định nghĩa cổng.",
+        "Define the DFT hand-off: test-enable port, scan clock and reset handling, MBIST interface for L1, LLC and directory RAM."
+      ]
+    },
+    {
+      "id": "F-015",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§18, §12, DEP-013",
+      "cells": [
+        "F-015",
+        "Major",
+        "§18, §12, DEP-013",
+        "FACT: §18 makes ECC depend on macros and tool flow, the selected CVA6 configuration sets DcacheEccEnable to 0, and an industrial gateway is the stated application; a detected memory error has no defined path other than the reset-only fatal record.",
+        "FACT: §18 để ECC phụ thuộc macro và tool flow, cấu hình CVA6 đã chọn đặt DcacheEccEnable bằng 0, và ứng dụng nêu là gateway công nghiệp; lỗi bộ nhớ phát hiện được không có đường xử lý nào ngoài fatal record chỉ reset.",
+        "Decide ECC or parity per array and record the error response."
+      ]
+    },
+    {
+      "id": "F-016",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§3.1 REQ-MEM-013, §3.1 REQ-ERR-003, §20 DEC-018",
+      "cells": [
+        "F-016",
+        "Major",
+        "§3.1 REQ-MEM-013, §3.1 REQ-ERR-003, §20 DEC-018",
+        "FACT: PREPARE, COMMIT and ABORT have no acknowledgement timeout (REQ-MEM-013); an ordinary dirty-eviction error is recoverable only by reset (REQ-ERR-003); there is no per-hart reset, so a missing response holds a slot and line lock until the whole cluster resets.",
+        "FACT: PREPARE, COMMIT và ABORT không có timeout acknowledgement (REQ-MEM-013); lỗi dirty-eviction thông thường chỉ phục hồi bằng reset (REQ-ERR-003); không có reset từng hart, nên một response thiếu giữ slot và line lock đến khi reset cả cluster.",
+        "Keep the approved decision and require a SoC watchdog that resets the cluster."
+      ]
+    },
+    {
+      "id": "F-018",
+      "severity": "Minor",
+      "label": "FACT",
+      "locator": "§18, DEP-006",
+      "cells": [
+        "F-018",
+        "Minor",
+        "§18, DEP-006",
+        "FACT: §18 states PPROT handling must be configured explicitly but no decision exists, so any AXI4-Lite master can flush the LLC or change the PMU; DEP-006 leaves debug authorization to the SoC.",
+        "FACT: §18 nói phải cấu hình PPROT tường minh nhưng chưa có quyết định, nên mọi master AXI4-Lite đều có thể flush LLC hoặc đổi cấu hình PMU; DEP-006 để xác thực debug cho SoC.",
+        "Choose a PPROT rule for the control windows."
+      ]
+    },
+    {
+      "id": "F-004",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "REQ-PERF-007, §15.2 TEST-057 to TEST-061, §19",
+      "cells": [
+        "F-004",
+        "Major",
+        "REQ-PERF-007, §15.2 TEST-057 to TEST-061, §19",
+        "FACT: REQ-PERF-007 cites TEST-057 to TEST-061 on profiles 0 and 2, but the five tests are written for profile 1 and §19 has no row for REQ-PERF-007.",
+        "FACT: REQ-PERF-007 dẫn TEST-057 đến TEST-061 trên profile 0 và 2, nhưng năm test viết cho profile 1 và §19 không có dòng cho REQ-PERF-007.",
+        "Parameterize the five tests over profiles 0, 1 and 2 and add the REQ-PERF-007 row."
+      ]
+    },
+    {
+      "id": "F-021",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§15.3, §15.4",
+      "cells": [
+        "F-021",
+        "Major",
+        "§15.3, §15.4",
+        "FACT: The inventory finds no property identifiers; §15.3 lists required assertions in prose and states that coverage thresholds are not yet selected, while §15.4 names formal and liveness analyses with no property list.",
+        "FACT: Inventory không thấy mã property; §15.3 liệt kê assertion bắt buộc bằng văn xuôi và nói chưa chọn ngưỡng coverage, trong khi §15.4 nêu phân tích formal và liveness mà không có danh sách property.",
+        "Assign PROP identifiers, link them to requirements and set the coverage thresholds."
+      ]
+    },
+    {
+      "id": "F-022",
+      "severity": "Major",
+      "label": "FACT",
+      "locator": "§15.1, OPEN-DV",
+      "cells": [
+        "F-022",
+        "Major",
+        "§15.1, OPEN-DV",
+        "FACT: OPEN-DV lists PMU, native LLC service, MMIO and uncached ATOP, IRQ, debug and WFI and random coherence as not yet functionally closed; the earlier interrupt swap and the LLC bridge double response were in exactly these areas.",
+        "FACT: OPEN-DV liệt kê PMU, dịch vụ LLC native, MMIO và uncached ATOP, IRQ, debug, WFI và random coherence chưa được đóng chức năng; lỗi đảo ngắt và lỗi bridge LLC trả hai response trước đây nằm đúng trong các vùng này.",
+        "Make a functional test a sign-off condition for each Required feature."
+      ]
+    },
+    {
+      "id": "F-020",
+      "severity": "Minor",
+      "label": "FACT",
+      "locator": "§20 ASM and DEP tables, §21",
+      "cells": [
+        "F-020",
+        "Minor",
+        "§20 ASM and DEP tables, §21",
+        "FACT: The inventory finds 31 open items (ASM-001 to ASM-007, DEP-001 to DEP-025) with a status text but no owner or due date; the document is about 9,700 lines, and the revision history sits only in the preface.",
+        "FACT: Inventory thấy 31 mục mở (ASM-001 đến ASM-007, DEP-001 đến DEP-025) có trạng thái nhưng không có owner hoặc hạn; tài liệu khoảng 9.700 dòng, và lịch sử revision chỉ nằm ở phần mở đầu.",
+        "Add owner and date columns and a revision table."
+      ]
+    },
+    {
+      "id": "F-026",
+      "severity": "Minor",
+      "label": "FACT",
+      "locator": "§1.2, §7.3, §6, ASM-003, ASM-005",
+      "cells": [
+        "F-026",
+        "Minor",
+        "§1.2, §7.3, §6, ASM-003, ASM-005",
+        "FACT: The integrator must provide a synchronized reset release, a coordinated fabric reset, an atomic-capable AXI target, software cache maintenance for DMA, SRAM views, SDC, an interrupt mapping and a Debug Module; each appears in a different section.",
+        "FACT: Người tích hợp phải cấp reset nhả đồng bộ, reset phối hợp với fabric, target AXI hỗ trợ atomic, cache maintenance bằng phần mềm cho DMA, view SRAM, SDC, ánh xạ ngắt và Debug Module; mỗi mục nằm ở một section khác.",
+        "Add one integration checklist section."
+      ]
+    },
+    {
+      "id": "F-025",
+      "severity": "Major",
+      "label": "INFERENCE",
+      "locator": "§1.1, §18, REQ-PD-001",
+      "cells": [
+        "F-025",
+        "Major",
+        "§1.1, §18, REQ-PD-001",
+        "INFERENCE: Press coverage dated 2020 describes the Andes AX45MP cluster as up to four cores with a MESI coherence manager, an L2 cache and I/O coherence for cacheless masters, at about 2.4 GHz in 12 nm; the SiFive U74-MC is described as four U74 cores plus a monitor core with a 2 MB L2 with ECC. This IP has an internal MESI domain and a shared LLC but no external coherent port, no ECC decision and no frequency evidence.",
+        "INFERENCE: Bài báo năm 2020 mô tả cluster Andes AX45MP tối đa bốn core với coherence manager MESI, L2 cache và I/O coherence cho master không cache, khoảng 2,4 GHz ở 12 nm; SiFive U74-MC được mô tả là bốn core U74 cộng một core monitor với L2 2 MB có ECC. IP này có miền MESI nội bộ và LLC dùng chung nhưng không có cổng coherent ngoài, chưa quyết ECC và không có bằng chứng tần số.",
+        "Decide the I/O-coherent port and the ECC level for the target market."
+      ]
+    }
+  ],
+  "matrix_rows": 0,
+  "matrix_non_match": 0
+}

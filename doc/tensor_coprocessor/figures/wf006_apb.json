@@ -1,15 +1,63 @@
 {
-  "head": {"text": "WF-006 APB register write then read"},
+  "head": {
+    "text": "WF-006 APB control write and version read"
+  },
   "signal": [
-    {"name": "i_clk_apb", "wave": "p........."},
-    {"name": "i_apb_psel", "wave": "01.0......"},
-    {"name": "i_apb_penable", "wave": "0.10......"},
-    {"name": "i_apb_pwrite", "wave": "01.0......"},
-    {"name": "i_apb_paddr[15:0]", "wave": "x=.xxxxxxx", "data": ["0x4"]},
-    {"name": "i_apb_pwdata[31:0]", "wave": "x=.xxxxxxx", "data": ["1"]},
-    {"name": "o_apb_pready", "wave": "0.10......"},
-    {"name": "o_apb_prdata[31:0]", "wave": "xxxxx=.xx.", "data": ["ver"]}
+    {
+      "name": "i_clk_apb",
+      "wave": "p..........."
+    },
+    {
+      "name": "i_apb_psel",
+      "wave": "011111111000"
+    },
+    {
+      "name": "i_apb_penable",
+      "wave": "001110111000"
+    },
+    {
+      "name": "i_apb_pwrite",
+      "wave": "011110000000"
+    },
+    {
+      "name": "i_apb_paddr[15:0]",
+      "wave": "x=...=...xxx",
+      "data": [
+        "0x4",
+        "0x0"
+      ]
+    },
+    {
+      "name": "i_apb_pwdata[31:0]",
+      "wave": "x=...xxxxxxx",
+      "data": [
+        "0x00000001"
+      ]
+    },
+    {
+      "name": "i_apb_pstrb[3:0]",
+      "wave": "x=...=...xxx",
+      "data": [
+        "0xF",
+        "0x0"
+      ]
+    },
+    {
+      "name": "o_apb_pready",
+      "wave": "000010001000"
+    },
+    {
+      "name": "o_apb_prdata[31:0]",
+      "wave": "xxxxxxxx=xxx",
+      "data": [
+        "0x00010001"
+      ]
+    }
   ],
-  "foot": {"text": "APB4 write to tcop_ctrl then read of tcop_version; Asynchronous=1."},
-  "config": {"hscale": 2}
+  "foot": {
+    "text": "The write enables commands. The next transfer reads IP version 1.1. Wait cycles are illustrative."
+  },
+  "config": {
+    "hscale": 3
+  }
 }

@@ -1,0 +1,217 @@
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "m_vlsit_riscv_tile_coh_adapter_internal.drawio",
+  "layout": {
+    "gap_h": 120,
+    "gap_v": 110,
+    "margin": 80,
+    "block_h": 60
+  },
+  "top": {
+    "frame_label": [
+      "Internal functional blocks",
+      "(m_vlsit_riscv_tile_coh_adapter)"
+    ]
+  },
+  "frame_row": [
+    "m_vlsit_riscv_tile_coh_adapter",
+    "Bridge one tile cache to the cluster coherence fabric with line locks.",
+    "rtl/common/vlsit/coherence/m_vlsit_riscv_tile_coh_adapter.sv"
+  ],
+  "frame_interfaces": [
+    "CRQ",
+    "GNTO",
+    "PRBI",
+    "PRBC"
+  ],
+  "blocks": [
+    {
+      "key": "B0",
+      "label": [
+        "reset_release_gate",
+        "(p_ff_reset_release)"
+      ],
+      "width": 240,
+      "row": 0,
+      "col": 1,
+      "row_name": "reset_release_gate (p_ff_reset_release)",
+      "function": "Profile 2 registers the release of reset before ready and valid are enabled; profiles 0 and 1 use the reset pin directly (REQ-PD-003).",
+      "source": "rtl/common/vlsit/coherence/m_vlsit_riscv_tile_coh_adapter.sv:123-138"
+    },
+    {
+      "key": "B1",
+      "label": [
+        "request_entry_reg",
+        "(p_ff_req_entry)"
+      ],
+      "width": 200,
+      "row": 0,
+      "col": 0,
+      "row_name": "request_entry_reg (p_ff_req_entry)",
+      "function": "Hold one native ownership request and its source ID until the fabric takes it.",
+      "source": "rtl/common/vlsit/coherence/m_vlsit_riscv_tile_coh_adapter.sv:210-226"
+    },
+    {
+      "key": "B2",
+      "label": [
+        "grant_entry_reg",
+        "(p_ff_gnt_entry)"
+      ],
+      "width": 200,
+      "row": 0,
+      "col": 2,
+      "row_name": "grant_entry_reg (p_ff_gnt_entry)",
+      "function": "Hold the fabric grant, state and error until the cache accepts it.",
+      "source": "rtl/common/vlsit/coherence/m_vlsit_riscv_tile_coh_adapter.sv:227-247"
+    },
+    {
+      "key": "B3",
+      "label": [
+        "probe_gate",
+        "(o_cache_probe_req_valid)"
+      ],
+      "width": 300,
+      "row": 1,
+      "col": 1,
+      "row_name": "probe_gate (o_cache_probe_req_valid)",
+      "function": "Pass a PREPARE probe to the cache only when the line is not busy with a refill, AMO or eviction and no lock conflicts.",
+      "source": "rtl/common/vlsit/coherence/m_vlsit_riscv_tile_coh_adapter.sv:184-208"
+    },
+    {
+      "key": "B4",
+      "label": [
+        "u_vlsit_riscv_cache_line_locks",
+        "(m_vlsit_riscv_cache_line_locks)"
+      ],
+      "width": 380,
+      "row": 1,
+      "col": 0,
+      "row_name": "u_vlsit_riscv_cache_line_locks (m_vlsit_riscv_cache_line_locks)",
+      "function": "Child lock table: lock the tagged line for the two-phase probe lifetime and report same-line access and victim conflicts.",
+      "source": "rtl/common/vlsit/coherence/m_vlsit_riscv_tile_coh_adapter.sv:249-270"
+    }
+  ],
+  "connectors": [
+    {
+      "id": "GATE",
+      "src": "B0",
+      "src_side": "B",
+      "dst": "B3",
+      "dst_side": "T"
+    },
+    {
+      "id": "LOCK",
+      "src": "B4",
+      "src_side": "R",
+      "dst": "B3",
+      "dst_side": "L"
+    },
+    {
+      "id": "REQ",
+      "src": "B1",
+      "src_side": "B",
+      "dst": "B4",
+      "dst_side": "T"
+    }
+  ],
+  "externals": [
+    {
+      "id": "CRQ",
+      "block": "B1",
+      "side": "T",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "CACHE REQUEST",
+        "id, line, kind"
+      ]
+    },
+    {
+      "id": "GNTO",
+      "block": "B2",
+      "side": "R",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "CACHE GRANT",
+        "id, state, err"
+      ]
+    },
+    {
+      "id": "PRBI",
+      "block": "B3",
+      "side": "R",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "PROBE REQUEST",
+        "from fabric"
+      ]
+    },
+    {
+      "id": "PRBC",
+      "block": "B3",
+      "side": "B",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "PROBE TO CACHE",
+        "tag, line, phase"
+      ]
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "GATE",
+      "name": "Release gate to probe gate",
+      "category": "custom",
+      "active": "B0 -> B3",
+      "signals": "w_handshake_active"
+    },
+    {
+      "id": "LOCK",
+      "name": "Lock status to probe gate",
+      "category": "custom",
+      "active": "B4 -> B3",
+      "signals": "o_cache_access_locked, o_cache_victim_locked, o_cache_line_lock_valid, o_cache_line_lock_pa_line, o_lock_diag_event"
+    },
+    {
+      "id": "REQ",
+      "name": "Request line to lock table",
+      "category": "custom",
+      "active": "B1 -> B4",
+      "signals": "i_cache_access_valid, i_cache_access_pa_line, i_cache_victim_valid, i_cache_victim_pa_line"
+    },
+    {
+      "id": "CRQ",
+      "name": "Cache request inputs",
+      "category": "handshake",
+      "active": "in",
+      "signals": "i_cache_req_valid, o_cache_req_ready, i_cache_req_id, i_cache_req_pa_line, i_cache_req_kind"
+    },
+    {
+      "id": "GNTO",
+      "name": "Cache grant outputs",
+      "category": "handshake",
+      "active": "out",
+      "signals": "o_cache_gnt_valid, i_cache_gnt_ready, o_cache_gnt_id, o_cache_gnt_pa_line, o_cache_gnt_state, o_cache_gnt_err"
+    },
+    {
+      "id": "PRBI",
+      "name": "Fabric probe inputs",
+      "category": "handshake",
+      "active": "in",
+      "signals": "i_probe_req_valid, o_probe_req_ready, i_probe_req_tag, i_probe_req_pa_line, i_probe_req_phase, i_probe_req_target_state, i_probe_req_wback_en"
+    },
+    {
+      "id": "PRBC",
+      "name": "Probe outputs to cache",
+      "category": "handshake",
+      "active": "out",
+      "signals": "o_cache_probe_req_valid, i_cache_probe_req_ready, o_cache_probe_req_tag, o_cache_probe_req_pa_line, o_cache_probe_req_phase, o_cache_probe_req_target_state, o_cache_probe_req_wback_en, o_cache_probe_query_valid, o_cache_probe_query_nline, i_cache_probe_line_busy"
+    }
+  ],
+  "nets": [],
+  "legend_note": "Functional decomposition of one RTL module. The module has no child instance except where a box names one, so the boxes are logic groups named after the RTL processes, generate blocks and registers cited in the source column. Arrows show the main request or data direction; responses return on the same bundle.",
+  "library_sha256": "15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"
+}

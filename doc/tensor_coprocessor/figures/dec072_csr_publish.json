@@ -1,0 +1,70 @@
+{
+  "head": {
+    "text": "WF-010 detail: DEC-072 mode-2 error publication before result"
+  },
+  "signal": [
+    [
+      "CLK-CORE (conceptual)",
+      {
+        "name": "AXI read fault drained",
+        "wave": "010..........."
+      },
+      {
+        "name": "core snapshot held",
+        "wave": "0.1..........0"
+      },
+      {
+        "name": "publish request sent",
+        "wave": "0.10.........."
+      },
+      {
+        "name": "publish ACK observed in core",
+        "wave": "0.....10......"
+      },
+      {
+        "name": "o_xif_result_valid",
+        "wave": "0......1..0..."
+      },
+      {
+        "name": "i_xif_result_ready",
+        "wave": "0........10..."
+      },
+      {
+        "name": "o_xif_result_data",
+        "wave": "x......=..x...",
+        "data": [
+          "all-ones sentinel"
+        ]
+      },
+      {
+        "name": "W1C observed in core",
+        "wave": "0...........10"
+      }
+    ],
+    [
+      "CLK-APB / software (conceptual)",
+      {
+        "name": "snapshot and err_valid readable",
+        "wave": "0...1.......0."
+      },
+      {
+        "name": "publish ACK sent",
+        "wave": "0....10......."
+      },
+      {
+        "name": "software reads error record",
+        "wave": "0.........10.."
+      },
+      {
+        "name": "software writes W1C",
+        "wave": "0..........10."
+      }
+    ]
+  ],
+  "foot": {
+    "text": "Columns show ordering only across asynchronous domains. The gaps do not specify cycle counts. Result stays stable until ready. The core observes publication ACK before result_valid."
+  },
+  "config": {
+    "hscale": 2
+  }
+}

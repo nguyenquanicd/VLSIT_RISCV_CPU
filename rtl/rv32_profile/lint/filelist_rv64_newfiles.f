@@ -1,0 +1,3 @@
+-f C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/rv32_profile/lint/cva6_rv64_newfiles.Flist
+-f C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/non_coherence_cluster/filelists/full_integration/filelist_llc_unique.f
+-f C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/rtl/rv32_profile/filelists/filelist_vlsit_cluster_rv32.f

@@ -2,45 +2,184 @@
   "module": "m_vlsit_csr_tcop",
   "prefix": "tcop",
   "async": 1,
-  "ip_version": {"major": 1, "minor": 0},
+  "ip_version": {
+    "major": 1,
+    "minor": 1
+  },
   "registers": [
     {
       "name": "tcop_version",
       "offset": "0x0",
-      "description": "Tensor coprocessor version register. Reports the IP major and minor version numbers.",
+      "description": "Tensor Coprocessor Version Register. Reports the major and minor IP versions.",
       "fields": [
-        {"name": "major", "bits": "[31:16]", "type": "ro", "reset": "0x1", "description": "Major version number of the tensor coprocessor. Software reads it to select compatible driver behavior.\n\nUsage: Read after reset; software never writes this field.\n\nValues:\n0x1 major version 1 (reset value).\n\nUnit: none.\n\nLimits: 16-bit unsigned value."},
-        {"name": "minor", "bits": "[15:0]", "type": "ro", "reset": "0x0", "description": "Minor version number of the tensor coprocessor. Software reads it to identify compatible additions.\n\nUsage: Read after reset; software never writes this field.\n\nValues:\n0x0 minor version 0 (reset value).\n\nUnit: none.\n\nLimits: 16-bit unsigned value."}
+        {
+          "name": "major",
+          "bits": "[31:16]",
+          "type": "ro",
+          "reset": "0x1",
+          "description": "Major version field. Identifies the compatible major IP generation.\n\nUsage: Read after reset; software never writes this field.\n\nValues:\n0x1 major version 1 (reset value).\n\nUnit: none\n\nLimits: 16-bit unsigned version number."
+        },
+        {
+          "name": "minor",
+          "bits": "[15:0]",
+          "type": "ro",
+          "reset": "0x1",
+          "description": "Minor version field. Identifies compatible additions within a major IP generation.\n\nUsage: Read after reset; software never writes this field.\n\nValues:\n0x1 minor version 1 (reset value).\n\nUnit: none\n\nLimits: 16-bit unsigned version number."
+        }
       ]
     },
     {
       "name": "tcop_ctrl",
       "offset": "0x4",
-      "description": "Tensor coprocessor control register. Enables the datapath and selects the operation mode.",
+      "description": "Tensor Coprocessor Control Register. Enables command acceptance and acknowledges a checked OP-003 scalar result.",
       "fields": [
-        {"name": "en", "bits": "[0]", "type": "rw", "reset": "0x0", "description": "Tensor coprocessor enable. Enables the systolic-array datapath and instruction acceptance.\n\nUsage: Written by software before issuing tensor instructions; may be changed only while the IP is idle (busy is 0).\n\nValues:\n0x0 disabled (reset value);\n0x1 enabled.\n\nUnit: none.\n\nLimits: one-bit value."},
-        {"name": "op_mode", "bits": "[2:1]", "type": "rw", "reset": "0x0", "description": "Operation mode select. Selects the operation class executed by an offloaded instruction.\n\nUsage: Written before enable or while idle; must match the PARA_OP_SCOPE elaboration setting.\n\nValues:\n0x0 GEMM only (reset value);\n0x1 element-wise;\n0x2 reduction;\n0x3 reserved.\n\nUnit: none.\n\nLimits: 2-bit value."},
-        {"name": "soft_rst", "bits": "[3]", "type": "rw", "reset": "0x0", "description": "Software reset. Resets the datapath to idle without deasserting the external reset.\n\nUsage: Write 0x1 then 0x0 to issue a self-clearing reset; the IP returns to idle.\n\nValues:\n0x0 normal operation (reset value);\n0x1 assert software reset.\n\nUnit: none.\n\nLimits: one-bit value."},
-        {"name": "reserved", "bits": "[31:4]", "type": "ro", "reset": "0x0", "description": ""}
+        {
+          "name": "en",
+          "bits": "[0]",
+          "type": "rw",
+          "reset": "0x0",
+          "description": "Enable field. Allows the IP to accept and launch supported tensor commands.\n\nUsage: Write 1 before issuing commands in a build that includes APB CSR. Clear only when the queue is empty and the datapath is idle.\n\nValues:\n0x0 command acceptance disabled (reset value);\n0x1 command acceptance enabled.\n\nUnit: none\n\nLimits: One-bit control."
+        },
+        {
+          "name": "scalar_ack",
+          "bits": "[1]",
+          "type": "wo",
+          "reset": "0x0",
+          "description": "One-shot scalar-check acknowledge request. Releases the global OP-003 fence after software has checked a zero-valued scalar result and any error record.\n\nUsage: In PARA_CTRL_MODE=2, write 1 only after an OP-003 result of zero has been observed and tcop_sts.err_valid has been checked. If err_valid is 1, read and record the complete first-error record and clear err_valid with W1C. Hardware consumes this request only while an OP-003 scalar-check fence is pending, and only after err_valid is clear in CLK-CORE. A request arriving when no scalar check is pending is discarded and shall not remain set for a later OP-003. Wait until tcop_sts.busy becomes 0 before releasing the global submission lock. Do not write this field when no OP-003 zero-result check is pending.\n\nValues:\n0x0 no scalar acknowledgment request (reset value);\n0x1 acknowledge the inspected OP-003 zero result.\n\nUnit: none\n\nLimits: One-bit write-only request transferred by an asynchronous request/acknowledge handshake; hardware clears it after consumption. Write the full APB word and preserve tcop_ctrl.en."
+        },
+        {
+          "name": "reserved",
+          "bits": "[31:2]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": ""
+        }
       ]
     },
     {
       "name": "tcop_sts",
       "offset": "0x8",
-      "description": "Tensor coprocessor status register. Reports busy, done and error state.",
+      "description": "Tensor Coprocessor Status Register. Reports live work and first-error record validity.",
       "fields": [
-        {"name": "busy", "bits": "[0]", "type": "ro", "reset": "0x0", "description": "Busy status. Indicates the datapath is processing an offloaded instruction.\n\nUsage: Software polls this field before reconfiguring; read-only.\n\nValues:\n0x0 idle (reset value);\n0x1 busy.\n\nUnit: none.\n\nLimits: one-bit value."},
-        {"name": "done", "bits": "[1]", "type": "rwi", "reset": "0x0", "description": "Done status. Indicates the last offloaded instruction completed and returned a result.\n\nUsage: Hardware sets this field on completion; software writes 0x0 to clear it after observing.\n\nValues:\n0x0 not done (reset value);\n0x1 done.\n\nUnit: none.\n\nLimits: one-bit value."},
-        {"name": "err", "bits": "[2]", "type": "w1c", "reset": "0x0", "description": "Error status. Indicates the last offloaded instruction terminated with an error.\n\nUsage: Hardware sets this field on error; software writes 0x1 to clear it.\n\nValues:\n0x0 no error (reset value);\n0x1 error.\n\nUnit: none.\n\nLimits: one-bit value."},
-        {"name": "reserved", "bits": "[31:3]", "type": "ro", "reset": "0x0", "description": ""}
+        {
+          "name": "busy",
+          "bits": "[0]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": "Busy field. Indicates active or queued accepted tensor work, or a pending OP-003 zero-result scalar-check fence.\n\nUsage: Read at any time; software does not write this field. The field stays high after an OP-003 zero result has completed over CV-X-IF and remains high until the scalar acknowledgment is consumed.\n\nValues:\n0x0 no accepted command is active or queued and no OP-003 scalar-check fence is pending (reset value);\n0x1 accepted work or a scalar-check fence is pending.\n\nUnit: none\n\nLimits: One-bit synchronized status."
+        },
+        {
+          "name": "err_valid",
+          "bits": "[1]",
+          "type": "w1c",
+          "reset": "0x0",
+          "description": "First-error valid field. Indicates that the sticky first-error record contains a command failure.\n\nUsage: Read the complete error record before writing 1 to clear. Younger execution pauses until the W1C clear acknowledgment reaches CLK-CORE. For an OP-003 zero-result fence, clearing err_valid alone does not release the global fence; software must also write tcop_ctrl.scalar_ack=1 after checking the result.\n\nValues:\n0x0 no valid error record (reset value or after W1C);\n0x1 a first-error record is valid. After the OP-003 zero-result handshake, while scalar_check_pending=1, 0 means the completed zero result is valid and 1 means that OP-003 failed.\n\nUnit: none\n\nLimits: One-bit sticky status; writes of 0 have no effect."
+        },
+        {
+          "name": "reserved",
+          "bits": "[31:2]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": ""
+        }
       ]
     },
     {
-      "name": "tcop_cfg",
+      "name": "tcop_err_sts",
       "offset": "0xC",
-      "description": "Tensor coprocessor configuration register. Holds the matrix dimension or stride for the next operation.",
+      "description": "Tensor Coprocessor First Error Status Register. Holds the DEC-012 status code.",
       "fields": [
-        {"name": "cfg_val", "bits": "[31:0]", "type": "rw", "reset": "0x0", "description": "Configuration value. Holds the matrix dimension or stride for the next offloaded operation.\n\nUsage: Written by software before issuing the instruction; used by the datapath for operand addressing.\n\nValues:\n0x00000000 default (reset value);\n0x00000001 to 0xFFFFFFFF configurable value.\n\nUnit: none.\n\nLimits: 32-bit value."}
+        {
+          "name": "code",
+          "bits": "[31:0]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": "Status field. Contains the stable status enumeration for the first accepted command error.\n\nUsage: Read only when tcop_sts.err_valid is 1.\n\nValues:\n0x0 no error status (reset value or no valid record);\n0x1 to 0xFFFFFFFF nonzero DEC-012 error code.\n\nUnit: status enum\n\nLimits: 32-bit unsigned status code; see HDS Section 12.1."
+        }
+      ]
+    },
+    {
+      "name": "tcop_err_hartid",
+      "offset": "0x10",
+      "description": "Tensor Coprocessor First Error Hart Register. Identifies the CV-X-IF hart that issued the error command.",
+      "fields": [
+        {
+          "name": "hartid",
+          "bits": "[31:0]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": "Hart field. Contains the zero-extended CV-X-IF hart ID associated with the first error.\n\nUsage: Read only when tcop_sts.err_valid is 1.\n\nValues:\n0x0 to 0xFFFFFFFF zero-extended hart ID.\n\nUnit: hart ID\n\nLimits: 32-bit zero-extended identifier; stable while err_valid is 1."
+        }
+      ]
+    },
+    {
+      "name": "tcop_err_xif_id",
+      "offset": "0x14",
+      "description": "Tensor Coprocessor First Error Command Register. Identifies the CV-X-IF command transaction.",
+      "fields": [
+        {
+          "name": "xif_id",
+          "bits": "[31:0]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": "Transaction field. Contains the zero-extended CV-X-IF transaction ID associated with the first error.\n\nUsage: Read only when tcop_sts.err_valid is 1.\n\nValues:\n0x0 to 0xFFFFFFFF zero-extended CV-X-IF transaction ID.\n\nUnit: transaction ID\n\nLimits: 32-bit zero-extended identifier; stable while err_valid is 1."
+        }
+      ]
+    },
+    {
+      "name": "tcop_err_addr_lo",
+      "offset": "0x18",
+      "description": "Tensor Coprocessor First Error Address Low Register. Holds the low half of the associated DMA byte address.",
+      "fields": [
+        {
+          "name": "addr_lo",
+          "bits": "[31:0]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": "Address field. Contains address bits [31:0] for a DMA address-related error.\n\nUsage: Read with tcop_err_addr_hi only when tcop_sts.err_valid is 1.\n\nValues:\n0x0 to 0xFFFFFFFF low address bits, or zero when no DMA address applies.\n\nUnit: byte address\n\nLimits: Low 32 bits of a 64-bit DMA-visible byte address."
+        }
+      ]
+    },
+    {
+      "name": "tcop_err_addr_hi",
+      "offset": "0x1C",
+      "description": "Tensor Coprocessor First Error Address High Register. Holds the high half of the associated DMA byte address.",
+      "fields": [
+        {
+          "name": "addr_hi",
+          "bits": "[31:0]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": "Address field. Contains address bits [63:32] for a DMA address-related error.\n\nUsage: Read with tcop_err_addr_lo only when tcop_sts.err_valid is 1.\n\nValues:\n0x0 to 0xFFFFFFFF high address bits, or zero when no DMA address applies.\n\nUnit: byte address\n\nLimits: High 32 bits of a 64-bit DMA-visible byte address."
+        }
+      ]
+    },
+    {
+      "name": "tcop_err_axi_id",
+      "offset": "0x20",
+      "description": "Tensor Coprocessor First Error AXI ID Register. Holds the associated AXI transaction identifier.",
+      "fields": [
+        {
+          "name": "axi_id",
+          "bits": "[31:0]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": "AXI ID field. Contains the zero-extended AXI transaction ID for an AXI response/protocol error.\n\nUsage: Read only when tcop_sts.err_valid is 1.\n\nValues:\n0x0 to 0xFFFFFFFF zero-extended AXI ID, or zero when no AXI ID applies.\n\nUnit: transaction ID\n\nLimits: 32-bit zero-extended AXI ID; stable while err_valid is 1."
+        }
+      ]
+    },
+    {
+      "name": "tcop_err_detail",
+      "offset": "0x24",
+      "description": "Tensor Coprocessor First Error Detail Register. Reserved for a future diagnostic subcode map; release 1 reads as zero for every status.",
+      "fields": [
+        {
+          "name": "detail",
+          "bits": "[31:0]",
+          "type": "ro",
+          "reset": "0x0",
+          "description": "Reserved detail field. In release 1, hardware reads zero for every error status; software shall not assign subcode semantics to this field.\n\nUsage: Reserved for a future versioned CSR/IP extension. Software control flow shall use tcop_err_sts.code only.\n\nValues:\n0x00000000 for every status in release 1.\n\nUnit: none in release 1.\n\nLimits: Read-only, reserved zero; stable while err_valid is 1."
+        }
       ]
     }
   ]

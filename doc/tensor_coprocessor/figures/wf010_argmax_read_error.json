@@ -1,26 +1,92 @@
 {
-  "head": {"text": "WF-010 OP-004 AXI read error and scalar sentinel completion"},
+  "head": {
+    "text": "WF-010 OP-004 read fault, APB publication and scalar result"
+  },
   "signal": [
-    {"name": "i_clk_core", "wave": "p.............."},
-    {"name": "PARA_ARGMAX_IMPL (static build value)", "wave": "=..............", "data": ["0=standalone; 1=fused"]},
-    {"name": "i_xif_issue_valid", "wave": "01.0..........."},
-    {"name": "o_xif_issue_ready", "wave": "01.0..........."},
-    {"name": "i_xif_issue_req_instr[31:0]", "wave": "x=.x...........", "data": ["OP-004"]},
-    {"name": "o_xif_issue_resp_accept", "wave": "01.0..........."},
-    {"name": "i_xif_commit_valid", "wave": "0...10........."},
-    {"name": "i_xif_commit_kill", "wave": "x...0..........", "data": ["0=committed"]},
-    {"name": "if003_read_req_valid", "wave": "0.....10......."},
-    {"name": "if003_read_req_ready", "wave": "0.....10......."},
-    {"name": "if003_read_resp_valid", "wave": "0.........10..."},
-    {"name": "if003_read_resp_ready", "wave": "0.........10..."},
-    {"name": "if003_rresp", "wave": "x.........=....", "data": ["SLVERR"]},
-    {"name": "csr_first_error_valid", "wave": "0...........1.."},
-    {"name": "csr_first_error_fields", "wave": "x...........=..", "data": ["AXI_READ"]},
-    {"name": "o_xif_result_valid", "wave": "0............10"},
-    {"name": "i_xif_result_ready", "wave": "0............10"},
-    {"name": "o_xif_result_data", "wave": "x............=.", "data": ["all-ones"]},
-    {"name": "o_xif_result_we", "wave": "x............=.", "data": ["1"]}
+    {
+      "name": "i_clk_core",
+      "wave": "p.................."
+    },
+    {
+      "name": "i_xif_issue_valid",
+      "wave": "0100000000000000000"
+    },
+    {
+      "name": "o_xif_issue_ready",
+      "wave": "0100000000000000000"
+    },
+    {
+      "name": "o_xif_issue_resp_accept",
+      "wave": "0100000000000000000"
+    },
+    {
+      "name": "o_xif_issue_resp_writeback",
+      "wave": "0100000000000000000"
+    },
+    {
+      "name": "i_xif_commit_valid",
+      "wave": "0001000000000000000"
+    },
+    {
+      "name": "i_xif_commit_kill",
+      "wave": "xxx0xxxxxxxxxxxxxxx"
+    },
+    {
+      "name": "descriptor validated (conceptual)",
+      "wave": "0000010000000000000"
+    },
+    {
+      "name": "IF-003 operand AR handshake (conceptual)",
+      "wave": "0000001000000000000"
+    },
+    {
+      "name": "IF-003 operand R handshake (conceptual)",
+      "wave": "0000000010100000000"
+    },
+    {
+      "name": "IF-003 RRESP (conceptual)",
+      "wave": "xxxxxxxx=x=xxxxxxxx",
+      "data": [
+        "SLVERR",
+        "OKAY"
+      ]
+    },
+    {
+      "name": "IF-003 RLAST on final transfer (conceptual)",
+      "wave": "0000000000100000000"
+    },
+    {
+      "name": "all accepted traffic drained (conceptual)",
+      "wave": "0000000000010000000"
+    },
+    {
+      "name": "APB publication ACK in core (conceptual)",
+      "wave": "0000000000000100000"
+    },
+    {
+      "name": "o_xif_result_valid",
+      "wave": "0000000000000011100"
+    },
+    {
+      "name": "i_xif_result_ready",
+      "wave": "0000000000000000100"
+    },
+    {
+      "name": "o_xif_result_data",
+      "wave": "xxxxxxxxxxxxxx=..xx",
+      "data": [
+        "all-ones"
+      ]
+    },
+    {
+      "name": "o_xif_result_we",
+      "wave": "xxxxxxxxxxxxxx1..xx"
+    }
   ],
-  "foot": {"text": "Illustrative ordering only; no fixed latency is implied. CSR error context is captured before completion. OP-004 retains its scalar writeback class on failure; software reads CSR only when rd equals the reserved all-ones token sentinel. The first-error record remains sticky until W1C."},
-  "config": {"hscale": 2}
+  "foot": {
+    "text": "The failing command drains first. APB publication precedes the scalar sentinel. Cycle placement is illustrative."
+  },
+  "config": {
+    "hscale": 3
+  }
 }

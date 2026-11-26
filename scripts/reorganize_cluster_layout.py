@@ -2,7 +2,7 @@
 
 Usage: python scripts/reorganize_cluster_layout.py plan|apply|check
 Inputs: the current cluster tree and its existing filelists/scripts/documents.
-Outputs: doc/maintenance/layout_migration/{manifest,validation}.json and snapshots.
+Outputs: project_support/maintenance/layout_migration/{manifest,validation}.json and snapshots.
 Exit: 0 on success; nonzero on collision, escaped path, missing source or mutation.
 Only the Python standard library is used. No recursive delete is performed.
 """
@@ -17,7 +17,7 @@ from collections import Counter
 from functools import lru_cache
 
 ROOT=Path(__file__).resolve().parents[1]
-OUT=ROOT/'doc/maintenance/layout_migration'
+OUT=ROOT/'project_support/maintenance/layout_migration'
 RTL={'.sv','.v','.svh','.vh','.vhd','.vhdl','.vp','.inc'}
 FLISTS={'.f','.flist'}
 DOC={'.md','.rst','.pdf','.docx','.xlsx','.pptx','.html','.htm','.svg','.png','.jpg','.jpeg'}
@@ -58,38 +58,38 @@ def destination(name):
     if name.startswith('rtl/third_party/'):
         tail=Path(*parts[2:]);lower=[s.lower() for s in tail.parts]
         if '.git' in lower or p.name.startswith('.git'):
-            return (Path('doc/provenance/third_party')/tail).as_posix()
+            return (Path('project_support/provenance/third_party')/tail).as_posix()
         if p.name.upper().startswith(('LICENSE','COPYING','NOTICE','AUTHORS')):
-            return (Path('doc/licenses/third_party')/tail).as_posix()
+            return (Path('project_support/licenses/third_party')/tail).as_posix()
         test=any(s in {'test','tests','tb','dv','formal','simulation','sim','example','examples'} for s in lower)
         support=('instr_tracer' in p.name or suffix in {'.cpp','.c','.cc','.h','.hpp','.hex','.mem','.bin','.elf','.s','.ld'})
-        if suffix in DOC or suffix=='.txt': return (Path('doc/third_party')/tail).as_posix()
+        if suffix in DOC or suffix=='.txt': return (Path('project_support/third_party')/tail).as_posix()
         if test or support: return (Path('verification/common/third_party')/tail).as_posix()
         if suffix in RTL or suffix in FLISTS: return (Path('rtl/common/third_party')/tail).as_posix()
         return (Path('scripts/third_party')/tail).as_posix()
     if name.startswith('rtl/modified/'):
         tail=Path(*parts[2:])
         if suffix in RTL or suffix in FLISTS: return (Path('rtl/common/modified')/tail).as_posix()
-        if suffix in DOC: return (Path('doc/rtl_layout/modified')/tail).as_posix()
+        if suffix in DOC: return (Path('project_support/rtl_layout/modified')/tail).as_posix()
         return (Path('lint/common/modified')/tail).as_posix()
     if name.startswith('rtl/vlsit/'):
         tail=Path(*parts[2:])
         if tail.parts[0]=='csr_generated':
             if suffix in RTL or suffix in FLISTS:
                 return (Path('rtl/common/vlsit/csr')/Path(*tail.parts[1:])).as_posix()
-            return (Path('doc/csr/generated')/Path(*tail.parts[1:])).as_posix()
+            return (Path('project_support/csr/generated')/Path(*tail.parts[1:])).as_posix()
         if suffix in RTL:
             return ('rtl/non_coherence_cluster/'+p.name if p.name in PRIVATE else 'rtl/common/vlsit/'+group(p.name)+'/'+p.name)
         if suffix in FLISTS: return 'rtl/common/filelists/legacy_vlsit/'+p.name
-        if suffix in DOC: return 'doc/rtl_layout/vlsit/'+tail.as_posix()
+        if suffix in DOC: return 'project_support/rtl_layout/vlsit/'+tail.as_posix()
         return 'lint/common/legacy_vlsit/'+tail.as_posix()
     if name.startswith('rtl/verification/'):
         suite=parts[2];tail=Path(*parts[2:])
-        if suffix=='.md': return (Path('doc/verification')/profile(suite)/tail).as_posix()
+        if suffix=='.md': return (Path('project_support/verification')/profile(suite)/tail).as_posix()
         return (Path('verification')/profile(suite)/tail).as_posix()
     if name.startswith('rtl/reports/'):
         suite=parts[2];tail=Path(*parts[2:]);kind=profile(suite)
-        if suffix=='.md': return (Path('doc/reports')/tail).as_posix()
+        if suffix=='.md': return (Path('project_support/reports')/tail).as_posix()
         if suffix in FLISTS:
             # Baseline/source snapshots retain their historical filelists.
             if any(v in parts for v in ('before','source_snapshots','simulation_sources')):
@@ -100,15 +100,15 @@ def destination(name):
             return (Path('lint')/kind/tail).as_posix()
         return (Path('verification')/kind/'reports'/tail).as_posix()
     if name=='rtl/lint_source_overrides.json': return 'lint/config/lint_source_overrides.json'
-    if name=='rtl/README.md': return 'doc/rtl_layout/README.md'
+    if name=='rtl/README.md': return 'project_support/rtl_layout/README.md'
     if len(parts)==1 and suffix=='.md' and p.name!='README.md':
         category='review' if p.name.startswith('rtl_change_review') else ('architecture' if p.name.startswith('VLSIT_') else 'research')
         return 'doc/'+category+'/'+p.name
     if len(parts)==1 and suffix=='.dasm': return 'verification/non_coherence_cluster/traces/'+p.name
-    if parts[0]=='figures': return (Path('doc/architecture_figures')/Path(*parts[1:])).as_posix()
+    if parts[0]=='figures': return (Path('project_support/architecture_figures')/Path(*parts[1:])).as_posix()
     if parts[0]=='tensor_coprocessor': return (Path('doc/tensor_coprocessor')/Path(*parts[1:])).as_posix()
     if parts[0] in {'_spec_work','.artifact_work','_acl_recovery'}:
-        return (Path('doc/maintenance/legacy_work')/p).as_posix()
+        return (Path('project_support/maintenance/legacy_work')/p).as_posix()
     if parts[0] in {'_tmp','.test_tmp'}: return (Path('verification/work/legacy')/p).as_posix()
     return name
 
@@ -209,8 +209,8 @@ def apply(rebase=False):
                 try: rel=target.relative_to(ROOT).as_posix()
                 except ValueError: return match[0]
                 updated=moves.get(rel,directory(rel,old))
-                if rel.startswith('rtl/reports/') and safe('doc/reports/'+rel[len('rtl/reports/'):]).is_dir():
-                    updated='doc/reports/'+rel[len('rtl/reports/'):]
+                if rel.startswith('rtl/reports/') and safe('project_support/reports/'+rel[len('rtl/reports/'):]).is_dir():
+                    updated='project_support/reports/'+rel[len('rtl/reports/'):]
                 return ']('+os.path.relpath(safe(updated),path.parent).replace('\\','/')+(sep+anchor if sep else '')+')'
             text=re.sub(r'\]\(([^)]+)\)',mdlink,text)
             # Rebase literal project-relative paths in code/examples as well.
@@ -275,8 +275,8 @@ def apply(rebase=False):
             try: folder.rmdir()
             except OSError: pass
     safe('rtl/coherence_cluster').mkdir(parents=True,exist_ok=True)
-    safe('rtl/coherence_cluster/filelist.f').write_text('// ACE profile not implemented. Intentionally no placeholder RTL.\n// See doc/rtl_layout/README.md.\n',encoding='utf-8')
-    for name in ('lint/non_coherence_cluster','verification/coherence_cluster','doc/rtl_layout'):
+    safe('rtl/coherence_cluster/filelist.f').write_text('// ACE profile not implemented. Intentionally no placeholder RTL.\n// See project_support/rtl_layout/README.md.\n',encoding='utf-8')
+    for name in ('lint/non_coherence_cluster','verification/coherence_cluster','project_support/rtl_layout'):
         safe(name).mkdir(parents=True,exist_ok=True)
     m['status']='applied';(OUT/'manifest.json').write_text(json.dumps(m,indent=2)+'\n',encoding='utf-8')
     print('APPLIED:',len(moves),'moves;',len(m['text_changes']),'live path/link updates')

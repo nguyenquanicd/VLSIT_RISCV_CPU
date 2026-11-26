@@ -14,7 +14,7 @@ import textwrap
 import xml.etree.ElementTree as ET
 
 ROOT=Path(__file__).resolve().parents[1]
-OUT=ROOT / 'doc/architecture_figures/cluster_architecture'
+OUT=ROOT / 'project_support/architecture_figures/cluster_architecture'
 
 
 def plain(value):

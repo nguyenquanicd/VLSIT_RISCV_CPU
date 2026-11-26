@@ -12,6 +12,8 @@
  *                No acknowledgement timeout or duplicate line-lock table.
  * Rule note    : NAM-08: o_cmo_error and i_maint_error retain approved Plan V3
  *                interface spelling for compatibility with the HDS channel table.
+ * History      : Quan Nguyen and Codex - VLSI Technology page.
+ *                DEC-045: Add optional cluster boundary timing profile support.
  */
 `timescale 1ns/1ps
 
@@ -27,6 +29,10 @@ module m_vlsit_riscv_cmo_controller #(
   // Parameter values: 2 through 16; default is 8.
   // Parameter unit: contexts.
   parameter logic [31:0] PARA_COH_TXN_NUM = 32'd8,
+  // Parameter Description: register the release of handshake gates.
+  // Parameter values: 0 = legacy, 1 = registered; default is 0.
+  // Parameter unit: mode
+  parameter logic [31:0] PARA_REGISTER_RESET_RELEASE = 32'd0,
   localparam logic [31:0] LPARA_COH_TAG_W = (PARA_COH_TXN_NUM > 32'd1)
                                            ? 32'($clog2(PARA_COH_TXN_NUM)) : 32'd1,
   localparam logic [31:0] LPARA_CMO_CLEAN = 32'd0,
@@ -79,6 +85,22 @@ module m_vlsit_riscv_cmo_controller #(
   output logic                       o_ccu_finish_commit,
   input  wire                        i_ccu_finish_done
 );
+
+  logic w_handshake_active;
+
+  // Clear immediately on reset and admit handshakes after the first active edge.
+  if (PARA_REGISTER_RESET_RELEASE == 32'd1) begin : gen_reset_release
+    logic reg_handshake_active;
+    always_ff @(posedge i_clk_cluster, negedge i_rst_n_cluster) begin : p_ff_reset_release
+      if (!i_rst_n_cluster)
+        reg_handshake_active <= 1'b0;
+      else
+        reg_handshake_active <= 1'b1;
+    end
+    assign w_handshake_active = reg_handshake_active;
+  end else begin : gen_reset_direct
+    assign w_handshake_active = i_rst_n_cluster;
+  end
 
   // Every command visits PREPARE; only successful preparation may reach the LLC.
   typedef enum logic [3:0] {
@@ -206,7 +228,7 @@ module m_vlsit_riscv_cmo_controller #(
     o_ccu_finish_commit = ~reg_cmo_err;
     case (reg_fsm_cmo_current_state)
       ENUM_ST_CMO_IDLE: begin
-        o_cmo_ready = w_cmd_legal & i_rst_n_cluster;
+        o_cmo_ready = w_cmd_legal & w_handshake_active;
       end
       ENUM_ST_CMO_BEGIN: begin
         o_ccu_begin_valid = 1'b1;

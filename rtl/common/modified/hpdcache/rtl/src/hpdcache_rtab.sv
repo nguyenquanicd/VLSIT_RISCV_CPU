@@ -9,6 +9,9 @@
  *  Creation Date : September, 2021
  *  Description   : HPDcache Replay Table
  *  History       :
+ *  2026-11-26 - Quan Nguyen and Claude - VLSI Technology page:
+ *    OPEN-X32-CBO4 (DEC-046): hold fence_o while a fence-type entry (AMO,
+ *    uncacheable, CMO) is queued, so no younger request links behind it.
  *  2026-11-14 - Quan Nguyen and Codex - VLSI Technology page:
  *    Add a per-entry line-lock dependency that clears only after its exact
  *    physical cache line leaves the CCU lock vector.
@@ -203,6 +206,7 @@ import hpdcache_pkg::*;
     hpdcache_req_addr_t [N-1:0]  addr;
     logic               [N-1:0]  is_read_bv;
     logic               [N-1:0]  fence_bv;
+    logic               [N-1:0]  fence_type_bv;
     logic                        fence_only;
     logic               [N-1:0]  check_hit;
     logic               [N-1:0]  match_check_nline;
@@ -247,7 +251,8 @@ import hpdcache_pkg::*;
     //  full and empty signals
     assign empty_o = &(~valid_q);
     assign  full_o = &( valid_q) | (|valid_q & cfg_single_entry_i);
-    assign fence_o = |fence_bv;
+    //  DEC-046: the fence also holds after pend_trans clears, until the fence-type entry leaves
+    assign fence_o = (|fence_bv) | (|(valid_q & fence_type_bv));
 //  }}}
 
 //  Check interface
@@ -259,6 +264,12 @@ import hpdcache_pkg::*;
         assign is_read_bv[gen_i] = is_load(req_q[gen_i].req.req.op) |
                                    is_cmo_prefetch(req_q[gen_i].req.req.op);
         assign fence_bv[gen_i] = deps_q[gen_i].pend_trans;
+        //  Same classification as st1_fence in hpdcache_ctrl_pe (DEC-046)
+        assign fence_type_bv[gen_i] = is_amo(req_q[gen_i].req.req.op)
+                                    | req_q[gen_i].req.req.pma.uncacheable
+                                    | is_cmo_fence(req_q[gen_i].req.req.op)
+                                    | is_cmo_inval(req_q[gen_i].req.req.op)
+                                    | is_cmo_flush(req_q[gen_i].req.req.op);
     end
 
     assign fence_only       = (valid_q == fence_bv);

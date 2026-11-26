@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "generator": "scripts/generators/generate_case_manifest.py",
+  "generator_version": "1.0.0",
+  "input": "tests/qualification_case_matrix.json",
+  "input_sha256": "430de7815f4de9dcd40edb89d3b912f2531726989bcefa1b24524c85cadcd935",
+  "cases": [
+    {
+      "id": "H2_FENCEI_SUCCESS",
+      "test_id": "TEST-041",
+      "hart_count": 2,
+      "inject_axi_error": false,
+      "expected": "FENCE.I waits for successful dirty-line transfer and retires without trap",
+      "checks": [
+        "architectural retirement",
+        "MESI maintenance ordering",
+        "20 AXI assertion counters"
+      ]
+    },
+    {
+      "id": "H2_FENCEI_AXI_ERROR",
+      "test_id": "TEST-042",
+      "hart_count": 2,
+      "inject_axi_error": true,
+      "expected": "FENCE.I waits for ABORT ACK and traps with the specified maintenance fault",
+      "checks": [
+        "architectural trap/retry",
+        "dirty owner preservation",
+        "20 AXI assertion counters"
+      ]
+    },
+    {
+      "id": "H4_FENCEI_SUCCESS",
+      "test_id": "TEST-041",
+      "hart_count": 4,
+      "inject_axi_error": false,
+      "expected": "FENCE.I waits for successful dirty-line transfer and retires without trap",
+      "checks": [
+        "architectural retirement",
+        "MESI maintenance ordering",
+        "20 AXI assertion counters"
+      ]
+    },
+    {
+      "id": "H4_FENCEI_AXI_ERROR",
+      "test_id": "TEST-042",
+      "hart_count": 4,
+      "inject_axi_error": true,
+      "expected": "FENCE.I waits for ABORT ACK and traps with the specified maintenance fault",
+      "checks": [
+        "architectural trap/retry",
+        "dirty owner preservation",
+        "20 AXI assertion counters"
+      ]
+    }
+  ],
+  "review_status": "G0 approved; initial scope only, not full HDS closure"
+}

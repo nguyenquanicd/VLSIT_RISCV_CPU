@@ -1,0 +1,17 @@
+{
+  "date": "2026-11-16",
+  "status": "PASS",
+  "original_doc_files": 3043,
+  "current_doc_files": 523,
+  "moved_to_project_support": 2522,
+  "relocated_within_doc": 10,
+  "permanently_deleted_files": 0,
+  "original_files_accounted_for": 3043,
+  "protected_rtl_files_unchanged": 1609,
+  "original_workbook_hashes_preserved": true,
+  "local_markdown_links_checked": 767,
+  "live_path_mappings_checked": 2532,
+  "python_sources_parsed": 29,
+  "current_doc_MiB": 11.22,
+  "findings": []
+}

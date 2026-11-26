@@ -1,12 +1,77 @@
 {
-  "head": {"text": "WF-007 Reset to idle (corner)"},
+  "head": {
+    "text": "WF-007 Drain an accepted command before ordinary reset"
+  },
   "signal": [
-    {"name": "i_clk_core", "wave": "p........."},
-    {"name": "i_rst_n_core", "wave": "0...111111"},
-    {"name": "i_xif_issue_valid", "wave": "0........."},
-    {"name": "o_xif_issue_resp_accept", "wave": "0........."},
-    {"name": "o_xif_result_valid", "wave": "0........."}
+    {
+      "name": "i_clk_core",
+      "wave": "p................"
+    },
+    {
+      "name": "i_rst_n_core",
+      "wave": "11111111111100111"
+    },
+    {
+      "name": "i_quiesce_req",
+      "wave": "00111111111111100"
+    },
+    {
+      "name": "o_quiesce_ack",
+      "wave": "00000000001100100"
+    },
+    {
+      "name": "drain_seen (reset controller)",
+      "wave": "00000000000111110"
+    },
+    {
+      "name": "i_xif_issue_valid",
+      "wave": "01000000000000001"
+    },
+    {
+      "name": "o_xif_issue_ready",
+      "wave": "11000000000000011"
+    },
+    {
+      "name": "o_xif_issue_resp_accept",
+      "wave": "01000000000000001"
+    },
+    {
+      "name": "i_xif_commit_valid",
+      "wave": "00001000000000000"
+    },
+    {
+      "name": "i_xif_commit_kill",
+      "wave": "xxxx0xxxxxxxxxxxx"
+    },
+    {
+      "name": "o_axi_arvalid",
+      "wave": "00000100000000000"
+    },
+    {
+      "name": "i_axi_arready",
+      "wave": "00000100000000000"
+    },
+    {
+      "name": "i_axi_rvalid (last required read)",
+      "wave": "00000001000000000"
+    },
+    {
+      "name": "o_axi_rready",
+      "wave": "11111111000000000"
+    },
+    {
+      "name": "o_xif_result_valid",
+      "wave": "00000000010000000"
+    },
+    {
+      "name": "i_xif_result_ready",
+      "wave": "00000000010000000"
+    }
   ],
-  "foot": {"text": "Asynchronous assertion, synchronous release; all state clears to idle."},
-  "config": {"hscale": 2}
+  "foot": {
+    "text": "The accepted command commits during drain. The controller latches ack before resetting the IP."
+  },
+  "config": {
+    "hscale": 3
+  }
 }

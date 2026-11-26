@@ -1,0 +1,113 @@
+{
+  "head": {
+    "text": "WF-013 OP-007 layer normalization (illustrative ordering only)",
+    "tick": 0
+  },
+  "signal": [
+    [
+      "CV-X-IF command/result",
+      {
+        "name": "i_clk_core",
+        "wave": "p..............................."
+      },
+      {
+        "name": "i_xif_issue_valid",
+        "wave": "01000000000000000000000000000000"
+      },
+      {
+        "name": "o_xif_issue_ready",
+        "wave": "01000000000000000000000000000000"
+      },
+      {
+        "name": "o_xif_issue_resp_accept",
+        "wave": "01000000000000000000000000000000"
+      },
+      {
+        "name": "i_xif_commit_valid",
+        "wave": "00010000000000000000000000000000"
+      },
+      {
+        "name": "i_xif_commit_kill",
+        "wave": "00000000000000000000000000000000"
+      },
+      {
+        "name": "o_xif_result_valid",
+        "wave": "00000000000000000000000000000100"
+      },
+      {
+        "name": "i_xif_result_ready",
+        "wave": "00000000000000000000000000000100"
+      },
+      {
+        "name": "o_xif_result_we",
+        "wave": "00000000000000000000000000000100"
+      },
+      {
+        "name": "i_xif_issue_req_instr[31:0]",
+        "wave": "x=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "data": [
+          "OP-007"
+        ]
+      },
+      {
+        "name": "o_xif_result_data",
+        "wave": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx=xx",
+        "data": [
+          "OK"
+        ]
+      }
+    ],
+    [
+      "IF-003 phases (conceptual)",
+      {
+        "name": "Descriptor fetch",
+        "wave": "00001110000000000000000000000000"
+      },
+      {
+        "name": "Descriptor validated",
+        "wave": "00000001000000000000000000000000"
+      },
+      {
+        "name": "Row 0 read request",
+        "wave": "00000000100000000000000000000000"
+      },
+      {
+        "name": "Row 0 ready",
+        "wave": "00000000010000000000000000000000"
+      },
+      {
+        "name": "Row 1 prefetch",
+        "wave": "00000000000001000000000000000000"
+      },
+      {
+        "name": "Row 1 ready",
+        "wave": "00000000000000001000000000000000"
+      }
+    ],
+    [
+      "Compute and completion (conceptual)",
+      {
+        "name": "Welford mean and M2",
+        "wave": "00000000001110000011100000000000"
+      },
+      {
+        "name": "Variance, epsilon and rsqrt",
+        "wave": "00000000000001100000011000000000"
+      },
+      {
+        "name": "Normalize and affine",
+        "wave": "00000000000000011000000110000000"
+      },
+      {
+        "name": "Row writes successful",
+        "wave": "00000000000000000100000000001000"
+      }
+    ]
+  ],
+  "foot": {
+    "text": "Illustrative ordering only. Row 1 prefetch overlaps row 0 post-processing. Result follows both row writes."
+  },
+  "config": {
+    "hscale": 1
+  }
+}

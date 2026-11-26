@@ -5,6 +5,10 @@
  * AI Flow Page : https://github.com/nguyenquanicd/VLSIT_RTL_Generator_AI_Model
  * Date         : 2026-11-08
  * Description  : Converts the LLC AXI4-Lite service window to the PULP RegBus handshake.
+ * Change History:
+ * 2026-11-20 - Modified by Quan Nguyen and Codex - VLSI Technology page:
+ *              Block denied LLC writes before RegBus dispatch to prevent side effects
+ *              and duplicate AXI4-Lite B responses (R-01).
  */
 `timescale 1ns/1ps
 
@@ -231,7 +235,7 @@ module m_vlsit_axil_reg_bridge #(
     endcase
     case (reg_fsm_axil_reg_current_state)
       ENUM_ST_IDLE: begin
-        if (w_pick_wr & w_wr_addr_aligned & w_wr_addr_mapped)
+        if (w_pick_wr & w_wr_addr_aligned & w_wr_addr_mapped & ~w_wr_addr_wr_denied)
           w_fsm_axil_reg_nxt_state = ENUM_ST_WR_REQ;
         else if (w_pick_rd & w_rd_addr_aligned & w_rd_addr_mapped)
           w_fsm_axil_reg_nxt_state = ENUM_ST_RD_REQ;

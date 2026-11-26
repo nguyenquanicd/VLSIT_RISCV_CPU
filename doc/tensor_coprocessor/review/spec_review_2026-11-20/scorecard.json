@@ -1,0 +1,337 @@
+{
+ "ip": "VLSIT Tensor Coprocessor",
+ "reviewed_spec": "doc/tensor_coprocessor/VLSIT_TENSOR_COPROCESSOR_HDS.md",
+ "date": "2026-11-20",
+ "areas": [
+  {
+   "id": "application_fit",
+   "weight": 1.0,
+   "score": 3,
+   "justification": "The product context is an on-device LLM and vision-transformer edge SoC with named workloads, but §1.2 leaves target shapes and the accuracy and latency envelope open and the 64 TOPS headline is far above Arm's published edge NPU range."
+  },
+  {
+   "id": "features",
+   "weight": 1.0,
+   "score": 4,
+   "justification": "Nine FEAT rows map to requirements and three configurations (CFG-BASE, CFG-FULL, CFG-64TOPS) tie features to interfaces; only the analytical-only status of CFG-64TOPS weakens it."
+  },
+  {
+   "id": "functions",
+   "weight": 1.5,
+   "score": 4,
+   "justification": "Each operation has a numeric contract down to rounding order (DEC-053 to DEC-070); only Minor points remain: the occupancy of the fused batch-one projection (3.125 percent in RV-016) is unmeasured and one active command owns all arrays."
+  },
+  {
+   "id": "interfaces",
+   "weight": 1.5,
+   "score": 3,
+   "justification": "CV-X-IF, AXI4 DMA, APB4 and IF-006 SRAM banks are defined, but the normative CV-X-IF revision is a development release and the packed-port assumption ASM-002 is open."
+  },
+  {
+   "id": "clock_reset_cdc",
+   "weight": 1.5,
+   "score": 3,
+   "justification": "Two clock domains, eight numbered crossings and a quiesce-and-drain reset sequence are specified; the OP-003 zero-result fence adds a core to APB to software round trip to a global issue stall."
+  },
+  {
+   "id": "parameters",
+   "weight": 1.0,
+   "score": 4,
+   "justification": "Every operation has finite elaboration-time caps with checked arithmetic and illegal combinations are rejected; the port list and AXI sizing are still candidates."
+  },
+  {
+   "id": "data_representation",
+   "weight": 0.5,
+   "score": 4,
+   "justification": "INT8, BF16, FP16 and FP32 behaviour, accumulator bounds, requantization and rounding order are fixed per operation."
+  },
+  {
+   "id": "asic_feasibility",
+   "weight": 1.5,
+   "score": 2,
+   "justification": "The 2 GHz point has no technology, library or experiment behind it and shares the clock with the CVA6 host; MAC-array structure gives a large flop proxy."
+  },
+  {
+   "id": "sdc_timing",
+   "weight": 1.5,
+   "score": 2,
+   "justification": "§17.1 gives clock names and exceptions, but every interface budget is integrator-supplied or TBD, including the AXI data path."
+  },
+  {
+   "id": "area_power",
+   "weight": 1.0,
+   "score": 2,
+   "justification": "PPA-002 and PPA-003 are qualitative and the power goal conflicts with a no-clock-gating rule."
+  },
+  {
+   "id": "performance",
+   "weight": 1.5,
+   "score": 2,
+   "justification": "Peak TOPS and roofline arithmetic are given, but latency, tokens per second and sustained utilization targets are TBD and the first AXI path is one 256-bit port."
+  },
+  {
+   "id": "software_ease",
+   "weight": 1.0,
+   "score": 4,
+   "justification": "Fixed 64-byte-header descriptors with versioned schemas, a generator for the layout constants and a first-error CSR record give a workable driver model."
+  },
+  {
+   "id": "dft",
+   "weight": 1.0,
+   "score": 3,
+   "justification": "Scan, MBIST and wrapper hooks are stated, but the no-ICG decision removes the usual power lever and ATPG constraints are left to the DFT team."
+  },
+  {
+   "id": "security_ras",
+   "weight": 1.0,
+   "score": 3,
+   "justification": "S/M-mode gating, a fixed DMA aperture and a first-error record are specified; recovery from a missing response is a full SoC reset, ECC is optional and multi-tenant isolation is open."
+  },
+  {
+   "id": "verification_quality",
+   "weight": 1.5,
+   "score": 4,
+   "justification": "62 requirements trace to 50 tests and 35 properties with a stated reproducible-seed strategy; coverage thresholds are absent and no RTL exists yet."
+  },
+  {
+   "id": "documentation",
+   "weight": 0.5,
+   "score": 3,
+   "justification": "Identifiers and decisions are stable, but the version field is still 0.1, there is no revision history and the document is about 4,400 very long lines."
+  },
+  {
+   "id": "integration_effort",
+   "weight": 1.0,
+   "score": 1,
+   "justification": "The safe-commit frontier needs host CVA6 changes that the specification itself lists as an unmapped P0 item."
+  },
+  {
+   "id": "market_position",
+   "weight": 1.0,
+   "score": 3,
+   "justification": "A CV-X-IF systolic coprocessor is a recognized pattern (Gemmini over RoCC, Arm Ethos-U85 on an AXI/CHI-class interface); the PPA claim has no evidence against them."
+  }
+ ],
+ "findings": [
+  {
+   "id": "F-001",
+   "area": "integration_effort",
+   "severity": "Blocker",
+   "label": "FACT",
+   "locator": "§20.1 RV-017, §3.1 REQ-IF-006, REQ-IF-007",
+   "title": "The host commit frontier the IP depends on has no mapped CVA6 implementation",
+   "detail": "REQ-IF-006 and REQ-IF-007 require a per-hart, age-ordered fault-resolved commit frontier and a kill rule; RV-017 states the signal mapping and host RTL remain P0, and the pinned CVA6 driver emits commit from issue-valid and ready with commit_kill tied to zero, so DMA could start before an older load or branch fault.",
+   "action": "Specify the CVA6 change as a requirement with its signal map before RTL start."
+  },
+  {
+   "id": "F-002",
+   "area": "asic_feasibility",
+   "severity": "Major",
+   "label": "INFERENCE",
+   "locator": "§13 PPA-001, §7.1, §1.2",
+   "title": "The 2 GHz goal has no technology basis and shares the host clock",
+   "detail": "PPA-001 sets at least 1 GHz and a 2 GHz characterization point for CFG-64TOPS at an SS corner, while §1.2 selects no technology; the tensor datapath shares CLK-CORE with the CVA6 host (§7.1). The related cluster synthesis (ARM sc12 55LPx RVT, ss 1.08 V 125 C) measured a 3.40 ns CVA6 critical path, and a published GF22 FDX synthesis reports about 1.09 GHz at 0.72 V and -40 C, so the host alone bounds the clock.",
+   "action": "Choose the technology and corner, and gate the accumulator-loop architecture on a processing-element experiment."
+  },
+  {
+   "id": "F-003",
+   "area": "performance",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "§13 PPA-004, PPA-007, §6.1.1",
+   "title": "64 TOPS peak has no sustained target and the first memory path is one 256-bit AXI port",
+   "detail": "PPA-004 states an ideal peak of 65.536 TOPS (16 arrays of 32 by 32 at 2 GHz) and FEAT-006 says it needs up to 2.048 TB/s of on-chip operand injection; PPA-007 gives the first target as one 256-bit AXI port with minimum SoC bandwidth, SRAM and arbitration left to sign-off, and §6.1.1 says the port does not sustain 64 TOPS for every workload.",
+   "action": "Add a sustained-throughput requirement per workload and the bandwidth it implies."
+  },
+  {
+   "id": "F-004",
+   "area": "performance",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "§20.1 RV-002, §13 PPA-005, PPA-006, PPA-010",
+   "title": "Latency and tokens-per-second targets are still TBD",
+   "detail": "RV-002 (Critical) says numeric latency targets remain TBD and its follow-up asks the team to supply them; PPA-005, PPA-006 and PPA-010 only define what to report, and the earlier 50 ms per token figure is called a preliminary example.",
+   "action": "Set numeric TTFT, inter-token and handler-entry targets for a named model."
+  },
+  {
+   "id": "F-005",
+   "area": "area_power",
+   "severity": "Major",
+   "label": "INFERENCE",
+   "locator": "§13 PPA-002, PPA-003",
+   "title": "No area or power basis although the structure implies a very large array",
+   "detail": "PPA-002 and PPA-003 are qualitative. As a structural proxy, 16 arrays of 32 by 32 PEs hold 16,384 accumulators of 32 bits, so at least 524,288 accumulator flops; using the 10.56 um2 average sequential cell of the supplied ARM sc12 55LPx RVT synthesis this is about 5.5 mm2 before multipliers, operand registers and SRAM (proxy, not a mapped number for this design).",
+   "action": "Add a structural area table and a power estimation method with assumptions."
+  },
+  {
+   "id": "F-006",
+   "area": "dft",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "§16, §7.1, §13 PPA-003",
+   "title": "Power goal is 'datapath-active only' while no clock gating is allowed",
+   "detail": "§7.1 and §16 state there is no internal clock gating and the clock-gating test enable is N/A, while PPA-003 sets the power goal as datapath-active only; an array of 16,384 MACs that is idle between commands would still toggle its clock tree.",
+   "action": "Allow approved ICG cells with a test-enable port or require operand isolation, and align PPA-003."
+  },
+  {
+   "id": "F-007",
+   "area": "sdc_timing",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "§17.1.2, §17.1.1",
+   "title": "Interface timing budgets are integrator-supplied or TBD, including the AXI data path",
+   "detail": "§17.1.2 lists CV-X-IF and APB budgets as 'integrator' and the IF-003 tensor-data path as burst and width TBD with SDC after port sizing; CLK-CORE has no period or uncertainty.",
+   "action": "State a port-group budget as a percent of the period and the register-output rule."
+  },
+  {
+   "id": "F-008",
+   "area": "interfaces",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "§2.1 REF-001, §2.3, §6 IF-001",
+   "title": "The normative CV-X-IF revision is a development release",
+   "detail": "REF-001 names the Core-V eXtension interface Release v1.0.1-dev.0 (Development, 2024-05-23) as the protocol authority, while the locally converted reference is the v1.0.0 document (file vlsit_cvxif_openhw_core_v_xif_v1_0_0.md); the two can differ in clause numbers and behavior.",
+   "action": "Pin the ratified v1.0.0 or record the exact development commit and the differences."
+  },
+  {
+   "id": "F-009",
+   "area": "functions",
+   "severity": "Minor",
+   "label": "FACT",
+   "locator": "§20.1 RV-016, §10 line 1572, DEC-073, REQ-FUNC-010",
+   "title": "Occupancy of the fused batch-one projection is unmeasured",
+   "detail": "A matrix-vector and small-M dataflow profile exists (REQ-FUNC-010, §10 line 1972), but RV-016 (Critical) notes that a 1 by K by K by V projection on a 32-row output-stationary mapping occupies one PE row (3.125 percent) and DEC-073 leaves the build tile geometry and latency evidence open, so the occupancy of the fused OP-004 build is not defined.",
+   "action": "Characterize the fused dataflow (direct, split-K or vector lanes) and state its occupancy before the ABI freeze."
+  },
+  {
+   "id": "F-010",
+   "area": "functions",
+   "severity": "Minor",
+   "label": "INFERENCE",
+   "locator": "§20.2 DEC-006, §20.1 RV-003",
+   "title": "One active command owns every array, so short operations idle the MACs",
+   "detail": "The first release schedules one active command across all arrays and hands over at completion; row softmax, layer normalization and argmax are limited by exp, reciprocal and reduction lanes (PPA-008) while the MAC arrays are idle.",
+   "action": "Report utilization per operation and decide when cross-command overlap is required."
+  },
+  {
+   "id": "F-011",
+   "area": "clock_reset_cdc",
+   "severity": "Major",
+   "label": "INFERENCE",
+   "locator": "§3.1 REQ-ERR-004, §7.2 CDC-005, CDC-006",
+   "title": "The OP-003 zero-result fence stalls every hart across an asynchronous round trip",
+   "detail": "REQ-ERR-004 holds a global all-hart issue stall for an OP-003 result of zero until software reads and clears the error record and writes scalar_ack through APB (CDC-005, CDC-006); zero is a common result (a sum of zeros, a max after ReLU), so the slow path is frequent and a software error could hold the stall.",
+   "action": "Measure the zero-result frequency and consider returning an error flag in the result instead."
+  },
+  {
+   "id": "F-012",
+   "area": "security_ras",
+   "severity": "Major",
+   "label": "FACT",
+   "locator": "§20.1 RV-022, §20.2 DEC-029, REQ-RESET-002",
+   "title": "A missing AXI response is recoverable only by full SoC reset",
+   "detail": "AXI4 has no cancel for an accepted transaction; the user rejected tensor-local abort and DEC-029 selects full SoC reset after a watchdog timeout, with the host waiting on a pending result in the meantime.",
+   "action": "Keep the approved decision and require a SoC watchdog and interrupt path."
+  },
+  {
+   "id": "F-013",
+   "area": "security_ras",
+   "severity": "Minor",
+   "label": "FACT",
+   "locator": "§18, §20.2 DEC-025",
+   "title": "ECC is optional and only parity on one SRAM is mentioned",
+   "detail": "§18 lists 'optional parity on MEM-001' with simulation as the check and no ECC requirement for the banks that hold weights, accumulators or recurrent state, and no error-injection requirement for them.",
+   "action": "Decide the protection level per memory."
+  },
+  {
+   "id": "F-014",
+   "area": "security_ras",
+   "severity": "Minor",
+   "label": "FACT",
+   "locator": "§18, §20.2 DEC-025, REQ-SEC-002, REQ-SEC-003",
+   "title": "Multi-tenant isolation and side channels are left open",
+   "detail": "The DMA firewall is an immutable BASE and LIMIT aperture and the spec states it does not isolate S-mode code or two U-mode clients; §18 marks information leakage open for multi-tenant operation and a single global CSR record exposes physical error addresses.",
+   "action": "State single-tenant as the supported scope or specify per-client isolation."
+  },
+  {
+   "id": "F-015",
+   "area": "verification_quality",
+   "severity": "Minor",
+   "label": "FACT",
+   "locator": "§15.3, §15.2",
+   "title": "No coverage thresholds although properties and covergroups exist",
+   "detail": "The specification has 35 properties (for example SVA-001) and cover points but no section sets a line, toggle, functional or assertion-coverage threshold.",
+   "action": "Set coverage thresholds per release configuration."
+  },
+  {
+   "id": "F-016",
+   "area": "verification_quality",
+   "severity": "Observation",
+   "label": "FACT",
+   "locator": "§4 CFG-BASE, CFG-FULL, CFG-64TOPS",
+   "title": "No tensor RTL exists; every configuration is verification-planned",
+   "detail": "The configuration table states 'Planned; simulation/lint have not run because tensor RTL is absent' for CFG-BASE and 'Analytical only' for CFG-64TOPS, so the 76 decisions and 62 requirements have not been exercised.",
+   "action": "Record this as the status of the review."
+  },
+  {
+   "id": "F-017",
+   "area": "documentation",
+   "severity": "Minor",
+   "label": "FACT",
+   "locator": "front matter line 6, §20.1",
+   "title": "Version 0.1 with no revision history, a review table inside the normative text",
+   "detail": "The front matter still says version 0.1 and no revision history exists although the document grew to 76 decisions; §20.1 embeds a review-findings table (RV-001 to RV-022) in the normative text, and the file has about 4,400 lines averaging more than 200 characters.",
+   "action": "Add a revision table and move the review table to a separate file."
+  },
+  {
+   "id": "F-018",
+   "area": "documentation",
+   "severity": "Minor",
+   "label": "FACT",
+   "locator": "README.md Review row, doc/tensor_coprocessor/review",
+   "title": "Earlier reviews are not re-baselined against the current specification",
+   "detail": "The README links the 2026-11-17 review and the architecture-options analysis but not the re-review, and the 2026-11-17 re-review cites an HDS of 1,743 lines while the file now has 4,356 lines; the status of each earlier finding is not recorded in the specification.",
+   "action": "Link the re-review and record a status per earlier finding."
+  },
+  {
+   "id": "F-019",
+   "area": "application_fit",
+   "severity": "Major",
+   "label": "INFERENCE",
+   "locator": "§1.2, §1.4 FEAT-002, FEAT-006",
+   "title": "An edge-SoC product with a 64 TOPS headline and an open workload envelope",
+   "detail": "§1.2 says target shapes and the accuracy and latency envelope remain open, yet FEAT-002 and FEAT-006 size the IP at 65.536 TOPS and up to 2.048 TB/s on-chip injection; Arm's edge NPU Ethos-U85 is published at 128 to 2048 MACs per cycle, 256 GOPS to 4 TOPS at 1 GHz with transformer support, so the stated target is 16 times larger than that edge class.",
+   "action": "Tie the array count to a named model and an SoC power and area budget."
+  },
+  {
+   "id": "F-020",
+   "area": "market_position",
+   "severity": "Major",
+   "label": "INFERENCE",
+   "locator": "§1.4, §13 PPA-004, PPA-006",
+   "title": "No PPA or utilization evidence against commercial and open reference accelerators",
+   "detail": "Arm states the Ethos-U85 reaches 4 TOPS in silicon in a 2048-MAC configuration; the open Gemmini generator offers a 16 by 16 systolic array of 512 ops per cycle over RoCC and a configuration study estimates 41.49 percent of peak for one workload. This specification gives peak only, with no sustained, area or power evidence to place it against them.",
+   "action": "Add a comparison row set with sustained utilization and area per TOPS once available."
+  },
+  {
+   "id": "F-021",
+   "area": "parameters",
+   "severity": "Minor",
+   "label": "FACT",
+   "locator": "§20.2 ASM-002, §6.2, §3.1 REQ-PARAM-004",
+   "title": "The port list and AXI sizing are still candidates",
+   "detail": "ASM-002 (packed CV-X-IF payload ports) is open, PPA-007 gives a 256-bit, 16-read, 8-write candidate and §17.1.2 marks IF-003 sizing TBD, so the top-level module boundary is not frozen even though the parameter caps are.",
+   "action": "Freeze the port list and the AXI data-path sizing together."
+  },
+  {
+   "id": "F-022",
+   "area": "functions",
+   "severity": "Observation",
+   "label": "FACT",
+   "locator": "§13, §20.2 DEC-016, REQ-IF-007, PPA-010",
+   "title": "Several earlier findings are closed in the current specification",
+   "detail": "The roofline now separates 8.2 TOPS at T=128 from the 64 TOPS goal, the control FSM has ERR_DRAIN, the CSR record holds hart, ID and status, DEC-016 separates the tensor top from the cluster, and REQ-IF-007 and PPA-010 give an interrupt and debug handler-entry bound.",
+   "action": "Keep these and track the open items of F-001, F-004 and F-009."
+  }
+ ]
+}

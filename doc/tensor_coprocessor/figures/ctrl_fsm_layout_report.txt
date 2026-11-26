@@ -1,11 +1,11 @@
 FSM: ctrl
-STATES: 7, TRANSITIONS: 8
-LAYOUT: flow-tb-snake-3-g60
-CROSSINGS: 0
+STATES: 8, TRANSITIONS: 13
+LAYOUT: flow-tb-4-g140
+CROSSINGS: 4
 LABEL CONFLICTS: 0
-BENDS: 1
-MINIMUM GAP: 60.0 px (minimum 60 px)
+BENDS: 8
+MINIMUM GAP: 100.0 px (minimum 100 px)
 TEXT FIT: PASS (worst fill ratio 0.55)
-DISTRIBUTION: PASS (4 x-centers, 3 y-centers)
-PAGE: 880 x 380 px
+DISTRIBUTION: PASS (6 x-centers, 4 y-centers)
+PAGE: 1020 x 540 px
 RESULT: PASS

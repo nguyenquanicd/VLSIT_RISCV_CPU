@@ -3,22 +3,34 @@ document_type: asic_ip_design_specification
 document_id: "VLSIT-RISCV-DUAL-QUAD-CPU-CLUSTER"
 title: "VLSIT RISC-V Dual/Quad CPU Cluster Design Specification"
 ip_name: "VLSIT RISC-V Dual/Quad CPU Cluster"
-version: "0.29"
+version: "0.39"
 status: "Draft - detailed post-A-06 component/FSM/interface contract; qualification and explicit open items remain"
-language: "English and Vietnamese"
+language: "English"
 rtl_rules: "VLSIT_RTL_Design_Rule.md v2"
 csr_spec: "VLSIT_RISCV_CPU_Cluster_CSR.xlsx"
 ---
 
 # VLSIT RISC-V Dual/Quad CPU Cluster Design Specification
 
-# Đặc tả chi tiết cluster CPU RISC-V 2/4 hart VLSIT
 
-**Revision 0.29, 2026-11-16.** Consolidated specification with current TOP/component diagrams, source-selected NEW/MODIFY/REUSE/GENERATED contracts, exact component ports, actual controller states and working/data flows. The prior revision and historical appendices are preserved in [the pre-rewrite snapshot](revision_history/pre_detail_rewrite_20261116/VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS.md).
+**Revision 0.39, 2026-11-27.** Adds Section 14.7: the three coherence deadlock fixes (DEC-046, DEC-047), what each fix changes and why. The fixes are merged into `rtl/common/`.
 
-This document states the approved design contract, explains its current RTL realization and separately identifies validation status. Source inspection is not a golden verification model. Conflicts and unqualified declarations remain explicit review items in Section 20; no RTL, register ABI, licensing notice or new waveform timing is changed by this rewrite.
+**Revision 0.38, 2026-11-26.** Adds DEC-047 (coherence fabric: a context leaves DIR_UPDATE / DIR_CANCEL only on the handshake that carries its own tag) and closes OPEN-DIR-UPD-TAG; TEST-064 passes on both profiles.
 
-Bản này hợp nhất hợp đồng thiết kế, cách RTL hiện thực và trạng thái verify; không biến source đang có thành bằng chứng thiết kế đúng. Có sơ đồ TOP/từng component, chức năng, interface, FSM và data flow. Các mâu thuẫn/phần chưa verify ghi ở Section 20; không sửa RTL hoặc map CSR.
+**Revision 0.37, 2026-11-26.** Adds DEC-046 (HPDcache coherent-atomic deadlock fix: atomic permission only on an E/M grant; RTAB fence held while a fence-type entry is queued), TEST-064 and OPEN-DIR-UPD-TAG (closed in rev 0.38 by DEC-047). Found with the RV32 profile testbench, TC-07.
+
+**Revision 0.36.** Adds the three timing-profile diagrams, RTL register-bit estimates, and latency/performance comparison.
+
+**Revision 0.35.** Sizes the eight external per-hart interrupt and debug vectors by PARA_CPU_NUM. The internal cluster core retains four hart slots.
+
+**Revision 0.34.** Aligns the AXI TOP parameter contract, interrupt mapping, timing-profile verification, and sign-off scope with the active design.
+
+**Revision 0.33.** Adds the optional AXI cluster boundary timing profile in DEC-045.
+
+**Revision 0.32, 2026-11-20.** Adds compile-time `PARA_TIMING_PROFILE` selection (DEC-044). Profile 1 inserts registered AXI target cuts and a PMU event/snapshot pipeline at cluster boundaries; CVA6 internal pipeline and logic remain unchanged. Adds REQ-PERF-006 and full-CPU profile qualification tests TEST-057–061. Revision 0.31 remains available in repository history.
+
+This document states the approved design contract, explains its current RTL realization and separately identifies validation status. Source inspection is not a golden verification model. Conflicts and unqualified declarations remain explicit review items in Section 20. DEC-043 changes only internal probe-slot allocation; it adds no top-level port or CSR and claims no fixed latency.
+
 
 ## Document map
 
@@ -34,17 +46,14 @@ Bản này hợp nhất hợp đồng thiết kế, cách RTL hiện thực và 
 
 ### 1.1 Purpose and scope
 
-The IP integrates two or four identical 64-bit application-class CVA6 harts into one internally cache-coherent cluster. Each hart has private L1 caches; the D-caches participate in a MESI domain coordinated by the cluster coherence controller (CCU). D-cache misses and ownership requests flow through the CCU to the shared LLC, and LLC misses use external AXI4+ATOP with the six-bit AWATOP field preserved. Non-cacheable peripheral traffic bypasses the coherent cache path over ordinary AXI4. Software configuration uses AXI4-Lite; the cluster also provides PMU facilities and per-hart debug control/status connections to an external RISC-V Debug Module.
+The IP integrates two or four identical 64-bit application-class CVA6 harts into one internally cache-coherent cluster. Each hart has private L1 caches; the D-caches participate in a MESI domain coordinated by the cluster coherence controller (CCU). D-cache misses and ownership requests flow through the CCU to the shared LLC, and LLC misses use the pinned PULP AXI4 interface with its six-bit AWATOP extension preserved (not full AXI5). Non-cacheable peripheral traffic bypasses the coherent cache path over ordinary AXI4. Software configuration uses AXI4-Lite; the cluster also provides PMU facilities and per-hart debug control/status connections to an external RISC-V Debug Module.
 
-The current delivery has one structural AXI top. It exposes AXI4+ATOP memory traffic and does not snoop external agents; external DMA therefore requires a software/system cache-maintenance contract. Non-cacheable peripheral traffic uses ordinary AXI4. A future ACE top may add external-agent coherence after a separate specification and approval. It is not a runtime mode and is not included in this RTL phase.
+The current delivery has one structural AXI top. It exposes PULP AXI4 memory traffic with AWATOP extension and does not snoop external agents; external DMA therefore requires a software/system cache-maintenance contract. Non-cacheable peripheral traffic uses ordinary AXI4. A future ACE top may add external-agent coherence after a separate specification and approval. It is not a runtime mode and is not included in this RTL phase.
 
-Included in the current RTL phase: two/four-hart elaboration; selected CVA6/HPDcache integration; internal MESI D-cache coherence; shared LLC; one AXI4+ATOP memory boundary; non-coherent AXI4 peripheral access; 32-bit AXI4-Lite configuration with LLC RegBus bridge; cluster PMU; per-hart debug request/status connections; reset and integration contracts. The external ACE profile is future work and is not part of the current RTL hierarchy or port plan.
+Included in the current RTL phase: two/four-hart elaboration; selected CVA6/HPDcache integration; internal MESI D-cache coherence; shared LLC; one PULP AXI4 memory boundary with AWATOP extension; non-coherent AXI4 peripheral access; 32-bit AXI4-Lite configuration with LLC RegBus bridge; cluster PMU; per-hart debug request/status connections; reset and integration contracts. The external ACE profile is future work and is not part of the current RTL hierarchy or port plan.
 
 Excluded: DRAM controller/PHY; complete SoC interconnect and interrupt controller; external Debug Transport Module/Debug Module; runtime LLC capacity changes; runtime scratchpad (SPM) mode; CPU hot-add; cache coherence across the AXI-only boundary; power gating, retention, and DVFS; guaranteed frequency, area, or power targets.
 
-Giai đoạn RTL hiện tại gồm cluster CVA6 hai hoặc bốn hart, coherence MESI cho D-cache, LLC chia sẻ tĩnh, biên bộ nhớ AXI4+ATOP, ngoại vi AXI4 không coherence, AXI4-Lite có bridge RegBus cho LLC, PMU và debug từng hart. Profile ACE coherence với agent ngoài là phần mở rộng tương lai, chưa thuộc hierarchy/port plan hiện tại.
-
-Giai đoạn hiện tại có một top cấu trúc AXI. Top này đưa traffic bộ nhớ AXI4 thông thường và không snoop agent ngoài. Nếu bổ sung top ACE trong tương lai, top đó phải là module cổng cố định riêng và cần đặc tả/phê duyệt riêng; không có chuyển profile lúc chạy.
 
 ### 1.2 Deployment assumptions
 
@@ -57,7 +66,6 @@ Giai đoạn hiện tại có một top cấu trúc AXI. Top này đưa traffic 
 | External dependencies | Upstream CVA6, modified HPDcache, Culsans coherence reference, axi_llc, AXI fabric, clock/reset controller, external RISC-V Debug Module; ACE fabric is future scope |
 | Evidence status | Public FPGA/simulation evidence exists for reference projects; this exact upstream combination has not been demonstrated |
 
-Ứng dụng dự kiến là gateway công nghiệp chạy Linux SMP để lọc gói, xử lý giao thức và dịch vụ bảo mật. Đây là ứng dụng đề xuất vì người dùng chưa cung cấp sản phẩm/workload cụ thể. Library ASIC, SRAM macro và số liệu workload thực tế do tích hợp SoC cung cấp.
 
 ### 1.3 Feature summary
 
@@ -79,7 +87,6 @@ Giai đoạn hiện tại có một top cấu trúc AXI. Top này đưa traffic 
 
 Values below are proposal baselines from this specification, not measured workload limits. The system owner must replace them when a product workload is known.
 
-Các giá trị dưới đây là cấu hình đề xuất của đặc tả, không phải giới hạn workload đã đo. Chủ hệ thống cần thay thế khi có workload sản phẩm.
 
 | Feature ID | Real-world application | What the application needs | Proposed measurable values | Consequence if missing or wrong | Requirements | Source |
 |---|---|---|---|---|---|---|
@@ -123,17 +130,16 @@ Protocol behavior follows REF-001 for the named AXI4, AXI4-Lite, and ACE profile
 
 The ACE standard was approved for web-based use, not local conversion. Therefore protocol clause references in this draft are based on the official PDF source and still require a later controlled-document review before signoff.
 
-**Language:** This specification is bilingual English–Vietnamese per the user’s project-wide instruction for documents. This intentionally overrides skill rule R-005, which otherwise requires English-only specifications; the RTL source and agent skills remain English-only.
+**Language:** This specification is written in English (skill rule R-005). The Vietnamese counterparts of its paragraphs are kept in the companion file [VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS_vi.md](VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS_vi.md), grouped by section heading. The English text is normative.
 
 **Naming rule:** VLSIT RTL Design Rule v2, selected by the user; path C:\HQuan\102_MyGithub\VLSIT_RTL_Generator_AI_Model\spec_template\VLSIT_RTL_Design_Rule.md; names use m_ module prefix, i_/o_ port prefix, protocol tags such as axi, axil, and ace, PARA_ parameters, and zero-based indices.
 
-Protocol tuân thủ theo REF-001. Hành vi core theo cấu hình CVA6 và commit sẽ được pin. Yêu cầu sản phẩm theo đặc tả này và quyết định của người dùng. REF-003 áp dụng cho RTL VLSIT mới; mã nguồn bên thứ ba giữ license và coding convention riêng, không tự sửa. Workbook ở Mục 11 là nguồn duy nhất cho CSR. Tài liệu ACE được duyệt dùng bản PDF chính thức trên web, chưa chuyển đổi cục bộ; cần kiểm soát tài liệu trước signoff.
 
 ### 2.3 Compliance declaration
 
 | Standard | Revision / profile | Role implemented | Options | Deviations |
 |---|---|---|---|---|
-| AMBA AXI4 / AXI4+ATOP | IHI 0022H | Manager on memory/peripheral egress | 64-bit address/data; native CVA6 ID 4 bits; MMIO ID 6 bits after fixed four-way mux; LLC memory ID 7 bits; 6-bit AWATOP on memory egress; no USER signals in selected profile | Preserve source-derived widths and AWATOP; final optional sidebands follow the pinned interfaces |
+| AMBA AXI4 and PULP AXI4 with AWATOP extension | IHI 0022H Part A A3–A6; AWATOP semantics in Part E E1.1 | Manager on memory/peripheral egress | 64-bit address/data; native CVA6 ID 4 bits; MMIO ID 6 bits after fixed four-way mux; LLC memory ID 7 bits; 6-bit AWATOP on memory egress; no USER signals in selected profile | Normal traffic follows AXI4. AWATOP behavior is limited to the pinned PULP subset and is not full AXI5 conformance |
 | AMBA AXI4-Lite | IHI 0022H, B1 | Subordinate for software control | 32-bit address/data; 4 byte strobes; single clock | Internal address windows and outstanding depths are project-defined |
 | AMBA ACE | IHI 0022H, D | Internal local-probe subset only; no external ACE boundary in current phase | Read-shared, read-unique/invalidate, and clean-invalidate outcomes; AC/CR/CD-style channels | Exact packed-field mapping is pinned with source integration; external ACE is deferred |
 | RISC-V ISA | Selected CVA6 package | Two/four application harts | XLEN=64, Sv39 configuration, enabled extensions as defined by pinned package | No ISA extension is added by cluster wrapper |
@@ -148,6 +154,8 @@ Protocol tuân thủ theo REF-001. Hành vi core theo cấu hình CVA6 và commi
 | REQ-SYS-002 | Every active tile shall use the selected cv64a6_imafdc_sv39_hpdcache_wb configuration unless a new approved spec revision changes it. | User decision; REF-004 | Both profiles | Configuration/package comparison |
 | REQ-SYS-003 | The cluster shall provide one shared 64-bit `i_boot_addr` input and connect it to `boot_addr_i` of every active CVA6 hart. The SoC shall hold the value stable while reset is asserted and through reset release. All harts begin at that address; boot software may branch on `mhartid` for per-hart startup. | User decision; DEC-021 | Both profiles | Boot-address fanout and two/four-hart startup test |
 | REQ-SYS-004 | The cluster's license-preserving local CVA6 configuration copy shall set `CVA6ConfigCvxifEn=0`. The cluster shall expose no CVXIF accelerator ports; if the pinned source signature retains native CVXIF pins, the licensed integration boundary shall leave them inactive. The pristine upstream configuration shall remain unchanged. | User decision; DEC-022 | Both profiles | Config comparison, elaboration, and inactive-native-pin check |
+| REQ-PERF-006 | `PARA_TIMING_PROFILE` shall select a synthesis-time cluster timing configuration: 0 preserves the low-latency AXI/PMU paths; 1 enables registered spill-register cuts on each hart's memory and MMIO AXI route and registers PMU event counts/enables before counter update. Profile 1 shall preserve AXI payload/ID/sideband ordering and count each sampled PMU event once. Its snapshot request shall be acknowledged only after the pending event pipeline drains. No profile may modify CVA6 internal logic or its instruction/data pipelines. The profile is not a runtime switch and makes no Fmax/IPC guarantee. | User decision; DEC-044; Sections 8.3 and 13 | AXI profile, 2/4 harts | Full-CPU profile matrix; AXI stability/ordering checks; PMU event/snapshot scoreboard; source diff audit proving no CVA6 internal source change |
+| REQ-PERF-007 | Profile 2 shall cut each external memory and MMIO AXI channel independently, pipeline PMU source and overflow, and use banked synchronous directory lookup. | DEC-045, Section 8.3 | AXI, 2/4 harts | TEST-057–061 on profiles 0 and 2, TEST-063 on profile 2, and post-route STA |
 | REQ-MEM-001 | Every active hart's D-cache shall participate in one internal MESI coherence domain for cacheable shared memory. The current implementation phase shall provide the AXI profile only. | User decisions; DEC-007, DEC-008 | AXI profile, 2/4 harts | MESI state-transition tests, multi-hart litmus, dirty-owner tests, and formal invariants |
 | REQ-MEM-005 | The CCU shall use a per-line sharer directory to target only D-caches recorded as possible holders; it shall collect tagged probe status responses and complete every required owner AXI writeback before granting E/S/M. It shall not broadcast every request to all active harts. | User decisions; DEC-007, DEC-013, DEC-027 | AXI profile | Directory-targeting tests, tagged probe/writeback scoreboard, and MESI state checks |
 | REQ-MEM-006 | Coherence arbitration shall lock only the target physical cache line: same-line CPU requests shall wait until the current probe/refill transaction resolves; unrelated lines shall remain eligible subject to directory, cache-bank, port, MSHR, CCU, LLC, and AXI resource conflicts. | User decisions; DEC-008, DEC-013 | AXI profile | Same-line collision and independent-line progress tests |
@@ -168,37 +176,45 @@ Protocol tuân thủ theo REF-001. Hành vi core theo cấu hình CVA6 và commi
 | REQ-MEM-021 | A response receiver shall accept each transport-valid internal probe ACK when its response buffer can accept it, independent of whether its tag/line/phase matches an active context. Only a unique expected response may update transaction state. Stale, duplicate, unknown-tag, wrong-hart, wrong-line, or wrong-phase responses shall be consumed and discarded, shall not modify any transaction/cache/directory state, and shall set the coherence-protocol diagnostic. | Review finding CC-02; v0.19 response-drain contract; DEC-033 | AXI profile | Duplicate/stale/mismatched ACK drain test; confirm a following valid ACK is accepted; diagnostic status test |
 | REQ-MEM-022 | Each per-slot bank request shall represent one pending operation token. A bank arbiter shall consume an accepted token exactly once and disarm that slot until it samples `i_req_valid[slot]=0`; a later assertion rearms the slot for a new token. This prevents a delayed VALID deassertion from receiving a duplicate grant. While a grant is stalled, its valid and slot identity shall remain stable, and the request's bank and operation payload shall remain stable. Each bank still accepts at most one token per cycle; different slots may be accepted in adjacent cycles. | Review finding CC-03; v0.19 request-token contract; DEC-035 | AXI profile | Delayed-deassertion/duplicate-grant test; stable grant and rearm assertions |
 | REQ-MEM-023 | An active transaction context shall retain its tag, line, requester/owner, transaction kind, target MESI state, phase, expected/received ACK masks, owner-writeback completion/status, and LLC/AXI completion/status until commit/abort is complete and all required responses drain. Starting a new phase shall not clear fields required by later phases. A probe scheduler shall use state associated with the matching context, not an uncorrelated live value. The owner-data obligation is satisfied only by a matching successful B for actual dirty M when writeback is required, or by validated no-data-needed E/I proof. An actual M writeback success shall never be inferred from stale directory metadata; COMMIT shall not proceed after a writeback error. | Review finding CC-03; v0.19 context-retention contract; DEC-027/035 | AXI profile | PREPARE-to-COMMIT/ABORT context-retention test; target-state and B-response association checks |
+| REQ-MEM-024 | Before issuing any PREPARE probe, the probe scheduler shall atomically reserve the per-hart service slot of every hart in that context's expected-probe mask. A claim is granted only when every required slot is available; otherwise the context reserves no hart slot and can compete on a later cycle when all required slots are available. At most one new context claim is granted per cycle, and the round-robin claim pointer advances after a grant. Once granted, every target slot shall retain the same context tag through PREPARE and until a successful matching COMMIT or ABORT response is accepted. Probe requests to the reserved harts may then progress independently. Transactions with disjoint target masks may proceed concurrently after successive claims. | DEC-043; Section 10.2.4 | AXI profile, 2/4 harts | Cross-claim directed test, same-tag owner assertions, disjoint-target progress, and wait-for/resource formal checks |
+| REQ-MEM-025 | When `PARA_DIR_SYNC_READ=1` (profile 2) the sharer directory payload (tag, owner, sharer and state fields of every way of every bank) shall be held in a separate RAM wrapper module with a fixed interface per way and bank: clock, enable, write enable, address, write data and read data with one-cycle read latency, and no reset on the data array. Valid bits, replacement (PLRU) state and set-reservation state shall stay in flops. The wrapper shall have a behavioral model and a macro-replacement path, so a technology SRAM can replace it without changing the directory logic. The directory module shall hold no payload array. Synthesis evidence shall show the payload flops only inside the wrapper. Decided by the project owner on 2026-11-21. | F-006 review fix; DEC-045; DEP-013; Section 8.3 | AXI, 2/4 harts, profile 2 | TEST-063 with the behavioral wrapper and with a macro-model wrapper; structural check that no payload array is outside the wrapper; synthesis flop-count report |
 | REQ-MEM-002 | The shared LLC shall default to 4 ways, 4096 lines per way, 2 64-bit blocks per line, and 16 bytes per line, for 256 KiB total capacity. | User decision; REF-008 | Both profiles | Parameter/elaboration check |
 | REQ-MEM-003 | LLC geometry shall be static after synthesis; software shall not change total capacity or enable SPM mode. | User decision; REF-008 | Both profiles | CSR access test and RTL inspection |
 | REQ-MEM-004 | LLC BIST and flush requests shall follow the selected axi_llc behavior; traffic shall not be treated as usable until the applicable BIST-ready condition is met. | REF-008 | Both profiles | BIST/flush sequence simulation |
 | REQ-IF-001 | The cluster shall expose one 32-bit-address, 32-bit-data AXI4-Lite Subordinate port for cluster CSR and LLC service windows. | User decision; REF-001 | Both profiles | AXI4-Lite protocol checker |
 | REQ-IF-002 | The cluster shall expose a non-coherent AXI4 Manager interface for peripheral/device traffic. | User requirement; REF-001 | Both profiles | AXI4 protocol checker and address-attribute tests |
-| REQ-IF-003 | The AXI memory profile shall expose AXI4+ATOP memory traffic without external snoop channels; software/SoC shall maintain cache visibility for external DMA. | User decision; DEC-023; REF-001 | AXI top only | ATOP pass-through/atomic response test and DMA visibility review |
+| REQ-IF-003 | The AXI memory profile shall expose the pinned PULP AXI4 interface with its 6-bit AWATOP extension, without external snoop channels; software/SoC shall maintain cache visibility for external DMA. The AWATOP extension does not make the port a full AMBA AXI5 interface. | User decision; DEC-023, DEC-042; REF-001 | AXI top only | AWATOP pass-through/atomic response test and DMA visibility review |
 | REQ-IF-004 | A future ACE profile may expose external coherent-memory channels after a separate ACE boundary specification and approval; it is not part of the current RTL phase. | Deferred scope decision | Future ACE phase only | Future ACE protocol checker and snoop tests |
 | REQ-IF-005 | AXI and ACE source payloads shall remain stable while VALID is high and READY is low, and responses shall be accepted only on VALID and READY handshakes. | REF-001 | Applicable interfaces | Protocol assertions |
-| REQ-IF-006 | The current delivery shall expose one fixed-port AXI structural top. Any future ACE top shall be a separate fixed-port module and requires a new approved specification phase. | User scope decision; VLSIT PRT-03 | Current AXI phase | Port-list/elaboration audit |
+| REQ-IF-006 | The current delivery shall expose one AXI structural TOP with the same port names for both hart counts. Its six per-hart IRQ inputs and two debug vectors shall each be PARA_CPU_NUM bits wide. Any future ACE TOP shall be a separate module and requires a new approved specification phase. | User scope decision; VLSIT PRT-03 | Current AXI phase | Port-list/elaboration audit |
 | REQ-IF-007 | AXI4-Lite writes shall honor WSTRB; aligned unmapped CSR addresses shall return DECERR and reads shall return zero. | REF-009; user-selected CSR generator v3.5 | Both profiles | Generated-CSR protocol simulation |
 | REQ-IF-008 | The cluster-local AXI4-Lite aperture shall contain five 4-KiB CSR groups at offsets `0x0000–0x4FFF` and a 4-KiB LLC-service window at `0x5000–0x5FFF`; the absolute SoC base is integration-defined and at least 4-KiB aligned. Unassigned offsets are reserved: reads return zero with DECERR and writes have no side effect with DECERR. | Approved CSR workbook; DEC-017 | AXI profile | Window boundary, reserved-offset, and base-alignment tests |
-| REQ-IF-009 | The AXI memory output shall preserve the 6-bit AWATOP field from the LLC. The SoC integration shall connect it to an AXI4+ATOP-capable memory path or place a verified atomic-service bridge before a fabric that lacks ATOP. The bridge shall execute the supported atomic operation at the memory serialization point and preserve ID/response/error association. A filter that returns SLVERR is not an atomic bridge. | User decision; DEC-023; pinned PULP `axi_llc` and HPDcache sources | AXI profile | LR/SC and AMO end-to-end atomicity test; unsupported-fabric integration check |
+| REQ-IF-009 | The memory egress shall preserve the six-bit AWATOP field and all standard AXI4 transaction fields from the LLC. Uncached LR/SC shall use AXI4 exclusive-access signaling (`ARLOCK`/`AWLOCK`); uncached AMO shall use only the AWATOP encodings generated by the pinned HPDcache/PULP AXI sources. The SoC integration shall connect the port to a target/fabric implementing both required mechanisms, or place a verified atomic-service bridge before a fabric that lacks them. The bridge shall execute each supported atomic operation at the memory serialization point and preserve ID/response/error association. A filter that returns SLVERR is not an atomic bridge. AWATOP follows the applicable AMBA 5 E1.1 atomic semantics for this supported subset; the cluster does not claim full AXI5 conformance. | User decision; DEC-023, DEC-042; pinned PULP `axi_llc`, AXI package and HPDcache sources | AXI profile | TEST-036, TEST-047; LR/SC and AMO end-to-end atomicity; unsupported-fabric integration check |
 | REQ-IF-010 | LLC-service accesses in local window `0x5000–0x5FFF` shall pass through a new VLSIT AXI4-Lite-to-RegBus bridge to the unchanged pinned LLC register interface. AXI AW and W may handshake independently; the bridge shall issue one complete write only after both are captured and shall return the matching response. | User decision; DEC-024; `axi_llc_reg_wrap` source audit | AXI profile | Independent AW/W order, backpressure, response association, and error tests |
 | REQ-IF-011 | One synthesis-time address-region table shall be the source of truth for both the cluster router and CVA6 PMA attributes. The adapter shall derive CVA6 `CachedRegion*` entries only from class `00` and `NonIdempotent*` entries only from class `10`; class `01` remains idempotent and uncached by being outside both lists. It shall support one cacheable normal-memory entry (default base `0x80000000`, size 1 GiB), plus configurable normal-uncached and MMIO entries, up to 16 total. Cacheable and normal-uncached requests shall use the memory path; normal-uncached traffic shall bypass LLC allocation. MMIO shall bypass CCU/LLC. Entries shall be non-overlapping, 16-byte aligned, and confined to PLEN=56. Unmatched or boundary-crossing accesses shall receive a local error without external AXI traffic. The default table shall contain only the cacheable entry; the SoC supplies uncached/MMIO entries. | User decision; DEC-037; selected CVA6 PMA capacity and LLC mapping | AXI profile | TEST-051, PMA/router parity, overlap/boundary/error tests |
+| REQ-IF-012 | `PARA_AXI_MEM_DATA_W` shall select external memory data width from `{32,64,128,256}` bits. The native CVA6/HPDcache/LLC datapath remains 64-bit; the adapter shall preserve byte addresses, IDs, responses, strobes, ordering and the 16-byte coherence-line contract for every supported width. MMIO remains 64-bit and AXI4-Lite remains 32-bit. | User decision; DEC-034 | AXI profile | TEST-047, width elaboration, transfer and error matrix |
 | REQ-PMU-001 | The cluster PMU shall support PARA_PMU_COUNTER_NUM counters, legal range 1–32 and default 16. | User decision, 2026-11-06 | Both profiles | Parameter-boundary elaboration |
 | REQ-PMU-002 | PMU counter width shall be configurable as 32 or 64 bits; the proposed default is 64 bits. Counters shall wrap modulo 2^W. | User decision; default tracked in Section 20 | Both profiles | Counter boundary simulation |
-| REQ-PMU-003 | A software snapshot request shall capture all PMU counters and keep the snapshot stable until the next accepted snapshot request or reset. | User decision, 2026-11-06 | Both profiles | Snapshot and concurrent increment test |
+| REQ-PMU-003 | An accepted software snapshot request shall atomically capture all PMU counters and keep the snapshot stable until the next accepted request or reset. `snapshot_done` is sticky: hardware sets it when capture completes, and software must clear it by W1C before issuing the next snapshot request. A request does not clear the previous `snapshot_done` value. | User decision, 2026-11-06; clarified 2026-11-16 | Both profiles | Snapshot, concurrent increment, sticky-done, W1C rearm, and second-request tests |
 | REQ-PMU-004 | PMU overflow causes shall be sticky and software-visible; one aggregate level interrupt shall remain asserted while any enabled pending cause remains. | User decision, 2026-11-06 | Both profiles | Overflow, mask, clear, and interrupt tests |
 | REQ-PMU-005 | Every PMU counter shall select either one active hart (scope 0–3), all active harts (scope 4), or a cluster-global event (scope 5); scopes 6–7 are reserved. | User decision, 2026-11-06 | Both profiles | Scope encoding, 2/4-hart and event-source tests |
 | REQ-PMU-006 | Aggregate per-hart events shall add the number of occurrences across active harts in each cycle; simultaneous events from four harts increment the selected counter by four. | User decision, 2026-11-06 | Both profiles | Multi-hart simultaneous-event scoreboard |
 | REQ-PMU-007 | The 16-bit `event_id` shall use the fixed source ranges and complete source mapping in workbook `Event_Map`: CVA6 `0x0001–0x0016`, HPDcache `0x0100–0x010F`, LLC `0x0200–0x0217` and `0x0240–0x0243`, and VLSIT CCU `0x0300–0x030B`. The workbook is the selector-code source of truth. Unknown/reserved IDs, disabled SPM events, unavailable sources, and invalid scope/source combinations shall contribute zero. | User decision; DEC-025; pinned source audit | AXI profile | Exact ID/source scoreboard; reserved and unavailable ID tests |
 | REQ-PMU-008 | Per-hart event sources shall expose one sampled indicator per hart; scope 0–3 selects one active hart and scope 4 sums indicators across active harts. For scope 5, CCU transaction/handshake IDs `0x0300–0x0307` and `0x030B` shall count actual occurrences each cycle, up to four, using 3-bit taps. CCU stall IDs `0x0308–0x030A` shall count one per cycle while asserted. Each single-instance LLC event field contributes one when `.active` is high; `.num_bytes` is not accumulated. CVA6 sources that OR-reduce commit ports contribute at most one per hart per cycle. | User decision; DEC-026; pinned CVA6, HPDcache, and LLC source semantics | AXI profile | Multi-occurrence CCU, held-stall, descriptor, aggregate, counter increment, and wrap tests |
 | REQ-DBG-001 | The cluster shall expose per-hart debug request and debug-mode/status connections; the DTM and Debug Module shall remain outside the cluster. | User decision; REF-007 | Both profiles | Hart-by-hart debug integration test |
-| REQ-IRQ-001 | Platform interrupt inputs shall be level-sensitive and routed only to the addressed active hart; inputs for absent harts shall be ignored. | Proposed interface contract; ASM-004 | Both profiles | Directed interrupt routing tests |
+| REQ-IRQ-001 | Platform interrupt inputs shall be level-sensitive and routed only to the addressed active hart. The AXI TOP exposes active-hart bits only. The legacy four-slot SoC adapter ignores inputs for absent harts. | Proposed interface contract; ASM-004 | Both profiles | Directed interrupt routing tests |
 | REQ-IRQ-002 | For each active hart, `i_int_ssip` and `i_int_stip` shall be ORed with the corresponding software-writable `mip` state to form the effective pending view used by interrupt logic and CSR reads. External levels shall not be copied into software-writable state by CSR read-modify-write operations. Gate SSIP with `RVS && SoftwareInterruptEn` and STIP with `RVS`. | REF-006; selected CVA6 configuration | Both profiles | Assert/deassert each external level; verify MIP/SIP visibility, interrupt delivery, software clear/set, and no sticky state after external deassertion |
+| REQ-IRQ-003 | For each active AXI hart, i_int_meip shall drive machine external pending and i_int_seip shall contribute to the supervisor external pending view. The pinned CVA6 irq_i mapping is bit 0 MEIP and bit 1 SEIP. Supervisor external software state, privilege and delegation retain the pinned CVA6 contract. | AXI tile wiring and pinned CVA6 interrupt semantics | CFG-AXI-2/4 | TEST-013 |
 | REQ-CLK-001 | All cluster AXI/ACE/AXI4-Lite ports and internal active harts shall use the cluster clock unless a separately specified CDC bridge is inserted outside the cluster. | Integration assumption | Both profiles | CDC analysis and clock-domain lint |
-| REQ-RST-001 | Reset shall clear valid/control state and reset all generated CSR fields to workbook reset values; SoC shall provide synchronized deassertion to the cluster clock. | Proposed interface contract; ASM-005 | Both profiles | Reset assertion/release tests |
+| REQ-CLK-002 | An active hart that remains in the coherence domain shall service probes while its instruction pipeline is in WFI or debug halt. SoC clock gating shall keep probe service available or guarantee wakeup for a pending probe. The SoC shall specify any finite wakeup bound. | Coherence integration obligation | CFG-AXI-2/4 | TEST-062 |
+| REQ-RST-001 | Reset shall clear cluster valid/control state, coherence/cache valid state, in-flight internal tags, and generated CSR fields to workbook reset values. The SoC shall provide asynchronous assertion if used and synchronized deassertion to the cluster clock. When resetting with transactions in flight, the SoC shall reset the connected AXI fabric/target transaction state and internal coherence agents as one coordinated reset event; no response to a pre-reset request may be delivered after cluster reset deassertion. Backing-memory contents are not cleared, but an externally accepted transaction may have committed before reset and its outcome is not reported across reset; software shall reinitialize affected data. | User decision; DEC-041; ASM-005 | AXI profile | TEST-014 reset injection, stale-response exclusion, and post-reset recovery |
+| REQ-RST-002 | The SoC shall provide a watchdog or equivalent supervisor that detects an AXI request, probe phase or CMO older than a SoC-defined timeout and resets the cluster as one coordinated event under REQ-RST-001. The cluster has no acknowledgement timeout (REQ-MEM-013, DEC-018), no per-hart reset and an ordinary dirty-eviction error recoverable only by reset (REQ-ERR-003), so it cannot recover from a missing response alone. The timeout value is a SoC input; the default is PD-10. Decided by the project owner on 2026-11-21. | F-016 review fix; DEC-018; REQ-MEM-013; REQ-ERR-003 | Both profiles; SoC integration obligation | Integration checklist item and a SoC-level test with a held AXI response; TEST-014 |
 | REQ-ERR-001 | AXI/ACE error responses shall be returned to the originating request path without changing the transaction ID or fabricating successful data. | REF-001 | Applicable interfaces | Error injection and response association tests |
 | REQ-ERR-002 | An unsupported or malformed internal address/control request shall not silently alter architectural cache or CSR state. | Product requirement | Both profiles | Negative tests and assertions |
 | REQ-ERR-003 | An ordinary dirty-eviction writeback failure shall preserve recoverable dirty data and retain the affected transaction/line lock until reset. It shall assert a sticky asynchronous `o_int_fault` and expose a reset-only first-fatal CSR record under DEC-039/040, including actual victim line address, source, exact AXI B response, L1 hart identity or LLC hart_valid=0, and a later/simultaneous-event multiple flag. Already issued AXI responses shall still be drained; no successful completion, automatic retry or retroactive precise exception at an already retired store shall be fabricated. Reset is the recovery. CBO and FENCE.I retain REQ-MEM-017/018. | User selected asynchronous fault, DEC-036 | AXI profile | TEST-050 |
-| REQ-PD-001 | The cluster shall not claim a frequency, area, or power limit until a library, PVT corner, SDC, and activity workload are supplied. | User decision | Both profiles | Review of constraints and reports |
+| REQ-PD-001 | The cluster shall not claim a frequency, area, or power limit until a library, PVT corner, SDC, and activity workload are supplied. A clock period of 1.25 ns (800 MHz) or 1.04167 ns (960 MHz) is an STA evaluation point, not an acceptance target. The accepted period shall be the shortest period of a sweep (at least 2.0, 2.5, 3.0 and 3.5 ns) at which setup, hold and the I/O groups close at each recorded corner, reported with the library, PVT corner, SRAM timing models, wire-load or physical estimate, clock uncertainty and I/O-delay model. The timing-profile mechanism (`PARA_TIMING_PROFILE`) shall be reported separately from any frequency, area or power claim. | User decision; F-001 review fix (decided by the project owner on 2026-11-21); Section 8.3 | Both profiles | Review of constraints and reports; sweep report per Section 8.3 |
+| REQ-PD-002 | Interface timing contract. In timing profile 2 every cluster output on the AXI memory, AXI MMIO, AXI4-Lite control, interrupt and fault port groups shall be driven by a register or by a function of registers only, and no combinational path shall run from any cluster input to any cluster output. Profiles 0 and 1 shall list each remaining input-to-output path in the timing report as a known exception; the known cases are `o_axi_mem_rready` from `i_axi_mem_rid` and `i_axi_mem_rvalid`, and the B/R response paths into the LSU and CCU. Each port group shall state its budget as a fraction of the clock period (output-to-register and input-to-register); the SoC supplies the external delay. Any synthesis result shall be reported with the input and output delay it used. The evaluation run of `dual_gf55_800.zip` used 40 percent, which leaves 0.208 ns for an input-to-output path at 1.04167 ns. Decided by the project owner on 2026-11-21. | F-002 review fix; Section 17.1; REQ-PD-001 | Both profiles (exceptions listed for 0 and 1) | TEST-055; STA path report with zero `in2out` paths at profile 2 |
+| REQ-PD-003 | Reset shall not appear in any ready, valid or handshake-enable expression of the cluster. The reset release shall be registered before it enables a handshake. Profile 2 already registers the release (`PARA_REGISTER_RESET_RELEASE`); profiles 0 and 1 currently use the reset pin directly (`m_vlsit_riscv_tile_coh_adapter.sv:136`, `m_vlsit_riscv_axi_route.sv`, line 425 as of the review) and are a recorded deviation until converted. The conversion adds at most one cycle after reset release and no steady-state latency (INFERENCE). Decided by the project owner on 2026-11-21. | F-003 review fix; REQ-RST-001; Section 8.3 | Both profiles (deviation recorded for 0 and 1) | TEST-014 reset-release test; lint or structural check that the reset port reaches no handshake expression; STA report with no reset start point on `in2out` |
 | REQ-VER-001 | Verification shall derive expected behavior from this specification, RISC-V architectural models, and the applicable protocol standards; generated RTL shall not be the golden reference. | User direction from prior verification-flow decision | Both profiles | Verification-plan review |
 | REQ-VER-002 | Each supported CPU-count/profile combination shall have an independent reproducible test target and saved command/log manifest. | Project verification policy | Both profiles | Build-flow audit |
 
@@ -206,7 +222,6 @@ Protocol tuân thủ theo REF-001. Hành vi core theo cấu hình CVA6 và commi
 
 A change to core package, line size, memory profile, CSR behavior, or supported ACE subset requires a new spec version and traceability review. Requirements that depend on an unproven adapter remain conditional until the adapter architecture is verified; they are not evidence that such an adapter already exists.
 
-Nếu thay core package, line size, memory profile, CSR behavior hoặc tập ACE hỗ trợ thì phải tăng version và rà soát truy vết. Yêu cầu phụ thuộc adapter chưa được chứng minh sẽ giữ trạng thái có điều kiện, không được hiểu là adapter đã tồn tại.
 
 ## 4. Features and configurations
 
@@ -214,12 +229,11 @@ Nếu thay core package, line size, memory profile, CSR behavior hoặc tập AC
 |---|---|---|---|---|---|
 | CFG-AXI-2 | 2 CVA6 harts; internal coherence; LLC; PMU; debug hooks | External snoop/coherence; SPM | AXI4 mem 64/64, AXI4 MMIO 64/64, AXI4-Lite 32/32 | Two-hart Linux SMP with software DMA cache maintenance | 2-hart AXI profile |
 | CFG-AXI-4 | 4 CVA6 harts; internal coherence; LLC; PMU; debug hooks | External snoop/coherence; SPM | Same fixed widths and port names | Four-hart Linux SMP with software DMA cache maintenance | 4-hart AXI profile |
-| CFG-ACE-2 | 2 CVA6 harts; internal coherence; LLC; ACE external coherence; PMU | SPM; runtime profile switch | ACE memory 64/64 plus AXI4 MMIO 64/64 and AXI4-Lite 32/32 | Two-hart cluster sharing cacheable memory with external ACE agents | 2-hart ACE profile |
-| CFG-ACE-4 | 4 CVA6 harts; internal coherence; LLC; ACE external coherence; PMU | SPM; runtime profile switch | Same fixed widths and port names | Four-hart cluster sharing cacheable memory with external ACE agents | 4-hart ACE profile |
+| CFG-ACE-2 | 2 CVA6 harts; internal coherence; LLC; ACE external coherence; PMU | SPM; runtime profile switch | ACE memory 64/64 plus AXI4 MMIO 64/64 and AXI4-Lite 32/32 | Two-hart cluster sharing cacheable memory with external ACE agents | Deferred, not elaborated in this release |
+| CFG-ACE-4 | 4 CVA6 harts; internal coherence; LLC; ACE external coherence; PMU | SPM; runtime profile switch | Same fixed widths and port names | Four-hart cluster sharing cacheable memory with external ACE agents | Deferred, not elaborated in this release |
 
 The two top module port lists are structurally distinct: the AXI top has an AXI4 memory port and no ACE snoop ports; the ACE top has one ACE memory port and no parallel AXI memory port. The AXI4 MMIO and AXI4-Lite control ports are present in both. CPU-count selection changes the number of synthesized tiles, not top-level port names; interrupt/debug vectors stay four bits wide and bits 3:2 are ignored in a two-hart build.
 
-Hai profile bộ nhớ là các top module riêng có port list cố định: top AXI có AXI4 memory và không có cổng snoop ACE; top ACE có một ACE memory và không có AXI memory song song. AXI4 MMIO và AXI4-Lite có trong cả hai. Cấu hình số hart chỉ đổi số tile synthesis; vector interrupt/debug luôn rộng bốn bit, bit 3:2 không dùng khi build hai hart.
 
 ## 5. Architecture
 
@@ -227,11 +241,10 @@ Hai profile bộ nhớ là các top module riêng có port list cố định: to
 
 The current implementation is the AXI-only profile. Two or four CVA6 harts have private instruction caches and modified HPDcache write-back D-caches. The cluster makes D-cache ownership coherent with a shared directory and tagged two-phase probes. The instruction caches are not snooped: software must arrange local `FENCE.I` on each hart that will execute modified code. Culsans is an architectural reference; the active CCU is the new VLSIT fabric, not an unchanged Culsans integration.
 
-Phiên bản hiện tại là profile AXI. Hai/bốn hart có I-cache riêng và HPDcache D-cache write-back đã sửa. CCU VLSIT quản lý coherence của D-cache bằng directory và probe có tag. I-cache không snoop; phần mềm phải thực hiện `FENCE.I` tại từng hart chạy code mới. Không mô tả CCU mới là RTL Culsans reuse nguyên trạng.
 
 | Component group | Responsibility | State/data owner | Boundary |
 |---|---|---|---|
-| Structural TOP | Connect the core and external memory width conversion | No independent execution state | Boot, IRQ/debug, control AXI4-Lite, MMIO AXI4, memory AXI4+ATOP |
+| Structural TOP | Connect the core and external memory width conversion | No independent execution state | Boot, IRQ/debug, control AXI4-Lite, MMIO AXI4, PULP AXI4 memory with AWATOP extension |
 | CPU tile array | Execute instructions and route per-hart requests/events | Native pipeline, MMU, I-cache and HPDcache | Per-hart AXI, tagged ownership/probe/query/lock, retirement maintenance |
 | CCU | Serialize conflicting line ownership while allowing independent contexts | Directory, transaction metadata, probe phase/ACKs and locks | Custom tagged ownership/PREPARE/COMMIT/ABORT interfaces |
 | Data routing | Apply shared PMA/router regions and preserve AXI response identity | Native route/mux outstanding transaction state | Cached memory, normal-uncached bypass and separate MMIO |
@@ -252,10 +265,512 @@ The source hierarchy and all component interfaces are specified in Section 14. A
 
 [Editable draw.io](figures/post_a06/m_vlsit_riscv_cluster_axi_top.drawio) · [Figure source](figures/post_a06/m_vlsit_riscv_cluster_axi_top.json).
 
+The structural TOP diagram above expands here to show every direct child instance of `m_vlsit_riscv_cluster_core`. This core-level view contains all 12 modules listed in Section 14.2. It groups per-hart boot, interrupt and debug ports at the boundary and emphasizes the main data, control, maintenance and CSR paths. The signal-level port definitions and secondary PMU/fault-source connections remain in Sections 6, 6.3 and 14.
+
+![Complete direct-child component composition of the cluster core](figures/post_a06/CLUSTER_FULL_COMPONENTS.svg)
+
+```json
+{
+  "page_name": "BLOCK_DIAGRAM",
+  "out_name": "CLUSTER_FULL_COMPONENTS.drawio",
+  "table_suffix": "",
+  "layout": {
+    "gap_h": 120,
+    "gap_v": 110,
+    "margin": 250,
+    "block_h": 80
+  },
+  "top": {
+    "frame_label": [
+      "2/4-HART CLUSTER CORE",
+      "(m_vlsit_riscv_cluster_core)"
+    ]
+  },
+  "frame_row": [
+    "m_vlsit_riscv_cluster_core",
+    "Complete direct-child composition of the implemented AXI cluster core. Internal D-cache coherence is inside the CPU tile array; external memory and MMIO use AXI interfaces.",
+    "Section 14.2; rtl/non_coherence_cluster/m_vlsit_riscv_cluster_core.sv"
+  ],
+  "frame_interfaces": [
+    "AXIL",
+    "MMIO",
+    "MEM",
+    "HART",
+    "PIRQ",
+    "FIRQ",
+    "CRCLK"
+  ],
+  "blocks": [
+    {
+      "key": "B0",
+      "label": [
+        "u_vlsit_axi_llc",
+        "(m_vlsit_axi_llc)"
+      ],
+      "width": 200,
+      "row": 0,
+      "col": 3,
+      "row_name": "u_vlsit_axi_llc (m_vlsit_axi_llc)",
+      "function": "Wrap the licensed native LLC with VLSIT AXI/service/maintenance and fault-event ports.",
+      "source": "NEW; rtl/common/vlsit/cache/m_vlsit_axi_llc.sv"
+    },
+    {
+      "key": "B1",
+      "label": [
+        "u_vlsit_axil_reg_bridge",
+        "(m_vlsit_axil_reg_bridge)"
+      ],
+      "width": 300,
+      "row": 1,
+      "col": 3,
+      "row_name": "u_vlsit_axil_reg_bridge (m_vlsit_axil_reg_bridge)",
+      "function": "Translate AXI4-Lite LLC-service accesses into the pinned PULP RegBus request/response form.",
+      "source": "NEW; rtl/common/vlsit/control/m_vlsit_axil_reg_bridge.sv"
+    },
+    {
+      "key": "B2",
+      "label": [
+        "u_vlsit_cpucl_csr",
+        "(m_vlsit_cpucl_csr)"
+      ],
+      "width": 220,
+      "row": 2,
+      "col": 2,
+      "row_name": "u_vlsit_cpucl_csr (m_vlsit_cpucl_csr)",
+      "function": "Implement workbook-defined AXI4-Lite PMU controls, snapshot words, IRQ/diagnostic status and read-only fatal records.",
+      "source": "GENERATED; rtl/common/vlsit/csr/RTL/m_vlsit_cpucl_csr.sv"
+    },
+    {
+      "key": "B3",
+      "label": [
+        "u_vlsit_riscv_axi_mem_mux",
+        "(m_vlsit_riscv_axi_mem_mux)"
+      ],
+      "width": 320,
+      "row": 0,
+      "col": 2,
+      "row_name": "u_vlsit_riscv_axi_mem_mux (m_vlsit_riscv_axi_mem_mux)",
+      "function": "Arbitrate per-hart memory traffic while preserving source identity and response routing.",
+      "source": "NEW; rtl/common/vlsit/interconnect/m_vlsit_riscv_axi_mem_mux.sv"
+    },
+    {
+      "key": "B4",
+      "label": [
+        "u_vlsit_riscv_axi_mmio",
+        "(m_vlsit_riscv_axi_mmio)"
+      ],
+      "width": 280,
+      "row": 1,
+      "col": 0,
+      "row_name": "u_vlsit_riscv_axi_mmio (m_vlsit_riscv_axi_mmio)",
+      "function": "Provide a separate non-coherent AXI4 device egress for active harts.",
+      "source": "NEW; rtl/common/vlsit/interconnect/m_vlsit_riscv_axi_mmio.sv"
+    },
+    {
+      "key": "B5",
+      "label": [
+        "u_vlsit_riscv_axi_route",
+        "(m_vlsit_riscv_axi_route)"
+      ],
+      "width": 300,
+      "row": 0,
+      "col": 1,
+      "row_name": "u_vlsit_riscv_axi_route (m_vlsit_riscv_axi_route)",
+      "function": "Classify and route one hart slot to cacheable memory, normal-uncached bypass, device MMIO or a local error response. Four generated slots are indexed 0 to 3; two- and four-hart builds activate the configured slots.",
+      "source": "NEW; rtl/common/vlsit/interconnect/m_vlsit_riscv_axi_route.sv"
+    },
+    {
+      "key": "B6",
+      "label": [
+        "u_vlsit_riscv_axil_decode",
+        "(m_vlsit_riscv_axil_decode)"
+      ],
+      "width": 320,
+      "row": 2,
+      "col": 3,
+      "row_name": "u_vlsit_riscv_axil_decode (m_vlsit_riscv_axil_decode)",
+      "function": "Decode one external AXI4-Lite control port into cluster CSR and LLC service targets.",
+      "source": "NEW; rtl/common/vlsit/control/m_vlsit_riscv_axil_decode.sv"
+    },
+    {
+      "key": "B7",
+      "label": [
+        "u_vlsit_riscv_cmo_arbiter",
+        "(m_vlsit_riscv_cmo_arbiter)"
+      ],
+      "width": 320,
+      "row": 1,
+      "col": 1,
+      "row_name": "u_vlsit_riscv_cmo_arbiter (m_vlsit_riscv_cmo_arbiter)",
+      "function": "Select one hart's retirement-blocking maintenance request and preserve its completion destination.",
+      "source": "NEW; rtl/common/vlsit/maintenance/m_vlsit_riscv_cmo_arbiter.sv"
+    },
+    {
+      "key": "B8",
+      "label": [
+        "u_vlsit_riscv_cmo_controller",
+        "(m_vlsit_riscv_cmo_controller)"
+      ],
+      "width": 360,
+      "row": 1,
+      "col": 2,
+      "row_name": "u_vlsit_riscv_cmo_controller (m_vlsit_riscv_cmo_controller)",
+      "function": "Sequence CCU preparation, optional per-line LLC maintenance, terminal COMMIT/ABORT and the hart completion response.",
+      "source": "NEW; rtl/common/vlsit/maintenance/m_vlsit_riscv_cmo_controller.sv"
+    },
+    {
+      "key": "B9",
+      "label": [
+        "u_vlsit_riscv_cpu_tile_array",
+        "(m_vlsit_riscv_cpu_tile_array)"
+      ],
+      "width": 360,
+      "row": 0,
+      "col": 0,
+      "row_name": "u_vlsit_riscv_cpu_tile_array (m_vlsit_riscv_cpu_tile_array)",
+      "function": "Replicate two or four active CVA6 tiles; coordinate the internal MESI D-cache directory, tagged probes, address classification, maintenance retirement and event capture.",
+      "source": "NEW; rtl/common/vlsit/cpu/m_vlsit_riscv_cpu_tile_array.sv"
+    },
+    {
+      "key": "B10",
+      "label": [
+        "u_vlsit_riscv_fault_record",
+        "(m_vlsit_riscv_fault_record)"
+      ],
+      "width": 340,
+      "row": 2,
+      "col": 1,
+      "row_name": "u_vlsit_riscv_fault_record (m_vlsit_riscv_fault_record)",
+      "function": "Capture the first fatal ordinary L1 or shared LLC writeback error until reset.",
+      "source": "NEW; rtl/common/vlsit/diagnostics/m_vlsit_riscv_fault_record.sv"
+    },
+    {
+      "key": "B11",
+      "label": [
+        "u_vlsit_riscv_pmu",
+        "(m_vlsit_riscv_pmu)"
+      ],
+      "width": 220,
+      "row": 2,
+      "col": 0,
+      "row_name": "u_vlsit_riscv_pmu (m_vlsit_riscv_pmu)",
+      "function": "Integrate source event packing, scope selection, counters, atomic snapshots and aggregate overflow interrupt.",
+      "source": "NEW; rtl/common/vlsit/pmu/m_vlsit_riscv_pmu.sv"
+    }
+  ],
+  "connectors": [
+    {
+      "id": "TAXI",
+      "src": "B9",
+      "src_side": "R",
+      "dst": "B5",
+      "dst_side": "L"
+    },
+    {
+      "id": "MREQ",
+      "src": "B5",
+      "src_side": "R",
+      "dst": "B3",
+      "dst_side": "L"
+    },
+    {
+      "id": "DAXI",
+      "src": "B5",
+      "src_side": "B",
+      "dst": "B4",
+      "dst_side": "R"
+    },
+    {
+      "id": "AXI",
+      "src": "B3",
+      "src_side": "R",
+      "dst": "B0",
+      "dst_side": "L"
+    },
+    {
+      "id": "REG",
+      "src": "B1",
+      "src_side": "T",
+      "dst": "B0",
+      "dst_side": "B"
+    },
+    {
+      "id": "CSR",
+      "src": "B6",
+      "src_side": "L",
+      "dst": "B2",
+      "dst_side": "R"
+    },
+    {
+      "id": "LLCR",
+      "src": "B6",
+      "src_side": "T",
+      "dst": "B1",
+      "dst_side": "B"
+    },
+    {
+      "id": "CMOR",
+      "src": "B9",
+      "src_side": "R",
+      "dst": "B7",
+      "dst_side": "T"
+    },
+    {
+      "id": "CMOA",
+      "src": "B7",
+      "src_side": "R",
+      "dst": "B8",
+      "dst_side": "L"
+    },
+    {
+      "id": "CCU",
+      "src": "B8",
+      "src_side": "L",
+      "dst": "B9",
+      "dst_side": "B"
+    },
+    {
+      "id": "MAINT",
+      "src": "B8",
+      "src_side": "T",
+      "dst": "B0",
+      "dst_side": "B"
+    },
+    {
+      "id": "FCSR",
+      "src": "B10",
+      "src_side": "R",
+      "dst": "B2",
+      "dst_side": "L"
+    }
+  ],
+  "externals": [
+    {
+      "id": "AXIL",
+      "block": "B6",
+      "side": "R",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "AXIL",
+        "control"
+      ]
+    },
+    {
+      "id": "MMIO",
+      "block": "B4",
+      "side": "L",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "MMIO",
+        "AXI4 device"
+      ]
+    },
+    {
+      "id": "MEM",
+      "block": "B0",
+      "side": "R",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "MEM",
+        "AXI4+ATOP"
+      ]
+    },
+    {
+      "id": "PIRQ",
+      "block": "B11",
+      "side": "L",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "PMU IRQ",
+        "aggregate"
+      ]
+    },
+    {
+      "id": "FIRQ",
+      "block": "B2",
+      "side": "B",
+      "dir": "out",
+      "pos": 0,
+      "text": [
+        "FAULT IRQ",
+        "aggregate"
+      ]
+    },
+    {
+      "id": "CRCLK",
+      "block": "B9",
+      "side": "T",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "CLOCK/RESET",
+        "cluster"
+      ]
+    },
+    {
+      "id": "HART",
+      "block": "B9",
+      "side": "L",
+      "dir": "in",
+      "pos": 0,
+      "text": [
+        "HART CTRL",
+        "boot / IRQ / debug"
+      ]
+    }
+  ],
+  "nets": [],
+  "interfaces": [
+    {
+      "id": "TAXI",
+      "name": "Per-hart AXI request/response and address attributes",
+      "category": "handshake",
+      "active": "u_vlsit_riscv_cpu_tile_array -> u_vlsit_riscv_axi_route; response signals return on the same bundle",
+      "signals": "w_route_arready [3:0]; w_route_awready [3:0]; w_route_bid [3:0] [3:0]; w_route_bresp [3:0] [1:0]; w_route_bvalid [3:0]; w_route_rdata [3:0] [63:0]; w_route_rid [3:0] [3:0]; w_route_rlast [3:0]; w_route_rresp [3:0] [1:0]; w_route_rvalid [3:0]; w_route_wready [3:0]; w_tile_axi_ar_region_err [3:0]; w_tile_axi_ar_region_match [3:0]; w_tile_axi_ar_region_type [3:0][1:0]; w_tile_axi_araddr [3:0][63:0]; w_tile_axi_arburst [3:0][1:0]; w_tile_axi_arcache [3:0][3:0]; w_tile_axi_arid [3:0][3:0]; w_tile_axi_arlen [3:0][7:0]; w_tile_axi_arlock [3:0]; w_tile_axi_arprot [3:0][2:0]; w_tile_axi_arqos [3:0][3:0]; w_tile_axi_arregion [3:0][3:0]; w_tile_axi_arsize [3:0][2:0]; w_tile_axi_arvalid [3:0]; w_tile_axi_aw_region_err [3:0]; w_tile_axi_aw_region_match [3:0]; w_tile_axi_aw_region_type [3:0][1:0]; w_tile_axi_awaddr [3:0][63:0]; w_tile_axi_awatop [3:0][5:0]; w_tile_axi_awburst [3:0][1:0]; w_tile_axi_awcache [3:0][3:0]; w_tile_axi_awid [3:0][3:0]; w_tile_axi_awlen [3:0][7:0]; w_tile_axi_awlock [3:0]; w_tile_axi_awprot [3:0][2:0]; w_tile_axi_awqos [3:0][3:0]; w_tile_axi_awregion [3:0][3:0]; w_tile_axi_awsize [3:0][2:0]; w_tile_axi_awvalid [3:0]; w_tile_axi_bready [3:0]; w_tile_axi_rready [3:0]; w_tile_axi_wdata [3:0][63:0]; w_tile_axi_wlast [3:0]; w_tile_axi_wstrb [3:0][7:0]; w_tile_axi_wvalid [3:0]"
+    },
+    {
+      "id": "MREQ",
+      "name": "Normal memory AXI request/response bundle",
+      "category": "handshake",
+      "active": "u_vlsit_riscv_axi_route -> u_vlsit_riscv_axi_mem_mux; response signals return on the same bundle",
+      "signals": "w_mem_mux_src_arready [3:0]; w_mem_mux_src_awready [3:0]; w_mem_mux_src_bid [3:0][3:0]; w_mem_mux_src_bresp [3:0][1:0]; w_mem_mux_src_bvalid [3:0]; w_mem_mux_src_rdata [3:0][63:0]; w_mem_mux_src_rid [3:0][3:0]; w_mem_mux_src_rlast [3:0]; w_mem_mux_src_rresp [3:0][1:0]; w_mem_mux_src_rvalid [3:0]; w_mem_mux_src_wready [3:0]; w_route_mem_araddr [3:0] [63:0]; w_route_mem_arburst [3:0] [1:0]; w_route_mem_arcache [3:0] [3:0]; w_route_mem_arid [3:0] [3:0]; w_route_mem_arlen [3:0] [7:0]; w_route_mem_arlock [3:0]; w_route_mem_arprot [3:0] [2:0]; w_route_mem_arqos [3:0] [3:0]; w_route_mem_arregion [3:0] [3:0]; w_route_mem_arsize [3:0] [2:0]; w_route_mem_arvalid [3:0]; w_route_mem_awaddr [3:0] [63:0]; w_route_mem_awatop [3:0] [5:0]; w_route_mem_awburst [3:0] [1:0]; w_route_mem_awcache [3:0] [3:0]; w_route_mem_awid [3:0] [3:0]; w_route_mem_awlen [3:0] [7:0]; w_route_mem_awlock [3:0]; w_route_mem_awprot [3:0] [2:0]; w_route_mem_awqos [3:0] [3:0]; w_route_mem_awregion [3:0] [3:0]; w_route_mem_awsize [3:0] [2:0]; w_route_mem_awvalid [3:0]; w_route_mem_bready [3:0]; w_route_mem_rready [3:0]; w_route_mem_wdata [3:0] [63:0]; w_route_mem_wlast [3:0]; w_route_mem_wstrb [3:0] [7:0]; w_route_mem_wvalid [3:0]"
+    },
+    {
+      "id": "DAXI",
+      "name": "Device MMIO AXI request/response bundle",
+      "category": "handshake",
+      "active": "u_vlsit_riscv_axi_route -> u_vlsit_riscv_axi_mmio; response signals return on the same bundle",
+      "signals": "w_mmio_mux_src_arready [3:0]; w_mmio_mux_src_awready [3:0]; w_mmio_mux_src_bid [3:0][3:0]; w_mmio_mux_src_bresp [3:0][1:0]; w_mmio_mux_src_bvalid [3:0]; w_mmio_mux_src_rdata [3:0][63:0]; w_mmio_mux_src_rid [3:0][3:0]; w_mmio_mux_src_rlast [3:0]; w_mmio_mux_src_rresp [3:0][1:0]; w_mmio_mux_src_rvalid [3:0]; w_mmio_mux_src_wready [3:0]; w_route_mmio_araddr [3:0] [63:0]; w_route_mmio_arburst [3:0] [1:0]; w_route_mmio_arcache [3:0] [3:0]; w_route_mmio_arid [3:0] [3:0]; w_route_mmio_arlen [3:0] [7:0]; w_route_mmio_arlock [3:0]; w_route_mmio_arprot [3:0] [2:0]; w_route_mmio_arqos [3:0] [3:0]; w_route_mmio_arregion [3:0] [3:0]; w_route_mmio_arsize [3:0] [2:0]; w_route_mmio_arvalid [3:0]; w_route_mmio_awaddr [3:0] [63:0]; w_route_mmio_awburst [3:0] [1:0]; w_route_mmio_awcache [3:0] [3:0]; w_route_mmio_awid [3:0] [3:0]; w_route_mmio_awlen [3:0] [7:0]; w_route_mmio_awlock [3:0]; w_route_mmio_awprot [3:0] [2:0]; w_route_mmio_awqos [3:0] [3:0]; w_route_mmio_awregion [3:0] [3:0]; w_route_mmio_awsize [3:0] [2:0]; w_route_mmio_awvalid [3:0]; w_route_mmio_bready [3:0]; w_route_mmio_rready [3:0]; w_route_mmio_wdata [3:0] [63:0]; w_route_mmio_wlast [3:0]; w_route_mmio_wstrb [3:0] [7:0]; w_route_mmio_wvalid [3:0]"
+    },
+    {
+      "id": "AXI",
+      "name": "LLC-side AXI request/response bundle",
+      "category": "handshake",
+      "active": "u_vlsit_riscv_axi_mem_mux -> u_vlsit_axi_llc; response signals return on the same bundle",
+      "signals": "w_llc_axi_req_araddr [63:0]; w_llc_axi_req_arburst [1:0]; w_llc_axi_req_arcache [3:0]; w_llc_axi_req_arid [5:0]; w_llc_axi_req_arlen [7:0]; w_llc_axi_req_arlock; w_llc_axi_req_arprot [2:0]; w_llc_axi_req_arqos [3:0]; w_llc_axi_req_arregion [3:0]; w_llc_axi_req_arsize [2:0]; w_llc_axi_req_arvalid; w_llc_axi_req_awaddr [63:0]; w_llc_axi_req_awatop [5:0]; w_llc_axi_req_awburst [1:0]; w_llc_axi_req_awcache [3:0]; w_llc_axi_req_awid [5:0]; w_llc_axi_req_awlen [7:0]; w_llc_axi_req_awlock; w_llc_axi_req_awprot [2:0]; w_llc_axi_req_awqos [3:0]; w_llc_axi_req_awregion [3:0]; w_llc_axi_req_awsize [2:0]; w_llc_axi_req_awvalid; w_llc_axi_req_bready; w_llc_axi_req_rready; w_llc_axi_req_wdata [63:0]; w_llc_axi_req_wlast; w_llc_axi_req_wstrb [7:0]; w_llc_axi_req_wvalid; w_llc_axi_rsp_arready; w_llc_axi_rsp_awready; w_llc_axi_rsp_bid [5:0]; w_llc_axi_rsp_bresp [1:0]; w_llc_axi_rsp_bvalid; w_llc_axi_rsp_rdata [63:0]; w_llc_axi_rsp_rid [5:0]; w_llc_axi_rsp_rlast; w_llc_axi_rsp_rresp [1:0]; w_llc_axi_rsp_rvalid; w_llc_axi_rsp_wready"
+    },
+    {
+      "id": "REG",
+      "name": "LLC service RegBus request/response",
+      "category": "handshake",
+      "active": "u_vlsit_axil_reg_bridge -> u_vlsit_axi_llc; response signals return on the same bundle",
+      "signals": "w_llc_reg_req_addr [6:0]; w_llc_reg_req_valid; w_llc_reg_req_wdata [31:0]; w_llc_reg_req_wr; w_llc_reg_req_wstrb [3:0]; w_llc_reg_rsp_err; w_llc_reg_rsp_rdata [31:0]; w_llc_reg_rsp_ready"
+    },
+    {
+      "id": "CSR",
+      "name": "AXI4-Lite CSR target 0",
+      "category": "handshake",
+      "active": "u_vlsit_riscv_axil_decode -> u_vlsit_cpucl_csr; response signals return on the same bundle",
+      "signals": "w_axil_target_araddr[0] [1:0][31:0]; w_axil_target_arprot[0] [1:0][2:0]; w_axil_target_arready[0] [1:0]; w_axil_target_arvalid[0] [1:0]; w_axil_target_awaddr[0] [1:0][31:0]; w_axil_target_awprot[0] [1:0][2:0]; w_axil_target_awready[0] [1:0]; w_axil_target_awvalid[0] [1:0]; w_axil_target_bready[0] [1:0]; w_axil_target_bresp[0] [1:0][1:0]; w_axil_target_bvalid[0] [1:0]; w_axil_target_rdata[0] [1:0][31:0]; w_axil_target_rready[0] [1:0]; w_axil_target_rresp[0] [1:0][1:0]; w_axil_target_rvalid[0] [1:0]; w_axil_target_wdata[0] [1:0][31:0]; w_axil_target_wready[0] [1:0]; w_axil_target_wstrb[0] [1:0][3:0]; w_axil_target_wvalid[0] [1:0]"
+    },
+    {
+      "id": "LLCR",
+      "name": "AXI4-Lite LLC service target 1",
+      "category": "handshake",
+      "active": "u_vlsit_riscv_axil_decode -> u_vlsit_axil_reg_bridge; response signals return on the same bundle",
+      "signals": "w_axil_target_araddr[1] [1:0][31:0]; w_axil_target_arprot[1] [1:0][2:0]; w_axil_target_arready[1] [1:0]; w_axil_target_arvalid[1] [1:0]; w_axil_target_awaddr[1] [1:0][31:0]; w_axil_target_awprot[1] [1:0][2:0]; w_axil_target_awready[1] [1:0]; w_axil_target_awvalid[1] [1:0]; w_axil_target_bready[1] [1:0]; w_axil_target_bresp[1] [1:0][1:0]; w_axil_target_bvalid[1] [1:0]; w_axil_target_rdata[1] [1:0][31:0]; w_axil_target_rready[1] [1:0]; w_axil_target_rresp[1] [1:0][1:0]; w_axil_target_rvalid[1] [1:0]; w_axil_target_wdata[1] [1:0][31:0]; w_axil_target_wready[1] [1:0]; w_axil_target_wstrb[1] [1:0][3:0]; w_axil_target_wvalid[1] [1:0]"
+    },
+    {
+      "id": "CMOR",
+      "name": "Per-hart retirement maintenance request and completion",
+      "category": "handshake",
+      "active": "u_vlsit_riscv_cpu_tile_array -> u_vlsit_riscv_cmo_arbiter; response signals return on the same bundle",
+      "signals": "w_cmo_req_op [3:0][1:0]; w_cmo_req_pa_line [3:0][51:0]; w_cmo_req_pc [3:0][63:0]; w_cmo_req_ready [3:0]; w_cmo_req_vaddr [3:0][63:0]; w_cmo_req_valid [3:0]; w_cmo_rsp_done [3:0]; w_cmo_rsp_err [3:0]"
+    },
+    {
+      "id": "CMOA",
+      "name": "Selected maintenance request and response",
+      "category": "handshake",
+      "active": "u_vlsit_riscv_cmo_arbiter -> u_vlsit_riscv_cmo_controller; response signals return on the same bundle",
+      "signals": "w_cmo_done; w_cmo_error; w_cmo_hart [1:0]; w_cmo_op [1:0]; w_cmo_pa_line [51:0]; w_cmo_pc [63:0]; w_cmo_ready; w_cmo_vaddr [63:0]; w_cmo_valid"
+    },
+    {
+      "id": "CCU",
+      "name": "Tagged CCU maintenance begin, prepare and terminal handshake",
+      "category": "handshake",
+      "active": "u_vlsit_riscv_cmo_controller -> u_vlsit_riscv_cpu_tile_array; response signals return on the same bundle",
+      "signals": "w_cmo_ccu_begin_hart [1:0]; w_cmo_ccu_begin_op [1:0]; w_cmo_ccu_begin_pa_line [51:0]; w_cmo_ccu_begin_ready; w_cmo_ccu_begin_valid; w_cmo_ccu_begin_wback_en; w_cmo_ccu_finish_commit; w_cmo_ccu_finish_done; w_cmo_ccu_finish_ready; w_cmo_ccu_finish_tag [$clog2(PARA_COH_TXN_NUM)-1:0]; w_cmo_ccu_finish_valid; w_cmo_ccu_prepare_err; w_cmo_ccu_prepare_ready; w_cmo_ccu_prepare_tag [$clog2(PARA_COH_TXN_NUM)-1:0]; w_cmo_ccu_prepare_valid"
+    },
+    {
+      "id": "MAINT",
+      "name": "Per-line LLC maintenance request and completion",
+      "category": "handshake",
+      "active": "u_vlsit_riscv_cmo_controller -> u_vlsit_axi_llc; response signals return on the same bundle",
+      "signals": "w_maint_done; w_maint_error; w_maint_op [1:0]; w_maint_pa_line [51:0]; w_maint_ready; w_maint_valid"
+    },
+    {
+      "id": "FCSR",
+      "name": "First-fatal status, information and address words",
+      "category": "custom",
+      "active": "u_vlsit_riscv_fault_record -> u_vlsit_cpucl_csr; response signals return on the same bundle",
+      "signals": "w_fault_addr_hi [31:0]; w_fault_addr_lo [31:0]; w_fault_info [31:0]; w_fault_sts [31:0]"
+    },
+    {
+      "id": "AXIL",
+      "name": "External AXI4-Lite CSR/LLC control",
+      "category": "handshake",
+      "active": "SoC manager -> cluster",
+      "signals": "i_axil_awaddr [31:0]; i_axil_awprot [2:0]; i_axil_awvalid; o_axil_awready; i_axil_wdata [31:0]; i_axil_wstrb [3:0]; i_axil_wvalid; o_axil_wready; o_axil_bresp [1:0]; o_axil_bvalid; i_axil_bready; i_axil_araddr [31:0]; i_axil_arprot [2:0]; i_axil_arvalid; o_axil_arready; o_axil_rdata [31:0]; o_axil_rresp [1:0]; o_axil_rvalid; i_axil_rready"
+    },
+    {
+      "id": "MMIO",
+      "name": "External non-coherent AXI4 MMIO",
+      "category": "handshake",
+      "active": "Cluster -> SoC subordinate; responses return to cluster",
+      "signals": "o_axi_mmio_awid [5:0]; o_axi_mmio_awaddr [63:0]; o_axi_mmio_awlen [7:0]; o_axi_mmio_awsize [2:0]; o_axi_mmio_awburst [1:0]; o_axi_mmio_awlock; o_axi_mmio_awcache [3:0]; o_axi_mmio_awprot [2:0]; o_axi_mmio_awqos [3:0]; o_axi_mmio_awregion [3:0]; o_axi_mmio_awvalid; i_axi_mmio_awready; o_axi_mmio_wdata [63:0]; o_axi_mmio_wstrb [7:0]; o_axi_mmio_wlast; o_axi_mmio_wvalid; i_axi_mmio_wready; i_axi_mmio_bid [5:0]; i_axi_mmio_bresp [1:0]; i_axi_mmio_bvalid; o_axi_mmio_bready; o_axi_mmio_arid [5:0]; o_axi_mmio_araddr [63:0]; o_axi_mmio_arlen [7:0]; o_axi_mmio_arsize [2:0]; o_axi_mmio_arburst [1:0]; o_axi_mmio_arlock; o_axi_mmio_arcache [3:0]; o_axi_mmio_arprot [2:0]; o_axi_mmio_arqos [3:0]; o_axi_mmio_arregion [3:0]; o_axi_mmio_arvalid; i_axi_mmio_arready; i_axi_mmio_rid [5:0]; i_axi_mmio_rdata [63:0]; i_axi_mmio_rresp [1:0]; i_axi_mmio_rlast; i_axi_mmio_rvalid; o_axi_mmio_rready"
+    },
+    {
+      "id": "MEM",
+      "name": "External AXI4+AWATOP memory",
+      "category": "handshake",
+      "active": "Cluster -> SoC memory; responses return to cluster",
+      "signals": "o_axi_mem_awid [6:0]; o_axi_mem_awatop [5:0]; o_axi_mem_awaddr [63:0]; o_axi_mem_awlen [7:0]; o_axi_mem_awsize [2:0]; o_axi_mem_awburst [1:0]; o_axi_mem_awlock; o_axi_mem_awcache [3:0]; o_axi_mem_awprot [2:0]; o_axi_mem_awqos [3:0]; o_axi_mem_awregion [3:0]; o_axi_mem_awvalid; i_axi_mem_awready; o_axi_mem_wdata [63:0]; o_axi_mem_wstrb [7:0]; o_axi_mem_wlast; o_axi_mem_wvalid; i_axi_mem_wready; i_axi_mem_bid [6:0]; i_axi_mem_bresp [1:0]; i_axi_mem_bvalid; o_axi_mem_bready; o_axi_mem_arid [6:0]; o_axi_mem_araddr [63:0]; o_axi_mem_arlen [7:0]; o_axi_mem_arsize [2:0]; o_axi_mem_arburst [1:0]; o_axi_mem_arlock; o_axi_mem_arcache [3:0]; o_axi_mem_arprot [2:0]; o_axi_mem_arqos [3:0]; o_axi_mem_arregion [3:0]; o_axi_mem_arvalid; i_axi_mem_arready; i_axi_mem_rid [6:0]; i_axi_mem_rdata [63:0]; i_axi_mem_rresp [1:0]; i_axi_mem_rlast; i_axi_mem_rvalid; o_axi_mem_rready"
+    },
+    {
+      "id": "PIRQ",
+      "name": "Aggregated PMU level interrupt",
+      "category": "custom",
+      "active": "PMU -> SoC",
+      "signals": "o_int_pmu"
+    },
+    {
+      "id": "FIRQ",
+      "name": "Aggregated fatal/coherence diagnostic interrupt",
+      "category": "custom",
+      "active": "Cluster -> SoC",
+      "signals": "w_cpucl_coh_fault; reg_l1_evict_fault; o_int_fault"
+    },
+    {
+      "id": "CRCLK",
+      "name": "Cluster clock and active-low reset",
+      "category": "custom",
+      "active": "SoC -> all active cluster components",
+      "signals": "i_clk_cluster; i_rst_n_cluster (active-low reset, distributed to every direct child)"
+    },
+    {
+      "id": "HART",
+      "name": "Per-hart boot, interrupt and debug boundary",
+      "category": "custom",
+      "active": "SoC/debug module -> cluster; debug-mode status returns",
+      "signals": "i_boot_addr [63:0]; i_int_msip [3:0]; i_int_mtip [3:0]; i_int_meip [3:0]; i_int_ssip [3:0]; i_int_stip [3:0]; i_int_seip [3:0]; i_hart_debug_req [3:0]; o_hart_debug_mode [3:0]"
+    }
+  ],
+  "legend_note": "All 12 direct child instances of m_vlsit_riscv_cluster_core are shown. The top row shows the per-hart AXI route, normal-memory mux and LLC; the middle row shows device egress, maintenance control and LLC service bridge; the bottom row shows PMU, fault record and AXI4-Lite control. Arrows show primary data/control paths and the fault-record CSR path. For legibility, secondary PMU event-source and LLC/L1 fault-source bundles are detailed in HDS Sections 6 and 14 and are not separate arrows here. The route generates four hart slots indexed 0..3; PARA_CPU_NUM activates two or four. Nested CVA6/HPDcache/MESI and internal CCU hierarchy is expanded in Section 14 component diagrams. Signal names and block provenance for shown paths are listed on BLOCK_INFORMATION. Responses return on the same protocol bundle.",
+  "library_sha256": "15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"
+}
+```
+
+[Editable two-tab draw.io](figures/post_a06/CLUSTER_FULL_COMPONENTS.drawio) · [Machine-readable figure source](figures/post_a06/CLUSTER_FULL_COMPONENTS.json) · [Authoring diagram specification](figures/post_a06/CLUSTER_FULL_COMPONENTS_spec.json).
+
+*Figure 5-2. Complete direct-child component composition of the cluster core. The block information tab records component functions, source status and shown interfaces. Nested tile, CCU and cache structure is expanded in Section 14.*
+
 
 Each component diagram is embedded beside its Section 14 contract, with its editable two-tab draw.io and JSON source. Containment diagrams show real source-referenced children; leaf diagrams show only the leaf boundary. They do not add fictitious internal modules. The request/data-flow relationships that are not evident from containment are stated explicitly below and in each component contract.
 
-Mỗi component có sơ đồ trong Section 14, kèm draw.io chỉnh sửa được và JSON. Hình phân cấp không tự suy ra liên kết dữ liệu; các luồng được mô tả riêng dưới đây. Diagram không thay bằng chứng mô phỏng.
 
 ### 5.3 Transaction and dataflow
 
@@ -292,7 +807,6 @@ Mỗi component có sơ đồ trong Section 14, kèm draw.io chỉnh sửa đư�
 
 The table specifies ordering, not a fixed number of cycles. A request handshake reserves work; completion is a separate obligation whenever the interface has an ACK/done/result.
 
-Luồng dirty data đi qua AXI hiện có của owner đến LLC, không đi qua payload của CCU. Mọi thao tác có completion phải chờ completion thật, không hoàn tất ngay khi nhận request. Các bước trên xác định thứ tự, không đặt latency chưa đo.
 
 ### 5.4 Invariants
 
@@ -309,7 +823,6 @@ Luồng dirty data đi qua AXI hiện có của owner đến LLC, không đi qua
 
 `NEW` means VLSIT logic designed for this cluster; `MODIFY` means a licensed native local copy with recorded changes; `REUSE` means a pristine upstream source; `GENERATED` means byte-exact CSR tool output. Native names are deliberately preserved inside licensed components. The VLSIT coding rule applies to new wrappers/components, not as an instruction to rename pristine reuse. A source-file classification does not imply that every conditional module/branch in that file elaborates in the selected profile.
 
-NEW là logic mới; MODIFY là bản native có sửa và history; REUSE giữ nguyên source; GENERATED là output generator không sửa tay. Không đánh đồng có tên trong filelist với đã instantiate hoặc đã kích hoạt trong mô phỏng.
 
 ## 6. External interfaces and ports
 
@@ -321,15 +834,14 @@ All current external interfaces share `i_clk_cluster`. The SoC supplies asynchro
 |---|---|---|---|
 | AXI4-Lite control | Subordinate | 32-bit address/data; independent read and write channels | Decoder queues → generated CSR or native LLC RegBus service |
 | AXI4 MMIO | Manager | 64-bit address/data, 6-bit extended ID | Per-hart routing/mux; external fabric decodes peripherals |
-| AXI4+ATOP memory | Manager | 64-bit address; 7-bit ID; 32/64/128/256-bit external data parameter | Native LLC/bypass/mux/width-converter association; SoC supplies atomic service |
+| PULP AXI4 memory + AWATOP extension | Manager | 64-bit address; 7-bit ID; 32/64/128/256-bit external data parameter | Native LLC/bypass/mux/width-converter association; SoC supplies atomic service |
 | Boot | Input | Shared 64-bit boot address; zero-based hart IDs are internally assigned | Held stable through reset release under SoC integration contract |
-| Per-hart interrupts | Inputs | Fixed four-slot vectors; only active harts are used | CVA6 privilege/trap logic; external interrupt controllers are SoC-owned |
-| Debug | Per-hart request/status | External DM requests; hart reports debug mode | Native CVA6; no integrated JTAG/DMI DM/DTM |
+| Per-hart interrupts | Inputs | PARA_CPU_NUM bits per vector; bit n connects to hart n | CVA6 privilege/trap logic; external interrupt controllers are SoC-owned |
+| Debug | Per-hart request/status | PARA_CPU_NUM bits per vector; hart n uses bit n | Native CVA6; no integrated JTAG/DMI DM/DTM |
 | PMU/fatal IRQ | Level outputs | Aggregate PMU pending; reset-only fatal retention | PMU raw/enabled cause and fatal cache state respectively |
 
 The ACE external profile is deferred and has no implemented current TOP. Do not connect an external coherent DMA agent to the AXI memory boundary and assume snoop service. Internal tagged two-phase interfaces are custom source-defined channels; their semantic relationship to the earlier ACE-subset architecture must not be advertised as literal AC/CR/CD wire compatibility without a separate mapping review.
 
-Profile ACE ngoài được hoãn. AXI ngoài không snoop cache. Các kênh tagged PREPARE/COMMIT/ABORT hiện tại là interface nội bộ có định nghĩa riêng; không tuyên bố chúng tương thích chân ACE chỉ từ tên kiến trúc ban đầu.
 
 ### 6.2 Complete AXI-profile port list
 
@@ -338,14 +850,14 @@ Profile ACE ngoài được hoãn. AXI ngoài không snoop cache. Các kênh tag
 | `i_clk_cluster` | input | `1` | clock | CLK-CLUSTER | Common rising-edge clock for CPU, cache, buses and control. |
 | `i_rst_n_cluster` | input | `1` | reset | CLK-CLUSTER | Active-low reset: asynchronous assertion, SoC-synchronized deassertion. |
 | `i_boot_addr` | input | `[63:0]` | static: stable through reset release | CLK-CLUSTER | Shared boot entry, held through reset release; hart identity selects software startup. |
-| `i_int_msip` | input | `[3:0]` | level | CLK-CLUSTER | Per-hart MSIP interrupt input; inactive slots ignored. |
-| `i_int_mtip` | input | `[3:0]` | level | CLK-CLUSTER | Per-hart MTIP interrupt input; inactive slots ignored. |
-| `i_int_meip` | input | `[3:0]` | level | CLK-CLUSTER | Per-hart MEIP interrupt input; inactive slots ignored. |
-| `i_int_ssip` | input | `[3:0]` | level | CLK-CLUSTER | Per-hart SSIP interrupt input; inactive slots ignored. |
-| `i_int_stip` | input | `[3:0]` | level | CLK-CLUSTER | Per-hart STIP interrupt input; inactive slots ignored. |
-| `i_int_seip` | input | `[3:0]` | level | CLK-CLUSTER | Per-hart SEIP interrupt input; inactive slots ignored. |
-| `i_hart_debug_req` | input | `[3:0]` | level | CLK-CLUSTER | Per-hart external Debug Module request; active maintenance defers admission. |
-| `o_hart_debug_mode` | output | `[3:0]` | level | CLK-CLUSTER | Per-hart native debug-mode status. |
+| `i_int_msip` | input | `[PARA_CPU_NUM-1:0]` | level | CLK-CLUSTER | Per-hart MSIP interrupt input. |
+| `i_int_mtip` | input | `[PARA_CPU_NUM-1:0]` | level | CLK-CLUSTER | Per-hart MTIP interrupt input. |
+| `i_int_meip` | input | `[PARA_CPU_NUM-1:0]` | level | CLK-CLUSTER | Per-hart MEIP interrupt input. |
+| `i_int_ssip` | input | `[PARA_CPU_NUM-1:0]` | level | CLK-CLUSTER | Per-hart SSIP interrupt input. |
+| `i_int_stip` | input | `[PARA_CPU_NUM-1:0]` | level | CLK-CLUSTER | Per-hart STIP interrupt input. |
+| `i_int_seip` | input | `[PARA_CPU_NUM-1:0]` | level | CLK-CLUSTER | Per-hart SEIP interrupt input. |
+| `i_hart_debug_req` | input | `[PARA_CPU_NUM-1:0]` | level | CLK-CLUSTER | Per-hart external Debug Module request; active maintenance defers admission. |
+| `o_hart_debug_mode` | output | `[PARA_CPU_NUM-1:0]` | level | CLK-CLUSTER | Per-hart native debug-mode status. |
 | `o_int_pmu` | output | `1` | level | CLK-CLUSTER | Aggregate enabled PMU overflow level. |
 | `o_int_fault` | output | `1` | level | CLK-CLUSTER | Retained fatal cache-writeback level; diagnostic W1C does not clear it. |
 | `i_axil_awaddr` | input | `[31:0]` | data: qualified by the corresponding channel VALID/READY | CLK-CLUSTER | AW channel: Byte address. Preserve the matching channel identity through stalls. |
@@ -447,6 +959,8 @@ Profile ACE ngoài được hoãn. AXI ngoài không snoop cache. Các kênh tag
 | `i_axi_mem_rvalid` | input | `1` | level | CLK-CLUSTER | R channel: Producer has valid payload. Preserve the matching channel identity through stalls. |
 | `o_axi_mem_rready` | output | `1` | level | CLK-CLUSTER | R channel: Consumer can accept payload. Preserve the matching channel identity through stalls. |
 
+For two harts the eight external IRQ/debug vectors are [1:0]. For four harts they are [3:0]. TOP zero-extends the seven input vectors into the four-slot cluster core and returns only active debug status bits. AXI ID widths stay fixed. A SoC with an existing four-slot IRQ/debug bundle can instantiate the optional [compatibility wrapper](../../rtl/non_coherence_cluster/m_vlsit_riscv_axi_soc_wrap.sv) using [its filelist](../../rtl/non_coherence_cluster/filelist_soc_wrapper.f). The wrapper ignores absent-hart inputs and drives absent debug outputs to zero.
+
 ### 6.3 Internal interface contracts
 
 | Interface | Initiator → service | Payload and qualifiers | Retained obligation / failure |
@@ -470,7 +984,6 @@ Section 14 lists the exact declarations at every component boundary, preserving 
 
 `o_int_pmu` is the level reduction of enabled raw overflow causes. Software clears handled causes through the generated CSR's documented priority rules. `o_int_fault` includes retained fatal ordinary cache writeback state and cannot be recovered by diagnostic W1C. External per-hart IRQ/debug inputs are wired to native CVA6 but their full operational qualification remains open. Once CMO is accepted, selected interrupt/debug deferral policy A applies until success or a precise terminal error; a missing downstream response may therefore defer that hart indefinitely.
 
-IRQ PMU có thể xóa qua CSR theo đúng priority. Fault fatal chỉ phục hồi bằng reset. Trì hoãn IRQ/debug khi CMO đã nhận là quyết định đã duyệt; không được hứa bound hữu hạn khi chính sách ACK không timeout.
 
 ## 7. Clock, reset, and power
 
@@ -499,15 +1012,13 @@ No internal asynchronous clock domain is defined. DTM TCK and DMI are outside th
 |---|---|---|---|---|---|---|
 | RST-CLUSTER | i_rst_n_cluster | Active-low assertion | Asynchronous assertion permitted | All harts, coherence state, LLC control, CSR, PMU, adapters | SoC guarantees deassertion synchronous to CLK-CLUSTER | Valid/control state zero; generated fields use workbook values |
 
-The reset controller shall hold the cluster in reset until CLK-CLUSTER is stable. Software shall wait for the axi_llc BIST-ready state before using memory paths that the LLC blocks during BIST. Reset aborts outstanding traffic according to the enclosing AXI/ACE system reset contract; the SoC must reset or drain corresponding external agents consistently.
+The reset controller shall hold the cluster in reset until CLK-CLUSTER is stable. Software shall wait for the axi_llc BIST-ready state before using memory paths that the LLC blocks during BIST. For a reset with outstanding traffic, the SoC shall reset the connected AXI fabric/target transaction state and internal coherence agents as one coordinated event, and shall not release the cluster while a pre-reset response can still reach it. Backing-memory contents are not cleared; a request accepted before reset may already have committed, so software must reinitialize affected data after reset.
 
-Reset controller giữ IP reset tới khi CLK-CLUSTER ổn định. Software chờ trạng thái BIST-ready của axi_llc trước khi dùng memory path bị BIST chặn. Reset hủy transaction đang chạy theo hợp đồng reset AXI/ACE của SoC; SoC phải reset hoặc drain các agent ngoài nhất quán.
 
 ### 7.4 Power intent
 
-No power gating, retention, isolation, or DVFS is included in v1. The implementation may use technology-approved clock gating after the clock/reset and scan methodology are supplied. WFI/power-state behavior must be checked against the pinned CVA6 integration. Power intent is owned by the SoC.
+No power gating, retention, isolation, or DVFS is included in v1. The implementation may use technology-approved clock gating after the clock/reset and scan methodology are supplied. WFI/power-state behavior must be checked against the pinned CVA6 integration. A hart that stays in the coherence domain keeps its cache and probe endpoint clocked and responsive in WFI and in debug halt (REQ-CLK-002, TEST-062), because probe phases have no timeout (REQ-MEM-013) and a stopped owner would hold its lines and hang the cluster. Power intent is owned by the SoC.
 
-Không có power gating, retention, isolation hoặc DVFS trong v1. Có thể dùng clock gating theo cell/methodology đã duyệt của công nghệ sau khi có clock/reset và scan flow. Hành vi WFI phải đối chiếu với CVA6 commit được pin. SoC sở hữu power intent.
 
 ## 8. Parameters and elaboration configurations
 
@@ -516,13 +1027,18 @@ Không có power gating, retention, isolation hoặc DVFS trong v1. Có thể d�
 | Parameter | Current RTL default / legal declaration | Qualification boundary |
 |---|---|---|
 | `PARA_CPU_NUM` | 4; 2 or 4 | Both real CPU campaigns and native TOP lint |
+| `PARA_TIMING_PROFILE` | 0 = low latency (default), 1 = per-tile cuts, 2 = external AXI cuts and cluster pipeline | TEST-057–061 at 2/4 harts. Profile 0 is the comparison baseline. Hardware STA is a separate qualification gate. |
 | `PARA_COH_TXN_NUM` | 8; 2 through 16 | Root admission reserves one victim credit; focused 2/8/16 units; not a whole-system matrix |
-| `PARA_LLC_WAY_NUM`, `PARA_LLC_NO_LINES` | 4 and 4096 | Default 256-KiB TOP lint; CPU campaigns use reduced geometry |
-| `PARA_LLC_BLOCK_NUM` | 2; RTL declares larger powers of two | Keep 16-byte baseline for qualified maintenance; larger-line behavior remains review work |
+| `PARA_LLC_WAY_NUM`, `PARA_LLC_NO_LINES` | Defaults 4 and 4096; 1–32 ways and a power-of-two line count greater than 2 | Default 256-KiB TOP lint; CPU campaigns use reduced geometry |
+| `PARA_LLC_BLOCK_NUM` | Default 2; a power of two, at least 2 | Keep 16-byte baseline for qualified maintenance; larger-line behavior remains review work |
 | `PARA_AXI_MEM_DATA_W` | 64; 32/64/128/256 | Four leaf widths, only 64-bit real CPU end-to-end |
 | `PARA_PMU_COUNTER_NUM`, `PARA_PMU_COUNTER_W` | 16 and 64; 1–32 counters, 32/64 bits | Functional PMU/software matrix pending |
 | `PARA_AXIL_BASE_ADDR` | 0; aligned base up to 0xFFFFA000 | Twenty-four KiB aperture with six 4-KiB regions; group/base units pass |
-| `PARA_ADDR_REGION_*` | One cacheable 0x80000000–0xBFFFFFFF region | Shared PMA/router table; normal-uncached/MMIO are configurable but need CPU integration tests |
+| `PARA_ADDR_REGION_NUM`, `PARA_ADDR_REGION_*` | 1–16 active entries; default one cacheable 0x80000000–0xBFFFFFFF region | Shared PMA/router table; normal-uncached/MMIO are configurable but need CPU integration tests |
+
+The AXI TOP rejects invalid hart count, timing profile, coherence-context count, AXI memory data width, PMU count/width, address-region count, LLC geometry, and AXI4-Lite aperture base during elaboration. Address-region contents are checked independently by the existing region-table logic. Legal LLC geometry at the TOP is 1–32 ways, a power-of-two line count per way greater than 2, and a power-of-two block count per line of at least 2. The 16-byte maintenance baseline remains the qualified configuration.
+
+Internal controls PARA_DIR_SYNC_READ and PARA_REGISTER_RESET_RELEASE are derived from Profile 2. They are not public TOP parameters. Missing PREPARE, COMMIT or ABORT ACK retains the affected slot and line lock per DEC-018. Progress on another line requires independent available resources. When those resources are exhausted, unrelated traffic can also stall. DEC-018 applies to probe-phase acknowledgements.
 
 The table describes the present declaration and evidence; it does not silently approve extra configurations. Native width/type parameters belong to the pinned dependency configuration.
 
@@ -530,7 +1046,87 @@ The table describes the present declaration and evidence; it does not silently a
 
 The BASE_LO/BASE_HI and SIZE_LO/SIZE_HI region parameters are sixteen-entry arrays of 32-bit words; TYPE is a sixteen-entry word array and NUM selects active entries. Active entries are aligned, nonzero in size, non-overlapping and within PLEN=56. Entry zero is the sole cacheable region in this native LLC integration; other active entries classify normal-uncached or MMIO. TYPE low bits encode the three defined classes; reserved upper/type bits invalidate the table. Exact defaults and checks are visible at the TOP/decoder contracts.
 
-Native CPU AXI IDs are four bits, MMIO egress IDs six bits and memory egress IDs seven bits after source extension. CCU context/scheduler tag width is max(1, clog2(PARA_COH_TXN_NUM)): three bits by default and one through four over the legal range. The native HPDcache probe endpoint uses a fixed four-bit tag field; its wrapper adapts the width while retaining the valid slot value. Physical line indices are 52 bits with four byte-offset bits omitted. LLC native data stays 64-bit; external memory width alone is parameterized. / Phải phân biệt native ID, ID sau mux, tag CCU và tag endpoint; không dùng một độ rộng cho mọi boundary.
+Native CPU AXI IDs are four bits, MMIO egress IDs six bits and memory egress IDs seven bits after source extension. CCU context/scheduler tag width is max(1, clog2(PARA_COH_TXN_NUM)): three bits by default and one through four over the legal range. The native HPDcache probe endpoint uses a fixed four-bit tag field; its wrapper adapts the width while retaining the valid slot value. Physical line indices are 52 bits with four byte-offset bits omitted. LLC native data stays 64-bit; external memory width alone is parameterized.
+
+### 8.3 Compile-time timing profiles
+
+`PARA_TIMING_PROFILE` is fixed at elaboration/synthesis. Profile 0 is the existing low-latency baseline. Profile 1 adds two-entry PULP `axi_cut` spill-registers independently on AW, W, B, AR, and R between each tile router and its memory/MMIO target. The cut carries the existing AWATOP, ID, route-class sideband, data, strobe, and response fields. It adds registered latency, holds payload stable under backpressure, and can sustain one transfer per cycle after fill when the downstream target remains ready; channel stalls and target arbitration still limit throughput.
+
+Profile 1 also registers the selected PMU event count and enable before the counter bank. Each sampled event vector is applied once, one clock later. The snapshot command is acknowledged two cycles after its first sampled request. The captured counter values include events sampled through the request edge; events sampled on later edges are excluded. Profile 0 retains the existing event-to-counter and snapshot timing. The profile does not change `cva6.sv`, the CVA6 pipeline, the HPDcache implementation, or architectural instruction latency. No profile value guarantees a frequency, IPC, area, or power target; compare post-synthesis and STA results using the same constraints and library.
+
+**Profile 2 (DEC-045).** The memory port is cut after width conversion. The MMIO port is cut after its final cluster mux. Each AW, W, B, AR and R channel has a separate two-entry spill register. Profile 2 bypasses the per-tile cuts of profile 1. The route, tile coherence adapter, line locks and CMO controller release their handshake gates after the first active edge following reset.
+
+The PMU samples native events together with the selector configuration and hart mask, registers the selected counts and registers overflow before it updates the CSR. A snapshot request first sampled at edge E captures the counters at E+2, including source samples before E. The generated CSR retains its existing hardware-write/software-clear priority.
+
+Each directory bank accepts one lookup or update per cycle subject to arbitration and reservation. At E a lookup reserves its set and reads all ways. At E+1 an available response register captures the result. A different unreserved set may be read at E+1. Backpressure holds both stages once full. Owner UPDATE and CANCEL remain eligible independently of lookup backpressure. Payload uses synchronous 1RW storage per way with independently reset valid bits. Physical SRAM macro mapping remains a synthesis dependency. Compare IPC and memory response latency against profile 0.
+
+#### 8.3.1 Pipeline placement and timing endpoints
+
+These diagrams show the active AXI cluster RTL. A **REG** block marks profile-dependent storage. The AXI arrows cover write address/data (AW/W), write response (B), read address/data (AR/R), and reverse READY for each channel. CVA6's internal instruction pipeline is common to the three profiles. E is the rising edge that first samples a snapshot request or accepts a directory lookup, as applicable.
+
+![Profile 0 baseline paths through the tile router, AXI TOP, PMU and directory](figures/timing_profiles/baseline.svg)
+
+**Figure 8.3-A — Baseline, profile 0.** The tile route outputs connect directly to the memory and memory-mapped I/O (MMIO) target paths. The two TOP AXI port groups also use direct connections. The memory R input can reach TOP RREADY through the width-conversion and response logic. The Performance Monitoring Unit (PMU) uses the event-selection result directly for the counter increment, and the combinational wrap indication feeds the interrupt request (IRQ) CSR logic. The directory reads the selected set, compares eight ways, and captures the result in the existing response register at E. [Editable diagram](figures/timing_profiles/baseline.drawio)
+
+![Profile 1 with per-tile AXI cuts and PMU event registers](figures/timing_profiles/tile_cuts.svg)
+
+**Figure 8.3-B — Tile cuts, profile 1.** In each RTL router, `u_mem_axi_cut` separates demultiplexer port 0 from the cluster memory mux/LLC path, and `u_mmio_axi_cut` separates port 1 from the cluster MMIO mux. Each stage registers AW/W/AR in the outward direction and B/R in the return direction. Producer-side READY comes from registered occupancy, breaking the receiving-side READY path through the cut. The local decode-error target and the external TOP pins have no profile-1 cut. In the PMU, event selection terminates at the registered counts/enables. The increment starts from those registers, and overflow-to-CSR, directory read/compare and reset qualification use the baseline paths. [Editable diagram](figures/timing_profiles/tile_cuts.drawio)
+
+![Profile 2 with AXI TOP spill registers, PMU source and overflow registers, directory read stage and reset-release flops](figures/timing_profiles/boundary.svg)
+
+**Figure 8.3-C — Boundary cuts, profile 2.** On memory, outbound AW/W/AR crosses the cut from the 64-to-D-bit width adapter to the pins, and B/R crosses from the pins to the adapter. On MMIO, the endpoints are the final MMIO mux and the external pins. Output RREADY on each of these ports is derived from the local spill occupancy, so the direct external RID/RVALID-to-RREADY path is cut. The diagram shows memory and MMIO boundary cuts only. AXI4-Lite has no corresponding TOP spill, and the broader zero input-to-output contract in REQ-PD-002 requires separate structural/STA evidence.
+
+The PMU registers event sources together with the corresponding hart mask and selector configuration before aggregation. The selected counts/enables are registered before the counter bank. A separate overflow register cuts the counter carry-to-IRQ CSR write path. It adds one cycle from the wrap indication to sticky status and to an IRQ asserted by that status. The directory inserts synchronous way outputs and aligned metadata between the selected-set read and way comparison/victim selection. Reset release flops feed handshake gates in the routers, tile coherence adapters, line locks and cache-block management operation (CMO) controller. The current directory RTL models the synchronous payload arrays inline. A replaceable RAM wrapper remains a separate REQ-MEM-025 implementation obligation. [Editable diagram](figures/timing_profiles/boundary.drawio)
+
+#### 8.3.2 Register-bit estimate from RTL
+
+Let H be the active hart count (2 or 4), C the number of PMU counters, D the external memory AXI data width in bits, and T the directory context tag width, `max(1, clog2(PARA_COH_TXN_NUM))`. The following counts are incremental relative to profile 0 and precede synthesis. A two-entry elastic channel with payload width P declares two P-bit data registers and two occupancy bits, or 2(P + 1) state bits. Bus READY is derived from occupancy. The pre-existing counter and snapshot values, the directory payload array, directory metadata, and the existing directory response registers are common state and excluded from the incremental count.
+
+| Added storage | Derivation from RTL | Profile 1 | Profile 2 |
+|---|---|---:|---:|
+| Tile AXI | One route has two cuts. Each cut has AW/W/B/AR/R payload widths 105/73/7/99/72, for 722 bits per cut and 1,444 per router. TOP instantiates four routers even at H=2. | 5,776 | 0 |
+| TOP AXI | Memory payload widths in AW/W/B/AR/R order are 106, D+D/8+1, 9, 100, D+10. MMIO widths are 99, 73, 8, 99, 73. Apply 2(P+1) to each of the ten channels. | 0 | 1,176 + 17D/4 |
+| PMU selected event and snapshot control | Three count bits and one enable per counter, plus two request-delay bits and one seen bit. | 4C + 3 | 4C + 3 |
+| PMU source and overflow | Per hart 1 active + 22 CVA6 + 16 HPDcache bits; 28 LLC + 12×3 CCU bits; per counter 16 selector ID + 3 scope + 1 enable + 1 overflow bit. | 0 | 39H + 64 + 21C |
+| Directory read metadata | Four banks, each with read-valid (1), set and tag (50 combined), context tag (T), valid-way mask (8), and tree-PLRU snapshot (7). | 0 | 4(66 + T) |
+| Directory read payload output | Four banks × eight ways. A way output holds `50 - clog2(64H) + H + 4` bits for line tag, holders, owner and MESI state. This is 49 bits at H=2 and 50 at H=4. | 0 | 1,568 / 1,600 at H=2 / H=4 |
+| Reset release | Four router release bits, H coherence adapters, H line-lock modules, one CMO controller. | 0 | 5 + 2H |
+
+| Profile | 2 harts | 4 harts |
+|---|---:|---:|
+| 0 — Baseline | 0 | 0 |
+| 1 — Tile cuts | 5,843 | 5,843 |
+| 2 — Boundary cuts, with modeled RAM read-output bits | 3,846 | 3,960 |
+| 2 — Boundary cuts, excluding the RAM read-output bits | 2,278 | 2,360 |
+
+The totals use D=64, C=16 and T=3. At H=2, the two inactive routers contribute 2,888 declared tile-cut bits in profile 1. Counting active-router cuts and PMU alone gives 2,955 bits. Tie-offs and unused payload fields may reduce the mapped count. The profile 2 RAM-excluded row isolates logic outside the modeled way outputs for macro planning. Actual mapping of RAM output storage depends on the selected macro and implementation. Increasing D from 64 to 128 adds 272 declared bits to profile 2; changing D leaves the profile 1 cuts at native 64 bits.
+
+RTL references: [Cluster core](../../rtl/non_coherence_cluster/m_vlsit_riscv_cluster_core.sv), [tile route](../../rtl/common/vlsit/interconnect/m_vlsit_riscv_axi_route.sv), [AXI TOP](../../rtl/non_coherence_cluster/m_vlsit_riscv_cluster_axi_top.sv), [PULP spill storage](../../rtl/common/third_party/axi_llc_locked/common_cells/src/spill_register_flushable.sv), [PMU](../../rtl/common/vlsit/pmu/m_vlsit_riscv_pmu.sv), and [sharer directory](../../rtl/common/vlsit/coherence/m_vlsit_riscv_sharer_directory.sv).
+
+#### 8.3.3 Latency and performance implications
+
+| Path / metric | Profile 0 | Profile 1 | Profile 2 |
+|---|---|---|---|
+| AXI crossing, no queueing or stalls | Reference wiring | +1 cycle per channel through a tile cut | +1 cycle per channel through a TOP cut |
+| AXI request/response example | Reference | Dependent AR→first R or AW/W→B adds two crossings for traffic using the selected tile route | Same two crossings for external traffic. An LLC hit uses no TOP memory cut. |
+| Directory lookup response | Captured at E | Captured at E | Captured at E+1 when the response stage is free. Independent eligible sets can still enter one per bank per cycle. |
+| Event sampling to counter update | Update at E | Update at E+1 | Update at E+2 |
+| Snapshot captured from request E | E | E+2 | E+2 |
+| Reset qualification | Direct | Direct | Release after the first active edge following reset deassertion |
+
+One active channel can sustain one beat per cycle after fill while both sides continue to transfer. Two-entry buffering absorbs short stalls. Bank conflicts, full queues, target service time, and memory dependencies can add further cycles. AW and W are independent and their cut stages can overlap, so the two write-request channels do not imply two serial request cycles. For a cacheable miss in profile 2, a directory lookup on the dependency path and an external memory round trip can add three cycles when serialized (+1 directory, +1 AR, +1 R). An LLC hit avoids the external crossings, although it can still wait on a directory lookup. Neither profile adds a cut to a private-cache hit that stays inside a hart. PMU timing changes affect observation of events, snapshots and wrap status rather than instruction execution.
+
+Compare instructions per cycle (IPC) at the same frequency and workload before attributing an improvement to clock speed. For equal work, instruction throughput scales with clock frequency × IPC. For example, a measured IPC drop from 1.00 to 0.95 would require a frequency increase of more than 5.26% to improve throughput. Measure private-cache, pointer-chase, LLC/DRAM streaming, and MMIO workloads separately. Report cycles per request, IPC and sustained beats per cycle under the same memory model for each profile. These cycle counts come from the RTL structure and describe unstalled stage crossings. Clock frequency, mapped flip-flops and overall IPC require implementation or workload measurements.
+
+
+**Timing evidence and accepted period (REQ-PD-001; F-001 fix).** The profiles are a mechanism, not a frequency claim. Evidence so far is one synthesis run with idealized inputs (see DEC-045). To establish an accepted period:
+
+1. Run the same flow at T = 2.0, 2.5, 3.0 and 3.5 ns on profile 2, 2 and 4 harts, with SRAM timing models linked, a stated wire-load or physical estimate, clock uncertainty above 1 percent, and I/O delay stated as a percentage of T for each AXI group.
+2. Report WNS, TNS, failing endpoints and the worst path per group (`reg2reg`, `in2reg`, `reg2out`, `in2out`) for each run, and name the start and end point of the worst path.
+3. Record the shortest closing period per corner as the accepted period. A period with any failing group is not accepted.
+4. Attribute each failing family to its owner: PMU/CSR overflow, directory, AXI boundary, reset-as-data, or CVA6 internals. A CVA6-internal family cannot be closed by a profile (DEC-044).
+5. Keep PPA numbers out of the profile comparison unless they come from the same sweep run.
+
 
 ## 9. Data representation and arithmetic
 
@@ -546,13 +1142,12 @@ Native CPU AXI IDs are four bits, MMIO egress IDs six bits and memory egress IDs
 
 All signals are unsigned bit vectors in the VLSIT RTL. The selected memory system uses little-endian byte lanes. No signed RTL arithmetic is permitted. A 64-bit PMU read requires a prior snapshot; the low and high words then represent the same captured count.
 
-Mọi tín hiệu là vector unsigned theo rule VLSIT; byte lane theo little-endian. Không dùng signed arithmetic trong RTL. Khi counter 64 bit, phần mềm yêu cầu snapshot trước, rồi low/high biểu diễn cùng giá trị đã chụp.
 
 ## 10. Detailed functional behavior
 
 ### 10.1 Modes and state transitions
 
-These are the exact explicit enum controllers introduced by the cluster. Waiting states hold until the stated handshake/completion. Diagrams show event order, not numeric latency. Native queue/flag lifecycles and retained retirement are specified separately; do not invent enum states for them. / Đây là các FSM enum thực; chờ đúng handshake/completion, không đặt latency giả.
+These are the exact explicit enum controllers introduced by the cluster. Waiting states hold until the stated handshake/completion. Diagrams show event order, not numeric latency. Native queue/flag lifecycles and retained retirement are specified separately; do not invent enum states for them.
 
 #### CMO-CONTROLLER
 
@@ -580,7 +1175,7 @@ Retain one hart command from acceptance through CCU preparation, optional LLC se
 | T10 | `ENUM_ST_CMO_FINISH_WAIT` | i_ccu_finish_done | `ENUM_ST_CMO_RESP` |
 | T11 | `ENUM_ST_CMO_RESP` | next edge after one-cycle response | `ENUM_ST_CMO_IDLE` |
 
-All unspecified guards hold the current legal state in the full FSM. Reset enters `ENUM_ST_CMO_IDLE`; a phase-view entry is not a new hardware reset state. Invalid-encoding behavior follows the source and is not a normal software recovery path. / Điều kiện chưa thỏa giữ state theo FSM đầy đủ; điểm vào phase không phải reset state mới.
+All unspecified guards hold the current legal state in the full FSM. Reset enters `ENUM_ST_CMO_IDLE`; a phase-view entry is not a new hardware reset state. Invalid-encoding behavior follows the source and is not a normal software recovery path.
 
 #### CCU-CONTEXT
 
@@ -631,7 +1226,7 @@ One instance of this state lifecycle exists per transaction slot, not one global
 | T33 | `ENUM_ST_GNT` | CMO response release accepted | `ENUM_ST_IDLE` |
 | T34 | `ENUM_ST_GNT_WAIT` | matching release accepted | `ENUM_ST_IDLE` |
 
-All unspecified guards hold the current legal state in the full FSM. Reset enters `ENUM_ST_IDLE`; a phase-view entry is not a new hardware reset state. Invalid-encoding behavior follows the source and is not a normal software recovery path. / Điều kiện chưa thỏa giữ state theo FSM đầy đủ; điểm vào phase không phải reset state mới.
+All unspecified guards hold the current legal state in the full FSM. Reset enters `ENUM_ST_IDLE`; a phase-view entry is not a new hardware reset state. Invalid-encoding behavior follows the source and is not a normal software recovery path.
 
 #### HPD-PROBE
 
@@ -663,7 +1258,7 @@ Lookup and any required dirty writeback belong to PREPARE. Actual metadata chang
 | T14 | `ENUM_ST_ERR_RSP` | error response consumed; retain prepared context | `ENUM_ST_TERMINAL_WAIT` |
 | T15 | `ENUM_ST_TERMINAL_RSP` | terminal response consumed | `ENUM_ST_IDLE` |
 
-All unspecified guards hold the current legal state in the full FSM. Reset enters `ENUM_ST_IDLE`; a phase-view entry is not a new hardware reset state. Invalid-encoding behavior follows the source and is not a normal software recovery path. / Điều kiện chưa thỏa giữ state theo FSM đầy đủ; điểm vào phase không phải reset state mới.
+All unspecified guards hold the current legal state in the full FSM. Reset enters `ENUM_ST_IDLE`; a phase-view entry is not a new hardware reset state. Invalid-encoding behavior follows the source and is not a normal software recovery path.
 
 #### AXIL-REGBUS
 
@@ -684,7 +1279,7 @@ Independent AXI address/data/read queues are separate from this service FSM. Loc
 | T03 | `ENUM_ST_WR_REQ` | RegBus request and response ready | `ENUM_ST_IDLE` |
 | T04 | `ENUM_ST_RD_REQ` | RegBus request and response ready | `ENUM_ST_IDLE` |
 
-All unspecified guards hold the current legal state in the full FSM. Reset enters `ENUM_ST_IDLE`; a phase-view entry is not a new hardware reset state. Invalid-encoding behavior follows the source and is not a normal software recovery path. / Điều kiện chưa thỏa giữ state theo FSM đầy đủ; điểm vào phase không phải reset state mới.
+All unspecified guards hold the current legal state in the full FSM. Reset enters `ENUM_ST_IDLE`; a phase-view entry is not a new hardware reset state. Invalid-encoding behavior follows the source and is not a normal software recovery path.
 
 #### HPD-MISS-PERMISSION
 
@@ -707,7 +1302,7 @@ Native miss-request controller extended for permission-before-refill. The reques
 | T05 | `MISS_REQ_SEND` | mem_req_ready_i | `MISS_REQ_IDLE` |
 | T06 | `MISS_REQ_OWN_ERROR` | failed response consumed with last | `MISS_REQ_IDLE` |
 
-All unspecified guards hold the current legal state in the full FSM. Reset enters `MISS_REQ_IDLE`; a phase-view entry is not a new hardware reset state. Invalid-encoding behavior follows the source and is not a normal software recovery path. / Điều kiện chưa thỏa giữ state theo FSM đầy đủ; điểm vào phase không phải reset state mới.
+All unspecified guards hold the current legal state in the full FSM. Reset enters `MISS_REQ_IDLE`; a phase-view entry is not a new hardware reset state. Invalid-encoding behavior follows the source and is not a normal software recovery path.
 
 #### HPD-FLUSH-CAPTURE
 
@@ -726,7 +1321,7 @@ Native SRAM capture/sending FSM; returning to FLUSH_IDLE means payload capture i
 | T01 | `FLUSH_IDLE` | flush_alloc_i and flush_alloc_ready_o; read first word | `FLUSH_SEND` |
 | T02 | `FLUSH_SEND` | flush_resizer_wok and flush_eol | `FLUSH_IDLE` |
 
-All unspecified guards hold the current legal state in the full FSM. Reset enters `FLUSH_IDLE`; a phase-view entry is not a new hardware reset state. Invalid-encoding behavior follows the source and is not a normal software recovery path. / Điều kiện chưa thỏa giữ state theo FSM đầy đủ; điểm vào phase không phải reset state mới.
+All unspecified guards hold the current legal state in the full FSM. Reset enters `FLUSH_IDLE`; a phase-view entry is not a new hardware reset state. Invalid-encoding behavior follows the source and is not a normal software recovery path.
 
 #### CCU-LOOKUP-VICTIM
 
@@ -758,7 +1353,7 @@ Readable phase view of the same per-context CCU FSM, not an additional controlle
 | T31 | `ENUM_ST_DIR_CANCEL` | no reservation or matching CANCEL accepted | `ENUM_ST_GNT` |
 | T33 | `ENUM_ST_GNT` | CMO response release accepted | `ENUM_ST_IDLE` |
 
-All unspecified guards hold the current legal state in the full FSM. Reset enters `ENUM_ST_IDLE`; a phase-view entry is not a new hardware reset state. Invalid-encoding behavior follows the source and is not a normal software recovery path. / Điều kiện chưa thỏa giữ state theo FSM đầy đủ; điểm vào phase không phải reset state mới.
+All unspecified guards hold the current legal state in the full FSM. Reset enters `ENUM_ST_IDLE`; a phase-view entry is not a new hardware reset state. Invalid-encoding behavior follows the source and is not a normal software recovery path.
 
 #### CCU-PREPARE-CMO
 
@@ -782,7 +1377,7 @@ Readable phase view of the same per-context CCU FSM, not an additional controlle
 | T18 | `ENUM_ST_CMO_FINISH` | matching finish accepted; commit and no retained error | `ENUM_ST_COMMIT_START` |
 | T19 | `ENUM_ST_CMO_FINISH` | matching finish accepted; abort or retained error | `ENUM_ST_ABORT_START` |
 
-All unspecified guards hold the current legal state in the full FSM. Reset enters `ENUM_ST_IDLE`; a phase-view entry is not a new hardware reset state. Invalid-encoding behavior follows the source and is not a normal software recovery path. / Điều kiện chưa thỏa giữ state theo FSM đầy đủ; điểm vào phase không phải reset state mới.
+All unspecified guards hold the current legal state in the full FSM. Reset enters `ENUM_ST_IDLE`; a phase-view entry is not a new hardware reset state. Invalid-encoding behavior follows the source and is not a normal software recovery path.
 
 #### CCU-COMMIT-RELEASE
 
@@ -809,7 +1404,7 @@ Readable phase view of the same per-context CCU FSM, not an additional controlle
 | T33 | `ENUM_ST_GNT` | CMO response release accepted | `ENUM_ST_IDLE` |
 | T34 | `ENUM_ST_GNT_WAIT` | matching release accepted | `ENUM_ST_IDLE` |
 
-All unspecified guards hold the current legal state in the full FSM. Reset enters `ENUM_ST_IDLE`; a phase-view entry is not a new hardware reset state. Invalid-encoding behavior follows the source and is not a normal software recovery path. / Điều kiện chưa thỏa giữ state theo FSM đầy đủ; điểm vào phase không phải reset state mới.
+All unspecified guards hold the current legal state in the full FSM. Reset enters `ENUM_ST_IDLE`; a phase-view entry is not a new hardware reset state. Invalid-encoding behavior follows the source and is not a normal software recovery path.
 
 #### CCU-ABORT-RELEASE
 
@@ -835,7 +1430,7 @@ Readable phase view of the same per-context CCU FSM, not an additional controlle
 | T33 | `ENUM_ST_GNT` | CMO response release accepted | `ENUM_ST_IDLE` |
 | T34 | `ENUM_ST_GNT_WAIT` | matching release accepted | `ENUM_ST_IDLE` |
 
-All unspecified guards hold the current legal state in the full FSM. Reset enters `ENUM_ST_IDLE`; a phase-view entry is not a new hardware reset state. Invalid-encoding behavior follows the source and is not a normal software recovery path. / Điều kiện chưa thỏa giữ state theo FSM đầy đủ; điểm vào phase không phải reset state mới.
+All unspecified guards hold the current legal state in the full FSM. Reset enters `ENUM_ST_IDLE`; a phase-view entry is not a new hardware reset state. Invalid-encoding behavior follows the source and is not a normal software recovery path.
 
 ### 10.2 Operations
 
@@ -844,7 +1439,7 @@ All unspecified guards hold the current legal state in the full FSM. Reset enter
 | OP-001 | Cluster reset and boot | Stable cluster clock; reset controller releases reset | Active harts leave reset with unique zero-based IDs; software boot sequence is SoC-owned | No boot latency target specified |
 | OP-002 | Cacheable memory access | LLC ready; request addresses normal memory | Internal coherence, then private/shared cache or selected external profile services request | No numeric latency target |
 | OP-003 | Non-coherent peripheral access | Address decoded as device/MMIO region | AXI4 MMIO transaction and associated response | AXI backpressure permitted; no fixed latency |
-| OP-004 | External DMA shared-memory access in AXI profile | Software/SoC performs required cache maintenance | AXI4+ATOP memory traffic with no external snoop service | Correctness depends on system maintenance sequence |
+| OP-004 | External DMA shared-memory access in AXI profile | Software/SoC performs required cache maintenance | PULP AXI4 memory traffic with AWATOP extension with no external snoop service | Correctness depends on system maintenance sequence |
 | OP-005 | Future external coherent access | Future ACE profile approved and externally verified | ACE snoop/request/response path preserves latest permitted data | Deferred; not a current AXI-phase operation |
 | OP-006 | PMU event counting and snapshot | Event source is implemented; counter is enabled | Counter increments, snapshot freezes a consistent read image | One capture edge when the stored request is observed; software bus latency is variable |
 | OP-007 | LLC BIST and flush | Software uses LLC control target; no prohibited concurrent reconfiguration | Status reports busy/done/error; SPM remains disabled | BIST/flush duration depends on macro geometry |
@@ -870,7 +1465,7 @@ The current cluster keeps I-caches outside the coherence domain and applies MESI
 | Read miss, one or more clean holders have S/E | Probe only recorded holders with the transaction tag; E owner downgrades to S; S holders remain S. | Grant S permission after matching responses and COMMIT; the requester's HPDcache refills from current LLC data and then completes the CPU load. | Requester is recorded as a possible S holder at grant; existing holders S |
 | Read miss, a recorded holder has M | PREPARE the recorded owner. Owner writes the latest 16-byte line to LLC through its own AXI writeback path; after successful B response, COMMIT changes the owner M→S. The requester then refills from LLC through its normal HPDcache AXI path. | Grant S permission only after owner writeback and COMMIT ACK. The CPU load completes after the requester's refill; a probe arriving during refill waits for the same-line miss to stabilize. A B error fails PREPARE and triggers ABORT. | Requester is recorded as a possible S holder at grant; former M owner S |
 | Write miss / AMO miss | PREPARE and invalidate only the recorded holders other than the requester. An M holder first writes its latest line through its own AXI path. After all COMMIT ACKs, the requester receives M permission and refills through its normal HPDcache AXI path. | Grant unique permission only after successful owner writeback and matching invalidation COMMIT acknowledgements. A same-line probe waits for an admitted refill to stabilize; the CPU operation completes after refill. | Requester is recorded as a possible M holder at grant; all other holders I |
-| S-to-M upgrade / AMO hit in S | Invalidate only recorded holders other than the requester. DEC-038 retains the clean S copy while awaiting unique permission, then performs a preparatory refill; older probes may complete before that grant. | Grant unique ownership after all matching invalidation responses. Hold same-line serialization through refill/replay and the AMO update/response. | Requester M; all other holders I |
+| S-to-M upgrade / AMO hit in S | Invalidate only recorded holders other than the requester. DEC-038 retains the clean S copy while awaiting unique permission, then performs a preparatory refill; older probes may complete before that grant. DEC-046: a pending AMO takes atomic permission (and refuses probes of its line) only after an E or M grant; an S grant (preparatory refill) gives no permission, except to LR. The HPDcache RTAB fence stays asserted while an AMO, uncacheable or CMO entry is queued, so no younger same-line request links behind it. | Grant unique ownership after all matching invalidation responses. Hold same-line serialization through refill/replay and the AMO update/response. | Requester M; all other holders I |
 | E-to-M store | No peer probe. | Local state transition, then store commits. | Owner M |
 | Dirty M eviction / explicit clean-invalidate | Owner sends the full line to the LLC and invalidates only after LLC accepts the writeback; the matching directory holder bit is then cleared. | Two 64-bit data beats for the 16-byte line; external AXI writeback occurs if the LLC later evicts it. | Owner I; LLC has current data; directory no longer lists the owner |
 
@@ -878,7 +1473,7 @@ The local probe subset is limited to the read-sharing, unique-ownership/invalida
 
 ### 10.2.3 System-wide Zicbom maintenance
 
-The selected CVA6 configuration enables Zicbom. CBO operations shall not use HPDcache's local per-line CMO path because that path would bypass other L1 D-cache holders, the CCU directory, and dirty data in the LLC. CVA6 resolves privilege and CBIE behavior before a legal operation reaches the CMO controller; the cluster shall preserve the resolved operation. For enabled lower-privilege execution, CBIE=01 selects FLUSH behavior and CBIE=11 selects invalidate unless an enclosing privilege setting requires FLUSH; CBIE=00 disables the operation at that privilege level, and reserved encodings are not accepted as configuration. A true resolved invalidate locks and invalidates matching copies without writeback, so dirty data may be discarded; software must clean first when those bytes must be preserved. A resolved FLUSH follows the writeback path. RISC-V permits an implementation to flush instead of invalidating; this design selects true invalidation when the resolved operation is invalidate. RISC-V defines clean as transferring modified data to another cache or memory, flush as clean followed by invalidate, and invalidate as deallocating copies. CLEAN/FLUSH operations cover the coherent cache hierarchy to the common point used by non-coherent agents. The selected cluster treats external memory as that common point. [REF-012](#22-references-used-to-shape-this-specification)
+The selected CVA6 configuration enables Zicbom. CBO operations shall not use HPDcache's local per-line CMO path because that path would bypass other L1 D-cache holders, the CCU directory, and dirty data in the LLC. CVA6 resolves privilege and CBIE behavior before a legal operation reaches the CMO controller; the cluster shall preserve the resolved operation. For enabled lower-privilege execution, CBIE=01 selects FLUSH behavior and CBIE=11 selects invalidate unless an enclosing privilege setting requires FLUSH; CBIE=00 disables the operation at that privilege level, and reserved encodings are not accepted as configuration. A true resolved invalidate locks and invalidates matching copies without writeback, so dirty data may be discarded; software must clean first when those bytes must be preserved. A resolved FLUSH follows the writeback path. RISC-V permits an implementation to flush instead of invalidating; this design selects true invalidation when the resolved operation is invalidate. RISC-V defines clean as transferring modified data to another cache or memory, flush as clean followed by invalidate, and invalidate as deallocating copies. CLEAN/FLUSH operations cover the coherent cache hierarchy to the common point used by non-coherent agents. The selected cluster treats external memory as that common point. [REF-012](#22-references-used-to-shape-this-template)
 
 | Operation reaching the CMO controller | L1 D-cache action | LLC action | Completion condition |
 |---|---|---|---|
@@ -899,7 +1494,6 @@ FENCE.I failure is distinct from a CBO fault. Its success path waits only for L1
 
 **Directory correctness and geometry.** A directory lookup uses the physical cache-line address and returns a conservative holder bitmap. The directory is independent of and non-inclusive with the LLC. It has eight ways and four banks. The total set counts across all banks are 512 for two harts and 1,024 for four harts, giving 4,096 and 8,192 total entries; each bank therefore has 128 or 256 sets, respectively. The bank is selected by the two least-significant line-address bits; for a 16-byte line, `line_addr[1:0]` is physical-address `[5:4]` (not physical-address `[1:0]`). Each bank accepts at most one eligible lookup/update/cancel operation per cycle; different banks may progress concurrently, and same-bank conflicts serialize. Each bank uses round-robin arbitration across eligible transaction slots; a valid but ineligible slot does not consume a grant or hold the array port. Each set stores seven tree-PLRU bits, reset to zero; bit 0 selects the left child and bit 1 the right child on a victim walk. A successful committed lookup/allocation updates each traversed bit to point away from the accessed way. Select the lowest-index invalid way before replacement; for a full set, follow the seven bits from root to leaf. If that victim is locked/reserved or its holder transaction cannot obtain a context, keep the request pending and continue serving other eligible operations in the bank. The holder bitmap is set when a permission grant commits, so an admitted but incomplete refill is conservatively tracked as a possible holder; it is cleared only after the matching cache transition commits. A stale positive indication may cause an extra probe, but a false negative is forbidden. LLC eviction alone shall not invalidate a private D-cache line or remove its directory entry. On directory set replacement, the selected victim entry remains allocated while every recorded holder is prepared for invalidation, any M owner completes writeback through its AXI path, and all cache invalidations commit; only then may the directory reuse that way. Replacement shall not lose a holder or dirty data.
 
-**Tính đúng đắn và hình học directory.** Lookup dùng địa chỉ cache-line vật lý và trả bitmap holder theo hướng bảo thủ. Directory độc lập, không bao hàm trong LLC. Cấu hình có tám way và bốn bank. Tổng số set trên bốn bank là 512 ở cấu hình hai hart và 1.024 ở cấu hình bốn hart, tương ứng 4.096 và 8.192 entry; mỗi bank có 128 hoặc 256 set. Bank được chọn bằng hai bit thấp nhất của địa chỉ line; với line 16 byte, `line_addr[1:0] = physical_address[5:4]`, không phải bit địa chỉ vật lý `[1:0]`. Mỗi bank cấp tối đa một thao tác đủ điều kiện mỗi chu kỳ bằng bộ phân xử round-robin trên các slot transaction đang hoạt động; sau mỗi lần cấp, con trỏ chuyển sang slot kế tiếp. Các bank khác nhau có thể tiến song song, còn xung đột cùng bank được phân xử công bằng theo thứ tự vòng. Mỗi set lưu bảy bit tree-PLRU, khởi tạo bằng 0; khi lần theo cây chọn victim, bit 0 chọn nhánh trái và bit 1 chọn nhánh phải. Access/cấp phát đã commit cập nhật từng bit trên đường đi để trỏ ra xa way vừa truy cập. Trước khi dùng PLRU, chọn way invalid có index thấp nhất; nếu cả tám way hợp lệ thì lần theo bảy bit từ gốc tới lá. Nếu victim đang bị khóa/đặt trước hoặc chưa lấy được transaction context, request vẫn chờ và thao tác đủ điều kiện khác trong bank có thể tiếp tục. Bitmap holder chỉ được set khi cache grant commit và chỉ được clear sau khi transition cache tương ứng commit. Holder thừa có thể gây probe dư nhưng không được bỏ sót holder. LLC eviction không được invalidate D-cache riêng hoặc xóa entry directory. Khi thay set, giữ entry victim cho tới khi mọi holder được prepare để invalidate, dữ liệu M được LLC chấp nhận và mọi invalidate cache đã commit; sau đó mới tái sử dụng way. Không được làm mất holder hoặc dirty data khi thay thế.
 
 **Tagged concurrency.** The CCU shall maintain `PARA_COH_TXN_NUM` contexts, default 8 and legal from 2 through 16. The tag is the allocated context slot index; its width is `max(1, ceil(log2(PARA_COH_TXN_NUM)))`. A slot/tag cannot be reused until all responses from its prior use have drained. Every context tracks the physical line lock, requester, target-holder mask, prepare mask, commit/abort mask, dirty-owner writeback status, owner AXI B-response status, LLC/refill status, and completion/error status. The tag and target hart index associate each probe response. Internal tags are separate from external AXI IDs. Same-line requests serialize and re-check the directory after the prior transaction finishes. Independent lines may overlap subject to the four directory banks, cache resources, LLC, and AXI.
 
@@ -911,13 +1505,9 @@ FENCE.I failure is distinct from a CBO fault. Its success path waits only for L1
 
 **Reset and instruction visibility.** Reset clears coherence transient state but does not preserve dirty D-cache contents. If normal-memory contents must survive a warm cluster reset, software/SoC must quiesce the harts and complete cache clean/flush before asserting reset. I-cache lines are not probed. For self-modifying code, the writer publishes the new bytes, sends the platform-required inter-hart notification, and each executing hart performs `FENCE.I` before fetching the modified address, as required by the RISC-V software contract.
 
-Giao thức hiện tại chỉ coherence các D-cache; I-cache không nhận probe. Directory độc lập với LLC, có 8 way và 4 bank: 4.096 entry cho hai hart, 8.192 entry cho bốn hart. Mỗi bank xử lý tối đa một thao tác lookup/update mỗi chu kỳ; bank khác có thể tiến đồng thời. `PARA_COH_TXN_NUM` mặc định 8, cho phép 2–16 context; tag là chỉ số slot và không được tái sử dụng khi response cũ chưa kết thúc. PREPARE khóa line tại cache đích, chờ miss/refill cùng line hoàn tất và trả MESI hiện tại cùng status, không đổi trạng thái stable. Nếu line ở M, owner giữ M và line lock, ghi đủ 16 byte qua AXI writeback path HPDcache hiện có, rồi chỉ trả PREPARE completion sau B response tương ứng; probe không mang payload dữ liệu. Sau khi mọi PREPARE và writeback cần thiết thành công, COMMIT yêu cầu cache chuyển sang S hoặc I; cache trả ACK sau khi áp dụng. CCU chỉ commit directory, cấp quyền requester và nhả line lock sau mọi COMMIT ACK. Lỗi trước COMMIT phát ABORT và đợi toàn bộ ACK; cache giữ nguyên state trước transaction. Không phase nào có timeout ACK. Trong lúc chờ PREPARE ACK, CCU giữ line lock và transaction slot, không đổi directory, không gửi COMMIT và không cấp quyền requester. Lỗi trước COMMIT gửi ABORT tới mọi cache đích; CCU tiếp tục giữ lock và slot đến khi đủ ABORT ACK. Cache nhận ABORT nhả lock cục bộ và giữ stable MESI cũ. Sau khi COMMIT bắt đầu, không rollback; CCU giữ lock/slot, không đổi directory và không cấp quyền requester đến khi đủ COMMIT ACK. Thiếu ACK ở PREPARE, COMMIT hoặc ABORT có thể làm line bị chặn vô thời hạn. Line khác chỉ tiến khi dùng slot và tài nguyên độc lập. COMMIT lặp cùng tag là idempotent. Reset xóa valid state của cache riêng và directory.
-
-Directory giữ bitmap holder bảo thủ theo physical cache line: bit thừa chỉ tạo thêm probe; thiếu holder bị cấm. Directory không inclusive với LLC; LLC eviction không xóa directory entry hoặc invalidate line ở L1. Khi thay entry directory đang có holder, phải PREPARE invalidate holder, ghi dữ liệu M cần thiết về LLC, COMMIT invalidation và chỉ sau đó mới dùng lại way. Probe response ghép theo (tag, hart index). Request cùng line bị khóa; line khác có thể tiến nếu không tranh chấp bank, cache array, MSHR, LLC hoặc AXI. Cấu hình không cam kết IPC hoặc latency cố định. Reset xóa valid state; muốn giữ memory qua reset, SoC/software phải quiesce và clean/flush trước. Với mã tự sửa đổi, phần mềm thông báo các hart liên quan và chạy `FENCE.I` trước khi thực thi code mới.
 
 **Example 1 — Missing COMMIT ACK.** In a four-hart build, harts 0 and 1 hold line X in S while hart 2 requests M. PREPARE succeeds for both holders. The CCU sends COMMIT(I); hart 0 acknowledges and hart 1 does not. The directory remains conservatively `{hart 0, hart 1}`, hart 2 receives no grant, and X's lock and transaction slot remain allocated. A request for line Y may complete through a different free slot if directory, cache, LLC, and AXI resources do not conflict. Reset clears cache and directory valid state and releases X's context; software must clean/flush before a warm reset if dirty contents must survive.
 
-**Ví dụ 1 — Thiếu COMMIT ACK.** Trong cấu hình bốn hart, hart 0 và hart 1 giữ line X ở S, còn hart 2 yêu cầu M. PREPARE thành công với cả hai holder. CCU gửi COMMIT(I); hart 0 ACK nhưng hart 1 không ACK. Directory vẫn giữ bitmap bảo thủ `{hart 0, hart 1}`, hart 2 không được cấp quyền, còn line lock và transaction slot của X vẫn được giữ. Request line Y có thể hoàn tất qua slot trống khác nếu không xung đột tài nguyên directory, cache, LLC và AXI. Reset xóa valid state cache/directory và giải phóng context của X; software phải clean/flush trước warm reset nếu cần giữ dữ liệu dirty.
 
 ### 10.2.2 Coherence performance and IPC evaluation
 
@@ -939,17 +1529,13 @@ IPC is measured, not inferred: `IPC_hart = retired instructions for hart h / ela
 
 The selected upstream config sets `SuperscalarEn=0` and declares `NrCommitPorts=2`; the latter alone is not a dual-issue or 2-IPC guarantee. No IPC target or percentage improvement is claimed until an executable build, representative benchmark, and timing/memory model are available. PMU counters can support this evaluation only after the event dictionary is pinned; simulation traces and independent performance models remain required meanwhile.
 
-IPC phải được đo: `IPC_hart = số lệnh đã retire của hart h / tổng chu kỳ clock`; `IPC_cluster = tổng lệnh retire của các hart hoạt động / cùng số chu kỳ`. Báo cáo thêm CPI từng hart, throughput workload, nhóm hit/miss D-cache, số lần S-to-M, số sharer mỗi transaction, probe wait, directory stall, mức sử dụng transaction table, số dirty-owner writeback và thời gian đợi B response, LLC hit/miss, AXI wait và số chu kỳ hai transaction line khác nhau cùng tiến triển. So sánh 2/4 hart với cùng chương trình, compiler, cache, mô hình AXI/DRAM, clock và thời gian chạy. Bao gồm private read nóng, cold miss, LLC hit/miss, producer-consumer, read-mostly, write ping-pong/false sharing, dirty owner và backpressure ngẫu nhiên. Báo cáo IPC từng hart và toàn cluster; không giả định IPC tăng tuyến tính theo số hart.
 
-Trong cấu hình upstream đã chọn, `SuperscalarEn=0` và `NrCommitPorts=2`; không thể suy ra dual-issue hay 2 IPC chỉ từ `NrCommitPorts`. Chưa có mục tiêu IPC hoặc phần trăm tăng hiệu năng; cần build chạy được, benchmark đại diện và mô hình timing/bộ nhớ. PMU chỉ hỗ trợ đo sau khi chốt event dictionary; trước đó vẫn cần trace mô phỏng và performance model độc lập.
+### 10.2.4 Deadlock avoidance, forward progress, and worst-case stalls
 
-### 10.2.4 Deadlock avoidance, forward progress, and worst-case stalls / Tránh deadlock, bảo đảm tiến triển và stall xấu nhất
-
-#### Directory reservation escape / Lối thoát reservation directory
+#### Directory reservation escape
 
 The reviewed CC-01 failure is a circular wait, not ordinary same-set serialization. Transaction T2 misses in a set and reserves it. T1 had already hit another line in that set and then presents an update. T1's update is correctly ineligible while T2 owns the reservation, but the old channel-priority logic lets the blocked T1 update suppress T2's valid cancel. T1 holds `VALID` until `READY`, so neither transaction can release the set.
 
-Lỗi CC-01 trong bản review là chờ vòng, không phải tuần tự hóa cùng set thông thường. T2 miss và đặt reservation trên một set. T1 đã hit một line khác trong set rồi gửi update. Update của T1 không đủ điều kiện khi T2 giữ reservation; tuy nhiên logic ưu tiên channel cũ để update bị chặn của T1 ngăn cancel hợp lệ của T2. T1 phải giữ `VALID` đến khi có `READY`, nên cả hai giao dịch đều không thể nhả set.
 
 The directory contract in this revision is:
 
@@ -959,15 +1545,8 @@ The directory contract in this revision is:
 4. Each bank accepts at most one operation per cycle. Round-robin arbitration advances only after an accepted operation and rotates across eligible transaction slots. A continuously eligible slot is selected within one full round if the bank continues accepting one operation per cycle. The arbitration guarantee does not cover a held downstream response or reset.
 5. A producer shall assert exactly one terminal action for a reservation. If the owner presents `UPDATE` and `CANCEL` for the same reservation concurrently, this is a protocol fault: preserve directory state and reservation, latch the diagnostic, and require system-level recovery; do not guess commit versus abort.
 
-Hợp đồng directory trong phiên bản này:
 
-1. Xác định điều kiện hợp lệ dựa trên bank, set, tag, chủ reservation và loại thao tác **trước** khi chọn request. Request không hợp lệ có thể vẫn giữ `VALID`, nhưng không được chiếm grant đã đăng ký, dùng lượt phân xử hoặc giữ cổng mảng directory.
-2. Khi tag T2 giữ reservation của một set, lookup/update từ tag khác vào set đó không hợp lệ. Request sang set khác vẫn đủ điều kiện, theo giới hạn một thao tác mỗi chu kỳ của bank.
-3. `UPDATE` hoặc `CANCEL` trước COMMIT của đúng chủ reservation là thao tác kết thúc và phải được phục vụ độc lập với update bị chặn của transaction khác. Nhận `CANCEL(T2)` chỉ xóa reservation T2, không đổi MESI hay holder. Update T1 vẫn giữ VALID và có thể được nhận sau khi reservation nhả. `UPDATE(T2)` commit trạng thái directory rồi nhả reservation.
-4. Mỗi bank nhận tối đa một thao tác mỗi chu kỳ. Round-robin chỉ tăng sau thao tác được nhận và quay vòng qua các slot đủ điều kiện. Slot liên tục đủ điều kiện được chọn trong một vòng nếu bank liên tục nhận một thao tác mỗi chu kỳ. Bảo đảm phân xử không áp dụng khi response phía sau bị giữ hoặc reset đang hoạt động.
-5. Producer chỉ được phát một terminal action cho mỗi reservation. Nếu owner đồng thời phát `UPDATE` và `CANCEL` cùng reservation, đây là lỗi giao thức: giữ nguyên directory và reservation, chốt diagnostic, chờ recovery cấp hệ thống; không tự đoán commit hay abort.
-
-#### Resource ordering and wait-for graph / Thứ tự tài nguyên và đồ thị chờ
+#### Resource ordering and wait-for graph
 
 | Resource | May remain held while waiting | Must be released or independently serviceable | Deadlock control |
 |---|---|---|---|
@@ -978,11 +1557,33 @@ Hợp đồng directory trong phiên bản này:
 | AXI ID and writeback state | Yes, until the matching B response | AXI B/R response routing remains independent of new AW/AR arbitration | Keep the owner M and line lock until response; do not hold directory/cache-array ports over B wait |
 | Directory replacement victim | Yes, while holders are resolved | Bank array port is released between lookup/update operations | Victim stays allocated until all holder transitions and dirty data complete |
 
-Forward-progress claims are conditional. Assume reset is deasserted, the clock runs, each cache eventually services a queued probe, AXI sources eventually see `READY`, and every accepted AXI transaction eventually receives its response. Under these assumptions and fair arbitration, the design shall not create an internal resource wait cycle or indefinitely starve an eligible request. The specification does **not** give a finite latency bound. If a PREPARE/COMMIT/ABORT ACK or AXI response never arrives, DEC-018 intentionally retains the transaction slot and line lock without timeout. Once all 8 default (or 16 maximum) contexts are occupied, new CCU-dependent misses/CMOs can stop cluster-wide; independent L1 hits may continue where no line/cache resource conflict exists. Reset clears cache valid state and can discard dirty data, so reset is not a safe data-preserving recovery for a warm system.
+#### Atomic probe-service claim
 
-Các cam kết tiến triển có điều kiện. Giả định reset đã nhả, clock chạy, mỗi cache xử lý probe đang chờ, nguồn AXI cuối cùng thấy `READY` và mỗi AXI transaction được chấp nhận cuối cùng có response. Với các giả định đó và phân xử công bằng, thiết kế không tạo vòng chờ tài nguyên nội bộ hoặc bỏ đói request đủ điều kiện vô thời hạn. Đặc tả **không** cam kết latency tối đa. Nếu một ACK PREPARE/COMMIT/ABORT hoặc AXI response không bao giờ đến, DEC-018 vẫn giữ transaction slot và line lock, không timeout. Khi cả 8 context mặc định (hoặc 16 context tối đa) đều bị chiếm, miss/CMO cần CCU mới có thể dừng trên toàn cluster; L1 hit độc lập vẫn có thể chạy nếu không xung đột line/cache. Reset xóa valid state cache và có thể làm mất dữ liệu dirty, vì vậy reset không phải cách recovery an toàn để bảo toàn dữ liệu khi hệ thống đang chạy.
+Before a PREPARE request is visible to any D-cache, the scheduler examines the full expected-hart mask. It grants one context only if all target service slots are free (or already reserved by the same tag). On the grant edge it writes the same tag into every target hart's phase-owner slot. If even one target is busy, it reserves none; the transaction keeps its own CCU context and line lock but cannot hold a partial set of hart slots. A round-robin context pointer chooses among currently claim-eligible contexts and advances only on a successful all-target claim.
 
-#### Worst-case performance envelope / Giới hạn hiệu năng trong trường hợp xấu nhất
+After the claim, each target cache may accept and answer its PREPARE independently. The scheduler preserves the same per-hart owner tag through COMMIT or ABORT, and releases a hart slot only after the matching successful terminal response. A missing ACK retains the claim without timeout under DEC-018. A newly granted disjoint target mask may overlap an existing phase; this rule does not serialize unrelated caches globally.
+
+```mermaid
+flowchart LR
+  A[PREPARE context T<br/>expected hart mask M] --> B{Every slot in M free?}
+  B -->|No| C[Wait with no per-hart slot held]
+  C --> B
+  B -->|Yes| D[One edge: reserve all slots in M with tag T]
+  D --> E[Issue tagged PREPARE probes]
+  E --> F[Collect all expected ACKs]
+  F --> G{Successful terminal response?}
+  G -->|COMMIT or ABORT succeeds| H[Release all slots owned by T]
+  G -->|ACK missing or terminal error| I[Retain owner slots; no timeout]
+```
+
+
+Example: T0 and T1 both target `{H2,H3}`. If T0 wins, both H2 and H3 reserve T0 in one edge and issue only T0's PREPARE. T1 owns neither slot until T0's terminal response succeeds; it then claims both slots and proceeds. The split ownership `{H2:T0,H3:T1}` is forbidden. For disjoint masks `{H0}` and `{H3}`, claims may be granted on consecutive cycles and both phases can then progress concurrently.
+
+
+Forward-progress claims are conditional. Assume reset is deasserted, the clock runs, each cache eventually services a queued probe, AXI sources eventually see `READY`, and every accepted AXI transaction eventually receives its response. Under these assumptions and fair arbitration, atomic all-target claiming prevents a transaction from holding only part of its expected per-hart probe slots; the design shall not create a circular wait through those slots or indefinitely starve a continuously claim-eligible context. A context blocked by an occupied target set holds no per-hart slot. This does not remove waits caused by a missing ACK/AXI response: DEC-018 intentionally retains an already granted claim, transaction context, and line lock without timeout. The specification does **not** give a finite latency bound. Once all 8 default (or 16 maximum) contexts are occupied, new CCU-dependent misses/CMOs can stop cluster-wide; independent L1 hits may continue where no line/cache resource conflict exists. Reset clears cache valid state and can discard dirty data, so reset is not a safe data-preserving recovery for a warm system.
+
+
+#### Worst-case performance envelope
 
 | Worst case | Work serialized or contended | Performance consequence and bound |
 |---|---|---|
@@ -990,6 +1591,7 @@ Các cam kết tiến triển có điều kiện. Giả định reset đã nhả
 | Same-line write ping-pong or false sharing | Each alternating writer must obtain M and invalidate other holders; 16-byte lines make unrelated words in one line contend. | Stores that would otherwise hit locally can become serial coherence transactions. Throughput can approach one ownership transfer at a time for that line; dependent CPU progress waits for the grant/refill. |
 | Same directory set conflict | The set reservation lasts for the complete coherence transaction, including holder probes, dirty-owner B wait, and terminal directory update/cancel. All other lookups to that set stall even when they target another way/tag. | This is intentional set-level serialization and can dominate adversarial conflict traffic. The escape rule prevents deadlock but does not make same-set requests parallel. Other sets may use the bank one accepted operation per cycle. |
 | Same-bank contention | One directory operation is accepted per bank per cycle. Up to 8 contexts by default (16 maximum) can map to one bank. | Fair service takes a full arbitration round for a continuously eligible slot when the bank accepts every cycle; each remote probe/AXI stall extends wall-clock wait beyond that arbitration bound. Other banks can progress independently only if downstream resources are free. |
+| Overlapping multi-hart probe claims | Contexts with intersecting expected-hart masks contend for the same per-hart service slots; one new all-target claim is granted per cycle. | A waiting context holds none of its target slots. After a claim, cache probes run concurrently across the claimed harts; disjoint masks can be claimed in successive cycles and overlap. A retained terminal ACK can still stall conflicting masks indefinitely under DEC-018. |
 | One cache receives many probes | Queue depth is up to `PARA_COH_TXN_NUM`; service is one probe at a time per cache. | A slow first probe causes head-of-line delay for later probes to that cache. Other harts/caches and unrelated L1 hits can continue only when their ports/MSHRs are independent. |
 | All transaction contexts occupied | Default 8 and maximum 16 global contexts are shared by all harts; there is no fixed per-hart quota. | New misses, upgrades, directory replacements, and CMOs requiring a context wait. A stalled ACK can retain a slot forever by design; a high slot count increases concurrency capacity but does not guarantee higher IPC. |
 | Full 8-way directory set with live holders | PLRU selects a victim; the entry cannot be reused until each recorded holder is invalidated and any M-owner data reaches LLC. | Directory replacement latency includes probe service and dirty-owner writeback; repeated address conflicts can cause extra back-invalidation and refills. Stale-positive holders add probes but preserve correctness. |
@@ -998,19 +1600,14 @@ Các cam kết tiến triển có điều kiện. Giả định reset đã nhả
 
 For measurement, decompose a miss as `T_miss = T_dir_wait + T_probe_queue + T_prepare + T_owner_W/B + T_commit + T_LLC + T_external (if LLC miss) + T_refill`. `T_prepare` and peer probes may overlap across different harts; the slowest required target controls that phase, while requests queued to the same cache serialize. The equation is an accounting model, not a cycle-accurate additive timing contract. For external data width W and clock frequency f, the peak data-channel rate is `W/8 × f` bytes/s per direction. Effective bandwidth is bounded by the minimum of that bus peak, LLC/cache service rate, outstanding-line capacity divided by average latency, and the SoC memory target. A 64-bit bus carries at most 8 data bytes per beat; read and write channels may progress concurrently, but this does not imply a guaranteed aggregate rate.
 
-Để đo, phân rã miss theo `T_miss = T_dir_wait + T_probe_queue + T_prepare + T_owner_W/B + T_commit + T_LLC + T_external (nếu LLC miss) + T_refill`. Probe tới các hart khác nhau có thể chạy song song; target chậm nhất quyết định hoàn tất phase, còn probe trong cùng cache phải tuần tự. Công thức là mô hình phân tích, không phải hợp đồng cộng chu kỳ chính xác. Với độ rộng dữ liệu ngoài W và tần số f, tốc độ dữ liệu đỉnh là `W/8 × f` byte/s cho mỗi chiều. Băng thông thực tế bị giới hạn bởi giá trị nhỏ nhất giữa bus peak, tốc độ phục vụ LLC/cache, số line outstanding chia latency trung bình và khả năng memory của SoC. Bus 64-bit mang tối đa 8 byte dữ liệu mỗi beat; kênh đọc/ghi có thể hoạt động đồng thời nhưng không đảm bảo thông lượng tổng cụ thể.
 
 ### 10.3 Waveform plan
 
-The user approved the original 14 waveform topics. WF-015 shows a missing COMMIT ACK; WF-016 and WF-017 add missing PREPARE and ABORT ACKs under the same all-phase no-timeout contract. WF-018 shows a writeback-required CBO error, ABORT completion, and the precise trap before retirement. WF-019 shows a successful local FENCE.I and a separate failed FENCE.I with ABORT, preserved M/directory state, and the custom cause-24 trap. WF-020 illustrates the CC-01 escape: an ineligible T1 update remains VALID, the reservation owner's T2 cancel handshakes, the reservation clears, and T1 update can then be accepted. WF-020 shows only the ordering contract; its spacing is not a cycle-latency guarantee. These diagrams show the retained lock/slot, unchanged directory and requester grant during missing-ACK waits, independent-line progress only when resources permit, and reset recovery. Probe and retirement-control names are logical aliases unless a figure points to an existing RTL port.
+The user approved the original 14 waveform topics. WF-015 shows a missing COMMIT ACK; WF-016 and WF-017 add missing PREPARE and ABORT ACKs under the same all-phase no-timeout contract. WF-018 shows a writeback-required CBO error, ABORT completion, and the precise trap before retirement. WF-019 shows a successful local FENCE.I and a separate failed FENCE.I with ABORT, preserved M/directory state, and the custom cause-24 trap. WF-020 illustrates the CC-01 escape: an ineligible T1 update remains VALID, the reservation owner's T2 cancel handshakes, the reservation clears, and T1 update can then be accepted. WF-020 shows only the ordering contract; its spacing is not a cycle-latency guarantee. WF-022 gives a close-up of the same escape with abstract event phases. WF-023 illustrates atomic all-target probe-slot claiming for two competing multi-hart contexts; it specifies event ordering but no fixed latency. These diagrams show the retained lock/slot, unchanged directory and requester grant during missing-ACK waits, independent-line progress only when resources permit, and reset recovery. Probe and retirement-control names are logical aliases unless a figure points to an existing RTL port.
 
-Người dùng đã duyệt 14 chủ đề waveform. WF-015 mô tả thiếu COMMIT ACK; WF-016/017 bổ sung thiếu PREPARE/ABORT ACK theo cùng hợp đồng không timeout ở mọi phase. Các hình thể hiện lock/slot được giữ, directory và quyền requester không đổi, line độc lập chỉ tiến khi tài nguyên cho phép, và reset để recovery. WF-002 mô tả tra directory, gửi probe tới holder, ghép trạng thái theo tag giao dịch và hart index, owner writeback qua AXI hiện có (hai beat W 64-bit), nhận B response, COMMIT, cập nhật directory rồi cấp shared. Tín hiệu probe là alias logic, không phải port RTL. Trình tự chỉ giải thích thứ tự; khoảng cách chu kỳ là minh họa, không cam kết latency/throughput.
-
-WF-020 minh họa lối thoát CC-01: update T1 không đủ điều kiện vẫn giữ VALID; cancel T2 của chủ reservation bắt tay; reservation được xóa; sau đó update T1 có thể được nhận. Hình chỉ thể hiện thứ tự hợp đồng, không cam kết latency theo chu kỳ.
 
 WF-022 gives a close-up of the same escape: T1 holds UPDATE VALID while READY is low; reservation-owner T2 CANCEL handshakes independently; the reservation releases; then T1 UPDATE handshakes. Each column is an abstract event phase, not a clock cycle.
 
-WF-022 là sơ đồ cận cảnh cùng luồng: UPDATE của T1 giữ VALID khi READY thấp; CANCEL của T2, chủ reservation, bắt tay độc lập; reservation được giải phóng; sau đó UPDATE T1 bắt tay. Các cột là pha sự kiện theo thứ tự, không phải chu kỳ clock hay cam kết latency.
 
 | Waveform ID | Function / operation | Scenario | Signals shown | Figure | Confirmed by user |
 |---|---|---|---|---|---|
@@ -1036,12 +1633,11 @@ WF-022 là sơ đồ cận cảnh cùng luồng: UPDATE của T1 giữ VALID khi
 | WF-020 | REQ-MEM-019 directory reservation cancel escape | T2 owns a set reservation; T1 update is held valid but ineligible; T2 cancel is accepted despite T1; reservation clears; T1 update then handshakes | Existing bank-0 ports `i_update_valid[0]`, `o_update_ready[0]`, `i_cancel_valid[0]`, `o_cancel_ready[0]`; `reg_dir_resv_valid` is an internal state label | ![WF-020](figures/waveforms/WF-020_directory_cancel_escape.svg); [WaveJSON source](figures/waveforms/WF-020_directory_cancel_escape.json); [offline waveform viewer](figures/waveforms/WF-020_directory_cancel_escape.html) |User selected signal set A; abstract event spacing, no cycle-latency claim; RTL unchanged|
 | WF-021 | REQ-IF-011 address-region classification | Separate illustrative requests show cacheable, normal-uncached, MMIO, and unmapped destinations; the last is rejected locally | Physical address/class, route class, memory-bypass request, MMIO request, local access-error response | ![WF-021](figures/waveforms/WF-021_address_region_routing.svg); [WaveJSON source](figures/waveforms/WF-021_address_region_routing.json); [offline viewer](figures/waveforms/WF-021_address_region_routing.html) |Approved 2026-11-14; independent cases, not cycles; standalone route leaf exists, full-core wiring remains pending|
 | WF-022 | REQ-MEM-019 directory reservation cancel escape detail | T1 UPDATE remains valid but ineligible; reservation-owner T2 CANCEL handshakes; reservation releases; T1 UPDATE handshakes | Existing bank-0 ports `i_update_valid[0]`, `o_update_ready[0]`, `i_cancel_valid[0]`, `o_cancel_ready[0]`; internal `reg_dir_resv_valid` | ![WF-022](figures/waveforms/WF-022_directory_cancel_escape_detail.svg); [WaveJSON source](figures/waveforms/WF-022_directory_cancel_escape_detail.json); [offline viewer](figures/waveforms/WF-022_directory_cancel_escape_detail.html) |Approved 2026-11-14; columns are abstract event phases, not clock cycles or latency promises|
+| WF-023 | REQ-MEM-024 atomic probe-service claim | Competing T0/T1 contexts both target H2/H3; T0 atomically claims both slots, completes PREPARE and terminal response, then T1 claims both and proceeds | Abstract claim event/tag/mask, per-hart PREPARE tag, terminal release; event labels are not additional RTL ports | ![WF-023](figures/waveforms/WF-023_probe_atomic_claim.svg); [WaveJSON source](figures/waveforms/WF-023_probe_atomic_claim.json) |DEC-043; abstract event phases, no cycle-latency claim|
 
 ### 10.4 Timing boundaries
 
 No deterministic AXI/ACE latency or maximum snoop response time is claimed. For internal PREPARE, COMMIT, and ABORT, the cluster has no ACK timeout: a missing ACK keeps the line lock and transaction slot allocated until all required ACKs arrive or cluster reset occurs; no requester grant or directory update occurs while waiting. A system that requires a bounded timeout must define timeout ownership, termination response, and data-safety behavior in a future approved interface contract. AXI/ACE backpressure remains legal for an unbounded interval unless the integration system states otherwise.
-
-Không cam kết latency AXI/ACE cố định hoặc thời gian snoop tối đa. PREPARE, COMMIT và ABORT nội bộ đều không có timeout ACK: nếu thiếu ACK, line lock và transaction slot được giữ đến khi nhận đủ ACK hoặc reset cluster; trong thời gian chờ không cập nhật directory và không cấp quyền requester. Backpressure AXI/ACE được phép kéo dài nếu hợp đồng tích hợp không quy định giới hạn.
 
 
 ### 10.5 End-to-end working flows and storage ownership
@@ -1055,7 +1651,6 @@ Không cam kết latency AXI/ACE cố định hoặc thời gian snoop tối đa
 5. COMMIT publishes permitted state and holder changes only after all required successful observations. ABORT preserves the old recoverable state. A requester grant uses retained request identity.
 6. After permission, native refill writes data and then valid/exclusive metadata only under the error contract. An unsuccessful refill may leave a conservative extra directory holder; a later valid PREPARE-I reconciles it without creating a cache line.
 
-Cache hit không có nghĩa luôn chạy song song với probe: CPU hit khác line chỉ tiếp tục nếu không tranh chấp tag/data array, replay, refill hoặc flush. Miss có thể chờ ownership và dữ liệu owner trước khi bắt đầu refill. Không dùng số transaction context để suy ra IPC tăng tương ứng.
 
 #### 10.5.2 Ordinary eviction and asynchronous fatal error
 
@@ -1084,7 +1679,7 @@ Cache hit không có nghĩa luôn chạy song song với probe: CPU hit khác li
 
 #### 10.5.5 Atomic execution and reservation
 
-Cached AMO/LR-SC executes in native L1 with CCU-protected ownership/reservation semantics. A shared LR does not acquire permanent write ownership; SC/AMO must obtain the required exclusive permission and preserve reservation/probe interactions. The result is the old value or architectural SC success/failure, not an arbitrary AXI response. Cached tests cannot qualify normal-uncached atomics: the latter retain the approved AXI4+ATOP/locking transport and require a SoC atomic-capable target. A response filter that returns SLVERR is not an atomic implementation.
+Cached AMO/LR-SC executes in native L1 with CCU-protected ownership/reservation semantics. A shared LR does not acquire permanent write ownership; SC/AMO must obtain the required exclusive permission and preserve reservation/probe interactions. The result is the old value or architectural SC success/failure, not an arbitrary AXI response. Cached tests cannot qualify normal-uncached atomics: the latter retain the approved PULP AXI4 interface with AWATOP for AMOs and exclusive signaling for LR/SC and require a SoC atomic-capable target. A response filter that returns SLVERR is not an atomic implementation.
 
 #### 10.5.6 Directory replacement and escape progress
 
@@ -1106,10 +1701,6 @@ Native event expressions retain their real units. Per-hart indicators are summed
 | First-fatal record | Valid, payload and multiple | First event captures; later events set multiple; reset clears | No software-clear transition |
 
 These are stateful contracts even when there is no enum variable. They are not new RTL modules or invented state names. Native optional ECC/scrub, MMU, FPU and protocol helper FSMs retain their source-owned behavior; conditional branch qualification remains a Section 15 integration task.
-
-Các lifecycle trên có trạng thái lưu giữ dù không dùng enum. Không tạo state giả để làm sơ đồ. Các nhánh native tùy chọn phải được verify theo cấu hình thực, không mặc nhiên PASS vì file được compile.
-
-
 
 
 ## 11. Register and programming model
@@ -1156,7 +1747,7 @@ flowchart TD
 | S04 | Configure observation | O | AXI4-Lite writes before measurement | `pmu_evt[k].event_id`, `.scope`, `.en`; `irq_en.overflow_en` | Select implemented source/scope and enable intended counters/overflow masks |
 | S05 | Run software | M | Boot input and native instruction execution | N/A: not a CSR-controlled hart-start mechanism | Execute the workload on zero-based active harts with shared PMA/router regions |
 | S06 | Select snapshot | O | Software branch if readout needed | N/A: decision | Choose a coherent snapshot rather than assuming low-read capture |
-| S07 | Snapshot | O | AXI4-Lite command and polling | Write `pmu_ctrl.snapshot_req`; poll `.snapshot_done`; W1C done as required before a new command | Capture one consistent bank; never accept an old sticky done as new completion |
+| S07 | Snapshot | O | AXI4-Lite command and polling | W1C `pmu_ctrl.snapshot_done` before each new `snapshot_req`; poll `.snapshot_done` after the request | Capture one consistent bank; a new request does not clear an old sticky done |
 | S08 | Read snapshot | O | AXI4-Lite reads | `pmu_count_lo[k].value`, `pmu_count_hi[k].value` | Reconstruct the captured value; high reads are zero for 32-bit counter profile |
 | S09 | Test overflow | O | `o_int_pmu` and software status | Read `irq_sts.overflow_pending` | Determine whether an enabled overflow cause needs handling |
 | S10 | Clear handled overflow | O | AXI4-Lite read/write | Read `irq_raw.overflow`; W1C handled bits | Respect hardware-first collision priority; do not clear unhandled causes blindly |
@@ -1164,7 +1755,6 @@ flowchart TD
 | S12 | Preserve diagnostics and recover | O | AXI4-Lite read plus SoC reset policy, only if fatal | Read `cpucl_fault_sts.value`, `cpucl_fault_info.value`, `cpucl_fault_lo.value`, `cpucl_fault_hi.value`; no record clear command | Record first source/address/response and hart-valid; coordinate platform recovery instead of retrying retained cache state |
 | S13 | Continue or stop | M | Software execution/platform control | N/A: processor operation | Continue only when the selected path permits; fatal recovery is not transparent workload continuation |
 
-VI: Dùng đúng field workbook; snapshot là lệnh riêng, done sticky cần phân biệt lệnh cũ/mới. Fault fatal chỉ phục hồi theo reset của SoC, không phải W1C. Trình tự phần mềm là hợp đồng mong muốn; PMU và native LLC service còn cần verify đầu-cuối.
 
 ### 11.3 Field connections and storage ownership
 
@@ -1172,7 +1762,7 @@ VI: Dùng đúng field workbook; snapshot là lệnh riêng, done sticky cần p
 |---|---|---|
 | `pmu_evt[k].event_id`, `.scope`, `.en` | Event selector and counter bank | Program the catalog/scope before measurement; invalid source/scope counts zero |
 | `pmu_ctrl.snapshot_req` | Snapshot capture and hardware clear | Stored command is cleared by hardware at capture; no read-triggered snapshot |
-| `pmu_ctrl.snapshot_done` | Snapshot hardware set and software W1C | Current RTL leaves done sticky until W1C; clear old done before issuing another command; workbook auto-clear wording is OPEN-PMU-DONE |
+| `pmu_ctrl.snapshot_done` | Snapshot hardware set and software W1C | Done remains sticky until W1C or reset; software clears old done before issuing another command; a request does not auto-clear done |
 | `pmu_count_lo[k].value`, `pmu_count_hi[k].value` | Snapshot bank RO data | Both words observe one captured bank; high word is zero in 32-bit profile |
 | `irq_en.overflow_en` | IRQ masking | Mask raw causes to derive pending/aggregate level |
 | `irq_raw.overflow` | Counter overflow hardware update and software W1C | Hardware update wins according to the generated full-field priority |
@@ -1185,8 +1775,6 @@ There is no generated irq_inj register in this workbook. Do not describe one as 
 ### 11.4 Access and update behavior
 
 Mapped aligned generated-CSR accesses return OKAY; writes to RO data are ignored under the generator policy. Misaligned accesses return SLVERR without field side effects. Reserved/unmapped accesses return DECERR; reads return zero, writes have no side effects. Zero strobes do not modify fields. AW/W and reads are queued separately, and B/R remain stable until accepted. Hardware clear wins for the snapshot request; hardware update wins for generated W1C status. Native LLC service has its own decoded legal offsets and rejects prohibited writes, including runtime SPM controls. No fixed software-visible wait count is promised.
-
-VI: Dùng tên field thực trong workbook, không tự thêm prefix hoặc irq_inj. RO write không làm thay đổi dữ liệu; reserved/misaligned có response riêng. Snapshot done đang sticky đến W1C; mô tả auto-clear trong workbook chưa khớp RTL và được ghi rõ để review, không tự sửa hành vi.
 
 
 ### 11.5 ABI preservation in this documentation revision
@@ -1210,7 +1798,6 @@ DEC-039 retains the first fatal ordinary writeback record to reset. Later indepe
 
 Diagnostic W1C does not clear a fatal dirty-cache condition or release retained cache/CCU state. Successful response draining does not imply the interrupted workload can continue after fatal retention. Hot reset with in-flight external traffic remains a SoC integration obligation.
 
-Lỗi precise chỉ báo sau cleanup/ABORT đúng thứ tự; lỗi eviction thông thường là fatal bất đồng bộ và giữ dữ liệu đến reset. Không dùng W1C để giả phục hồi cache. Không suy ra LLC hart owner từ giá trị zero.
 
 ## 13. Performance, power, and area
 
@@ -1229,7 +1816,35 @@ No FCLK, area, power or IPC target has been supplied with a library/corner, SRAM
 | Full memory/response queues | Native mux/LLC/adapter backpressure preserves ordering | Arbitrary external stall produces no finite global latency bound |
 | Missing ACK / fatal error | Retain safe state rather than infer completion | Worst-case latency is unbounded by approved policy; interrupt/debug can be deferred for the active CMO |
 | Wider external memory | More payload bits per accepted beat; internal LLC remains 64-bit | Does not widen the CPU datapath or eliminate bank/ownership/packing bottlenecks; TOP width matrix not yet functionally closed |
+| Timing profile 0 | No additional AXI target cut or PMU event pipeline | Lowest added latency; retains the reviewed long combinational paths |
+| Timing profile 1 | Per-hart memory/MMIO AXI target cuts; one PMU event stage; two-cycle snapshot request drain | Splits AXI route/target and PMU event/counter paths; increases transfer and snapshot latency; does not split CVA6, directory compare, LLC-internal, or CMO FSM paths |
 | PMU measurement | Event IDs/scopes/units and snapshot window must be correct | Current PMU integration is not yet a validated source of IPC/bandwidth claims |
+
+**Structural proxy and mapped result (F-007; the mapped figure applies only to the run described).** Source: Design Compiler X-2025.06-SP5, ARM sc12 55LPx RVT, ss_nominal_max_1p08v_125c, two harts, 1.04167 ns, SRAM macros excluded (black boxes), zero wire load. It is a lower bound for logic only and carries no signoff meaning.
+
+| Item | Value | Label |
+|---|---|---|
+| Mapped area, two harts, SRAM excluded | 4.998 mm2 | FACT (report) |
+| Sequential cells | 280,250 | FACT (report) |
+| Sharer directory flops | 206,600 (74 percent of sequential cells) | FACT (report) |
+| Sharer directory area | 2.82 mm2 (56 percent of area) | FACT (report) |
+| Directory entries, two harts | 4,096 (REQ-MEM-010); about 50 flops per entry including valid and PLRU | INFERENCE (206,600 / 4,096) |
+| Other blocks | Not extracted; extract flop count per block from the same run | Open |
+
+Replacing the directory payload by a RAM macro (REQ-MEM-025) removes most of the 206,600 flops from this figure; report the macro area separately from the library.
+
+**Measured cycles and profile delta (F-008).** Only one value has been measured: a coherence transaction to one hart takes 12 cycles, 6 per phase, with an ideal cache (review of 2026-11-16, FACT). Every other row is to be filled by TEST-046.
+
+| Case | Baseline profile 0 | Profile 1 | Profile 2 |
+|---|---|---|---|
+| Probe round trip to one hart (ideal cache) | 12 cycles (FACT) | not measured | not measured |
+| Private hit, clean miss, dirty-owner transfer | not measured | not measured | not measured |
+| CBO.CLEAN, one 16-byte line | not measured | not measured | not measured |
+| AXI memory request or response | 0 added | one spill-register stage per direction per cut (INFERENCE) | one stage per direction per channel after width conversion (INFERENCE) |
+| Directory lookup | combinational read | combinational read | response register at E+1 (Section 8.3, FACT) |
+| PMU snapshot acknowledgment | existing | two sampled cycles (Section 8.3) | E+2 (Section 8.3) |
+
+**CBO cost for non-coherent DMA (F-009).** The CBO operation works on one 16-byte line. A 1,500-byte network buffer spans 94 lines (FEAT-010). If each operation is a serialized CCU transaction near the measured 12 cycles, the buffer costs about 1,100 cycles of CBO work (INFERENCE: 94 x 12; the CBO path itself is not measured). No section sets a limit. See OPEN-CBO-RATE.
 
 For a bounded environment, express a miss/service time as measured components rather than inventing cycle constants:
 
@@ -1241,7 +1856,6 @@ $$IPC=\frac{\Delta instret}{\Delta cycle},\qquad BW=\frac{bytes\ transferred}{el
 
 Use actual retired instructions, not an OR-reduced load/store category. Measure 2/4 harts, hit/miss/shared/dirty/conflict mixes and stalls separately. Fault/error recovery cases describe lost progress, not peak throughput. Power gating, retention and DVFS are excluded; native WFI and technology-approved clock gating still need SoC qualification.
 
-Chưa có cơ sở tuyên bố IPC, tần số hoặc công suất đạt mục tiêu. Phải đo đúng workload, SRAM/library/corner và điều kiện backpressure. Thêm context/bank/bit bus không tự bảo đảm throughput tăng tương ứng. ACK mất làm worst case không có bound hữu hạn theo quyết định đã duyệt.
 
 ## 14. RTL implementation contract
 
@@ -1249,7 +1863,7 @@ Chưa có cơ sở tuyên bố IPC, tần số hoặc công suất đạt mục 
 
 New VLSIT modules use the approved VLSIT_RTL_Design_Rule.md v2. Pristine reuse retains original source, ports, headers and license notices. Modified native copies retain notices and dated history by Quan Nguyen and Codex - VLSI Technology page. Generated CSR is regenerated from the canonical workbook, never hand-edited. Native package/signed/type names are deliberate licensed-source exceptions, not instructions to restyle third-party RTL.
 
-Logic module, component, source-file and source-reference are different units. A selected file can declare optional/inactive modules; selection is not activation or coverage. / Module, component và file source không đồng nghĩa; compile không chứng minh nhánh chức năng đã hoạt động.
+Logic module, component, source-file and source-reference are different units. A selected file can declare optional/inactive modules; selection is not activation or coverage.
 
 ### 14.2 Current source hierarchy and component inventory
 
@@ -1295,7 +1909,7 @@ Logic module, component, source-file and source-reference are different units. A
 
 Each component section records function, working/data flow, storage owner, interface, error/backpressure constraints and verification scope. A no-enum wrapper can contain stateful child controllers; a combinational selector does not require an invented FSM. Block figures show actual containment; exact port declarations and the flow contracts carry the connectivity detail. Native replicated/conditional instances retain their source conditions.
 
-### 14.4 New and generated component contracts / Component mới và sinh tự động
+### 14.4 New and generated component contracts
 
 
 #### 14.4.1 `m_csr_async_fifo` — GENERATED
@@ -1312,15 +1926,8 @@ Source: [rtl/common/vlsit/csr/RTL/models/m_csr_async_fifo.sv](../../rtl/common/v
 
 **Verification boundary.** Generated collateral is included; asynchronous configuration is outside current cluster functional evidence.
 
-The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules. / Hình thể hiện phân cấp source; leaf chỉ có symbol ranh giới, không tạo module giả.
+This module has no child instance, so no composition diagram is given; a one-box figure would add no information. Its behavior is in the text above and the interface table below.
 
-![m_csr_async_fifo composition](figures/post_a06/m_csr_async_fifo.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"m_csr_async_fifo.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(m_csr_async_fifo)"]},"frame_row":["m_csr_async_fifo","Provide the generator's optional dual-clock request/response FIFO implementation.","rtl/common/vlsit/csr/RTL/models/m_csr_async_fifo.sv"],"frame_interfaces":["IN","OUT"],"blocks":[{"key":"B0","label":["component_boundary","(m_csr_async_fifo)"],"width":220,"row":0,"col":0,"row_name":"component_boundary (m_csr_async_fifo)","function":"Provide the generator's optional dual-clock request/response FIFO implementation.","source":"GENERATED; rtl/common/vlsit/csr/RTL/models/m_csr_async_fifo.sv"}],"connectors":[],"externals":[{"id":"IN","block":"B0","side":"L","dir":"in","pos":0,"text":["IN","ports"]},{"id":"OUT","block":"B0","side":"R","dir":"out","pos":0,"text":["OUT","ports"]}],"interfaces":[{"id":"IN","name":"Parent in ports","category":"custom","active":"in","signals":"i_clk_wr, i_rst_n_wr, i_w_valid, i_w_data, i_clk_rd, i_rst_n_rd, i_r_ready"},{"id":"OUT","name":"Parent out ports","category":"custom","active":"out","signals":"o_w_ready, o_r_valid, o_r_data"}],"nets":[],"legend_note":"A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/m_csr_async_fifo.drawio) · [Figure source](figures/post_a06/m_csr_async_fifo.json).
 
 **Interface contract.** All synchronous ports use the common cluster clock; the probe engine cache clock is the same domain in this cluster. A valid/ready payload is accepted only on the corresponding handshake and held through backpressure. Pulsed completion/ACK interfaces are described by the operation/FSM contract; they must not be treated as independent ready/valid channels.
 
@@ -1353,15 +1960,8 @@ Source: [rtl/common/vlsit/csr/RTL/models/m_csr_sync_fifo.sv](../../rtl/common/vl
 
 **Verification boundary.** Exercised by A-06 AXI4-Lite operations; exhaustive standalone FIFO parameter coverage is not claimed.
 
-The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules. / Hình thể hiện phân cấp source; leaf chỉ có symbol ranh giới, không tạo module giả.
+This module has no child instance, so no composition diagram is given; a one-box figure would add no information. Its behavior is in the text above and the interface table below.
 
-![m_csr_sync_fifo composition](figures/post_a06/m_csr_sync_fifo.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"m_csr_sync_fifo.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(m_csr_sync_fifo)"]},"frame_row":["m_csr_sync_fifo","Provide the generated CSR's synchronous queued request/response storage.","rtl/common/vlsit/csr/RTL/models/m_csr_sync_fifo.sv"],"frame_interfaces":["IN","OUT"],"blocks":[{"key":"B0","label":["component_boundary","(m_csr_sync_fifo)"],"width":220,"row":0,"col":0,"row_name":"component_boundary (m_csr_sync_fifo)","function":"Provide the generated CSR's synchronous queued request/response storage.","source":"GENERATED; rtl/common/vlsit/csr/RTL/models/m_csr_sync_fifo.sv"}],"connectors":[],"externals":[{"id":"IN","block":"B0","side":"L","dir":"in","pos":0,"text":["IN","ports"]},{"id":"OUT","block":"B0","side":"R","dir":"out","pos":0,"text":["OUT","ports"]}],"interfaces":[{"id":"IN","name":"Parent in ports","category":"custom","active":"in","signals":"i_clk_bus, i_rst_n_bus, i_w_valid, i_w_data, i_r_ready"},{"id":"OUT","name":"Parent out ports","category":"custom","active":"out","signals":"o_w_ready, o_r_valid, o_r_data"}],"nets":[],"legend_note":"A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/m_csr_sync_fifo.drawio) · [Figure source](figures/post_a06/m_csr_sync_fifo.json).
 
 **Interface contract.** All synchronous ports use the common cluster clock; the probe engine cache clock is the same domain in this cluster. A valid/ready payload is accepted only on the corresponding handshake and held through backpressure. Pulsed completion/ACK interfaces are described by the operation/FSM contract; they must not be treated as independent ready/valid channels.
 
@@ -1392,15 +1992,8 @@ Source: [rtl/common/vlsit/cache/m_vlsit_axi_llc.sv](../../rtl/common/vlsit/cache
 
 **Verification boundary.** Native LLC units and reduced-geometry CPU tests pass; default 256-KiB system stress and native CSR BIST/flush remain open.
 
-The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules. / Hình thể hiện phân cấp source; leaf chỉ có symbol ranh giới, không tạo module giả.
+This module has no child instance, so no composition diagram is given; a one-box figure would add no information. Its behavior is in the text above and the interface table below.
 
-![m_vlsit_axi_llc composition](figures/post_a06/m_vlsit_axi_llc.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"m_vlsit_axi_llc.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(m_vlsit_axi_llc)"]},"frame_row":["m_vlsit_axi_llc","Wrap the licensed native LLC with VLSIT AXI/service/maintenance and fault-event ports.","rtl/common/vlsit/cache/m_vlsit_axi_llc.sv"],"frame_interfaces":[],"blocks":[{"key":"B0","label":["u_dont_touch_axi_llc_reg_wrap","(axi_llc_reg_wrap)"],"width":340,"row":0,"col":0,"row_name":"u_dont_touch_axi_llc_reg_wrap (axi_llc_reg_wrap)","function":"Native LLC software wrapper","source":"MODIFY; rtl/common/modified/axi_llc/src/axi_llc_reg_wrap.sv"}],"connectors":[],"externals":[],"interfaces":[],"nets":[],"legend_note":"Exact source-referenced children; generate multiplicity and active branches are specified in the component text. Containment denotes hierarchy, not invented signal connectivity. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/m_vlsit_axi_llc.drawio) · [Figure source](figures/post_a06/m_vlsit_axi_llc.json).
 
 **Interface contract.** All synchronous ports use the common cluster clock; the probe engine cache clock is the same domain in this cluster. A valid/ready payload is accepted only on the corresponding handshake and held through backpressure. Pulsed completion/ACK interfaces are described by the operation/FSM contract; they must not be treated as independent ready/valid channels.
 
@@ -1527,15 +2120,8 @@ Source: [rtl/common/vlsit/control/m_vlsit_axil_reg_bridge.sv](../../rtl/common/v
 
 **Verification boundary.** Connected and lint-clean from TOP; native BIST/flush/status and concurrent software traffic still need active integration tests.
 
-The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules. / Hình thể hiện phân cấp source; leaf chỉ có symbol ranh giới, không tạo module giả.
+This module has no child instance, so no composition diagram is given; a one-box figure would add no information. Its behavior is in the text above and the interface table below.
 
-![m_vlsit_axil_reg_bridge composition](figures/post_a06/m_vlsit_axil_reg_bridge.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"m_vlsit_axil_reg_bridge.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(m_vlsit_axil_reg_bridge)"]},"frame_row":["m_vlsit_axil_reg_bridge","Translate AXI4-Lite LLC-service accesses into the pinned PULP RegBus request/response form.","rtl/common/vlsit/control/m_vlsit_axil_reg_bridge.sv"],"frame_interfaces":["IN","OUT"],"blocks":[{"key":"B0","label":["component_boundary","(m_vlsit_axil_reg_bridge)"],"width":300,"row":0,"col":0,"row_name":"component_boundary (m_vlsit_axil_reg_bridge)","function":"Translate AXI4-Lite LLC-service accesses into the pinned PULP RegBus request/response form.","source":"NEW; rtl/common/vlsit/control/m_vlsit_axil_reg_bridge.sv"}],"connectors":[],"externals":[{"id":"IN","block":"B0","side":"L","dir":"in","pos":0,"text":["IN","ports"]},{"id":"OUT","block":"B0","side":"R","dir":"out","pos":0,"text":["OUT","ports"]}],"interfaces":[{"id":"IN","name":"Parent in ports","category":"custom","active":"in","signals":"i_clk_cluster, i_rst_n_cluster, i_axil_awaddr, i_axil_awprot, i_axil_awvalid, i_axil_wdata, i_axil_wstrb, i_axil_wvalid, i_axil_bready, i_axil_araddr, i_axil_arprot, i_axil_arvalid, i_axil_rready, i_reg_rsp_ready, i_reg_rsp_rdata, i_reg_rsp_err"},{"id":"OUT","name":"Parent out ports","category":"custom","active":"out","signals":"o_axil_awready, o_axil_wready, o_axil_bresp, o_axil_bvalid, o_axil_arready, o_axil_rdata, o_axil_rresp, o_axil_rvalid, o_reg_req_valid, o_reg_req_wr, o_reg_req_addr, o_reg_req_wdata, o_reg_req_wstrb"}],"nets":[],"legend_note":"A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/m_vlsit_axil_reg_bridge.drawio) · [Figure source](figures/post_a06/m_vlsit_axil_reg_bridge.json).
 
 **Interface contract.** All synchronous ports use the common cluster clock; the probe engine cache clock is the same domain in this cluster. A valid/ready payload is accepted only on the corresponding handshake and held through backpressure. Pulsed completion/ACK interfaces are described by the operation/FSM contract; they must not be treated as independent ready/valid channels.
 
@@ -1587,7 +2173,7 @@ Source: [rtl/common/vlsit/csr/RTL/m_vlsit_cpucl_csr.sv](../../rtl/common/vlsit/c
 
 **Verification boundary.** A-06 verifies RO fault words, writes, strobes, reserved accesses and reset; active PMU/snapshot/IRQ operation remains to qualify.
 
-The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules. / Hình thể hiện phân cấp source; leaf chỉ có symbol ranh giới, không tạo module giả.
+The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules.
 
 ![m_vlsit_cpucl_csr composition](figures/post_a06/m_vlsit_cpucl_csr.svg)
 
@@ -1663,15 +2249,8 @@ Source: [rtl/common/vlsit/pmu/m_vlsit_pmu_aggregate.sv](../../rtl/common/vlsit/p
 
 **Verification boundary.** RTL is present and linted; independent source-to-counter checks are pending.
 
-The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules. / Hình thể hiện phân cấp source; leaf chỉ có symbol ranh giới, không tạo module giả.
+This module has no child instance, so no composition diagram is given; a one-box figure would add no information. Its behavior is in the text above and the interface table below.
 
-![m_vlsit_pmu_aggregate composition](figures/post_a06/m_vlsit_pmu_aggregate.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"m_vlsit_pmu_aggregate.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(m_vlsit_pmu_aggregate)"]},"frame_row":["m_vlsit_pmu_aggregate","Sum the same event indicator across active harts without discarding simultaneous occurrences.","rtl/common/vlsit/pmu/m_vlsit_pmu_aggregate.sv"],"frame_interfaces":["IN","OUT"],"blocks":[{"key":"B0","label":["component_boundary","(m_vlsit_pmu_aggregate)"],"width":280,"row":0,"col":0,"row_name":"component_boundary (m_vlsit_pmu_aggregate)","function":"Sum the same event indicator across active harts without discarding simultaneous occurrences.","source":"NEW; rtl/common/vlsit/pmu/m_vlsit_pmu_aggregate.sv"}],"connectors":[],"externals":[{"id":"IN","block":"B0","side":"L","dir":"in","pos":0,"text":["IN","ports"]},{"id":"OUT","block":"B0","side":"R","dir":"out","pos":0,"text":["OUT","ports"]}],"interfaces":[{"id":"IN","name":"Parent in ports","category":"custom","active":"in","signals":"i_hart_active, i_hart_evt"},{"id":"OUT","name":"Parent out ports","category":"custom","active":"out","signals":"o_evt_cnt"}],"nets":[],"legend_note":"A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/m_vlsit_pmu_aggregate.drawio) · [Figure source](figures/post_a06/m_vlsit_pmu_aggregate.json).
 
 **Interface contract.** All synchronous ports use the common cluster clock; the probe engine cache clock is the same domain in this cluster. A valid/ready payload is accepted only on the corresponding handshake and held through backpressure. Pulsed completion/ACK interfaces are described by the operation/FSM contract; they must not be treated as independent ready/valid channels.
 
@@ -1697,15 +2276,8 @@ Source: [rtl/common/vlsit/pmu/m_vlsit_pmu_cluster_evt.sv](../../rtl/common/vlsit
 
 **Verification boundary.** CCU count tap units exist; complete native LLC event semantics and software readout remain unqualified.
 
-The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules. / Hình thể hiện phân cấp source; leaf chỉ có symbol ranh giới, không tạo module giả.
+This module has no child instance, so no composition diagram is given; a one-box figure would add no information. Its behavior is in the text above and the interface table below.
 
-![m_vlsit_pmu_cluster_evt composition](figures/post_a06/m_vlsit_pmu_cluster_evt.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"m_vlsit_pmu_cluster_evt.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(m_vlsit_pmu_cluster_evt)"]},"frame_row":["m_vlsit_pmu_cluster_evt","Pack LLC single-bit indicators and CCU three-bit same-cycle occurrence counts into cluster event slots.","rtl/common/vlsit/pmu/m_vlsit_pmu_cluster_evt.sv"],"frame_interfaces":["IN","OUT"],"blocks":[{"key":"B0","label":["component_boundary","(m_vlsit_pmu_cluster_evt)"],"width":300,"row":0,"col":0,"row_name":"component_boundary (m_vlsit_pmu_cluster_evt)","function":"Pack LLC single-bit indicators and CCU three-bit same-cycle occurrence counts into cluster event slots.","source":"NEW; rtl/common/vlsit/pmu/m_vlsit_pmu_cluster_evt.sv"}],"connectors":[],"externals":[{"id":"IN","block":"B0","side":"L","dir":"in","pos":0,"text":["IN","ports"]},{"id":"OUT","block":"B0","side":"R","dir":"out","pos":0,"text":["OUT","ports"]}],"interfaces":[{"id":"IN","name":"Parent in ports","category":"custom","active":"in","signals":"i_llc_evt, i_ccu_evt_count"},{"id":"OUT","name":"Parent out ports","category":"custom","active":"out","signals":"o_cluster_evt_count"}],"nets":[],"legend_note":"A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/m_vlsit_pmu_cluster_evt.drawio) · [Figure source](figures/post_a06/m_vlsit_pmu_cluster_evt.json).
 
 **Interface contract.** All synchronous ports use the common cluster clock; the probe engine cache clock is the same domain in this cluster. A valid/ready payload is accepted only on the corresponding handshake and held through backpressure. Pulsed completion/ACK interfaces are described by the operation/FSM contract; they must not be treated as independent ready/valid channels.
 
@@ -1731,15 +2303,8 @@ Source: [rtl/common/vlsit/pmu/m_vlsit_pmu_counter_bank.sv](../../rtl/common/vlsi
 
 **Verification boundary.** Connected/linted; true wrap, enable, multiplicity and same-edge snapshot tests remain pending.
 
-The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules. / Hình thể hiện phân cấp source; leaf chỉ có symbol ranh giới, không tạo module giả.
+This module has no child instance, so no composition diagram is given; a one-box figure would add no information. Its behavior is in the text above and the interface table below.
 
-![m_vlsit_pmu_counter_bank composition](figures/post_a06/m_vlsit_pmu_counter_bank.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"m_vlsit_pmu_counter_bank.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(m_vlsit_pmu_counter_bank)"]},"frame_row":["m_vlsit_pmu_counter_bank","Accumulate enabled event occurrence counts modulo the configured counter width and emit carry/overflow events.","rtl/common/vlsit/pmu/m_vlsit_pmu_counter_bank.sv"],"frame_interfaces":["IN","OUT"],"blocks":[{"key":"B0","label":["component_boundary","(m_vlsit_pmu_counter_bank)"],"width":300,"row":0,"col":0,"row_name":"component_boundary (m_vlsit_pmu_counter_bank)","function":"Accumulate enabled event occurrence counts modulo the configured counter width and emit carry/overflow events.","source":"NEW; rtl/common/vlsit/pmu/m_vlsit_pmu_counter_bank.sv"}],"connectors":[],"externals":[{"id":"IN","block":"B0","side":"L","dir":"in","pos":0,"text":["IN","ports"]},{"id":"OUT","block":"B0","side":"R","dir":"out","pos":0,"text":["OUT","ports"]}],"interfaces":[{"id":"IN","name":"Parent in ports","category":"custom","active":"in","signals":"i_clk_cluster, i_rst_n_cluster, i_pmu_cnt_en, i_evt_cnt"},{"id":"OUT","name":"Parent out ports","category":"custom","active":"out","signals":"o_pmu_cnt_val, o_pmu_cnt_ovf"}],"nets":[],"legend_note":"A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/m_vlsit_pmu_counter_bank.drawio) · [Figure source](figures/post_a06/m_vlsit_pmu_counter_bank.json).
 
 **Interface contract.** All synchronous ports use the common cluster clock; the probe engine cache clock is the same domain in this cluster. A valid/ready payload is accepted only on the corresponding handshake and held through backpressure. Pulsed completion/ACK interfaces are described by the operation/FSM contract; they must not be treated as independent ready/valid channels.
 
@@ -1768,15 +2333,8 @@ Source: [rtl/common/vlsit/pmu/m_vlsit_pmu_event_select.sv](../../rtl/common/vlsi
 
 **Verification boundary.** TOP lint only for full software use; boundary ID/scope and invalid-selection tests are required.
 
-The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules. / Hình thể hiện phân cấp source; leaf chỉ có symbol ranh giới, không tạo module giả.
+This module has no child instance, so no composition diagram is given; a one-box figure would add no information. Its behavior is in the text above and the interface table below.
 
-![m_vlsit_pmu_event_select composition](figures/post_a06/m_vlsit_pmu_event_select.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"m_vlsit_pmu_event_select.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(m_vlsit_pmu_event_select)"]},"frame_row":["m_vlsit_pmu_event_select","Decode each software event ID and scope into an occurrence count for one counter.","rtl/common/vlsit/pmu/m_vlsit_pmu_event_select.sv"],"frame_interfaces":["IN","OUT"],"blocks":[{"key":"B0","label":["component_boundary","(m_vlsit_pmu_event_select)"],"width":300,"row":0,"col":0,"row_name":"component_boundary (m_vlsit_pmu_event_select)","function":"Decode each software event ID and scope into an occurrence count for one counter.","source":"NEW; rtl/common/vlsit/pmu/m_vlsit_pmu_event_select.sv"}],"connectors":[],"externals":[{"id":"IN","block":"B0","side":"L","dir":"in","pos":0,"text":["IN","ports"]},{"id":"OUT","block":"B0","side":"R","dir":"out","pos":0,"text":["OUT","ports"]}],"interfaces":[{"id":"IN","name":"Parent in ports","category":"custom","active":"in","signals":"i_hart_active, i_hart_evt, i_hart_agg_evt_count, i_cluster_evt_count, i_pmu_evt_id, i_pmu_evt_scope"},{"id":"OUT","name":"Parent out ports","category":"custom","active":"out","signals":"o_pmu_evt_count"}],"nets":[],"legend_note":"A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/m_vlsit_pmu_event_select.drawio) · [Figure source](figures/post_a06/m_vlsit_pmu_event_select.json).
 
 **Interface contract.** All synchronous ports use the common cluster clock; the probe engine cache clock is the same domain in this cluster. A valid/ready payload is accepted only on the corresponding handshake and held through backpressure. Pulsed completion/ACK interfaces are described by the operation/FSM contract; they must not be treated as independent ready/valid channels.
 
@@ -1806,15 +2364,8 @@ Source: [rtl/common/vlsit/pmu/m_vlsit_pmu_hart_evt.sv](../../rtl/common/vlsit/pm
 
 **Verification boundary.** Source wiring inspected and hierarchy linted; complete event-by-event functional mapping is pending.
 
-The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules. / Hình thể hiện phân cấp source; leaf chỉ có symbol ranh giới, không tạo module giả.
+This module has no child instance, so no composition diagram is given; a one-box figure would add no information. Its behavior is in the text above and the interface table below.
 
-![m_vlsit_pmu_hart_evt composition](figures/post_a06/m_vlsit_pmu_hart_evt.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"m_vlsit_pmu_hart_evt.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(m_vlsit_pmu_hart_evt)"]},"frame_row":["m_vlsit_pmu_hart_evt","Pack CVA6 and HPDcache source indicators into a stable per-hart catalog order.","rtl/common/vlsit/pmu/m_vlsit_pmu_hart_evt.sv"],"frame_interfaces":["IN","OUT"],"blocks":[{"key":"B0","label":["component_boundary","(m_vlsit_pmu_hart_evt)"],"width":260,"row":0,"col":0,"row_name":"component_boundary (m_vlsit_pmu_hart_evt)","function":"Pack CVA6 and HPDcache source indicators into a stable per-hart catalog order.","source":"NEW; rtl/common/vlsit/pmu/m_vlsit_pmu_hart_evt.sv"}],"connectors":[],"externals":[{"id":"IN","block":"B0","side":"L","dir":"in","pos":0,"text":["IN","ports"]},{"id":"OUT","block":"B0","side":"R","dir":"out","pos":0,"text":["OUT","ports"]}],"interfaces":[{"id":"IN","name":"Parent in ports","category":"custom","active":"in","signals":"i_cva6_evt, i_hpdcache_evt"},{"id":"OUT","name":"Parent out ports","category":"custom","active":"out","signals":"o_hart_evt"}],"nets":[],"legend_note":"A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/m_vlsit_pmu_hart_evt.drawio) · [Figure source](figures/post_a06/m_vlsit_pmu_hart_evt.json).
 
 **Interface contract.** All synchronous ports use the common cluster clock; the probe engine cache clock is the same domain in this cluster. A valid/ready payload is accepted only on the corresponding handshake and held through backpressure. Pulsed completion/ACK interfaces are described by the operation/FSM contract; they must not be treated as independent ready/valid channels.
 
@@ -1840,15 +2391,8 @@ Source: [rtl/common/vlsit/pmu/m_vlsit_pmu_irq.sv](../../rtl/common/vlsit/pmu/m_v
 
 **Verification boundary.** Connected/linted; overflow/W1C/new-event collision and masked IRQ behavior need active tests.
 
-The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules. / Hình thể hiện phân cấp source; leaf chỉ có symbol ranh giới, không tạo module giả.
+This module has no child instance, so no composition diagram is given; a one-box figure would add no information. Its behavior is in the text above and the interface table below.
 
-![m_vlsit_pmu_irq composition](figures/post_a06/m_vlsit_pmu_irq.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"m_vlsit_pmu_irq.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(m_vlsit_pmu_irq)"]},"frame_row":["m_vlsit_pmu_irq","Merge newly overflowing counters into retained raw causes and drive one aggregate level interrupt.","rtl/common/vlsit/pmu/m_vlsit_pmu_irq.sv"],"frame_interfaces":["IN","OUT"],"blocks":[{"key":"B0","label":["component_boundary","(m_vlsit_pmu_irq)"],"width":220,"row":0,"col":0,"row_name":"component_boundary (m_vlsit_pmu_irq)","function":"Merge newly overflowing counters into retained raw causes and drive one aggregate level interrupt.","source":"NEW; rtl/common/vlsit/pmu/m_vlsit_pmu_irq.sv"}],"connectors":[],"externals":[{"id":"IN","block":"B0","side":"L","dir":"in","pos":0,"text":["IN","ports"]},{"id":"OUT","block":"B0","side":"R","dir":"out","pos":0,"text":["OUT","ports"]}],"interfaces":[{"id":"IN","name":"Parent in ports","category":"custom","active":"in","signals":"i_irq_raw, i_irq_en, i_pmu_cnt_ovf"},{"id":"OUT","name":"Parent out ports","category":"custom","active":"out","signals":"o_irq_raw_wdata, o_irq_raw_we, o_irq_pending, o_int_pmu"}],"nets":[],"legend_note":"A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/m_vlsit_pmu_irq.drawio) · [Figure source](figures/post_a06/m_vlsit_pmu_irq.json).
 
 **Interface contract.** All synchronous ports use the common cluster clock; the probe engine cache clock is the same domain in this cluster. A valid/ready payload is accepted only on the corresponding handshake and held through backpressure. Pulsed completion/ACK interfaces are described by the operation/FSM contract; they must not be treated as independent ready/valid channels.
 
@@ -1878,15 +2422,8 @@ Source: [rtl/common/vlsit/pmu/m_vlsit_pmu_snapshot.sv](../../rtl/common/vlsit/pm
 
 **Verification boundary.** RTL inspected and linted; software-visible command/done/stability tests are pending.
 
-The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules. / Hình thể hiện phân cấp source; leaf chỉ có symbol ranh giới, không tạo module giả.
+This module has no child instance, so no composition diagram is given; a one-box figure would add no information. Its behavior is in the text above and the interface table below.
 
-![m_vlsit_pmu_snapshot composition](figures/post_a06/m_vlsit_pmu_snapshot.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"m_vlsit_pmu_snapshot.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(m_vlsit_pmu_snapshot)"]},"frame_row":["m_vlsit_pmu_snapshot","Capture every live counter atomically and expose stable software low/high read words.","rtl/common/vlsit/pmu/m_vlsit_pmu_snapshot.sv"],"frame_interfaces":["IN","OUT"],"blocks":[{"key":"B0","label":["component_boundary","(m_vlsit_pmu_snapshot)"],"width":260,"row":0,"col":0,"row_name":"component_boundary (m_vlsit_pmu_snapshot)","function":"Capture every live counter atomically and expose stable software low/high read words.","source":"NEW; rtl/common/vlsit/pmu/m_vlsit_pmu_snapshot.sv"}],"connectors":[],"externals":[{"id":"IN","block":"B0","side":"L","dir":"in","pos":0,"text":["IN","ports"]},{"id":"OUT","block":"B0","side":"R","dir":"out","pos":0,"text":["OUT","ports"]}],"interfaces":[{"id":"IN","name":"Parent in ports","category":"custom","active":"in","signals":"i_clk_cluster, i_rst_n_cluster, i_snapshot_req, i_pmu_cnt_val"},{"id":"OUT","name":"Parent out ports","category":"custom","active":"out","signals":"o_pmu_cnt_lo_value, o_pmu_cnt_hi_value, o_snapshot_req_clear, o_snapshot_done_wdata, o_snapshot_done_we"}],"nets":[],"legend_note":"A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/m_vlsit_pmu_snapshot.drawio) · [Figure source](figures/post_a06/m_vlsit_pmu_snapshot.json).
 
 **Interface contract.** All synchronous ports use the common cluster clock; the probe engine cache clock is the same domain in this cluster. A valid/ready payload is accepted only on the corresponding handshake and held through backpressure. Pulsed completion/ACK interfaces are described by the operation/FSM contract; they must not be treated as independent ready/valid channels.
 
@@ -1918,15 +2455,8 @@ Source: [rtl/common/vlsit/address_map/m_vlsit_riscv_addr_decode.sv](../../rtl/co
 
 **Verification boundary.** Classifier and classifier/router leaf tests pass; CPU-originated MMIO/normal-uncached behavior remains unqualified.
 
-The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules. / Hình thể hiện phân cấp source; leaf chỉ có symbol ranh giới, không tạo module giả.
+This module has no child instance, so no composition diagram is given; a one-box figure would add no information. Its behavior is in the text above and the interface table below.
 
-![m_vlsit_riscv_addr_decode composition](figures/post_a06/m_vlsit_riscv_addr_decode.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"m_vlsit_riscv_addr_decode.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(m_vlsit_riscv_addr_decode)"]},"frame_row":["m_vlsit_riscv_addr_decode","Classify a complete physical access against a shared compile-time region table.","rtl/common/vlsit/address_map/m_vlsit_riscv_addr_decode.sv"],"frame_interfaces":["IN","OUT"],"blocks":[{"key":"B0","label":["component_boundary","(m_vlsit_riscv_addr_decode)"],"width":320,"row":0,"col":0,"row_name":"component_boundary (m_vlsit_riscv_addr_decode)","function":"Classify a complete physical access against a shared compile-time region table.","source":"NEW; rtl/common/vlsit/address_map/m_vlsit_riscv_addr_decode.sv"}],"connectors":[],"externals":[{"id":"IN","block":"B0","side":"L","dir":"in","pos":0,"text":["IN","ports"]},{"id":"OUT","block":"B0","side":"R","dir":"out","pos":0,"text":["OUT","ports"]}],"interfaces":[{"id":"IN","name":"Parent in ports","category":"custom","active":"in","signals":"i_phys_addr, i_access_bytes, i_atomic"},{"id":"OUT","name":"Parent out ports","category":"custom","active":"out","signals":"o_config_valid, o_region_match, o_region_idx, o_region_type, o_access_err"}],"nets":[],"legend_note":"A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/m_vlsit_riscv_addr_decode.drawio) · [Figure source](figures/post_a06/m_vlsit_riscv_addr_decode.json).
 
 **Interface contract.** All synchronous ports use the common cluster clock; the probe engine cache clock is the same domain in this cluster. A valid/ready payload is accepted only on the corresponding handshake and held through backpressure. Pulsed completion/ACK interfaces are described by the operation/FSM contract; they must not be treated as independent ready/valid channels.
 
@@ -1957,15 +2487,8 @@ Source: [rtl/non_coherence_cluster/m_vlsit_riscv_axi_dw_adapter.sv](../../rtl/no
 
 **Verification boundary.** Four leaf-width tests pass. Only 64-bit external memory is exercised by the current real CPU regression.
 
-The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules. / Hình thể hiện phân cấp source; leaf chỉ có symbol ranh giới, không tạo module giả.
+This module has no child instance, so no composition diagram is given; a one-box figure would add no information. Its behavior is in the text above and the interface table below.
 
-![m_vlsit_riscv_axi_dw_adapter composition](figures/post_a06/m_vlsit_riscv_axi_dw_adapter.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"m_vlsit_riscv_axi_dw_adapter.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(m_vlsit_riscv_axi_dw_adapter)"]},"frame_row":["m_vlsit_riscv_axi_dw_adapter","Convert the fixed 64-bit memory-side LLC bus to synthesis-selected external AXI data width.","rtl/non_coherence_cluster/m_vlsit_riscv_axi_dw_adapter.sv"],"frame_interfaces":[],"blocks":[{"key":"B0","label":["u_dont_touch_axi_dw_converter","(axi_dw_converter)"],"width":340,"row":0,"col":0,"row_name":"u_dont_touch_axi_dw_converter (axi_dw_converter)","function":"Native component","source":"REUSE; rtl/common/third_party/axi_llc_locked/axi/src/axi_dw_converter.sv"}],"connectors":[],"externals":[],"interfaces":[],"nets":[],"legend_note":"Exact source-referenced children; generate multiplicity and active branches are specified in the component text. Containment denotes hierarchy, not invented signal connectivity. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/m_vlsit_riscv_axi_dw_adapter.drawio) · [Figure source](figures/post_a06/m_vlsit_riscv_axi_dw_adapter.json).
 
 **Interface contract.** All synchronous ports use the common cluster clock; the probe engine cache clock is the same domain in this cluster. A valid/ready payload is accepted only on the corresponding handshake and held through backpressure. Pulsed completion/ACK interfaces are described by the operation/FSM contract; they must not be treated as independent ready/valid channels.
 
@@ -2070,15 +2593,8 @@ Source: [rtl/common/vlsit/interconnect/m_vlsit_riscv_axi_mem_mux.sv](../../rtl/c
 
 **Verification boundary.** 2/4-hart leaf transport tests plus CPU memory traffic pass. Uncached atomic execution is not demonstrated by metadata forwarding.
 
-The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules. / Hình thể hiện phân cấp source; leaf chỉ có symbol ranh giới, không tạo module giả.
+This module has no child instance, so no composition diagram is given; a one-box figure would add no information. Its behavior is in the text above and the interface table below.
 
-![m_vlsit_riscv_axi_mem_mux composition](figures/post_a06/m_vlsit_riscv_axi_mem_mux.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"m_vlsit_riscv_axi_mem_mux.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(m_vlsit_riscv_axi_mem_mux)"]},"frame_row":["m_vlsit_riscv_axi_mem_mux","Arbitrate per-hart memory traffic while preserving source identity and response routing.","rtl/common/vlsit/interconnect/m_vlsit_riscv_axi_mem_mux.sv"],"frame_interfaces":[],"blocks":[{"key":"B0","label":["u_dont_touch_axi_mux","(axi_mux)"],"width":240,"row":0,"col":0,"row_name":"u_dont_touch_axi_mux (axi_mux)","function":"Native component","source":"REUSE; rtl/common/third_party/axi_llc_locked/axi/src/axi_mux.sv"}],"connectors":[],"externals":[],"interfaces":[],"nets":[],"legend_note":"Exact source-referenced children; generate multiplicity and active branches are specified in the component text. Containment denotes hierarchy, not invented signal connectivity. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/m_vlsit_riscv_axi_mem_mux.drawio) · [Figure source](figures/post_a06/m_vlsit_riscv_axi_mem_mux.json).
 
 **Interface contract.** All synchronous ports use the common cluster clock; the probe engine cache clock is the same domain in this cluster. A valid/ready payload is accepted only on the corresponding handshake and held through backpressure. Pulsed completion/ACK interfaces are described by the operation/FSM contract; they must not be treated as independent ready/valid channels.
 
@@ -2183,15 +2699,8 @@ Source: [rtl/common/vlsit/interconnect/m_vlsit_riscv_axi_mmio.sv](../../rtl/comm
 
 **Verification boundary.** TOP lint establishes connection. No complete CPU-to-device model program campaign has been found; classify peripheral behavior as unqualified.
 
-The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules. / Hình thể hiện phân cấp source; leaf chỉ có symbol ranh giới, không tạo module giả.
+This module has no child instance, so no composition diagram is given; a one-box figure would add no information. Its behavior is in the text above and the interface table below.
 
-![m_vlsit_riscv_axi_mmio composition](figures/post_a06/m_vlsit_riscv_axi_mmio.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"m_vlsit_riscv_axi_mmio.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(m_vlsit_riscv_axi_mmio)"]},"frame_row":["m_vlsit_riscv_axi_mmio","Provide a separate non-coherent AXI4 device egress for active harts.","rtl/common/vlsit/interconnect/m_vlsit_riscv_axi_mmio.sv"],"frame_interfaces":[],"blocks":[{"key":"B0","label":["u_dont_touch_axi_mux","(axi_mux)"],"width":240,"row":0,"col":0,"row_name":"u_dont_touch_axi_mux (axi_mux)","function":"Native component","source":"REUSE; rtl/common/third_party/axi_llc_locked/axi/src/axi_mux.sv"}],"connectors":[],"externals":[],"interfaces":[],"nets":[],"legend_note":"Exact source-referenced children; generate multiplicity and active branches are specified in the component text. Containment denotes hierarchy, not invented signal connectivity. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/m_vlsit_riscv_axi_mmio.drawio) · [Figure source](figures/post_a06/m_vlsit_riscv_axi_mmio.json).
 
 **Interface contract.** All synchronous ports use the common cluster clock; the probe engine cache clock is the same domain in this cluster. A valid/ready payload is accepted only on the corresponding handshake and held through backpressure. Pulsed completion/ACK interfaces are described by the operation/FSM contract; they must not be treated as independent ready/valid channels.
 
@@ -2294,7 +2803,7 @@ Source: [rtl/common/vlsit/interconnect/m_vlsit_riscv_axi_route.sv](../../rtl/com
 
 **Verification boundary.** Route leaf tests and cacheable CPU traffic exist; full external MMIO/uncached/error campaigns are pending.
 
-The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules. / Hình thể hiện phân cấp source; leaf chỉ có symbol ranh giới, không tạo module giả.
+The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules.
 
 ![m_vlsit_riscv_axi_route composition](figures/post_a06/m_vlsit_riscv_axi_route.svg)
 
@@ -2456,15 +2965,8 @@ Source: [rtl/common/vlsit/control/m_vlsit_riscv_axil_decode.sv](../../rtl/common
 
 **Verification boundary.** A-06 native CPU CSR accesses plus nonzero/max/invalid-base map units pass; map-cookie checks do not verify the LLC service's side effects.
 
-The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules. / Hình thể hiện phân cấp source; leaf chỉ có symbol ranh giới, không tạo module giả.
+This module has no child instance, so no composition diagram is given; a one-box figure would add no information. Its behavior is in the text above and the interface table below.
 
-![m_vlsit_riscv_axil_decode composition](figures/post_a06/m_vlsit_riscv_axil_decode.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"m_vlsit_riscv_axil_decode.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(m_vlsit_riscv_axil_decode)"]},"frame_row":["m_vlsit_riscv_axil_decode","Decode one external AXI4-Lite control port into cluster CSR and LLC service targets.","rtl/common/vlsit/control/m_vlsit_riscv_axil_decode.sv"],"frame_interfaces":["IN","OUT"],"blocks":[{"key":"B0","label":["component_boundary","(m_vlsit_riscv_axil_decode)"],"width":320,"row":0,"col":0,"row_name":"component_boundary (m_vlsit_riscv_axil_decode)","function":"Decode one external AXI4-Lite control port into cluster CSR and LLC service targets.","source":"NEW; rtl/common/vlsit/control/m_vlsit_riscv_axil_decode.sv"}],"connectors":[],"externals":[{"id":"IN","block":"B0","side":"L","dir":"in","pos":0,"text":["IN","ports"]},{"id":"OUT","block":"B0","side":"R","dir":"out","pos":0,"text":["OUT","ports"]}],"interfaces":[{"id":"IN","name":"Parent in ports","category":"custom","active":"in","signals":"i_clk_cluster, i_rst_n_cluster, i_axil_awaddr, i_axil_awprot, i_axil_awvalid, i_axil_wdata, i_axil_wstrb, i_axil_wvalid, i_axil_bready, i_axil_araddr, i_axil_arprot, i_axil_arvalid, i_axil_rready, i_axil_target_awready, i_axil_target_wready, i_axil_target_bresp, i_axil_target_bvalid, i_axil_target_arready, i_axil_target_rdata, i_axil_target_rresp, i_axil_target_rvalid"},{"id":"OUT","name":"Parent out ports","category":"custom","active":"out","signals":"o_axil_awready, o_axil_wready, o_axil_bresp, o_axil_bvalid, o_axil_arready, o_axil_rdata, o_axil_rresp, o_axil_rvalid, o_axil_target_awaddr, o_axil_target_awprot, o_axil_target_awvalid, o_axil_target_wdata, o_axil_target_wstrb, o_axil_target_wvalid, o_axil_target_bready, o_axil_target_araddr, o_axil_target_arprot, o_axil_target_arvalid, o_axil_target_rready"}],"nets":[],"legend_note":"A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/m_vlsit_riscv_axil_decode.drawio) · [Figure source](figures/post_a06/m_vlsit_riscv_axil_decode.json).
 
 **Interface contract.** All synchronous ports use the common cluster clock; the probe engine cache clock is the same domain in this cluster. A valid/ready payload is accepted only on the corresponding handshake and held through backpressure. Pulsed completion/ACK interfaces are described by the operation/FSM contract; they must not be treated as independent ready/valid channels.
 
@@ -2527,15 +3029,8 @@ Source: [rtl/common/vlsit/coherence/m_vlsit_riscv_cache_line_locks.sv](../../rtl
 
 **Verification boundary.** Lock lifetime, duplicate/conflict and terminal-release units are available; formal concurrency checks remain open.
 
-The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules. / Hình thể hiện phân cấp source; leaf chỉ có symbol ranh giới, không tạo module giả.
+This module has no child instance, so no composition diagram is given; a one-box figure would add no information. Its behavior is in the text above and the interface table below.
 
-![m_vlsit_riscv_cache_line_locks composition](figures/post_a06/m_vlsit_riscv_cache_line_locks.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"m_vlsit_riscv_cache_line_locks.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(m_vlsit_riscv_cache_line_locks)"]},"frame_row":["m_vlsit_riscv_cache_line_locks","Track line exclusion by transaction tag and answer CPU access, victim and probe lock queries.","rtl/common/vlsit/coherence/m_vlsit_riscv_cache_line_locks.sv"],"frame_interfaces":["IN","OUT"],"blocks":[{"key":"B0","label":["component_boundary","(m_vlsit_riscv_cache_line_locks)"],"width":380,"row":0,"col":0,"row_name":"component_boundary (m_vlsit_riscv_cache_line_locks)","function":"Track line exclusion by transaction tag and answer CPU access, victim and probe lock queries.","source":"NEW; rtl/common/vlsit/coherence/m_vlsit_riscv_cache_line_locks.sv"}],"connectors":[],"externals":[{"id":"IN","block":"B0","side":"L","dir":"in","pos":0,"text":["IN","ports"]},{"id":"OUT","block":"B0","side":"R","dir":"out","pos":0,"text":["OUT","ports"]}],"interfaces":[{"id":"IN","name":"Parent in ports","category":"custom","active":"in","signals":"i_clk_cluster, i_rst_n_cluster, i_acquire_valid, i_acquire_tag, i_acquire_pa_line, i_release_valid, i_release_tag, i_release_pa_line, i_access_valid, i_access_pa_line, i_victim_valid, i_victim_pa_line"},{"id":"OUT","name":"Parent out ports","category":"custom","active":"out","signals":"o_acquire_ready, o_diag_event, o_access_locked, o_victim_locked, o_line_lock_valid, o_line_lock_pa_line"}],"nets":[],"legend_note":"A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/m_vlsit_riscv_cache_line_locks.drawio) · [Figure source](figures/post_a06/m_vlsit_riscv_cache_line_locks.json).
 
 **Interface contract.** All synchronous ports use the common cluster clock; the probe engine cache clock is the same domain in this cluster. A valid/ready payload is accepted only on the corresponding handshake and held through backpressure. Pulsed completion/ACK interfaces are described by the operation/FSM contract; they must not be treated as independent ready/valid channels.
 
@@ -2576,7 +3071,7 @@ Source: [rtl/non_coherence_cluster/m_vlsit_riscv_cluster_axi_top.sv](../../rtl/n
 
 **Verification boundary.** Fresh native TOP lint passes at 2/4 harts. CPU end-to-end tests use the 64-bit external memory profile; other advertised widths remain leaf-qualified.
 
-The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules. / Hình thể hiện phân cấp source; leaf chỉ có symbol ranh giới, không tạo module giả.
+The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules.
 
 ![m_vlsit_riscv_cluster_axi_top composition](figures/post_a06/m_vlsit_riscv_cluster_axi_top.svg)
 
@@ -2593,14 +3088,14 @@ The figure shows actual child composition; a leaf shows its own boundary. It doe
 | input | `wire i_clk_cluster` |
 | input | `wire i_rst_n_cluster` |
 | input | `wire [63:0] i_boot_addr` |
-| input | `wire [3:0] i_int_msip` |
-| input | `wire [3:0] i_int_mtip` |
-| input | `wire [3:0] i_int_meip` |
-| input | `wire [3:0] i_int_ssip` |
-| input | `wire [3:0] i_int_stip` |
-| input | `wire [3:0] i_int_seip` |
-| input | `wire [3:0] i_hart_debug_req` |
-| output | `logic [3:0] o_hart_debug_mode` |
+| input | `wire [PARA_CPU_NUM-1:0] i_int_msip` |
+| input | `wire [PARA_CPU_NUM-1:0] i_int_mtip` |
+| input | `wire [PARA_CPU_NUM-1:0] i_int_meip` |
+| input | `wire [PARA_CPU_NUM-1:0] i_int_ssip` |
+| input | `wire [PARA_CPU_NUM-1:0] i_int_stip` |
+| input | `wire [PARA_CPU_NUM-1:0] i_int_seip` |
+| input | `wire [PARA_CPU_NUM-1:0] i_hart_debug_req` |
+| output | `logic [PARA_CPU_NUM-1:0] o_hart_debug_mode` |
 | output | `logic o_int_pmu` |
 | output | `logic o_int_fault` |
 | input | `wire [31:0] i_axil_awaddr` |
@@ -2718,12 +3213,12 @@ Source: [rtl/non_coherence_cluster/m_vlsit_riscv_cluster_core.sv](../../rtl/non_
 
 **Verification boundary.** The latest source-consistent campaign has 58 real CPU scenarios. The presence of PMU, debug and LLC service instances does not establish functional closure of those paths.
 
-The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules. / Hình thể hiện phân cấp source; leaf chỉ có symbol ranh giới, không tạo module giả.
+The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules.
 
-![m_vlsit_riscv_cluster_core composition](figures/post_a06/m_vlsit_riscv_cluster_core.svg)
+![m_vlsit_riscv_cluster_core child connectivity](figures/post_a06/m_vlsit_riscv_cluster_core.svg)
 
 ```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"m_vlsit_riscv_cluster_core.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(m_vlsit_riscv_cluster_core)"]},"frame_row":["m_vlsit_riscv_cluster_core","Integrate CPUs, coherence control, memory/MMIO routing, maintenance, shared LLC, PMU and software diagnostics.","rtl/non_coherence_cluster/m_vlsit_riscv_cluster_core.sv"],"frame_interfaces":[],"blocks":[{"key":"B0","label":["u_vlsit_axi_llc","(m_vlsit_axi_llc)"],"width":200,"row":0,"col":0,"row_name":"u_vlsit_axi_llc (m_vlsit_axi_llc)","function":"Wrap the licensed native LLC with VLSIT AXI/service/maintenance and fault-event ports.","source":"NEW; rtl/common/vlsit/cache/m_vlsit_axi_llc.sv"},{"key":"B1","label":["u_vlsit_axil_reg_bridge","(m_vlsit_axil_reg_bridge)"],"width":300,"row":0,"col":1,"row_name":"u_vlsit_axil_reg_bridge (m_vlsit_axil_reg_bridge)","function":"Translate AXI4-Lite LLC-service accesses into the pinned PULP RegBus request/response form.","source":"NEW; rtl/common/vlsit/control/m_vlsit_axil_reg_bridge.sv"},{"key":"B2","label":["u_vlsit_cpucl_csr","(m_vlsit_cpucl_csr)"],"width":220,"row":0,"col":2,"row_name":"u_vlsit_cpucl_csr (m_vlsit_cpucl_csr)","function":"Implement workbook-defined AXI4-Lite PMU controls, snapshot words, IRQ/diagnostic status and read-only fatal records.","source":"GENERATED; rtl/common/vlsit/csr/RTL/m_vlsit_cpucl_csr.sv"},{"key":"B3","label":["u_vlsit_riscv_axi_mem_mux","(m_vlsit_riscv_axi_mem_mux)"],"width":320,"row":1,"col":0,"row_name":"u_vlsit_riscv_axi_mem_mux (m_vlsit_riscv_axi_mem_mux)","function":"Arbitrate per-hart memory traffic while preserving source identity and response routing.","source":"NEW; rtl/common/vlsit/interconnect/m_vlsit_riscv_axi_mem_mux.sv"},{"key":"B4","label":["u_vlsit_riscv_axi_mmio","(m_vlsit_riscv_axi_mmio)"],"width":280,"row":1,"col":1,"row_name":"u_vlsit_riscv_axi_mmio (m_vlsit_riscv_axi_mmio)","function":"Provide a separate non-coherent AXI4 device egress for active harts.","source":"NEW; rtl/common/vlsit/interconnect/m_vlsit_riscv_axi_mmio.sv"},{"key":"B5","label":["u_vlsit_riscv_axi_route","(m_vlsit_riscv_axi_route)"],"width":300,"row":1,"col":2,"row_name":"u_vlsit_riscv_axi_route (m_vlsit_riscv_axi_route)","function":"Route one tile's AXI transactions to cached memory, normal-uncached bypass, device MMIO or a local error responder.","source":"NEW; rtl/common/vlsit/interconnect/m_vlsit_riscv_axi_route.sv"},{"key":"B6","label":["u_vlsit_riscv_axil_decode","(m_vlsit_riscv_axil_decode)"],"width":320,"row":2,"col":0,"row_name":"u_vlsit_riscv_axil_decode (m_vlsit_riscv_axil_decode)","function":"Decode one external AXI4-Lite control port into cluster CSR and LLC service targets.","source":"NEW; rtl/common/vlsit/control/m_vlsit_riscv_axil_decode.sv"},{"key":"B7","label":["u_vlsit_riscv_cmo_arbiter","(m_vlsit_riscv_cmo_arbiter)"],"width":320,"row":2,"col":1,"row_name":"u_vlsit_riscv_cmo_arbiter (m_vlsit_riscv_cmo_arbiter)","function":"Select one hart's retirement-blocking maintenance request and preserve its completion destination.","source":"NEW; rtl/common/vlsit/maintenance/m_vlsit_riscv_cmo_arbiter.sv"},{"key":"B8","label":["u_vlsit_riscv_cmo_controller","(m_vlsit_riscv_cmo_controller)"],"width":360,"row":2,"col":2,"row_name":"u_vlsit_riscv_cmo_controller (m_vlsit_riscv_cmo_controller)","function":"Sequence CCU preparation, optional per-line LLC maintenance, terminal COMMIT/ABORT and the hart completion response.","source":"NEW; rtl/common/vlsit/maintenance/m_vlsit_riscv_cmo_controller.sv"},{"key":"B9","label":["u_vlsit_riscv_cpu_tile_array","(m_vlsit_riscv_cpu_tile_array)"],"width":360,"row":3,"col":0,"row_name":"u_vlsit_riscv_cpu_tile_array (m_vlsit_riscv_cpu_tile_array)","function":"Replicate active CPU tiles and connect their ownership, query, lock and tagged-probe channels to one shared coherence tile array.","source":"NEW; rtl/common/vlsit/cpu/m_vlsit_riscv_cpu_tile_array.sv"},{"key":"B10","label":["u_vlsit_riscv_fault_record","(m_vlsit_riscv_fault_record)"],"width":340,"row":3,"col":1,"row_name":"u_vlsit_riscv_fault_record (m_vlsit_riscv_fault_record)","function":"Capture the first fatal ordinary L1 or shared LLC writeback error until reset.","source":"NEW; rtl/common/vlsit/diagnostics/m_vlsit_riscv_fault_record.sv"},{"key":"B11","label":["u_vlsit_riscv_pmu","(m_vlsit_riscv_pmu)"],"width":220,"row":3,"col":2,"row_name":"u_vlsit_riscv_pmu (m_vlsit_riscv_pmu)","function":"Integrate source event packing, scope selection, counters, atomic snapshots and aggregate overflow interrupt.","source":"NEW; rtl/common/vlsit/pmu/m_vlsit_riscv_pmu.sv"}],"connectors":[],"externals":[],"interfaces":[],"nets":[],"legend_note":"Exact source-referenced children; generate multiplicity and active branches are specified in the component text. Containment denotes hierarchy, not invented signal connectivity. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
+{"page_name":"BLOCK_DIAGRAM","out_name":"m_vlsit_riscv_cluster_core.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Child connectivity","(m_vlsit_riscv_cluster_core)"]},"frame_row":["m_vlsit_riscv_cluster_core","Integrate CPUs, coherence control, memory/MMIO routing, maintenance, shared LLC, PMU and software diagnostics.","rtl/non_coherence_cluster/m_vlsit_riscv_cluster_core.sv"],"frame_interfaces":[],"blocks":[{"key":"B0","label":["u_vlsit_axil_reg_bridge","(m_vlsit_axil_reg_bridge)"],"width":300,"row":0,"col":0,"row_name":"u_vlsit_axil_reg_bridge (m_vlsit_axil_reg_bridge)","function":"Translate AXI4-Lite LLC-service accesses into the pinned PULP RegBus request/response form.","source":"NEW; rtl/common/vlsit/control/m_vlsit_axil_reg_bridge.sv"},{"key":"B1","label":["u_vlsit_riscv_axil_decode","(m_vlsit_riscv_axil_decode)"],"width":320,"row":0,"col":1,"row_name":"u_vlsit_riscv_axil_decode (m_vlsit_riscv_axil_decode)","function":"Decode one external AXI4-Lite control port into cluster CSR and LLC service targets.","source":"NEW; rtl/common/vlsit/control/m_vlsit_riscv_axil_decode.sv"},{"key":"B2","label":["u_vlsit_cpucl_csr","(m_vlsit_cpucl_csr)"],"width":220,"row":0,"col":2,"row_name":"u_vlsit_cpucl_csr (m_vlsit_cpucl_csr)","function":"Implement workbook-defined AXI4-Lite PMU controls, snapshot words, IRQ/diagnostic status and read-only fatal records.","source":"GENERATED; rtl/common/vlsit/csr/RTL/m_vlsit_cpucl_csr.sv"},{"key":"B3","label":["u_vlsit_axi_llc","(m_vlsit_axi_llc)"],"width":200,"row":1,"col":0,"row_name":"u_vlsit_axi_llc (m_vlsit_axi_llc)","function":"Wrap the licensed native LLC with VLSIT AXI/service/maintenance and fault-event ports.","source":"NEW; rtl/common/vlsit/cache/m_vlsit_axi_llc.sv"},{"key":"B4","label":["u_vlsit_riscv_pmu","(m_vlsit_riscv_pmu)"],"width":220,"row":1,"col":1,"row_name":"u_vlsit_riscv_pmu (m_vlsit_riscv_pmu)","function":"Integrate source event packing, scope selection, counters, atomic snapshots and aggregate overflow interrupt.","source":"NEW; rtl/common/vlsit/pmu/m_vlsit_riscv_pmu.sv"},{"key":"B5","label":["u_vlsit_riscv_fault_record","(m_vlsit_riscv_fault_record)"],"width":340,"row":1,"col":2,"row_name":"u_vlsit_riscv_fault_record (m_vlsit_riscv_fault_record)","function":"Capture the first fatal ordinary L1 or shared LLC writeback error until reset.","source":"NEW; rtl/common/vlsit/diagnostics/m_vlsit_riscv_fault_record.sv"},{"key":"B6","label":["u_vlsit_riscv_axi_mem_mux","(m_vlsit_riscv_axi_mem_mux)"],"width":320,"row":2,"col":0,"row_name":"u_vlsit_riscv_axi_mem_mux (m_vlsit_riscv_axi_mem_mux)","function":"Arbitrate per-hart memory traffic while preserving source identity and response routing.","source":"NEW; rtl/common/vlsit/interconnect/m_vlsit_riscv_axi_mem_mux.sv"},{"key":"B7","label":["u_vlsit_riscv_cpu_tile_array","(m_vlsit_riscv_cpu_tile_array)"],"width":360,"row":2,"col":1,"row_name":"u_vlsit_riscv_cpu_tile_array (m_vlsit_riscv_cpu_tile_array)","function":"Replicate active CPU tiles and connect their ownership, query, lock and tagged-probe channels to one shared coherence tile array.","source":"NEW; rtl/common/vlsit/cpu/m_vlsit_riscv_cpu_tile_array.sv"},{"key":"B8","label":["u_vlsit_riscv_axi_route","(m_vlsit_riscv_axi_route)"],"width":300,"row":2,"col":2,"row_name":"u_vlsit_riscv_axi_route (m_vlsit_riscv_axi_route)","function":"Route one tile's AXI transactions to cached memory, normal-uncached bypass, device MMIO or a local error responder.","source":"NEW; rtl/common/vlsit/interconnect/m_vlsit_riscv_axi_route.sv"},{"key":"B9","label":["u_vlsit_riscv_cmo_controller","(m_vlsit_riscv_cmo_controller)"],"width":360,"row":3,"col":0,"row_name":"u_vlsit_riscv_cmo_controller (m_vlsit_riscv_cmo_controller)","function":"Sequence CCU preparation, optional per-line LLC maintenance, terminal COMMIT/ABORT and the hart completion response.","source":"NEW; rtl/common/vlsit/maintenance/m_vlsit_riscv_cmo_controller.sv"},{"key":"B10","label":["u_vlsit_riscv_cmo_arbiter","(m_vlsit_riscv_cmo_arbiter)"],"width":320,"row":3,"col":1,"row_name":"u_vlsit_riscv_cmo_arbiter (m_vlsit_riscv_cmo_arbiter)","function":"Select one hart's retirement-blocking maintenance request and preserve its completion destination.","source":"NEW; rtl/common/vlsit/maintenance/m_vlsit_riscv_cmo_arbiter.sv"},{"key":"B11","label":["u_vlsit_riscv_axi_mmio","(m_vlsit_riscv_axi_mmio)"],"width":280,"row":3,"col":2,"row_name":"u_vlsit_riscv_axi_mmio (m_vlsit_riscv_axi_mmio)","function":"Provide a separate non-coherent AXI4 device egress for active harts.","source":"NEW; rtl/common/vlsit/interconnect/m_vlsit_riscv_axi_mmio.sv"}],"connectors":[{"id":"CMOQ","src":"B7","src_side":"B","dst":"B10","dst_side":"T"},{"id":"CMOA","src":"B10","src_side":"L","dst":"B9","dst_side":"R"},{"id":"MNT","src":"B9","src_side":"T","dst":"B3","dst_side":"B"},{"id":"CMOT","src":"B9","src_side":"R","dst":"B7","dst_side":"L"},{"id":"TILE","src":"B7","src_side":"R","dst":"B8","dst_side":"L"},{"id":"EVT","src":"B7","src_side":"T","dst":"B4","dst_side":"B"},{"id":"RTF","src":"B8","src_side":"T","dst":"B5","dst_side":"B"},{"id":"MEM","src":"B8","src_side":"L","dst":"B6","dst_side":"R"},{"id":"MMIO","src":"B8","src_side":"B","dst":"B11","dst_side":"T"},{"id":"LLC","src":"B6","src_side":"T","dst":"B3","dst_side":"B"},{"id":"SVC","src":"B0","src_side":"B","dst":"B3","dst_side":"T"},{"id":"FLT","src":"B3","src_side":"R","dst":"B5","dst_side":"L"},{"id":"LEVT","src":"B3","src_side":"R","dst":"B4","dst_side":"L"},{"id":"FREC","src":"B5","src_side":"T","dst":"B2","dst_side":"B"},{"id":"PMUC","src":"B4","src_side":"R","dst":"B2","dst_side":"L"},{"id":"BRG","src":"B1","src_side":"L","dst":"B0","dst_side":"R"},{"id":"CSR","src":"B1","src_side":"R","dst":"B2","dst_side":"L"}],"externals":[],"interfaces":[{"id":"CMOQ","name":"vlsit_riscv_cpu_tile_array and vlsit_riscv_cmo_arbiter bundle","category":"handshake","active":"B7 -> B10","signals":"w_cmo_req_op, w_cmo_req_pa_line, w_cmo_req_pc, w_cmo_req_ready, w_cmo_req_vaddr, w_cmo_req_valid, w_cmo_rsp_done, w_cmo_rsp_err"},{"id":"CMOA","name":"vlsit_riscv_cmo_arbiter and vlsit_riscv_cmo_controller bundle","category":"handshake","active":"B10 -> B9","signals":"w_cmo_done, w_cmo_error, w_cmo_hart, w_cmo_op, w_cmo_pa_line, w_cmo_pc, w_cmo_ready, w_cmo_vaddr, w_cmo_valid"},{"id":"MNT","name":"vlsit_riscv_cmo_controller and vlsit_axi_llc bundle","category":"handshake","active":"B9 -> B3","signals":"w_maint_done, w_maint_error, w_maint_op, w_maint_pa_line, w_maint_ready, w_maint_valid"},{"id":"CMOT","name":"vlsit_riscv_cmo_controller and vlsit_riscv_cpu_tile_array bundle","category":"handshake","active":"B9 -> B7","signals":"w_cmo_ccu_begin_hart, w_cmo_ccu_begin_op, w_cmo_ccu_begin_pa_line, w_cmo_ccu_begin_ready, w_cmo_ccu_begin_valid, w_cmo_ccu_begin_wback_en, w_cmo_ccu_finish_commit, w_cmo_ccu_finish_done, w_cmo_ccu_finish_ready, w_cmo_ccu_finish_tag, w_cmo_ccu_finish_valid, w_cmo_ccu_prepare_err, w_cmo_ccu_prepare_ready, w_cmo_ccu_prepare_tag, w_cmo_ccu_prepare_valid"},{"id":"TILE","name":"vlsit_riscv_cpu_tile_array and vlsit_riscv_axi_route bundle","category":"handshake","active":"B7 -> B8","signals":"w_route_arready, w_route_awready, w_route_bid, w_route_bresp, w_route_bvalid, w_route_rdata, w_route_rid, w_route_rlast, w_route_rresp, w_route_rvalid, w_route_wready, w_tile_axi_ar_region_err, w_tile_axi_ar_region_match, w_tile_axi_ar_region_type, w_tile_axi_araddr, w_tile_axi_arburst, w_tile_axi_arcache, w_tile_axi_arid, w_tile_axi_arlen, w_tile_axi_arlock, w_tile_axi_arprot, w_tile_axi_arqos, w_tile_axi_arregion, w_tile_axi_arsize, w_tile_axi_arvalid, w_tile_axi_aw_region_err, w_tile_axi_aw_region_match, w_tile_axi_aw_region_type, w_tile_axi_awaddr, w_tile_axi_awatop, w_tile_axi_awburst, w_tile_axi_awcache, w_tile_axi_awid, w_tile_axi_awlen, w_tile_axi_awlock, w_tile_axi_awprot, w_tile_axi_awqos, w_tile_axi_awregion, w_tile_axi_awsize, w_tile_axi_awvalid, w_tile_axi_bready, w_tile_axi_rready, w_tile_axi_wdata, w_tile_axi_wlast, w_tile_axi_wstrb, w_tile_axi_wvalid"},{"id":"EVT","name":"vlsit_riscv_cpu_tile_array and vlsit_riscv_pmu bundle","category":"handshake","active":"B7 -> B4","signals":"w_ccu_evt_count, w_tile_hpdcache_perf_event, w_tile_perf_event"},{"id":"RTF","name":"vlsit_riscv_axi_route and vlsit_riscv_fault_record bundle","category":"handshake","active":"B8 -> B5","signals":"w_route_bresp"},{"id":"MEM","name":"vlsit_riscv_axi_route and vlsit_riscv_axi_mem_mux bundle","category":"handshake","active":"B8 -> B6","signals":"w_mem_mux_src_arready, w_mem_mux_src_awready, w_mem_mux_src_bid, w_mem_mux_src_bresp, w_mem_mux_src_bvalid, w_mem_mux_src_rdata, w_mem_mux_src_rid, w_mem_mux_src_rlast, w_mem_mux_src_rresp, w_mem_mux_src_rvalid, w_mem_mux_src_wready, w_route_mem_araddr, w_route_mem_arburst, w_route_mem_arcache, w_route_mem_arid, w_route_mem_arlen, w_route_mem_arlock, w_route_mem_arprot, w_route_mem_arqos, w_route_mem_arregion, w_route_mem_arsize, w_route_mem_arvalid, w_route_mem_awaddr, w_route_mem_awatop, w_route_mem_awburst, w_route_mem_awcache, w_route_mem_awid, w_route_mem_awlen, w_route_mem_awlock, w_route_mem_awprot, w_route_mem_awqos, w_route_mem_awregion, w_route_mem_awsize, w_route_mem_awvalid, w_route_mem_bready, w_route_mem_rready, w_route_mem_wdata, w_route_mem_wlast, w_route_mem_wstrb, w_route_mem_wvalid"},{"id":"MMIO","name":"vlsit_riscv_axi_route and vlsit_riscv_axi_mmio bundle","category":"handshake","active":"B8 -> B11","signals":"w_mmio_mux_src_arready, w_mmio_mux_src_awready, w_mmio_mux_src_bid, w_mmio_mux_src_bresp, w_mmio_mux_src_bvalid, w_mmio_mux_src_rdata, w_mmio_mux_src_rid, w_mmio_mux_src_rlast, w_mmio_mux_src_rresp, w_mmio_mux_src_rvalid, w_mmio_mux_src_wready, w_route_mmio_araddr, w_route_mmio_arburst, w_route_mmio_arcache, w_route_mmio_arid, w_route_mmio_arlen, w_route_mmio_arlock, w_route_mmio_arprot, w_route_mmio_arqos, w_route_mmio_arregion, w_route_mmio_arsize, w_route_mmio_arvalid, w_route_mmio_awaddr, w_route_mmio_awburst, w_route_mmio_awcache, w_route_mmio_awid, w_route_mmio_awlen, w_route_mmio_awlock, w_route_mmio_awprot, w_route_mmio_awqos, w_route_mmio_awregion, w_route_mmio_awsize, w_route_mmio_awvalid, w_route_mmio_bready, w_route_mmio_rready, w_route_mmio_wdata, w_route_mmio_wlast, w_route_mmio_wstrb, w_route_mmio_wvalid"},{"id":"LLC","name":"vlsit_riscv_axi_mem_mux and vlsit_axi_llc bundle","category":"handshake","active":"B6 -> B3","signals":"w_llc_axi_req_araddr, w_llc_axi_req_arburst, w_llc_axi_req_arcache, w_llc_axi_req_arid, w_llc_axi_req_arlen, w_llc_axi_req_arlock, w_llc_axi_req_arprot, w_llc_axi_req_arqos, w_llc_axi_req_arregion, w_llc_axi_req_arsize, w_llc_axi_req_arvalid, w_llc_axi_req_awaddr, w_llc_axi_req_awatop, w_llc_axi_req_awburst, w_llc_axi_req_awcache, w_llc_axi_req_awid, w_llc_axi_req_awlen, w_llc_axi_req_awlock, w_llc_axi_req_awprot, w_llc_axi_req_awqos, w_llc_axi_req_awregion, w_llc_axi_req_awsize, w_llc_axi_req_awvalid, w_llc_axi_req_bready, w_llc_axi_req_rready, w_llc_axi_req_wdata, w_llc_axi_req_wlast, w_llc_axi_req_wstrb, w_llc_axi_req_wvalid, w_llc_axi_rsp_arready, w_llc_axi_rsp_awready, w_llc_axi_rsp_bid, w_llc_axi_rsp_bresp, w_llc_axi_rsp_bvalid, w_llc_axi_rsp_rdata, w_llc_axi_rsp_rid, w_llc_axi_rsp_rlast, w_llc_axi_rsp_rresp, w_llc_axi_rsp_rvalid, w_llc_axi_rsp_wready"},{"id":"SVC","name":"vlsit_axil_reg_bridge and vlsit_axi_llc bundle","category":"handshake","active":"B0 -> B3","signals":"w_llc_reg_req_addr, w_llc_reg_req_valid, w_llc_reg_req_wdata, w_llc_reg_req_wr, w_llc_reg_req_wstrb, w_llc_reg_rsp_err, w_llc_reg_rsp_rdata, w_llc_reg_rsp_ready"},{"id":"FLT","name":"vlsit_axi_llc and vlsit_riscv_fault_record bundle","category":"handshake","active":"B3 -> B5","signals":"w_llc_wb_fault_addr, w_llc_wb_fault_event, w_llc_wb_fault_resp"},{"id":"LEVT","name":"vlsit_axi_llc and vlsit_riscv_pmu bundle","category":"handshake","active":"B3 -> B4","signals":"w_llc_events"},{"id":"FREC","name":"vlsit_riscv_fault_record and vlsit_cpucl_csr bundle","category":"handshake","active":"B5 -> B2","signals":"w_fault_addr_hi, w_fault_addr_lo, w_fault_info, w_fault_sts"},{"id":"PMUC","name":"vlsit_riscv_pmu and vlsit_cpucl_csr bundle","category":"handshake","active":"B4 -> B2","signals":"w_irq_en_overflow_en, w_irq_raw_overflow, w_irq_raw_overflow_wdata, w_irq_raw_overflow_we, w_irq_sts_overflow_pending, w_pmu_count_hi_value, w_pmu_count_lo_value, w_pmu_ctrl_snapshot_done_wdata, w_pmu_ctrl_snapshot_done_we, w_pmu_ctrl_snapshot_req, w_pmu_ctrl_snapshot_req_clear, w_pmu_evt_en, w_pmu_evt_event_id, w_pmu_evt_scope"},{"id":"BRG","name":"vlsit_riscv_axil_decode and vlsit_axil_reg_bridge bundle","category":"handshake","active":"B1 -> B0","signals":"w_axil_target_araddr, w_axil_target_arprot, w_axil_target_arready, w_axil_target_arvalid, w_axil_target_awaddr, w_axil_target_awprot, w_axil_target_awready, w_axil_target_awvalid, w_axil_target_bready, w_axil_target_bresp, w_axil_target_bvalid, w_axil_target_rdata, w_axil_target_rready, w_axil_target_rresp, w_axil_target_rvalid, w_axil_target_wdata, w_axil_target_wready, w_axil_target_wstrb, w_axil_target_wvalid"},{"id":"CSR","name":"vlsit_riscv_axil_decode and vlsit_cpucl_csr bundle","category":"handshake","active":"B1 -> B2","signals":"w_axil_target_araddr, w_axil_target_arprot, w_axil_target_arready, w_axil_target_arvalid, w_axil_target_awaddr, w_axil_target_awprot, w_axil_target_awready, w_axil_target_awvalid, w_axil_target_bready, w_axil_target_bresp, w_axil_target_bvalid, w_axil_target_rdata, w_axil_target_rready, w_axil_target_rresp, w_axil_target_rvalid, w_axil_target_wdata, w_axil_target_wready, w_axil_target_wstrb, w_axil_target_wvalid"}],"nets":[],"legend_note":"Instance-to-instance connections of the cluster core, derived from the wires of the core source: a connector exists when a wire is driven by an output of one child and read by an input of another. The arrow points from the child that drives most of the bundle; the response or status wires of the same pair return on the same connector. Clock, reset and boundary ports are omitted. Complete child port declarations are in Section 14.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
 ```
 
 [Editable draw.io](figures/post_a06/m_vlsit_riscv_cluster_core.drawio) · [Figure source](figures/post_a06/m_vlsit_riscv_cluster_core.json).
@@ -2860,15 +3355,8 @@ Source: [rtl/common/vlsit/maintenance/m_vlsit_riscv_cmo_arbiter.sv](../../rtl/co
 
 **Verification boundary.** Arbiter units and actual CBO/FENCE.I CPU tests pass; simultaneous maintenance plus external interrupt/debug remains to qualify.
 
-The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules. / Hình thể hiện phân cấp source; leaf chỉ có symbol ranh giới, không tạo module giả.
+This module has no child instance, so no composition diagram is given; a one-box figure would add no information. Its behavior is in the text above and the interface table below.
 
-![m_vlsit_riscv_cmo_arbiter composition](figures/post_a06/m_vlsit_riscv_cmo_arbiter.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"m_vlsit_riscv_cmo_arbiter.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(m_vlsit_riscv_cmo_arbiter)"]},"frame_row":["m_vlsit_riscv_cmo_arbiter","Select one hart's retirement-blocking maintenance request and preserve its completion destination.","rtl/common/vlsit/maintenance/m_vlsit_riscv_cmo_arbiter.sv"],"frame_interfaces":["IN","OUT"],"blocks":[{"key":"B0","label":["component_boundary","(m_vlsit_riscv_cmo_arbiter)"],"width":320,"row":0,"col":0,"row_name":"component_boundary (m_vlsit_riscv_cmo_arbiter)","function":"Select one hart's retirement-blocking maintenance request and preserve its completion destination.","source":"NEW; rtl/common/vlsit/maintenance/m_vlsit_riscv_cmo_arbiter.sv"}],"connectors":[],"externals":[{"id":"IN","block":"B0","side":"L","dir":"in","pos":0,"text":["IN","ports"]},{"id":"OUT","block":"B0","side":"R","dir":"out","pos":0,"text":["OUT","ports"]}],"interfaces":[{"id":"IN","name":"Parent in ports","category":"custom","active":"in","signals":"i_clk_cluster, i_rst_n_cluster, i_req_valid, i_req_op, i_req_pa_line, i_req_vaddr, i_req_pc, i_cmo_ready, i_cmo_done, i_cmo_err"},{"id":"OUT","name":"Parent out ports","category":"custom","active":"out","signals":"o_req_ready, o_rsp_done, o_rsp_err, o_cmo_valid, o_cmo_op, o_cmo_pa_line, o_cmo_vaddr, o_cmo_pc, o_cmo_hart"}],"nets":[],"legend_note":"A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/m_vlsit_riscv_cmo_arbiter.drawio) · [Figure source](figures/post_a06/m_vlsit_riscv_cmo_arbiter.json).
 
 **Interface contract.** All synchronous ports use the common cluster clock; the probe engine cache clock is the same domain in this cluster. A valid/ready payload is accepted only on the corresponding handshake and held through backpressure. Pulsed completion/ACK interfaces are described by the operation/FSM contract; they must not be treated as independent ready/valid channels.
 
@@ -2910,15 +3398,15 @@ Source: [rtl/common/vlsit/maintenance/m_vlsit_riscv_cmo_controller.sv](../../rtl
 
 **Verification boundary.** Directed controller/metadata units and CPU CBO/FENCE.I success/error/retry cases pass.
 
-The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules. / Hình thể hiện phân cấp source; leaf chỉ có symbol ranh giới, không tạo module giả.
+The figure shows the internal functional blocks of the module. The module has no child instance, so the boxes are logic groups named after the RTL processes, generate blocks and registers listed in the figure source; they are not extra RTL modules.
 
-![m_vlsit_riscv_cmo_controller composition](figures/post_a06/m_vlsit_riscv_cmo_controller.svg)
+![m_vlsit_riscv_cmo_controller internal functional blocks](figures/post_a06/m_vlsit_riscv_cmo_controller_internal.svg)
 
 ```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"m_vlsit_riscv_cmo_controller.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(m_vlsit_riscv_cmo_controller)"]},"frame_row":["m_vlsit_riscv_cmo_controller","Sequence CCU preparation, optional per-line LLC maintenance, terminal COMMIT/ABORT and the hart completion response.","rtl/common/vlsit/maintenance/m_vlsit_riscv_cmo_controller.sv"],"frame_interfaces":["IN","OUT"],"blocks":[{"key":"B0","label":["component_boundary","(m_vlsit_riscv_cmo_controller)"],"width":360,"row":0,"col":0,"row_name":"component_boundary (m_vlsit_riscv_cmo_controller)","function":"Sequence CCU preparation, optional per-line LLC maintenance, terminal COMMIT/ABORT and the hart completion response.","source":"NEW; rtl/common/vlsit/maintenance/m_vlsit_riscv_cmo_controller.sv"}],"connectors":[],"externals":[{"id":"IN","block":"B0","side":"L","dir":"in","pos":0,"text":["IN","ports"]},{"id":"OUT","block":"B0","side":"R","dir":"out","pos":0,"text":["OUT","ports"]}],"interfaces":[{"id":"IN","name":"Parent in ports","category":"custom","active":"in","signals":"i_clk_cluster, i_rst_n_cluster, i_cmo_valid, i_cmo_op, i_cmo_pa_line, i_cmo_vaddr, i_cmo_pc, i_cmo_hart, i_ccu_begin_ready, i_ccu_prepare_valid, i_ccu_prepare_tag, i_ccu_prepare_err, i_maint_ready, i_maint_done, i_maint_error, i_ccu_finish_ready, i_ccu_finish_done"},{"id":"OUT","name":"Parent out ports","category":"custom","active":"out","signals":"o_cmo_ready, o_cmo_done, o_cmo_error, o_cmo_vaddr, o_cmo_pc, o_cmo_hart, o_ccu_begin_valid, o_ccu_begin_op, o_ccu_begin_pa_line, o_ccu_begin_hart, o_ccu_begin_wback_en, o_ccu_prepare_ready, o_maint_valid, o_maint_op, o_maint_pa_line, o_ccu_finish_valid, o_ccu_finish_tag, o_ccu_finish_commit"}],"nets":[],"legend_note":"A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
+{"page_name":"BLOCK_DIAGRAM","out_name":"m_vlsit_riscv_cmo_controller_internal.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Internal functional blocks","(m_vlsit_riscv_cmo_controller)"]},"frame_row":["m_vlsit_riscv_cmo_controller","Sequence CCU preparation, LLC maintenance and terminal COMMIT or ABORT for one CMO.","rtl/common/vlsit/maintenance/m_vlsit_riscv_cmo_controller.sv"],"frame_interfaces":["CMDI","CCUB","LLCM","RSPO"],"blocks":[{"key":"B0","label":["command_capture","(retained op, hart, line)"],"width":300,"row":0,"col":0,"row_name":"command_capture (retained op, hart, line)","function":"Take one CBO or FENCE.I command and keep op, hart, line, PC, virtual address and tag until the response.","source":"rtl/common/vlsit/maintenance/m_vlsit_riscv_cmo_controller.sv:94-146"},{"key":"B1","label":["fsm_next_state","(p_com_fsm_cmo_nxt)"],"width":220,"row":0,"col":1,"row_name":"fsm_next_state (p_com_fsm_cmo_nxt)","function":"Choose the next of eight states from CCU, LLC and terminal handshakes; an error or FENCE.I skips the LLC step.","source":"rtl/common/vlsit/maintenance/m_vlsit_riscv_cmo_controller.sv:156-282"},{"key":"B2","label":["fsm_state_reg","(p_ff_fsm_cmo)"],"width":180,"row":0,"col":2,"row_name":"fsm_state_reg (p_ff_fsm_cmo)","function":"Hold the controller state.","source":"rtl/common/vlsit/maintenance/m_vlsit_riscv_cmo_controller.sv:148-155"},{"key":"B3","label":["ccu_begin_prepare","(o_ccu_begin_*)"],"width":200,"row":1,"col":0,"row_name":"ccu_begin_prepare (o_ccu_begin_*)","function":"Request a CCU transaction and take the PREPARE result and tag.","source":"rtl/common/vlsit/maintenance/m_vlsit_riscv_cmo_controller.sv:62-71,140"},{"key":"B4","label":["llc_maintenance","(o_maint_*)"],"width":180,"row":1,"col":1,"row_name":"llc_maintenance (o_maint_*)","function":"Issue native per-line LLC clean or invalidate for a successful CBO and wait for done or error.","source":"rtl/common/vlsit/maintenance/m_vlsit_riscv_cmo_controller.sv:72-81"},{"key":"B5","label":["ccu_finish","(o_ccu_finish_*)"],"width":200,"row":1,"col":2,"row_name":"ccu_finish (o_ccu_finish_*)","function":"Send COMMIT, or ABORT on any error, and wait until the context is done.","source":"rtl/common/vlsit/maintenance/m_vlsit_riscv_cmo_controller.sv:82-86"},{"key":"B6","label":["hart_response","(o_cmo_done, o_cmo_error)"],"width":300,"row":2,"col":2,"row_name":"hart_response (o_cmo_done, o_cmo_error)","function":"Answer the hart only after all terminal ACKs: success, or an error with cause 7 (CBO) or 24 (FENCE.I).","source":"rtl/common/vlsit/maintenance/m_vlsit_riscv_cmo_controller.sv:40-60"}],"connectors":[{"id":"CAP","src":"B0","src_side":"R","dst":"B1","dst_side":"L"},{"id":"NEXT","src":"B1","src_side":"R","dst":"B2","dst_side":"L"},{"id":"BEG","src":"B0","src_side":"B","dst":"B3","dst_side":"T"},{"id":"PREP","src":"B3","src_side":"R","dst":"B4","dst_side":"L"},{"id":"MNT","src":"B4","src_side":"R","dst":"B5","dst_side":"L"},{"id":"RSP","src":"B5","src_side":"B","dst":"B6","dst_side":"T"}],"externals":[{"id":"CMDI","block":"B0","side":"T","dir":"in","pos":0,"text":["CMO COMMAND","op, hart, line"]},{"id":"CCUB","block":"B3","side":"L","dir":"out","pos":0,"text":["CCU BEGIN","op, line, hart"]},{"id":"LLCM","block":"B4","side":"B","dir":"out","pos":0,"text":["LLC MAINTENANCE","op, line"]},{"id":"RSPO","block":"B6","side":"R","dir":"out","pos":0,"text":["HART RESPONSE","done, error"]}],"interfaces":[{"id":"CAP","name":"Captured command to FSM","category":"custom","active":"B0 -> B1","signals":"i_cmo_op, i_cmo_pa_line, i_cmo_hart"},{"id":"NEXT","name":"Next state to state register","category":"custom","active":"B1 -> B2","signals":"reg_cmo_op"},{"id":"BEG","name":"Command to CCU begin","category":"handshake","active":"B0 -> B3","signals":"o_ccu_begin_valid, i_ccu_begin_ready, o_ccu_begin_op, o_ccu_begin_pa_line, o_ccu_begin_hart, o_ccu_begin_wback_en"},{"id":"PREP","name":"PREPARE result to maintenance","category":"handshake","active":"B3 -> B4","signals":"i_ccu_prepare_valid, o_ccu_prepare_ready, i_ccu_prepare_tag, i_ccu_prepare_err"},{"id":"MNT","name":"Maintenance result to finish","category":"handshake","active":"B4 -> B5","signals":"i_maint_done, i_maint_error"},{"id":"RSP","name":"Finish result to hart response","category":"handshake","active":"B5 -> B6","signals":"o_ccu_finish_valid, i_ccu_finish_ready, o_ccu_finish_tag, o_ccu_finish_commit, i_ccu_finish_done"},{"id":"CMDI","name":"Command inputs","category":"handshake","active":"in","signals":"i_cmo_valid, o_cmo_ready, i_cmo_op, i_cmo_pa_line, i_cmo_vaddr, i_cmo_pc, i_cmo_hart"},{"id":"CCUB","name":"CCU begin outputs","category":"handshake","active":"out","signals":"o_ccu_begin_valid, o_ccu_begin_op, o_ccu_begin_pa_line, o_ccu_begin_hart, o_ccu_begin_wback_en"},{"id":"LLCM","name":"LLC maintenance outputs","category":"handshake","active":"out","signals":"o_maint_valid, i_maint_ready, o_maint_op, o_maint_pa_line"},{"id":"RSPO","name":"Hart response outputs","category":"handshake","active":"out","signals":"o_cmo_done, o_cmo_error, o_cmo_vaddr, o_cmo_pc, o_cmo_hart"}],"nets":[],"legend_note":"Functional decomposition of one RTL module. The module has no child instance except where a box names one, so the boxes are logic groups named after the RTL processes, generate blocks and registers cited in the source column. Arrows show the main request or data direction; responses return on the same bundle.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
 ```
 
-[Editable draw.io](figures/post_a06/m_vlsit_riscv_cmo_controller.drawio) · [Figure source](figures/post_a06/m_vlsit_riscv_cmo_controller.json).
+[Editable draw.io](figures/post_a06/m_vlsit_riscv_cmo_controller_internal.drawio) · [Figure source](figures/post_a06/m_vlsit_riscv_cmo_controller_internal.json).
 
 **Interface contract.** All synchronous ports use the common cluster clock; the probe engine cache clock is the same domain in this cluster. A valid/ready payload is accepted only on the corresponding handshake and held through backpressure. Pulsed completion/ACK interfaces are described by the operation/FSM contract; they must not be treated as independent ready/valid channels.
 
@@ -2976,15 +3464,8 @@ Source: [rtl/common/vlsit/coherence/m_vlsit_riscv_coh_bank_arb.sv](../../rtl/com
 
 **Verification boundary.** Bank-progress, reservation-cancel escape and A-05 directed units exist; saturated random fairness remains open.
 
-The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules. / Hình thể hiện phân cấp source; leaf chỉ có symbol ranh giới, không tạo module giả.
+This module has no child instance, so no composition diagram is given; a one-box figure would add no information. Its behavior is in the text above and the interface table below.
 
-![m_vlsit_riscv_coh_bank_arb composition](figures/post_a06/m_vlsit_riscv_coh_bank_arb.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"m_vlsit_riscv_coh_bank_arb.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(m_vlsit_riscv_coh_bank_arb)"]},"frame_row":["m_vlsit_riscv_coh_bank_arb","Select eligible directory work fairly within each of four independent banks while preserving request identity.","rtl/common/vlsit/coherence/m_vlsit_riscv_coh_bank_arb.sv"],"frame_interfaces":["IN","OUT"],"blocks":[{"key":"B0","label":["component_boundary","(m_vlsit_riscv_coh_bank_arb)"],"width":340,"row":0,"col":0,"row_name":"component_boundary (m_vlsit_riscv_coh_bank_arb)","function":"Select eligible directory work fairly within each of four independent banks while preserving request identity.","source":"NEW; rtl/common/vlsit/coherence/m_vlsit_riscv_coh_bank_arb.sv"}],"connectors":[],"externals":[{"id":"IN","block":"B0","side":"L","dir":"in","pos":0,"text":["IN","ports"]},{"id":"OUT","block":"B0","side":"R","dir":"out","pos":0,"text":["OUT","ports"]}],"interfaces":[{"id":"IN","name":"Parent in ports","category":"custom","active":"in","signals":"i_clk_cluster, i_rst_n_cluster, i_req_valid, i_req_bank, i_gnt_ready"},{"id":"OUT","name":"Parent out ports","category":"custom","active":"out","signals":"o_gnt_valid, o_gnt_slot, o_bank_conflict_stall"}],"nets":[],"legend_note":"A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/m_vlsit_riscv_coh_bank_arb.drawio) · [Figure source](figures/post_a06/m_vlsit_riscv_coh_bank_arb.json).
 
 **Interface contract.** All synchronous ports use the common cluster clock; the probe engine cache clock is the same domain in this cluster. A valid/ready payload is accepted only on the corresponding handshake and held through backpressure. Pulsed completion/ACK interfaces are described by the operation/FSM contract; they must not be treated as independent ready/valid channels.
 
@@ -3015,7 +3496,7 @@ Source: [rtl/common/vlsit/coherence/m_vlsit_riscv_coh_fabric.sv](../../rtl/commo
 
 **Verification boundary.** A-01/A-02/A-04/A-05 targeted CPU/unit tests pass. This is not a formal global deadlock or all-traffic fairness proof.
 
-The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules. / Hình thể hiện phân cấp source; leaf chỉ có symbol ranh giới, không tạo module giả.
+The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules.
 
 ![m_vlsit_riscv_coh_fabric composition](figures/post_a06/m_vlsit_riscv_coh_fabric.svg)
 
@@ -3094,7 +3575,7 @@ Source: [rtl/common/vlsit/coherence/m_vlsit_riscv_coh_tile_array.sv](../../rtl/c
 
 **Verification boundary.** Composed control units plus CPU atomic/maintenance paths pass. General multi-hart data correctness requires an independent memory scoreboard.
 
-The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules. / Hình thể hiện phân cấp source; leaf chỉ có symbol ranh giới, không tạo module giả.
+The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules.
 
 ![m_vlsit_riscv_coh_tile_array composition](figures/post_a06/m_vlsit_riscv_coh_tile_array.svg)
 
@@ -3184,15 +3665,15 @@ Source: [rtl/common/vlsit/coherence/m_vlsit_riscv_coh_txn_table.sv](../../rtl/co
 
 **Verification boundary.** Context full/wrap, identity, phase retention, invalid ACK and mutation checks exist; random reorder coverage remains incomplete.
 
-The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules. / Hình thể hiện phân cấp source; leaf chỉ có symbol ranh giới, không tạo module giả.
+The figure shows the internal functional blocks of the module. The module has no child instance, so the boxes are logic groups named after the RTL processes, generate blocks and registers listed in the figure source; they are not extra RTL modules.
 
-![m_vlsit_riscv_coh_txn_table composition](figures/post_a06/m_vlsit_riscv_coh_txn_table.svg)
+![m_vlsit_riscv_coh_txn_table internal functional blocks](figures/post_a06/m_vlsit_riscv_coh_txn_table_internal.svg)
 
 ```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"m_vlsit_riscv_coh_txn_table.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(m_vlsit_riscv_coh_txn_table)"]},"frame_row":["m_vlsit_riscv_coh_txn_table","Own the lifetime and immutable identity of every active coherence transaction and its current probe phase.","rtl/common/vlsit/coherence/m_vlsit_riscv_coh_txn_table.sv"],"frame_interfaces":["IN","OUT"],"blocks":[{"key":"B0","label":["component_boundary","(m_vlsit_riscv_coh_txn_table)"],"width":340,"row":0,"col":0,"row_name":"component_boundary (m_vlsit_riscv_coh_txn_table)","function":"Own the lifetime and immutable identity of every active coherence transaction and its current probe phase.","source":"NEW; rtl/common/vlsit/coherence/m_vlsit_riscv_coh_txn_table.sv"}],"connectors":[],"externals":[{"id":"IN","block":"B0","side":"L","dir":"in","pos":0,"text":["IN","ports"]},{"id":"OUT","block":"B0","side":"R","dir":"out","pos":0,"text":["OUT","ports"]}],"interfaces":[{"id":"IN","name":"Parent in ports","category":"custom","active":"in","signals":"i_clk_cluster, i_rst_n_cluster, i_alloc_valid, i_alloc_src, i_alloc_req_id, i_alloc_pa_line, i_alloc_kind, i_alloc_target_state, i_alloc_wback_en, i_release_valid, i_release_tag, i_phase_start_valid, i_phase_start_tag, i_phase_start, i_phase_expected, i_owner_capture_valid, i_owner_capture_tag, i_owner_capture_present, i_owner_capture_hart, i_ack_valid, i_ack_tag, i_ack_phase, i_ack_err, i_ack_wback_done"},{"id":"OUT","name":"Parent out ports","category":"custom","active":"out","signals":"o_alloc_ready, o_alloc_tag, o_release_ready, o_phase_start_ready, o_owner_capture_ready, o_ack_ready, o_ctx_valid, o_ctx_src, o_ctx_req_id, o_ctx_pa_line, o_ctx_kind, o_ctx_phase, o_ctx_ack_expected, o_ctx_ack_received, o_ctx_phase_active, o_ctx_phase_done, o_ctx_phase_err, o_ctx_owner_wback_done, o_ctx_target_state, o_ctx_wback_en, o_ctx_owner_known, o_ctx_owner_present, o_ctx_owner_hart, o_ctx_txn_err, o_ctx_owner_wback_err, o_coh_proto_diag_event"}],"nets":[],"legend_note":"A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
+{"page_name":"BLOCK_DIAGRAM","out_name":"m_vlsit_riscv_coh_txn_table_internal.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Internal functional blocks","(m_vlsit_riscv_coh_txn_table)"]},"frame_row":["m_vlsit_riscv_coh_txn_table","Own the lifetime and identity of each active coherence transaction.","rtl/common/vlsit/coherence/m_vlsit_riscv_coh_txn_table.sv"],"frame_interfaces":["ALCI","PHSI","ACKI","CTXO"],"blocks":[{"key":"B0","label":["slot_allocator","(p_com_coh_alloc)"],"width":200,"row":0,"col":1,"row_name":"slot_allocator (p_com_coh_alloc)","function":"Find a free slot, keep the reserved victim credit, and return the new context tag.","source":"rtl/common/vlsit/coherence/m_vlsit_riscv_coh_txn_table.sv:185-198"},{"key":"B1","label":["control_ready","(p_com_coh_ctl_ready)"],"width":260,"row":0,"col":0,"row_name":"control_ready (p_com_coh_ctl_ready)","function":"Decide which release, phase-start and owner-capture requests can be taken in this cycle.","source":"rtl/common/vlsit/coherence/m_vlsit_riscv_coh_txn_table.sv:152-183"},{"key":"B2","label":["context_registers","(p_ff_coh_context)"],"width":220,"row":1,"col":1,"row_name":"context_registers (p_ff_coh_context)","function":"Per slot: valid, line, source, kind, target state, phase, expected and received masks, owner, write-back and error state.","source":"rtl/common/vlsit/coherence/m_vlsit_riscv_coh_txn_table.sv:240-332"},{"key":"B3","label":["ack_matcher","(p_com_coh_ack_match)"],"width":260,"row":1,"col":2,"row_name":"ack_matcher (p_com_coh_ack_match)","function":"Accept only a unique expected ACK for a live tag and phase; stale, duplicate or wrong-phase ACKs change nothing.","source":"rtl/common/vlsit/coherence/m_vlsit_riscv_coh_txn_table.sv:200-238"},{"key":"B4","label":["context_status_out","(o_ctx_*)"],"width":220,"row":2,"col":1,"row_name":"context_status_out (o_ctx_*)","function":"Present every slot to the probe scheduler and the fabric: masks, phase done, owner and error flags.","source":"rtl/common/vlsit/coherence/m_vlsit_riscv_coh_txn_table.sv:1-150"}],"connectors":[{"id":"ALOC","src":"B0","src_side":"B","dst":"B2","dst_side":"T"},{"id":"CTRL","src":"B1","src_side":"R","dst":"B0","dst_side":"L"},{"id":"ACK","src":"B3","src_side":"L","dst":"B2","dst_side":"R"},{"id":"STAT","src":"B2","src_side":"B","dst":"B4","dst_side":"T"}],"externals":[{"id":"ALCI","block":"B0","side":"R","dir":"in","pos":0,"text":["ALLOC REQUEST","line, kind, state"]},{"id":"PHSI","block":"B1","side":"L","dir":"in","pos":0,"text":["PHASE / RELEASE","start, capture, release"]},{"id":"ACKI","block":"B3","side":"R","dir":"in","pos":0,"text":["ACK","tag, phase, err"]},{"id":"CTXO","block":"B4","side":"B","dir":"out","pos":0,"text":["CONTEXT STATUS","to scheduler, fabric"]}],"interfaces":[{"id":"ALOC","name":"Allocated slot to registers","category":"custom","active":"B0 -> B2","signals":"o_alloc_tag, i_alloc_src, i_alloc_req_id, i_alloc_pa_line, i_alloc_kind, i_alloc_target_state, i_alloc_wback_en"},{"id":"CTRL","name":"Control ready to allocator","category":"handshake","active":"B1 -> B0","signals":"o_alloc_ready, o_release_ready, o_phase_start_ready, o_owner_capture_ready"},{"id":"ACK","name":"Matched ACK to registers","category":"custom","active":"B3 -> B2","signals":"i_ack_tag, i_ack_phase, i_ack_err, i_ack_wback_done"},{"id":"STAT","name":"Registers to status output","category":"custom","active":"B2 -> B4","signals":"o_ctx_valid, o_ctx_phase, o_ctx_ack_expected, o_ctx_ack_received"},{"id":"ALCI","name":"Allocation inputs","category":"handshake","active":"in","signals":"i_alloc_valid, i_alloc_src, i_alloc_req_id, i_alloc_pa_line, i_alloc_kind, i_alloc_target_state, i_alloc_wback_en"},{"id":"PHSI","name":"Phase and release inputs","category":"handshake","active":"in","signals":"i_release_valid, i_release_tag, i_phase_start_valid, i_phase_start_tag, i_phase_start, i_phase_expected, i_owner_capture_valid, i_owner_capture_tag, i_owner_capture_present, i_owner_capture_hart"},{"id":"ACKI","name":"ACK inputs","category":"handshake","active":"in","signals":"i_ack_valid, o_ack_ready, i_ack_tag, i_ack_phase, i_ack_err, i_ack_wback_done"},{"id":"CTXO","name":"Context status outputs","category":"custom","active":"out","signals":"o_ctx_valid, o_ctx_src, o_ctx_req_id, o_ctx_pa_line, o_ctx_kind, o_ctx_phase, o_ctx_ack_expected, o_ctx_ack_received, o_ctx_phase_active, o_ctx_phase_done, o_ctx_phase_err, o_ctx_owner_wback_done, o_ctx_target_state, o_ctx_wback_en, o_ctx_owner_known, o_ctx_owner_present, o_ctx_owner_hart, o_ctx_txn_err, o_ctx_owner_wback_err, o_coh_proto_diag_event"}],"nets":[],"legend_note":"Functional decomposition of one RTL module. The module has no child instance except where a box names one, so the boxes are logic groups named after the RTL processes, generate blocks and registers cited in the source column. Arrows show the main request or data direction; responses return on the same bundle.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
 ```
 
-[Editable draw.io](figures/post_a06/m_vlsit_riscv_coh_txn_table.drawio) · [Figure source](figures/post_a06/m_vlsit_riscv_coh_txn_table.json).
+[Editable draw.io](figures/post_a06/m_vlsit_riscv_coh_txn_table_internal.drawio) · [Figure source](figures/post_a06/m_vlsit_riscv_coh_txn_table_internal.json).
 
 **Interface contract.** All synchronous ports use the common cluster clock; the probe engine cache clock is the same domain in this cluster. A valid/ready payload is accepted only on the corresponding handshake and held through backpressure. Pulsed completion/ACK interfaces are described by the operation/FSM contract; they must not be treated as independent ready/valid channels.
 
@@ -3265,7 +3746,7 @@ Source: [rtl/common/vlsit/cpu/m_vlsit_riscv_cpu_tile.sv](../../rtl/common/vlsit/
 
 **Verification boundary.** Real CPU boot/load/store/atomic/CMO and selected M/S trap cases pass. Full ISA, Sv39 and OS qualification remain open.
 
-The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules. / Hình thể hiện phân cấp source; leaf chỉ có symbol ranh giới, không tạo module giả.
+The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules.
 
 ![m_vlsit_riscv_cpu_tile composition](figures/post_a06/m_vlsit_riscv_cpu_tile.svg)
 
@@ -3411,7 +3892,7 @@ Source: [rtl/common/vlsit/cpu/m_vlsit_riscv_cpu_tile_array.sv](../../rtl/common/
 
 **Verification boundary.** Active 2/4-hart real programs and inactive-slot unit checks exist; external per-hart IRQ/debug behavior still needs system tests.
 
-The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules. / Hình thể hiện phân cấp source; leaf chỉ có symbol ranh giới, không tạo module giả.
+The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules.
 
 ![m_vlsit_riscv_cpu_tile_array composition](figures/post_a06/m_vlsit_riscv_cpu_tile_array.svg)
 
@@ -3544,15 +4025,8 @@ Source: [rtl/common/vlsit/diagnostics/m_vlsit_riscv_fault_record.sv](../../rtl/c
 
 **Verification boundary.** A-06 ten real CPU cases plus priority/high-address/inactive-hart/reset units and overwrite mutation detection pass.
 
-The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules. / Hình thể hiện phân cấp source; leaf chỉ có symbol ranh giới, không tạo module giả.
+This module has no child instance, so no composition diagram is given; a one-box figure would add no information. Its behavior is in the text above and the interface table below.
 
-![m_vlsit_riscv_fault_record composition](figures/post_a06/m_vlsit_riscv_fault_record.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"m_vlsit_riscv_fault_record.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(m_vlsit_riscv_fault_record)"]},"frame_row":["m_vlsit_riscv_fault_record","Capture the first fatal ordinary L1 or shared LLC writeback error until reset.","rtl/common/vlsit/diagnostics/m_vlsit_riscv_fault_record.sv"],"frame_interfaces":["IN","OUT"],"blocks":[{"key":"B0","label":["component_boundary","(m_vlsit_riscv_fault_record)"],"width":340,"row":0,"col":0,"row_name":"component_boundary (m_vlsit_riscv_fault_record)","function":"Capture the first fatal ordinary L1 or shared LLC writeback error until reset.","source":"NEW; rtl/common/vlsit/diagnostics/m_vlsit_riscv_fault_record.sv"}],"connectors":[],"externals":[{"id":"IN","block":"B0","side":"L","dir":"in","pos":0,"text":["IN","ports"]},{"id":"OUT","block":"B0","side":"R","dir":"out","pos":0,"text":["OUT","ports"]}],"interfaces":[{"id":"IN","name":"Parent in ports","category":"custom","active":"in","signals":"i_clk_cluster, i_rst_n_cluster, i_l1_fault_valid, i_l1_fault_addr, i_l1_fault_resp, i_llc_fault_valid, i_llc_fault_addr, i_llc_fault_resp"},{"id":"OUT","name":"Parent out ports","category":"custom","active":"out","signals":"o_fault_sts, o_fault_info, o_fault_addr_lo, o_fault_addr_hi"}],"nets":[],"legend_note":"A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/m_vlsit_riscv_fault_record.drawio) · [Figure source](figures/post_a06/m_vlsit_riscv_fault_record.json).
 
 **Interface contract.** All synchronous ports use the common cluster clock; the probe engine cache clock is the same domain in this cluster. A valid/ready payload is accepted only on the corresponding handshake and held through backpressure. Pulsed completion/ACK interfaces are described by the operation/FSM contract; they must not be treated as independent ready/valid channels.
 
@@ -3587,15 +4061,15 @@ Source: [rtl/common/vlsit/coherence/m_vlsit_riscv_hpd_probe_engine.sv](../../rtl
 
 **Verification boundary.** Native probe-engine units plus dirty-owner, absence, ABORT and maintenance CPU paths pass.
 
-The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules. / Hình thể hiện phân cấp source; leaf chỉ có symbol ranh giới, không tạo module giả.
+The figure shows the internal functional blocks of the module. The module has no child instance, so the boxes are logic groups named after the RTL processes, generate blocks and registers listed in the figure source; they are not extra RTL modules.
 
-![m_vlsit_riscv_hpd_probe_engine composition](figures/post_a06/m_vlsit_riscv_hpd_probe_engine.svg)
+![m_vlsit_riscv_hpd_probe_engine internal functional blocks](figures/post_a06/m_vlsit_riscv_hpd_probe_engine_internal.svg)
 
 ```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"m_vlsit_riscv_hpd_probe_engine.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(m_vlsit_riscv_hpd_probe_engine)"]},"frame_row":["m_vlsit_riscv_hpd_probe_engine","Execute tagged PREPARE and matching COMMIT/ABORT against native HPDcache metadata and writeback services.","rtl/common/vlsit/coherence/m_vlsit_riscv_hpd_probe_engine.sv"],"frame_interfaces":["IN","OUT"],"blocks":[{"key":"B0","label":["component_boundary","(m_vlsit_riscv_hpd_probe_engine)"],"width":380,"row":0,"col":0,"row_name":"component_boundary (m_vlsit_riscv_hpd_probe_engine)","function":"Execute tagged PREPARE and matching COMMIT/ABORT against native HPDcache metadata and writeback services.","source":"NEW; rtl/common/vlsit/coherence/m_vlsit_riscv_hpd_probe_engine.sv"}],"connectors":[],"externals":[{"id":"IN","block":"B0","side":"L","dir":"in","pos":0,"text":["IN","ports"]},{"id":"OUT","block":"B0","side":"R","dir":"out","pos":0,"text":["OUT","ports"]}],"interfaces":[{"id":"IN","name":"Parent in ports","category":"custom","active":"in","signals":"i_clk_cache, i_rst_n_cache, i_probe_req_valid, i_probe_req_tag, i_probe_req_nline, i_probe_req_phase, i_probe_req_target_state, i_probe_req_wback_en, i_probe_rsp_ready, i_lookup_ready, i_lookup_rsp_valid, i_lookup_rsp_tag, i_lookup_rsp_nline, i_lookup_rsp_way, i_lookup_rsp_hit, i_lookup_rsp_state, i_lookup_rsp_err, i_flush_ready, i_flush_ack_valid, i_flush_ack_nline, i_flush_ack_err, i_state_update_ready"},{"id":"OUT","name":"Parent out ports","category":"custom","active":"out","signals":"o_probe_req_ready, o_probe_rsp_valid, o_probe_rsp_tag, o_probe_rsp_nline, o_probe_rsp_phase, o_probe_rsp_state, o_probe_rsp_err, o_probe_rsp_wback_done, o_lookup_valid, o_lookup_tag, o_lookup_nline, o_lookup_rsp_ready, o_flush_valid, o_flush_nline, o_flush_way, o_state_update_valid, o_state_update_nline, o_state_update_way, o_state_update_state"}],"nets":[],"legend_note":"A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
+{"page_name":"BLOCK_DIAGRAM","out_name":"m_vlsit_riscv_hpd_probe_engine_internal.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Internal functional blocks","(m_vlsit_riscv_hpd_probe_engine)"]},"frame_row":["m_vlsit_riscv_hpd_probe_engine","Execute tagged PREPARE and COMMIT or ABORT against HPDcache metadata and write-back.","rtl/common/vlsit/coherence/m_vlsit_riscv_hpd_probe_engine.sv"],"frame_interfaces":["PRQ","LKPI","FLSO","UPDO","PRS"],"blocks":[{"key":"B0","label":["probe_payload_regs","(p_ff_probe_payload)"],"width":240,"row":0,"col":0,"row_name":"probe_payload_regs (p_ff_probe_payload)","function":"Hold probe tag, line, target state, observed state, way, hit, error and write-back status.","source":"rtl/common/vlsit/coherence/m_vlsit_riscv_hpd_probe_engine.sv:294-445"},{"key":"B1","label":["probe_fsm_next","(p_com_probe_nxt)"],"width":200,"row":0,"col":1,"row_name":"probe_fsm_next (p_com_probe_nxt)","function":"Eleven-state next-state logic for PREPARE, COMMIT and ABORT.","source":"rtl/common/vlsit/coherence/m_vlsit_riscv_hpd_probe_engine.sv:191-284"},{"key":"B2","label":["probe_state_reg","(p_ff_probe_state)"],"width":220,"row":0,"col":2,"row_name":"probe_state_reg (p_ff_probe_state)","function":"Hold the explicit FSM state on the cache clock.","source":"rtl/common/vlsit/coherence/m_vlsit_riscv_hpd_probe_engine.sv:285-293"},{"key":"B3","label":["metadata_lookup","(o_lookup_*)"],"width":180,"row":1,"col":0,"row_name":"metadata_lookup (o_lookup_*)","function":"Look the line up in the HPDcache tag array and capture hit, way, state and error.","source":"rtl/common/vlsit/coherence/m_vlsit_riscv_hpd_probe_engine.sv:133-190"},{"key":"B4","label":["dirty_flush","(o_flush_*)"],"width":140,"row":1,"col":1,"row_name":"dirty_flush (o_flush_*)","function":"For an actual dirty M hit with write-back enabled, start a native flush and wait for the accepted B result.","source":"rtl/common/vlsit/coherence/m_vlsit_riscv_hpd_probe_engine.sv:133-190"},{"key":"B5","label":["state_update","(o_state_update_*)"],"width":220,"row":1,"col":2,"row_name":"state_update (o_state_update_*)","function":"On a matching COMMIT, write the target MESI state into a real hit; absence stays I and allocates no line.","source":"rtl/common/vlsit/coherence/m_vlsit_riscv_hpd_probe_engine.sv:133-190"},{"key":"B6","label":["probe_response_reg","(o_probe_rsp_*)"],"width":220,"row":2,"col":0,"row_name":"probe_response_reg (o_probe_rsp_*)","function":"Return prepared state, error and write-back done; payload stays stable while ready is low.","source":"rtl/common/vlsit/coherence/m_vlsit_riscv_hpd_probe_engine.sv:133-190"}],"connectors":[{"id":"PAY","src":"B0","src_side":"R","dst":"B1","dst_side":"L"},{"id":"NXT","src":"B1","src_side":"R","dst":"B2","dst_side":"L"},{"id":"LKP","src":"B0","src_side":"B","dst":"B3","dst_side":"T"},{"id":"FLS","src":"B3","src_side":"R","dst":"B4","dst_side":"L"},{"id":"UPD","src":"B4","src_side":"R","dst":"B5","dst_side":"L"},{"id":"RESP","src":"B3","src_side":"B","dst":"B6","dst_side":"T"}],"externals":[{"id":"PRQ","block":"B0","side":"T","dir":"in","pos":0,"text":["PROBE REQUEST","tag, line, phase"]},{"id":"LKPI","block":"B3","side":"L","dir":"out","pos":0,"text":["METADATA LOOKUP","to HPDcache"]},{"id":"FLSO","block":"B4","side":"B","dir":"out","pos":0,"text":["FLUSH","to HPDcache"]},{"id":"UPDO","block":"B5","side":"B","dir":"out","pos":0,"text":["STATE UPDATE","to HPDcache"]},{"id":"PRS","block":"B6","side":"L","dir":"out","pos":0,"text":["PROBE RESPONSE","state, err"]}],"interfaces":[{"id":"PAY","name":"Payload to FSM","category":"custom","active":"B0 -> B1","signals":"i_probe_req_tag, i_probe_req_nline, i_probe_req_phase, i_probe_req_target_state, i_probe_req_wback_en"},{"id":"NXT","name":"Next state to state register","category":"custom","active":"B1 -> B2","signals":"i_lookup_rsp_hit, i_flush_ack_valid, i_state_update_ready"},{"id":"LKP","name":"Payload to lookup","category":"handshake","active":"B0 -> B3","signals":"o_lookup_valid, i_lookup_ready, o_lookup_tag, o_lookup_nline, i_lookup_rsp_valid, o_lookup_rsp_ready, i_lookup_rsp_tag, i_lookup_rsp_nline, i_lookup_rsp_way, i_lookup_rsp_hit, i_lookup_rsp_state, i_lookup_rsp_err"},{"id":"FLS","name":"Lookup result to flush","category":"handshake","active":"B3 -> B4","signals":"o_flush_valid, i_flush_ready, o_flush_nline, o_flush_way, i_flush_ack_valid, i_flush_ack_nline, i_flush_ack_err"},{"id":"UPD","name":"Flush result to state update","category":"handshake","active":"B4 -> B5","signals":"o_state_update_valid, i_state_update_ready, o_state_update_nline, o_state_update_way, o_state_update_state"},{"id":"RESP","name":"Lookup result to response","category":"handshake","active":"B3 -> B6","signals":"i_lookup_rsp_state, i_lookup_rsp_err, o_probe_rsp_wback_done"},{"id":"PRQ","name":"Probe request inputs","category":"handshake","active":"in","signals":"i_probe_req_valid, o_probe_req_ready, i_probe_req_tag, i_probe_req_nline, i_probe_req_phase, i_probe_req_target_state, i_probe_req_wback_en"},{"id":"LKPI","name":"Lookup outputs","category":"handshake","active":"out","signals":"o_lookup_valid, o_lookup_tag, o_lookup_nline"},{"id":"FLSO","name":"Flush outputs","category":"handshake","active":"out","signals":"o_flush_valid, o_flush_nline, o_flush_way"},{"id":"UPDO","name":"State update outputs","category":"handshake","active":"out","signals":"o_state_update_valid, o_state_update_nline, o_state_update_way, o_state_update_state"},{"id":"PRS","name":"Probe response outputs","category":"handshake","active":"out","signals":"o_probe_rsp_valid, i_probe_rsp_ready, o_probe_rsp_tag, o_probe_rsp_nline, o_probe_rsp_phase, o_probe_rsp_state, o_probe_rsp_err, o_probe_rsp_wback_done"}],"nets":[],"legend_note":"Functional decomposition of one RTL module. The module has no child instance except where a box names one, so the boxes are logic groups named after the RTL processes, generate blocks and registers cited in the source column. Arrows show the main request or data direction; responses return on the same bundle.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
 ```
 
-[Editable draw.io](figures/post_a06/m_vlsit_riscv_hpd_probe_engine.drawio) · [Figure source](figures/post_a06/m_vlsit_riscv_hpd_probe_engine.json).
+[Editable draw.io](figures/post_a06/m_vlsit_riscv_hpd_probe_engine_internal.drawio) · [Figure source](figures/post_a06/m_vlsit_riscv_hpd_probe_engine_internal.json).
 
 **Interface contract.** All synchronous ports use the common cluster clock; the probe engine cache clock is the same domain in this cluster. A valid/ready payload is accepted only on the corresponding handshake and held through backpressure. Pulsed completion/ACK interfaces are described by the operation/FSM contract; they must not be treated as independent ready/valid channels.
 
@@ -3659,7 +4133,7 @@ Source: [rtl/common/vlsit/pmu/m_vlsit_riscv_pmu.sv](../../rtl/common/vlsit/pmu/m
 
 **Verification boundary.** Connected and linted; a full active PMU-to-software functional campaign is missing.
 
-The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules. / Hình thể hiện phân cấp source; leaf chỉ có symbol ranh giới, không tạo module giả.
+The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules.
 
 ![m_vlsit_riscv_pmu composition](figures/post_a06/m_vlsit_riscv_pmu.svg)
 
@@ -3712,15 +4186,15 @@ Source: [rtl/common/vlsit/coherence/m_vlsit_riscv_probe_scheduler.sv](../../rtl/
 
 **Verification boundary.** Tagged phase/invalid response/control tests and CPU paths pass. General hostile response ordering remains a verification task.
 
-The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules. / Hình thể hiện phân cấp source; leaf chỉ có symbol ranh giới, không tạo module giả.
+The figure shows the internal functional blocks of the module. The module has no child instance, so the boxes are logic groups named after the RTL processes, generate blocks and registers listed in the figure source; they are not extra RTL modules.
 
-![m_vlsit_riscv_probe_scheduler composition](figures/post_a06/m_vlsit_riscv_probe_scheduler.svg)
+![m_vlsit_riscv_probe_scheduler internal functional blocks](figures/post_a06/m_vlsit_riscv_probe_scheduler_internal.svg)
 
 ```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"m_vlsit_riscv_probe_scheduler.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(m_vlsit_riscv_probe_scheduler)"]},"frame_row":["m_vlsit_riscv_probe_scheduler","Schedule one active tagged probe per cache and route matching cache responses to the correct context.","rtl/common/vlsit/coherence/m_vlsit_riscv_probe_scheduler.sv"],"frame_interfaces":["IN","OUT"],"blocks":[{"key":"B0","label":["component_boundary","(m_vlsit_riscv_probe_scheduler)"],"width":360,"row":0,"col":0,"row_name":"component_boundary (m_vlsit_riscv_probe_scheduler)","function":"Schedule one active tagged probe per cache and route matching cache responses to the correct context.","source":"NEW; rtl/common/vlsit/coherence/m_vlsit_riscv_probe_scheduler.sv"}],"connectors":[],"externals":[{"id":"IN","block":"B0","side":"L","dir":"in","pos":0,"text":["IN","ports"]},{"id":"OUT","block":"B0","side":"R","dir":"out","pos":0,"text":["OUT","ports"]}],"interfaces":[{"id":"IN","name":"Parent in ports","category":"custom","active":"in","signals":"i_clk_cluster, i_rst_n_cluster, i_ctx_valid, i_ctx_pa_line, i_ctx_phase, i_ctx_ack_expected, i_ctx_ack_received, i_ctx_phase_active, i_ctx_target_state, i_ctx_wback_en, i_probe_req_ready, i_probe_rsp_valid, i_probe_rsp_tag, i_probe_rsp_pa_line, i_probe_rsp_phase, i_probe_rsp_state, i_probe_rsp_err, i_probe_rsp_wback_done, i_ack_ready"},{"id":"OUT","name":"Parent out ports","category":"custom","active":"out","signals":"o_probe_req_valid, o_probe_req_tag, o_probe_req_pa_line, o_probe_req_phase, o_probe_req_target_state, o_probe_req_wback_en, o_probe_rsp_ready, o_ack_valid, o_ack_tag, o_ack_phase, o_ack_state, o_ack_err, o_ack_wback_done, o_coh_proto_diag_event"}],"nets":[],"legend_note":"A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
+{"page_name":"BLOCK_DIAGRAM","out_name":"m_vlsit_riscv_probe_scheduler_internal.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Internal functional blocks","(m_vlsit_riscv_probe_scheduler)"]},"frame_row":["m_vlsit_riscv_probe_scheduler","Schedule one tagged probe per cache and route the matching response.","rtl/common/vlsit/coherence/m_vlsit_riscv_probe_scheduler.sv"],"frame_interfaces":["CTXI","PRBO","RSPI","ACKO"],"blocks":[{"key":"B0","label":["claim_arbiter","(p_com_probe_claim)"],"width":220,"row":0,"col":0,"row_name":"claim_arbiter (p_com_probe_claim)","function":"Grant one new context per cycle, and only when every hart slot of its expected mask is free (REQ-MEM-024).","source":"rtl/common/vlsit/coherence/m_vlsit_riscv_probe_scheduler.sv:134-183"},{"key":"B1","label":["phase_owner_slots","(per-hart owner tag)"],"width":240,"row":0,"col":1,"row_name":"phase_owner_slots (per-hart owner tag)","function":"Keep, for each hart, the tag of the context that owns its probe slot from PREPARE to COMMIT or ABORT.","source":"rtl/common/vlsit/coherence/m_vlsit_riscv_probe_scheduler.sv:233-309"},{"key":"B2","label":["target_select","(p_com_probe_sel)"],"width":200,"row":1,"col":0,"row_name":"target_select (p_com_probe_sel)","function":"Scan active contexts round robin for each hart and pick only expected targets that have not acknowledged yet.","source":"rtl/common/vlsit/coherence/m_vlsit_riscv_probe_scheduler.sv:185-212"},{"key":"B3","label":["probe_request_regs","(per-hart request)"],"width":220,"row":1,"col":1,"row_name":"probe_request_regs (per-hart request)","function":"Hold tag, line, phase, target state and write-back enable stable while the cache is not ready.","source":"rtl/common/vlsit/coherence/m_vlsit_riscv_probe_scheduler.sv:214-232"},{"key":"B4","label":["active_probe_tracker","(p_ff_probe_schedule)"],"width":260,"row":2,"col":1,"row_name":"active_probe_tracker (p_ff_probe_schedule)","function":"Remember which probe is outstanding on each hart and its phase-owner association.","source":"rtl/common/vlsit/coherence/m_vlsit_riscv_probe_scheduler.sv:233-309"},{"key":"B5","label":["ack_match_buffer","(response match)"],"width":200,"row":2,"col":0,"row_name":"ack_match_buffer (response match)","function":"Match response tag, line and phase, hold the ACK until the transaction table accepts it, and drain a mismatch into a diagnostic event.","source":"rtl/common/vlsit/coherence/m_vlsit_riscv_probe_scheduler.sv:214-309"}],"connectors":[{"id":"CLM","src":"B0","src_side":"R","dst":"B1","dst_side":"L"},{"id":"CTX","src":"B0","src_side":"B","dst":"B2","dst_side":"T"},{"id":"SEL","src":"B2","src_side":"R","dst":"B3","dst_side":"L"},{"id":"OWN","src":"B1","src_side":"B","dst":"B3","dst_side":"T"},{"id":"ACT","src":"B3","src_side":"B","dst":"B4","dst_side":"T"},{"id":"MTCH","src":"B4","src_side":"L","dst":"B5","dst_side":"R"}],"externals":[{"id":"CTXI","block":"B0","side":"T","dir":"in","pos":0,"text":["CONTEXT STATE","expected, received"]},{"id":"PRBO","block":"B3","side":"R","dir":"out","pos":0,"text":["PROBE REQUEST","to cache"]},{"id":"RSPI","block":"B5","side":"B","dir":"in","pos":0,"text":["PROBE RESPONSE","from cache"]},{"id":"ACKO","block":"B5","side":"L","dir":"out","pos":0,"text":["ACK","to txn table"]}],"interfaces":[{"id":"CLM","name":"Claim result to owner slots","category":"handshake","active":"B0 -> B1","signals":"i_ctx_valid, i_ctx_ack_expected, i_ctx_phase_active"},{"id":"CTX","name":"Eligible context to target select","category":"custom","active":"B0 -> B2","signals":"i_ctx_valid, i_ctx_ack_expected, i_ctx_ack_received"},{"id":"SEL","name":"Selected target to request register","category":"handshake","active":"B2 -> B3","signals":"o_probe_req_valid, i_probe_req_ready"},{"id":"OWN","name":"Owner tag to request register","category":"custom","active":"B1 -> B3","signals":"o_probe_req_tag"},{"id":"ACT","name":"Accepted probe to tracker","category":"custom","active":"B3 -> B4","signals":"o_probe_req_pa_line, o_probe_req_phase, o_probe_req_target_state, o_probe_req_wback_en"},{"id":"MTCH","name":"Tracker to ACK match","category":"custom","active":"B4 -> B5","signals":"i_probe_rsp_tag, i_probe_rsp_pa_line, i_probe_rsp_phase"},{"id":"CTXI","name":"Context inputs","category":"custom","active":"in","signals":"i_ctx_valid, i_ctx_pa_line, i_ctx_phase, i_ctx_ack_expected, i_ctx_ack_received, i_ctx_phase_active, i_ctx_target_state, i_ctx_wback_en"},{"id":"PRBO","name":"Probe request outputs","category":"handshake","active":"out","signals":"o_probe_req_valid, o_probe_req_tag, o_probe_req_pa_line, o_probe_req_phase, o_probe_req_target_state, o_probe_req_wback_en"},{"id":"RSPI","name":"Probe response inputs","category":"handshake","active":"in","signals":"i_probe_rsp_valid, i_probe_rsp_tag, i_probe_rsp_pa_line, i_probe_rsp_phase, i_probe_rsp_state, i_probe_rsp_err, i_probe_rsp_wback_done"},{"id":"ACKO","name":"ACK outputs","category":"handshake","active":"out","signals":"o_ack_valid, o_ack_tag, o_ack_phase, o_ack_state, o_ack_err, o_ack_wback_done, o_coh_proto_diag_event"}],"nets":[],"legend_note":"Functional decomposition of one RTL module. The module has no child instance except where a box names one, so the boxes are logic groups named after the RTL processes, generate blocks and registers cited in the source column. Arrows show the main request or data direction; responses return on the same bundle.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
 ```
 
-[Editable draw.io](figures/post_a06/m_vlsit_riscv_probe_scheduler.drawio) · [Figure source](figures/post_a06/m_vlsit_riscv_probe_scheduler.json).
+[Editable draw.io](figures/post_a06/m_vlsit_riscv_probe_scheduler_internal.drawio) · [Figure source](figures/post_a06/m_vlsit_riscv_probe_scheduler_internal.json).
 
 **Interface contract.** All synchronous ports use the common cluster clock; the probe engine cache clock is the same domain in this cluster. A valid/ready payload is accepted only on the corresponding handshake and held through backpressure. Pulsed completion/ACK interfaces are described by the operation/FSM contract; they must not be treated as independent ready/valid channels.
 
@@ -3776,15 +4250,15 @@ Source: [rtl/common/vlsit/coherence/m_vlsit_riscv_sharer_directory.sv](../../rtl
 
 **Verification boundary.** Lookup/update/cancel, PLRU, victim and A-04/A-05 units/CPU paths exist. ASIC SRAM binding and formal no-false-negative proof remain open.
 
-The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules. / Hình thể hiện phân cấp source; leaf chỉ có symbol ranh giới, không tạo module giả.
+The figure shows the internal functional blocks of the module. The module has no child instance, so the boxes are logic groups named after the RTL processes, generate blocks and registers listed in the figure source; they are not extra RTL modules.
 
-![m_vlsit_riscv_sharer_directory composition](figures/post_a06/m_vlsit_riscv_sharer_directory.svg)
+![m_vlsit_riscv_sharer_directory internal functional blocks](figures/post_a06/m_vlsit_riscv_sharer_directory_internal.svg)
 
 ```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"m_vlsit_riscv_sharer_directory.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(m_vlsit_riscv_sharer_directory)"]},"frame_row":["m_vlsit_riscv_sharer_directory","Store a conservative set of L1 holders and MESI/owner metadata independently of shared LLC residency.","rtl/common/vlsit/coherence/m_vlsit_riscv_sharer_directory.sv"],"frame_interfaces":["IN","OUT"],"blocks":[{"key":"B0","label":["component_boundary","(m_vlsit_riscv_sharer_directory)"],"width":380,"row":0,"col":0,"row_name":"component_boundary (m_vlsit_riscv_sharer_directory)","function":"Store a conservative set of L1 holders and MESI/owner metadata independently of shared LLC residency.","source":"NEW; rtl/common/vlsit/coherence/m_vlsit_riscv_sharer_directory.sv"}],"connectors":[],"externals":[{"id":"IN","block":"B0","side":"L","dir":"in","pos":0,"text":["IN","ports"]},{"id":"OUT","block":"B0","side":"R","dir":"out","pos":0,"text":["OUT","ports"]}],"interfaces":[{"id":"IN","name":"Parent in ports","category":"custom","active":"in","signals":"i_clk_cluster, i_rst_n_cluster, i_lookup_valid, i_lookup_pa_line, i_lookup_tag, i_lookup_rsp_ready, i_update_valid, i_update_tag, i_update_pa_line, i_update_way, i_update_holders, i_update_owner, i_update_state, i_cancel_valid, i_cancel_tag, i_cancel_pa_line"},{"id":"OUT","name":"Parent out ports","category":"custom","active":"out","signals":"o_lookup_ready, o_lookup_rsp_valid, o_lookup_hit, o_lookup_rsp_tag, o_lookup_way, o_lookup_victim_valid, o_lookup_victim_pa_line, o_lookup_holders, o_lookup_owner, o_lookup_state, o_update_ready, o_cancel_ready, o_dir_lookup_count, o_dir_update_count, o_coh_proto_diag_event"}],"nets":[],"legend_note":"A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
+{"page_name":"BLOCK_DIAGRAM","out_name":"m_vlsit_riscv_sharer_directory_internal.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Internal functional blocks","(m_vlsit_riscv_sharer_directory)"]},"frame_row":["m_vlsit_riscv_sharer_directory","Per-bank lookup, reservation, victim choice and update of the sharer directory.","rtl/common/vlsit/coherence/m_vlsit_riscv_sharer_directory.sv"],"frame_interfaces":["REQ","RSPO","UPD"],"blocks":[{"key":"B0","label":["bank_op_arbiter","(p_com_dir_ready)"],"width":200,"row":0,"col":0,"row_name":"bank_op_arbiter (p_com_dir_ready)","function":"Pick one lookup, update or cancel per bank and cycle by round robin, after eligibility checks against the set reservation and the response slot.","source":"rtl/common/vlsit/coherence/m_vlsit_riscv_sharer_directory.sv:364-432"},{"key":"B1","label":["set_reservation","(reg_dir_resv_*)"],"width":200,"row":0,"col":1,"row_name":"set_reservation (reg_dir_resv_*)","function":"Hold one reservation tag per set from a lookup until its update or cancel; only the owner tag may release it.","source":"rtl/common/vlsit/coherence/m_vlsit_riscv_sharer_directory.sv:111-112"},{"key":"B2","label":["read_stage","(gen_read_pipe)"],"width":180,"row":1,"col":0,"row_name":"read_stage (gen_read_pipe)","function":"Profile 2: register set, tag, response tag and the read data for one cycle. Profile 0/1: pass the request straight through.","source":"rtl/common/vlsit/coherence/m_vlsit_riscv_sharer_directory.sv:176-226"},{"key":"B3","label":["payload_array","(gen_way x8)"],"width":160,"row":1,"col":1,"row_name":"payload_array (gen_way x8)","function":"Eight ways per set: tag, holder mask, owner and MESI state. Synchronous 1RW storage in profile 2.","source":"rtl/common/vlsit/coherence/m_vlsit_riscv_sharer_directory.sv:228-259"},{"key":"B4","label":["valid_plru_flops","(reg_dir_valid, reg_dir_plru)"],"width":340,"row":1,"col":2,"row_name":"valid_plru_flops (reg_dir_valid, reg_dir_plru)","function":"Per-way valid bits and seven-bit tree PLRU per set, kept in flops with reset.","source":"rtl/common/vlsit/coherence/m_vlsit_riscv_sharer_directory.sv:109-110"},{"key":"B5","label":["hit_victim_select","(p_com_dir_lookup)"],"width":220,"row":2,"col":1,"row_name":"hit_victim_select (p_com_dir_lookup)","function":"Compare the tag with all eight ways, prefer an invalid way, otherwise choose the PLRU victim and report its holders.","source":"rtl/common/vlsit/coherence/m_vlsit_riscv_sharer_directory.sv:261-362,456-466"},{"key":"B6","label":["lookup_response_reg","(reg_lookup_*)"],"width":220,"row":2,"col":0,"row_name":"lookup_response_reg (reg_lookup_*)","function":"Register hit, way, victim, holders, owner and state with the response tag until the CCU accepts it.","source":"rtl/common/vlsit/coherence/m_vlsit_riscv_sharer_directory.sv:113-121,159-167"},{"key":"B7","label":["update_writer","(p_ff_dir_storage)"],"width":220,"row":2,"col":2,"row_name":"update_writer (p_ff_dir_storage)","function":"Write the committed entry and the PLRU update at the reserved way, or release the reservation on cancel.","source":"rtl/common/vlsit/coherence/m_vlsit_riscv_sharer_directory.sv:434-454,468-543"}],"connectors":[{"id":"OP","src":"B0","src_side":"R","dst":"B1","dst_side":"L"},{"id":"RD","src":"B0","src_side":"B","dst":"B2","dst_side":"T"},{"id":"ADDR","src":"B2","src_side":"R","dst":"B3","dst_side":"L"},{"id":"WAYS","src":"B3","src_side":"B","dst":"B5","dst_side":"T"},{"id":"PLRU","src":"B4","src_side":"B","dst":"B5","dst_side":"R"},{"id":"RSP","src":"B5","src_side":"L","dst":"B6","dst_side":"R"},{"id":"WR","src":"B7","src_side":"T","dst":"B4","dst_side":"B"}],"externals":[{"id":"REQ","block":"B0","side":"T","dir":"in","pos":0,"text":["LOOKUP / UPDATE / CANCEL","valid, set, tag"]},{"id":"RSPO","block":"B6","side":"L","dir":"out","pos":0,"text":["LOOKUP RESPONSE","hit, way, holders"]},{"id":"UPD","block":"B7","side":"B","dir":"in","pos":0,"text":["UPDATE DATA","way, holders, owner, state"]}],"interfaces":[{"id":"OP","name":"Selected operation and eligibility","category":"handshake","active":"B0 -> B1","signals":"w_lookup_eligible, w_update_eligible, w_cancel_eligible, w_dir_op_selected, w_dir_op_selected_valid"},{"id":"RD","name":"Lookup issue to read stage","category":"handshake","active":"B0 -> B2","signals":"w_lookup_hs, w_lookup_set, w_lookup_tag, w_read_slot_ready"},{"id":"ADDR","name":"Set address to payload array","category":"custom","active":"B2 -> B3","signals":"w_eval_set, w_ram_addr"},{"id":"WAYS","name":"Eight-way entries to the compare","category":"custom","active":"B3 -> B5","signals":"w_lookup_entry, w_lookup_valid_ways"},{"id":"PLRU","name":"PLRU state to victim choice","category":"custom","active":"B4 -> B5","signals":"w_lookup_plru, w_lookup_valid_ways"},{"id":"RSP","name":"Compare result to response register","category":"handshake","active":"B5 -> B6","signals":"w_lookup_hit, w_lookup_hit_way, w_lookup_victim_way, w_lookup_victim_pa_line, w_lookup_holders, w_lookup_owner, w_lookup_state"},{"id":"WR","name":"Update write to valid and PLRU flops","category":"custom","active":"B7 -> B4","signals":"w_update_hs, w_update_set, i_update_way"},{"id":"REQ","name":"Request inputs","category":"handshake","active":"in","signals":"i_lookup_valid, i_update_valid, i_cancel_valid, i_lookup_tag, i_update_tag"},{"id":"RSPO","name":"Response outputs","category":"handshake","active":"out","signals":"o_lookup_rsp_valid, o_lookup_hit, o_lookup_rsp_tag, o_lookup_way, o_lookup_victim_valid, o_lookup_holders, o_lookup_owner, o_lookup_state"},{"id":"UPD","name":"Update data inputs","category":"custom","active":"in","signals":"i_update_way, i_update_holders, i_update_owner, i_update_state"}],"nets":[],"legend_note":"Functional decomposition of one directory bank (four identical banks). The module has no child instance, so the boxes are logic groups named after the RTL generate blocks, processes and registers cited in the source column. Arrows show the direction of the main data path; the lookup response returns through the response register. Valid bits, PLRU and reservation stay in flops when the payload becomes a RAM wrapper (REQ-MEM-025).","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
 ```
 
-[Editable draw.io](figures/post_a06/m_vlsit_riscv_sharer_directory.drawio) · [Figure source](figures/post_a06/m_vlsit_riscv_sharer_directory.json).
+[Editable draw.io](figures/post_a06/m_vlsit_riscv_sharer_directory_internal.drawio) · [Figure source](figures/post_a06/m_vlsit_riscv_sharer_directory_internal.json).
 
 **Interface contract.** All synchronous ports use the common cluster clock; the probe engine cache clock is the same domain in this cluster. A valid/ready payload is accepted only on the corresponding handshake and held through backpressure. Pulsed completion/ACK interfaces are described by the operation/FSM contract; they must not be treated as independent ready/valid channels.
 
@@ -3838,15 +4312,15 @@ Source: [rtl/common/vlsit/coherence/m_vlsit_riscv_tile_coh_adapter.sv](../../rtl
 
 **Verification boundary.** Focused adapter/lock units and native CPU scenarios exist. Array-resource contention must not be mistaken for guaranteed hit-under-probe throughput.
 
-The figure shows actual child composition; a leaf shows its own boundary. It does not invent intermediate RTL modules. / Hình thể hiện phân cấp source; leaf chỉ có symbol ranh giới, không tạo module giả.
+The figure shows the internal functional blocks of the module. The module has no child instance, so the boxes are logic groups named after the RTL processes, generate blocks and registers listed in the figure source; they are not extra RTL modules.
 
-![m_vlsit_riscv_tile_coh_adapter composition](figures/post_a06/m_vlsit_riscv_tile_coh_adapter.svg)
+![m_vlsit_riscv_tile_coh_adapter internal functional blocks](figures/post_a06/m_vlsit_riscv_tile_coh_adapter_internal.svg)
 
 ```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"m_vlsit_riscv_tile_coh_adapter.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(m_vlsit_riscv_tile_coh_adapter)"]},"frame_row":["m_vlsit_riscv_tile_coh_adapter","Bridge native tile ownership/probe interfaces to the cluster fabric while enforcing line-busy and lock constraints.","rtl/common/vlsit/coherence/m_vlsit_riscv_tile_coh_adapter.sv"],"frame_interfaces":[],"blocks":[{"key":"B0","label":["u_vlsit_riscv_cache_line_locks","(m_vlsit_riscv_cache_line_locks)"],"width":380,"row":0,"col":0,"row_name":"u_vlsit_riscv_cache_line_locks (m_vlsit_riscv_cache_line_locks)","function":"Track line exclusion by transaction tag and answer CPU access, victim and probe lock queries.","source":"NEW; rtl/common/vlsit/coherence/m_vlsit_riscv_cache_line_locks.sv"}],"connectors":[],"externals":[],"interfaces":[],"nets":[],"legend_note":"Exact source-referenced children; generate multiplicity and active branches are specified in the component text. Containment denotes hierarchy, not invented signal connectivity. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
+{"page_name":"BLOCK_DIAGRAM","out_name":"m_vlsit_riscv_tile_coh_adapter_internal.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Internal functional blocks","(m_vlsit_riscv_tile_coh_adapter)"]},"frame_row":["m_vlsit_riscv_tile_coh_adapter","Bridge one tile cache to the cluster coherence fabric with line locks.","rtl/common/vlsit/coherence/m_vlsit_riscv_tile_coh_adapter.sv"],"frame_interfaces":["CRQ","GNTO","PRBI","PRBC"],"blocks":[{"key":"B0","label":["reset_release_gate","(p_ff_reset_release)"],"width":240,"row":0,"col":1,"row_name":"reset_release_gate (p_ff_reset_release)","function":"Profile 2 registers the release of reset before ready and valid are enabled; profiles 0 and 1 use the reset pin directly (REQ-PD-003).","source":"rtl/common/vlsit/coherence/m_vlsit_riscv_tile_coh_adapter.sv:123-138"},{"key":"B1","label":["request_entry_reg","(p_ff_req_entry)"],"width":200,"row":0,"col":0,"row_name":"request_entry_reg (p_ff_req_entry)","function":"Hold one native ownership request and its source ID until the fabric takes it.","source":"rtl/common/vlsit/coherence/m_vlsit_riscv_tile_coh_adapter.sv:210-226"},{"key":"B2","label":["grant_entry_reg","(p_ff_gnt_entry)"],"width":200,"row":0,"col":2,"row_name":"grant_entry_reg (p_ff_gnt_entry)","function":"Hold the fabric grant, state and error until the cache accepts it.","source":"rtl/common/vlsit/coherence/m_vlsit_riscv_tile_coh_adapter.sv:227-247"},{"key":"B3","label":["probe_gate","(o_cache_probe_req_valid)"],"width":300,"row":1,"col":1,"row_name":"probe_gate (o_cache_probe_req_valid)","function":"Pass a PREPARE probe to the cache only when the line is not busy with a refill, AMO or eviction and no lock conflicts.","source":"rtl/common/vlsit/coherence/m_vlsit_riscv_tile_coh_adapter.sv:184-208"},{"key":"B4","label":["u_vlsit_riscv_cache_line_locks","(m_vlsit_riscv_cache_line_locks)"],"width":380,"row":1,"col":0,"row_name":"u_vlsit_riscv_cache_line_locks (m_vlsit_riscv_cache_line_locks)","function":"Child lock table: lock the tagged line for the two-phase probe lifetime and report same-line access and victim conflicts.","source":"rtl/common/vlsit/coherence/m_vlsit_riscv_tile_coh_adapter.sv:249-270"}],"connectors":[{"id":"GATE","src":"B0","src_side":"B","dst":"B3","dst_side":"T"},{"id":"LOCK","src":"B4","src_side":"R","dst":"B3","dst_side":"L"},{"id":"REQ","src":"B1","src_side":"B","dst":"B4","dst_side":"T"}],"externals":[{"id":"CRQ","block":"B1","side":"T","dir":"in","pos":0,"text":["CACHE REQUEST","id, line, kind"]},{"id":"GNTO","block":"B2","side":"R","dir":"out","pos":0,"text":["CACHE GRANT","id, state, err"]},{"id":"PRBI","block":"B3","side":"R","dir":"in","pos":0,"text":["PROBE REQUEST","from fabric"]},{"id":"PRBC","block":"B3","side":"B","dir":"out","pos":0,"text":["PROBE TO CACHE","tag, line, phase"]}],"interfaces":[{"id":"GATE","name":"Release gate to probe gate","category":"custom","active":"B0 -> B3","signals":"w_handshake_active"},{"id":"LOCK","name":"Lock status to probe gate","category":"custom","active":"B4 -> B3","signals":"o_cache_access_locked, o_cache_victim_locked, o_cache_line_lock_valid, o_cache_line_lock_pa_line, o_lock_diag_event"},{"id":"REQ","name":"Request line to lock table","category":"custom","active":"B1 -> B4","signals":"i_cache_access_valid, i_cache_access_pa_line, i_cache_victim_valid, i_cache_victim_pa_line"},{"id":"CRQ","name":"Cache request inputs","category":"handshake","active":"in","signals":"i_cache_req_valid, o_cache_req_ready, i_cache_req_id, i_cache_req_pa_line, i_cache_req_kind"},{"id":"GNTO","name":"Cache grant outputs","category":"handshake","active":"out","signals":"o_cache_gnt_valid, i_cache_gnt_ready, o_cache_gnt_id, o_cache_gnt_pa_line, o_cache_gnt_state, o_cache_gnt_err"},{"id":"PRBI","name":"Fabric probe inputs","category":"handshake","active":"in","signals":"i_probe_req_valid, o_probe_req_ready, i_probe_req_tag, i_probe_req_pa_line, i_probe_req_phase, i_probe_req_target_state, i_probe_req_wback_en"},{"id":"PRBC","name":"Probe outputs to cache","category":"handshake","active":"out","signals":"o_cache_probe_req_valid, i_cache_probe_req_ready, o_cache_probe_req_tag, o_cache_probe_req_pa_line, o_cache_probe_req_phase, o_cache_probe_req_target_state, o_cache_probe_req_wback_en, o_cache_probe_query_valid, o_cache_probe_query_nline, i_cache_probe_line_busy"}],"nets":[],"legend_note":"Functional decomposition of one RTL module. The module has no child instance except where a box names one, so the boxes are logic groups named after the RTL processes, generate blocks and registers cited in the source column. Arrows show the main request or data direction; responses return on the same bundle.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
 ```
 
-[Editable draw.io](figures/post_a06/m_vlsit_riscv_tile_coh_adapter.drawio) · [Figure source](figures/post_a06/m_vlsit_riscv_tile_coh_adapter.json).
+[Editable draw.io](figures/post_a06/m_vlsit_riscv_tile_coh_adapter_internal.drawio) · [Figure source](figures/post_a06/m_vlsit_riscv_tile_coh_adapter_internal.json).
 
 **Interface contract.** All synchronous ports use the common cluster clock; the probe engine cache clock is the same domain in this cluster. A valid/ready payload is accepted only on the corresponding handshake and held through backpressure. Pulsed completion/ACK interfaces are described by the operation/FSM contract; they must not be treated as independent ready/valid channels.
 
@@ -3921,9 +4395,9 @@ The figure shows actual child composition; a leaf shows its own boundary. It doe
 
 **FSM:** No new enum controller is declared by this module. Its combinational mapping, queue/valid-bit lifecycle, or instantiated child FSMs implement the behavior above. This is not a claim that the entire subtree is stateless.
 
-### 14.5 Modified native source contracts / Hợp đồng source native đã sửa
+### 14.5 Modified native source contracts
 
-Every selected modified source is listed below. Native ports/types/state names retain upstream naming and licenses; VLSIT wrappers adapt boundaries. A package is a type/constant dependency, not an instantiable RTL component. Header history is implementation provenance and can contain superseded staging comments; current behavior follows this specification and the actual source. / Liệt kê mọi source MODIFY được chọn; package không phải module. Không restyle RTL reuse theo rule VLSIT.
+Every selected modified source is listed below. Native ports/types/state names retain upstream naming and licenses; VLSIT wrappers adapt boundaries. A package is a type/constant dependency, not an instantiable RTL component. Header history is implementation provenance and can contain superseded staging comments; current behavior follows this specification and the actual source.
 
 #### 14.5.1 `id_queue.sv` — MODIFY
 
@@ -3974,13 +4448,6 @@ Source: [rtl/common/modified/axi_llc/src/axi_llc_burst_cutter.sv](../../rtl/comm
 
 **Function and local effect.** Native axi llc burst cutter component. Preserve the native request/result or storage behavior while applying the explicit local changes recorded below. Its parent consumes the exact typed interfaces in this section; queue, arithmetic, memory and protocol helpers do not create new architectural ownership rules. Native latency/ordering remains source-defined and is not independently qualified by TOP lint.
 
-![axi_llc_burst_cutter selected modified component](figures/post_a06/axi_llc_burst_cutter.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"axi_llc_burst_cutter.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(axi_llc_burst_cutter)"]},"frame_row":["axi_llc_burst_cutter","Native modified component; function and change contract are specified in Section 14.","rtl/common/modified/axi_llc/src/axi_llc_burst_cutter.sv"],"frame_interfaces":[],"blocks":[{"key":"B0","label":["i_burst_cutter_decode","(addr_decode)"],"width":260,"row":0,"col":0,"row_name":"i_burst_cutter_decode (addr_decode)","function":"Native component","source":"REUSE; rtl/common/third_party/axi_llc_locked/common_cells/src/addr_decode.sv"}],"connectors":[],"externals":[],"interfaces":[],"nets":[],"legend_note":"Exact source-referenced children; generate multiplicity and active branches are specified in the component text. Containment denotes hierarchy, not invented signal connectivity. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/axi_llc_burst_cutter.drawio) · [Figure source](figures/post_a06/axi_llc_burst_cutter.json).
 
 **Interface and flow.** Keep native typed request/response records and source ordering. The parent wrapper owns translation to VLSIT flat ports. Exact port declarations:
 
@@ -4006,13 +4473,6 @@ Source: [rtl/common/modified/axi_llc/src/axi_llc_chan_splitter.sv](../../rtl/com
 
 **Function and local effect.** Native axi llc chan splitter component. Preserve the native request/result or storage behavior while applying the explicit local changes recorded below. Its parent consumes the exact typed interfaces in this section; queue, arithmetic, memory and protocol helpers do not create new architectural ownership rules. Native latency/ordering remains source-defined and is not independently qualified by TOP lint.
 
-![axi_llc_chan_splitter selected modified component](figures/post_a06/axi_llc_chan_splitter.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"axi_llc_chan_splitter.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(axi_llc_chan_splitter)"]},"frame_row":["axi_llc_chan_splitter","Native modified component; function and change contract are specified in Section 14.","rtl/common/modified/axi_llc/src/axi_llc_chan_splitter.sv"],"frame_interfaces":[],"blocks":[{"key":"B0","label":["i_burst_cutter","(axi_llc_burst_cutter)"],"width":260,"row":0,"col":0,"row_name":"i_burst_cutter (axi_llc_burst_cutter)","function":"Native component","source":"MODIFY; rtl/common/modified/axi_llc/src/axi_llc_burst_cutter.sv"}],"connectors":[],"externals":[],"interfaces":[],"nets":[],"legend_note":"Exact source-referenced children; generate multiplicity and active branches are specified in the component text. Containment denotes hierarchy, not invented signal connectivity. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/axi_llc_chan_splitter.drawio) · [Figure source](figures/post_a06/axi_llc_chan_splitter.json).
 
 **Interface and flow.** Keep native typed request/response records and source ordering. The parent wrapper owns translation to VLSIT flat ports. Exact port declarations:
 
@@ -4401,13 +4861,6 @@ Source: [rtl/common/modified/axi_llc/src/eviction_refill/axi_llc_ax_master.sv](.
 
 **Function and local effect.** Native axi llc ax master component. Preserve the native request/result or storage behavior while applying the explicit local changes recorded below. Its parent consumes the exact typed interfaces in this section; queue, arithmetic, memory and protocol helpers do not create new architectural ownership rules. Native latency/ordering remains source-defined and is not independently qualified by TOP lint.
 
-![axi_llc_ax_master selected modified component](figures/post_a06/axi_llc_ax_master.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"axi_llc_ax_master.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(axi_llc_ax_master)"]},"frame_row":["axi_llc_ax_master","Native modified component; function and change contract are specified in Section 14.","rtl/common/modified/axi_llc/src/eviction_refill/axi_llc_ax_master.sv"],"frame_interfaces":["IN","OUT"],"blocks":[{"key":"B0","label":["component_boundary","(axi_llc_ax_master)"],"width":220,"row":0,"col":0,"row_name":"component_boundary (axi_llc_ax_master)","function":"Native component","source":"MODIFY; rtl/common/modified/axi_llc/src/eviction_refill/axi_llc_ax_master.sv"}],"connectors":[],"externals":[{"id":"IN","block":"B0","side":"L","dir":"in","pos":0,"text":["IN","ports"]},{"id":"OUT","block":"B0","side":"R","dir":"out","pos":0,"text":["OUT","ports"]}],"interfaces":[{"id":"IN","name":"Parent in ports","category":"custom","active":"in","signals":"clk_i, rst_ni, desc_i, desc_valid_i, desc_ready_i, ax_chan_ready_i"},{"id":"OUT","name":"Parent out ports","category":"custom","active":"out","signals":"desc_ready_o, desc_o, desc_valid_o, ax_chan_mst_o, ax_chan_valid_o"}],"nets":[],"legend_note":"A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/axi_llc_ax_master.drawio) · [Figure source](figures/post_a06/axi_llc_ax_master.json).
 
 **Interface and flow.** Keep native typed request/response records and source ordering. The parent wrapper owns translation to VLSIT flat ports. Exact port declarations:
 
@@ -4436,13 +4889,6 @@ Source: [rtl/common/modified/axi_llc/src/eviction_refill/axi_llc_r_master.sv](..
 
 **Function and local effect.** LLC refill read master. Preserve ID/data/last/error association across refill buffering and explicit width/selection fixes; a failed refill must not silently create a valid cache line.
 
-![axi_llc_r_master selected modified component](figures/post_a06/axi_llc_r_master.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"axi_llc_r_master.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(axi_llc_r_master)"]},"frame_row":["axi_llc_r_master","Native modified component; function and change contract are specified in Section 14.","rtl/common/modified/axi_llc/src/eviction_refill/axi_llc_r_master.sv"],"frame_interfaces":[],"blocks":[{"key":"B0","label":["i_block_offset_counter","(counter)"],"width":260,"row":0,"col":0,"row_name":"i_block_offset_counter (counter)","function":"Native component","source":"REUSE; rtl/common/third_party/cva6/vendor/pulp-platform/common_cells/src/counter.sv"}],"connectors":[],"externals":[],"interfaces":[],"nets":[],"legend_note":"Exact source-referenced children; generate multiplicity and active branches are specified in the component text. Containment denotes hierarchy, not invented signal connectivity. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/axi_llc_r_master.drawio) · [Figure source](figures/post_a06/axi_llc_r_master.json).
 
 **Interface and flow.** Keep native typed request/response records and source ordering. The parent wrapper owns translation to VLSIT flat ports. Exact port declarations:
 
@@ -4613,13 +5059,6 @@ Source: [rtl/common/modified/axi_llc_locked/axi/src/axi_atop_filter.sv](../../rt
 
 **Function and local effect.** Native axi atop filter component. Preserve the native request/result or storage behavior while applying the explicit local changes recorded below. Its parent consumes the exact typed interfaces in this section; queue, arithmetic, memory and protocol helpers do not create new architectural ownership rules. Native latency/ordering remains source-defined and is not independently qualified by TOP lint.
 
-![axi_atop_filter selected modified component](figures/post_a06/axi_atop_filter.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"axi_atop_filter.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(axi_atop_filter)"]},"frame_row":["axi_atop_filter","Native modified component; function and change contract are specified in Section 14.","rtl/common/modified/axi_llc_locked/axi/src/axi_atop_filter.sv"],"frame_interfaces":[],"blocks":[{"key":"B0","label":["r_resp_cmd","(stream_register)"],"width":200,"row":0,"col":0,"row_name":"r_resp_cmd (stream_register)","function":"Native component","source":"REUSE; rtl/common/third_party/axi_llc_locked/common_cells/src/stream_register.sv"}],"connectors":[],"externals":[],"interfaces":[],"nets":[],"legend_note":"Exact source-referenced children; generate multiplicity and active branches are specified in the component text. Containment denotes hierarchy, not invented signal connectivity. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/axi_atop_filter.drawio) · [Figure source](figures/post_a06/axi_atop_filter.json).
 
 **Interface and flow.** Keep native typed request/response records and source ordering. The parent wrapper owns translation to VLSIT flat ports. Exact port declarations:
 
@@ -4633,13 +5072,6 @@ Source: [rtl/common/modified/axi_llc_locked/axi/src/axi_atop_filter.sv](../../rt
 | input | `axi_resp_t mst_resp_i` |
 **Function and local effect.** Native axi atop filter intf component. Preserve the native request/result or storage behavior while applying the explicit local changes recorded below. Its parent consumes the exact typed interfaces in this section; queue, arithmetic, memory and protocol helpers do not create new architectural ownership rules. Native latency/ordering remains source-defined and is not independently qualified by TOP lint.
 
-![axi_atop_filter_intf selected modified component](figures/post_a06/axi_atop_filter_intf.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"axi_atop_filter_intf.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(axi_atop_filter_intf)"]},"frame_row":["axi_atop_filter_intf","Native modified component; function and change contract are specified in Section 14.","rtl/common/modified/axi_llc_locked/axi/src/axi_atop_filter.sv"],"frame_interfaces":[],"blocks":[{"key":"B0","label":["i_axi_atop_filter","(axi_atop_filter)"],"width":200,"row":0,"col":0,"row_name":"i_axi_atop_filter (axi_atop_filter)","function":"Native component","source":"MODIFY; rtl/common/modified/axi_llc_locked/axi/src/axi_atop_filter.sv"}],"connectors":[],"externals":[],"interfaces":[],"nets":[],"legend_note":"Exact source-referenced children; generate multiplicity and active branches are specified in the component text. Containment denotes hierarchy, not invented signal connectivity. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/axi_atop_filter_intf.drawio) · [Figure source](figures/post_a06/axi_atop_filter_intf.json).
 
 **Interface and flow.** Keep native typed request/response records and source ordering. The parent wrapper owns translation to VLSIT flat ports. Exact port declarations:
 
@@ -4717,13 +5149,6 @@ Source: [rtl/common/modified/axi_llc_locked/axi/src/axi_isolate.sv](../../rtl/co
 | output | `logic isolated_o` |
 **Function and local effect.** Native axi isolate inner component. Preserve the native request/result or storage behavior while applying the explicit local changes recorded below. Its parent consumes the exact typed interfaces in this section; queue, arithmetic, memory and protocol helpers do not create new architectural ownership rules. Native latency/ordering remains source-defined and is not independently qualified by TOP lint.
 
-![axi_isolate_inner selected modified component](figures/post_a06/axi_isolate_inner.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"axi_isolate_inner.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(axi_isolate_inner)"]},"frame_row":["axi_isolate_inner","Native modified component; function and change contract are specified in Section 14.","rtl/common/modified/axi_llc_locked/axi/src/axi_isolate.sv"],"frame_interfaces":["IN","OUT"],"blocks":[{"key":"B0","label":["component_boundary","(axi_isolate_inner)"],"width":220,"row":0,"col":0,"row_name":"component_boundary (axi_isolate_inner)","function":"Native component","source":"MODIFY; rtl/common/modified/axi_llc_locked/axi/src/axi_isolate.sv"}],"connectors":[],"externals":[{"id":"IN","block":"B0","side":"L","dir":"in","pos":0,"text":["IN","ports"]},{"id":"OUT","block":"B0","side":"R","dir":"out","pos":0,"text":["OUT","ports"]}],"interfaces":[{"id":"IN","name":"Parent in ports","category":"custom","active":"in","signals":"clk_i, rst_ni, slv_req_i, mst_resp_i, isolate_i"},{"id":"OUT","name":"Parent out ports","category":"custom","active":"out","signals":"slv_resp_o, mst_req_o, isolated_o"}],"nets":[],"legend_note":"A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/axi_isolate_inner.drawio) · [Figure source](figures/post_a06/axi_isolate_inner.json).
 
 **Interface and flow.** Keep native typed request/response records and source ordering. The parent wrapper owns translation to VLSIT flat ports. Exact port declarations:
 
@@ -4739,13 +5164,6 @@ Source: [rtl/common/modified/axi_llc_locked/axi/src/axi_isolate.sv](../../rtl/co
 | output | `logic isolated_o` |
 **Function and local effect.** Native axi isolate intf component. Preserve the native request/result or storage behavior while applying the explicit local changes recorded below. Its parent consumes the exact typed interfaces in this section; queue, arithmetic, memory and protocol helpers do not create new architectural ownership rules. Native latency/ordering remains source-defined and is not independently qualified by TOP lint.
 
-![axi_isolate_intf selected modified component](figures/post_a06/axi_isolate_intf.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"axi_isolate_intf.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(axi_isolate_intf)"]},"frame_row":["axi_isolate_intf","Native modified component; function and change contract are specified in Section 14.","rtl/common/modified/axi_llc_locked/axi/src/axi_isolate.sv"],"frame_interfaces":[],"blocks":[{"key":"B0","label":["i_axi_isolate","(axi_isolate)"],"width":160,"row":0,"col":0,"row_name":"i_axi_isolate (axi_isolate)","function":"Native component","source":"MODIFY; rtl/common/modified/axi_llc_locked/axi/src/axi_isolate.sv"}],"connectors":[],"externals":[],"interfaces":[],"nets":[],"legend_note":"Exact source-referenced children; generate multiplicity and active branches are specified in the component text. Containment denotes hierarchy, not invented signal connectivity. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/axi_isolate_intf.drawio) · [Figure source](figures/post_a06/axi_isolate_intf.json).
 
 **Interface and flow.** Keep native typed request/response records and source ordering. The parent wrapper owns translation to VLSIT flat ports. Exact port declarations:
 
@@ -4806,13 +5224,6 @@ Source: [rtl/common/modified/axi_llc_locked/common_cells/src/sub_per_hash.sv](..
 
 **Function and local effect.** Native sub per hash component. Preserve the native request/result or storage behavior while applying the explicit local changes recorded below. Its parent consumes the exact typed interfaces in this section; queue, arithmetic, memory and protocol helpers do not create new architectural ownership rules. Native latency/ordering remains source-defined and is not independently qualified by TOP lint.
 
-![sub_per_hash selected modified component](figures/post_a06/sub_per_hash.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"sub_per_hash.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(sub_per_hash)"]},"frame_row":["sub_per_hash","Native modified component; function and change contract are specified in Section 14.","rtl/common/modified/axi_llc_locked/common_cells/src/sub_per_hash.sv"],"frame_interfaces":["IN","OUT"],"blocks":[{"key":"B0","label":["component_boundary","(sub_per_hash)"],"width":220,"row":0,"col":0,"row_name":"component_boundary (sub_per_hash)","function":"Native component","source":"MODIFY; rtl/common/modified/axi_llc_locked/common_cells/src/sub_per_hash.sv"}],"connectors":[],"externals":[{"id":"IN","block":"B0","side":"L","dir":"in","pos":0,"text":["IN","ports"]},{"id":"OUT","block":"B0","side":"R","dir":"out","pos":0,"text":["OUT","ports"]}],"interfaces":[{"id":"IN","name":"Parent in ports","category":"custom","active":"in","signals":"data_i"},{"id":"OUT","name":"Parent out ports","category":"custom","active":"out","signals":"hash_o, hash_onehot_o"}],"nets":[],"legend_note":"A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/sub_per_hash.drawio) · [Figure source](figures/post_a06/sub_per_hash.json).
 
 **Interface and flow.** Keep native typed request/response records and source ordering. The parent wrapper owns translation to VLSIT flat ports. Exact port declarations:
 
@@ -4902,13 +5313,6 @@ Source: [rtl/common/modified/cva6/core/aes.sv](../../rtl/common/modified/cva6/co
 
 **Function and local effect.** The Zkn extension including its subsets accelerates cryptographic workloads by introducing dedicated. Preserve the native request/result or storage behavior while applying the explicit local changes recorded below. Its parent consumes the exact typed interfaces in this section; queue, arithmetic, memory and protocol helpers do not create new architectural ownership rules. Native latency/ordering remains source-defined and is not independently qualified by TOP lint.
 
-![aes selected modified component](figures/post_a06/aes.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"aes.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(aes)"]},"frame_row":["aes","Native modified component; function and change contract are specified in Section 14.","rtl/common/modified/cva6/core/aes.sv"],"frame_interfaces":["IN","OUT"],"blocks":[{"key":"B0","label":["component_boundary","(aes)"],"width":220,"row":0,"col":0,"row_name":"component_boundary (aes)","function":"Native component","source":"MODIFY; rtl/common/modified/cva6/core/aes.sv"}],"connectors":[],"externals":[{"id":"IN","block":"B0","side":"L","dir":"in","pos":0,"text":["IN","ports"]},{"id":"OUT","block":"B0","side":"R","dir":"out","pos":0,"text":["OUT","ports"]}],"interfaces":[{"id":"IN","name":"Parent in ports","category":"custom","active":"in","signals":"clk_i, rst_ni, fu_data_i, orig_instr_aes"},{"id":"OUT","name":"Parent out ports","category":"custom","active":"out","signals":"result_o"}],"nets":[],"legend_note":"A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/aes.drawio) · [Figure source](figures/post_a06/aes.json).
 
 **Interface and flow.** Keep native typed request/response records and source ordering. The parent wrapper owns translation to VLSIT flat ports. Exact port declarations:
 
@@ -4962,13 +5366,6 @@ Source: [rtl/common/modified/cva6/core/ariane_regfile_ff.sv](../../rtl/common/mo
 
 **Function and local effect.** Register file with 31 or 15x 32 bit wide registers.. Preserve the native request/result or storage behavior while applying the explicit local changes recorded below. Its parent consumes the exact typed interfaces in this section; queue, arithmetic, memory and protocol helpers do not create new architectural ownership rules. Native latency/ordering remains source-defined and is not independently qualified by TOP lint.
 
-![ariane_regfile selected modified component](figures/post_a06/ariane_regfile.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"ariane_regfile.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(ariane_regfile)"]},"frame_row":["ariane_regfile","Native modified component; function and change contract are specified in Section 14.","rtl/common/modified/cva6/core/ariane_regfile_ff.sv"],"frame_interfaces":["IN","OUT"],"blocks":[{"key":"B0","label":["component_boundary","(ariane_regfile)"],"width":220,"row":0,"col":0,"row_name":"component_boundary (ariane_regfile)","function":"Native component","source":"MODIFY; rtl/common/modified/cva6/core/ariane_regfile_ff.sv"}],"connectors":[],"externals":[{"id":"IN","block":"B0","side":"L","dir":"in","pos":0,"text":["IN","ports"]},{"id":"OUT","block":"B0","side":"R","dir":"out","pos":0,"text":["OUT","ports"]}],"interfaces":[{"id":"IN","name":"Parent in ports","category":"custom","active":"in","signals":"clk_i, rst_ni, test_en_i, raddr_i, waddr_i, wdata_i, we_i"},{"id":"OUT","name":"Parent out ports","category":"custom","active":"out","signals":"rdata_o"}],"nets":[],"legend_note":"A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/ariane_regfile.drawio) · [Figure source](figures/post_a06/ariane_regfile.json).
 
 **Interface and flow.** Keep native typed request/response records and source ordering. The parent wrapper owns translation to VLSIT flat ports. Exact port declarations:
 
@@ -4994,13 +5391,6 @@ Source: [rtl/common/modified/cva6/core/cache_subsystem/cva6_hpdcache_if_adapter.
 
 **Function and local effect.** CPU-to-cache request adaptation. Preserve request identity, ownership needs and atomic/CMO error response association across the native CPU/cache adapter.
 
-![cva6_hpdcache_if_adapter selected modified component](figures/post_a06/cva6_hpdcache_if_adapter.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"cva6_hpdcache_if_adapter.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(cva6_hpdcache_if_adapter)"]},"frame_row":["cva6_hpdcache_if_adapter","Native modified component; function and change contract are specified in Section 14.","rtl/common/modified/cva6/core/cache_subsystem/cva6_hpdcache_if_adapter.sv"],"frame_interfaces":["IN","OUT"],"blocks":[{"key":"B0","label":["component_boundary","(cva6_hpdcache_if_adapter)"],"width":300,"row":0,"col":0,"row_name":"component_boundary (cva6_hpdcache_if_adapter)","function":"CPU-to-cache request adaptation","source":"MODIFY; rtl/common/modified/cva6/core/cache_subsystem/cva6_hpdcache_if_adapter.sv"}],"connectors":[],"externals":[{"id":"IN","block":"B0","side":"L","dir":"in","pos":0,"text":["IN","ports"]},{"id":"OUT","block":"B0","side":"R","dir":"out","pos":0,"text":["OUT","ports"]}],"interfaces":[{"id":"IN","name":"Parent in ports","category":"custom","active":"in","signals":"clk_i, rst_ni, hpdcache_req_sid_i, cva6_req_i, cva6_amo_req_i, cva6_dcache_flush_i, hpdcache_req_ready_i, hpdcache_rsp_valid_i, hpdcache_rsp_i"},{"id":"OUT","name":"Parent out ports","category":"custom","active":"out","signals":"cva6_req_o, cva6_amo_resp_o, cva6_amo_error_o, cva6_dcache_flush_ack_o, hpdcache_req_valid_o, hpdcache_req_o, hpdcache_req_abort_o, hpdcache_req_tag_o, hpdcache_req_pma_o"}],"nets":[],"legend_note":"A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/cva6_hpdcache_if_adapter.drawio) · [Figure source](figures/post_a06/cva6_hpdcache_if_adapter.json).
 
 **Interface and flow.** Keep native typed request/response records and source ordering. The parent wrapper owns translation to VLSIT flat ports. Exact port declarations:
 
@@ -5469,13 +5859,6 @@ Source: [rtl/common/modified/cva6/core/commit_stage.sv](../../rtl/common/modifie
 
 **Function and local effect.** Precise retirement and completion. Hold accepted CBO/FENCE.I until terminal completion. Retain PC/address/error provenance, defer interrupt/debug admission while maintenance is active, retire only on success and trap after ABORT on failure.
 
-![commit_stage selected modified component](figures/post_a06/commit_stage.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"commit_stage.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(commit_stage)"]},"frame_row":["commit_stage","Native modified component; function and change contract are specified in Section 14.","rtl/common/modified/cva6/core/commit_stage.sv"],"frame_interfaces":["IN","OUT"],"blocks":[{"key":"B0","label":["component_boundary","(commit_stage)"],"width":220,"row":0,"col":0,"row_name":"component_boundary (commit_stage)","function":"Precise retirement and completion","source":"MODIFY; rtl/common/modified/cva6/core/commit_stage.sv"}],"connectors":[],"externals":[{"id":"IN","block":"B0","side":"L","dir":"in","pos":0,"text":["IN","ports"]},{"id":"OUT","block":"B0","side":"R","dir":"out","pos":0,"text":["OUT","ports"]}],"interfaces":[{"id":"IN","name":"Parent in ports","category":"custom","active":"in","signals":"clk_i, rst_ni, halt_i, flush_dcache_i, single_step_i, commit_instr_i, commit_drop_i, amo_resp_i, amo_error_i, amo_active_i, csr_rdata_i, csr_exception_i, cmo_entry_valid_i, cmo_entry_op_i, cmo_entry_paddr_i, cmo_entry_vaddr_i, cmo_ready_i, cmo_done_i, cmo_error_i, cmo_fault_paddr_i, fence_icache_done_i, commit_lsu_ready_i, no_st_pending_i, shared_tlb_flush_busy_i, sdtrig_commit_icount_valid_i, sdtrig_commit_icount_nr_instr_i, sdtrig_commit_action_i, sdtrig_commit_std_exception_valid_i"},{"id":"OUT","name":"Parent out ports","category":"custom","active":"out","signals":"exception_o, dirty_fp_state_o, commit_ack_o, commit_macro_ack_o, waddr_o, wdata_o, we_gpr_o, we_fpr_o, pc_o, csr_op_o, csr_wdata_o, csr_write_fflags_o, cmo_valid_o, cmo_op_o, cmo_pa_line_o, cmo_vaddr_o, cmo_pc_o, fence_sync_o, fence_icache_req_o, cmo_active_o, commit_lsu_o, commit_tran_id_o, amo_valid_commit_o, commit_csr_o, fence_i_o, fence_o, flush_commit_o, sfence_vma_o, hfence_vvma_o, hfence_gvma_o"}],"nets":[],"legend_note":"A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/commit_stage.drawio) · [Figure source](figures/post_a06/commit_stage.json).
 
 **Interface and flow.** Keep native typed request/response records and source ordering. The parent wrapper owns translation to VLSIT flat ports. Exact port declarations:
 
@@ -5555,13 +5938,6 @@ Source: [rtl/common/modified/cva6/core/controller.sv](../../rtl/common/modified/
 
 **Function and local effect.** Pipeline flush and fence coordination. Coordinate fetch/pipeline invalidation with retained maintenance completion so an accepted CBO/FENCE.I cannot be lost by ordinary flush/interrupt/debug control.
 
-![controller selected modified component](figures/post_a06/controller.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"controller.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(controller)"]},"frame_row":["controller","Native modified component; function and change contract are specified in Section 14.","rtl/common/modified/cva6/core/controller.sv"],"frame_interfaces":["IN","OUT"],"blocks":[{"key":"B0","label":["component_boundary","(controller)"],"width":220,"row":0,"col":0,"row_name":"component_boundary (controller)","function":"Pipeline flush and fence coordination","source":"MODIFY; rtl/common/modified/cva6/core/controller.sv"}],"connectors":[],"externals":[{"id":"IN","block":"B0","side":"L","dir":"in","pos":0,"text":["IN","ports"]},{"id":"OUT","block":"B0","side":"R","dir":"out","pos":0,"text":["OUT","ports"]}],"interfaces":[{"id":"IN","name":"Parent in ports","category":"custom","active":"in","signals":"clk_i, rst_ni, v_i, flush_dcache_ack_i, halt_csr_i, halt_acc_i, eret_i, ex_valid_i, set_debug_pc_i, resolved_branch_i, flush_csr_i, fence_i_i, fence_i, sfence_vma_i, hfence_vvma_i, hfence_gvma_i, flush_commit_i, flush_acc_i"},{"id":"OUT","name":"Parent out ports","category":"custom","active":"out","signals":"set_pc_commit_o, flush_if_o, flush_unissued_instr_o, flush_id_o, flush_ex_o, flush_bp_o, flush_icache_o, flush_dcache_o, flush_tlb_o, flush_tlb_vvma_o, flush_tlb_gvma_o, halt_frontend_o, halt_o"}],"nets":[],"legend_note":"A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/controller.drawio) · [Figure source](figures/post_a06/controller.json).
 
 **Interface and flow.** Keep native typed request/response records and source ordering. The parent wrapper owns translation to VLSIT flat ports. Exact port declarations:
 
@@ -5610,13 +5986,6 @@ Source: [rtl/common/modified/cva6/core/csr_regfile.sv](../../rtl/common/modified
 
 **Function and local effect.** Privilege, delegation and trap state. Route precise maintenance and atomic errors to the correct M/S trap state. Preserve the custom FENCE.I cause-24 and aligned physical fault-value contract; software support is a SoC dependency.
 
-![csr_regfile selected modified component](figures/post_a06/csr_regfile.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"csr_regfile.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(csr_regfile)"]},"frame_row":["csr_regfile","Native modified component; function and change contract are specified in Section 14.","rtl/common/modified/cva6/core/csr_regfile.sv"],"frame_interfaces":[],"blocks":[{"key":"B0","label":["trigger_module_i","(trigger_module)"],"width":200,"row":0,"col":0,"row_name":"trigger_module_i (trigger_module)","function":"Native component","source":"REUSE; rtl/common/third_party/cva6/core/trigger_module.sv"}],"connectors":[],"externals":[],"interfaces":[],"nets":[],"legend_note":"Exact source-referenced children; generate multiplicity and active branches are specified in the component text. Containment denotes hierarchy, not invented signal connectivity. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/csr_regfile.drawio) · [Figure source](figures/post_a06/csr_regfile.json).
 
 **Interface and flow.** Keep native typed request/response records and source ordering. The parent wrapper owns translation to VLSIT flat ports. Exact port declarations:
 
@@ -6025,13 +6394,6 @@ Source: [rtl/common/modified/cva6/core/cva6_mmu/cva6_tlb.sv](../../rtl/common/mo
 
 **Function and local effect.** Translation Lookaside Buffer, parameterizable to Sv32 or Sv39,. Preserve the native request/result or storage behavior while applying the explicit local changes recorded below. Its parent consumes the exact typed interfaces in this section; queue, arithmetic, memory and protocol helpers do not create new architectural ownership rules. Native latency/ordering remains source-defined and is not independently qualified by TOP lint.
 
-![cva6_tlb selected modified component](figures/post_a06/cva6_tlb.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"cva6_tlb.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(cva6_tlb)"]},"frame_row":["cva6_tlb","Native modified component; function and change contract are specified in Section 14.","rtl/common/modified/cva6/core/cva6_mmu/cva6_tlb.sv"],"frame_interfaces":["IN","OUT"],"blocks":[{"key":"B0","label":["component_boundary","(cva6_tlb)"],"width":220,"row":0,"col":0,"row_name":"component_boundary (cva6_tlb)","function":"Native component","source":"MODIFY; rtl/common/modified/cva6/core/cva6_mmu/cva6_tlb.sv"}],"connectors":[],"externals":[{"id":"IN","block":"B0","side":"L","dir":"in","pos":0,"text":["IN","ports"]},{"id":"OUT","block":"B0","side":"R","dir":"out","pos":0,"text":["OUT","ports"]}],"interfaces":[{"id":"IN","name":"Parent in ports","category":"custom","active":"in","signals":"clk_i, rst_ni, flush_i, flush_vvma_i, flush_gvma_i, s_st_enbl_i, g_st_enbl_i, v_i, update_i, lu_access_i, lu_asid_i, lu_vmid_i, lu_vaddr_i, asid_to_be_flushed_i, vmid_to_be_flushed_i, vaddr_to_be_flushed_i, gpaddr_to_be_flushed_i"},{"id":"OUT","name":"Parent out ports","category":"custom","active":"out","signals":"lu_gpaddr_o, lu_content_o, lu_g_content_o, lu_is_page_o, lu_hit_o"}],"nets":[],"legend_note":"A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/cva6_tlb.drawio) · [Figure source](figures/post_a06/cva6_tlb.json).
 
 **Interface and flow.** Keep native typed request/response records and source ordering. The parent wrapper owns translation to VLSIT flat ports. Exact port declarations:
 
@@ -6072,13 +6434,6 @@ Source: [rtl/common/modified/cva6/core/decoder.sv](../../rtl/common/modified/cva
 
 **Function and local effect.** Issues instruction from the scoreboard and fetches the operands. Preserve the native request/result or storage behavior while applying the explicit local changes recorded below. Its parent consumes the exact typed interfaces in this section; queue, arithmetic, memory and protocol helpers do not create new architectural ownership rules. Native latency/ordering remains source-defined and is not independently qualified by TOP lint.
 
-![decoder selected modified component](figures/post_a06/decoder.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"decoder.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(decoder)"]},"frame_row":["decoder","Native modified component; function and change contract are specified in Section 14.","rtl/common/modified/cva6/core/decoder.sv"],"frame_interfaces":[],"blocks":[{"key":"B0","label":["i_accel_decoder","(cva6_accel_first_pass_decoder)"],"width":360,"row":0,"col":0,"row_name":"i_accel_decoder (cva6_accel_first_pass_decoder)","function":"Native component","source":"REUSE; rtl/common/third_party/cva6/core/cva6_accel_first_pass_decoder_stub.sv"}],"connectors":[],"externals":[],"interfaces":[],"nets":[],"legend_note":"Exact source-referenced children; generate multiplicity and active branches are specified in the component text. Containment denotes hierarchy, not invented signal connectivity. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/decoder.drawio) · [Figure source](figures/post_a06/decoder.json).
 
 **Interface and flow.** Keep native typed request/response records and source ordering. The parent wrapper owns translation to VLSIT flat ports. Exact port declarations:
 
@@ -6283,13 +6638,6 @@ Source: [rtl/common/modified/cva6/core/fpu_wrap.sv](../../rtl/common/modified/cv
 
 **Function and local effect.** FPU pipeline and issue/response wrapper. Separate state-derived valid/payload selection from ready-dependent control to remove a combinational feedback path without adding latency or changing arithmetic.
 
-![fpu_wrap selected modified component](figures/post_a06/fpu_wrap.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"fpu_wrap.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(fpu_wrap)"]},"frame_row":["fpu_wrap","Native modified component; function and change contract are specified in Section 14.","rtl/common/modified/cva6/core/fpu_wrap.sv"],"frame_interfaces":[],"blocks":[{"key":"B0","label":["i_fpnew_bulk","(fpnew_top)"],"width":140,"row":0,"col":0,"row_name":"i_fpnew_bulk (fpnew_top)","function":"Native component","source":"REUSE; rtl/common/third_party/cvfpu/src/fpnew_top.sv"}],"connectors":[],"externals":[],"interfaces":[],"nets":[],"legend_note":"Exact source-referenced children; generate multiplicity and active branches are specified in the component text. Containment denotes hierarchy, not invented signal connectivity. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/fpu_wrap.drawio) · [Figure source](figures/post_a06/fpu_wrap.json).
 
 **Interface and flow.** Keep native typed request/response records and source ordering. The parent wrapper owns translation to VLSIT flat ports. Exact port declarations:
 
@@ -6531,13 +6879,6 @@ Source: [rtl/common/modified/cva6/core/load_unit.sv](../../rtl/common/modified/c
 
 **Function and local effect.** Load/atomic completion and fault path. Preserve cached atomic/load response error provenance and destination association while the CCU-owned request is stalled or completed.
 
-![load_unit selected modified component](figures/post_a06/load_unit.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"load_unit.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(load_unit)"]},"frame_row":["load_unit","Native modified component; function and change contract are specified in Section 14.","rtl/common/modified/cva6/core/load_unit.sv"],"frame_interfaces":[],"blocks":[{"key":"B0","label":["lzc_windex_i","(lzc)"],"width":140,"row":0,"col":0,"row_name":"lzc_windex_i (lzc)","function":"Native component","source":"REUSE; rtl/common/third_party/cva6/vendor/pulp-platform/common_cells/src/lzc.sv"}],"connectors":[],"externals":[],"interfaces":[],"nets":[],"legend_note":"Exact source-referenced children; generate multiplicity and active branches are specified in the component text. Containment denotes hierarchy, not invented signal connectivity. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/load_unit.drawio) · [Figure source](figures/post_a06/load_unit.json).
 
 **Interface and flow.** Keep native typed request/response records and source ordering. The parent wrapper owns translation to VLSIT flat ports. Exact port declarations:
 
@@ -6619,13 +6960,6 @@ Source: [rtl/common/modified/cva6/core/perf_counters.sv](../../rtl/common/modifi
 
 **Function and local effect.** Native CPU event taps. Expose the existing native HPM source expressions for cluster observation. Preserve each indicator unit; OR-reduced per-hart categories are not arbitrary retirement popcounts.
 
-![perf_counters selected modified component](figures/post_a06/perf_counters.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"perf_counters.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(perf_counters)"]},"frame_row":["perf_counters","Native modified component; function and change contract are specified in Section 14.","rtl/common/modified/cva6/core/perf_counters.sv"],"frame_interfaces":["IN","OUT"],"blocks":[{"key":"B0","label":["component_boundary","(perf_counters)"],"width":220,"row":0,"col":0,"row_name":"component_boundary (perf_counters)","function":"Native CPU event taps","source":"MODIFY; rtl/common/modified/cva6/core/perf_counters.sv"}],"connectors":[],"externals":[{"id":"IN","block":"B0","side":"L","dir":"in","pos":0,"text":["IN","ports"]},{"id":"OUT","block":"B0","side":"R","dir":"out","pos":0,"text":["OUT","ports"]}],"interfaces":[{"id":"IN","name":"Parent in ports","category":"custom","active":"in","signals":"clk_i, rst_ni, debug_mode_i, addr_i, we_i, data_i, commit_instr_i, commit_ack_i, l1_icache_miss_i, l1_dcache_miss_i, itlb_miss_i, dtlb_miss_i, sb_full_i, if_empty_i, ex_i, eret_i, resolved_branch_i, branch_exceptions_i, l1_icache_access_i, l1_dcache_access_i, miss_vld_bits_i, i_tlb_flush_i, stall_issue_i, mcountinhibit_i"},{"id":"OUT","name":"Parent out ports","category":"custom","active":"out","signals":"data_o, perf_event_o"}],"nets":[],"legend_note":"A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/perf_counters.drawio) · [Figure source](figures/post_a06/perf_counters.json).
 
 **Interface and flow.** Keep native typed request/response records and source ordering. The parent wrapper owns translation to VLSIT flat ports. Exact port declarations:
 
@@ -6670,13 +7004,6 @@ Source: [rtl/common/modified/cva6/core/raw_checker.sv](../../rtl/common/modified
 
 **Function and local effect.** Native raw checker component. Preserve the native request/result or storage behavior while applying the explicit local changes recorded below. Its parent consumes the exact typed interfaces in this section; queue, arithmetic, memory and protocol helpers do not create new architectural ownership rules. Native latency/ordering remains source-defined and is not independently qualified by TOP lint.
 
-![raw_checker selected modified component](figures/post_a06/raw_checker.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"raw_checker.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(raw_checker)"]},"frame_row":["raw_checker","Native modified component; function and change contract are specified in Section 14.","rtl/common/modified/cva6/core/raw_checker.sv"],"frame_interfaces":["IN","OUT"],"blocks":[{"key":"B0","label":["component_boundary","(raw_checker)"],"width":220,"row":0,"col":0,"row_name":"component_boundary (raw_checker)","function":"Native component","source":"MODIFY; rtl/common/modified/cva6/core/raw_checker.sv"}],"connectors":[],"externals":[{"id":"IN","block":"B0","side":"L","dir":"in","pos":0,"text":["IN","ports"]},{"id":"OUT","block":"B0","side":"R","dir":"out","pos":0,"text":["OUT","ports"]}],"interfaces":[{"id":"IN","name":"Parent in ports","category":"custom","active":"in","signals":"clk_i, rst_ni, rs_i, rs_fpr_i, rd_i, rd_fpr_i, still_issued_i, issue_pointer_i"},{"id":"OUT","name":"Parent out ports","category":"custom","active":"out","signals":"idx_o, valid_o"}],"nets":[],"legend_note":"A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/raw_checker.drawio) · [Figure source](figures/post_a06/raw_checker.json).
 
 **Interface and flow.** Keep native typed request/response records and source ordering. The parent wrapper owns translation to VLSIT flat ports. Exact port declarations:
 
@@ -6706,13 +7033,6 @@ Source: [rtl/common/modified/cva6/core/scoreboard.sv](../../rtl/common/modified/
 
 **Function and local effect.** Scoreboard - keeps track of all decoded, issued and committed instructions. Preserve the native request/result or storage behavior while applying the explicit local changes recorded below. Its parent consumes the exact typed interfaces in this section; queue, arithmetic, memory and protocol helpers do not create new architectural ownership rules. Native latency/ordering remains source-defined and is not independently qualified by TOP lint.
 
-![scoreboard selected modified component](figures/post_a06/scoreboard.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"scoreboard.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(scoreboard)"]},"frame_row":["scoreboard","Native modified component; function and change contract are specified in Section 14.","rtl/common/modified/cva6/core/scoreboard.sv"],"frame_interfaces":["IN","OUT"],"blocks":[{"key":"B0","label":["component_boundary","(scoreboard)"],"width":220,"row":0,"col":0,"row_name":"component_boundary (scoreboard)","function":"Native component","source":"MODIFY; rtl/common/modified/cva6/core/scoreboard.sv"}],"connectors":[],"externals":[{"id":"IN","block":"B0","side":"L","dir":"in","pos":0,"text":["IN","ports"]},{"id":"OUT","block":"B0","side":"R","dir":"out","pos":0,"text":["OUT","ports"]}],"interfaces":[{"id":"IN","name":"Parent in ports","category":"custom","active":"in","signals":"clk_i, rst_ni, flush_unissued_instr_i, flush_i, x_transaction_accepted_i, x_issue_writeback_i, x_id_i, commit_ack_i, decoded_instr_i, orig_instr_i, decoded_instr_valid_i, issue_ack_i, resolved_branch_i, trans_id_i, wbdata_i, ex_i, wt_valid_i, x_we_i, x_rd_i"},{"id":"OUT","name":"Parent out ports","category":"custom","active":"out","signals":"sb_full_o, commit_instr_o, commit_drop_o, decoded_instr_ack_o, issue_instr_o, orig_instr_o, issue_instr_valid_o, fwd_o, rvfi_issue_pointer_o, rvfi_commit_pointer_o"}],"nets":[],"legend_note":"A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/scoreboard.drawio) · [Figure source](figures/post_a06/scoreboard.json).
 
 **Interface and flow.** Keep native typed request/response records and source ordering. The parent wrapper owns translation to VLSIT flat ports. Exact port declarations:
 
@@ -6798,13 +7118,6 @@ Source: [rtl/common/modified/cva6/core/store_buffer.sv](../../rtl/common/modifie
 
 **Function and local effect.** Retained committed store/CBO queue. Retain effective VA, physical line, operation and completion association. An externally completed CBO dequeues once without issuing a duplicate local maintenance operation.
 
-![store_buffer selected modified component](figures/post_a06/store_buffer.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"store_buffer.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(store_buffer)"]},"frame_row":["store_buffer","Native modified component; function and change contract are specified in Section 14.","rtl/common/modified/cva6/core/store_buffer.sv"],"frame_interfaces":["IN","OUT"],"blocks":[{"key":"B0","label":["component_boundary","(store_buffer)"],"width":220,"row":0,"col":0,"row_name":"component_boundary (store_buffer)","function":"Retained committed store/CBO queue","source":"MODIFY; rtl/common/modified/cva6/core/store_buffer.sv"}],"connectors":[],"externals":[{"id":"IN","block":"B0","side":"L","dir":"in","pos":0,"text":["IN","ports"]},{"id":"OUT","block":"B0","side":"R","dir":"out","pos":0,"text":["OUT","ports"]}],"interfaces":[{"id":"IN","name":"Parent in ports","category":"custom","active":"in","signals":"clk_i, rst_ni, flush_i, stall_st_pending_i, page_offset_i, commit_i, valid_i, valid_without_flush_i, paddr_i, vaddr_i, data_i, be_i, data_size_i, cbo_op_i, req_port_i"},{"id":"OUT","name":"Parent out ports","category":"custom","active":"out","signals":"no_st_pending_o, store_buffer_empty_o, page_offset_matches_o, commit_ready_o, ready_o, rvfi_mem_paddr_o, cmo_entry_valid_o, cmo_entry_op_o, cmo_entry_paddr_o, cmo_entry_vaddr_o, req_port_o"}],"nets":[],"legend_note":"A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/store_buffer.drawio) · [Figure source](figures/post_a06/store_buffer.json).
 
 **Interface and flow.** Keep native typed request/response records and source ordering. The parent wrapper owns translation to VLSIT flat ports. Exact port declarations:
 
@@ -6925,13 +7238,6 @@ Source: [rtl/common/modified/cva6/vendor/pulp-platform/common_cells/src/lfsr.sv]
 
 **Function and local effect.** This is a parametric LFSR with precomputed coefficients for. Preserve the native request/result or storage behavior while applying the explicit local changes recorded below. Its parent consumes the exact typed interfaces in this section; queue, arithmetic, memory and protocol helpers do not create new architectural ownership rules. Native latency/ordering remains source-defined and is not independently qualified by TOP lint.
 
-![lfsr selected modified component](figures/post_a06/lfsr.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"lfsr.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(lfsr)"]},"frame_row":["lfsr","Native modified component; function and change contract are specified in Section 14.","rtl/common/modified/cva6/vendor/pulp-platform/common_cells/src/lfsr.sv"],"frame_interfaces":["IN","OUT"],"blocks":[{"key":"B0","label":["component_boundary","(lfsr)"],"width":220,"row":0,"col":0,"row_name":"component_boundary (lfsr)","function":"Native component","source":"MODIFY; rtl/common/modified/cva6/vendor/pulp-platform/common_cells/src/lfsr.sv"}],"connectors":[],"externals":[{"id":"IN","block":"B0","side":"L","dir":"in","pos":0,"text":["IN","ports"]},{"id":"OUT","block":"B0","side":"R","dir":"out","pos":0,"text":["OUT","ports"]}],"interfaces":[{"id":"IN","name":"Parent in ports","category":"custom","active":"in","signals":"clk_i, rst_ni, en_i"},{"id":"OUT","name":"Parent out ports","category":"custom","active":"out","signals":"out_o"}],"nets":[],"legend_note":"A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/lfsr.drawio) · [Figure source](figures/post_a06/lfsr.json).
 
 **Interface and flow.** Keep native typed request/response records and source ordering. The parent wrapper owns translation to VLSIT flat ports. Exact port declarations:
 
@@ -6988,13 +7294,6 @@ Source: [rtl/common/modified/cva6/vendor/pulp-platform/common_cells/src/stream_d
 
 **Function and local effect.** Native stream demux component. Preserve the native request/result or storage behavior while applying the explicit local changes recorded below. Its parent consumes the exact typed interfaces in this section; queue, arithmetic, memory and protocol helpers do not create new architectural ownership rules. Native latency/ordering remains source-defined and is not independently qualified by TOP lint.
 
-![stream_demux selected modified component](figures/post_a06/stream_demux.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"stream_demux.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(stream_demux)"]},"frame_row":["stream_demux","Native modified component; function and change contract are specified in Section 14.","rtl/common/modified/cva6/vendor/pulp-platform/common_cells/src/stream_demux.sv"],"frame_interfaces":["IN","OUT"],"blocks":[{"key":"B0","label":["component_boundary","(stream_demux)"],"width":220,"row":0,"col":0,"row_name":"component_boundary (stream_demux)","function":"Native component","source":"MODIFY; rtl/common/modified/cva6/vendor/pulp-platform/common_cells/src/stream_demux.sv"}],"connectors":[],"externals":[{"id":"IN","block":"B0","side":"L","dir":"in","pos":0,"text":["IN","ports"]},{"id":"OUT","block":"B0","side":"R","dir":"out","pos":0,"text":["OUT","ports"]}],"interfaces":[{"id":"IN","name":"Parent in ports","category":"custom","active":"in","signals":"inp_valid_i, oup_sel_i, oup_ready_i"},{"id":"OUT","name":"Parent out ports","category":"custom","active":"out","signals":"inp_ready_o, oup_valid_o"}],"nets":[],"legend_note":"A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/stream_demux.drawio) · [Figure source](figures/post_a06/stream_demux.json).
 
 **Interface and flow.** Keep native typed request/response records and source ordering. The parent wrapper owns translation to VLSIT flat ports. Exact port declarations:
 
@@ -7017,13 +7316,6 @@ Source: [rtl/common/modified/cva6/vendor/pulp-platform/tech_cells_generic/src/rt
 
 **Function and local effect.** Functional module of a generic SRAM. Preserve the native request/result or storage behavior while applying the explicit local changes recorded below. Its parent consumes the exact typed interfaces in this section; queue, arithmetic, memory and protocol helpers do not create new architectural ownership rules. Native latency/ordering remains source-defined and is not independently qualified by TOP lint.
 
-![tc_sram selected modified component](figures/post_a06/tc_sram.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"tc_sram.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(tc_sram)"]},"frame_row":["tc_sram","Native modified component; function and change contract are specified in Section 14.","rtl/common/modified/cva6/vendor/pulp-platform/tech_cells_generic/src/rtl/tc_sram.sv"],"frame_interfaces":["IN","OUT"],"blocks":[{"key":"B0","label":["component_boundary","(tc_sram)"],"width":220,"row":0,"col":0,"row_name":"component_boundary (tc_sram)","function":"Native component","source":"MODIFY; rtl/common/modified/cva6/vendor/pulp-platform/tech_cells_generic/src/rtl/tc_sram.sv"}],"connectors":[],"externals":[{"id":"IN","block":"B0","side":"L","dir":"in","pos":0,"text":["IN","ports"]},{"id":"OUT","block":"B0","side":"R","dir":"out","pos":0,"text":["OUT","ports"]}],"interfaces":[{"id":"IN","name":"Parent in ports","category":"custom","active":"in","signals":"clk_i, rst_ni, req_i, we_i, addr_i, wdata_i, be_i"},{"id":"OUT","name":"Parent out ports","category":"custom","active":"out","signals":"rdata_o"}],"nets":[],"legend_note":"A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/tc_sram.drawio) · [Figure source](figures/post_a06/tc_sram.json).
 
 **Interface and flow.** Keep native typed request/response records and source ordering. The parent wrapper owns translation to VLSIT flat ports. Exact port declarations:
 
@@ -7106,13 +7398,6 @@ Source: [rtl/common/modified/cvfpu/src/fpnew_divsqrt_th_64_multi.sv](../../rtl/c
 
 **Function and local effect.** Native fpnew divsqrt th 64 multi component. Preserve the native request/result or storage behavior while applying the explicit local changes recorded below. Its parent consumes the exact typed interfaces in this section; queue, arithmetic, memory and protocol helpers do not create new architectural ownership rules. Native latency/ordering remains source-defined and is not independently qualified by TOP lint.
 
-![fpnew_divsqrt_th_64_multi selected modified component](figures/post_a06/fpnew_divsqrt_th_64_multi.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"fpnew_divsqrt_th_64_multi.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(fpnew_divsqrt_th_64_multi)"]},"frame_row":["fpnew_divsqrt_th_64_multi","Native modified component; function and change contract are specified in Section 14.","rtl/common/modified/cvfpu/src/fpnew_divsqrt_th_64_multi.sv"],"frame_interfaces":[],"blocks":[{"key":"B0","label":["i_ct_vfdsu_top","(ct_vfdsu_top)"],"width":180,"row":0,"col":0,"row_name":"i_ct_vfdsu_top (ct_vfdsu_top)","function":"Native component","source":"REUSE; rtl/common/third_party/cvfpu/vendor/openc910/C910_RTL_FACTORY/gen_rtl/vfdsu/rtl/ct_vfdsu_top.v"}],"connectors":[],"externals":[],"interfaces":[],"nets":[],"legend_note":"Exact source-referenced children; generate multiplicity and active branches are specified in the component text. Containment denotes hierarchy, not invented signal connectivity. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/fpnew_divsqrt_th_64_multi.drawio) · [Figure source](figures/post_a06/fpnew_divsqrt_th_64_multi.json).
 
 **Interface and flow.** Keep native typed request/response records and source ordering. The parent wrapper owns translation to VLSIT flat ports. Exact port declarations:
 
@@ -7210,13 +7495,6 @@ Source: [rtl/common/modified/cvfpu/src/fpnew_noncomp.sv](../../rtl/common/modifi
 
 **Function and local effect.** Native fpnew noncomp component. Preserve the native request/result or storage behavior while applying the explicit local changes recorded below. Its parent consumes the exact typed interfaces in this section; queue, arithmetic, memory and protocol helpers do not create new architectural ownership rules. Native latency/ordering remains source-defined and is not independently qualified by TOP lint.
 
-![fpnew_noncomp selected modified component](figures/post_a06/fpnew_noncomp.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"fpnew_noncomp.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(fpnew_noncomp)"]},"frame_row":["fpnew_noncomp","Native modified component; function and change contract are specified in Section 14.","rtl/common/modified/cvfpu/src/fpnew_noncomp.sv"],"frame_interfaces":[],"blocks":[{"key":"B0","label":["i_class_a","(fpnew_classifier)"],"width":220,"row":0,"col":0,"row_name":"i_class_a (fpnew_classifier)","function":"Native component","source":"REUSE; rtl/common/third_party/cvfpu/src/fpnew_classifier.sv"}],"connectors":[],"externals":[],"interfaces":[],"nets":[],"legend_note":"Exact source-referenced children; generate multiplicity and active branches are specified in the component text. Containment denotes hierarchy, not invented signal connectivity. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/fpnew_noncomp.drawio) · [Figure source](figures/post_a06/fpnew_noncomp.json).
 
 **Interface and flow.** Keep native typed request/response records and source ordering. The parent wrapper owns translation to VLSIT flat ports. Exact port declarations:
 
@@ -7802,13 +8080,6 @@ Source: [rtl/common/modified/hpdcache/rtl/src/hpdcache_ctrl_pe.sv](../../rtl/com
 
 **Function and local effect.** Hit/eviction pipeline execution. Maintain exclusive/dirty metadata and silent E-to-M consistency. Do not allocate a replacement or overwrite a dirty victim until its writeback B succeeds; retain failed context/data until reset.
 
-![hpdcache_ctrl_pe selected modified component](figures/post_a06/hpdcache_ctrl_pe.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"hpdcache_ctrl_pe.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(hpdcache_ctrl_pe)"]},"frame_row":["hpdcache_ctrl_pe","Native modified component; function and change contract are specified in Section 14.","rtl/common/modified/hpdcache/rtl/src/hpdcache_ctrl_pe.sv"],"frame_interfaces":["IN","OUT"],"blocks":[{"key":"B0","label":["component_boundary","(hpdcache_ctrl_pe)"],"width":220,"row":0,"col":0,"row_name":"component_boundary (hpdcache_ctrl_pe)","function":"Hit/eviction pipeline execution","source":"MODIFY; rtl/common/modified/hpdcache/rtl/src/hpdcache_ctrl_pe.sv"}],"connectors":[],"externals":[{"id":"IN","block":"B0","side":"L","dir":"in","pos":0,"text":["IN","ports"]},{"id":"OUT","block":"B0","side":"R","dir":"out","pos":0,"text":["OUT","ports"]}],"interfaces":[{"id":"IN","name":"Parent in ports","category":"custom","active":"in","signals":"core_req_valid_i, scrub_req_valid_i, rtab_req_valid_i, refill_req_valid_i, st0_req_is_error_i, st0_req_is_uncacheable_i, st0_req_need_rsp_i, st0_req_is_load_i, st0_req_is_scrub_i, st0_req_is_store_i, st0_req_is_amo_i, st0_req_is_cmo_fence_i, st0_req_is_cmo_inval_i, st0_req_is_cmo_flush_i, st0_req_is_cmo_prefetch_i, st0_req_is_partial_i, st1_req_valid_i, st1_req_abort_i, st1_req_rtab_i, st1_req_is_error_i, st1_req_is_uncacheable_i, st1_req_need_rsp_i, st1_req_is_load_i, st1_req_is_store_i, st1_req_is_amo_i, st1_req_is_amo_lr_i, st1_req_is_amo_sc_i, uc_lrsc_match_i, st1_req_is_cmo_inval_i, st1_req_is_cmo_inval_nline_i, st1_req_is_cmo_flush_i, st1_req_is_cmo_flush_nline_i, st1_req_is_cmo_flush_inval_nline_i, st1_req_is_cmo_fence_i, st1_req_is_cmo_prefetch_i, st1_req_is_partial_i, st1_req_nline_i, st1_victim_nline_i, st1_coh_line_locked_i, st1_dir_victim_locked_i, st1_req_wr_wt_i, st1_req_wr_wb_i, st1_req_wr_auto_i, st1_dir_hit_i, st1_dir_hit_wback_i, st1_dir_hit_dirty_i, st1_dir_hit_exclusive_i, st1_dir_hit_fetch_i, st1_dir_victim_unavailable_i, st1_dir_victim_valid_i, st1_dir_victim_wback_i, st1_dir_victim_dirty_i, st1_dir_err_cor_i, st1_dir_err_unc_i, st1_dat_err_cor_i, st1_dat_err_unc_i, st1_dat_err_unc_dirty_i, err_busy_i, err_wait_i, st1_mshr_alloc_ready_i, st1_mshr_hit_i, st1_mshr_full_i, st1_mshr_cbuf_full_i, st1_no_pend_trans_i, st2_mshr_alloc_i, st2_mshr_alloc_is_prefetch_i, st2_mshr_alloc_wback_i, st2_mshr_alloc_dirty_i, st2_mshr_alloc_exclusive_i, st2_dir_updt_i, st2_dir_updt_valid_i, st2_dir_updt_wback_i, st2_dir_updt_dirty_i, st2_dir_updt_fetch_i, rd_wr_conflict_i, rtab_full_i, rtab_fence_i, rtab_check_hit_i, cachedir_init_ready_i, refill_busy_i, refill_core_rsp_valid_i, wbuf_write_ready_i, wbuf_read_hit_i, flush_busy_i, ordinary_flush_hold_i, st1_flush_check_hit_i, st1_flush_alloc_ready_i, st2_flush_alloc_i, coh_probe_flush_pending_i, uc_busy_i, cmo_busy_i, cfg_prefetch_updt_plru_i, cfg_default_wb_i"},{"id":"OUT","name":"Parent out ports","category":"custom","active":"out","signals":"core_req_ready_o, scrub_req_ready_o, rtab_req_ready_o, refill_req_ready_o, st0_req_mshr_check_o, st0_req_cachedir_read_o, st1_err_o, st1_req_valid_o, st1_rsp_valid_o, st1_rsp_error_o, st1_rsp_aborted_o, st1_req_cachedir_sel_victim_o, st1_req_cachedir_updt_sel_victim_o, st1_req_cachedata_write_o, st1_req_cachedata_write_enable_o, st1_req_cachedata_write_merge_o, st2_mshr_alloc_o, st2_mshr_alloc_cs_o, st2_mshr_alloc_need_rsp_o, st2_mshr_alloc_wback_o, st2_mshr_alloc_dirty_o, st2_mshr_alloc_exclusive_o, st2_mshr_alloc_probe_shared_o, st2_dir_updt_o, st2_dir_updt_valid_o, st2_dir_updt_wback_o, st2_dir_updt_dirty_o, st2_dir_updt_fetch_o, req_cachedata_read_o, rtab_check_o, st1_rtab_alloc_o, st1_rtab_alloc_and_link_o, st1_rtab_commit_o, st1_rtab_rback_o, st1_rtab_mshr_hit_o, st1_rtab_probe_lock_o, st1_rtab_probe_lock_nline_o, st1_rtab_mshr_full_o, st1_rtab_mshr_ready_o, st1_rtab_write_miss_o, st1_rtab_wbuf_hit_o, st1_rtab_wbuf_not_ready_o, st1_rtab_dir_unavailable_o, st1_rtab_dir_fetch_o, st1_rtab_flush_hit_o, st1_rtab_flush_not_ready_o, st1_rtab_pend_trans_o, wbuf_write_valid_o, wbuf_write_uncacheable_o, wbuf_read_flush_hit_o, wbuf_flush_all_o, st2_flush_alloc_o, uc_req_valid_o, uc_core_rsp_ready_o, cmo_req_valid_o, cmo_core_rsp_ready_o, evt_cache_write_miss_o, evt_cache_read_miss_o, evt_cache_dir_unc_err_o, evt_cache_dir_cor_err_o, evt_cache_dat_unc_err_o, evt_cache_dat_cor_err_o, evt_uncached_req_o, evt_cmo_req_o, evt_write_req_o, evt_read_req_o, evt_prefetch_req_o, evt_req_on_hold_o, evt_rtab_rollback_o, evt_stall_refill_o, evt_stall_o"}],"nets":[],"legend_note":"A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/hpdcache_ctrl_pe.drawio) · [Figure source](figures/post_a06/hpdcache_ctrl_pe.json).
 
 **Interface and flow.** Keep native typed request/response records and source ordering. The parent wrapper owns translation to VLSIT flat ports. Exact port declarations:
 
@@ -8478,13 +8749,6 @@ Source: [rtl/common/modified/hpdcache_cva6_pinned/rtl/src/common/hpdcache_data_u
 
 **Function and local effect.** Refill data upsize. Preserve the native request/result or storage behavior while applying the explicit local changes recorded below. Its parent consumes the exact typed interfaces in this section; queue, arithmetic, memory and protocol helpers do not create new architectural ownership rules. Native latency/ordering remains source-defined and is not independently qualified by TOP lint.
 
-![hpdcache_data_upsize selected modified component](figures/post_a06/hpdcache_data_upsize.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"hpdcache_data_upsize.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(hpdcache_data_upsize)"]},"frame_row":["hpdcache_data_upsize","Native modified component; function and change contract are specified in Section 14.","rtl/common/modified/hpdcache_cva6_pinned/rtl/src/common/hpdcache_data_upsize.sv"],"frame_interfaces":["IN","OUT"],"blocks":[{"key":"B0","label":["component_boundary","(hpdcache_data_upsize)"],"width":260,"row":0,"col":0,"row_name":"component_boundary (hpdcache_data_upsize)","function":"Native component","source":"MODIFY; rtl/common/modified/hpdcache_cva6_pinned/rtl/src/common/hpdcache_data_upsize.sv"}],"connectors":[],"externals":[{"id":"IN","block":"B0","side":"L","dir":"in","pos":0,"text":["IN","ports"]},{"id":"OUT","block":"B0","side":"R","dir":"out","pos":0,"text":["OUT","ports"]}],"interfaces":[{"id":"IN","name":"Parent in ports","category":"custom","active":"in","signals":"clk_i, rst_ni, w_i, wdata_i, wlast_i, r_i"},{"id":"OUT","name":"Parent out ports","category":"custom","active":"out","signals":"wok_o, rok_o, rdata_o"}],"nets":[],"legend_note":"A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/hpdcache_data_upsize.drawio) · [Figure source](figures/post_a06/hpdcache_data_upsize.json).
 
 **Interface and flow.** Keep native typed request/response records and source ordering. The parent wrapper owns translation to VLSIT flat ports. Exact port declarations:
 
@@ -8663,13 +8927,6 @@ Source: [rtl/common/modified/hpdcache_cva6_pinned/rtl/src/hwpf_stride/hwpf_strid
 
 **Function and local effect.** HPDcache Linear Hardware Memory Prefetcher.. Preserve the native request/result or storage behavior while applying the explicit local changes recorded below. Its parent consumes the exact typed interfaces in this section; queue, arithmetic, memory and protocol helpers do not create new architectural ownership rules. Native latency/ordering remains source-defined and is not independently qualified by TOP lint.
 
-![hwpf_stride selected modified component](figures/post_a06/hwpf_stride.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"hwpf_stride.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(hwpf_stride)"]},"frame_row":["hwpf_stride","Native modified component; function and change contract are specified in Section 14.","rtl/common/modified/hpdcache_cva6_pinned/rtl/src/hwpf_stride/hwpf_stride.sv"],"frame_interfaces":["IN","OUT"],"blocks":[{"key":"B0","label":["component_boundary","(hwpf_stride)"],"width":220,"row":0,"col":0,"row_name":"component_boundary (hwpf_stride)","function":"Native component","source":"MODIFY; rtl/common/modified/hpdcache_cva6_pinned/rtl/src/hwpf_stride/hwpf_stride.sv"}],"connectors":[],"externals":[{"id":"IN","block":"B0","side":"L","dir":"in","pos":0,"text":["IN","ports"]},{"id":"OUT","block":"B0","side":"R","dir":"out","pos":0,"text":["OUT","ports"]}],"interfaces":[{"id":"IN","name":"Parent in ports","category":"custom","active":"in","signals":"clk_i, rst_ni, csr_base_set_i, csr_base_i, csr_param_set_i, csr_param_i, csr_throttle_set_i, csr_throttle_i, snoop_match_i, hpdcache_req_ready_i, hpdcache_rsp_valid_i, hpdcache_rsp_i"},{"id":"OUT","name":"Parent out ports","category":"custom","active":"out","signals":"csr_base_o, csr_param_o, csr_throttle_o, busy_o, snoop_nline_o, hpdcache_req_valid_o, hpdcache_req_o"}],"nets":[],"legend_note":"A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/hwpf_stride.drawio) · [Figure source](figures/post_a06/hwpf_stride.json).
 
 **Interface and flow.** Keep native typed request/response records and source ordering. The parent wrapper owns translation to VLSIT flat ports. Exact port declarations:
 
@@ -8740,13 +8997,6 @@ Source: [rtl/common/modified/hpdcache_cva6_pinned/rtl/src/utils/hpdcache_mem_to_
 
 **Function and local effect.** Dcache memory request to axi write channels. Preserve the native request/result or storage behavior while applying the explicit local changes recorded below. Its parent consumes the exact typed interfaces in this section; queue, arithmetic, memory and protocol helpers do not create new architectural ownership rules. Native latency/ordering remains source-defined and is not independently qualified by TOP lint.
 
-![hpdcache_mem_to_axi_write selected modified component](figures/post_a06/hpdcache_mem_to_axi_write.svg)
-
-```json
-{"page_name":"BLOCK_DIAGRAM","out_name":"hpdcache_mem_to_axi_write.drawio","layout":{"gap_h":120,"gap_v":110,"margin":80,"block_h":60},"top":{"frame_label":["Component composition","(hpdcache_mem_to_axi_write)"]},"frame_row":["hpdcache_mem_to_axi_write","Native modified component; function and change contract are specified in Section 14.","rtl/common/modified/hpdcache_cva6_pinned/rtl/src/utils/hpdcache_mem_to_axi_write.sv"],"frame_interfaces":["IN","OUT"],"blocks":[{"key":"B0","label":["component_boundary","(hpdcache_mem_to_axi_write)"],"width":320,"row":0,"col":0,"row_name":"component_boundary (hpdcache_mem_to_axi_write)","function":"Native component","source":"MODIFY; rtl/common/modified/hpdcache_cva6_pinned/rtl/src/utils/hpdcache_mem_to_axi_write.sv"}],"connectors":[],"externals":[{"id":"IN","block":"B0","side":"L","dir":"in","pos":0,"text":["IN","ports"]},{"id":"OUT","block":"B0","side":"R","dir":"out","pos":0,"text":["OUT","ports"]}],"interfaces":[{"id":"IN","name":"Parent in ports","category":"custom","active":"in","signals":"req_valid_i, req_i, req_data_valid_i, req_data_i, resp_ready_i, axi_aw_ready_i, axi_w_ready_i, axi_b_valid_i, axi_b_i"},{"id":"OUT","name":"Parent out ports","category":"custom","active":"out","signals":"req_ready_o, req_data_ready_o, resp_valid_o, resp_o, axi_aw_valid_o, axi_aw_o, axi_w_valid_o, axi_w_o, axi_b_ready_o"}],"nets":[],"legend_note":"A single boundary symbol denotes a leaf: internal equations/registers are described in its function/dataflow contract, not invented child modules. NEW/MODIFY/REUSE/GENERATED provenance is listed in the block table. Clock/reset follow the common synchronous contract. Complete parent port declarations are in the component section.","library_sha256":"15DFB183E267D2A94F8CAB316E01EB3D2E9D2F9C006DC816790A394F4123506C"}
-```
-
-[Editable draw.io](figures/post_a06/hpdcache_mem_to_axi_write.drawio) · [Figure source](figures/post_a06/hpdcache_mem_to_axi_write.json).
 
 **Interface and flow.** Keep native typed request/response records and source ordering. The parent wrapper owns translation to VLSIT flat ports. Exact port declarations:
 
@@ -8782,22 +9032,35 @@ Source: [rtl/common/modified/hpdcache_cva6_pinned/rtl/src/utils/hpdcache_mem_to_
 
 The logical baseline is one clock, 16-byte coherence lines, 64-bit native LLC data and default 256-KiB LLC. Memory bus width is selected at synthesis. Larger LLC block counts are declared by RTL but are not yet an approved/qualified multi-line maintenance contract. PDK/SRAM/SDC/corner/scan inputs are integration dependencies. No synthesis, timing, power, formal or code-coverage result is inferred from lint.
 
+### 14.7 Coherence deadlock fixes (DEC-046, DEC-047), merged 2026-11-27
+
+Three defects made the cluster deadlock when four harts contend on one cache line while another hart runs cache maintenance (TEST-064, the RV32 profile's TC-07: hart 0 runs CBO.CLEAN, CBO.FLUSH, CBO.INVAL and FENCE.I while harts 1-3 run AMOADD.W and then spin on a load of one shared line). They were found with the RV32 profile testbench, reproduced on this 64-bit cluster, and are timing races, so they are not limited to four harts. Each defect was confirmed before it was fixed: defects 1 and 2 by simulation-only experiments that forced one net, defect 3 by the context FSM states in the waveform. The fixed files are in the original locations; the pre-fix files are kept in `rtl/coherence_fix/pre_merge/` and `verification/rv32_profile/run.py --base-64` still reproduces the hang.
+
+| Defect | Where | Symptom and root cause | Fix | Why this fix |
+|---|---|---|---|---|
+| 1. AMO takes atomic permission on a Shared grant | `rtl/common/modified/hpdcache/rtl/src/hpdcache.sv` (instance of `hpdcache_ctrl`), `hpdcache_ctrl.sv` (`atomic_permission_q`) | A pending AMO received an S grant for its line (preparatory refill) and set `atomic_permission_q`, which makes the cache refuse every probe of that line until the AMO completes. An AMO cannot complete from S: it sends a unique request, which the fabric serializes behind the competing same-line context whose PREPARE probe is being refused. Deadlock | New input `coh_atomic_grant_unique_i` = grant state bit 1 (E or M). Permission is set on a grant only when it is unique, or when the atomic is an LR (`atomic_lr_q`) | It is the behavior the row "S-to-M upgrade / AMO hit in S" already requires ("older probes may complete before that grant"). The DEC-038 protection that keeps a just-acquired line until the AMO executes still applies after the E/M grant. LR keeps S, as on an S hit, because an LR executes from S |
+| 2. RTAB fence drops while the fenced AMO is still queued | `hpdcache_rtab.sv` (`fence_o`) | `fence_o`, which stops new core requests, was high only while an entry still had its `pend_trans` dependency. When the AMO's dependency cleared, a younger load to the same line was accepted and linked behind the AMO. The coherent AMO then needed a second, unique ownership request and was rolled back with `pend_trans` again. `pend_trans` clears only when every queued entry is fenced, so it never cleared: the load cannot run before the AMO. Deadlock | `fence_o = (|fence_bv) | (|(valid_q & fence_type_bv))`; `fence_type_bv` marks AMO, uncacheable and CMO entries from the stored request, the same classification as `st1_fence` | It is the upstream intent stated in `hpdcache_ctrl_pe.sv` ("all instructions following the fence need to wait the completion of this last"). No new storage; the flag stays correct across rollbacks; refill, probe, write-back and replay are not gated. Cost: the core port waits while an AMO, uncacheable or CMO entry is queued |
+| 3. One directory handshake retires two contexts | `rtl/common/vlsit/coherence/m_vlsit_riscv_coh_fabric.sv` (context FSM, `ENUM_ST_DIR_UPDATE`, `ENUM_ST_DIR_CANCEL`) | Each directory bank sends one context's update per handshake, but every context in DIR_UPDATE on that bank left on the bank handshake without checking the tag. With two contexts of one bank in DIR_UPDATE, the second lost its directory update (its holder was never recorded) and its set reservation stayed valid, so a later lookup of that set (here the CMO of FENCE.I) waited forever | Leave DIR_UPDATE only when `w_update_hs[bank]` and `w_dir_update_tag[bank]` equal the slot; leave DIR_CANCEL when the slot holds no reservation or `w_cancel_hs[bank]` and `w_dir_cancel_tag[bank]` equal the slot | It is the rule `ENUM_ST_RETRY_CANCEL` in the same FSM already used. The arbiter keeps the other context in DIR_UPDATE, so it is served on a later cycle. No new state, port or register. Besides the hang, the fix removes a coherence risk: a holder missing from the directory would not be probed |
+
+Verification of the merged RTL: lint 0 errors / 0 warnings (2 and 4 harts, timing profiles 0 and 2, both XLEN profiles); RV32 testbench TC-01 to TC-10 PASS with 2 and 4 harts; the same testbench on this cluster TC-04 to 07, 09, 10 PASS with 2 and 4 harts, TC-07 also with 2 and 3 contending harts; the existing atomic, CMO, FENCE.I and directory-holder suites 36/36 PASS with verdicts identical to their baseline; the pre-fix snapshot still hangs. A testbench assertion (assertion 104 of the RV32 HDS: a context leaves DIR_UPDATE only on its own-tag handshake) fails on the unfixed fabric at the defect cycle and passes after the fix. Evidence: `verification/rv32_profile/REPORT.md` sections 3c to 3f; change plans: `doc/specification/HPDCACHE_ATOMIC_DEADLOCK_CHANGE_PLAN.md`.
+
 ## 15. Verification specification
 
 ### 15.1 Scope and strategy
 
-Current evidence: 58 actual CPU cases and 98 checked entries with source identities, plus fresh default TOP 2/4-hart lint. No CPU simulations are rerun by this document rewrite. See [post-A-06 matrix](../reports/post_a06_cluster_audit/README.md). A-06 activates external fault CSR; PMU/native LLC service/debug/uncached ATOP are not thereby verified. Directed cases are not code-coverage percentages.
+Current evidence: 58 actual CPU cases and 98 checked entries with source identities, plus fresh default TOP 2/4-hart lint. No CPU simulations are rerun by this document rewrite. See [post-A-06 matrix](../../project_support/reports/post_a06_cluster_audit/README.md). A-06 activates external fault CSR; PMU/native LLC service/debug/uncached ATOP are not thereby verified. Directed cases are not code-coverage percentages.
 
 
 Verification shall be independent of generated RTL. The golden sources are this specification, pinned RISC-V architectural specifications/models, AMBA protocol standards/checkers, and independently authored reference models. The generated RTL is the DUT only. Required levels: unit, protocol, multi-hart coherence, full cluster integration, formal properties, CDC/RDC, lint, synthesis/elaboration, and physical timing/power signoff.
 
-Verification flow độc lập với RTL được sinh. Golden source là đặc tả này, RISC-V architectural spec/model đã pin, chuẩn/checker giao thức và reference model độc lập. RTL sinh ra chỉ là DUT. Các mức cần có: unit, protocol, coherence đa hart, tích hợp cluster, formal, CDC/RDC, lint, elaboration/synthesis và signoff physical.
+**Sign-off condition per Required feature (F-022).** A feature marked Required in Section 1.3 is not signed off by lint, elaboration or synthesis alone. Each needs at least one functional test from Section 15.2 that has run on the current source baseline with a saved log. A feature area listed in OPEN-DV (PMU, native LLC service, MMIO and uncached ATOP, IRQ, debug and WFI, random coherence, width and default LLC matrix) without such a test blocks RTL freeze.
+
 
 ### 15.2 Requirement-based test plan
 
 | Test ID | Requirements | Scenario / stimulus | Expected result | Test type | Configuration |
 |---|---|---|---|---|---|
-| TEST-001 | REQ-SYS-001, REQ-SYS-002 | Elaborate two/four harts under selected CVA6 package | Correct active hart count and IDs | Elaboration | All four configs |
+| TEST-001 | REQ-SYS-001, REQ-SYS-002 | Elaborate 2/4 harts for each legal timing profile, check hart IDs, and try illegal scalar TOP configurations | Correct hart count and IDs. Unsupported scalar parameters fail elaboration. | Positive and negative elaboration | CFG-AXI-2/4, timing profiles 0/1/2 |
 | TEST-002 | REQ-MEM-001, REQ-MEM-005 | MESI read-sharing, clean/dirty owner, E grant, and dirty-owner AXI writeback | Legal state transitions; all readers see latest data; LLC is current only after owner writeback B response and before M-to-S completes | Directed/random litmus and scoreboard | CFG-AXI-2/4 |
 | TEST-003 | REQ-MEM-002, REQ-MEM-003 | Check LLC geometry and attempt SPM control | Capacity equals 256 KiB default; SPM stays disabled | Elaboration/CSR test | Both profiles |
 | TEST-004 | REQ-MEM-004 | Reset, observe BIST, then flush dirty lines | No use before BIST ready; flush completes without data loss | Simulation | Both profiles |
@@ -8805,14 +9068,14 @@ Verification flow độc lập với RTL được sinh. Golden source là đặc
 | TEST-006 | REQ-IF-002, REQ-IF-005 | AXI MMIO bursts with backpressure, IDs, errors | Stable payload, correct response association | AXI checker/simulation | Both profiles |
 | TEST-007 | REQ-IF-003 | External DMA access with and without software maintenance | AXI profile contract is honored; no false coherence claim | System test | CFG-AXI-2/4 |
 | TEST-008 | REQ-IF-004 | Future external ACE read/write snoops to clean and dirty lines | Correct CR/CD response and latest data | Future ACE checker/system test | Deferred |
-| TEST-009 | REQ-PMU-001, REQ-PMU-002 | Min/max counter count and 32/64-bit wrap | Correct parameter legality and modulo arithmetic | Directed/random | Both profiles |
+| TEST-009 | REQ-PMU-001, REQ-PMU-002, REQ-PMU-005 | Min/max counter count and 32/64-bit wrap; scope 0–7 at 2/4 harts | Correct parameter legality and modulo arithmetic; active-hart, aggregate and cluster scopes count correctly; absent-hart and reserved scopes count zero | Directed/random | AXI profile, 2/4 harts |
 | TEST-010 | REQ-PMU-003 | Snapshot while live counters continue incrementing | Captured low/high images remain stable and internally consistent | Scoreboard | Both profiles |
 | TEST-011 | REQ-PMU-004 | Overflow, mask, clear, interrupt injection | Sticky cause and aggregate IRQ match CSR state | CSR/interrupt test | Both profiles |
 | TEST-012 | REQ-DBG-001 | Halt/resume each active hart separately | Only requested hart enters/exits debug | Integration test | 2/4 harts |
-| TEST-013 | REQ-IRQ-001 | Assert each interrupt vector and unused-hart bits | Correct hart receives level; absent hart ignored | Directed test | 2/4 harts |
-| TEST-014 | REQ-RST-001, REQ-ERR-001 | Reset with outstanding reads/writes/snoop | Reset behavior agrees with system reset contract; no stale completion | Reset injection | Both profiles |
+| TEST-013 | REQ-IRQ-001, REQ-IRQ-003 | Assert MEIP and SEIP independently per active hart. Exercise absent indices through the optional four-slot SoC wrapper. Vary enable/delegation and SEIP software state. Exercise WFI wake. | Correct architectural pending and trap/wakeup for the addressed hart under the configured privilege rules. Absent hart inputs are ignored. | Directed CPU and CSR scoreboard | CFG-AXI-2/4 |
+| TEST-014 | REQ-RST-001, REQ-ERR-001 | Assert coordinated system reset while AXI read/write responses and internal coherence acknowledgements are outstanding; preserve the backing-memory array while clearing fabric/endpoint transaction state | Cluster and connected transaction state reset together; no pre-reset R/B/probe response reaches the released cluster or satisfies a new request; reset does not clear backing-memory contents. The final value of an externally accepted in-flight write is not checked because it may have committed before reset | Reset injection with independently controlled fabric/target reset and post-reset stale-response monitor | AXI profile, 2/4 harts |
 | TEST-015 | REQ-VER-001, REQ-VER-002 | Rebuild all configs from clean manifest and saved Make targets | Same tests/files/logs are reproducible | Flow audit | All configs |
-| TEST-016 | REQ-IF-006 | Elaborate current AXI top at 2/4 harts and inspect its fixed port list | One AXI top; no runtime AXI/ACE profile mux | Elaboration audit | CFG-AXI-2/4 |
+| TEST-016 | REQ-IF-006 | Elaborate AXI TOP and the optional SoC wrapper at 2/4 harts; check IRQ/debug widths and AXI IDs | TOP vectors are 2/4 bits. Wrapper vectors stay 4 bits with zero inactive debug status. AXI IDs stay unchanged. | Elaboration and connectivity audit | CFG-AXI-2/4 |
 | TEST-017 | REQ-ERR-002 | Inject malformed internal address/control requests | No silent CSR/cache-state change; error status follows the approved interface policy | Negative simulation/assertions | Both profiles |
 | TEST-018 | REQ-CLK-001 | Audit clock use at every cluster port and instantiated hart | No undeclared internal clock domain; external crossings use a separate SoC bridge | CDC/clock-domain lint | Both profiles |
 | TEST-019 | REQ-MEM-001 | Exercise I/S/E/M transitions, including E-to-M local store and S-to-M ownership upgrade | No illegal state combination or duplicate M/E owner | Directed MESI scoreboard/formal | CFG-AXI-2/4 |
@@ -8831,8 +9094,8 @@ Verification flow độc lập với RTL được sinh. Golden source là đặc
 | TEST-032 | REQ-SYS-003 | Hold `i_boot_addr` through reset release and start two/four harts | Every active CVA6 receives the same boot address; `mhartid` remains distinct | Elaboration and multi-hart startup test | CFG-AXI-2/4 |
 | TEST-033 | REQ-MEM-014 | Exercise bank round-robin under sustained eligible contention; access all ways to check PLRU path updates, invalid-way preference, and locked-victim waiting | Eligible slots receive fair cyclic grants; PLRU selects the expected tree victim; invalid ways precede replacement; blocked victim does not block unrelated eligible work | Directed arbitration/replacement scoreboard and assertions | CFG-AXI-2/4 |
 | TEST-034 | REQ-SYS-004 | Compare the local configuration copy to the pinned pristine file and elaborate with CVXIF disabled | Only the approved CVXIF enable field changes; upstream source remains intact; no CVXIF top ports exist and native pins remain inactive if present | Source-diff review and elaboration | CFG-AXI-2/4 |
-| TEST-035 | REQ-PMU-007, REQ-PMU-008 | Program every catalog ID and compatible scope; include unknown/reserved IDs, absent-hart scopes, disabled SPM IDs, simultaneous per-hart events, held stall indicators, and 2–4 same-kind events across CCU banks in one cycle | Exact source map increments correctly; invalid/unavailable combinations count zero; aggregate sums per-hart indicators; CCU occurrence taps add 2–4 while stall taps add one per active cycle; LLC AXI transfers/descriptors count once per accepted source event, not by bytes | Source-based event scoreboard with pinned-source cross-check and a CCU count-bound assertion | CFG-AXI-2/4 |
-| TEST-036 | REQ-IF-009 | Run cached LR/SC and AMO operations at the coherent L1 serialization point, including dirty remote owners and reservation invalidation; run uncached operations through the external AXI4+ATOP target and separately exercise a system bridge when the target fabric lacks ATOP | Cached atomics execute exactly once under unique CCU permission; competing same-line probes cannot interleave their read/write. Uncached AWATOP, ID and response association are preserved; a filter-only path is rejected | RISC-V atomic architectural model and AXI4+ATOP checker | CFG-AXI-2/4 |
+| TEST-035 | REQ-PMU-005, REQ-PMU-007, REQ-PMU-008 | Program every catalog ID and compatible scope; include unknown/reserved IDs, absent-hart scopes, disabled SPM IDs, simultaneous per-hart events, held stall indicators, and 2–4 same-kind events across CCU banks in one cycle | Exact source map increments correctly; invalid/unavailable combinations count zero; aggregate sums per-hart indicators; CCU occurrence taps add 2–4 while stall taps add one per active cycle; LLC AXI transfers/descriptors count once per accepted source event, not by bytes | Source-based event scoreboard with pinned-source cross-check and a CCU count-bound assertion | CFG-AXI-2/4 |
+| TEST-036 | REQ-IF-009 | Run cached LR/SC and AMO operations at the coherent L1 serialization point, including dirty remote owners and reservation invalidation; run uncached LR/SC over AXI4 exclusive signaling and AMOs over the supported PULP AWATOP extension; test a real atomic-service bridge if the target fabric lacks either mechanism | Cached atomics execute exactly once under unique CCU permission; competing same-line probes cannot interleave their read/write. Uncached `ARLOCK`/`AWLOCK` and AWATOP, ID and response association are preserved; the AWATOP subset matches the pinned source and AMBA E1.1 semantics; a filter-only path is rejected | RISC-V atomic architectural model and AXI4/PULP-AWATOP checker | CFG-AXI-2/4 |
 | TEST-037 | REQ-IF-010 | Issue LLC service reads and writes; vary AXI4-Lite AW/W arrival order, WSTRB, and backpressure while delaying RegBus response | One RegBus request is formed from each accepted write; AXI response returns to the matching request without loss or duplication | AXI4-Lite/RegBus bridge scoreboard against pinned interface types | CFG-AXI-2/4 |
 | TEST-038 | REQ-MEM-015 | Exercise CLEAN, FLUSH, and CBIE-decoded INVAL across L1/LLC hit/miss and I/S/E/M/dirty states; include a concurrent same-line CPU request and an ordered DMA observer | Correct operation reaches every required holder; no CMO refill; CMO holds the shared line lock; CLEAN/FLUSH make memory current; FLUSH/INVAL invalidate only at commit; true INVAL emits no writeback and may discard dirty copies; DMA observes the defined result | Independent CMO reference model and coherence scoreboard | CFG-AXI-2/4 |
 | TEST-039 | REQ-MEM-016, REQ-MEM-017 | Inject owner-writeback and LLC-memory B errors for CLEAN, FLUSH, and INVAL-as-FLUSH; delay PREPARE/ABORT ACKs; also run true INVAL and assert no writeback; observe CVA6 retirement/trap state | No CBO or younger retirement before resolution; recoverable dirty data/directory remain valid after writeback error; after every required ABORT ACK, raise exception code 7 with original CBO PC in `mepc`/`sepc` and effective address in `mtval`/`stval`; true INVAL performs no B transaction | Error-injection simulation, retirement scoreboard and assertions | CFG-AXI-2/4 |
@@ -8842,22 +9105,52 @@ Verification flow độc lập với RTL được sinh. Golden source là đặc
 | TEST-043 | REQ-IRQ-002 | Assert and deassert SSIP/STIP while independently setting/clearing software-writable MIP bits; include CSRRS/CSRRC accesses while an external level is asserted | Effective MIP/SIP and interrupt delivery reflect the ORed source; software state changes only from CSR writes; dropping the external level does not leave a sticky bit | Architectural CSR reference model, interrupt scoreboard, and CSR read-modify-write assertions | CFG-AXI-2/4 |
 | TEST-044 | REQ-MEM-019 | Reproduce CC-01 exactly: T1 lookup-hit/update and T2 same-set miss/reservation; keep T1 update VALID until READY; then assert matching T2 cancel | T2 cancel handshakes despite blocked T1 update, clears only T2 reservation, and T1 update later handshakes; no directory/MESI corruption. Also confirm another eligible same-bank operation can be scheduled once the bank accepts it. | Directed reproduction, ready/valid scoreboard, reservation-owner assertions, and bounded liveness under continuous bank acceptance | CFG-AXI-2/4; `PARA_COH_TXN_NUM`=2/8/16 |
 | TEST-045 | REQ-MEM-021 | Inject duplicate, stale, unknown-tag, wrong-phase, wrong-hart, and wrong-line probe ACKs ahead of a valid expected ACK | Invalid responses are accepted/discarded and diagnosed; no transaction/cache/directory state changes; the following valid ACK is accepted and completes only its matching transaction | Tagged response scoreboard, assertion, and diagnostic CSR check | CFG-AXI-2/4 |
-| TEST-046 | REQ-MEM-019/020; PERF-001/004/005 | Stress a full 8-way set, same-bank request contention, one cache's full probe queue, all transaction slots occupied, dirty-owner writeback, and controlled AXI READY/B-response delays | Report maximum observed arbitration wait, slot occupancy, per-hart stalls/IPC, line-lock duration, and overlapping progress for a finite controlled environment; separately show that unbounded ACK/AXI stalls have no finite latency bound under DEC-018 | Independent reference model, trace counters, directed/random backpressure, and fairness assertions | CFG-AXI-2/4; controlled-response and unbounded-stall runs |
-| TEST-047 | External AXI memory width profile (DEP-022) | Exercise the memory adapter at 32/64/128/256 bits, including ATOP, IDs, narrow/full transfers, burst limits, strobes, ordering, errors, and backpressure | Preserve the 16-byte internal coherence granule and AXI responses; unsupported burst/ATOP cases are rejected explicitly; standalone adapter evidence does not substitute for full LLC-to-SoC testing | Width-converter protocol checker and end-to-end AXI+ATOP model | Adapter leaf tests pass; integrated route pending |
-| TEST-048 | REQ-MEM-014/022 | Hold a per-slot request valid through backpressure; accept its grant, delay VALID deassertion, then drop VALID and later present a new token from the same slot | No duplicate grant occurs for the old token; grant payload is stable while stalled; the slot rearms only after sampled VALID low; other eligible slots retain round-robin service | Directed bank-arbiter scoreboard, grant-count assertion, and slot-rearm coverage | CFG-AXI-2/4; `PARA_COH_TXN_NUM`=2/8/16 |
-| TEST-049 | REQ-MEM-012/023 | Exercise M-owner PREPARE with successful B followed by COMMIT, and a separate B-error path followed by ABORT; vary target state and ACK order | Matching writeback status and target state survive phase transitions; COMMIT is gated by successful B; B error remains visible through ABORT; no wrong-tag/line response updates the context | Transaction-context reference model, AXI ID/response scoreboard, and phase-state assertions | CFG-AXI-2/4; reordered ACK and B-response runs |
+| TEST-046 | REQ-MEM-019, REQ-MEM-020; PERF-001/004/005 | Stress a full 8-way set, same-bank request contention, one cache's full probe queue, all transaction slots occupied, dirty-owner writeback, and controlled AXI READY/B-response delays | Report maximum observed arbitration wait, slot occupancy, per-hart stalls/IPC, line-lock duration, and overlapping progress for a finite controlled environment; verify resource wait-for invariants; separately show that unbounded ACK/AXI stalls have no finite latency bound under DEC-018 | Independent reference model, wait-for/resource assertions, trace counters, directed/random backpressure, and fairness assumptions | CFG-AXI-2/4; controlled-response and unbounded-stall runs Also report, per timing profile and 2/4 harts, the measured cycles of a private hit, clean miss, dirty-owner transfer and CBO.CLEAN on one line, the CBO.CLEAN rate over a 94-line range, and the number of directory conflict invalidations per 1,000 requests for the mixes above. Decided by the project owner on 2026-11-21. |
+| TEST-047 | REQ-IF-012 | Exercise the memory adapter at 32/64/128/256 bits, including supported AWATOP and exclusive transactions, IDs, narrow/full transfers, burst limits, strobes, ordering, errors, and backpressure | Preserve the 16-byte internal coherence granule and AXI responses; unsupported burst/atomic cases are rejected explicitly; standalone adapter evidence does not substitute for full LLC-to-SoC testing | Width-converter protocol checker and end-to-end memory-target model | AXI profile, 2/4 harts; all four external widths |
+| TEST-048 | REQ-MEM-014, REQ-MEM-022 | Hold a per-slot request valid through backpressure; accept its grant, delay VALID deassertion, then drop VALID and later present a new token from the same slot | No duplicate grant occurs for the old token; grant payload is stable while stalled; the slot rearms only after sampled VALID low; other eligible slots retain round-robin service | Directed bank-arbiter scoreboard, grant-count assertion, and slot-rearm coverage | CFG-AXI-2/4; `PARA_COH_TXN_NUM`=2/8/16 |
+| TEST-049 | REQ-MEM-012, REQ-MEM-023 | Exercise M-owner PREPARE with successful B followed by COMMIT, and a separate B-error path followed by ABORT; vary target state and ACK order | Matching writeback status and target state survive phase transitions; COMMIT is gated by successful B; B error remains visible through ABORT; no wrong-tag/line response updates the context | Transaction-context reference model, AXI ID/response scoreboard, and phase-state assertions | CFG-AXI-2/4; reordered ACK and B-response runs |
 | TEST-051 | REQ-IF-011 | Configure the default cacheable entry plus representative normal-uncached RAM and MMIO entries; probe each region through CVA6 PMA and router; test an unmapped address, a boundary-crossing burst, overlap/overflow parameters, and an MMIO atomic | PMA and router classify each byte range identically; cacheable uses CCU/LLC, normal-uncached uses LLC bypass without allocation, MMIO reaches only the MMIO AXI port, and unmapped/boundary/atomic-to-MMIO requests return local access errors without external requests. Invalid tables lower `o_config_valid`; the SoC build must reject that configuration because RTL does not guarantee an elaboration failure | Parameter/elaboration checks, independent address-table model, AXI monitors and access-fault scoreboard | CFG-AXI-2/4; 1 and 16 region entries |
-| TEST-052 | REQ-MEM-008/012/023; DEC-013; A-04 | Cause successful clean/dirty L1 replacement or AMO/LR refill error, then access the line from peer harts; include mixed real/absent holders, all-absent CMO, ABORT, and invalid terminal state | Read latest data, retain atomic old-value uniqueness, accept only validated I absence, prune only successful committed masks, keep absent caches I without RAM writes, normalize empty masks to I, preserve metadata on ABORT and reject synthetic terminal S | Real CVA6 2/4-hart programs, SRAM/probe/directory monitors, independent data oracle and focused CCU/probe negative tests | CFG-AXI-2/4 |
-| TEST-053 | REQ-MEM-009/010/014/019; A-05 | Saturate N=2/8/16 contexts, force victims, hold multiple roots/grants, conflict victim lines, inject child error and reuse tags; run nine-line CPU replacement at two contexts on 2/4-hart TOP | Roots cannot consume last credit; victim child completes without recursive allocation; only selected parent/grant changes state; locked-victim reservation cancels/relooks up; ABORT preserves metadata and error identity; requests drain with finite responses | Independent request-ID/cache BFM, context/phase assertions, real CVA6 programs, data/AXI oracle and mutation checks | N=2/8/16 focused, CFG-AXI-2/4 CPU |
+| TEST-052 | REQ-MEM-008, REQ-MEM-012, REQ-MEM-023; DEC-013; A-04 | Cause successful clean/dirty L1 replacement or AMO/LR refill error, then access the line from peer harts; include mixed real/absent holders, all-absent CMO, ABORT, and invalid terminal state | Read latest data, retain atomic old-value uniqueness, accept only validated I absence, prune only successful committed masks, keep absent caches I without RAM writes, normalize empty masks to I, preserve metadata on ABORT and reject synthetic terminal S | Real CVA6 2/4-hart programs, SRAM/probe/directory monitors, independent data oracle and focused CCU/probe negative tests | CFG-AXI-2/4 |
+| TEST-053 | REQ-MEM-009, REQ-MEM-010, REQ-MEM-014, REQ-MEM-019; A-05 | Saturate N=2/8/16 contexts, force victims, hold multiple roots/grants, conflict victim lines, inject child error and reuse tags; run nine-line CPU replacement at two contexts on 2/4-hart TOP | Roots cannot consume last credit; victim child completes without recursive allocation; only selected parent/grant changes state; locked-victim reservation cancels/relooks up; ABORT preserves metadata and error identity; requests drain with finite responses | Independent request-ID/cache BFM, context/phase assertions, real CVA6 programs, data/AXI oracle and mutation checks | N=2/8/16 focused, CFG-AXI-2/4 CPU |
 | TEST-054 | REQ-ERR-003; DEC-039/040 | Capture L1/LLC SLVERR/DECERR, later and simultaneous errors, RO writes/W1C, split-address reads, reset and inactive harts; verify all local AXI4-Lite groups | First fatal payload retained, deterministic L1 priority, multiple set without overwrite, raw response and actual victim address preserved, LLC hart invalid, reset-only clear and no nonfatal contamination | Independent event oracle, real CPU + memory fault injection, AXI4-Lite reads and activated protocol assertions, offset-routing checks | CFG-AXI-2/4 |
+| TEST-055 | REQ-PD-001 | Review published claims and available signoff evidence with PDK, library, SRAM, SDC, PVT and workload inputs absent; for any numeric period claim, check that the sweep report of Section 8.3 exists for the same corner and constraints | No numeric Fmax, area or power limit is claimed without a sweep report; 1.25 ns and 1.04167 ns are cited only as evaluation points; PPA, STA and physical signoff remain integration dependencies | Document/constraint audit | AXI profile Also check the interface contract of REQ-PD-002 and REQ-PD-003: list each input-to-output path, name each exception and show that no reset start point reaches a handshake. Decided by the project owner on 2026-11-21. |
+| TEST-056 | REQ-MEM-024; DEC-043 | Advance H3's local round-robin pointer with a single-hart transaction; then activate T0/T1 with the same expected mask `{H2,H3}` and make both cache endpoints responsive | Both H2 and H3 issue PREPARE for one identical winning tag; the losing transaction owns neither slot until the winner's successful COMMIT/ABORT; the loser then claims both slots and completes. No split ownership or circular wait occurs. A second disjoint-mask case confirms independent progress. | Directed 4-hart probe-scheduler simulation, owner-tag assertions, bounded progress check under finite responses; the full wait-for property remains a formal obligation | CFG-AXI-4 Add a starvation case: keep one single-hart claim eligible on every cycle and show that a context needing three or four slots is granted within the bound of the aging rule in OPEN-PROBE-FAIR. Decided by the project owner on 2026-11-21. |
+| TEST-057 | REQ-PERF-006; REQ-PERF-007; REQ-SYS-003 | Boot and execute cached instruction fetches plus scalar load/store and a directed MMIO access on the full CVA6 cluster | The CPU reaches the pass signature; memory and MMIO transfers traverse the applicable profile boundary; response/data remain associated | Full production TOP, real CVA6 program, 2 and 4 harts; compare profile 0 smoke result; profiles 0/1/2 | CFG-AXI-2/4; timing profiles 0, 1 and 2 |
+| TEST-058 | REQ-PERF-006; REQ-PERF-007; REQ-MEM-001/005/006 | Two harts write/read the same cache line in alternating ownership order | Software observes the latest value; PREPARE/COMMIT, directory response tags, and AXI owner writeback/refill remain ordered through the applicable boundary | Full production TOP, real CVA6 program, 2 and 4 harts; profiles 0/1/2 | CFG-AXI-2/4; timing profiles 0, 1 and 2 |
+| TEST-059 | REQ-PERF-006; REQ-PERF-007; REQ-IF-003/009 | Execute cached LR/SC and AMO plus supported uncached atomic access with a programmed target stall | Atomic success/failure and response IDs match the ISA/protocol contract; AWATOP/exclusive sidebands survive the timing cut | Full production TOP, real CVA6 program, 2 and 4 harts; profiles 0/1/2 | CFG-AXI-2/4; timing profiles 0, 1 and 2 |
+| TEST-060 | REQ-PERF-006; REQ-PERF-007; REQ-ERR-003; REQ-MEM-010/016 | Force dirty L1 eviction and hold AXI AW/W/B ready/response with deterministic backpressure | Data, valid, ID and strobe remain stable while blocked; no replacement or refill completes before successful B; error retention remains intact | Full production TOP, real CVA6 program, 2 and 4 harts; success and injected B-error variants; profiles 0/1/2 | CFG-AXI-2/4; timing profiles 0, 1 and 2 |
+| TEST-061 | REQ-PERF-006; REQ-PERF-007; REQ-MEM-017/018 | Execute real CBO.CLEAN and FENCE.I success/error sequences through retirement, arbiter, CCU and LLC | Retire exactly once on success; on failure wait for ABORT and trap precisely; PMU event/snapshot checks count each sampled event once with the profile's documented latency | Full production TOP, real CVA6 program, 2 and 4 harts; CBO/FENCE.I success and error, PMU snapshot scoreboard; profiles 0/1/2 | CFG-AXI-2/4; timing profiles 0, 1 and 2 |
+| TEST-062 | REQ-CLK-002; REQ-MEM-013 | Put a hart holding a dirty line into WFI, then repeat in debug halt. Have another hart request the line. | The target services PREPARE and terminal probes, supplies current data and releases the line under responsive peers. | Directed CPU system test, pending | CFG-AXI-2/4 |
+| TEST-063 | REQ-PERF-007; REQ-MEM-019 | Issue distinct-set lookups to one bank on consecutive eligible cycles. Fill both lookup stages by holding response READY low, then submit a matching owner CANCEL while stalled. Release response READY. | One lookup per eligible cycle before fill, stable ordered tag and payload under stall, and CANCEL progress independent of response backpressure. | Directed directory regression and handshake assertions, pending | CFG-AXI-2/4, timing profile 2 Repeat with the payload RAM wrapper of REQ-MEM-025 in its behavioral and macro-model forms. Decided by the project owner on 2026-11-21. |
+| TEST-064 | REQ-MEM-017/018; REQ-MEM-012; DEC-046 | Four harts: hart 0 runs CBO.CLEAN, CBO.FLUSH, CBO.INVAL and FENCE.I on private lines while harts 1-3 run AMOADD.W then a load loop on one shared line (RV32 testbench TC-07, also run on the 64-bit cluster). Repeat with 2 and 3 harts in the loop. | Every CBO and FENCE.I completes, written-back data is in memory, all harts finish; no watchdog. | Directed CPU test, `verification/rv32_profile` (`run.py --xlen 64`) | CFG-AXI-4, timing profile 0. PASS on the 64-bit and RV32 clusters with DEC-046 and DEC-047 (2026-11-26). |
 
 ### 15.3 Assertions and coverage
 
-Additional normative test: **TEST-050 — REQ-ERR-003 / DEC-036.** Retire a store into a dirty cache line, trigger its ordinary eviction, and return a non-OKAY writeback response. Verify retained recoverable data and affected lock/context, sticky `o_int_fault`, associated CSR fault information, continued draining of previously issued AXI responses, and no automatic retry or fabricated success. Verify reset recovery and separately confirm that CBO/FENCE.I still follow their synchronous-fault contracts. / Cho store retire vào line dirty, gây eviction và trả lỗi writeback; kiểm tra dữ liệu/lock giữ lại, IRQ sticky, fault record CSR, nhận đủ response đã gửi, không tự retry/báo thành công, reset recovery và hành vi lỗi đồng bộ riêng của CBO/FENCE.I.
+Additional normative test: **TEST-050 — REQ-ERR-003 / DEC-036.** Retire a store into a dirty cache line, trigger its ordinary eviction, and return a non-OKAY writeback response. Verify retained recoverable data and affected lock/context, sticky `o_int_fault`, associated CSR fault information, continued draining of previously issued AXI responses, and no automatic retry or fabricated success. Verify reset recovery and separately confirm that CBO/FENCE.I still follow their synchronous-fault contracts.
+
+**Property identifiers (F-021).** Each property below is realized as an SVA assertion, cover point or formal proof. Coverage closure thresholds stay as stated in the coverage contract below.
+
+| ID | Property | Kind | Requirement |
+|---|---|---|---|
+| PROP-001 | VALID and payload stay stable while stalled on every AXI channel, every profile boundary cut and every internal request/response channel | assert, formal | REQ-PERF-006, REQ-PERF-007, REQ-MEM-022 |
+| PROP-002 | A response appears only after its request was accepted, and each internal tag matches one live transaction | assert | REQ-MEM-023 |
+| PROP-003 | A bank grant is consumed once per token and the slot rearms only after VALID was sampled low | assert, formal | REQ-MEM-022 |
+| PROP-004 | A response to a mismatched `(tag, hart, line)` or phase changes no state and is still drained | assert | REQ-MEM-021 |
+| PROP-005 | The directory never omits an active D-cache that may hold a line | formal | REQ-MEM-008, REQ-MEM-010 |
+| PROP-006 | No M/E duplication and no dirty-owner bypass | formal | REQ-MEM-005 |
+| PROP-007 | COMMIT never follows a failed owner writeback, and each probed cache sends exactly one response per phase | assert | REQ-MEM-013, REQ-MEM-023 |
+| PROP-008 | Stable MESI state does not change during PREPARE | assert | REQ-MEM-013 |
+| PROP-009 | A granted PREPARE tag owns every slot of its mask, no two tags own one hart, and a waiting context owns no strict subset | assert, formal | REQ-MEM-024 |
+| PROP-010 | Under finite cache responses and fair claims, every context is eventually granted (liveness) | formal liveness | REQ-MEM-024, OPEN-PROBE-FAIR |
+| PROP-011 | An owner UPDATE or CANCEL is never blocked by a valid but ineligible request | assert | REQ-MEM-019 |
+| PROP-012 | No resource is held while waiting for a response that needs that resource (wait-for graph acyclic) | formal | REQ-MEM-020 |
+| PROP-013 | A PMU event sampled once is counted once, and a snapshot includes every earlier sample | assert | REQ-PERF-006, REQ-PERF-007 |
+| PROP-014 | No input-to-output combinational path and no reset in a handshake expression (structural) | structural check | REQ-PD-002, REQ-PD-003 |
 
 Required assertions include VALID/payload stability under stall; response only after request acceptance; AXI and internal-tag association; unique active transaction tags; no response update to a mismatched `(tag, hart, line)`; no duplicate completion or bank grant for one request token; a slot cannot be granted again until VALID has been sampled low; grant bank/slot stability under backpressure; owner-writeback status, target state, and error status persist across phases; COMMIT is impossible after a failed writeback; no M/E duplication; no dirty-owner bypass; no lost accepted probe; exactly one response per targeted cache for each phase; no stable MESI state change during PREPARE; no requester grant before all COMMIT acknowledgements and directory update; ABORT preserves the pre-transaction state; a probe-originated flush B response routes only to its matching probe and preserves its error; a successful PREPARE for M requires both owner W beats and the matching successful B response; no line-lock release before all phase responses and dirty-owner writeback/LLC obligations complete; while any required PREPARE, COMMIT, or ABORT ACK is missing, no timeout, directory update, requester grant, or slot release; directory-refinement safety; no same-line CPU completion while locked; 2/8/16 transaction parameter coverage; 2/4-hart directory geometry; same-bank serialization and cross-bank overlap; per-hart interrupt isolation; PMU correctness; snapshot stability; and aggregate IRQ equivalence to enabled sticky causes. Add liveness assertions under explicit fairness assumptions: an ineligible request never occupies a grant; a matching reservation-owner cancel/update is not blocked by another transaction's ineligible request; an accepted cancel clears exactly one matching reservation; every response channel can drain stale/duplicate ACKs; and every continuously eligible bank slot is selected within a full accepted-grant round. Coverage shall cross hart count × MESI request × initial state × owner/sharer count × LLC hit/miss × bank conflict × transaction occupancy × backpressure × reset timing × cancel/update race × stale-response class × duplicate-grant/rearm.
+For REQ-MEM-024, assert that each granted PREPARE tag owns every bit in its expected mask before any request handshake; no two tags own the same hart; a waiting context never owns a strict subset of its target mask; PREPARE issue uses only the reserved tag; successful COMMIT/ABORT releases exactly the matching owner's slots; and round-robin claim selection advances only on a successful claim. Under finite cache responses and fair claims, the directed two-context cross-claim scenario shall complete both transactions. Add disjoint-mask overlap coverage.
 
-Coverage thresholds are not yet selected. Coverage reports must separate line, condition, toggle, functional, and protocol coverage and state unreachable points with justification.
+Use the approved [verification coverage contract](../../verification/plan/coverage_contract.json) and the reviewed active-source manifest. The code coverage threshold is 100% each for line, expression, and toggle on active project-created/generated and modified licensed RTL. Expression is the selected metric. Report functional obligations separately. Unchanged upstream exclusions require source provenance, and unreachable-point exclusions require proof and approval. No current Profile 2 coverage closure is claimed.
 
 ### 15.4 Formal, CDC, and RDC
 
@@ -8867,8 +9160,8 @@ Coverage thresholds are not yet selected. Coverage reports must separate line, c
 | Coherence formal | MESI ownership/sharer rules, dirty-owner AXI writeback preservation, line-lock release, one response per probed cache, E/M exclusivity | Probe/flush-engine ownership and HPDcache transient-state assumptions from Section 10.2.1 | Invariants/refinement checks against an independent MESI/directory reference model |
 | Liveness / deadlock formal | Directory reservation escape, eligible-slot fairness, probe response drain, and resource wait graph | Reset deasserted; clocks active; compliant stable VALID; caches eventually service probes; AXI eventually accepts requests and returns responses. Do not assume a bounded ACK/AXI latency. | Prove no internal wait cycle and no starvation under fairness; separately prove DEC-018 holds indefinitely without fabricating ACKs |
 | CDC / RDC | All SoC crossings, reset release and interrupt/debug sources | Same clock at cluster ports or external bridges | CDC/RDC tool plus waiver review |
-| Lint/elaboration | Four profiles and legal parameter endpoints | Pinned tools and third-party waivers | Reproducible Make targets |
-| Synthesis | Both top profiles and LLC geometries | Target library/macro mapping | Synthesis reports, no unsupported construct |
+| Lint/elaboration | AXI 2/4 harts, timing profiles 0/1/2, and supported parameter endpoints | Pinned tools and third-party waivers | Reproducible Make targets |
+| Synthesis | Implemented AXI TOP and supported LLC geometries | Target library/macro mapping | Synthesis reports, no unsupported construct |
 
 
 ### 15.5 Current ordinary-eviction test definition
@@ -8888,6 +9181,7 @@ Coverage thresholds are not yet selected. Coverage reports must separate line, c
 | Clock gating | Any integrated clock gating requires approved test-enable behavior |
 | ATPG constraints | Library and test mode are integration dependencies |
 | Test artifacts | Filelist, scan constraints, MBIST integration and reports are SoC-owned |
+| DFT hand-off (F-017; OPEN-DFT) | The cluster needs: a test-enable input that reaches every integrated clock gate (the flow uses automatic clock gating with PREICG cells); scan-enable and scan-chain ports added by the SoC DFT flow; a reset that the scan flow can control; an MBIST access path for the L1 SRAMs, the LLC arrays and the directory RAM wrapper (REQ-MEM-025). The LLC test enable is tied to zero today (`cluster_core.sv`, lines 93 and 967 as of the review) and the AXI TOP has no test-enable port. |
 
 ## 17. Physical design and timing integration
 
@@ -8895,17 +9189,20 @@ Coverage thresholds are not yet selected. Coverage reports must separate line, c
 
 The cluster has one declared synchronous clock domain. No executable SDC can be completed without period, waveform, latency, uncertainty, input/output delays, loads, transitions, PVT/RC views, and tool-specific object names. SoC integration shall provide these values before STA. No broad false paths or unreviewed multicycle exceptions are implied.
 
-Cluster có một clock domain đồng bộ. Chưa thể hoàn thiện SDC chạy được nếu thiếu period, waveform, latency, uncertainty, input/output delay, load, transition, PVT/RC và object name theo tool. SoC phải cung cấp các giá trị này trước STA. Không ngầm định false-path rộng hoặc multicycle chưa review.
 
 | Clock ID | Port / source object | Primary/generated and master | Period, waveform, phase / ratio | Latency / uncertainty / transition | Clock group / mode | Constraint source |
 |---|---|---|---|---|---|---|
 | CLK-CLUSTER | i_clk_cluster | Primary | Open integration dependency DEP-007 | Open integration dependency DEP-007 | Synchronous cluster | SoC SDC |
+
 | Interface / port group | Direction | Reference clock | External min / max delay | Input transition / output load | IP timing budget | Mode / condition | Constraint source |
 |---|---|---|---|---|---|---|---|
 | AXI4 / ACE / AXI4-Lite | Input and output | CLK-CLUSTER | To be supplied by SoC | To be supplied by SoC | To be budgeted with fabric | CFG-AXI or CFG-ACE | SoC SDC |
+
 | Exception ID | Type / SDC command | From | Through | To | Value and setup/hold/min/max meaning | Mode / condition | Technical rationale |
 |---|---|---|---|---|---|---|---|
 | EXC-001 | No exception defined in this draft | No path selected | No path selected | No path selected | No exception value approved | All modes | Add only after CDC/STA path review |
+
+**Interface timing contract (F-002).** REQ-PD-002 and REQ-PD-003 define the contract: flop-driven outputs, no combinational input-to-output path in profile 2, a budget per port group stated as a fraction of the period, and no reset in a handshake. An evaluation SDC may be written before the SoC supplies values, if it states its period, uncertainty, input and output delay and is not used as signoff. The evaluation run so far used 1.04167 ns, 1 percent uncertainty and 0.4167 ns input and output delay on every AXI port, which leaves 0.208 ns for an input-to-output path and about 0.5 ns for an input-to-register path.
 
 ### 17.2 Physical assumptions
 
@@ -8927,7 +9224,7 @@ Cluster có một clock domain đồng bộ. Chưa thể hoàn thiện SDC chạ
 | Access control / privilege | No APB/backdoor access to hart architectural CSRs; debug authorization is controlled by external DM/SoC | Integration review and debug authorization tests |
 | Secure clearing / zeroization | No key material is stored. Secure clearing of cache, CSR, PMU snapshot, and debug state is not specified; SoC security policy is required. | Define the clearing boundary, then verify reset/secure-clear behavior; no sanitization claim is made yet |
 | Information leakage / side channels | No side-channel resistance claim; caches and PMU expose performance behavior | Security review and software policy |
-| ECC/parity and fault detection | ECC enablement depends on selected HPDcache/LLC macros and tool flow | Injected memory faults when ECC is selected |
+| ECC/parity and fault detection | ECC enablement depends on selected HPDcache/LLC macros and tool flow. The selected CVA6 configuration sets `DcacheEccEnable` to 0. A detected memory error has no path except the reset-only fatal record. Decision per array in OPEN-ECC (F-015) | Injected memory faults when ECC is selected |
 | Safety goal / integrity level | No ISO 26262 or IEC 61508 safety claim | Safety certification is outside current scope |
 | Diagnostics and recovery | PMU/LLC status and external debug support diagnosis; fatal coherence failure recovery needs system policy | Error injection and recovery review |
 
@@ -8935,8 +9232,10 @@ Cluster có một clock domain đồng bộ. Chưa thể hoàn thiện SDC chạ
 
 | Requirement ID | RTL module/location | Test/property | Verification method / analysis | Configuration |
 |---|---|---|---|---|
-| REQ-SYS-001, REQ-SYS-002 | Top and CPU tile array | TEST-001 | Elaboration/config compare | All |
+| REQ-SYS-001, REQ-SYS-002 | Top and CPU tile array | TEST-001 | Positive and negative AXI TOP elaboration | CFG-AXI-2/4 |
 | REQ-SYS-003 | AXI top and CPU tile array | TEST-032 | Boot-address fanout and two/four-hart startup | CFG-AXI-2/4 |
+| REQ-PERF-006 | TOP → cluster core → per-hart AXI routes and PMU | TEST-057–061 | Five full-CPU scenarios at timing profile 1, 2/4 harts; AXI channel stability/ordering and PMU event/snapshot scoreboard; compare low-latency profile reference | CFG-AXI-2/4 |
+| REQ-PERF-007 | AXI TOP channel cuts, PMU event path and synchronous directory | TEST-057–061, TEST-063; post-route STA | Compare profiles 0 and 2 at 2/4 harts. Retain functional and timing status separately. | CFG-AXI-2/4 |
 | REQ-SYS-004 | License-preserving CVA6 configuration copy and CPU tile boundary | TEST-034 | Config delta, disabled CVXIF, no cluster ports, inactive source pins if present | CFG-AXI-2/4 |
 | REQ-MEM-001 | MESI CCU and modified HPDcache | TEST-002, TEST-019 | MESI scoreboard/formal | CFG-AXI-2/4 |
 | REQ-MEM-005 | MESI CCU and probe fanout | TEST-002, TEST-020 | Probe status and owner AXI writeback/B-response scoreboard | CFG-AXI-2/4 |
@@ -8951,11 +9250,13 @@ Cluster có một clock domain đồng bộ. Chưa thể hoàn thiện SDC chạ
 | REQ-MEM-017 | CVA6 CBO decode/store/commit path plus CMO controller | TEST-039 | Precise pre-retirement fault, no younger retirement, original PC/effective address, and post-ABORT exception delivery | CFG-AXI-2/4 |
 | REQ-MEM-007 | I-cache/software coherence contract | TEST-022, TEST-041 | RISC-V per-hart executable-memory publication sequence | CFG-AXI-2/4 |
 | REQ-MEM-018 | CVA6 FENCE.I controller, HPDcache owner writeback, CCU, trap path, and local I-cache/fetch invalidation | TEST-041, TEST-042 | Success: L1-to-LLC acceptance before local fetch sync and retirement; failure: ABORT ACKs before cause-24 trap, aligned physical line base in mtval/stval, M/directory retained; no LLC-to-DRAM request | CFG-AXI-2/4 |
-| REQ-MEM-019 | Sharer directory bank arbitration and reservation owner escape | TEST-044 | CC-01 directed reproduction, cancel/update handshake, eligible-slot fairness and reservation assertions | CFG-AXI-2/4 |
+| REQ-MEM-019 | Sharer directory bank arbitration and reservation owner escape | TEST-044, TEST-063 | CC-01 directed reproduction, cancel/update handshake, eligible-slot fairness and reservation assertions | CFG-AXI-2/4 |
 | REQ-MEM-020 | CCU, sharer directory, HPDcache probe controller, AXI writeback path | TEST-046 | Resource wait-for graph, same-line refill/probe ordering, and independent resource ownership | CFG-AXI-2/4 |
 | REQ-MEM-021 | Transaction table and probe-response receiver | TEST-045 | Stale/duplicate/mismatched ACK drain, no state mutation, subsequent valid ACK acceptance, diagnostic status | CFG-AXI-2/4 |
 | REQ-MEM-022 | Bank arbiter and transaction request source | TEST-048 | Exactly-once token consumption, stable stalled grant, VALID-low rearm, no duplicate grant | CFG-AXI-2/4 |
 | REQ-MEM-023 | Transaction table, probe scheduler, owner writeback response path | TEST-049 | Context/target-state/status retention across PREPARE/COMMIT/ABORT; matching B response gates commit | CFG-AXI-2/4 |
+| REQ-MEM-024 | Probe scheduler all-target claim arbiter and per-hart phase-owner slots | TEST-056 | Atomic all-target reservation, no split ownership, round-robin claim selection among fully eligible masks, and disjoint-target progress | CFG-AXI-2/4 |
+| REQ-MEM-025 | Sharer directory and its payload RAM wrapper | TEST-063 | Behavioral and macro-model wrapper runs, structural check, synthesis flop count | CFG-AXI-2/4, timing profile 2 |
 | PERF-005 / DEP-022 | External AXI memory width-converter wrapper | TEST-047 | Per-width AXI/ATOP functional tests and beat-count analysis; end-to-end integration remains open | Memory adapter leaf tested at 32/64/128/256; MMIO remains 64 |
 | REQ-MEM-002, REQ-MEM-003 | LLC wrapper/decode | TEST-003 | Parameter calculation and CSR test | Both |
 | REQ-MEM-004 | LLC wrapper | TEST-004 | BIST/flush simulation | Both |
@@ -8971,18 +9272,26 @@ Cluster có một clock domain đồng bộ. Chưa thể hoàn thiện SDC chạ
 | REQ-PMU-005 | PMU selector scope logic | Scope portion of TEST-009 | Per-hart/aggregate/cluster event-source tests | CFG-AXI-2/4 |
 | REQ-PMU-006 | PMU event aggregation | TEST-023 | Sum simultaneous event occurrences | CFG-AXI-4 |
 | REQ-PMU-007, REQ-PMU-008 | PMU event tap, selector and counter path | TEST-035 | Full source-ID map, scope, zero-count cases and event multiplicity | CFG-AXI-2/4 |
-| REQ-IF-009 | LLC AXI4+ATOP memory path and SoC atomic-service boundary | TEST-036 | End-to-end LR/SC and AMO atomicity; AWATOP/ID/response preservation | CFG-AXI-2/4 |
+| REQ-IF-009 | LLC PULP AXI4/AWATOP memory path and SoC atomic-service boundary | TEST-036, TEST-047 | End-to-end cached/uncached LR/SC and AMO atomicity; exclusive/AWATOP/ID/response preservation | CFG-AXI-2/4 |
 | REQ-IF-010 | AXI4-Lite-to-RegBus bridge | TEST-037 | AW/W decoupling, strobe, backpressure and response association | CFG-AXI-2/4 |
 | REQ-IF-011 | Address-region parameter adapter, per-tile CVA6 PMA configuration, CPU address router, and LLC cache window | TEST-051 | PMA/router parity, all three region classes, LLC bypass/no-allocation, invalid-table rejection, boundary and local-error behavior | CFG-AXI-2/4 |
+| REQ-IF-012 | External memory width adapter | TEST-047 | Widths 32/64/128/256; IDs, byte lanes, ordering, responses, AWATOP/exclusive preservation | CFG-AXI-2/4 |
 | REQ-DBG-001 | Debug adapter | TEST-012 | Hart-by-hart integration | 2/4 harts |
 | REQ-IRQ-001 | CPU tile array | TEST-013 | Interrupt routing simulation | 2/4 harts |
 | REQ-IRQ-002 | Modified CVA6 CSR read/interrupt view | TEST-043 | External/software MIP merge and non-sticky CSR read-modify-write | CFG-AXI-2/4 |
+| REQ-IRQ-003 | AXI tile irq_i wiring and pinned CVA6 CSR/interrupt logic | TEST-013 | M/S pending, delegation and hart isolation | CFG-AXI-2/4 |
 | REQ-RST-001, REQ-ERR-001 | Structural tops and fabric | TEST-014 | Reset/error injection | Both |
+| REQ-RST-002 | SoC watchdog and cluster reset | TEST-014 | SoC-level reset test with a held response and integration checklist | Both profiles |
 | REQ-CLK-001 | Cluster wrapper and all interface boundaries | TEST-018 | Clock-domain lint and CDC analysis | Both profiles |
+| REQ-CLK-002 | Active hart HPDcache probe endpoint and SoC clock controls | TEST-062 | WFI/debug-halt dirty-owner service | CFG-AXI-2/4 |
 | REQ-ERR-002 | AXI/MMIO decoders and coherence request validation | TEST-017 | Malformed address/control negative tests | Both profiles |
-| REQ-PD-001 | Timing/physical integration package | REVIEW-001 | Review constraints and signoff reports for prohibited claims | Both profiles |
+| REQ-PD-001 | Timing/physical integration package | TEST-055 | Review constraints and signoff reports for prohibited claims | AXI profile |
+| REQ-PD-002 | Cluster port groups and AXI boundary registers | TEST-055 | STA group report: zero `in2out` paths at profile 2, known exceptions listed at profiles 0 and 1 | AXI profile |
+| REQ-PD-003 | Reset release in tile coherence adapter, AXI route, line locks and CMO controller | TEST-014, TEST-055 | Reset-release behavior and structural check that reset reaches no handshake expression | Both profiles |
 | REQ-VER-001, REQ-VER-002 | Verification repository | TEST-015 | Clean-build audit | All |
 
+
+**Implementation and integration status.** Section 6.2 contains 111 AXI TOP ports. The names, directions and declared widths match the active module. The AXI TOP scalar guards implement the bounds in §8.1. Directory and reset pipeline selection remain internal. The source-level interrupt wiring matches REQ-IRQ-003. Architectural interrupt, WFI/debug probe service, Profile 2 directory backpressure, full-CPU profile comparison, coverage and physical timing require separate evidence. An RTL source or lint match does not satisfy these verification obligations.
 
 ### 19.1 Fatal ordinary writeback traceability
 
@@ -8992,12 +9301,12 @@ Cluster có một clock domain đồng bộ. Chưa thể hoàn thiện SDC chạ
 
 ## 20. Assumptions, dependencies, and decisions
 
-Dated decision prose records the approval checkpoint, not current implementation completeness. Current source/status is in Sections 14–15 and the open-item table below. / Các quyết định cũ không phải bằng chứng trạng thái RTL hiện tại.
+Dated decision prose records the approval checkpoint, not current implementation completeness. Current source/status is in Sections 14–15 and the open-item table below.
 
 
-**DEC-036 — Confirmed by the designer, 2026-11-14; REQ-ERR-003, TEST-050.** Q2 selected asynchronous fault reporting for ordinary dirty-eviction writeback errors: preserve recoverable data and the affected line/context until reset, add sticky `o_int_fault` and CSR fault information, continue draining previously issued responses, and do not retry automatically. The alternative was a precise fault for the operation triggering eviction, which would extend normal store-retirement semantics. The selected option preserves the performance-oriented retirement model. CSR field layout, fault-source wiring and waveform documentation remain implementation/review work; this decision does not claim that the feature is implemented. / Người thiết kế chọn phương án fault bất đồng bộ cho eviction thông thường, thay cho mở rộng fault chính xác của store thông thường. Giữ dữ liệu/lock đến reset, thêm IRQ và CSR, tiếp tục nhận response đã gửi, không tự retry. Layout CSR, nối nguồn lỗi và waveform vẫn cần hoàn tất.
+**DEC-036 — Confirmed by the designer, 2026-11-14; REQ-ERR-003, TEST-050.** Q2 selected asynchronous fault reporting for ordinary dirty-eviction writeback errors: preserve recoverable data and the affected line/context until reset, add sticky `o_int_fault` and CSR fault information, continue draining previously issued responses, and do not retry automatically. The alternative was a precise fault for the operation triggering eviction, which would extend normal store-retirement semantics. The selected option preserves the performance-oriented retirement model. CSR field layout, fault-source wiring and waveform documentation remain implementation/review work; this decision does not claim that the feature is implemented.
 
-**DEC-037 — Confirmed by the designer, 2026-11-14; REQ-IF-011, TEST-051.** Use one synthesis-time source table for CVA6 PMA generation and router decoding. The PMA adapter maps class `00` into CVA6 cached-region fields, class `10` into non-idempotent-region fields, and leaves class `01` outside both lists so it remains idempotent and uncached. Keep CVA6's cacheable range as the default entry; integrations add normal-uncached and MMIO entries with no guessed SoC addresses. Example: with entry 0 `{base=0x80000000,size=0x40000000,type=CACHEABLE}`, entry 1 `{base=0x100000000,size=0x10000000,type=NORMAL_UNCACHED}`, and entry 2 `{base=0x40000000,size=0x10000000,type=MMIO}`, address `0x100000100` uses the LLC bypass memory path while `0x40000100` uses the MMIO manager; these latter ranges are illustrative only and are not defaults. Unmatched addresses return a local access error without external traffic. The table capacity is 16; CVA6's separate non-idempotent list can represent up to 16 MMIO entries, while this LLC configuration supports one cacheable window. SoC-specific entries and integration of the source table into each hart's PMA/router remain to be implemented and verified. / Người thiết kế chọn một bảng compile-time làm nguồn chung để tạo PMA CVA6 và decode router. Bộ chuyển đổi đưa class `00` vào cached-region của CVA6, class `10` vào non-idempotent-region; class `01` nằm ngoài cả hai danh sách để giữ thuộc tính idempotent/uncached. Giữ vùng cacheable CVA6 làm entry mặc định; SoC bổ sung normal-uncached/MMIO, không tự đoán địa chỉ. Ví dụ chỉ minh họa cách phân loại. Địa chỉ không khớp bị trả lỗi cục bộ, không phát AXI. Bảng có tối đa 16 entry; LLC hiện hỗ trợ một cửa sổ cacheable. Các vùng thật của SoC và tích hợp bảng vào PMA/router từng hart còn cần triển khai và kiểm chứng.
+**DEC-037 — Confirmed by the designer, 2026-11-14; REQ-IF-011, TEST-051.** Use one synthesis-time source table for CVA6 PMA generation and router decoding. The PMA adapter maps class `00` into CVA6 cached-region fields, class `10` into non-idempotent-region fields, and leaves class `01` outside both lists so it remains idempotent and uncached. Keep CVA6's cacheable range as the default entry; integrations add normal-uncached and MMIO entries with no guessed SoC addresses. Example: with entry 0 `{base=0x80000000,size=0x40000000,type=CACHEABLE}`, entry 1 `{base=0x100000000,size=0x10000000,type=NORMAL_UNCACHED}`, and entry 2 `{base=0x40000000,size=0x10000000,type=MMIO}`, address `0x100000100` uses the LLC bypass memory path while `0x40000100` uses the MMIO manager; these latter ranges are illustrative only and are not defaults. Unmatched addresses return a local access error without external traffic. The table capacity is 16; CVA6's separate non-idempotent list can represent up to 16 MMIO entries, while this LLC configuration supports one cacheable window. SoC-specific entries and integration of the source table into each hart's PMA/router remain to be implemented and verified.
 
 | ID | Type | Assumption / dependency / unresolved decision | Technical impact / version / configuration | Resolution / status |
 |---|---|---|---|---|
@@ -9042,7 +9351,7 @@ Dated decision prose records the approval checkpoint, not current implementation
 | DEC-033 | Decision (v0.19 spec contract) | Probe response channels drain stale, duplicate, unknown, and mismatched ACKs; only the first expected matching response updates a transaction. Invalid responses set a coherence-protocol diagnostic and cannot block a later valid ACK. | Resolves the head-of-line blocking risk in review finding CC-02. Exact CSR diagnostic field remains an integration dependency; RTL and workbook remain unchanged. | Added by v0.19 spec update; REQ-MEM-021, ERR-010, TEST-045 |
 | DEC-034 | Decision (memory boundary implementation) | Keep the native CVA6/HPDcache/LLC path at 64-bit. Add `PARA_AXI_MEM_DATA_W` for the external memory port with legal values `{32,64,128,256}` through the PULP width converter; keep MMIO at 64-bit and AXI4-Lite at 32-bit. | Does not change cache-line size or native datapath. The width adapter leaf is linted and directed-tested at all four widths; LLC-to-SoC integration, full response/error coverage, and supported-burst signoff remain open. | Implemented as adapter leaf in RTL; HDS Section 8 and TEST-047 track remaining end-to-end validation |
 | DEC-035 | Decision (v0.19 review contract) | Treat a per-slot bank request as a single operation token; suppress a consumed slot until VALID has been sampled low, and retain all phase-critical transaction fields/status until the context is safely released. | Closes the duplicate-grant and context-loss ambiguities in review finding CC-03; implementation and assertions remain unverified. | Added by v0.19 spec update; REQ-MEM-022/023, TEST-048/049 |
-| DEP-001 | Dependency | Pin manifests identify upstream CVA6, HPDcache, Culsans, AXI, ACE, and axi_llc commits; prove selected filelist/license and source-port compatibility | Culsans pins a different PlanV CVA6/LLC while this design selects OpenHW CVA6/HPDcache | Source commits are recorded in `doc/third_party/README.md`; compatibility and file-level release audit remain open |
+| DEP-001 | Dependency | Pin manifests identify upstream CVA6, HPDcache, Culsans, AXI, ACE, and axi_llc commits; prove selected filelist/license and source-port compatibility | Culsans pins a different PlanV CVA6/LLC while this design selects OpenHW CVA6/HPDcache | Source commits are recorded in `project_support/third_party/README.md`; compatibility and file-level release audit remain open |
 | DEP-002 | Dependency | Map the defined internal ACE-subset outcomes to the exact pinned cache/CCU ports; external ACE transaction attributes, DVM, and external-agent policy belong to a future spec | Internal stable-state behavior is specified in Section 10.2.1; exact records/encodings still need source-level mapping | Internal behavior closed for planning; port mapping open; external ACE deferred |
 | DEP-003 | Dependency | Arm IHI 0022H was read through official web PDF; no local converted standard exists | Clause-level audit and controlled copy are absent | User approved web-only source; recheck before signoff |
 | DEP-004 | Dependency | Pin exact RISC-V ISA/debug spec revisions and the actual CVA6 extension configuration | Software compatibility and architectural tests | Open; pin with source commit |
@@ -9058,10 +9367,10 @@ Dated decision prose records the approval checkpoint, not current implementation
 | DEP-015 | Dependency | Finalize and verify error paths for source-specific LLC/AXI responses and reset interruption | Must not expose partial coherence state | Directed source-specific CBO/FENCE/atomic/ordinary B-error paths pass; arbitrary reorder/reset interruption remains unqualified. |
 | DEP-016 | Dependency (closed by DEC-021) | Add shared `i_boot_addr[63:0]` and connect it to every active CVA6 `boot_addr_i` | CVA6 requires this runtime input | Shared boot input and zero-based hart fanout implemented and exercised by 2/4-hart boot programs. |
 | DEP-017 | Dependency (closed by DEC-022) | Disable CVXIF in a local configuration copy while retaining license/history and leaving upstream source pristine | Selected configuration enables CVXIF but the cluster has no accelerator interface | Selected local configuration disables CVXIF; no accelerator interface is exposed. Broader configuration equivalence is separate. |
-| DEP-018 | Dependency (boundary selected by DEC-023) | Verify the SoC AXI4+ATOP target or separately supplied atomic-service bridge against every supported LR/SC and AMO encoding | The SoC fabric capability and bridge implementation are not part of the cluster RTL | Boundary contract selected; system atomic-service verification remains an integration dependency |
+| DEP-018 | Dependency (boundary selected by DEC-023) | Verify the SoC PULP AXI4 target with AWATOP and exclusive support or separately supplied atomic-service bridge against every supported LR/SC and AMO encoding | The SoC fabric capability and bridge implementation are not part of the cluster RTL | Boundary contract selected; system atomic-service verification remains an integration dependency |
 | DEP-019 | Dependency (bridge selected by DEC-024) | Complete the new AXI4-Lite-to-RegBus bridge port/timing map and verify against the pinned `register_interface` types | Exact RegBus request/response widths and handshake timing must match the pinned source | AXI4-Lite-to-RegBus bridge implemented and linted; native BIST/flush/software service behavior remains unqualified. |
 | DEP-020 | Dependency (architecture closed by DEC-027) | Freeze exact HPDcache probe/writeback ports; modify the flush engine for probe-origin tracking and B-error routing; verify owner AXI writeback, M-state retention, ABORT on B error, and COMMIT/ABORT lock release | Data path is selected, but pinned HPDcache flush completion is currently shared and lacks probe-specific status | Tagged probe, origin-aware native flush ACK, retained dirty data and terminal locks implemented; targeted CPU/unit evidence exists. |
-| DEP-021 | Implemented; directed verification passed 2026-11-15 | Cause-24 provenance, M/S exception routing and delegation, physical line-base trap value, ABORT-before-trap, held retirement, I-cache completion and handler retry implemented in licensed copies | TEST-041/042 pass with real FENCE.I at 2/4 harts in M and delegated S mode; production TOP lint has 0 errors/warnings; evidence: `doc/reports/fence_i/README.md` | Directed closure only: bare S mode, reduced simulation LLC; full OS/Sv39/concurrency and signoff remain separate |
+| DEP-021 | Implemented; directed verification passed 2026-11-15 | Cause-24 provenance, M/S exception routing and delegation, physical line-base trap value, ABORT-before-trap, held retirement, I-cache completion and handler retry implemented in licensed copies | TEST-041/042 pass with real FENCE.I at 2/4 harts in M and delegated S mode; production TOP lint has 0 errors/warnings; evidence: `project_support/reports/fence_i/README.md` | Directed closure only: bare S mode, reduced simulation LLC; full OS/Sv39/concurrency and signoff remain separate |
 | DEP-022 | Integration dependency (DEC-034) | Connect the tested external memory width adapter after the LLC and prove ATOP, IDs, transfer sizes, burst forms, strobes, ordering, and error responses end-to-end | Native LLC width is 64-bit; the adapter leaf accepts external width 32/64/128/256. MMIO remains 64-bit | Adapter connected at TOP. Leaf 32/64/128/256 pass; CPU memory profile is 64-bit. Remaining width/ATOP/burst matrix is open. |
 | DEP-023 | Dependency (DEC-033) | Add the coherence-protocol diagnostic field and clear semantics to the CSR workbook; align the PMU/event map and error table | Necessary to make drained invalid ACKs software-visible without changing transaction state | Diagnostic W1C workbook/generated CSR wiring is implemented; A-06 adds separate reset-only fatal record. Broader malformed-protocol software observation remains to test. |
 | DEP-024 | Dependency (DEC-032/FSM-012) | Update the editable FSM draw.io source with the eligibility filter, owner-terminal escape, and set-reservation release transitions | Required before RTL approval under the project FSM documentation rule | Current CCU source-mapped FSM includes retry-cancel and victim parent/child transitions; proposal figures remain archived. |
@@ -9074,10 +9383,18 @@ Dated decision prose records the approval checkpoint, not current implementation
 |---|---|---|
 | OPEN-LIC | Restrictive vendored lzc header remains in actual TOP filelist | Establish permission/provenance or replace with a licensed compatible implementation before release/tapeout readiness |
 | OPEN-LINE | Fixed 16-byte CCU/maintenance line and configurable larger LLC block count | Keep the qualified 16-byte profile; decide/review any larger-line support before advertising it |
-| OPEN-ABI | Newer skill version-at-zero requirement versus existing approved CSR ABI | Designer/firmware must choose any future version-register ABI change; this rewrite changes no register |
+| OPEN-ABI | Newer skill version-at-zero requirement versus existing approved CSR ABI | Designer/firmware must choose any future version-register ABI change; this rewrite changes no register (F-011, default content) Candidate read-only block: ABI version, hart count, timing profile, LLC geometry and a feature mask, in a location that does not move the approved control register. Also decide whether a hart-start control is in scope; REQ-SYS-003 starts every hart at one boot address and software parks harts by `mhartid`. Default: PD-07. |
 | OPEN-ACE-MAP | Earlier ACE-subset architectural intent versus implemented custom tagged channels | Review semantic mapping; do not claim native ACE pin compliance or external snoop service |
 | OPEN-DV | PMU/native LLC service, MMIO/uncached ATOP, IRQ/debug/WFI, random coherence, width/default LLC matrix | Complete prioritized tests from the post-A-06 audit; existing lint is not functional closure |
+| OPEN-TIMING-P2 | Profile 2 AXI TOP has prior 2/4-hart lint evidence. The CPU campaign remains unqualified. | Replay TEST-057–061 on the current source baseline, including MMIO and uncached ATOP. 800 and 960 MHz remain STA evaluation points. Profiles 0 and 1 also keep the reset pin in the handshake enable (REQ-PD-003) and the input-to-output paths listed in REQ-PD-002. Default: PD-03. |
+| OPEN-TIMING-TARGET | The only synthesis evidence (`dual_gf55_800.zip`, T = 1.04167 ns) shows a 3.40 ns longest path (WNS -2.47 ns), with SRAM black boxes, zero wire load, 40 percent I/O delay and `critical_range` 0.5, so it is optimistic. No sweep exists and no accepted period is recorded. | Run the Section 8.3 sweep (2.0, 2.5, 3.0, 3.5 ns) on profile 2 after replacing black boxes by SRAM timing models and correcting the I/O model. Record the accepted period per corner. Decide separately whether CVA6 internals may change. Default planning period: PD-01, PD-02. |
+| OPEN-PROBE-FAIR | The atomic all-slot claim removes partial ownership. Round robin selects among fully eligible masks and does not establish progress for an intermittently eligible wider mask. | Reproduce overlapping narrow claims and select an aging or reservation policy with proof of safety and conditional progress. (F-013, default aging rule) A context that is eligible by hart state but cannot claim its full mask for W arbitration rounds blocks any new claim whose mask overlaps it, until it is granted. W is set by the RTL owner and recorded. Prove safety (no partial ownership, no deadlock) and conditional progress under PROP-010, and extend TEST-056. Default: PD-08. |
 | OPEN-ASIC | PDK/SRAM/clock/SDC/PVT/scan/DFT and workload targets absent | SoC inputs required for implementation and PPA/STA/signoff |
+| OPEN-AXIL-POLICY | AXI4-Lite AWPROT/ARPROT attributes and trusted control/debug access | SoC security owner selects an upstream firewall or an approved IP check, then verifies denied access has no side effects. |
+| OPEN-ECC | Per-array fault protection, including dirty cache lines and directory metadata | Product/SoC reliability owner selects detection, correction and recovery per array before macro binding. (F-015) Decide for each array: L1 instruction tag/data, L1 data tag/data, LLC tag/data, directory payload, directory valid and PLRU. For each give detection, correction, error response (new fault record, interrupt, or the existing fatal record) and area. Directory metadata errors are severe because the directory must never omit a holder (REQ-MEM-008). Default: PD-04. |
+| OPEN-CBO-RATE | A 1,500-byte buffer needs 94 per-line CBO operations (INFERENCE: about 1,100 cycles at 12 cycles each; CBO path not measured). No rate requirement and no I/O-coherent port exist (OPEN-ACE-MAP). | Product decision (F-009, F-025): set a CBO.CLEAN throughput requirement from the target packet rate, or add an I/O-coherent port for cacheless masters. TEST-046 reports the measured rate. Default: PD-06. |
+| OPEN-DIR-CONFLICT | The directory holds the same number of entries as the private D-cache lines, so any set conflict invalidates a live L1 line, and stale-positive holders occupy entries (REQ-MEM-008). The extra invalidations are not quantified (F-014). | Measure conflict invalidations per 1,000 requests (TEST-046), then decide an over-provision factor. It is cheap once the payload is a RAM (REQ-MEM-025). Default: PD-09. |
+| OPEN-DFT | The DFT hand-off of Section 16 names a test-enable input, scan reset control and MBIST paths, but the top has no such port (F-017). | DFT owner confirms the port list and the MBIST scheme, then the TOP port table (Section 6.2) is extended. Default: PD-05. |
 
 ### 20.2 Confirmed first-fatal decisions
 
@@ -9090,19 +9407,58 @@ Dated decision prose records the approval checkpoint, not current implementation
 
 | ID | Evidence | Required review; no silent change |
 |---|---|---|
-| OPEN-PMU-DONE | Workbook snapshot_done description says a new request clears old done; current snapshot/CSR RTL only sets it on capture and otherwise requires W1C | Agree intended rearm behavior and synchronize workbook/RTL/tests. Documented safe software sequence clears old done before requesting a new snapshot |
+| CLOSED-PMU-DONE | `snapshot_done` remains sticky until W1C or reset; software clears it before the next request; the request itself does not clear it | User selected W1C rearm on 2026-11-16. HDS and workbook descriptions now agree; verify the specified rearm sequence |
 | OPEN-REGNAME | Earlier cpucl prefix intent differs from actual legacy pmu/irq workbook names | Preserve actual names in this spec; decide any future naming/API migration explicitly. No offset, port or generated RTL changed here |
+
+### 20.4 Reset clarification
+
+| ID | Confirmed behavior | Source |
+|---|---|---|
+| DEC-041 | Reset is coordinated across the cluster, connected AXI fabric/target transaction state, and internal coherence agents. No pre-reset response may be delivered after cluster release. Backing-memory contents remain; an in-flight external transaction may have committed, and software must reinitialize affected data. | User decision, 2026-11-16; REQ-RST-001, TEST-014 |
+| DEC-042 | Keep the current PULP AXI4 memory port and its six-bit AWATOP extension; it is not full AMBA AXI5. Ordinary traffic follows AXI4, uncached LR/SC uses AXI4 exclusive accesses, and supported uncached AMOs use the AWATOP subset implemented by the pinned PULP/HPDcache source, checked against AMBA 5 E1.1 atomic semantics. | User decision, 2026-11-16; REQ-IF-003/009, TEST-036/047 |
+
+### 20.5 Probe-service slot ownership
+
+| Decision | Confirmed behavior | Source |
+|---|---|---|
+| DEC-043 | A PREPARE transaction must acquire all expected per-hart probe-service slots atomically before issuing any probe. If one target slot is unavailable, the transaction waits without holding any target slot. At most one round-robin claim among fully eligible contexts is granted per cycle; once granted, the same tag owns every target slot through PREPARE and until a successful COMMIT/ABORT response. Disjoint target masks may overlap after successive claims. No external interface or fixed latency changes. | Designer approved the recommended atomic all-target claim, 2026-11-20; REQ-MEM-024, TEST-056, WF-023 |
+
+### 20.6 Cluster timing-profile selection
+
+| Decision | Confirmed behavior | Source |
+|---|---|---|
+| DEC-044 | `PARA_TIMING_PROFILE=0` preserves the current low-latency AXI-route and PMU paths and is the default. `PARA_TIMING_PROFILE=1` inserts PULP spill-register cuts on the per-hart memory/MMIO AXI routes and registers PMU event counts/enables before counter updates; snapshot acknowledgment waits two sampled cycles for the event pipeline to drain. This is a compile-time choice. Do not modify CVA6 internal logic, pipeline stages, or latency. Profile 1 adds boundary latency and requires full-CPU functional and STA evaluation; it does not claim to fix CVA6, directory-compare, or LLC-internal critical paths. | User direction, 2026-11-20; REQ-PERF-006, TEST-057–061 |
+| DEC-045 | Profile 2 selects memory/MMIO TOP cuts, synchronous directory lookup and PMU source/overflow registers. Compare profile 0 and 2 at 2 and 4 harts, then check ASIC timing at 1.25 ns and 1.04167 ns. **Clarification (decided by the project owner on 2026-11-21).** Those two periods are STA evaluation points, not acceptance targets. The GF55 55LPx Design Compiler run of `dual_gf55_800.zip` (T = 1.04167 ns, SRAM black boxes, zero wire load) reports a 3.40 ns longest path of 46 cells, WNS -2.47 ns and 312,168 failing endpoints, and CVA6 internals alone sit near 3.4 ns. DEC-044 forbids changing the CVA6 pipeline, so profile 2 can remove the PMU/CSR, directory and AXI-boundary peaks but cannot by itself reach either evaluation point. Record the accepted period per corner from the sweep in Section 8.3. A target below the CVA6 limit needs a separate decision to change CVA6 internals or to accept an IPC cost; no such decision exists. | User approved timing profile proposal. REQ-PERF-007; REQ-PD-001; F-001 review fix. |
+| DEC-046 | HPDcache coherent atomics: (1) `atomic_permission_q` is set on a grant only when the grant state is E or M (S still allowed for LR, matching the first-hit rule); (2) the RTAB `fence_o` is the OR of the `pend_trans` dependencies and of every valid AMO/uncacheable/CMO entry. Reason: with 4 harts, an AMO holding permission after an S grant refused the PREPARE probe of a competing same-line context while its own unique request waited behind that context (deadlock); after (1), a younger load linked behind a re-fenced AMO kept `fence_only` false forever (deadlock). Both reproduced and confirmed by simulation experiments, then fixed in `hpdcache.sv`, `hpdcache_ctrl.sv` and `hpdcache_rtab.sv` (Section 14.7). Verification: TC-07 4 harts PASS on the 64-bit cluster; existing atomic, CMO, FENCE.I and directory-holder suites unchanged (36 runs PASS). Evidence: `verification/rv32_profile/REPORT.md` sections 3c-3e | Approved by the designer on 2026-11-26 (change plan `HPDCACHE_ATOMIC_DEADLOCK_CHANGE_PLAN.md` v1). Merged into `rtl/common/modified/hpdcache/rtl/src/` on 2026-11-27 (Section 14.7). |
+| DEC-047 | Coherence fabric context FSM: `ENUM_ST_DIR_UPDATE` advances only when `w_update_hs[bank]` is high and `w_dir_update_tag[bank]` equals the slot; `ENUM_ST_DIR_CANCEL` advances when the slot holds no reservation or when `w_cancel_hs[bank]` is high and `w_dir_cancel_tag[bank]` equals the slot (the rule `ENUM_ST_RETRY_CANCEL` already used). Reason: one bank handshake retired two contexts; the second lost its directory update (holder not recorded) and leaked its set reservation, so a later lookup of that set waited forever (RV32 4-hart TC-07, cycle 945). Fixed in `m_vlsit_riscv_coh_fabric.sv` (Section 14.7). Verification: TC-07 4 harts PASS on both profiles, full RV32 and 64-bit testbench regressions PASS, 36 existing suite runs PASS; RV32 testbench assertion A46 (assertion 104 of the RV32 HDS) fails on the unfixed fabric at the defect cycle and passes with the fix | Approved by the designer on 2026-11-26 (change plan v2). Merged into `rtl/common/vlsit/coherence/` on 2026-11-27 (Section 14.7). |
+
+### 20.7 Default decisions for the proposed items (PD-01 to PD-10)
+
+Each row closes an item that review of 2026-11-20 left open, with a default taken from the evidence in this specification. Each default is a working value decided by the project owner on 2026-11-21 so that design and verification can proceed; it is not a measured result. The change rule says what evidence replaces it.
+
+| ID | Default | Basis | Change rule |
+|---|---|---|---|
+| PD-01 | Planning clock period 3.5 ns (about 286 MHz) at ss_nominal_max_1p08v_125c, for the first timing closure. Not a claim (REQ-PD-001). | The measured longest path is 3.40 ns, dominated by CVA6 internals that DEC-044 forbids changing (Section 8.3). | Replace by the accepted period of the Section 8.3 sweep when it exists. |
+| PD-02 | Evaluation SDC for profile 2 uses input and output delay of 25 percent of the period on every AXI group, which leaves 0.5 T for an input-to-output path. | The evaluation run used 40 percent, which leaves 0.2 T; 20 to 30 percent applies when the SoC register-slices both sides (REQ-PD-002). | Replace by the SoC budget when supplied (DEP-007). |
+| PD-03 | Profiles 0 and 1 also register the reset release (REQ-PD-003). The cost is one cycle after release. | Removes the reset start point of the worst input paths; no steady-state latency. | Revert only with a measured IPC loss after reset release. |
+| PD-04 | ECC and parity per array: L1 instruction cache tag and data, parity with invalidate and refetch; L1 data cache tag and data, single-error-correct double-error-detect; LLC tag and data, single-error-correct double-error-detect; directory payload, single-error-correct double-error-detect; directory valid and PLRU flops, none. A corrected error increments a diagnostic counter. An uncorrectable error uses the existing fatal fault record and `o_int_fault`, with reset recovery. | The target is an industrial gateway; dirty data and the directory must not be lost (REQ-MEM-008); the existing fatal path avoids a new recovery protocol. | Change when the SRAM macros and their ECC support are selected (DEP-013); the CVA6 `DcacheEccEnable` setting changes with it. |
+| PD-05 | DFT hand-off: one input `i_dft_test_en` reaches every integrated clock gate and the LLC test enable; scan enable and scan chains are added by the SoC DFT flow; the SoC drives the reset pin directly in scan mode; every SRAM macro sits behind a wrapper with a BIST access mux owned by the SoC. | Section 16; the LLC test enable is tied to zero today. | Final port names follow the DFT owner (OPEN-DFT). |
+| PD-06 | No I/O-coherent port in version 1. Target for CBO.CLEAN: one line per 16 cycles on one hart, so a 94-line buffer takes at most 1,504 cycles. | The measured coherence transaction is 12 cycles per line (Section 13); the CBO path itself is not measured. | Replace by a rate derived from the target packet rate when the product sets it; an I/O-coherent port moves to version 2 (OPEN-ACE-MAP). |
+| PD-07 | Register ABI of version 1 is unchanged: no version register, no hart-start control. Software finds the hart count from the platform description and parks harts by `mhartid` (REQ-SYS-003). | Moving the approved control register would break software. | A version and configuration block is added in ABI version 2 at a new aperture region. |
+| PD-08 | Aging rule for OPEN-PROBE-FAIR: after 8 failed claim rounds a context blocks any new claim whose mask overlaps it. | A bound of one full pass of the default 8 contexts. | Tune after the TEST-056 starvation case. |
+| PD-09 | No directory over-provision in version 1. If TEST-046 shows more than 1 conflict invalidation per 100 requests, raise the directory associativity or entry count by one step and repeat. | The count equals the L1 line count (REQ-MEM-010); the RAM wrapper (REQ-MEM-025) makes growth cheap. | Replace by the measured rate. |
+| PD-10 | The SoC watchdog of REQ-RST-002 times out after at least 1,000,000 cluster cycles without a response. | It is far longer than any expected service time and far shorter than a human-visible hang. | Replace by the SoC value. |
 
 ## 21. Glossary
 
 | Term / acronym | Definition |
 |---|---|
 | ACE | AXI Coherency Extensions; adds coherent transaction attributes and snoop channels to AXI |
-| CBO / CMO | Cache-Block Operation / Cache-Management Operation. A CBO is the RISC-V instruction; CMO is the hardware maintenance operation it requests. / Lệnh Cache-Block Operation / thao tác Cache-Management Operation. CBO là lệnh RISC-V; CMO là thao tác phần cứng được yêu cầu. |
-| Precise synchronous fault | Exception attributed to the faulting instruction before it retires, with its instruction PC and effective address retained in trap state. / Ngoại lệ đồng bộ gắn với lệnh gây lỗi trước khi lệnh nghỉ hưu, giữ PC lệnh và địa chỉ hiệu dụng trong trạng thái trap. |
-| FSM | Finite-state machine; control logic represented as named states and guarded transitions. / Máy trạng thái hữu hạn; logic điều khiển được mô tả bằng state có tên và transition có điều kiện. |
-| FSM guard | Boolean condition or handshake event that permits a transition. / Điều kiện logic hoặc sự kiện handshake cho phép chuyển state. |
-| FSM transition | Directed change from one state to another, with its guard and action. / Chuyển có hướng giữa hai state, kèm điều kiện và hành động. |
+| CBO / CMO | Cache-Block Operation / Cache-Management Operation. A CBO is the RISC-V instruction; CMO is the hardware maintenance operation it requests. |
+| Precise synchronous fault | Exception attributed to the faulting instruction before it retires, with its instruction PC and effective address retained in trap state. |
+| FSM | Finite-state machine; control logic represented as named states and guarded transitions. |
+| FSM guard | Boolean condition or handshake event that permits a transition. |
+| FSM transition | Directed change from one state to another, with its guard and action. |
 | AXI4-Lite | Reduced AXI memory-mapped interface intended for control/status access |
 | CVA6 | OpenHW 64-bit RISC-V application-class CPU core |
 | Hart | One RISC-V hardware thread; here one CVA6 core per hart |
@@ -9115,10 +9471,10 @@ Dated decision prose records the approval checkpoint, not current implementation
 | Round-robin arbitration | Fair cyclic selection among eligible request slots; after a grant, the priority pointer advances to the next slot. |
 | Tree-PLRU | Seven-bit tree-based pseudo-least-recently-used policy for selecting one of eight directory ways; it approximates recency with less state than exact LRU. |
 | Transaction context / tag | Slot that stores one active line transaction and its unique identifier; the tag is reused only after all associated responses drain. |
-| Forward progress | An eligible operation eventually completes under stated fairness and environment-response assumptions; this is not a finite latency guarantee. / Thao tác đủ điều kiện cuối cùng hoàn tất khi thỏa giả định công bằng và phản hồi môi trường; đây không phải cam kết latency hữu hạn. |
-| Head-of-line blocking | A blocked request at the front of an arbitration/response path prevents a later eligible request from being accepted. / Request bị chặn ở đầu đường phân xử/response làm request đủ điều kiện phía sau không được nhận. |
-| Wait-for graph | Model of resources and transactions showing which owner is waiting for which resource/response; a cycle indicates possible deadlock. / Mô hình tài nguyên và transaction thể hiện chủ nào đang chờ tài nguyên/response nào; một vòng chờ báo nguy cơ deadlock. |
-| AXI width converter | AXI adapter that changes data width while translating beats, strobes, IDs, responses, and supported burst forms. / Adapter AXI đổi độ rộng dữ liệu và chuyển đổi beat, strobe, ID, response cùng loại burst được hỗ trợ. |
+| Forward progress | An eligible operation eventually completes under stated fairness and environment-response assumptions; this is not a finite latency guarantee. |
+| Head-of-line blocking | A blocked request at the front of an arbitration/response path prevents a later eligible request from being accepted. |
+| Wait-for graph | Model of resources and transactions showing which owner is waiting for which resource/response; a cycle indicates possible deadlock. |
+| AXI width converter | AXI adapter that changes data width while translating beats, strobes, IDs, responses, and supported burst forms. |
 | Reserved offset | Unassigned aligned address inside a defined local window; reads return zero with DECERR and writes have no side effect and return DECERR. |
 | Snoop | Coherence request that asks a cache to inspect or change a line |
 | SPM | Scratchpad memory mode; disabled in this design |
@@ -9128,13 +9484,13 @@ Dated decision prose records the approval checkpoint, not current implementation
 | BIST | Built-in self-test of memory or storage structures |
 | PVT / RC | Process-voltage-temperature and interconnect resistance-capacitance analysis corners |
 | Backpressure | Receiver deasserts READY, delaying a channel transfer while source holds VALID/payload |
-| CCU | Coherence control unit; tracks/coordinates cache ownership and probes. / Khối điều khiển coherence; theo dõi và phối hợp ownership cache/probe. |
-| MMIO | Memory-mapped input/output; peripheral access through an addressable bus. / Truy cập ngoại vi qua bus có ánh xạ địa chỉ. |
-| AXI mux / demux | Multiplexer arbitrates request sources; demultiplexer routes transactions to targets. / Mux phân xử nguồn request; demux định tuyến giao dịch đến target. |
-| LLC descriptor | Internal record describing one cache-line operation derived from a bus transaction. / Bản ghi nội bộ mô tả thao tác cache line được tách từ giao dịch bus. |
-| Eviction / refill | Replacement writes a dirty victim out; refill reads the requested line in. / Eviction ghi victim dirty ra; refill nạp line được yêu cầu vào. |
-| SRAM binding | Mapping a generic memory interface to a technology-specific compiled SRAM macro. / Ánh xạ giao diện memory tổng quát sang SRAM macro theo công nghệ. |
-| REUSE / REUSE* / MODIFY / NEW / GENERATED | Implementation status defined in Section 14.3. / Trạng thái triển khai được định nghĩa tại Mục 14.3. |
+| CCU | Coherence control unit; tracks/coordinates cache ownership and probes. |
+| MMIO | Memory-mapped input/output; peripheral access through an addressable bus. |
+| AXI mux / demux | Multiplexer arbitrates request sources; demultiplexer routes transactions to targets. |
+| LLC descriptor | Internal record describing one cache-line operation derived from a bus transaction. |
+| Eviction / refill | Replacement writes a dirty victim out; refill reads the requested line in. |
+| SRAM binding | Mapping a generic memory interface to a technology-specific compiled SRAM macro. |
+| REUSE / REUSE* / MODIFY / NEW / GENERATED | Implementation status defined in Section 14.3. |
 
 ## 22. References used to shape this template
 
@@ -9153,5 +9509,5 @@ Dated decision prose records the approval checkpoint, not current implementation
 13. PULP, [AXI SystemVerilog width converter](https://github.com/pulp-platform/axi/tree/master/src), local files `axi_dw_converter.sv`, `axi_dw_upsizer.sv`, and `axi_dw_downsizer.sv`. The pinned source supports useful width-conversion cases but documents limits for FIXED/WRAP bursts; verify exact ATOP and response behavior before selecting an external width profile.
 
 
-Current source baseline and review evidence: [recursive production inventory](../reports/post_a06_cluster_audit/source_inventory.md), [audit](../reports/post_a06_cluster_audit/README.md), [A-06 source identities](../../verification/non_coherence_cluster/reports/fault_record_a06/results.json). The corrected recursive inventory includes the nested HPDcache filelist: 464 source files, not the earlier 419-file top-level-only count.
+Current source baseline and review evidence: [recursive production inventory](../../project_support/reports/post_a06_cluster_audit/source_inventory.md), [audit](../../project_support/reports/post_a06_cluster_audit/README.md), [A-06 source identities](../../verification/non_coherence_cluster/reports/fault_record_a06/results.json). The corrected recursive inventory includes the nested HPDcache filelist: 464 source files, not the earlier 419-file top-level-only count.
 

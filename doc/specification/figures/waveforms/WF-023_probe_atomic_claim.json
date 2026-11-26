@@ -1,0 +1,60 @@
+{
+  "head": {
+    "text": "WF-023 - Example arbitration outcome: T0 atomically claims H2/H3; no fixed priority or latency"
+  },
+  "signal": [
+    {
+      "name": "event_phase",
+      "wave": "====",
+      "data": ["two contexts request {H2,H3}", "T0 claim and PREPARE", "T0 terminal success", "T1 claim and PREPARE"]
+    },
+    [
+      "Per-hart service-slot owner (internal state)",
+      {
+        "name": "owner[H2]",
+        "wave": "====",
+        "data": ["free", "T0", "free", "T1"]
+      },
+      {
+        "name": "owner[H3]",
+        "wave": "====",
+        "data": ["free", "T0", "free", "T1"]
+      },
+      {
+      "name": "forbidden split H2=T0, H3=T1",
+        "wave": "0000"
+      }
+    ],
+    [
+      "Tagged PREPARE issue",
+      {
+        "name": "H2 PREPARE tag",
+        "wave": "====",
+        "data": ["-", "T0", "-", "T1"]
+      },
+      {
+        "name": "H3 PREPARE tag",
+        "wave": "====",
+        "data": ["-", "T0", "-", "T1"]
+      }
+    ],
+    [
+      "Waiting context",
+      {
+        "name": "T1 holds per-hart slot",
+        "wave": "0000"
+      },
+      {
+        "name": "T1 status",
+        "wave": "====",
+        "data": ["waiting, no claim", "waiting, no claim", "claim both", "PREPARE active"]
+      }
+    ]
+  ],
+  "foot": {
+    "text": "Each column is an abstract event phase, not a clock cycle or latency promise. T0 is only an example winner; round-robin arbitration may select either tag. Both expected slots are reserved in one edge before either PREPARE is issued. T1 owns no partial slot while it waits, so the cross-claim wait cycle cannot form. A missing terminal ACK still retains the winning claim under DEC-018."
+  },
+  "config": {
+    "hscale": 6
+  }
+}

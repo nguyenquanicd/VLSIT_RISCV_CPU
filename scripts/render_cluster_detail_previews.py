@@ -1,7 +1,7 @@
 """Render the topology portion of the cluster detail draw.io pages as SVG.
 
 Usage: python scripts/render_cluster_detail_previews.py
-Input: doc/specification/figures/detail_level2/VLSIT_RISCV_CLUSTER_DETAIL_LEVEL2.drawio
+Input: project_support/specification/figures/detail_level2/VLSIT_RISCV_CLUSTER_DETAIL_LEVEL2.drawio
 Output: one SVG preview per detail page beside the source diagram.
 The editable draw.io file remains the source for the function/interface tables.
 Standard library only; no network access.

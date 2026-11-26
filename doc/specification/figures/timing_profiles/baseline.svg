@@ -1,0 +1,98 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1540" height="740" viewBox="0 0 1540 740" role="img">
+  <title>Profile 0 - Baseline</title>
+  <desc>Low-latency reference | 0 additional pipeline state bits</desc>
+  <rect width="1540" height="740" fill="white" />
+  <text x="32" y="50" font-family="Arial, sans-serif" font-size="34" font-weight="bold">Profile 0 - Baseline</text>
+  <text x="32" y="83" font-family="Arial, sans-serif" font-size="22" font-weight="normal">Low-latency reference | 0 additional pipeline state bits</text>
+  <text x="32" y="113" font-family="Arial, sans-serif" font-size="18" font-weight="normal">REG marks added storage. Double arrows include payload and VALID, with READY in the reverse direction.</text>
+  <line x1="32" y1="131" x2="1508" y2="131" stroke="#999999" />
+  <text x="32" y="182" font-family="Arial, sans-serif" font-size="19" font-weight="bold">Memory AXI</text>
+  <rect x="216" y="144" width="299" height="61" fill="#ffffff" stroke="#202020" stroke-width="1.5" />
+  <text x="365.5" y="169" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">CVA6 tile / AXI router</text>
+  <text x="365.5" y="190" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">Native 64-bit AXI</text>
+  <rect x="547" y="144" width="299" height="61" fill="#ffffff" stroke="#202020" stroke-width="1.5" />
+  <text x="696.5" y="169" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">Memory mux + LLC</text>
+  <text x="696.5" y="190" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">64-bit native</text>
+  <line x1="517" y1="174" x2="544" y2="174" stroke="#202020" stroke-width="1.7" />
+  <path d="M537 170 L545 174 L537 178 Z" fill="#202020" />
+  <path d="M524 170 L516 174 L524 178 Z" fill="#202020" />
+  <rect x="878" y="144" width="299" height="61" fill="#ffffff" stroke="#202020" stroke-width="1.5" />
+  <text x="1027.5" y="169" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">TOP width adapter</text>
+  <text x="1027.5" y="190" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">64 to D bits</text>
+  <line x1="848" y1="174" x2="875" y2="174" stroke="#202020" stroke-width="1.7" />
+  <path d="M868 170 L876 174 L868 178 Z" fill="#202020" />
+  <path d="M855 170 L847 174 L855 178 Z" fill="#202020" />
+  <rect x="1209" y="144" width="299" height="61" fill="#ffffff" stroke="#202020" stroke-width="1.5" />
+  <text x="1358.5" y="169" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">SoC memory fabric</text>
+  <text x="1358.5" y="190" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">D-bit AXI + AWATOP</text>
+  <line x1="1179" y1="174" x2="1206" y2="174" stroke="#202020" stroke-width="1.7" />
+  <path d="M1199 170 L1207 174 L1199 178 Z" fill="#202020" />
+  <path d="M1186 170 L1178 174 L1186 178 Z" fill="#202020" />
+  <text x="216" y="232" font-family="Arial, sans-serif" font-size="18" font-weight="normal">Direct router and TOP connections. External response paths can reach cluster logic in the same cycle.</text>
+  <line x1="32" y1="251" x2="1508" y2="251" stroke="#999999" />
+  <text x="32" y="302" font-family="Arial, sans-serif" font-size="19" font-weight="bold">MMIO AXI</text>
+  <rect x="216" y="264" width="409" height="61" fill="#ffffff" stroke="#202020" stroke-width="1.5" />
+  <text x="420.5" y="289" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">CVA6 tile / AXI router</text>
+  <text x="420.5" y="310" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">Native 64-bit AXI</text>
+  <rect x="657" y="264" width="409" height="61" fill="#ffffff" stroke="#202020" stroke-width="1.5" />
+  <text x="861.5" y="289" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">Cluster MMIO mux</text>
+  <text x="861.5" y="310" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">64-bit egress</text>
+  <line x1="627" y1="294" x2="654" y2="294" stroke="#202020" stroke-width="1.7" />
+  <path d="M647 290 L655 294 L647 298 Z" fill="#202020" />
+  <path d="M634 290 L626 294 L634 298 Z" fill="#202020" />
+  <rect x="1098" y="264" width="409" height="61" fill="#ffffff" stroke="#202020" stroke-width="1.5" />
+  <text x="1302.5" y="289" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">SoC peripheral fabric</text>
+  <text x="1302.5" y="310" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">64-bit AXI</text>
+  <line x1="1068" y1="294" x2="1095" y2="294" stroke="#202020" stroke-width="1.7" />
+  <path d="M1088 290 L1096 294 L1088 298 Z" fill="#202020" />
+  <path d="M1075 290 L1067 294 L1075 298 Z" fill="#202020" />
+  <text x="216" y="352" font-family="Arial, sans-serif" font-size="18" font-weight="normal">Direct router-to-mux and mux-to-pin connections. Backpressure can propagate through the route.</text>
+  <line x1="32" y1="371" x2="1508" y2="371" stroke="#999999" />
+  <text x="32" y="422" font-family="Arial, sans-serif" font-size="19" font-weight="bold">PMU and IRQ</text>
+  <rect x="216" y="384" width="232" height="61" fill="#ffffff" stroke="#202020" stroke-width="1.5" />
+  <text x="332.0" y="421" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">Event taps / config</text>
+  <rect x="480" y="384" width="232" height="61" fill="#ffffff" stroke="#202020" stroke-width="1.5" />
+  <text x="596.0" y="421" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">Aggregate / select</text>
+  <line x1="450" y1="414" x2="477" y2="414" stroke="#202020" stroke-width="1.7" />
+  <path d="M470 410 L478 414 L470 418 Z" fill="#202020" />
+  <rect x="744" y="384" width="232" height="61" fill="#ffffff" stroke="#202020" stroke-width="1.5" />
+  <text x="860.0" y="421" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">Existing counter bank</text>
+  <line x1="714" y1="414" x2="741" y2="414" stroke="#202020" stroke-width="1.7" />
+  <path d="M734 410 L742 414 L734 418 Z" fill="#202020" />
+  <rect x="1008" y="384" width="232" height="61" fill="#ffffff" stroke="#202020" stroke-width="1.5" />
+  <text x="1124.0" y="421" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">Wrap / IRQ logic</text>
+  <line x1="978" y1="414" x2="1005" y2="414" stroke="#202020" stroke-width="1.7" />
+  <path d="M998 410 L1006 414 L998 418 Z" fill="#202020" />
+  <rect x="1272" y="384" width="232" height="61" fill="#ffffff" stroke="#202020" stroke-width="1.5" />
+  <text x="1388.0" y="421" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">Existing CSR status</text>
+  <line x1="1242" y1="414" x2="1269" y2="414" stroke="#202020" stroke-width="1.7" />
+  <path d="M1262 410 L1270 414 L1262 418 Z" fill="#202020" />
+  <text x="216" y="472" font-family="Arial, sans-serif" font-size="18" font-weight="normal">Event selection and counter increment share a cycle. Counter carry feeds the overflow CSR path.</text>
+  <line x1="32" y1="491" x2="1508" y2="491" stroke="#999999" />
+  <text x="32" y="542" font-family="Arial, sans-serif" font-size="19" font-weight="bold">Directory lookup</text>
+  <rect x="216" y="504" width="299" height="61" fill="#ffffff" stroke="#202020" stroke-width="1.5" />
+  <text x="365.5" y="541" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">CCU lookup request</text>
+  <rect x="547" y="504" width="299" height="61" fill="#ffffff" stroke="#202020" stroke-width="1.5" />
+  <text x="696.5" y="541" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">Asynchronous way read</text>
+  <line x1="517" y1="534" x2="544" y2="534" stroke="#202020" stroke-width="1.7" />
+  <path d="M537 530 L545 534 L537 538 Z" fill="#202020" />
+  <rect x="878" y="504" width="299" height="61" fill="#ffffff" stroke="#202020" stroke-width="1.5" />
+  <text x="1027.5" y="541" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">Tag compare / victim select</text>
+  <line x1="848" y1="534" x2="875" y2="534" stroke="#202020" stroke-width="1.7" />
+  <path d="M868 530 L876 534 L868 538 Z" fill="#202020" />
+  <rect x="1209" y="504" width="299" height="61" fill="#ffffff" stroke="#202020" stroke-width="1.5" />
+  <text x="1358.5" y="541" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">Existing response register</text>
+  <line x1="1179" y1="534" x2="1206" y2="534" stroke="#202020" stroke-width="1.7" />
+  <path d="M1199 530 L1207 534 L1199 538 Z" fill="#202020" />
+  <text x="216" y="592" font-family="Arial, sans-serif" font-size="18" font-weight="normal">Array read and comparison share a cycle. The existing response register is the endpoint.</text>
+  <line x1="32" y1="611" x2="1508" y2="611" stroke="#999999" />
+  <text x="32" y="662" font-family="Arial, sans-serif" font-size="19" font-weight="bold">Reset release</text>
+  <rect x="216" y="624" width="590" height="61" fill="#ffffff" stroke="#202020" stroke-width="1.5" />
+  <text x="511.0" y="661" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">External reset pin</text>
+  <rect x="838" y="624" width="590" height="61" fill="#ffffff" stroke="#202020" stroke-width="1.5" />
+  <text x="1133.0" y="661" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">Route / adapter / locks / CMO gates</text>
+  <line x1="808" y1="654" x2="835" y2="654" stroke="#202020" stroke-width="1.7" />
+  <path d="M828 650 L836 654 L828 658 Z" fill="#202020" />
+  <text x="216" y="712" font-family="Arial, sans-serif" font-size="18" font-weight="normal">Reset directly qualifies handshake gating. Internal CVA6 paths are common to the three profiles.</text>
+</svg>

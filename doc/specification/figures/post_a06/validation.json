@@ -1,5 +1,5 @@
 {
-  "components": 117,
+  "components": 65,
   "working_flow_figures": 2,
   "implemented_fsms": 6,
   "fsm_figures": 10,
@@ -14,5 +14,6 @@
   "spec_checker_language_findings": 1,
   "compatibility": "Project adapter restores protected FSM library edge style and emits exact oval/transition-label SVG; post-render library checks pass; installed skill unchanged.",
   "component_functions": 35,
-  "modified_sources": 84
+  "modified_sources": 84,
+  "note_2026_11_20": "58 one-box component diagrams removed; 6 internal functional diagrams added; cluster core diagram redrawn with parsed child connectivity."
 }

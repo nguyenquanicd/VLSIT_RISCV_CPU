@@ -1,15 +1,103 @@
 {
-  "head": {"text": "WF-005 Reduction operation (success)"},
+  "head": {
+    "text": "WF-005 OP-003 valid zero scalar and owner acknowledgment",
+    "tick": 0
+  },
   "signal": [
-    {"name": "i_clk_core", "wave": "p........."},
-    {"name": "i_xif_issue_valid", "wave": "01.0......"},
-    {"name": "o_xif_issue_ready", "wave": "01.0......"},
-    {"name": "i_xif_issue_req_instr[31:0]", "wave": "x=.xxxxxxx", "data": ["RED"]},
-    {"name": "o_xif_issue_resp_accept", "wave": "01.0......"},
-    {"name": "o_xif_result_valid", "wave": "0.....10.."},
-    {"name": "i_xif_result_ready", "wave": "0.....10.."},
-    {"name": "o_xif_result_data", "wave": "xxxxx=.xxx", "data": ["s"]}
+    {
+      "name": "i_clk_core",
+      "wave": "p................"
+    },
+    {
+      "name": "i_xif_issue_valid",
+      "wave": "01000000000000000"
+    },
+    {
+      "name": "o_xif_issue_ready",
+      "wave": "01000000000000000"
+    },
+    {
+      "name": "i_xif_issue_req_instr[31:0]",
+      "wave": "x=xxxxxxxxxxxxxxx",
+      "data": [
+        "OP-003"
+      ]
+    },
+    {
+      "name": "o_xif_issue_resp_accept",
+      "wave": "01000000000000000"
+    },
+    {
+      "name": "i_xif_commit_valid",
+      "wave": "00010000000000000"
+    },
+    {
+      "name": "i_xif_commit_kill",
+      "wave": "00000000000000000"
+    },
+    {
+      "name": "Descriptor validated (conceptual)",
+      "wave": "00000010000000000"
+    },
+    {
+      "name": "Input read drained (conceptual)",
+      "wave": "00000000100000000"
+    },
+    {
+      "name": "Scalar zero ready (conceptual)",
+      "wave": "00000000010000000"
+    },
+    {
+      "name": "Busy visible in APB (conceptual)",
+      "wave": "00000000111111100"
+    },
+    {
+      "name": "Error visible in APB (conceptual)",
+      "wave": "00000000000000000"
+    },
+    {
+      "name": "o_xif_result_valid",
+      "wave": "00000000001000000"
+    },
+    {
+      "name": "i_xif_result_ready",
+      "wave": "00000000001000000"
+    },
+    {
+      "name": "o_xif_result_we",
+      "wave": "00000000001000000"
+    },
+    {
+      "name": "o_xif_result_rd",
+      "wave": "xxxxxxxxxx=xxxxxx",
+      "data": [
+        "x12"
+      ]
+    },
+    {
+      "name": "o_xif_result_data",
+      "wave": "xxxxxxxxxx=xxxxxx",
+      "data": [
+        "0"
+      ]
+    },
+    {
+      "name": "Owner reads err_valid=0 (conceptual)",
+      "wave": "00000000000100000"
+    },
+    {
+      "name": "Owner writes scalar_ack (conceptual)",
+      "wave": "00000000000010000"
+    },
+    {
+      "name": "Scalar ack consumed in core (conceptual)",
+      "wave": "00000000000000100"
+    }
   ],
-  "foot": {"text": "Scalar sum/max uses result.data; row/vector outputs are written through IF-003."},
-  "config": {"hscale": 2}
+  "foot": {
+    "text": "The clean fence protects attribution of a valid scalar zero. Its result fires before the owner checks CSR and acknowledges. APB rows show ordering only."
+  },
+  "config": {
+    "hscale": 2
+  }
 }

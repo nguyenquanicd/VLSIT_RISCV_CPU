@@ -1,0 +1,288 @@
+{
+  "schema_version": 2,
+  "configuration": "AXI non-coherent cluster; 64-bit bus; 2 or 4 active harts; compile-time timing profile 1",
+  "test": "Full-CVA6 FENCE.I success/error and PMU event/snapshot qualification in timing profile 1 (HDS REQ-PERF-006, TEST-061)",
+  "top": "tb_fence_i_end_to_end",
+  "seed": 1,
+  "environment": [
+    {
+      "name": "PATH",
+      "purpose": "Resolve Windows runtime DLLs for Python, Verilator and UCRT64 GCC.",
+      "required": true,
+      "secret": false,
+      "value": "C:\\Users\\PC\\Tools\\msys64\\ucrt64\\bin;C:\\Users\\PC\\Tools\\msys64\\usr\\bin;C:\\Users\\PC\\Tools\\oss-cad-suite\\bin;C:\\Users\\PC\\AppData\\Local\\Programs\\Python\\Python312;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0",
+      "source": "env/toolchain.json",
+      "setup_order": 0,
+      "override": "The package helper replaces the shell PATH with this curated value."
+    },
+    {
+      "name": "VERILATOR_ROOT",
+      "purpose": "Identify the installed Verilator runtime tree.",
+      "required": true,
+      "secret": false,
+      "value": "C:\\Users\\PC\\Tools\\oss-cad-suite\\share\\verilator",
+      "source": "env/toolchain.json",
+      "setup_order": 1,
+      "override": "Exact installed tool root recorded in the package."
+    },
+    {
+      "name": "VLSIT_BUILD_JOBS",
+      "purpose": "Bound parallel generated C++ compilation workers.",
+      "required": true,
+      "secret": false,
+      "value": "1",
+      "source": "env/toolchain.json",
+      "setup_order": 2,
+      "override": "Fixed to one worker under the reviewed resource budget."
+    },
+    {
+      "name": "VLSIT_MIN_FREE_RAM_BYTES",
+      "purpose": "Stop a build before available system RAM crosses the reviewed reserve floor.",
+      "required": true,
+      "secret": false,
+      "value": "1073741824",
+      "source": "env/resource_budget.json",
+      "setup_order": 3,
+      "override": "Fixed to the approved 1 GiB available-RAM stop floor."
+    },
+    {
+      "name": "VLSIT_MIN_FREE_DISK_BYTES",
+      "purpose": "Stop a run before free disk space crosses the reviewed storage floor.",
+      "required": true,
+      "secret": false,
+      "value": "2147483648",
+      "source": "env/resource_budget.json",
+      "setup_order": 4,
+      "override": "Fixed to the approved 2 GiB free-disk stop floor."
+    },
+    {
+      "name": "VLSIT_MAX_RAM_DROP_BYTES",
+      "purpose": "Stop the run before its available-RAM drop exceeds the memory-limited pilot target.",
+      "required": true,
+      "secret": false,
+      "value": "1090519040",
+      "source": "env/resource_budget.json",
+      "setup_order": 5,
+      "override": "1040 MiB maximum observed decrease from the run-start available-RAM baseline; just below half the previous 2.04 GiB coverage-build decrease."
+    },
+    {
+      "name": "VLSIT_RAM_POLL_INTERVAL_MS",
+      "purpose": "Sample system available RAM and free disk during each guarded command.",
+      "required": true,
+      "secret": false,
+      "value": "100",
+      "source": "env/resource_budget.json",
+      "setup_order": 6,
+      "override": "Sample every 100 ms to reduce guard overshoot."
+    },
+    {
+      "name": "VLSIT_RAM_GUARD_MARGIN_BYTES",
+      "purpose": "Keep an additional margin above the approved hard available-RAM floor.",
+      "required": true,
+      "secret": false,
+      "value": "134217728",
+      "source": "env/resource_budget.json",
+      "setup_order": 7,
+      "override": "Require at least 128 MiB above the 1 GiB reserve floor."
+    }
+  ],
+  "tools": [
+    {
+      "name": "python",
+      "version_argv": [
+        "C:/Users/PC/AppData/Local/Programs/Python/Python312/python.exe",
+        "--version"
+      ],
+      "status": "observed",
+      "version": "Python 3.12.10",
+      "version_log": "docs/tool_versions/python.txt",
+      "version_log_sha256": "6a5d9f6462ca5dfc6788cfd216ba579fffd7875776ab9d9b35659be78858f73a"
+    },
+    {
+      "name": "verilator",
+      "version_argv": [
+        "C:/Users/PC/Tools/oss-cad-suite/bin/verilator_bin.exe",
+        "--version"
+      ],
+      "status": "observed",
+      "version": "Verilator 5.053 devel rev v5.052-119-g014c9820d (mod)",
+      "version_log": "docs/tool_versions/verilator.txt",
+      "version_log_sha256": "77c88dfe83159e6ba25f771f57f1aaf1ec3340a5a36e2bb357ece4aac6b2485c"
+    },
+    {
+      "name": "gxx",
+      "version_argv": [
+        "C:/Users/PC/Tools/msys64/ucrt64/bin/g++.exe",
+        "--version"
+      ],
+      "status": "observed",
+      "version": "g++.exe (Rev4, Built by MSYS2 project) 16.2.0\nCopyright (C) 2026 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+      "version_log": "docs/tool_versions/gxx.txt",
+      "version_log_sha256": "aafa14c82f604d3dcc5190b9d35dfbf68b5af3fe960cec1c434647e068c45858"
+    },
+    {
+      "name": "verilator_coverage",
+      "version_argv": [
+        "C:/Users/PC/Tools/oss-cad-suite/bin/verilator_coverage_bin_dbg.exe",
+        "--version"
+      ],
+      "status": "observed",
+      "version": "Verilator 5.053 devel rev v5.052-119-g014c9820d (mod)",
+      "version_log": "docs/tool_versions/verilator_coverage.txt",
+      "version_log_sha256": "77c88dfe83159e6ba25f771f57f1aaf1ec3340a5a36e2bb357ece4aac6b2485c"
+    }
+  ],
+  "commands": [
+    {
+      "name": "plan validator",
+      "stage": "setup",
+      "argv": [
+        "C:/Users/PC/AppData/Local/Programs/Python/Python312/python.exe",
+        "scripts/vlsit_verify_plan.py",
+        "check",
+        "docs/00_plan/vplan.csv",
+        "--spec-index",
+        "docs/00_plan/requirements.txt",
+        "--today",
+        "2026-11-16"
+      ],
+      "cwd": "runs/configuration/build",
+      "environment": [
+        "PATH"
+      ],
+      "timeout_s": 60,
+      "status": "not_run",
+      "reason": "A plan validation was run before G0; this package-local command is retained for independent replay."
+    },
+    {
+      "name": "compile isolated FENCE.I smoke models",
+      "stage": "compile",
+      "argv": [
+        "C:/Users/PC/AppData/Local/Programs/Python/Python312/python.exe",
+        "scripts/project_runner.py",
+        "compile"
+      ],
+      "cwd": "runs/configuration/build",
+      "environment": [
+        "PATH",
+        "VERILATOR_ROOT",
+        "VLSIT_BUILD_JOBS"
+      ],
+      "timeout_s": 7200,
+      "status": "not_run",
+      "reason": "Per-run result is recorded in helper receipts."
+    },
+    {
+      "name": "simulate four initial FENCE.I cases",
+      "stage": "simulate",
+      "argv": [
+        "C:/Users/PC/AppData/Local/Programs/Python/Python312/python.exe",
+        "scripts/project_runner.py",
+        "simulate"
+      ],
+      "cwd": "runs/configuration/build",
+      "environment": [
+        "PATH",
+        "VERILATOR_ROOT",
+        "VLSIT_BUILD_JOBS"
+      ],
+      "timeout_s": 1800,
+      "status": "not_run",
+      "reason": "Per-run result is recorded in helper receipts."
+    },
+    {
+      "name": "cold replay in a new run directory",
+      "stage": "replay",
+      "argv": [
+        "C:/Users/PC/AppData/Local/Programs/Python/Python312/python.exe",
+        "scripts/vlsit_sim_workspace.py",
+        "replay",
+        "--root",
+        ".",
+        "--baseline",
+        "BASELINE_ID",
+        "--run-id",
+        "replay_001",
+        "--reference-run",
+        "initial_001"
+      ],
+      "cwd": "runs/configuration/build",
+      "environment": [
+        "PATH",
+        "VERILATOR_ROOT",
+        "VLSIT_BUILD_JOBS"
+      ],
+      "timeout_s": 9000,
+      "status": "not_run",
+      "reason": "Replay must follow a qualified original execution."
+    }
+  ],
+  "cold_replay": {
+    "status": "not_run",
+    "reason": "Only helper-generated replay receipts may record a cold replay."
+  },
+  "external_dependencies": [
+    {
+      "name": "Verilator runtime and executable",
+      "version": "Verilator 5.053 devel rev v5.052-119-g014c9820d (mod)",
+      "purpose": "SystemVerilog elaboration, timed simulation model and coverage runtime.",
+      "provisioning": "Install the exact build at the path recorded in env/toolchain.json; retain its upstream license.",
+      "limitation": "Development build; no condition coverage claim."
+    },
+    {
+      "name": "MSYS2 UCRT64 GCC",
+      "version": "g++.exe (Rev4, Built by MSYS2 project) 16.2.0\nCopyright (C) 2026 Free Software Foundation, Inc.\nThis is free software; see the source for copying conditions.  There is NO\nwarranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.",
+      "purpose": "Compile generated C++ model and Verilator runtime.",
+      "provisioning": "Install the exact compiler at the path recorded in env/toolchain.json.",
+      "limitation": "Host-specific Windows toolchain; replay on another host requires a reviewed baseline update."
+    },
+    {
+      "name": "Python",
+      "version": "Python 3.12.10",
+      "purpose": "Run package helper, project runner, generators and validators.",
+      "provisioning": "Install Python 3.12.10 at the path recorded in env/toolchain.json.",
+      "limitation": "Standard-library scripts only."
+    }
+  ],
+  "environment_policy": {
+    "mode": "isolated",
+    "empty_reason": "Not applicable; three curated variables are declared."
+  },
+  "dependency_export": "env/build_inputs.json",
+  "replay_plan": {
+    "runner": "scripts/project_runner.py",
+    "compile": {
+      "argv": [
+        "C:/Users/PC/AppData/Local/Programs/Python/Python312/python.exe",
+        "{snapshot}/scripts/project_runner.py",
+        "compile"
+      ],
+      "timeout_s": 7200
+    },
+    "simulate": {
+      "argv": [
+        "C:/Users/PC/AppData/Local/Programs/Python/Python312/python.exe",
+        "{snapshot}/scripts/project_runner.py",
+        "simulate"
+      ],
+      "timeout_s": 1800
+    },
+    "build_outputs": [
+      "build/fence_2h/Vtb_fence_i_end_to_end.exe",
+      "build/fence_4h/Vtb_fence_i_end_to_end.exe"
+    ],
+    "result": "reports/result.json",
+    "expected_cases": [
+      "H2_FENCEI_SUCCESS",
+      "H2_FENCEI_AXI_ERROR",
+      "H4_FENCEI_SUCCESS",
+      "H4_FENCEI_AXI_ERROR"
+    ],
+    "result_producer": {
+      "status": "qualified",
+      "reviewer": "Codex; four-case preflight logs and coverage evidence in docs/result_producer_qualification.md",
+      "scope": "rtl",
+      "evidence": "docs/result_producer_qualification.md"
+    }
+  }
+}

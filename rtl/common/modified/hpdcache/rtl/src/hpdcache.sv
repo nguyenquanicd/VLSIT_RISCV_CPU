@@ -9,6 +9,8 @@
  *  Creation Date : April, 2021
  *  Description   : HPDcache top
  *  History       :
+ *  2026-11-26 - Quan Nguyen and Claude - VLSI Technology page:
+ *    OPEN-X32-CBO4 (DEC-046): pass grant uniqueness (E/M) to hpdcache_ctrl.
  *  2026-11-14 - Quan Nguyen and Codex - VLSI Technology page:
  *    Connect the modified flush-engine origin, line, B-error and invalid-ID
  *    status to the cache subsystem boundary.
@@ -648,6 +650,7 @@ import hpdcache_pkg::*;
         .coh_atomic_grant_i(coh_own_gnt_valid_i && coh_own_gnt_ready_o &&
                             !coh_own_gnt_err_i && (coh_own_gnt_state_i != 2'd0)),
         .coh_atomic_grant_nline_i(coh_own_gnt_nline_i),
+        .coh_atomic_grant_unique_i(coh_own_gnt_state_i[1]),
         .coh_access_line_valid_o,
         .coh_access_nline_o,
         .coh_victim_line_valid_o,

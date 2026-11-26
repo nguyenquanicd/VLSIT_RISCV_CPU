@@ -7,6 +7,12 @@
  * Description  : MESI ownership fabric joining transaction, directory, and probe blocks.
  * Specification: REQ-MEM-001, REQ-MEM-005, REQ-MEM-006, REQ-MEM-009, REQ-MEM-012..014
  * Change History:
+ * 2026-11-26 - Modified by Quan Nguyen and Claude - VLSI Technology page:
+ *              DEC-047 (OPEN-DIR-UPD-TAG): leave DIR_UPDATE and DIR_CANCEL only on
+ *              the bank handshake that carries this slot's tag, as RETRY_CANCEL does.
+ * 2026-11-20 - Modified by Quan Nguyen and Codex - VLSI Technology page:
+ *              Move module-scope signal declarations ahead of first use for
+ *              stricter SystemVerilog front-end compatibility (R-03).
  * 2026-11-15 - Modified by Quan Nguyen and Codex - VLSI Technology page:
  *              A-05: reserve one victim context credit, bind child allocation
  *              to the selected parent, cancel/retry victim-line conflicts
@@ -20,6 +26,8 @@
  *              Preserve failed PREPARE/writeback status through ABORT and return
  *              an error grant to the CPU requester; propagate victim-child failure.
  * Rule note    : DEC-028 true CBO.INVAL is handled by the maintenance integration.
+ * History      : Quan Nguyen and Codex - VLSI Technology page.
+ *                DEC-045: Add optional cluster boundary timing profile support.
  */
 // 2026-11-15 - Quan Nguyen and Codex - VLSI Technology page:
 // REQ-MEM-001/012/017: qualify silent E-to-M at the unique owner, retain
@@ -49,6 +57,10 @@ module m_vlsit_riscv_coh_fabric #(
   // Parameter values: 2 through 16; default is 8.
   // Parameter unit: contexts.
   parameter logic [31:0] PARA_COH_TXN_NUM = 32'd8,
+  // Parameter Description: use synchronous directory storage.
+  // Parameter values: 0 = legacy, 1 = synchronous; default is 0.
+  // Parameter unit: mode
+  parameter logic [31:0] PARA_DIR_SYNC_READ = 32'd0,
   localparam logic [31:0] LPARA_COH_TAG_W = (PARA_COH_TXN_NUM > 32'd1)
                                            ? 32'($clog2(PARA_COH_TXN_NUM)) : 32'd1,
   localparam logic [31:0] LPARA_COH_SLOT_W = (PARA_COH_TXN_NUM > 32'd1)
@@ -153,55 +165,6 @@ module m_vlsit_riscv_coh_fabric #(
     ENUM_ST_CMO_FINISH = 5'd17,
     ENUM_ST_RETRY_CANCEL = 5'd18
   } coh_state_type_def;
-
-  logic reg_cmo_active;
-  logic [LPARA_COH_TAG_W-1:0] reg_cmo_tag;
-  logic [PARA_COH_TXN_NUM-1:0] reg_ctx_cmo_dir_hit;
-  logic w_cmo_alloc_pick;
-  // Select one maintenance context after victim service.
-  assign w_cmo_alloc_pick = (PARA_CMO_EN != 0) && i_ccu_begin_valid
-                            && !reg_cmo_active && !w_internal_pick_valid
-                            && (32'(i_ccu_begin_op) < LPARA_CMO_OP_COUNT)
-                            && (32'(i_ccu_begin_hart) < PARA_CPU_NUM);
-  // Accept only legal requests while the shared service is free.
-  assign o_ccu_begin_ready = (PARA_CMO_EN != 0) && !reg_cmo_active
-                             && !w_internal_pick_valid && w_alloc_ready
-                             && (32'(i_ccu_begin_op) < LPARA_CMO_OP_COUNT)
-                             && (32'(i_ccu_begin_hart) < PARA_CPU_NUM);
-  // Hold PREPARE completion until the controller accepts it.
-  assign o_ccu_prepare_valid = reg_cmo_active &&
-      (reg_fsm_ctx_current_state[reg_cmo_tag] == ENUM_ST_CMO_PREPARED);
-  // Return the retained transaction identity and status.
-  assign o_ccu_prepare_tag = reg_cmo_tag;
-  assign o_ccu_prepare_err = reg_ctx_gnt_err[reg_cmo_tag];
-  // Match terminal commands to the retained prepared transaction.
-  assign o_ccu_finish_ready = reg_cmo_active &&
-      (reg_fsm_ctx_current_state[reg_cmo_tag] == ENUM_ST_CMO_FINISH)
-      && (i_ccu_finish_tag == reg_cmo_tag);
-  // Complete only after the native context and lock are released.
-  assign o_ccu_finish_done = reg_cmo_active &&
-      (reg_fsm_ctx_current_state[reg_cmo_tag] == ENUM_ST_GNT)
-      && w_release_hs[reg_cmo_tag];
-  // Retain maintenance ownership and directory-hit metadata through terminal ACKs.
-  always_ff @(posedge i_clk_cluster, negedge i_rst_n_cluster) begin : p_ff_cmo_service
-    if (!i_rst_n_cluster) begin
-      reg_cmo_active <= 1'b0;
-      reg_cmo_tag <= '0;
-      reg_ctx_cmo_dir_hit <= '0;
-    end else begin
-      if (w_cmo_alloc_pick && w_alloc_ready) begin
-        reg_cmo_active <= 1'b1;
-        reg_cmo_tag <= w_alloc_tag;
-        reg_ctx_cmo_dir_hit[w_alloc_tag] <= 1'b0;
-      end
-      for (int bank_idx=0;bank_idx<4;bank_idx++)
-        if (w_lookup_rsp_accept[bank_idx] &&
-            w_ctx_src[w_dir_lookup_rsp_tag[bank_idx]] == 3'(LPARA_SRC_CMO))
-          reg_ctx_cmo_dir_hit[w_dir_lookup_rsp_tag[bank_idx]] <= w_dir_lookup_hit[bank_idx];
-      if (reg_cmo_active && w_release_hs[reg_cmo_tag])
-        reg_cmo_active <= 1'b0;
-    end
-  end
 
   // Context storage keeps target/victim metadata through probe backpressure and replacement.
   coh_state_type_def reg_fsm_ctx_current_state [PARA_COH_TXN_NUM-1:0];
@@ -352,6 +315,55 @@ module m_vlsit_riscv_coh_fabric #(
   logic [3:0] w_cancel_hs;
   logic w_req_kind_valid;
   logic w_lookup_diag_event;
+
+  logic reg_cmo_active;
+  logic [LPARA_COH_TAG_W-1:0] reg_cmo_tag;
+  logic [PARA_COH_TXN_NUM-1:0] reg_ctx_cmo_dir_hit;
+  logic w_cmo_alloc_pick;
+  // Select one maintenance context after victim service.
+  assign w_cmo_alloc_pick = (PARA_CMO_EN != 0) && i_ccu_begin_valid
+                            && !reg_cmo_active && !w_internal_pick_valid
+                            && (32'(i_ccu_begin_op) < LPARA_CMO_OP_COUNT)
+                            && (32'(i_ccu_begin_hart) < PARA_CPU_NUM);
+  // Accept only legal requests while the shared service is free.
+  assign o_ccu_begin_ready = (PARA_CMO_EN != 0) && !reg_cmo_active
+                             && !w_internal_pick_valid && w_alloc_ready
+                             && (32'(i_ccu_begin_op) < LPARA_CMO_OP_COUNT)
+                             && (32'(i_ccu_begin_hart) < PARA_CPU_NUM);
+  // Hold PREPARE completion until the controller accepts it.
+  assign o_ccu_prepare_valid = reg_cmo_active &&
+      (reg_fsm_ctx_current_state[reg_cmo_tag] == ENUM_ST_CMO_PREPARED);
+  // Return the retained transaction identity and status.
+  assign o_ccu_prepare_tag = reg_cmo_tag;
+  assign o_ccu_prepare_err = reg_ctx_gnt_err[reg_cmo_tag];
+  // Match terminal commands to the retained prepared transaction.
+  assign o_ccu_finish_ready = reg_cmo_active &&
+      (reg_fsm_ctx_current_state[reg_cmo_tag] == ENUM_ST_CMO_FINISH)
+      && (i_ccu_finish_tag == reg_cmo_tag);
+  // Complete only after the native context and lock are released.
+  assign o_ccu_finish_done = reg_cmo_active &&
+      (reg_fsm_ctx_current_state[reg_cmo_tag] == ENUM_ST_GNT)
+      && w_release_hs[reg_cmo_tag];
+  // Retain maintenance ownership and directory-hit metadata through terminal ACKs.
+  always_ff @(posedge i_clk_cluster, negedge i_rst_n_cluster) begin : p_ff_cmo_service
+    if (!i_rst_n_cluster) begin
+      reg_cmo_active <= 1'b0;
+      reg_cmo_tag <= '0;
+      reg_ctx_cmo_dir_hit <= '0;
+    end else begin
+      if (w_cmo_alloc_pick && w_alloc_ready) begin
+        reg_cmo_active <= 1'b1;
+        reg_cmo_tag <= w_alloc_tag;
+        reg_ctx_cmo_dir_hit[w_alloc_tag] <= 1'b0;
+      end
+      for (int bank_idx=0;bank_idx<4;bank_idx++)
+        if (w_lookup_rsp_accept[bank_idx] &&
+            w_ctx_src[w_dir_lookup_rsp_tag[bank_idx]] == 3'(LPARA_SRC_CMO))
+          reg_ctx_cmo_dir_hit[w_dir_lookup_rsp_tag[bank_idx]] <= w_dir_lookup_hit[bank_idx];
+      if (reg_cmo_active && w_release_hs[reg_cmo_tag])
+        reg_cmo_active <= 1'b0;
+    end
+  end
 
   // Reserve the last free context for a non-recursive victim child. Root
   // backpressure must never gate phase completion, native writeback or release.
@@ -790,6 +802,7 @@ module m_vlsit_riscv_coh_fabric #(
   );
 
   m_vlsit_riscv_sharer_directory #(
+    .PARA_DIR_SYNC_READ(PARA_DIR_SYNC_READ),
     .PARA_CPU_NUM(PARA_CPU_NUM),
     .PARA_COH_TXN_NUM(PARA_COH_TXN_NUM)
   ) u_vlsit_riscv_sharer_directory (
@@ -1049,12 +1062,16 @@ module m_vlsit_riscv_coh_fabric #(
           end
         end
         ENUM_ST_DIR_UPDATE: begin
-          if (w_update_hs[w_ctx_pa_line[slot_idx][1:0]])
+          if (w_update_hs[w_ctx_pa_line[slot_idx][1:0]]
+              & (w_dir_update_tag[w_ctx_pa_line[slot_idx][1:0]]
+                 == LPARA_COH_TAG_W'(slot_idx)))
             w_fsm_ctx_nxt_state[slot_idx] = ENUM_ST_GNT;
         end
         ENUM_ST_DIR_CANCEL: begin
           if (~reg_ctx_dir_reserved[slot_idx]
-              | w_cancel_hs[w_ctx_pa_line[slot_idx][1:0]])
+              | (w_cancel_hs[w_ctx_pa_line[slot_idx][1:0]]
+                 & (w_dir_cancel_tag[w_ctx_pa_line[slot_idx][1:0]]
+                    == LPARA_COH_TAG_W'(slot_idx))))
             w_fsm_ctx_nxt_state[slot_idx] = ENUM_ST_GNT;
         end
         ENUM_ST_CMO_PREPARED: begin

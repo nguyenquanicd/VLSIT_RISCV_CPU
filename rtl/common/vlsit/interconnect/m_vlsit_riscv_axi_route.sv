@@ -7,6 +7,12 @@
  * Description  : Routes one tile AXI4 port by shared-table region metadata.
  * Specification: REQ-IF-011, DEC-037
  * Rule note    : HIE-02 is intentional; this adapter combines route logic and cells.
+ * Change History:
+ * 2026-11-20 - Modified by Quan Nguyen and Codex - VLSI Technology page:
+ *              Add optional registered AXI target cuts for the cluster timing profile.
+ *              Preserve CVA6 internals and the existing AXI/route-class payloads.
+ * History      : Quan Nguyen and Codex - VLSI Technology page.
+ *                DEC-045: Add optional cluster boundary timing profile support.
  */
 `timescale 1ns/1ps
 
@@ -15,6 +21,12 @@ module m_vlsit_riscv_axi_route #(
   // Parameter values: 1 through 32; default is 8.
   // Parameter unit: transactions.
   parameter logic [31:0] PARA_AXI_MAX_TRANS = 32'd8,
+  // Parameter Description: compile-time cluster timing profile.
+  // Parameter values: 0 = baseline, 1 = tile cuts, 2 = boundary profile.
+  // Parameter unit: profile index.
+  parameter logic [31:0] PARA_TIMING_PROFILE = 32'd0,
+  localparam logic [31:0] LPARA_TIMING_TILE = 32'd1,
+  localparam logic [31:0] LPARA_TIMING_PROFILE_BOUNDARY = 32'd2,
   localparam logic [31:0] LPARA_AXI_ID_W = 32'd4,
   localparam logic [31:0] LPARA_AXI_ROUTE_MEM = 32'd0,
   localparam logic [31:0] LPARA_AXI_ROUTE_MMIO = 32'd1,
@@ -332,10 +344,17 @@ module m_vlsit_riscv_axi_route #(
   axi_tile_resp_type_def w_tile_resp;
   axi_req_type_def [LPARA_AXI_MST_PORT_NUM-1:0] w_mst_req;
   axi_resp_type_def [LPARA_AXI_MST_PORT_NUM-1:0] w_mst_resp;
+  axi_req_type_def w_mem_target_req;
+  axi_resp_type_def w_mem_target_resp;
+  axi_req_type_def w_mmio_target_req;
+  axi_resp_type_def w_mmio_target_resp;
   logic [LPARA_AXI_REQ_W-1:0] w_slv_req_bits;
   logic [LPARA_AXI_RESP_W-1:0] w_slv_resp_bits;
-  logic [LPARA_AXI_MST_PORT_NUM-1:0][LPARA_AXI_REQ_W-1:0] w_mst_req_bits;
   logic [LPARA_AXI_MST_PORT_NUM-1:0][LPARA_AXI_RESP_W-1:0] w_mst_resp_bits;
+  logic [LPARA_AXI_REQ_W-1:0] w_mem_target_req_bits;
+  logic [LPARA_AXI_REQ_W-1:0] w_mmio_target_req_bits;
+  logic [LPARA_AXI_RESP_W-1:0] w_mem_target_resp_bits;
+  logic [LPARA_AXI_RESP_W-1:0] w_mmio_target_resp_bits;
   logic [LPARA_AXI_AW_W-1:0] w_mem_aw_bits;
   logic [LPARA_AXI_AR_W-1:0] w_mem_ar_bits;
   logic [LPARA_AXI_AW_MMIO_W-1:0] w_mmio_aw_bits;
@@ -390,14 +409,30 @@ module m_vlsit_riscv_axi_route #(
   end
 
   // Bundle flat AXI channels into the unchanged upstream PULP request record.
+  logic w_route_active;
+
+  // Profile 2 removes raw reset from the combinational handshake cone.
+  if (PARA_TIMING_PROFILE == LPARA_TIMING_PROFILE_BOUNDARY) begin : gen_route_release
+    logic reg_route_active;
+    always_ff @(posedge i_clk_cluster, negedge i_rst_n_cluster) begin : p_ff_route_release
+      if (!i_rst_n_cluster)
+        reg_route_active <= 1'b0;
+      else
+        reg_route_active <= 1'b1;
+    end
+    assign w_route_active = reg_route_active;
+  end else begin : gen_route_reset_direct
+    assign w_route_active = i_rst_n_cluster;
+  end
+
   assign w_slv_req_bits = {
     i_awid, i_awatop, i_awaddr, i_awlen, i_awsize, i_awburst, i_awlock, i_awcache,
-    i_awprot, i_awqos, i_awregion, i_aw_region_type, (i_awvalid & i_rst_n_cluster),
-    i_wdata, i_wstrb, i_wlast, (i_wvalid & i_rst_n_cluster),
-    (i_bready & i_rst_n_cluster),
+    i_awprot, i_awqos, i_awregion, i_aw_region_type, (i_awvalid & w_route_active),
+    i_wdata, i_wstrb, i_wlast, (i_wvalid & w_route_active),
+    (i_bready & w_route_active),
     i_arid, i_araddr, i_arlen, i_arsize, i_arburst, i_arlock, i_arcache, i_arprot,
-    i_arqos, i_arregion, i_ar_region_type, (i_arvalid & i_rst_n_cluster),
-    (i_rready & i_rst_n_cluster)
+    i_arqos, i_arregion, i_ar_region_type, (i_arvalid & w_route_active),
+    (i_rready & w_route_active)
   };
   // Cast the flat tile request into the tile and upstream record types.
   assign w_tile_req = axi_tile_req_type_def'(w_slv_req_bits);
@@ -429,10 +464,57 @@ module m_vlsit_riscv_axi_route #(
     .mst_resps_i(w_mst_resp)
   );
 
-  // Pack demux outputs before mapping them to flat target ports.
-  assign w_mst_req_bits = w_mst_req;
+  // Pack demux responses after optional target cuts before returning them to the tile.
+  assign w_mst_resp_bits = w_mst_resp;
+  assign w_mem_target_req_bits = w_mem_target_req;
+  assign w_mmio_target_req_bits = w_mmio_target_req;
   assign w_tile_resp = axi_tile_resp_type_def'(w_slv_resp);
   assign w_slv_resp_bits = w_tile_resp;
+
+  // The timing profile inserts licensed spill-register cuts at memory and MMIO
+  // target boundaries. Channel payloads, IDs, and route-class sidebands remain intact.
+  if (PARA_TIMING_PROFILE == LPARA_TIMING_TILE) begin : gen_cluster_timing_cuts
+    axi_cut #(
+      .Bypass      (1'b0),
+      .aw_chan_t   (axi_aw_chan_type_def),
+      .w_chan_t    (axi_w_chan_type_def),
+      .b_chan_t    (axi_b_chan_type_def),
+      .ar_chan_t   (axi_ar_chan_type_def),
+      .r_chan_t    (axi_r_chan_type_def),
+      .axi_req_t   (axi_req_type_def),
+      .axi_resp_t  (axi_resp_type_def)
+    ) u_mem_axi_cut (
+      .clk_i      (i_clk_cluster),
+      .rst_ni     (i_rst_n_cluster),
+      .slv_req_i  (w_mst_req[LPARA_AXI_ROUTE_MEM]),
+      .slv_resp_o(w_mst_resp[LPARA_AXI_ROUTE_MEM]),
+      .mst_req_o  (w_mem_target_req),
+      .mst_resp_i(w_mem_target_resp)
+    );
+
+    axi_cut #(
+      .Bypass      (1'b0),
+      .aw_chan_t   (axi_aw_chan_type_def),
+      .w_chan_t    (axi_w_chan_type_def),
+      .b_chan_t    (axi_b_chan_type_def),
+      .ar_chan_t   (axi_ar_chan_type_def),
+      .r_chan_t    (axi_r_chan_type_def),
+      .axi_req_t   (axi_req_type_def),
+      .axi_resp_t  (axi_resp_type_def)
+    ) u_mmio_axi_cut (
+      .clk_i      (i_clk_cluster),
+      .rst_ni     (i_rst_n_cluster),
+      .slv_req_i  (w_mst_req[LPARA_AXI_ROUTE_MMIO]),
+      .slv_resp_o(w_mst_resp[LPARA_AXI_ROUTE_MMIO]),
+      .mst_req_o  (w_mmio_target_req),
+      .mst_resp_i(w_mmio_target_resp)
+    );
+  end else begin : gen_low_latency_routes
+    assign w_mem_target_req = w_mst_req[LPARA_AXI_ROUTE_MEM];
+    assign w_mst_resp[LPARA_AXI_ROUTE_MEM] = w_mem_target_resp;
+    assign w_mmio_target_req = w_mst_req[LPARA_AXI_ROUTE_MMIO];
+    assign w_mst_resp[LPARA_AXI_ROUTE_MMIO] = w_mmio_target_resp;
+  end
 
   // The pinned PULP slave returns DECERR for invalid or unsupported transactions.
   axi_err_slv #(
@@ -451,30 +533,30 @@ module m_vlsit_riscv_axi_route #(
   );
 
   // Return the demultiplexed response channels to the tile AXI master.
-  assign o_awready = w_slv_resp_bits[LPARA_AXI_RESP_AW_READY_BIT] & i_rst_n_cluster;
-  assign o_wready = w_slv_resp_bits[LPARA_AXI_RESP_W_READY_BIT] & i_rst_n_cluster;
+  assign o_awready = w_slv_resp_bits[LPARA_AXI_RESP_AW_READY_BIT] & w_route_active;
+  assign o_wready = w_slv_resp_bits[LPARA_AXI_RESP_W_READY_BIT] & w_route_active;
   assign {o_bid, o_bresp} = w_slv_resp_bits[
     LPARA_AXI_RESP_B_MSB:LPARA_AXI_RESP_B_LSB+LPARA_AXI_USER_W
   ];
   // Return B VALID only for the selected target response.
-  assign o_bvalid = w_slv_resp_bits[LPARA_AXI_RESP_B_VALID_BIT] & i_rst_n_cluster;
-  assign o_arready = w_slv_resp_bits[LPARA_AXI_RESP_AR_READY_BIT] & i_rst_n_cluster;
+  assign o_bvalid = w_slv_resp_bits[LPARA_AXI_RESP_B_VALID_BIT] & w_route_active;
+  assign o_arready = w_slv_resp_bits[LPARA_AXI_RESP_AR_READY_BIT] & w_route_active;
   assign {o_rid, o_rdata, o_rresp, o_rlast} = w_slv_resp_bits[
     LPARA_AXI_RESP_R_MSB:LPARA_AXI_RESP_R_LSB+LPARA_AXI_USER_W
   ];
   // Return R VALID only for the selected target response.
-  assign o_rvalid = w_slv_resp_bits[LPARA_AXI_RESP_R_VALID_BIT] & i_rst_n_cluster;
+  assign o_rvalid = w_slv_resp_bits[LPARA_AXI_RESP_R_VALID_BIT] & w_route_active;
 
   // Keep region class so the CCU can bypass LLC for normal-uncached traffic.
-  assign w_mem_aw_bits = w_mst_req_bits[LPARA_AXI_ROUTE_MEM][
+  assign w_mem_aw_bits = w_mem_target_req_bits[
     LPARA_AXI_REQ_AW_MSB:LPARA_AXI_REQ_AW_LSB
   ];
   // Extract the selected memory target's AR record.
-  assign w_mem_ar_bits = w_mst_req_bits[LPARA_AXI_ROUTE_MEM][
+  assign w_mem_ar_bits = w_mem_target_req_bits[
     LPARA_AXI_REQ_AR_MSB:LPARA_AXI_REQ_AR_LSB
   ];
   // Extract the selected memory target's W record.
-  assign w_mem_w_bits = w_mst_req_bits[LPARA_AXI_ROUTE_MEM][
+  assign w_mem_w_bits = w_mem_target_req_bits[
     LPARA_AXI_REQ_W_MSB:LPARA_AXI_REQ_W_LSB
   ];
   // Drive memory AW fields and retain the shared-table route class.
@@ -482,41 +564,39 @@ module m_vlsit_riscv_axi_route #(
           o_mem_awburst, o_mem_awlock, o_mem_awcache, o_mem_awprot, o_mem_awqos,
           o_mem_awregion, o_mem_aw_route_class} = w_mem_aw_bits;
   // Forward the memory write-address handshake.
-  assign o_mem_awvalid = w_mst_req_bits[LPARA_AXI_ROUTE_MEM][LPARA_AXI_REQ_AW_VALID_BIT];
+  assign o_mem_awvalid = w_mem_target_req_bits[LPARA_AXI_REQ_AW_VALID_BIT];
   // Drive the memory write-data payload.
   assign {o_mem_wdata, o_mem_wstrb, o_mem_wlast} = w_mem_w_bits;
-  assign o_mem_wvalid = w_mst_req_bits[LPARA_AXI_ROUTE_MEM][LPARA_AXI_REQ_W_VALID_BIT];
-  assign o_mem_bready = w_mst_req_bits[LPARA_AXI_ROUTE_MEM][LPARA_AXI_REQ_B_READY_BIT];
+  assign o_mem_wvalid = w_mem_target_req_bits[LPARA_AXI_REQ_W_VALID_BIT];
+  assign o_mem_bready = w_mem_target_req_bits[LPARA_AXI_REQ_B_READY_BIT];
   assign {o_mem_arid, o_mem_araddr, o_mem_arlen, o_mem_arsize, o_mem_arburst,
           o_mem_arlock, o_mem_arcache, o_mem_arprot, o_mem_arqos, o_mem_arregion,
           o_mem_ar_route_class} = w_mem_ar_bits;
   // Forward the memory read-address handshake.
-  assign o_mem_arvalid = w_mst_req_bits[LPARA_AXI_ROUTE_MEM][LPARA_AXI_REQ_AR_VALID_BIT];
-  assign o_mem_rready = w_mst_req_bits[LPARA_AXI_ROUTE_MEM][LPARA_AXI_REQ_R_READY_BIT];
-  assign w_mst_resp_bits[LPARA_AXI_ROUTE_MEM] = {
+  assign o_mem_arvalid = w_mem_target_req_bits[LPARA_AXI_REQ_AR_VALID_BIT];
+  assign o_mem_rready = w_mem_target_req_bits[LPARA_AXI_REQ_R_READY_BIT];
+  assign w_mem_target_resp_bits = {
     i_mem_awready, i_mem_wready, i_mem_bid, i_mem_bresp, 1'b0, i_mem_bvalid,
     i_mem_arready, i_mem_rid, i_mem_rdata, i_mem_rresp, i_mem_rlast, 1'b0, i_mem_rvalid
   };
-  // Return memory responses in the upstream typed record.
-  assign w_mst_resp[LPARA_AXI_ROUTE_MEM] =
-    axi_resp_type_def'(w_mst_resp_bits[LPARA_AXI_ROUTE_MEM]);
+  assign w_mem_target_resp = axi_resp_type_def'(w_mem_target_resp_bits);
 
   // Keep standard AXI fields; external fabric decodes the MMIO address.
   assign w_mmio_aw_bits = {
-    w_mst_req_bits[LPARA_AXI_ROUTE_MMIO][LPARA_AXI_REQ_AW_MSB:
+    w_mmio_target_req_bits[LPARA_AXI_REQ_AW_MSB:
       LPARA_AXI_REQ_AW_LSB+LPARA_AXI_AW_ID_LSB],
-    w_mst_req_bits[LPARA_AXI_ROUTE_MMIO][LPARA_AXI_REQ_AW_LSB+LPARA_AXI_AW_ADDR_MSB:
+    w_mmio_target_req_bits[LPARA_AXI_REQ_AW_LSB+LPARA_AXI_AW_ADDR_MSB:
       LPARA_AXI_REQ_AW_LSB+LPARA_AXI_ROUTE_CLASS_W]
   };
   // Strip the internal route class from the MMIO AR payload.
   assign w_mmio_ar_bits = {
-    w_mst_req_bits[LPARA_AXI_ROUTE_MMIO][LPARA_AXI_REQ_AR_MSB:
+    w_mmio_target_req_bits[LPARA_AXI_REQ_AR_MSB:
       LPARA_AXI_REQ_AR_LSB+LPARA_AXI_AR_ID_LSB],
-    w_mst_req_bits[LPARA_AXI_ROUTE_MMIO][LPARA_AXI_REQ_AR_LSB+LPARA_AXI_AR_ADDR_MSB:
+    w_mmio_target_req_bits[LPARA_AXI_REQ_AR_LSB+LPARA_AXI_AR_ADDR_MSB:
       LPARA_AXI_REQ_AR_LSB+LPARA_AXI_ROUTE_CLASS_W]
   };
   // Extract the MMIO W record for the peripheral fabric.
-  assign w_mmio_w_bits = w_mst_req_bits[LPARA_AXI_ROUTE_MMIO][
+  assign w_mmio_w_bits = w_mmio_target_req_bits[
     LPARA_AXI_REQ_W_MSB:LPARA_AXI_REQ_W_LSB
   ];
   // Forward standard AW fields without internal sidebands.
@@ -524,27 +604,22 @@ module m_vlsit_riscv_axi_route #(
           o_mmio_awlock, o_mmio_awcache, o_mmio_awprot, o_mmio_awqos,
           o_mmio_awregion} = w_mmio_aw_bits;
   // Forward the MMIO write-address handshake.
-  assign o_mmio_awvalid = w_mst_req_bits[LPARA_AXI_ROUTE_MMIO][LPARA_AXI_REQ_AW_VALID_BIT];
+  assign o_mmio_awvalid = w_mmio_target_req_bits[LPARA_AXI_REQ_AW_VALID_BIT];
   assign {o_mmio_wdata, o_mmio_wstrb, o_mmio_wlast} = w_mmio_w_bits;
-  assign o_mmio_wvalid = w_mst_req_bits[LPARA_AXI_ROUTE_MMIO][LPARA_AXI_REQ_W_VALID_BIT];
-  assign o_mmio_bready = w_mst_req_bits[LPARA_AXI_ROUTE_MMIO][LPARA_AXI_REQ_B_READY_BIT];
+  assign o_mmio_wvalid = w_mmio_target_req_bits[LPARA_AXI_REQ_W_VALID_BIT];
+  assign o_mmio_bready = w_mmio_target_req_bits[LPARA_AXI_REQ_B_READY_BIT];
   assign {o_mmio_arid, o_mmio_araddr, o_mmio_arlen, o_mmio_arsize, o_mmio_arburst,
           o_mmio_arlock, o_mmio_arcache, o_mmio_arprot, o_mmio_arqos,
           o_mmio_arregion} = w_mmio_ar_bits;
   // Forward the MMIO read-address handshake.
-  assign o_mmio_arvalid = w_mst_req_bits[LPARA_AXI_ROUTE_MMIO][LPARA_AXI_REQ_AR_VALID_BIT];
-  assign o_mmio_rready = w_mst_req_bits[LPARA_AXI_ROUTE_MMIO][LPARA_AXI_REQ_R_READY_BIT];
-  assign w_mst_resp_bits[LPARA_AXI_ROUTE_MMIO] = {
+  assign o_mmio_arvalid = w_mmio_target_req_bits[LPARA_AXI_REQ_AR_VALID_BIT];
+  assign o_mmio_rready = w_mmio_target_req_bits[LPARA_AXI_REQ_R_READY_BIT];
+  assign w_mmio_target_resp_bits = {
     i_mmio_awready, i_mmio_wready, i_mmio_bid, i_mmio_bresp, 1'b0, i_mmio_bvalid,
     i_mmio_arready, i_mmio_rid, i_mmio_rdata, i_mmio_rresp, i_mmio_rlast, 1'b0,
     i_mmio_rvalid
   };
-  // Return MMIO responses in the upstream typed record.
-  assign w_mst_resp[LPARA_AXI_ROUTE_MMIO] =
-    axi_resp_type_def'(w_mst_resp_bits[LPARA_AXI_ROUTE_MMIO]);
-
-  // Keep the DECERR responder's structured output in the common packed response array.
-  assign w_mst_resp_bits[LPARA_AXI_ROUTE_ERR] = w_mst_resp[LPARA_AXI_ROUTE_ERR];
+  assign w_mmio_target_resp = axi_resp_type_def'(w_mmio_target_resp_bits);
 
   // Report a local decode error only when the corresponding address handshake is accepted.
   assign o_aw_local_err_event = i_awvalid & o_awready & w_aw_local_err;

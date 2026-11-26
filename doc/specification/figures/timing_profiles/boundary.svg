@@ -1,0 +1,130 @@
+<?xml version='1.0' encoding='utf-8'?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1540" height="860" viewBox="0 0 1540 860" role="img">
+  <title>Profile 2 - Boundary cuts</title>
+  <desc>Shared TOP, PMU, directory and reset cuts | 3,846 / 3,960 added RTL-model bits at 2 / 4 harts</desc>
+  <rect width="1540" height="860" fill="white" />
+  <text x="32" y="50" font-family="Arial, sans-serif" font-size="34" font-weight="bold">Profile 2 - Boundary cuts</text>
+  <text x="32" y="83" font-family="Arial, sans-serif" font-size="22" font-weight="normal">Shared TOP, PMU, directory and reset cuts | 3,846 / 3,960 added RTL-model bits at 2 / 4 harts</text>
+  <text x="32" y="113" font-family="Arial, sans-serif" font-size="18" font-weight="normal">REG marks added storage. Double arrows include payload and VALID, with READY in the reverse direction.</text>
+  <line x1="32" y1="131" x2="1508" y2="131" stroke="#999999" />
+  <text x="32" y="182" font-family="Arial, sans-serif" font-size="19" font-weight="bold">Memory AXI</text>
+  <rect x="216" y="144" width="232" height="61" fill="#ffffff" stroke="#202020" stroke-width="1.5" />
+  <text x="332.0" y="169" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">CVA6 tile / AXI router</text>
+  <text x="332.0" y="190" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">Native 64-bit AXI</text>
+  <rect x="480" y="144" width="232" height="61" fill="#ffffff" stroke="#202020" stroke-width="1.5" />
+  <text x="596.0" y="169" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">Memory mux + LLC</text>
+  <text x="596.0" y="190" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">64-bit native</text>
+  <line x1="450" y1="174" x2="477" y2="174" stroke="#202020" stroke-width="1.7" />
+  <path d="M470 170 L478 174 L470 178 Z" fill="#202020" />
+  <path d="M457 170 L449 174 L457 178 Z" fill="#202020" />
+  <rect x="744" y="144" width="232" height="61" fill="#ffffff" stroke="#202020" stroke-width="1.5" />
+  <text x="860.0" y="169" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">TOP width adapter</text>
+  <text x="860.0" y="190" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">64 to D bits</text>
+  <line x1="714" y1="174" x2="741" y2="174" stroke="#202020" stroke-width="1.7" />
+  <path d="M734 170 L742 174 L734 178 Z" fill="#202020" />
+  <path d="M721 170 L713 174 L721 178 Z" fill="#202020" />
+  <rect x="1008" y="144" width="232" height="61" fill="#ececec" stroke="#202020" stroke-width="3" />
+  <text x="1124.0" y="169" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="bold">REG - TOP memory</text>
+  <text x="1124.0" y="190" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="bold">AW / W / B / AR / R</text>
+  <line x1="978" y1="174" x2="1005" y2="174" stroke="#202020" stroke-width="1.7" />
+  <path d="M998 170 L1006 174 L998 178 Z" fill="#202020" />
+  <path d="M985 170 L977 174 L985 178 Z" fill="#202020" />
+  <rect x="1272" y="144" width="232" height="61" fill="#ffffff" stroke="#202020" stroke-width="1.5" />
+  <text x="1388.0" y="169" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">SoC memory fabric</text>
+  <text x="1388.0" y="190" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">D-bit AXI + AWATOP</text>
+  <line x1="1242" y1="174" x2="1269" y2="174" stroke="#202020" stroke-width="1.7" />
+  <path d="M1262 170 L1270 174 L1262 178 Z" fill="#202020" />
+  <path d="M1249 170 L1241 174 L1249 178 Z" fill="#202020" />
+  <text x="216" y="232" font-family="Arial, sans-serif" font-size="18" font-weight="normal">After width conversion: cuts internal requests to pins, external B/R to the width adapter and reverse READY.</text>
+  <line x1="32" y1="251" x2="1508" y2="251" stroke="#999999" />
+  <text x="32" y="302" font-family="Arial, sans-serif" font-size="19" font-weight="bold">MMIO AXI</text>
+  <rect x="216" y="264" width="299" height="61" fill="#ffffff" stroke="#202020" stroke-width="1.5" />
+  <text x="365.5" y="289" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">CVA6 tile / AXI router</text>
+  <text x="365.5" y="310" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">Native 64-bit AXI</text>
+  <rect x="547" y="264" width="299" height="61" fill="#ffffff" stroke="#202020" stroke-width="1.5" />
+  <text x="696.5" y="289" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">Cluster MMIO mux</text>
+  <text x="696.5" y="310" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">64-bit egress</text>
+  <line x1="517" y1="294" x2="544" y2="294" stroke="#202020" stroke-width="1.7" />
+  <path d="M537 290 L545 294 L537 298 Z" fill="#202020" />
+  <path d="M524 290 L516 294 L524 298 Z" fill="#202020" />
+  <rect x="878" y="264" width="299" height="61" fill="#ececec" stroke="#202020" stroke-width="3" />
+  <text x="1027.5" y="289" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="bold">REG - TOP MMIO</text>
+  <text x="1027.5" y="310" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="bold">AW / W / B / AR / R</text>
+  <line x1="848" y1="294" x2="875" y2="294" stroke="#202020" stroke-width="1.7" />
+  <path d="M868 290 L876 294 L868 298 Z" fill="#202020" />
+  <path d="M855 290 L847 294 L855 298 Z" fill="#202020" />
+  <rect x="1209" y="264" width="299" height="61" fill="#ffffff" stroke="#202020" stroke-width="1.5" />
+  <text x="1358.5" y="289" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">SoC peripheral fabric</text>
+  <text x="1358.5" y="310" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">64-bit AXI</text>
+  <line x1="1179" y1="294" x2="1206" y2="294" stroke="#202020" stroke-width="1.7" />
+  <path d="M1199 290 L1207 294 L1199 298 Z" fill="#202020" />
+  <path d="M1186 290 L1178 294 L1186 298 Z" fill="#202020" />
+  <text x="216" y="352" font-family="Arial, sans-serif" font-size="18" font-weight="normal">After the final MMIO mux: cuts requests, responses and reverse READY at TOP. Tile AXI cuts are bypassed.</text>
+  <line x1="32" y1="371" x2="1508" y2="371" stroke="#999999" />
+  <text x="32" y="422" font-family="Arial, sans-serif" font-size="19" font-weight="bold">PMU event path</text>
+  <rect x="216" y="384" width="232" height="61" fill="#ffffff" stroke="#202020" stroke-width="1.5" />
+  <text x="332.0" y="421" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">Event taps / config</text>
+  <rect x="480" y="384" width="232" height="61" fill="#ececec" stroke="#202020" stroke-width="3" />
+  <text x="596.0" y="409" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="bold">REG - samples</text>
+  <text x="596.0" y="430" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="bold">Events + configuration</text>
+  <line x1="450" y1="414" x2="477" y2="414" stroke="#202020" stroke-width="1.7" />
+  <path d="M470 410 L478 414 L470 418 Z" fill="#202020" />
+  <rect x="744" y="384" width="232" height="61" fill="#ffffff" stroke="#202020" stroke-width="1.5" />
+  <text x="860.0" y="421" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">Aggregate / select</text>
+  <line x1="714" y1="414" x2="741" y2="414" stroke="#202020" stroke-width="1.7" />
+  <path d="M734 410 L742 414 L734 418 Z" fill="#202020" />
+  <rect x="1008" y="384" width="232" height="61" fill="#ececec" stroke="#202020" stroke-width="3" />
+  <text x="1124.0" y="421" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="bold">REG - count / enable</text>
+  <line x1="978" y1="414" x2="1005" y2="414" stroke="#202020" stroke-width="1.7" />
+  <path d="M998 410 L1006 414 L998 418 Z" fill="#202020" />
+  <rect x="1272" y="384" width="232" height="61" fill="#ffffff" stroke="#202020" stroke-width="1.5" />
+  <text x="1388.0" y="421" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">Existing counter bank</text>
+  <line x1="1242" y1="414" x2="1269" y2="414" stroke="#202020" stroke-width="1.7" />
+  <path d="M1262 410 L1270 414 L1262 418 Z" fill="#202020" />
+  <text x="216" y="472" font-family="Arial, sans-serif" font-size="18" font-weight="normal">Separates input sampling, event selection and counter addition. Snapshot captures at E+2.</text>
+  <line x1="32" y1="491" x2="1508" y2="491" stroke="#999999" />
+  <text x="32" y="542" font-family="Arial, sans-serif" font-size="19" font-weight="bold">PMU overflow</text>
+  <rect x="216" y="504" width="409" height="61" fill="#ffffff" stroke="#202020" stroke-width="1.5" />
+  <text x="420.5" y="541" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">Counter bank / carry</text>
+  <rect x="657" y="504" width="409" height="61" fill="#ececec" stroke="#202020" stroke-width="3" />
+  <text x="861.5" y="529" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="bold">REG - overflow</text>
+  <text x="861.5" y="550" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="bold">1 bit per counter</text>
+  <line x1="627" y1="534" x2="654" y2="534" stroke="#202020" stroke-width="1.7" />
+  <path d="M647 530 L655 534 L647 538 Z" fill="#202020" />
+  <rect x="1098" y="504" width="409" height="61" fill="#ffffff" stroke="#202020" stroke-width="1.5" />
+  <text x="1302.5" y="541" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">Existing IRQ CSR update</text>
+  <line x1="1068" y1="534" x2="1095" y2="534" stroke="#202020" stroke-width="1.7" />
+  <path d="M1088 530 L1096 534 L1088 538 Z" fill="#202020" />
+  <text x="216" y="592" font-family="Arial, sans-serif" font-size="18" font-weight="normal">Cuts count carry to CSR write. Adds a cycle from wrap to sticky status and associated IRQ.</text>
+  <line x1="32" y1="611" x2="1508" y2="611" stroke="#999999" />
+  <text x="32" y="662" font-family="Arial, sans-serif" font-size="19" font-weight="bold">Directory lookup</text>
+  <rect x="216" y="624" width="299" height="61" fill="#ffffff" stroke="#202020" stroke-width="1.5" />
+  <text x="365.5" y="661" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">CCU lookup request</text>
+  <rect x="547" y="624" width="299" height="61" fill="#ececec" stroke="#202020" stroke-width="3" />
+  <text x="696.5" y="649" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="bold">REG - sync way outputs</text>
+  <text x="696.5" y="670" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="bold">And request metadata</text>
+  <line x1="517" y1="654" x2="544" y2="654" stroke="#202020" stroke-width="1.7" />
+  <path d="M537 650 L545 654 L537 658 Z" fill="#202020" />
+  <rect x="878" y="624" width="299" height="61" fill="#ffffff" stroke="#202020" stroke-width="1.5" />
+  <text x="1027.5" y="661" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">Tag compare / victim select</text>
+  <line x1="848" y1="654" x2="875" y2="654" stroke="#202020" stroke-width="1.7" />
+  <path d="M868 650 L876 654 L868 658 Z" fill="#202020" />
+  <rect x="1209" y="624" width="299" height="61" fill="#ffffff" stroke="#202020" stroke-width="1.5" />
+  <text x="1358.5" y="661" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">Existing response register</text>
+  <line x1="1179" y1="654" x2="1206" y2="654" stroke="#202020" stroke-width="1.7" />
+  <path d="M1199 650 L1207 654 L1199 658 Z" fill="#202020" />
+  <text x="216" y="712" font-family="Arial, sans-serif" font-size="18" font-weight="normal">Cuts array read from compare. Lookup accepted at E reaches the response register at E+1 when unstalled.</text>
+  <line x1="32" y1="731" x2="1508" y2="731" stroke="#999999" />
+  <text x="32" y="782" font-family="Arial, sans-serif" font-size="19" font-weight="bold">Reset release</text>
+  <rect x="216" y="744" width="409" height="61" fill="#ffffff" stroke="#202020" stroke-width="1.5" />
+  <text x="420.5" y="781" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">External reset pin</text>
+  <rect x="657" y="744" width="409" height="61" fill="#ececec" stroke="#202020" stroke-width="3" />
+  <text x="861.5" y="781" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="bold">REG - local release</text>
+  <line x1="627" y1="774" x2="654" y2="774" stroke="#202020" stroke-width="1.7" />
+  <path d="M647 770 L655 774 L647 778 Z" fill="#202020" />
+  <rect x="1098" y="744" width="409" height="61" fill="#ffffff" stroke="#202020" stroke-width="1.5" />
+  <text x="1302.5" y="781" text-anchor="middle" font-family="Arial, sans-serif" font-size="19" font-weight="normal">Route / adapter / locks / CMO gates</text>
+  <line x1="1068" y1="774" x2="1095" y2="774" stroke="#202020" stroke-width="1.7" />
+  <path d="M1088 770 L1096 774 L1088 778 Z" fill="#202020" />
+  <text x="216" y="832" font-family="Arial, sans-serif" font-size="18" font-weight="normal">A local flop releases handshake gating. AXI4-Lite control has no dedicated TOP spill in this RTL.</text>
+</svg>
