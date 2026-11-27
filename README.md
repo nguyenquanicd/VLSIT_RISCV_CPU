@@ -1,12 +1,48 @@
 # VLSIT RISC-V CPU Cluster & Tensor Coprocessor
 
-This repository contains a configurable 2/4-CPU RISC-V cluster and the design specification for a tensor coprocessor. Start with the specifications and register workbooks below; diagrams, FSMs and waveforms are linked beside them.
+This repository contains a configurable 2/4-CPU RISC-V cluster in a 64-bit and a 32-bit version, and the design specification for a tensor coprocessor. Start with the status table below, then the specifications and register workbooks; diagrams, FSMs and waveforms are linked beside them.
 
-Repository gồm cluster RISC-V cấu hình 2/4 CPU và đặc tả tensor coprocessor. Bắt đầu từ specification và workbook thanh ghi bên dưới; các liên kết sơ đồ, FSM và waveform nằm cạnh từng thiết kế.
+Repository gồm cluster RISC-V cấu hình 2/4 CPU với hai phiên bản 64-bit và 32-bit, cùng đặc tả tensor coprocessor. Bắt đầu từ bảng trạng thái bên dưới, sau đó là specification và workbook thanh ghi; các liên kết sơ đồ, FSM và waveform nằm cạnh từng thiết kế.
 
 [Documentation index / Mục lục tài liệu](doc/README.md) · [Project layout / Cấu trúc dự án](doc/PROJECT_LAYOUT.md) · [Supporting records / Hồ sơ hỗ trợ](project_support/README.md)
 
-## 1. Cluster 2/4 CPU
+## Project status / Trạng thái dự án
+
+Last updated / Cập nhật lần cuối: **2026-11-27**. Every design is a **draft**: none is signed off for tapeout. / Mọi thiết kế đều là **bản nháp**, chưa có thiết kế nào được signoff để tapeout.
+
+### Cluster versions / Các phiên bản cluster
+
+| Version / Phiên bản | Core / Lõi | Harts | Specification / Đặc tả | RTL and filelist / RTL và filelist |
+|---|---|---|---|---|
+| **64-bit cluster** (main design / thiết kế chính) | CVA6 `cv64a6_imafdc_sv39_hpdcache_wb`: RV64IMAFDC, Sv39, write-back HPDcache with MESI coherence | 2 or 4 (`PARA_CPU_NUM`, default 4) | [Cluster HDS](doc/specification/VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS.md) **rev 0.39** | [`rtl/non_coherence_cluster/`](rtl/non_coherence_cluster/) + [`rtl/common/`](rtl/common/) · [`filelist.f`](rtl/non_coherence_cluster/filelist.f) |
+| **32-bit cluster** (RV32 profile / profile RV32) | CVA6 `cv32a6_imafc_sv32_hpdcache_wb`: RV32IMAFC (F without D), Sv32, PLEN 34; same cluster, ports and CSR map as the 64-bit version | 2 or 4 (default 4) | [RV32 HDS](doc/specification_32/VLSIT_RISCV32_DUAL_QUAD_CPU_CLUSTER_HDS.md) **rev 0.4** · [Tóm tắt tiếng Việt](doc/specification_32/README.md) | [`rtl/rv32_profile/`](rtl/rv32_profile/) (core package, tile adapter, FPU divider copy) + shared [`rtl/common/`](rtl/common/) · [`filelist_rv32.f`](rtl/rv32_profile/filelist_rv32.f) |
+| External ACE coherence profile / Profile coherence ACE bên ngoài | — | — | Reserved / Dự phòng | [`rtl/coherence_cluster/`](rtl/coherence_cluster/): **not implemented / chưa triển khai** |
+
+Both versions share one AXI TOP (`m_vlsit_riscv_cluster_axi_top`): AXI4-Lite control, AXI4 memory with the PULP AWATOP extension, non-coherent AXI4 MMIO, timing profiles 0/1/2 (`PARA_TIMING_PROFILE`). / Hai phiên bản dùng chung một TOP AXI: điều khiển AXI4-Lite, bộ nhớ AXI4 mở rộng PULP AWATOP, MMIO AXI4 không coherence, timing profile 0/1/2.
+
+### Status by design / Trạng thái từng thiết kế
+
+| Check / Hạng mục | 64-bit cluster | 32-bit cluster | Tensor coprocessor |
+|---|---|---|---|
+| Specification / Đặc tả | Draft rev 0.39 | Draft rev 0.4 | [Draft rev 0.1](doc/tensor_coprocessor/VLSIT_TENSOR_COPROCESSOR_HDS.md) |
+| RTL | Complete for the AXI profile / Đủ cho profile AXI | Complete (64-bit RTL + RV32 adaptations) / Đủ | **None / Chưa có** |
+| Lint (Verilator 5.053) | 0 errors, 0 warnings: 2/4 harts, profiles 0 and 2 | 0 errors, 0 warnings: 2/4 harts, profiles 0/1/2 (68 documented upstream waivers) | — |
+| Directed simulation / Mô phỏng directed | **PASS**: atomic, CMO, FENCE.I and directory-holder suites (36 runs, 2/4 harts); RV32 testbench in 64-bit mode TC-04 to 07, 09, 10 | **PASS**: [TC-01 to TC-10](verification/rv32_profile/REPORT.md), 2 and 4 harts, profile 0, with fault qualification | — |
+| Not yet verified / Chưa kiểm chứng | Random coherence, PMU, IRQ/debug/WFI, MMIO/uncached ATOP (OPEN-DV) | PMU (TC-11), profiles 1/2 in simulation (TC-12), constrained-random test | Everything / Toàn bộ |
+| Timing / Timing | One DC run only (GF55, T = 1.04 ns): longest path 3.40 ns, WNS -2.47 ns, optimistic setup. No accepted clock period; planning value 3.5 ns (PD-01) | Not run (OPEN-X32-PPA) | — |
+| Software / Phần mềm | No Linux or RTOS image selected | No RV32 OS selected (OPEN-X32-OS) | — |
+| Signoff (synthesis, STA, PPA, DFT, SoC) | **Not done / Chưa** | **Not done / Chưa** | **Not done / Chưa** |
+
+Open items and release blockers / Mục còn mở: [64-bit HDS Section 20.1](doc/specification/VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS.md#201-current-unresolved-contracts-and-release-blockers) · [RV32 HDS Section 20.1](doc/specification_32/VLSIT_RISCV32_DUAL_QUAD_CPU_CLUSTER_HDS.md) · [Tensor HDS Section 20](doc/tensor_coprocessor/VLSIT_TENSOR_COPROCESSOR_HDS.md#20-assumptions-dependencies-and-decisions).
+
+### Recent changes / Thay đổi gần đây
+
+| Date / Ngày | Change / Thay đổi | Details / Chi tiết |
+|---|---|---|
+| 2026-11-27 | Three coherence deadlock fixes merged into `rtl/common/` (both versions) / Merge ba bản sửa deadlock coherence (cả hai phiên bản) | [Section below / Mục bên dưới](#coherence-deadlock-fixes-2026-11-27--sửa-lỗi-deadlock-coherence) · HDS 14.7, DEC-046, DEC-047 |
+| 2026-11-26 | 32-bit version: RTL, testbench TC-01 to TC-10; FPU divider operands NaN-boxed for FLEN=32 (DEC-106) / Phiên bản 32-bit: RTL, testbench; sửa bộ chia FPU | [RV32 HDS 14.5](doc/specification_32/VLSIT_RISCV32_DUAL_QUAD_CPU_CLUSTER_HDS.md) · [Report](verification/rv32_profile/REPORT.md) |
+
+## 1. Cluster 2/4 CPU (64-bit and 32-bit versions / phiên bản 64-bit và 32-bit)
 
 The cluster uses CVA6 harts, private L1 caches with coherent D-caches, a shared LLC, PMU and per-hart debug connections. The current AXI profile provides AXI4-Lite control, an AXI4 memory interface with the PULP AWATOP extension, and non-coherent AXI4 MMIO. The external ACE profile is deferred. CPU count is selected before synthesis: `PARA_CPU_NUM=2` or `4`, default `4`.
 
@@ -90,10 +126,13 @@ Mở file HTML waveform bằng trình duyệt trên máy. Các hình tensor mô 
 doc/
   README.md                      Documentation entry / Mục lục tài liệu
   PROJECT_LAYOUT.md              Project map and commands / Cấu trúc và lệnh chạy
-  specification/                 Cluster 2/4 CPU: HDS, CSR, architecture, figures, references
+  specification/                 64-bit cluster: HDS, CSR, architecture, figures, references
+  specification_32/              32-bit cluster (RV32 profile): HDS, change plan, figures
   tensor_coprocessor/             Tensor HDS, CSR, figures, CV-X-IF reference
 rtl/
   non_coherence_cluster/         Current AXI TOP and private RTL / TOP AXI hiện tại
+  rv32_profile/                  32-bit version: RV32 core package, tile adapter, filelists / Phiên bản 32-bit
+  coherence_fix/                 Pre-fix snapshot and records of the 2026-11-27 fixes / Bản trước khi sửa
   coherence_cluster/             Reserved external ACE profile / Profile ACE dự phòng
   common/
     third_party/                 Original upstream RTL / RTL upstream nguyên bản
@@ -110,7 +149,8 @@ project_support/                 Reports, snapshots, vendor docs and licenses / 
 
 | Resource / Tài nguyên | Link / Liên kết |
 |---|---|
-| Cluster TOP, 2/4 harts / TOP cluster 2/4 hart | [m_vlsit_riscv_cluster_axi_top.sv](rtl/non_coherence_cluster/m_vlsit_riscv_cluster_axi_top.sv) · [Production filelist / Filelist production](rtl/non_coherence_cluster/filelist.f) |
+| Cluster TOP, 2/4 harts / TOP cluster 2/4 hart | [m_vlsit_riscv_cluster_axi_top.sv](rtl/non_coherence_cluster/m_vlsit_riscv_cluster_axi_top.sv) · [64-bit filelist](rtl/non_coherence_cluster/filelist.f) · [32-bit filelist](rtl/rv32_profile/filelist_rv32.f) |
+| 32-bit testbench / Testbench 32-bit | [verification/rv32_profile](verification/rv32_profile/) · [Test plan](verification/rv32_profile/TEST_PLAN.md) · [Report](verification/rv32_profile/REPORT.md) · `python run.py build --harts 4` then `python run.py run TC-01 ... TC-10 --harts 4` (`--xlen 64` for the 64-bit cluster) |
 | Current cluster audit / Audit cluster hiện tại | [Post-A-06 report](project_support/reports/post_a06_cluster_audit/README.md) |
 | Behavioral replay / Chạy lại kiểm chứng chức năng | [Regression Makefile](verification/non_coherence_cluster/cmo_end_to_end/Makefile) · [A-06 evidence / Bằng chứng A-06](project_support/reports/fault_record_a06/README.md) |
 | Design gaps / Điểm thiết kế còn mở | [Cluster HDS Section 20](doc/specification/VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS.md#20-assumptions-dependencies-and-decisions) · [Tensor HDS Section 20](doc/tensor_coprocessor/VLSIT_TENSOR_COPROCESSOR_HDS.md#20-assumptions-dependencies-and-decisions) |
