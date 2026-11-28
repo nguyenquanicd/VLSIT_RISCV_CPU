@@ -3,7 +3,7 @@ document_type: asic_ip_design_specification
 document_id: "VLSIT-RISCV-DUAL-QUAD-CPU-CLUSTER"
 title: "VLSIT RISC-V Dual/Quad CPU Cluster Design Specification"
 ip_name: "VLSIT RISC-V Dual/Quad CPU Cluster"
-version: "0.39"
+version: "0.40"
 status: "Draft - detailed post-A-06 component/FSM/interface contract; qualification and explicit open items remain"
 language: "English"
 rtl_rules: "VLSIT_RTL_Design_Rule.md v2"
@@ -12,6 +12,8 @@ csr_spec: "VLSIT_RISCV_CPU_Cluster_CSR.xlsx"
 
 # VLSIT RISC-V Dual/Quad CPU Cluster Design Specification
 
+
+**Revision 0.40, 2026-11-28.** Adds the exact TOP address-region parameter declarations, class encoding, table validity rules and an example parameter set to Section 14.4.20 (owner-approved, verification question Q-G3-01). Documents existing RTL behaviour; no design change.
 
 **Revision 0.39, 2026-11-27.** Adds Section 14.7: the three coherence deadlock fixes (DEC-046, DEC-047), what each fix changes and why. The fixes are merged into `rtl/common/`.
 
@@ -1044,7 +1046,7 @@ The table describes the present declaration and evidence; it does not silently a
 
 ### 8.2 Address arrays, identity and line representation
 
-The BASE_LO/BASE_HI and SIZE_LO/SIZE_HI region parameters are sixteen-entry arrays of 32-bit words; TYPE is a sixteen-entry word array and NUM selects active entries. Active entries are aligned, nonzero in size, non-overlapping and within PLEN=56. Entry zero is the sole cacheable region in this native LLC integration; other active entries classify normal-uncached or MMIO. TYPE low bits encode the three defined classes; reserved upper/type bits invalidate the table. Exact defaults and checks are visible at the TOP/decoder contracts.
+The BASE_LO/BASE_HI and SIZE_LO/SIZE_HI region parameters are sixteen-entry arrays of 32-bit words; TYPE is a sixteen-entry word array and NUM selects active entries. Active entries are aligned, nonzero in size, non-overlapping and within PLEN=56. Entry zero is the sole cacheable region in this native LLC integration; other active entries classify normal-uncached or MMIO. TYPE low bits encode the three defined classes; reserved upper/type bits invalidate the table. Exact defaults and checks are visible at the TOP/decoder contracts. The exact parameter declarations, class encoding and validity rules are in Section 14.4.20.
 
 Native CPU AXI IDs are four bits, MMIO egress IDs six bits and memory egress IDs seven bits after source extension. CCU context/scheduler tag width is max(1, clog2(PARA_COH_TXN_NUM)): three bits by default and one through four over the legal range. The native HPDcache probe endpoint uses a fixed four-bit tag field; its wrapper adapts the width while retaining the valid slot value. Physical line indices are 52 bits with four byte-offset bits omitted. LLC native data stays 64-bit; external memory width alone is parameterized.
 
@@ -3198,6 +3200,62 @@ The figure shows actual child composition; a leaf shows its own boundary. It doe
 | output | `logic o_axi_mem_rready` |
 
 **FSM:** No new enum controller is declared by this module. Its combinational mapping, queue/valid-bit lifecycle, or instantiated child FSMs implement the behavior above. This is not a claim that the entire subtree is stateless.
+
+**TOP address-region parameters.**
+
+The AXI TOP `m_vlsit_riscv_cluster_axi_top` exposes the shared PMA/router table (REQ-IF-011) through six elaboration parameters. Entry *i* of the table is the *i*-th element of each array; only entries `0 .. PARA_ADDR_REGION_NUM-1` are active, entries above are ignored.
+
+| Parameter | SystemVerilog declaration | Meaning | Default |
+|---|---|---|---|
+| `PARA_ADDR_REGION_NUM` | `parameter logic [31:0]` | Number of active entries, 1 to 16; any other value is an elaboration error | `32'd1` |
+| `PARA_ADDR_REGION_BASE_LO` | `parameter logic [31:0] PARA_ADDR_REGION_BASE_LO [0:15]` (unpacked array of sixteen 32-bit words, index = entry) | Bits 31:0 of the entry base byte address | entry 0 = `32'h8000_0000`, others 0 |
+| `PARA_ADDR_REGION_BASE_HI` | `parameter logic [31:0] PARA_ADDR_REGION_BASE_HI [0:15]` | Bits 63:32 of the entry base byte address | all 0 |
+| `PARA_ADDR_REGION_SIZE_LO` | `parameter logic [31:0] PARA_ADDR_REGION_SIZE_LO [0:15]` | Bits 31:0 of the entry length in bytes | entry 0 = `32'h4000_0000`, others 0 |
+| `PARA_ADDR_REGION_SIZE_HI` | `parameter logic [31:0] PARA_ADDR_REGION_SIZE_HI [0:15]` | Bits 63:32 of the entry length in bytes | all 0 |
+| `PARA_ADDR_REGION_TYPE` | `parameter logic [31:0] PARA_ADDR_REGION_TYPE [0:15]` | Bits 1:0 = class; bits 31:2 must be 0 | all 0 |
+
+The entry base is `{BASE_HI[i], BASE_LO[i]}` and its length is `{SIZE_HI[i], SIZE_LO[i]}`. The entry covers the half-open byte range `[base, base + length)`.
+
+**Class encoding (`TYPE[1:0]`):** `2'b00` cacheable, `2'b01` normal uncached, `2'b10` MMIO, `2'b11` reserved and invalid (REQ-IF-011).
+
+**Table validity rules.**
+
+A table is valid only if all of the following hold for the active entries. An invalid table drives the decoder output `o_config_valid` low and the cluster does not accept accesses; the rules are checked inside the decoder, they are not an elaboration failure, except the range of `PARA_ADDR_REGION_NUM`.
+
+1. `PARA_ADDR_REGION_NUM` is in 1..16.
+2. Every base is 16-byte aligned, every length is a non-zero multiple of 16 bytes, `base[63:56]` is 0 and `base + length` does not exceed 2^56 (PLEN = 56, REQ-IF-011).
+3. `TYPE[31:2]` is 0 and `TYPE[1:0]` is not `2'b11`.
+4. Entries do not overlap.
+5. **Exactly one entry has class `00`, and it is entry 0.** Its length is a power of two and its base is aligned to its length.
+
+Rule 5 and its power-of-two/alignment condition are stricter than the wording of REQ-IF-011 ("one cacheable normal-memory entry") and are recorded here so that the specification matches the design.
+
+**Cluster-profile bound (32-bit cluster, requirement XL-011 of the RV32 HDS).**
+
+For the 32-bit cluster every active entry also satisfies `base + length <= 2^34`. This is an integration obligation checked by a parameter-set script before build (verification question log Q-G0-09 C); the RTL does not enforce it.
+
+**Example parameter set (CFG-RV32-2 verification campaign, confirmed by the owner 2026-11-28).**
+
+| Entry | Class | Base | Length | Purpose |
+|---|---|---|---|---|
+| 0 | `00` cacheable | `0x0_8000_0000` | 1 GiB (`0x4000_0000`) | program and data |
+| 1 | `10` MMIO | `0x0_1000_0000` | 256 MiB (`0x1000_0000`) | test control, IRQ control |
+| 2 | `10` MMIO | `0x0_0000_0000` | 4 KiB (`0x1000`) | debug ROM at 0x800/0x808 |
+| 3 | `01` normal uncached | `0x0_4000_0000` | 256 MiB (`0x1000_0000`) | uncached RAM |
+| 4 | `01` normal uncached | `0x3_C000_0000` | 1 GiB (`0x4000_0000`), ends at 2^34 | high-address uncached RAM |
+
+Elaboration form (`PARA_ADDR_REGION_NUM = 5`):
+
+```systemverilog
+.PARA_ADDR_REGION_NUM     (32'd5),
+.PARA_ADDR_REGION_BASE_LO ('{0:32'h8000_0000, 1:32'h1000_0000, 2:32'h0000_0000, 3:32'h4000_0000, 4:32'hC000_0000, default:32'd0}),
+.PARA_ADDR_REGION_BASE_HI ('{4:32'h0000_0003, default:32'd0}),
+.PARA_ADDR_REGION_SIZE_LO ('{0:32'h4000_0000, 1:32'h1000_0000, 2:32'h0000_1000, 3:32'h1000_0000, 4:32'h4000_0000, default:32'd0}),
+.PARA_ADDR_REGION_SIZE_HI ('{default:32'd0}),
+.PARA_ADDR_REGION_TYPE    ('{0:32'd0, 1:32'd2, 2:32'd2, 3:32'd1, 4:32'd1, default:32'd0})
+```
+
+The table satisfies rules 1-5: no overlap, exactly one cacheable entry at index 0 (1 GiB, aligned to 1 GiB), highest end `0x4_0000_0000 = 2^34`.
 
 #### 14.4.21 `m_vlsit_riscv_cluster_core` — NEW
 
