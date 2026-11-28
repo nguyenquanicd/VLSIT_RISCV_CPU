@@ -8,15 +8,15 @@ Repository gồm cluster RISC-V cấu hình 2/4 CPU với hai phiên bản 64-bi
 
 ## Project status / Trạng thái dự án
 
-Last updated: **2026-11-27**. Every design is a **draft**; none is signed off for tapeout.
+Last updated: **2026-11-28**. Every design is a **draft**; none is signed off for tapeout.
 
-Cập nhật lần cuối: **2026-11-27**. Mọi thiết kế đều là **bản nháp**, chưa có thiết kế nào được signoff để tapeout.
+Cập nhật lần cuối: **2026-11-28**. Mọi thiết kế đều là **bản nháp**, chưa có thiết kế nào được signoff để tapeout.
 
 ### Cluster versions / Các phiên bản cluster
 
 | Version / Phiên bản | Core / Lõi | Harts | Specification / Đặc tả | RTL and filelist / RTL và filelist |
 |---|---|---|---|---|
-| **64-bit cluster** — main design / **Cluster 64-bit** — thiết kế chính | CVA6 `cv64a6_imafdc_sv39_hpdcache_wb`: RV64IMAFDC, Sv39, write-back HPDcache with MESI coherence / HPDcache write-back có coherence MESI | 2 or 4 (`PARA_CPU_NUM`, default 4) / 2 hoặc 4 (mặc định 4) | [Cluster HDS](doc/specification/VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS.md) **rev 0.39** · [Bản tiếng Việt](doc/specification/VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS_vi.md) | [`rtl/non_coherence_cluster/`](rtl/non_coherence_cluster/) + [`rtl/common/`](rtl/common/) · [`filelist.f`](rtl/non_coherence_cluster/filelist.f) |
+| **64-bit cluster** — main design / **Cluster 64-bit** — thiết kế chính | CVA6 `cv64a6_imafdc_sv39_hpdcache_wb`: RV64IMAFDC, Sv39, write-back HPDcache with MESI coherence / HPDcache write-back có coherence MESI | 2 or 4 (`PARA_CPU_NUM`, default 4) / 2 hoặc 4 (mặc định 4) | [Cluster HDS](doc/specification/VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS.md) **rev 0.40** · [Bản tiếng Việt](doc/specification/VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS_vi.md) | [`rtl/non_coherence_cluster/`](rtl/non_coherence_cluster/) + [`rtl/common/`](rtl/common/) · [`filelist.f`](rtl/non_coherence_cluster/filelist.f) |
 | **32-bit cluster** — RV32 profile / **Cluster 32-bit** — profile RV32 | CVA6 `cv32a6_imafc_sv32_hpdcache_wb`: RV32IMAFC (F without D / F không có D), Sv32, PLEN 34. Same cluster, ports and CSR map as the 64-bit version / Cùng cluster, cổng và bản đồ CSR với bản 64-bit | 2 or 4 (default 4) / 2 hoặc 4 (mặc định 4) | [RV32 HDS](doc/specification_32/VLSIT_RISCV32_DUAL_QUAD_CPU_CLUSTER_HDS.md) **rev 0.4** · [Tóm tắt tiếng Việt](doc/specification_32/README.md) | [`rtl/rv32_profile/`](rtl/rv32_profile/) (core package, tile adapter, FPU divider copy / package core, tile chuyển độ rộng, bản sao bộ chia FPU) + [`rtl/common/`](rtl/common/) · [`filelist_rv32.f`](rtl/rv32_profile/filelist_rv32.f) |
 | External ACE coherence profile / Profile coherence ACE bên ngoài | — | — | Reserved / Dự phòng | [`rtl/coherence_cluster/`](rtl/coherence_cluster/): **not implemented / chưa triển khai** |
 
@@ -24,14 +24,69 @@ Both versions share one AXI TOP (`m_vlsit_riscv_cluster_axi_top`): AXI4-Lite con
 
 Hai phiên bản dùng chung một TOP AXI (`m_vlsit_riscv_cluster_axi_top`): điều khiển AXI4-Lite, bộ nhớ AXI4 mở rộng PULP AWATOP, MMIO AXI4 không coherence, và timing profile 0/1/2 (`PARA_TIMING_PROFILE`).
 
+### Versions, filelists and build / Phiên bản, filelist và cách build
+
+**One TOP, two versions.** There is no separate 32-bit top file. Both versions use the module `m_vlsit_riscv_cluster_axi_top` in [`rtl/non_coherence_cluster/m_vlsit_riscv_cluster_axi_top.sv`](rtl/non_coherence_cluster/m_vlsit_riscv_cluster_axi_top.sv); the filelist decides which core and adapters are compiled. "Non-coherence" in the folder name means the **external** interface is plain AXI4 (no ACE, no snooping of outside agents); the harts inside the cluster are coherent with each other through the MESI fabric.
+
+**Một TOP, hai phiên bản.** Không có file top riêng cho bản 32-bit; cả hai dùng module `m_vlsit_riscv_cluster_axi_top`, filelist quyết định core và adapter nào được biên dịch. "Non-coherence" trong tên thư mục chỉ giao tiếp **bên ngoài** là AXI4 thường (không ACE, không snoop agent ngoài); các hart bên trong cluster vẫn coherent với nhau qua fabric MESI.
+
+| Version / Phiên bản | Filelist (top-level) | Chained lists / Các list được gọi | Differs from the other version / Khác bản kia |
+|---|---|---|---|
+| 64-bit | [`rtl/non_coherence_cluster/filelist.f`](rtl/non_coherence_cluster/filelist.f) | `rtl/common/filelists/cva6_flush_path/cva6_modified_cache.Flist` (CVA6 + HPDcache), `filelists/full_integration/filelist_llc_unique.f` (LLC), `filelists/full_integration/filelist_vlsit_cluster.f` (cluster RTL) | Core package `cv64a6_imafdc_sv39_hpdcache_wb_config_pkg.sv` |
+| 32-bit | [`rtl/rv32_profile/filelist_rv32.f`](rtl/rv32_profile/filelist_rv32.f) | [`filelists/cva6_rv32.Flist`](rtl/rv32_profile/filelists/cva6_rv32.Flist) (CVA6 with the RV32 package), `filelist_llc_unique.f` (shared LLC), [`filelists/filelist_vlsit_cluster_rv32.f`](rtl/rv32_profile/filelists/filelist_vlsit_cluster_rv32.f) (cluster RTL with the RV32 tile) | Package `cv32a6_imafc_sv32_hpdcache_wb_config_pkg.sv`, tile `rtl/rv32_profile/cpu/m_vlsit_riscv_cpu_tile.sv`, `hpd_probe_engine`, `hpdcache.sv` and FPU divider copies in `rtl/rv32_profile/` |
+| 64-bit + SoC wrapper | [`rtl/non_coherence_cluster/filelist_soc_wrapper.f`](rtl/non_coherence_cluster/filelist_soc_wrapper.f) | `filelist.f` plus `m_vlsit_riscv_axi_soc_wrap.sv` (fixed four-slot IRQ/debug adapter) | Optional wrapper only |
+
+Every filelist uses **absolute paths** (`C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU/...`). On another machine or checkout path, rewrite that prefix first in all lists at once, because they call each other (for example `grep -rl "C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU" rtl --include=*.f --include=*.Flist | xargs sed -i "s#C:/HQuan/102_MyGithub/VLSIT_RISCV_CPU#$PWD#g"`; this edits tracked files, so do it in a scratch checkout). Use only one CVA6 configuration package per build: both versions declare `cva6_config_pkg`. / Mọi filelist dùng **đường dẫn tuyệt đối**; trên máy khác phải đổi tiền tố. Mỗi lần build chỉ dùng một package cấu hình CVA6.
+
+**Build parameters / Tham số build** (set with `-G<name>=<value>`, they are TOP parameters):
+
+| Parameter | Values | Default |
+|---|---|---|
+| `PARA_CPU_NUM` | 2 or 4 harts / 2 hoặc 4 hart | 4 |
+| `PARA_TIMING_PROFILE` | 0 baseline, 1 tile cuts, 2 boundary registers / 0 cơ sở, 1 cắt ở tile, 2 thanh ghi ở biên | 0 |
+| `PARA_ADDR_REGION_NUM`, `PARA_ADDR_REGION_{BASE,SIZE}_{LO,HI}`, `PARA_ADDR_REGION_TYPE` | Address-region table, up to 16 entries: exactly one cacheable entry, and it is entry 0; class 0 cacheable, 1 normal uncached, 2 MMIO / bảng vùng địa chỉ, tối đa 16 entry | one cacheable 0x8000_0000, 1 GiB |
+| `PARA_PMU_COUNTER_NUM`, `PARA_PMU_COUNTER_W` | PMU counters (1-32) and width (32 or 64) / số bộ đếm PMU và độ rộng | 16, 64 |
+| `PARA_LLC_WAY_NUM`, `PARA_LLC_NO_LINES`, `PARA_LLC_BLOCK_NUM`, `PARA_AXI_MEM_DATA_W`, `PARA_AXIL_BASE_ADDR` | LLC geometry, external memory width (32/64/128/256), AXI4-Lite base / hình học LLC, độ rộng bus nhớ, base AXI4-Lite | 4, 4096, 2, 64, 0 |
+
+The declarations, class encoding and validity rules of the region table are in the [64-bit HDS Section 14.4.20](doc/specification/VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS.md).
+
+**Lint / elaborate (verified 2026-11-28, Verilator 5.053, 0 errors and 0 warnings for both)** — run from the repository root. The include paths are needed by the vendored AXI/LLC sources. / Chạy từ thư mục gốc repo; các đường include cần cho mã AXI/LLC.
+
+```sh
+INC="+incdir+rtl/common/third_party/axi_llc_locked/common_cells/include +incdir+rtl/common/third_party/axi_llc_locked/axi/include +incdir+rtl/common/third_party/apb/include +incdir+rtl/common/third_party/register_interface/include +incdir+rtl/common/third_party/tech_cells_generic/include +incdir+rtl/common/third_party/axi_llc/include"
+
+# 64-bit cluster, 2 harts
+verilator --lint-only --timing --timescale 1ns/1ps --top-module m_vlsit_riscv_cluster_axi_top \
+  -GPARA_CPU_NUM=2 -GPARA_TIMING_PROFILE=0 $INC -f rtl/non_coherence_cluster/filelist.f
+
+# 32-bit cluster, 2 harts (the waiver file must come first on the command line)
+verilator --lint-only --timing --timescale 1ns/1ps --top-module m_vlsit_riscv_cluster_axi_top \
+  -GPARA_CPU_NUM=2 -GPARA_TIMING_PROFILE=0 rtl/rv32_profile/lint/rv32_upstream_waivers.vlt $INC -f rtl/rv32_profile/filelist_rv32.f
+```
+
+The 32-bit build needs [`rv32_upstream_waivers.vlt`](rtl/rv32_profile/lint/rv32_upstream_waivers.vlt) (68 per-line waivers of upstream XLEN/Sv39 constant patterns, each justified in [`rv32_upstream_waivers.md`](rtl/rv32_profile/lint/rv32_upstream_waivers.md)). Change `-GPARA_CPU_NUM=4` and `-GPARA_TIMING_PROFILE=1|2` for the other configurations. / Bản 32-bit cần file waiver; đổi `-G` để lint cấu hình khác.
+
+**Simulate / Mô phỏng.** Verilator-based testbenches (Verilator 5.053 and MSYS2 g++ at the paths set in each `run.py`, currently `C:/Users/PC/Tools/...`; edit them on another machine):
+
+| Goal / Mục đích | Command (from the folder) / Lệnh |
+|---|---|
+| 32-bit testbench, build then run TC-01 to TC-10 | `cd verification/rv32_profile`, then `python run.py build --harts 4` and `python run.py run TC-01 TC-02 TC-03 TC-04 TC-05 TC-06 TC-07 TC-08 TC-09 TC-10 --harts 4` |
+| Same testbench on the 64-bit cluster | add `--xlen 64` to both commands (`TC-04` to `TC-07`, `TC-09`, `TC-10` apply) |
+| Reproduce the pre-fix deadlock | `python run.py build --harts 4 --xlen 64 --base-64`, then run `TC-07` with the same flags |
+| 64-bit end-to-end suites | `cd verification/non_coherence_cluster/<suite>` then `python run.py --harts 4` (suites listed in its [README](verification/non_coherence_cluster/README.md)) |
+| New spec-only 32-bit campaign (dual core) | [`verification/rv32_dual`](verification/rv32_dual/README.md): plan, environment and tests are written; **no simulation has run yet** (see status below) |
+
+Builds are large: one 2-hart or 4-hart Verilator build folder is several hundred MB, and compiling can run out of memory when several builds run at once. Use `--jobs 3`, one build at a time, and keep several GB of disk free. / Mỗi bản build vài trăm MB; không chạy nhiều build song song.
+
 ### Status by design / Trạng thái từng thiết kế
 
 | Check / Hạng mục | 64-bit cluster / Cluster 64-bit | 32-bit cluster / Cluster 32-bit | Tensor coprocessor |
 |---|---|---|---|
-| Specification / Đặc tả | Draft rev 0.39 / Nháp rev 0.39 | Draft rev 0.4 / Nháp rev 0.4 | [Draft rev 0.1 / Nháp rev 0.1](doc/tensor_coprocessor/VLSIT_TENSOR_COPROCESSOR_HDS.md) |
+| Specification / Đặc tả | Draft rev 0.40 / Nháp rev 0.40 | Draft rev 0.4 / Nháp rev 0.4 | [Draft rev 0.1 / Nháp rev 0.1](doc/tensor_coprocessor/VLSIT_TENSOR_COPROCESSOR_HDS.md) |
 | RTL | Complete for the AXI profile / Đủ cho profile AXI | Complete: 64-bit RTL plus RV32 adaptations / Đủ: RTL 64-bit cộng phần chuyển đổi RV32 | **None / Chưa có** |
 | Lint (Verilator 5.053) | 0 errors, 0 warnings; 2/4 harts, profiles 0 and 2 / 0 lỗi, 0 cảnh báo; 2/4 hart, profile 0 và 2 | 0 errors, 0 warnings; 2/4 harts, profiles 0/1/2, with 68 documented upstream waivers / 0 lỗi, 0 cảnh báo; 2/4 hart, profile 0/1/2, có 68 waiver upstream đã ghi lý do | — |
 | Directed simulation / Mô phỏng directed | **PASS**: atomic, CMO, FENCE.I and directory-holder suites (36 runs, 2/4 harts); RV32 testbench in 64-bit mode TC-04 to 07, 09, 10 / suite atomic, CMO, FENCE.I, directory holder (36 lần chạy, 2/4 hart); testbench RV32 ở chế độ 64-bit TC-04 đến 07, 09, 10 | **PASS**: [TC-01 to TC-10](verification/rv32_profile/REPORT.md), 2 and 4 harts, profile 0, with fault qualification / TC-01 đến TC-10, 2 và 4 hart, profile 0, có kiểm tra lỗi cố ý | — |
+| Verification campaign / Chiến dịch kiểm chứng | Cluster HDS only; legacy suites above / Chỉ các suite cũ ở trên | [`verification/rv32_dual`](verification/rv32_dual/README.md) (2 harts): plan [G0 and G1 approved 2026-11-27](verification/rv32_dual/docs/00_plan/signoff.md), 34 of 38 tests written, environment and Python oracles qualified, **no simulation yet**; 14 plan rows blocked on three specification inputs / G0 và G1 đã duyệt, đã viết 34/38 test, chưa mô phỏng | — |
 | Not yet verified / Chưa kiểm chứng | Random coherence, PMU, IRQ/debug/WFI, MMIO/uncached ATOP (OPEN-DV) / Coherence ngẫu nhiên, PMU, IRQ/debug/WFI, MMIO/ATOP uncached | PMU (TC-11), profiles 1/2 in simulation (TC-12), constrained-random test / PMU, mô phỏng profile 1/2, test ngẫu nhiên có ràng buộc | Everything / Toàn bộ |
 | Timing | One DC run only (GF55, T = 1.04 ns): longest path 3.40 ns, WNS -2.47 ns, optimistic setup. No accepted clock period; planning value 3.5 ns (PD-01) / Mới có một lần chạy DC: đường dài nhất 3,40 ns, WNS -2,47 ns, điều kiện lạc quan. Chưa có chu kỳ clock được chấp nhận; giá trị lập kế hoạch 3,5 ns | Not run (OPEN-X32-PPA) / Chưa chạy | — |
 | Software / Phần mềm | No Linux or RTOS image selected / Chưa chọn image Linux hay RTOS | No RV32 OS selected (OPEN-X32-OS) / Chưa chọn OS RV32 | — |
@@ -43,6 +98,7 @@ Open items and release blockers / Mục còn mở và điểm chặn phát hành
 
 | Date / Ngày | Change / Thay đổi | Details / Chi tiết |
 |---|---|---|
+| 2026-11-28 | Spec-only verification campaign for the 32-bit dual-core cluster started; REF-001 rev 0.40 adds the exact TOP address-region parameters (Section 14.4.20) / Bắt đầu chiến dịch kiểm chứng chỉ-từ-spec cho cluster 32-bit 2 hart; REF-001 rev 0.40 bổ sung tham số vùng địa chỉ | [`verification/rv32_dual`](verification/rv32_dual/README.md) · [HDS 14.4.20](doc/specification/VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS.md) |
 | 2026-11-27 | Three coherence deadlock fixes merged into `rtl/common/`, used by both versions / Merge ba bản sửa deadlock coherence vào `rtl/common/`, dùng cho cả hai phiên bản | [Section below / Mục bên dưới](#coherence-deadlock-fixes-2026-11-27--sửa-lỗi-deadlock-coherence) · HDS 14.7, DEC-046, DEC-047 |
 | 2026-11-26 | 32-bit version: RTL and testbench TC-01 to TC-10; FPU divider operands NaN-boxed for FLEN=32 (DEC-106) / Phiên bản 32-bit: RTL và testbench TC-01 đến TC-10; toán hạng bộ chia FPU được NaN-box khi FLEN=32 | [RV32 HDS 14.5](doc/specification_32/VLSIT_RISCV32_DUAL_QUAD_CPU_CLUSTER_HDS.md) · [Report / Báo cáo](verification/rv32_profile/REPORT.md) |
 
@@ -143,7 +199,7 @@ rtl/
     modified/                    Local changes with license/history / Bản sửa giữ license/history
     vlsit/                       New and generated RTL / RTL mới và sinh tự động
     filelists/                   Shared source lists / Filelist dùng chung
-verification/                    Testbenches, programs and simulation results / Mô phỏng
+verification/                    Testbenches, programs and simulation results; rv32_profile (32-bit TB), rv32_dual (new spec-only campaign), non_coherence_cluster (64-bit suites) / Mô phỏng
 lint/                            Lint/rule configuration and results / Cấu hình và kết quả lint
 scripts/                         Generation and checking tools / Công cụ sinh và kiểm tra
 project_support/                 Reports, snapshots, vendor docs and licenses / Hồ sơ hỗ trợ
