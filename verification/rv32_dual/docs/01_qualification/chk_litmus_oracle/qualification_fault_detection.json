@@ -1,0 +1,36 @@
+{
+  "model_id": "chk_litmus_oracle",
+  "kind": "fault_detection",
+  "cases": [
+    {
+      "name": "MP with fences observed r0=1,r1=0",
+      "expected": "detected",
+      "observed": "detected: MP fenced=True outcome {'r0': 1, 'r1': 0} is not RVWMO-allowed",
+      "pass": true
+    },
+    {
+      "name": "SB with fences observed r0=0,r1=0",
+      "expected": "detected",
+      "observed": "detected: SB fenced=True outcome {'r0': 0, 'r1': 0} is not RVWMO-allowed",
+      "pass": true
+    },
+    {
+      "name": "LB with fences observed r0=1,r1=1",
+      "expected": "detected",
+      "observed": "detected: LB fenced=True outcome {'r0': 1, 'r1': 1} is not RVWMO-allowed",
+      "pass": true
+    },
+    {
+      "name": "2+2W with fences final x=1,y=1",
+      "expected": "detected",
+      "observed": "detected: 2+2W fenced=True outcome {'fx': 1, 'fy': 1} is not RVWMO-allowed",
+      "pass": true
+    },
+    {
+      "name": "value never written (r1=3)",
+      "expected": "detected",
+      "observed": "detected: SB fenced=False outcome {'r0': 0, 'r1': 3} is not RVWMO-allowed",
+      "pass": true
+    }
+  ]
+}

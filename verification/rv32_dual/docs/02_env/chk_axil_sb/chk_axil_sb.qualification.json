@@ -1,0 +1,69 @@
+{
+  "checker_id": "chk_axil_sb",
+  "label": "AI-generated qualification record; not human-reviewed",
+  "build_manifest_sha256": "a8cf0cc39c792b0072f244fa06c9f14f32e90a1e6e5114ef5313e4f45c71c4e8",
+  "review": {
+    "decision": "pending",
+    "approver": "pending",
+    "date": null
+  },
+  "tests": [
+    {
+      "kind": "fault_detection",
+      "status": "pass",
+      "command": "python scripts/run_env_qualification.py --force",
+      "exit_code": 0,
+      "expected": "detected",
+      "observed": "5/5",
+      "evidence": {
+        "path": "docs/02_env/chk_axil_sb/qualification_fault_detection.json",
+        "sha256": "d6b3b611932503736dae668692c2e23a476c39fdffb9f2cfb6590ba6730cca35"
+      }
+    },
+    {
+      "kind": "known_answer",
+      "status": "pass",
+      "command": "python scripts/run_env_qualification.py --force",
+      "exit_code": 0,
+      "expected": "match",
+      "observed": "1/1",
+      "evidence": {
+        "path": "docs/02_env/chk_axil_sb/qualification_known_answer.json",
+        "sha256": "edb31776678b85301505792fdb37f55378ec2b76ac2fb3845b1fbb572f68f0f9"
+      }
+    },
+    {
+      "kind": "boundary",
+      "status": "pass",
+      "command": "python scripts/run_env_qualification.py --force",
+      "exit_code": 0,
+      "expected": "match",
+      "observed": "1/1",
+      "evidence": {
+        "path": "docs/02_env/chk_axil_sb/qualification_boundary.json",
+        "sha256": "414f0fd03603edf7881104b1923ba70967f95f1155f49317d0c1beae5a9fc9ec"
+      }
+    },
+    {
+      "kind": "negative",
+      "status": "pass",
+      "command": "python scripts/run_env_qualification.py --force",
+      "exit_code": 0,
+      "expected": "match",
+      "observed": "1/1",
+      "evidence": {
+        "path": "docs/02_env/chk_axil_sb/qualification_negative.json",
+        "sha256": "972d662038c49abb27675662c38439e2064938b84727e4c48507fcb525b50161"
+      }
+    },
+    {
+      "kind": "reset",
+      "status": "not_applicable",
+      "command": "python scripts/run_env_qualification.py --force",
+      "exit_code": null,
+      "expected": "n/a",
+      "observed": "stateless accounting over one log",
+      "evidence": null
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "label": "AI-generated qualification manifest; review pending",
+  "model_id": "chk_pmu_model",
+  "sources": [
+    {
+      "path": "models/chk_pmu_model.py",
+      "sha256": "b916bdec44a0bd351328b69772079349f8ec9968e183b1ec59c9f9018f49b91c"
+    },
+    {
+      "path": "models/common/xlsx_min.py",
+      "sha256": "ba03cc68da030cceaee547781e90a5a9b4bb6be3fc3e2c1b9ec72755e56741fd"
+    },
+    {
+      "path": "models/qual/qual_chk_pmu_model.py",
+      "sha256": "8f2cb7a41615e677ad7e65558bf2f4bb1d3c36d755601182a29eed6c3832181f"
+    },
+    {
+      "path": "doc/specification/VLSIT_RISCV_CPU_Cluster_CSR.xlsx",
+      "sha256": "59872e8809ee51a0a380b4642ec94230ba6ed097c4a62d38f2366e01e60ccec1"
+    }
+  ],
+  "python": "3.12.10",
+  "semantics": "Event_Map catalog; scopes 0-3/4/5/6-7; per-cycle caps (indicator 1, CCU occurrence 4, stall 1); SPM selectors zero; modulo 2^W; W=32 high word zero; exact counts with prefetcher-off assumption (G0-CONF-01).",
+  "correlated_error_note": "Shares common/xlsx_min.py with chk_csr_model (workbook reader). A reader defect would affect both; the catalog size and spot IDs are checked against the workbook rows read independently during plan authoring."
+}

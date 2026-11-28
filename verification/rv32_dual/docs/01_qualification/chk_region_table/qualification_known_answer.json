@@ -1,0 +1,210 @@
+{
+  "model_id": "chk_region_table",
+  "kind": "known_answer",
+  "cases": [
+    {
+      "name": "campaign parameter set (14.4.20 example) satisfies rules 1-5 and 2^34",
+      "expected": [],
+      "observed": [],
+      "pass": true
+    },
+    {
+      "name": "SV parameter form equals the 14.4.20 elaboration form",
+      "expected": {
+        "PARA_ADDR_REGION_NUM": {
+          "value": "0x5"
+        },
+        "PARA_ADDR_REGION_BASE_LO": {
+          "0": "0x80000000",
+          "1": "0x10000000",
+          "3": "0x40000000",
+          "4": "0xc0000000",
+          "default": "0x0"
+        },
+        "PARA_ADDR_REGION_BASE_HI": {
+          "4": "0x3",
+          "default": "0x0"
+        },
+        "PARA_ADDR_REGION_SIZE_LO": {
+          "0": "0x40000000",
+          "1": "0x10000000",
+          "2": "0x1000",
+          "3": "0x10000000",
+          "4": "0x40000000",
+          "default": "0x0"
+        },
+        "PARA_ADDR_REGION_SIZE_HI": {
+          "default": "0x0"
+        },
+        "PARA_ADDR_REGION_TYPE": {
+          "1": "0x2",
+          "2": "0x2",
+          "3": "0x1",
+          "4": "0x1",
+          "default": "0x0"
+        }
+      },
+      "observed": {
+        "PARA_ADDR_REGION_NUM": {
+          "value": "0x5"
+        },
+        "PARA_ADDR_REGION_BASE_LO": {
+          "0": "0x80000000",
+          "1": "0x10000000",
+          "3": "0x40000000",
+          "4": "0xc0000000",
+          "default": "0x0"
+        },
+        "PARA_ADDR_REGION_BASE_HI": {
+          "4": "0x3",
+          "default": "0x0"
+        },
+        "PARA_ADDR_REGION_SIZE_LO": {
+          "0": "0x40000000",
+          "1": "0x10000000",
+          "2": "0x1000",
+          "3": "0x10000000",
+          "4": "0x40000000",
+          "default": "0x0"
+        },
+        "PARA_ADDR_REGION_SIZE_HI": {
+          "default": "0x0"
+        },
+        "PARA_ADDR_REGION_TYPE": {
+          "1": "0x2",
+          "2": "0x2",
+          "3": "0x1",
+          "4": "0x1",
+          "default": "0x0"
+        }
+      },
+      "pass": true
+    },
+    {
+      "name": "classify 0x80000000/4 atomic=False",
+      "expected": [
+        "cacheable",
+        "0x0"
+      ],
+      "observed": [
+        "cacheable",
+        "0x0"
+      ],
+      "pass": true
+    },
+    {
+      "name": "classify 0xbffffffc/4 atomic=False",
+      "expected": [
+        "cacheable",
+        "0x0"
+      ],
+      "observed": [
+        "cacheable",
+        "0x0"
+      ],
+      "pass": true
+    },
+    {
+      "name": "classify 0x10000000/4 atomic=False",
+      "expected": [
+        "mmio",
+        "0x1"
+      ],
+      "observed": [
+        "mmio",
+        "0x1"
+      ],
+      "pass": true
+    },
+    {
+      "name": "classify 0x800/4 atomic=False",
+      "expected": [
+        "mmio",
+        "0x2"
+      ],
+      "observed": [
+        "mmio",
+        "0x2"
+      ],
+      "pass": true
+    },
+    {
+      "name": "classify 0x40000000/4 atomic=True",
+      "expected": [
+        "normal_uncached",
+        "0x3"
+      ],
+      "observed": [
+        "normal_uncached",
+        "0x3"
+      ],
+      "pass": true
+    },
+    {
+      "name": "classify 0x3fffffffc/4 atomic=False",
+      "expected": [
+        "normal_uncached",
+        "0x4"
+      ],
+      "observed": [
+        "normal_uncached",
+        "0x4"
+      ],
+      "pass": true
+    },
+    {
+      "name": "classify 0x3fffffffc/8 atomic=False",
+      "expected": [
+        "error",
+        "boundary crossing"
+      ],
+      "observed": [
+        "error",
+        "boundary crossing"
+      ],
+      "pass": true
+    },
+    {
+      "name": "classify 0x20000000/4 atomic=False",
+      "expected": [
+        "error",
+        "unmapped"
+      ],
+      "observed": [
+        "error",
+        "unmapped"
+      ],
+      "pass": true
+    },
+    {
+      "name": "classify 0x10000000/4 atomic=True",
+      "expected": [
+        "error",
+        "atomic to MMIO"
+      ],
+      "observed": [
+        "error",
+        "atomic to MMIO"
+      ],
+      "pass": true
+    },
+    {
+      "name": "classify 0xc0000000/4 atomic=False",
+      "expected": [
+        "error",
+        "unmapped"
+      ],
+      "observed": [
+        "error",
+        "unmapped"
+      ],
+      "pass": true
+    },
+    {
+      "name": "CLI on the campaign table returns 0",
+      "expected": "0x0",
+      "observed": "0x0",
+      "pass": true
+    }
+  ]
+}

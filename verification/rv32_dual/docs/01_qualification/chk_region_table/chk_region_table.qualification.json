@@ -1,0 +1,66 @@
+{
+  "checker_id": "chk_region_table",
+  "label": "AI-generated qualification record; not human-reviewed",
+  "build_manifest_sha256": "5740e24f50ebac3916f890792f436b9698e429d311e102bee2d1995e58934c44",
+  "review": {
+    "decision": "pending",
+    "approver": "pending",
+    "date": null
+  },
+  "tests": [
+    {
+      "kind": "known_answer",
+      "status": "pass",
+      "command": "python scripts/run_model_qualification.py --out docs/01_qualification --force",
+      "exit_code": 0,
+      "expected": "match",
+      "observed": "13/13 cases passed",
+      "evidence": {
+        "path": "docs/01_qualification/chk_region_table/qualification_known_answer.json",
+        "sha256": "a5cb1c7423908ddafceea6a58a212ddca255a6a6e337dc8741018a4e4c3aa7c5"
+      }
+    },
+    {
+      "kind": "fault_detection",
+      "status": "pass",
+      "command": "python scripts/run_model_qualification.py --out docs/01_qualification --force",
+      "exit_code": 0,
+      "expected": "detected",
+      "observed": "17/17 cases detected",
+      "evidence": {
+        "path": "docs/01_qualification/chk_region_table/qualification_fault_detection.json",
+        "sha256": "93f8d9de13ce7163b8082d181353d6116325e6a52ca73a2752caffeb5d776eb4"
+      }
+    },
+    {
+      "kind": "boundary",
+      "status": "pass",
+      "command": "python scripts/run_model_qualification.py --out docs/01_qualification --force",
+      "exit_code": 0,
+      "expected": "match",
+      "observed": "5/5 cases passed",
+      "evidence": {
+        "path": "docs/01_qualification/chk_region_table/qualification_boundary.json",
+        "sha256": "74259fd3b6faf8c20143b79011b62ca6b575cc592877ddd9845c4e1ce92705d7"
+      }
+    },
+    {
+      "kind": "negative",
+      "status": "not_applicable",
+      "command": "python scripts/run_model_qualification.py --out docs/01_qualification --force",
+      "exit_code": null,
+      "expected": "n/a",
+      "observed": "covered by the fault_detection mutated tables",
+      "evidence": null
+    },
+    {
+      "kind": "reset",
+      "status": "not_applicable",
+      "command": "python scripts/run_model_qualification.py --out docs/01_qualification --force",
+      "exit_code": null,
+      "expected": "n/a",
+      "observed": "static configuration check",
+      "evidence": null
+    }
+  ]
+}

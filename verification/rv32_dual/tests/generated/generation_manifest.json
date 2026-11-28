@@ -1,0 +1,1791 @@
+{
+ "generator": "scripts/generators/gen_prog.py",
+ "generator_sha256": "ac512ebc1a2bfafbd27a6a9a8d5c16831b6675d8c1345d655ea38933f6f4b2c7",
+ "library_sha256": "21881ad998f63a3dcbf5baf9cf59142ebe389360c5fa33434d92182f4fd5dc59",
+ "assembler_sha256": "d4210c10a33c6fe6954fe8222bc841101ac82277a88ac279f048fcc5f899deb8",
+ "command": "python scripts/generators/gen_prog.py --force",
+ "tests": [
+  {
+   "test": "t_rv32d_atomics_uncached",
+   "source": "tests/t_rv32d_atomics_uncached.py",
+   "source_sha256": "d3482f1c7a9b1eaec741fb238c1e067152e582760b87a0bf5e435dda54bf17b3",
+   "reqs": [
+    "PROTO-AXI4-A7.2",
+    "PROTO-AXI5-E1.1",
+    "REQ-IF-003",
+    "REQ-IF-009"
+   ],
+   "checks": [
+    "CK-UAT-01",
+    "CK-UAT-01b",
+    "CK-UAT-02",
+    "CK-UAT-02b",
+    "CK-UAT-03",
+    "CK-UAT-04",
+    "CK-UAT-05"
+   ],
+   "blocked_checks": [],
+   "outputs": [
+    {
+     "path": "tests/generated/t_rv32d_atomics_uncached/axil_script.txt",
+     "sha256": "8d109c0c834724e126dfb29b8c45f209940a320f55491ffcdff2b9566b1686af"
+    },
+    {
+     "path": "tests/generated/t_rv32d_atomics_uncached/dump_ranges.txt",
+     "sha256": "0fb779e71de5bb83c774cedf8e2203c51ec98a4f9a4f6aa6cf01392b12f6cf56"
+    },
+    {
+     "path": "tests/generated/t_rv32d_atomics_uncached/expected.json",
+     "sha256": "d0dde6dabe5a3da97c60bb34b62c91697167f7c4d2226f96173ad1cc7b7ac393"
+    },
+    {
+     "path": "tests/generated/t_rv32d_atomics_uncached/mem_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_atomics_uncached/mmio_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_atomics_uncached/plusargs.txt",
+     "sha256": "bf28ab2aa967a18a928a1d025fe04b3173be59ad1f05c9e9559c16263cdb5928"
+    },
+    {
+     "path": "tests/generated/t_rv32d_atomics_uncached/prog.S",
+     "sha256": "f5f490411a0433897392a3ffe0f816f056b40ed4b7ac5ba823885df32ebaf359"
+    },
+    {
+     "path": "tests/generated/t_rv32d_atomics_uncached/prog.memh",
+     "sha256": "971c9056d833273d32027fcd11f6baf2e5f2848ab0936c2ae3f683669e4d3e7c"
+    },
+    {
+     "path": "tests/generated/t_rv32d_atomics_uncached/symbols.json",
+     "sha256": "a454c17222fb2d30f5eeeada74f7db085f190fe0f6c725d75ea81b097f39238a"
+    }
+   ]
+  },
+  {
+   "test": "t_rv32d_axil_csr_windows",
+   "source": "tests/t_rv32d_axil_csr_windows.py",
+   "source_sha256": "de89cf081010a51120c3c4f17d23a57d26504ca06b4f68fe7b8721d8ef3a0e9c",
+   "reqs": [
+    "PROTO-AXI4L-B1",
+    "REQ-ERR-002",
+    "REQ-IF-005",
+    "REQ-IF-007",
+    "REQ-IF-008"
+   ],
+   "checks": [
+    "CK-AXL-01",
+    "CK-AXL-02",
+    "CK-AXL-03",
+    "CK-AXL-04",
+    "CK-AXL-05",
+    "CK-AXL-06"
+   ],
+   "blocked_checks": [
+    "CK-AXL-07"
+   ],
+   "outputs": [
+    {
+     "path": "tests/generated/t_rv32d_axil_csr_windows/axil_script.txt",
+     "sha256": "6cccc1847502fc476273db6dd0a9e3a4ca5dc357d11bcb97a0b261104e2b0bb5"
+    },
+    {
+     "path": "tests/generated/t_rv32d_axil_csr_windows/dump_ranges.txt",
+     "sha256": "0fb779e71de5bb83c774cedf8e2203c51ec98a4f9a4f6aa6cf01392b12f6cf56"
+    },
+    {
+     "path": "tests/generated/t_rv32d_axil_csr_windows/expected.json",
+     "sha256": "dbe828b653ade3bab1594354edebe1cc40eb6e32644f7be5670f34e70b5bee2e"
+    },
+    {
+     "path": "tests/generated/t_rv32d_axil_csr_windows/mem_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_axil_csr_windows/mmio_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_axil_csr_windows/plusargs.txt",
+     "sha256": "ca849ab1f58956d73197b5c5b320b6d0808bed9fff63c86201ec06ae5958c980"
+    },
+    {
+     "path": "tests/generated/t_rv32d_axil_csr_windows/prog.S",
+     "sha256": "af31ba6125dc62d880e5b4af0f816d416a9e28fbd01dbc50c1caf39af51b470e"
+    },
+    {
+     "path": "tests/generated/t_rv32d_axil_csr_windows/prog.memh",
+     "sha256": "ec71a4970f4cd34f66c28b388c4b49f9e1d719dc1373f08e3646b53a77df4923"
+    },
+    {
+     "path": "tests/generated/t_rv32d_axil_csr_windows/symbols.json",
+     "sha256": "f4c2a2c166d8eae69825c0ba6e3e5696196ca69e1c1a00699a9e3526f9c6a142"
+    }
+   ]
+  },
+  {
+   "test": "t_rv32d_boot_addr_hi_nonzero",
+   "source": "tests/t_rv32d_boot_addr_hi_nonzero.py",
+   "source_sha256": "9d9f00705a279c8e851fc13141f5a5439594b1d60e3f6dc6018afc6bb7517a8e",
+   "reqs": [
+    "REQ-SYS-003",
+    "REQ-XL-002",
+    "REQ-XL-006",
+    "REQ-XL-008"
+   ],
+   "checks": [
+    "CK-BHN-01",
+    "CK-BHN-02",
+    "CK-BHN-03",
+    "CK-BHN-04",
+    "CK-BHN-05"
+   ],
+   "blocked_checks": [],
+   "outputs": [
+    {
+     "path": "tests/generated/t_rv32d_boot_addr_hi_nonzero/axil_script.txt",
+     "sha256": "8d109c0c834724e126dfb29b8c45f209940a320f55491ffcdff2b9566b1686af"
+    },
+    {
+     "path": "tests/generated/t_rv32d_boot_addr_hi_nonzero/dump_ranges.txt",
+     "sha256": "0fb779e71de5bb83c774cedf8e2203c51ec98a4f9a4f6aa6cf01392b12f6cf56"
+    },
+    {
+     "path": "tests/generated/t_rv32d_boot_addr_hi_nonzero/expected.json",
+     "sha256": "147fa1d64c07bfc4543d4a6d98808bc4aee5240b0811fcd58449e21d54e3f0e3"
+    },
+    {
+     "path": "tests/generated/t_rv32d_boot_addr_hi_nonzero/mem_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_boot_addr_hi_nonzero/mmio_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_boot_addr_hi_nonzero/plusargs.txt",
+     "sha256": "bde7a41579affb0178f33f6628814770ef26758e1a5c31b76d26c9bd304300fd"
+    },
+    {
+     "path": "tests/generated/t_rv32d_boot_addr_hi_nonzero/prog.S",
+     "sha256": "b06bf2d107bc4ad93bcf7570ddc14f8ba2a27d6b4ac1833ff85f3369c739d7b1"
+    },
+    {
+     "path": "tests/generated/t_rv32d_boot_addr_hi_nonzero/prog.memh",
+     "sha256": "91f64b093899455f82a1b2a00b8e4c89ceefafb7512dc00d3ea1ee8c6086cc87"
+    },
+    {
+     "path": "tests/generated/t_rv32d_boot_addr_hi_nonzero/symbols.json",
+     "sha256": "4d674aa8db23f3d9918f1dfdfcc09333e22267fc57471632cb42cfa0b69b269b"
+    }
+   ]
+  },
+  {
+   "test": "t_rv32d_boot_identity",
+   "source": "tests/t_rv32d_boot_identity.py",
+   "source_sha256": "77c7e2f82c39cf5f56852797c59d75fd14e34244cade84f60bf6637460a9bdee",
+   "reqs": [
+    "REQ-SYS-001",
+    "REQ-XL-002",
+    "REQ-XL-003",
+    "REQ-XL-008"
+   ],
+   "checks": [
+    "CK-BID-01",
+    "CK-BID-02",
+    "CK-BID-03",
+    "CK-BID-04",
+    "CK-BID-05"
+   ],
+   "blocked_checks": [],
+   "outputs": [
+    {
+     "path": "tests/generated/t_rv32d_boot_identity/axil_script.txt",
+     "sha256": "8d109c0c834724e126dfb29b8c45f209940a320f55491ffcdff2b9566b1686af"
+    },
+    {
+     "path": "tests/generated/t_rv32d_boot_identity/dump_ranges.txt",
+     "sha256": "0fb779e71de5bb83c774cedf8e2203c51ec98a4f9a4f6aa6cf01392b12f6cf56"
+    },
+    {
+     "path": "tests/generated/t_rv32d_boot_identity/expected.json",
+     "sha256": "8f2be4a7cd8833190f795e4af6f820084f8936220cca440d0700cb50835d9d35"
+    },
+    {
+     "path": "tests/generated/t_rv32d_boot_identity/mem_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_boot_identity/mmio_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_boot_identity/plusargs.txt",
+     "sha256": "d66fe3027a731461ea6262386ccc882f4046865043d6e56f6dd3b0ccb975c2a5"
+    },
+    {
+     "path": "tests/generated/t_rv32d_boot_identity/prog.S",
+     "sha256": "3cfa7acd16731f3267c3aa0a8f09a113eec3cd4dda1819c2aa07096894a67a0f"
+    },
+    {
+     "path": "tests/generated/t_rv32d_boot_identity/prog.memh",
+     "sha256": "b0254e2f2fc0b3601cfe3133ec1baf82404b5ec8841dca298fab116e18fbf9df"
+    },
+    {
+     "path": "tests/generated/t_rv32d_boot_identity/symbols.json",
+     "sha256": "2ef4ae59f6496be222264c7e177ea17129c42948c93cdf65f78686b6bdef5a51"
+    }
+   ]
+  },
+  {
+   "test": "t_rv32d_cbo_fault_llc",
+   "source": "tests/t_rv32d_cbo_fault_llc.py",
+   "source_sha256": "c61509204561521cf7132e020da0ed4996485dd3d023c5eb2837e6de0c13e2ae",
+   "reqs": [
+    "REQ-ERR-001",
+    "REQ-MEM-016",
+    "REQ-MEM-017",
+    "REQ-XL-005"
+   ],
+   "checks": [
+    "CK-CBF-01",
+    "CK-CBF-02",
+    "CK-CBF-03",
+    "CK-CBF-04",
+    "CK-CBF-05",
+    "CK-CBF-06",
+    "CK-CBF-07"
+   ],
+   "blocked_checks": [],
+   "outputs": [
+    {
+     "path": "tests/generated/t_rv32d_cbo_fault_llc/axil_script.txt",
+     "sha256": "8d109c0c834724e126dfb29b8c45f209940a320f55491ffcdff2b9566b1686af"
+    },
+    {
+     "path": "tests/generated/t_rv32d_cbo_fault_llc/dump_ranges.txt",
+     "sha256": "0fb779e71de5bb83c774cedf8e2203c51ec98a4f9a4f6aa6cf01392b12f6cf56"
+    },
+    {
+     "path": "tests/generated/t_rv32d_cbo_fault_llc/expected.json",
+     "sha256": "16373e7cea7b59bf8bd0f5bfab6edd00cff5ae66efb444db6b826c8bf57c1d57"
+    },
+    {
+     "path": "tests/generated/t_rv32d_cbo_fault_llc/mem_rules.txt",
+     "sha256": "19c54ed5d8987a4bd3ab81e1aabe275caa13787724b144d95bf06b2c55f721bf"
+    },
+    {
+     "path": "tests/generated/t_rv32d_cbo_fault_llc/mmio_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_cbo_fault_llc/plusargs.txt",
+     "sha256": "62fb704376d8952b3b9f59eadc58d270e878fad7aba704ff62aba934df5903c9"
+    },
+    {
+     "path": "tests/generated/t_rv32d_cbo_fault_llc/prog.S",
+     "sha256": "bbbecb3bc6ad40549e26ffb1a970616bdb1060242e7fc841d85a609162e86633"
+    },
+    {
+     "path": "tests/generated/t_rv32d_cbo_fault_llc/prog.memh",
+     "sha256": "23beec3d5cdc436d03850057ca3859a403cb5f5d80c849bdf91b56f5bd4485a8"
+    },
+    {
+     "path": "tests/generated/t_rv32d_cbo_fault_llc/symbols.json",
+     "sha256": "097ad9d6b446972b4ee7a84d30d5ee2051789c062bdf0ad016dcfa22676e0bf8"
+    }
+   ]
+  },
+  {
+   "test": "t_rv32d_cbo_matrix",
+   "source": "tests/t_rv32d_cbo_matrix.py",
+   "source_sha256": "0ef0c675c65ba76fbc654a226c466d2f161baf4324ee99bd5f7734be097ef881",
+   "reqs": [
+    "REQ-MEM-005",
+    "REQ-MEM-015",
+    "REQ-MEM-016"
+   ],
+   "checks": [
+    "CK-CBM-01",
+    "CK-CBM-02",
+    "CK-CBM-03",
+    "CK-CBM-04",
+    "CK-CBM-04b",
+    "CK-CBM-05",
+    "CK-CBM-06",
+    "CK-CBM-06b"
+   ],
+   "blocked_checks": [],
+   "outputs": [
+    {
+     "path": "tests/generated/t_rv32d_cbo_matrix/axil_script.txt",
+     "sha256": "8d109c0c834724e126dfb29b8c45f209940a320f55491ffcdff2b9566b1686af"
+    },
+    {
+     "path": "tests/generated/t_rv32d_cbo_matrix/dump_ranges.txt",
+     "sha256": "0fb779e71de5bb83c774cedf8e2203c51ec98a4f9a4f6aa6cf01392b12f6cf56"
+    },
+    {
+     "path": "tests/generated/t_rv32d_cbo_matrix/expected.json",
+     "sha256": "de79504c3470420c16d6d6c5429a9bcb4f4485759755548e6463d435b97f6b38"
+    },
+    {
+     "path": "tests/generated/t_rv32d_cbo_matrix/mem_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_cbo_matrix/mmio_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_cbo_matrix/plusargs.txt",
+     "sha256": "013783614ce4e21e13723f85381db5701ebabb60852325764cca7f3ba15248c0"
+    },
+    {
+     "path": "tests/generated/t_rv32d_cbo_matrix/prog.S",
+     "sha256": "d1881570bc004cf8a26fb29550a1c910433846bc11e305ea9416777023b4a7aa"
+    },
+    {
+     "path": "tests/generated/t_rv32d_cbo_matrix/prog.memh",
+     "sha256": "76a7f5c3acabc9d15dd3b445dc54f0ed4943c06a89177b033c0e0d5143c0004b"
+    },
+    {
+     "path": "tests/generated/t_rv32d_cbo_matrix/symbols.json",
+     "sha256": "8d9ee392f47567d01f6daa874e84972c5992659e6aae2961aa5761403f205dbc"
+    }
+   ]
+  },
+  {
+   "test": "t_rv32d_coh_cmo_amo_stress",
+   "source": "tests/t_rv32d_coh_cmo_amo_stress.py",
+   "source_sha256": "b035ede6631956fdc65e58802bb7bb711453ced5e3d6a3ec35a5dc04a080a7c5",
+   "reqs": [
+    "PROTO-AXI4-A3.2",
+    "REQ-MEM-001",
+    "REQ-MEM-006",
+    "REQ-MEM-015",
+    "REQ-MEM-018",
+    "REQ-MEM-020",
+    "REQ-PMU-008"
+   ],
+   "checks": [
+    "CK-STR-01",
+    "CK-STR-02",
+    "CK-STR-03",
+    "CK-STR-04",
+    "CK-STR-04b",
+    "CK-STR-05",
+    "CK-STR-06",
+    "CK-STR-07",
+    "CK-STR-08"
+   ],
+   "blocked_checks": [
+    "SVA-104/105"
+   ],
+   "outputs": [
+    {
+     "path": "tests/generated/t_rv32d_coh_cmo_amo_stress/axil_script.txt",
+     "sha256": "edcaa8771fe8c5c1bdd68dd05335a6fc1a4c5732af914a66a121bfa5c224d9d0"
+    },
+    {
+     "path": "tests/generated/t_rv32d_coh_cmo_amo_stress/dump_ranges.txt",
+     "sha256": "a4c02183badcb5a4508765a29787f710c2f20f4085b4394e33b15ffcac28732e"
+    },
+    {
+     "path": "tests/generated/t_rv32d_coh_cmo_amo_stress/expected.json",
+     "sha256": "8b6a16eb43b09fc93ab0fe2fe0dac229fc88a9096b823bb0e7cd1bd7285a13b0"
+    },
+    {
+     "path": "tests/generated/t_rv32d_coh_cmo_amo_stress/mem_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_coh_cmo_amo_stress/mmio_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_coh_cmo_amo_stress/plusargs.txt",
+     "sha256": "fd1b4edcfe53fec28e035405fa2f24a6a25cdbbf85e6d30cc1cec05130a5f3da"
+    },
+    {
+     "path": "tests/generated/t_rv32d_coh_cmo_amo_stress/prog.S",
+     "sha256": "beacc5fbf7b00c95464be94b15674c918b0ace375477e80029ab8b477c0c8e47"
+    },
+    {
+     "path": "tests/generated/t_rv32d_coh_cmo_amo_stress/prog.memh",
+     "sha256": "adfe2dd9c0f072b777f84c0a2718aa004c21d705f1908fac4239609548ffa236"
+    },
+    {
+     "path": "tests/generated/t_rv32d_coh_cmo_amo_stress/symbols.json",
+     "sha256": "14b5aedd0a2203547228159a988f7ff912694049a72c224295e8b87d4b410ec5"
+    }
+   ]
+  },
+  {
+   "test": "t_rv32d_counters_pmu",
+   "source": "tests/t_rv32d_counters_pmu.py",
+   "source_sha256": "6337f7801005fd0945f8ab77423b822521834283359728e51eb0c6431d065008",
+   "reqs": [
+    "REQ-PMU-003",
+    "REQ-PMU-007",
+    "REQ-XL-013"
+   ],
+   "checks": [
+    "CK-CNT-01",
+    "CK-CNT-01b",
+    "CK-CNT-02",
+    "CK-CNT-03",
+    "CK-CNT-04",
+    "CK-CNT-05"
+   ],
+   "blocked_checks": [],
+   "outputs": [
+    {
+     "path": "tests/generated/t_rv32d_counters_pmu/axil_script.txt",
+     "sha256": "0161ee653c2b03bc33b28b73cad3b933a6fbce6f63b9d550d997e580cb2707ff"
+    },
+    {
+     "path": "tests/generated/t_rv32d_counters_pmu/dump_ranges.txt",
+     "sha256": "0fb779e71de5bb83c774cedf8e2203c51ec98a4f9a4f6aa6cf01392b12f6cf56"
+    },
+    {
+     "path": "tests/generated/t_rv32d_counters_pmu/expected.json",
+     "sha256": "3d2b483ab6b5684dea46cb7f5ab0df5ec4c423fcff54368fb3acf175a1c1fff8"
+    },
+    {
+     "path": "tests/generated/t_rv32d_counters_pmu/mem_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_counters_pmu/mmio_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_counters_pmu/plusargs.txt",
+     "sha256": "3a657e15a74e43a0e3b5468def81657fb9d62086db15277cf8ca44e8bc331bde"
+    },
+    {
+     "path": "tests/generated/t_rv32d_counters_pmu/prog.S",
+     "sha256": "249eafaa9d3e2390c3d01b66d70f1974b6ad35ab264716a473aa7b312dbe1ca8"
+    },
+    {
+     "path": "tests/generated/t_rv32d_counters_pmu/prog.memh",
+     "sha256": "3f1f6adea92b3e20aa9d8127f07ab8a658aad39abeaad1b40d3704129d044e59"
+    },
+    {
+     "path": "tests/generated/t_rv32d_counters_pmu/symbols.json",
+     "sha256": "4ed622a5a5bb37999ee5b7f027f8168764259b831107449f9424c633faab58f5"
+    }
+   ]
+  },
+  {
+   "test": "t_rv32d_debug_halt",
+   "source": "tests/t_rv32d_debug_halt.py",
+   "source_sha256": "1ec47c6fdbe39cd9b1568f0da9a99613e2dc701e0a6f642d13369697ce449beb",
+   "reqs": [
+    "REQ-CLK-002",
+    "REQ-DBG-001",
+    "REQ-XL-002"
+   ],
+   "checks": [
+    "CK-DBG-01",
+    "CK-DBG-01b",
+    "CK-DBG-02",
+    "CK-DBG-03",
+    "CK-DBG-04",
+    "CK-DBG-05"
+   ],
+   "blocked_checks": [],
+   "outputs": [
+    {
+     "path": "tests/generated/t_rv32d_debug_halt/axil_script.txt",
+     "sha256": "8d109c0c834724e126dfb29b8c45f209940a320f55491ffcdff2b9566b1686af"
+    },
+    {
+     "path": "tests/generated/t_rv32d_debug_halt/dump_ranges.txt",
+     "sha256": "0fb779e71de5bb83c774cedf8e2203c51ec98a4f9a4f6aa6cf01392b12f6cf56"
+    },
+    {
+     "path": "tests/generated/t_rv32d_debug_halt/expected.json",
+     "sha256": "55af0703dc7709aa77562baa3e856f91b390beae87f7c0c6a198d5163aa15c8f"
+    },
+    {
+     "path": "tests/generated/t_rv32d_debug_halt/mem_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_debug_halt/mmio_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_debug_halt/plusargs.txt",
+     "sha256": "cc843ac2c7950bea529116e5100d8072c2419d38b132cd81b64481f938504650"
+    },
+    {
+     "path": "tests/generated/t_rv32d_debug_halt/prog.S",
+     "sha256": "8f1e3b97ffd1c85cf4d295061c9e8a564a3a2ac299310b250da38547303abf00"
+    },
+    {
+     "path": "tests/generated/t_rv32d_debug_halt/prog.memh",
+     "sha256": "19e3b88552ce90d48a4caf2f9eac26800f952a788516963d156b076dad6c2d1f"
+    },
+    {
+     "path": "tests/generated/t_rv32d_debug_halt/symbols.json",
+     "sha256": "91e4ff5dd213de172cd6fe658fb6d6d14578b1de11f6a869bb4c7cd290200e71"
+    }
+   ]
+  },
+  {
+   "test": "t_rv32d_elab_lint_matrix",
+   "kind": "static",
+   "source": "tests/t_rv32d_elab_lint_matrix.py",
+   "source_sha256": "8b22cce43a4adb3a60bbe5d52467c1d84e92aaa2bac1b8625818edcb0b83ee67",
+   "runner": "scripts/static/lint_matrix.py",
+   "checks": [
+    "CK-LNT-01",
+    "CK-LNT-02",
+    "CK-LNT-03",
+    "CK-LNT-04",
+    "CK-LNT-05"
+   ],
+   "blocked": null,
+   "outputs": []
+  },
+  {
+   "test": "t_rv32d_elab_port_audit",
+   "kind": "static",
+   "source": "tests/t_rv32d_elab_port_audit.py",
+   "source_sha256": "beb76d36f42072f74f3717776c4131b532cb87f51ae8cc2fe4ae7a633eaaa90f",
+   "runner": "scripts/static/elab_port_audit.py",
+   "checks": [
+    "CK-ELB-01",
+    "CK-ELB-02",
+    "CK-ELB-03",
+    "CK-ELB-04",
+    "CK-ELB-05",
+    "CK-ELB-06",
+    "CK-ELB-07"
+   ],
+   "blocked": null,
+   "outputs": []
+  },
+  {
+   "test": "t_rv32d_fatal_llc_eviction",
+   "source": "tests/t_rv32d_fatal_llc_eviction.py",
+   "source_sha256": "96939ad559ea52333cf1dd46cd2e0e507b7c47f82e37a5b3c32da1498797bc6a",
+   "reqs": [
+    "REQ-ERR-003",
+    "REQ-RST-001"
+   ],
+   "checks": [
+    "CK-FAT-01",
+    "CK-FAT-01b",
+    "CK-FAT-02",
+    "CK-FAT-03",
+    "CK-FAT-04",
+    "CK-FAT-05",
+    "CK-FAT-05b",
+    "CK-FAT-06"
+   ],
+   "blocked_checks": [],
+   "outputs": [
+    {
+     "path": "tests/generated/t_rv32d_fatal_llc_eviction/axil_script.txt",
+     "sha256": "0d4aaf1b5b0828edbbed425fad6bdda95c9ec4cf3b23bb20bd2a704d5577c088"
+    },
+    {
+     "path": "tests/generated/t_rv32d_fatal_llc_eviction/dump_ranges.txt",
+     "sha256": "0fb779e71de5bb83c774cedf8e2203c51ec98a4f9a4f6aa6cf01392b12f6cf56"
+    },
+    {
+     "path": "tests/generated/t_rv32d_fatal_llc_eviction/expected.json",
+     "sha256": "f33015eb7d1de7ef559b22c43c83735a11dfd2f828c0b687721f08a73fc32d9b"
+    },
+    {
+     "path": "tests/generated/t_rv32d_fatal_llc_eviction/mem_rules.txt",
+     "sha256": "a70136389fa028590d5cc74186b77b2dc73befc25fdfa0d2616bf390add5e97e"
+    },
+    {
+     "path": "tests/generated/t_rv32d_fatal_llc_eviction/mmio_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_fatal_llc_eviction/plusargs.txt",
+     "sha256": "d4ae00223407b6de17e40466e58eb55f750c51b4ed08e85111818bcbe764bd9e"
+    },
+    {
+     "path": "tests/generated/t_rv32d_fatal_llc_eviction/prog.S",
+     "sha256": "1aa87c77d9f3d344bbedaa6ffbaf227aef63fdfb8f17d890150e336a47e7b954"
+    },
+    {
+     "path": "tests/generated/t_rv32d_fatal_llc_eviction/prog.memh",
+     "sha256": "46a01d4cb3c44bc3aae69a9892cff1b684845fe0b2ddc4c58c99d7059052f407"
+    },
+    {
+     "path": "tests/generated/t_rv32d_fatal_llc_eviction/symbols.json",
+     "sha256": "d1eb24c8ac7740e7415af291590a608facbdc5556b0df60cf5d88a2292d3b7a1"
+    }
+   ]
+  },
+  {
+   "test": "t_rv32d_fencei_smc",
+   "source": "tests/t_rv32d_fencei_smc.py",
+   "source_sha256": "aaabcf46c9293df2b4d7b9049781deeb6917a9536d64aa1b38fb1d4ef7640a31",
+   "reqs": [
+    "PROTO-RISCV-ZIFENCEI",
+    "REQ-IRQ-001",
+    "REQ-MEM-007",
+    "REQ-MEM-018"
+   ],
+   "checks": [
+    "CK-SMC-01",
+    "CK-SMC-01b",
+    "CK-SMC-02",
+    "CK-SMC-03",
+    "CK-SMC-04",
+    "CK-SMC-04b",
+    "CK-SMC-05",
+    "CK-SMC-06"
+   ],
+   "blocked_checks": [],
+   "outputs": [
+    {
+     "path": "tests/generated/t_rv32d_fencei_smc/axil_script.txt",
+     "sha256": "8d109c0c834724e126dfb29b8c45f209940a320f55491ffcdff2b9566b1686af"
+    },
+    {
+     "path": "tests/generated/t_rv32d_fencei_smc/dump_ranges.txt",
+     "sha256": "0fb779e71de5bb83c774cedf8e2203c51ec98a4f9a4f6aa6cf01392b12f6cf56"
+    },
+    {
+     "path": "tests/generated/t_rv32d_fencei_smc/expected.json",
+     "sha256": "c9112232a191f8edee94348e0d016154446d33608127034e500b81dca516be3e"
+    },
+    {
+     "path": "tests/generated/t_rv32d_fencei_smc/mem_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_fencei_smc/mmio_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_fencei_smc/plusargs.txt",
+     "sha256": "b1878862d1e2efa8a85630b74f6bfe8050696a7ff9917c2f76e4d285fc2f5a7c"
+    },
+    {
+     "path": "tests/generated/t_rv32d_fencei_smc/prog.S",
+     "sha256": "28e35793aa54a9a7ea1a3442226f20044560fc77dc47b7b9ffd11b91f36fa0e9"
+    },
+    {
+     "path": "tests/generated/t_rv32d_fencei_smc/prog.memh",
+     "sha256": "ad38f488738265f4f086750ed33fb0ef7fe2a1cc58d508e2faff903497ad9e48"
+    },
+    {
+     "path": "tests/generated/t_rv32d_fencei_smc/symbols.json",
+     "sha256": "323483ab2bc2ad496b2c368e478257d55522f27172e0a4bb38949986b834ead3"
+    }
+   ]
+  },
+  {
+   "test": "t_rv32d_fp32_divsqrt",
+   "source": "tests/t_rv32d_fp32_divsqrt.py",
+   "source_sha256": "98fd9fcbed806cca054ae5ef014cb956efadeb6ee10567de32d05d3424a59fbc",
+   "reqs": [
+    "REQ-PMU-008",
+    "REQ-XL-004"
+   ],
+   "checks": [
+    "CK-FP-01",
+    "CK-FP-02",
+    "CK-FP-01h1",
+    "CK-FP-02h1",
+    "CK-FP-03",
+    "CK-FP-04",
+    "CK-FP-05",
+    "CK-FP-06"
+   ],
+   "blocked_checks": [],
+   "outputs": [
+    {
+     "path": "tests/generated/t_rv32d_fp32_divsqrt/axil_script.txt",
+     "sha256": "74b010d87edf3a7a8a5009cbf6f1e85df464b193073bb4c7fa0f598822285cfb"
+    },
+    {
+     "path": "tests/generated/t_rv32d_fp32_divsqrt/dump_ranges.txt",
+     "sha256": "0fb779e71de5bb83c774cedf8e2203c51ec98a4f9a4f6aa6cf01392b12f6cf56"
+    },
+    {
+     "path": "tests/generated/t_rv32d_fp32_divsqrt/expected.json",
+     "sha256": "4a2d41fff1f17d6fe9e27c920a23ea156ca675d55f9644a102c33913cecce144"
+    },
+    {
+     "path": "tests/generated/t_rv32d_fp32_divsqrt/mem_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_fp32_divsqrt/mmio_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_fp32_divsqrt/plusargs.txt",
+     "sha256": "7ad023f9e183c327268131c3b7f04b391783ccf6b6644f45496847abba4423f1"
+    },
+    {
+     "path": "tests/generated/t_rv32d_fp32_divsqrt/prog.S",
+     "sha256": "0ec8ca10c871c2f3f284f2fb7b7684168f7e23f5d5df2b766141cc9116af68f7"
+    },
+    {
+     "path": "tests/generated/t_rv32d_fp32_divsqrt/prog.memh",
+     "sha256": "528e9a81109c26731b7a44526ed7e942fcea09fd8b2c805d53ddd613a4ba6dd9"
+    },
+    {
+     "path": "tests/generated/t_rv32d_fp32_divsqrt/symbols.json",
+     "sha256": "0a836d3df3364ba9619dc9fbb425e381590add9a5cc5bd9bc844596e3c553414"
+    }
+   ]
+  },
+  {
+   "test": "t_rv32d_fv_addr_decode",
+   "kind": "formal",
+   "source": "tests/t_rv32d_fv_addr_decode.py",
+   "source_sha256": "8100bfeeca5028a3a7ccfe87860a897f9300e1c24405efd37148368882beb587",
+   "runner": "sby -f tests/formal/fv_addr_decode.sby",
+   "checks": [
+    "CK-FAD-01",
+    "CK-FAD-02",
+    "CK-FAD-03",
+    "CK-FAD-04",
+    "CK-FAD-05",
+    "CK-FAD-06"
+   ],
+   "blocked": null,
+   "outputs": []
+  },
+  {
+   "test": "t_rv32d_fv_axil",
+   "kind": "formal",
+   "source": "tests/t_rv32d_fv_axil.py",
+   "source_sha256": "3f94cda643647a23e491329802362eeb0713ae12140cdb832c60b973e440141a",
+   "runner": "sby -f tests/formal/fv_axil.sby",
+   "checks": [
+    "CK-FAX-01",
+    "CK-FAX-02",
+    "CK-FAX-03",
+    "CK-FAX-04",
+    "CK-FAX-05",
+    "CK-FAX-06"
+   ],
+   "blocked": null,
+   "outputs": []
+  },
+  {
+   "test": "t_rv32d_fv_pmu",
+   "kind": "formal",
+   "source": "tests/t_rv32d_fv_pmu.py",
+   "source_sha256": "acbb6995f5295e692f7006b471c8a3afe9f26899a9e30738610653865c3bb865",
+   "runner": "sby -f tests/formal/fv_pmu.sby",
+   "checks": [
+    "CK-FPM-01",
+    "CK-FPM-02",
+    "CK-FPM-03",
+    "CK-FPM-04",
+    "CK-FPM-05",
+    "CK-FPM-06"
+   ],
+   "blocked": null,
+   "outputs": []
+  },
+  {
+   "test": "t_rv32d_hpdcache_word32_lanes",
+   "source": "tests/t_rv32d_hpdcache_word32_lanes.py",
+   "source_sha256": "e2873a3062544b770c11a9ce66eac6c292cd2170fa3f2264e3e22195a2a0f961",
+   "reqs": [
+    "REQ-MEM-001",
+    "REQ-XL-004",
+    "REQ-XL-012"
+   ],
+   "checks": [
+    "CK-W32-01",
+    "CK-W32-02",
+    "CK-W32-03",
+    "CK-W32-04",
+    "CK-W32-04b",
+    "CK-W32-05",
+    "CK-W32-05b"
+   ],
+   "blocked_checks": [],
+   "outputs": [
+    {
+     "path": "tests/generated/t_rv32d_hpdcache_word32_lanes/axil_script.txt",
+     "sha256": "8d109c0c834724e126dfb29b8c45f209940a320f55491ffcdff2b9566b1686af"
+    },
+    {
+     "path": "tests/generated/t_rv32d_hpdcache_word32_lanes/dump_ranges.txt",
+     "sha256": "0fb779e71de5bb83c774cedf8e2203c51ec98a4f9a4f6aa6cf01392b12f6cf56"
+    },
+    {
+     "path": "tests/generated/t_rv32d_hpdcache_word32_lanes/expected.json",
+     "sha256": "85396a4c71152f6fccc0c436a39ae130ee8057974fec3a51392dd638edaa0fb2"
+    },
+    {
+     "path": "tests/generated/t_rv32d_hpdcache_word32_lanes/mem_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_hpdcache_word32_lanes/mmio_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_hpdcache_word32_lanes/plusargs.txt",
+     "sha256": "b8be3951dd63c6b4b6148d41a8c836f27ab4d2458ad338597cba14063d1fc1a2"
+    },
+    {
+     "path": "tests/generated/t_rv32d_hpdcache_word32_lanes/prog.S",
+     "sha256": "84ea6f39b890e4d4cbf510c7f9329a74cb42ff71f01d918cd21095a6c0ccbb37"
+    },
+    {
+     "path": "tests/generated/t_rv32d_hpdcache_word32_lanes/prog.memh",
+     "sha256": "7990eb4ade3d2b6491f428c75aa4db9af58328aff058b484f5f628efbd18dd9f"
+    },
+    {
+     "path": "tests/generated/t_rv32d_hpdcache_word32_lanes/symbols.json",
+     "sha256": "1113f2310c1521a531b55f7ead3aa5b7ec513d6ae55b4f54ba2f617f3ab9d40a"
+    }
+   ]
+  },
+  {
+   "test": "t_rv32d_irq_matrix",
+   "source": "tests/t_rv32d_irq_matrix.py",
+   "source_sha256": "a0cfdf82c5669bc1fb25def2692b71ac22921b6d8b43ba37834091a001131a74",
+   "reqs": [
+    "REQ-IRQ-001",
+    "REQ-IRQ-002",
+    "REQ-IRQ-003",
+    "REQ-XL-002"
+   ],
+   "checks": [
+    "CK-IRQ-01",
+    "CK-IRQ-01_h0_7",
+    "CK-IRQ-01_h0_b",
+    "CK-IRQ-01_h1_3",
+    "CK-IRQ-01_h1_7",
+    "CK-IRQ-01_h1_b",
+    "CK-IRQ-02",
+    "CK-IRQ-03",
+    "CK-IRQ-04",
+    "CK-IRQ-05"
+   ],
+   "blocked_checks": [],
+   "outputs": [
+    {
+     "path": "tests/generated/t_rv32d_irq_matrix/axil_script.txt",
+     "sha256": "8d109c0c834724e126dfb29b8c45f209940a320f55491ffcdff2b9566b1686af"
+    },
+    {
+     "path": "tests/generated/t_rv32d_irq_matrix/dump_ranges.txt",
+     "sha256": "0fb779e71de5bb83c774cedf8e2203c51ec98a4f9a4f6aa6cf01392b12f6cf56"
+    },
+    {
+     "path": "tests/generated/t_rv32d_irq_matrix/expected.json",
+     "sha256": "e3b084163c791ac736129645d645edfcf666d707af1ddb70d8165916a62c2af8"
+    },
+    {
+     "path": "tests/generated/t_rv32d_irq_matrix/mem_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_irq_matrix/mmio_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_irq_matrix/plusargs.txt",
+     "sha256": "f967a976093a4ccc8a814d08cf9ba7c91a346e13df96c1d9abfce459faf7602d"
+    },
+    {
+     "path": "tests/generated/t_rv32d_irq_matrix/prog.S",
+     "sha256": "84ccc4f08e2f178443a75aee4678084f819a38001b411a099ffaca14d76708b6"
+    },
+    {
+     "path": "tests/generated/t_rv32d_irq_matrix/prog.memh",
+     "sha256": "960bf542d56c5997098299f354ca76c03dd49d809b32117919cbccaa9f57f4dd"
+    },
+    {
+     "path": "tests/generated/t_rv32d_irq_matrix/symbols.json",
+     "sha256": "5c96fbb02acfb79032114cadb4580d8376ed10d940b97417615834806ad5841e"
+    }
+   ]
+  },
+  {
+   "test": "t_rv32d_irq_wfi_coherence",
+   "source": "tests/t_rv32d_irq_wfi_coherence.py",
+   "source_sha256": "71706e0232dd05f75f1bdfcb9f8ebdb25189542d7a9facc2a9c4394746e827a1",
+   "reqs": [
+    "REQ-CLK-002",
+    "REQ-IRQ-001",
+    "REQ-IRQ-003"
+   ],
+   "checks": [
+    "CK-WFI-01",
+    "CK-WFI-02",
+    "CK-WFI-03",
+    "CK-WFI-04",
+    "CK-WFI-05",
+    "CK-WFI-06"
+   ],
+   "blocked_checks": [],
+   "outputs": [
+    {
+     "path": "tests/generated/t_rv32d_irq_wfi_coherence/axil_script.txt",
+     "sha256": "8d109c0c834724e126dfb29b8c45f209940a320f55491ffcdff2b9566b1686af"
+    },
+    {
+     "path": "tests/generated/t_rv32d_irq_wfi_coherence/dump_ranges.txt",
+     "sha256": "0fb779e71de5bb83c774cedf8e2203c51ec98a4f9a4f6aa6cf01392b12f6cf56"
+    },
+    {
+     "path": "tests/generated/t_rv32d_irq_wfi_coherence/expected.json",
+     "sha256": "d2a9057ba7a03855da3d490ab9f60613b58c185f7b6f18f810f43d4f97a5e7ae"
+    },
+    {
+     "path": "tests/generated/t_rv32d_irq_wfi_coherence/mem_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_irq_wfi_coherence/mmio_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_irq_wfi_coherence/plusargs.txt",
+     "sha256": "46dac58044020f6a25ffc3558af39403e4b245d58eb558428d6786cfb91ba3aa"
+    },
+    {
+     "path": "tests/generated/t_rv32d_irq_wfi_coherence/prog.S",
+     "sha256": "1da25706c9f8197ac56347ff136277d676b13632d9a241e8f60e2924699eef37"
+    },
+    {
+     "path": "tests/generated/t_rv32d_irq_wfi_coherence/prog.memh",
+     "sha256": "0d1d39854dffb3f4080d4c1459ea6a40ee3fccb3d49bbfc5f724e28835411a27"
+    },
+    {
+     "path": "tests/generated/t_rv32d_irq_wfi_coherence/symbols.json",
+     "sha256": "cb4aa3c245268f22d71a213e99cb8829caccab747a9bea50fcb0a69c5361e020"
+    }
+   ]
+  },
+  {
+   "test": "t_rv32d_isa_ext_kat",
+   "source": "tests/t_rv32d_isa_ext_kat.py",
+   "source_sha256": "9520e15fd5c15d4e73ef7d6b6035c78ee9fa66dc7911f81f6be7ae926780d612",
+   "reqs": [
+    "REQ-XL-003",
+    "REQ-XL-013"
+   ],
+   "checks": [
+    "CK-EXT-01",
+    "CK-EXT-02",
+    "CK-EXT-03",
+    "CK-EXT-04",
+    "CK-EXT-05",
+    "CK-EXT-06"
+   ],
+   "blocked_checks": [],
+   "outputs": [
+    {
+     "path": "tests/generated/t_rv32d_isa_ext_kat/axil_script.txt",
+     "sha256": "8d109c0c834724e126dfb29b8c45f209940a320f55491ffcdff2b9566b1686af"
+    },
+    {
+     "path": "tests/generated/t_rv32d_isa_ext_kat/dump_ranges.txt",
+     "sha256": "0fb779e71de5bb83c774cedf8e2203c51ec98a4f9a4f6aa6cf01392b12f6cf56"
+    },
+    {
+     "path": "tests/generated/t_rv32d_isa_ext_kat/expected.json",
+     "sha256": "aca273260cabd671a092bd0235b447268a38400ad481536c1674fd0d85741601"
+    },
+    {
+     "path": "tests/generated/t_rv32d_isa_ext_kat/mem_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_isa_ext_kat/mmio_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_isa_ext_kat/plusargs.txt",
+     "sha256": "dddb35a1b2dfc0ed4d137e3abe4a6c38ef0a42f1431f9fc57fca63a922272359"
+    },
+    {
+     "path": "tests/generated/t_rv32d_isa_ext_kat/prog.S",
+     "sha256": "314ca0b6e40cabe20943638a2fe4ac35309fc74237063deb9ac6872e602fccaa"
+    },
+    {
+     "path": "tests/generated/t_rv32d_isa_ext_kat/prog.memh",
+     "sha256": "192bb47a3e4cad1903934a47f9d6aff97f72f5a9c955010171859a18561ff714"
+    },
+    {
+     "path": "tests/generated/t_rv32d_isa_ext_kat/symbols.json",
+     "sha256": "1f3fd5412952b194e201908aaa25a5b4b02e88953602c6203aca0c3687a0da3f"
+    }
+   ]
+  },
+  {
+   "test": "t_rv32d_isa_rv32_traps",
+   "source": "tests/t_rv32d_isa_rv32_traps.py",
+   "source_sha256": "9d5edc2eee10b07e4cb509c7d35e596ba9140785dc571deb3ffe5e11352770a5",
+   "reqs": [
+    "REQ-XL-003",
+    "REQ-XL-004"
+   ],
+   "checks": [
+    "CK-I32-01",
+    "CK-I32-02",
+    "CK-I32-03",
+    "CK-I32-04",
+    "CK-I32-05",
+    "CK-I32-06"
+   ],
+   "blocked_checks": [],
+   "outputs": [
+    {
+     "path": "tests/generated/t_rv32d_isa_rv32_traps/axil_script.txt",
+     "sha256": "8d109c0c834724e126dfb29b8c45f209940a320f55491ffcdff2b9566b1686af"
+    },
+    {
+     "path": "tests/generated/t_rv32d_isa_rv32_traps/dump_ranges.txt",
+     "sha256": "0fb779e71de5bb83c774cedf8e2203c51ec98a4f9a4f6aa6cf01392b12f6cf56"
+    },
+    {
+     "path": "tests/generated/t_rv32d_isa_rv32_traps/expected.json",
+     "sha256": "84737ade30efdc942727c5a0936f6d82a898e7afe932ab54457eaba3a7254245"
+    },
+    {
+     "path": "tests/generated/t_rv32d_isa_rv32_traps/mem_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_isa_rv32_traps/mmio_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_isa_rv32_traps/plusargs.txt",
+     "sha256": "1001cc36e8b0ab2d0562f94ede697b4024ec7d7552689b821c614cd9cf7ee655"
+    },
+    {
+     "path": "tests/generated/t_rv32d_isa_rv32_traps/prog.S",
+     "sha256": "f0ba0be3920ef7936d04e91dd7e4ff82c9c6ea7c592a694264bf73134cfb1c9f"
+    },
+    {
+     "path": "tests/generated/t_rv32d_isa_rv32_traps/prog.memh",
+     "sha256": "77ac51c50e3e0a7fee7140d22d7ba6d8b5771d622edf79e491c1fcd5877e737d"
+    },
+    {
+     "path": "tests/generated/t_rv32d_isa_rv32_traps/symbols.json",
+     "sha256": "edf1ad53c54cece8da7e53b7f9ae701642489d6573b377b6005a8f1c9bbfa319"
+    }
+   ]
+  },
+  {
+   "test": "t_rv32d_mesi_dirty_owner",
+   "source": "tests/t_rv32d_mesi_dirty_owner.py",
+   "source_sha256": "bb1e8e9cef4beb6fbd938a6e8982bb338a62d48f66999c57612d1e2c6025d9b2",
+   "reqs": [
+    "REQ-MEM-001",
+    "REQ-PMU-008",
+    "REQ-XL-006",
+    "REQ-XL-012"
+   ],
+   "checks": [
+    "CK-DOW-01",
+    "CK-DOW-01b",
+    "CK-DOW-02",
+    "CK-DOW-03",
+    "CK-DOW-04",
+    "CK-DOW-05",
+    "CK-DOW-07"
+   ],
+   "blocked_checks": [
+    "CK-DOW-06"
+   ],
+   "outputs": [
+    {
+     "path": "tests/generated/t_rv32d_mesi_dirty_owner/axil_script.txt",
+     "sha256": "f81f94fb2cbf2b4480d442577b65a92569e0c405c7e370a30d7696ff647a59db"
+    },
+    {
+     "path": "tests/generated/t_rv32d_mesi_dirty_owner/dump_ranges.txt",
+     "sha256": "0fb779e71de5bb83c774cedf8e2203c51ec98a4f9a4f6aa6cf01392b12f6cf56"
+    },
+    {
+     "path": "tests/generated/t_rv32d_mesi_dirty_owner/expected.json",
+     "sha256": "7413f9d2ad3dd8284a6224922f2ef01206a66df94db15b65bd198561e440e723"
+    },
+    {
+     "path": "tests/generated/t_rv32d_mesi_dirty_owner/mem_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_mesi_dirty_owner/mmio_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_mesi_dirty_owner/plusargs.txt",
+     "sha256": "b1889182882c2eacce172494e95792f883c7d1b4121d22374ef16672af2e3250"
+    },
+    {
+     "path": "tests/generated/t_rv32d_mesi_dirty_owner/prog.S",
+     "sha256": "bc1d8e9404befdab5c03d8474cc9afc2e61c8f660b82037a7456ca1cb6b772ad"
+    },
+    {
+     "path": "tests/generated/t_rv32d_mesi_dirty_owner/prog.memh",
+     "sha256": "378276dd7ab97c51f31f943f52854d6e75ec9dde8fe1b7e0b18ab643b7206aa2"
+    },
+    {
+     "path": "tests/generated/t_rv32d_mesi_dirty_owner/symbols.json",
+     "sha256": "49d81bc07e2f363ac5078a78a24d9b926c00bb837ac31966ed3512925a284356"
+    }
+   ]
+  },
+  {
+   "test": "t_rv32d_mesi_random_litmus",
+   "source": "tests/t_rv32d_mesi_random_litmus.py",
+   "source_sha256": "79ec64f2c8e1889665c38245ba50d2f72bbb0b98c89ad403059bfb33f1cc1726",
+   "reqs": [
+    "PROTO-AXI4-A3.2",
+    "PROTO-AXI4-A3.4",
+    "REQ-IF-009",
+    "REQ-MEM-001",
+    "REQ-MEM-006",
+    "REQ-MEM-008",
+    "REQ-MEM-020"
+   ],
+   "checks": [
+    "CK-RND-02",
+    "CK-RND-02_2",
+    "CK-RND-02_3",
+    "CK-RND-02_4",
+    "CK-RND-02_5",
+    "CK-RND-02_6",
+    "CK-RND-02_7",
+    "CK-RND-02_8",
+    "CK-RND-02_9",
+    "CK-RND-02_10",
+    "CK-RND-02_11",
+    "CK-RND-02_12",
+    "CK-RND-02_13",
+    "CK-RND-02_14",
+    "CK-RND-02_15",
+    "CK-RND-02_16",
+    "CK-RND-02_17",
+    "CK-RND-02_18",
+    "CK-RND-02_19",
+    "CK-RND-02_20",
+    "CK-RND-02_21",
+    "CK-RND-02_22",
+    "CK-RND-02_23",
+    "CK-RND-02_24",
+    "CK-RND-02_25",
+    "CK-RND-02_26",
+    "CK-RND-02_27",
+    "CK-RND-02_28",
+    "CK-RND-02_29",
+    "CK-RND-02_30",
+    "CK-RND-02_31",
+    "CK-RND-02_32",
+    "CK-RND-01",
+    "CK-RND-03",
+    "CK-RND-04",
+    "CK-RND-05",
+    "CK-RND-06",
+    "CK-RND-07"
+   ],
+   "blocked_checks": [],
+   "outputs": [
+    {
+     "path": "tests/generated/t_rv32d_mesi_random_litmus/axil_script.txt",
+     "sha256": "8d109c0c834724e126dfb29b8c45f209940a320f55491ffcdff2b9566b1686af"
+    },
+    {
+     "path": "tests/generated/t_rv32d_mesi_random_litmus/dump_ranges.txt",
+     "sha256": "0fb779e71de5bb83c774cedf8e2203c51ec98a4f9a4f6aa6cf01392b12f6cf56"
+    },
+    {
+     "path": "tests/generated/t_rv32d_mesi_random_litmus/expected.json",
+     "sha256": "f32619c523b74b2499a6a41393a3cb70c111279d8ad1072c48531b9450b777fb"
+    },
+    {
+     "path": "tests/generated/t_rv32d_mesi_random_litmus/mem_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_mesi_random_litmus/mmio_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_mesi_random_litmus/plusargs.txt",
+     "sha256": "919ffb235118be4fc1d08456b1dfc35bbcbdafcbc475b8edf521d3a303ee90d6"
+    },
+    {
+     "path": "tests/generated/t_rv32d_mesi_random_litmus/prog.S",
+     "sha256": "dbcd05ac3b042e9551d3d6f3efe0be92b10e8b8a2b6c23b0a1efd521039015f5"
+    },
+    {
+     "path": "tests/generated/t_rv32d_mesi_random_litmus/prog.memh",
+     "sha256": "785eb16eafc53e6c3506e3f925ab77fdfbe0a5a9c3d5f2953ffd25c04c06d5b5"
+    },
+    {
+     "path": "tests/generated/t_rv32d_mesi_random_litmus/symbols.json",
+     "sha256": "df68b32e2bd8ce21dc4f41afc9c14e55579ebb7796b7d79597d10579243c98cb"
+    }
+   ]
+  },
+  {
+   "test": "t_rv32d_mmio_axi",
+   "source": "tests/t_rv32d_mmio_axi.py",
+   "source_sha256": "1f88c2fab0a81772d697828576c10bcaee0da1f1aa62b70ed64926432ccb6d5e",
+   "reqs": [
+    "PROTO-AXI4-A6",
+    "REQ-IF-002",
+    "REQ-IF-005",
+    "REQ-XL-006"
+   ],
+   "checks": [
+    "CK-MIO-01",
+    "CK-MIO-02",
+    "CK-MIO-03",
+    "CK-MIO-04",
+    "CK-MIO-05",
+    "CK-MIO-06"
+   ],
+   "blocked_checks": [],
+   "outputs": [
+    {
+     "path": "tests/generated/t_rv32d_mmio_axi/axil_script.txt",
+     "sha256": "8d109c0c834724e126dfb29b8c45f209940a320f55491ffcdff2b9566b1686af"
+    },
+    {
+     "path": "tests/generated/t_rv32d_mmio_axi/dump_ranges.txt",
+     "sha256": "0fb779e71de5bb83c774cedf8e2203c51ec98a4f9a4f6aa6cf01392b12f6cf56"
+    },
+    {
+     "path": "tests/generated/t_rv32d_mmio_axi/expected.json",
+     "sha256": "90ccedd2bc5a67161e10af8740f5e363d4f393273c228f324f55fd7a3b5dc57f"
+    },
+    {
+     "path": "tests/generated/t_rv32d_mmio_axi/mem_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_mmio_axi/mmio_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_mmio_axi/plusargs.txt",
+     "sha256": "8ee464c02f3f78b053ab842a6f1b734cf13748484fa48b83cd95cccda2584c09"
+    },
+    {
+     "path": "tests/generated/t_rv32d_mmio_axi/prog.S",
+     "sha256": "e333e209818f027c5e582bbef34c8bd597b4d0749f1765f8ec50d2381e8b840d"
+    },
+    {
+     "path": "tests/generated/t_rv32d_mmio_axi/prog.memh",
+     "sha256": "6ec220125e4d3330f025867dc8fd788e5afe07bc46ec1513d6a6a0d74afd8ebe"
+    },
+    {
+     "path": "tests/generated/t_rv32d_mmio_axi/symbols.json",
+     "sha256": "f0d4533cad4b31716ee1e2288bc924035072cdb9885a400dd09c3fa630e4ddc2"
+    }
+   ]
+  },
+  {
+   "test": "t_rv32d_mmio_error",
+   "source": "tests/t_rv32d_mmio_error.py",
+   "source_sha256": "836da7e6cbc699c866de0d70f95ce185f1302687195ff999c1110b6ca76ea5cf",
+   "reqs": [
+    "PROTO-AXI4-A6",
+    "REQ-ERR-001"
+   ],
+   "checks": [
+    "CK-MER-01",
+    "CK-MER-02",
+    "CK-MER-03",
+    "CK-MER-04",
+    "CK-MER-05"
+   ],
+   "blocked_checks": [],
+   "outputs": [
+    {
+     "path": "tests/generated/t_rv32d_mmio_error/axil_script.txt",
+     "sha256": "8d109c0c834724e126dfb29b8c45f209940a320f55491ffcdff2b9566b1686af"
+    },
+    {
+     "path": "tests/generated/t_rv32d_mmio_error/dump_ranges.txt",
+     "sha256": "0fb779e71de5bb83c774cedf8e2203c51ec98a4f9a4f6aa6cf01392b12f6cf56"
+    },
+    {
+     "path": "tests/generated/t_rv32d_mmio_error/expected.json",
+     "sha256": "683f69e2936c521868042f7bd08d217bdf2accacade8cbfaed51e8d3b35092e9"
+    },
+    {
+     "path": "tests/generated/t_rv32d_mmio_error/mem_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_mmio_error/mmio_rules.txt",
+     "sha256": "8e758c264140dd28eb492ae0992b30655e5c6ade87576c0e54aefa1bb646920f"
+    },
+    {
+     "path": "tests/generated/t_rv32d_mmio_error/plusargs.txt",
+     "sha256": "e9ce2548975356f76e28e9f9f472882d2a530829232442eb3cb4899edad6330b"
+    },
+    {
+     "path": "tests/generated/t_rv32d_mmio_error/prog.S",
+     "sha256": "6177b996780ac9b37cff26987ea283a90f93f75a67f3cbf6c616b1c1fa353acc"
+    },
+    {
+     "path": "tests/generated/t_rv32d_mmio_error/prog.memh",
+     "sha256": "d4cbc0821270dbd646ceffcfe000aba094d2c78d7c537aca0e53581315105284"
+    },
+    {
+     "path": "tests/generated/t_rv32d_mmio_error/symbols.json",
+     "sha256": "897f5f5a0fc0d23b77226c84b3d27c8c7d9b57dc9df62898727fefd7e775f226"
+    }
+   ]
+  },
+  {
+   "test": "t_rv32d_no_timeout_hold",
+   "source": "tests/t_rv32d_no_timeout_hold.py",
+   "source_sha256": "51d96752995b36d2c673015b61707df7c7760b4bb9a81fe8cfaa6b9ca2b5cd39",
+   "reqs": [
+    "PROTO-AXI4-A3.2",
+    "PROTO-AXI4-A6",
+    "REQ-ERR-001",
+    "REQ-MEM-013"
+   ],
+   "checks": [
+    "CK-HLD-01",
+    "CK-HLD-01b",
+    "CK-HLD-02",
+    "CK-HLD-03",
+    "CK-HLD-04",
+    "CK-HLD-05",
+    "CK-HLD-06"
+   ],
+   "blocked_checks": [],
+   "outputs": [
+    {
+     "path": "tests/generated/t_rv32d_no_timeout_hold/axil_script.txt",
+     "sha256": "8d109c0c834724e126dfb29b8c45f209940a320f55491ffcdff2b9566b1686af"
+    },
+    {
+     "path": "tests/generated/t_rv32d_no_timeout_hold/dump_ranges.txt",
+     "sha256": "0fb779e71de5bb83c774cedf8e2203c51ec98a4f9a4f6aa6cf01392b12f6cf56"
+    },
+    {
+     "path": "tests/generated/t_rv32d_no_timeout_hold/expected.json",
+     "sha256": "fcef2daf314502f353b288369567b4a7a69ad9f3ca028643968eef0df0dde244"
+    },
+    {
+     "path": "tests/generated/t_rv32d_no_timeout_hold/mem_rules.txt",
+     "sha256": "1c2692698d52a3ddfd23de7a3f5ddb007fa6880700ce08fde238b7bbeb423047"
+    },
+    {
+     "path": "tests/generated/t_rv32d_no_timeout_hold/mmio_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_no_timeout_hold/plusargs.txt",
+     "sha256": "97f32db422b8dc7f4f658c917eec6cdc45147852b086d9705a35b93a3e631cd8"
+    },
+    {
+     "path": "tests/generated/t_rv32d_no_timeout_hold/prog.S",
+     "sha256": "3689113b369a9e052c876e5427c2815f7112353c070a5e39a4ce17931ae2be32"
+    },
+    {
+     "path": "tests/generated/t_rv32d_no_timeout_hold/prog.memh",
+     "sha256": "8de63d37f75795450739cb49bc2ae1d64fb1504c80be60f95cf5ec32963b6248"
+    },
+    {
+     "path": "tests/generated/t_rv32d_no_timeout_hold/symbols.json",
+     "sha256": "31b87844b683b455c40c9cdb64fa88f3c162c5eb8a94949d5235325f120c7faf"
+    }
+   ]
+  },
+  {
+   "test": "t_rv32d_pa34_alias",
+   "source": "tests/t_rv32d_pa34_alias.py",
+   "source_sha256": "30f67b3058b0b7e92ea07f244464554c81ade9a0beb70590df90b5ce5638de5e",
+   "reqs": [
+    "REQ-XL-005",
+    "REQ-XL-006",
+    "REQ-XL-007",
+    "REQ-XL-011"
+   ],
+   "checks": [
+    "CK-PA-01",
+    "CK-PA-02",
+    "CK-PA-03",
+    "CK-PA-04",
+    "CK-PA-06"
+   ],
+   "blocked_checks": [
+    "CK-PA-05"
+   ],
+   "outputs": [
+    {
+     "path": "tests/generated/t_rv32d_pa34_alias/axil_script.txt",
+     "sha256": "8d109c0c834724e126dfb29b8c45f209940a320f55491ffcdff2b9566b1686af"
+    },
+    {
+     "path": "tests/generated/t_rv32d_pa34_alias/dump_ranges.txt",
+     "sha256": "0fb779e71de5bb83c774cedf8e2203c51ec98a4f9a4f6aa6cf01392b12f6cf56"
+    },
+    {
+     "path": "tests/generated/t_rv32d_pa34_alias/expected.json",
+     "sha256": "3868436067fd5600212abc946505799534402b91bfae63165e068ccd5b9c4d99"
+    },
+    {
+     "path": "tests/generated/t_rv32d_pa34_alias/mem_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_pa34_alias/mmio_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_pa34_alias/plusargs.txt",
+     "sha256": "ab72716caa491386dc6e67328a8536dcc3b82235ba4484b23064fd4227391c03"
+    },
+    {
+     "path": "tests/generated/t_rv32d_pa34_alias/prog.S",
+     "sha256": "cff22423224aa7f25d0d7a2468eb8afdbc12d9d10e960b5dc4eab4b12260004e"
+    },
+    {
+     "path": "tests/generated/t_rv32d_pa34_alias/prog.memh",
+     "sha256": "a9d206d8acf16f9df124d747467ab9a02251784edfb4d1c83b0673b132e40db5"
+    },
+    {
+     "path": "tests/generated/t_rv32d_pa34_alias/symbols.json",
+     "sha256": "d9a674c298f4038d792bf0552c0c4a3cbd046cadb9fa97d8a658d36d191e17f2"
+    }
+   ]
+  },
+  {
+   "test": "t_rv32d_pmu_scope_snapshot",
+   "source": "tests/t_rv32d_pmu_scope_snapshot.py",
+   "source_sha256": "fc4fbc0bbf9edf0a4f869985f1e749f8ee30997281ac3647c33382a25b8ed28a",
+   "reqs": [
+    "REQ-PMU-003",
+    "REQ-PMU-004",
+    "REQ-PMU-005",
+    "REQ-PMU-006",
+    "REQ-PMU-007",
+    "REQ-PMU-008"
+   ],
+   "checks": [
+    "CK-PMS-01",
+    "CK-PMS-02",
+    "CK-PMS-03",
+    "CK-PMS-04",
+    "CK-PMS-05",
+    "CK-PMS-06",
+    "CK-PMS-07"
+   ],
+   "blocked_checks": [],
+   "outputs": [
+    {
+     "path": "tests/generated/t_rv32d_pmu_scope_snapshot/axil_script.txt",
+     "sha256": "bedd28992603ddcbe7fd5f7ab124e83a78868ef406c6800ff5f88d9e8b757193"
+    },
+    {
+     "path": "tests/generated/t_rv32d_pmu_scope_snapshot/dump_ranges.txt",
+     "sha256": "0fb779e71de5bb83c774cedf8e2203c51ec98a4f9a4f6aa6cf01392b12f6cf56"
+    },
+    {
+     "path": "tests/generated/t_rv32d_pmu_scope_snapshot/expected.json",
+     "sha256": "be4935ad965a77e3bc542d4247a6fe8baa0e435b33f6f409f1248fc5db13b217"
+    },
+    {
+     "path": "tests/generated/t_rv32d_pmu_scope_snapshot/mem_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_pmu_scope_snapshot/mmio_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_pmu_scope_snapshot/plusargs.txt",
+     "sha256": "9a6ec6f3e1985e88b3a1f2a85b63e7d72e6872da48207368d24b7ee0b7c3e26c"
+    },
+    {
+     "path": "tests/generated/t_rv32d_pmu_scope_snapshot/prog.S",
+     "sha256": "67d29cc9f066c926334b3ce8daab6487c1008de4b1964aaadfd27611a13525ab"
+    },
+    {
+     "path": "tests/generated/t_rv32d_pmu_scope_snapshot/prog.memh",
+     "sha256": "4cf73824a69060bb8d0b80fa3a2b95a02e2c2c989a7fc6928b7add95f165cae8"
+    },
+    {
+     "path": "tests/generated/t_rv32d_pmu_scope_snapshot/symbols.json",
+     "sha256": "a76b1d587ce2cc3053c2c32f2c7c6efa1be76bd148ac1775972f0ef6d07ba782"
+    }
+   ]
+  },
+  {
+   "test": "t_rv32d_process_audit",
+   "kind": "static",
+   "source": "tests/t_rv32d_process_audit.py",
+   "source_sha256": "667d6f8dd3f09203587d55e97d67c0296c4261c3de4636280dd7978cee6ede81",
+   "runner": "manual review + python scripts/vlsit_sim_workspace.py replay",
+   "checks": [
+    "CK-PRC-01",
+    "CK-PRC-02",
+    "CK-PRC-03",
+    "CK-PRC-04",
+    "CK-PRC-05"
+   ],
+   "blocked": null,
+   "outputs": []
+  },
+  {
+   "test": "t_rv32d_region_routing",
+   "source": "tests/t_rv32d_region_routing.py",
+   "source_sha256": "10d3965ee72b4a168095aa81b397bc9fc6c1dd2a1e71df5878d28b6c25e3bd17",
+   "reqs": [
+    "REQ-ERR-002",
+    "REQ-IF-011",
+    "REQ-XL-011"
+   ],
+   "checks": [
+    "CK-REG-01",
+    "CK-REG-02",
+    "CK-REG-02b",
+    "CK-REG-03",
+    "CK-REG-04",
+    "CK-REG-05",
+    "CK-REG-05b",
+    "CK-REG-06"
+   ],
+   "blocked_checks": [],
+   "outputs": [
+    {
+     "path": "tests/generated/t_rv32d_region_routing/axil_script.txt",
+     "sha256": "8d109c0c834724e126dfb29b8c45f209940a320f55491ffcdff2b9566b1686af"
+    },
+    {
+     "path": "tests/generated/t_rv32d_region_routing/dump_ranges.txt",
+     "sha256": "0fb779e71de5bb83c774cedf8e2203c51ec98a4f9a4f6aa6cf01392b12f6cf56"
+    },
+    {
+     "path": "tests/generated/t_rv32d_region_routing/expected.json",
+     "sha256": "357a2bacb4997bdbc8581902dced2e3e12e19fc9bc75674f7e805c9cbf9999ec"
+    },
+    {
+     "path": "tests/generated/t_rv32d_region_routing/mem_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_region_routing/mmio_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_region_routing/plusargs.txt",
+     "sha256": "dca20852f547dda2ed58938a36e700d9ee470efd2f0b29c163196e9c50a393b3"
+    },
+    {
+     "path": "tests/generated/t_rv32d_region_routing/prog.S",
+     "sha256": "c87509738d349abe1108647797cd72cb2473ab38dd9597189343959d9b2c20e3"
+    },
+    {
+     "path": "tests/generated/t_rv32d_region_routing/prog.memh",
+     "sha256": "5af5816fbe936b785d1b5965979b1d449302fea6ec29d6996744f35091a63329"
+    },
+    {
+     "path": "tests/generated/t_rv32d_region_routing/symbols.json",
+     "sha256": "16f4d56dee9156772919c01d9f2403666679551b5313d9cf394a51b0f9b0ea0e"
+    }
+   ]
+  },
+  {
+   "test": "t_rv32d_reset_inflight",
+   "source": "tests/t_rv32d_reset_inflight.py",
+   "source_sha256": "96661439b6964ebb303dc4ca3f4693e0613a358a068ea64df935aac53425d4ea",
+   "reqs": [
+    "REQ-IF-005",
+    "REQ-MEM-013",
+    "REQ-RST-001",
+    "REQ-SYS-003"
+   ],
+   "checks": [
+    "CK-RST-01",
+    "CK-RST-01b",
+    "CK-RST-02",
+    "CK-RST-03",
+    "CK-RST-03b",
+    "CK-RST-04",
+    "CK-RST-05",
+    "CK-RST-06",
+    "CK-RST-07",
+    "CK-RST-08"
+   ],
+   "blocked_checks": [],
+   "outputs": [
+    {
+     "path": "tests/generated/t_rv32d_reset_inflight/axil_script.txt",
+     "sha256": "ea57e230fcc476296b7877a0cee250704e56ee5abb1f8ecd12911e0d900c90e0"
+    },
+    {
+     "path": "tests/generated/t_rv32d_reset_inflight/dump_ranges.txt",
+     "sha256": "0fb779e71de5bb83c774cedf8e2203c51ec98a4f9a4f6aa6cf01392b12f6cf56"
+    },
+    {
+     "path": "tests/generated/t_rv32d_reset_inflight/expected.json",
+     "sha256": "99b208042badca6b2f374e4ddea9e907cddc141824a4cf92d17670ed653ca383"
+    },
+    {
+     "path": "tests/generated/t_rv32d_reset_inflight/mem_rules.txt",
+     "sha256": "28d4eb7ab247feedaa81658e331ae0be386582feceb3e4a69e24475fb9d55eff"
+    },
+    {
+     "path": "tests/generated/t_rv32d_reset_inflight/mmio_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_reset_inflight/plusargs.txt",
+     "sha256": "2f987ff54ad982a966ee3103699d27e3b701578bcbb669f8cfda87f9ed29b49a"
+    },
+    {
+     "path": "tests/generated/t_rv32d_reset_inflight/prog.S",
+     "sha256": "fcc2bbff80a8e6eedf1868435ad9e496dbb9c463d97361cdd441a822f9e6c8e3"
+    },
+    {
+     "path": "tests/generated/t_rv32d_reset_inflight/prog.memh",
+     "sha256": "822f3e082dd5ecfc9bc1554daebf4ce0d250b91193fab3c1599f47398985a1cd"
+    },
+    {
+     "path": "tests/generated/t_rv32d_reset_inflight/symbols.json",
+     "sha256": "78ac28a45af661481cffb4dc55efa2845cfa3f649a53af875a005410a36648b8"
+    }
+   ]
+  },
+  {
+   "test": "t_rv32d_smoke",
+   "source": "tests/t_rv32d_smoke.py",
+   "source_sha256": "a192e88525fe3457e4198f4a3be48da8b12a9dbd644b4d6e7ed8011e860513ac",
+   "reqs": [
+    "REQ-IF-005",
+    "REQ-MEM-001",
+    "REQ-PERF-006",
+    "REQ-PERF-007",
+    "REQ-SYS-003",
+    "REQ-XL-006"
+   ],
+   "checks": [
+    "CK-SMK-01",
+    "CK-SMK-02",
+    "CK-SMK-03",
+    "CK-SMK-04",
+    "CK-SMK-05",
+    "CK-SMK-06"
+   ],
+   "blocked_checks": [],
+   "outputs": [
+    {
+     "path": "tests/generated/t_rv32d_smoke/axil_script.txt",
+     "sha256": "8d109c0c834724e126dfb29b8c45f209940a320f55491ffcdff2b9566b1686af"
+    },
+    {
+     "path": "tests/generated/t_rv32d_smoke/dump_ranges.txt",
+     "sha256": "0fb779e71de5bb83c774cedf8e2203c51ec98a4f9a4f6aa6cf01392b12f6cf56"
+    },
+    {
+     "path": "tests/generated/t_rv32d_smoke/expected.json",
+     "sha256": "96eeb99c61f74fe7001a2aeb6244207873966432d030ff5ae71c32e25795a262"
+    },
+    {
+     "path": "tests/generated/t_rv32d_smoke/mem_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_smoke/mmio_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_smoke/plusargs.txt",
+     "sha256": "8fe970c6b8f21aec63139254d2d7cc675af9d6bdc2e6b3a37b4654806fdd538c"
+    },
+    {
+     "path": "tests/generated/t_rv32d_smoke/prog.S",
+     "sha256": "511f95ab0872e8c67e44be5c2751edfe6082213e7d223bad575c73978d42396c"
+    },
+    {
+     "path": "tests/generated/t_rv32d_smoke/prog.memh",
+     "sha256": "2bfe13d75bc661941399ea679250eee38cc600525e8d3ac50921374820c49719"
+    },
+    {
+     "path": "tests/generated/t_rv32d_smoke/symbols.json",
+     "sha256": "1dfb6bfa92aa161557e2fbfca3c601f9d616e8ca820826cb476c79de62fdd5f2"
+    }
+   ]
+  },
+  {
+   "test": "t_rv32d_sv32_mmu",
+   "source": "tests/t_rv32d_sv32_mmu.py",
+   "source_sha256": "18cb5e83a1bdcb0f50e750657ab00c7ff7d839a13f7b6b4588422ea5e2610fe8",
+   "reqs": [
+    "REQ-XL-005",
+    "REQ-XL-006"
+   ],
+   "checks": [
+    "CK-SV-01",
+    "CK-SV-02",
+    "CK-SV-03",
+    "CK-SV-04",
+    "CK-SV-05",
+    "CK-SV-05b",
+    "CK-SV-06"
+   ],
+   "blocked_checks": [],
+   "outputs": [
+    {
+     "path": "tests/generated/t_rv32d_sv32_mmu/axil_script.txt",
+     "sha256": "8d109c0c834724e126dfb29b8c45f209940a320f55491ffcdff2b9566b1686af"
+    },
+    {
+     "path": "tests/generated/t_rv32d_sv32_mmu/dump_ranges.txt",
+     "sha256": "0fb779e71de5bb83c774cedf8e2203c51ec98a4f9a4f6aa6cf01392b12f6cf56"
+    },
+    {
+     "path": "tests/generated/t_rv32d_sv32_mmu/expected.json",
+     "sha256": "a65254994b0eba7d263d3c4eb1abb47ae1c8c023b1102c181e100a98269e0f25"
+    },
+    {
+     "path": "tests/generated/t_rv32d_sv32_mmu/mem_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_sv32_mmu/mmio_rules.txt",
+     "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+     "path": "tests/generated/t_rv32d_sv32_mmu/plusargs.txt",
+     "sha256": "d2fb916285602285a89a73e483c37a2a0eec03731d9c5d0e4a6ccbbd0b839c1b"
+    },
+    {
+     "path": "tests/generated/t_rv32d_sv32_mmu/prog.S",
+     "sha256": "108678d9f450e30d901af868c7daf928e245a10f8d00aef9bb6f02b63aaf58e3"
+    },
+    {
+     "path": "tests/generated/t_rv32d_sv32_mmu/prog.memh",
+     "sha256": "6726bb47be7f413645f74682f4553814a9593e1418bb1d021227591a49edebe4"
+    },
+    {
+     "path": "tests/generated/t_rv32d_sv32_mmu/symbols.json",
+     "sha256": "5ef5c7d5ef791e31532da0c2084c704fed6c34431e7da816ee0df0b5f21981bf"
+    }
+   ]
+  }
+ ]
+}

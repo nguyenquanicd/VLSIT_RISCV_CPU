@@ -1,0 +1,13 @@
+asm_rv32           model   KAT 246/246  boundary 19/19  negative 54/54  reset n/a  faults detected 8/8
+chk_fp_model       model   KAT 63/63  boundary 5/5  negative 3/3  reset n/a  faults detected 7/7
+chk_isa_kat        model   KAT 73/73  boundary 6/6  negative 3/3  reset n/a  faults detected 6/6
+chk_trap_oracle    model   KAT 10/10  boundary 3/3  negative 2/2  reset n/a  faults detected 7/7
+chk_mem_oracle     model   KAT 18/18  boundary 3/3  negative 3/3  reset 2/2  faults detected 6/6
+chk_litmus_oracle  model   KAT 8/8  boundary 3/3  negative 2/2  reset n/a  faults detected 5/5
+chk_pmu_model      model   KAT 9/9  boundary 3/3  negative 2/2  reset 1/1  faults detected 6/6
+chk_fault_oracle   model   KAT 6/6  boundary 2/2  negative 2/2  reset 1/1  faults detected 6/6
+RESULT: ACCEPTED (5 active entries)
+chk_region_table   checker KAT 13/13  boundary 5/5  negative 0/0  reset n/a  faults detected 17/17
+chk_csr_model      model   KAT 14/14  boundary 3/3  negative 2/2  reset 1/1  faults detected 6/6
+OVERALL: PASS (10 suites)
+exit=0

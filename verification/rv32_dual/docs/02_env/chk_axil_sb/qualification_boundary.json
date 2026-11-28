@@ -1,0 +1,12 @@
+{
+  "checker_id": "chk_axil_sb",
+  "kind": "boundary",
+  "cases": [
+    {
+      "name": "empty log is consistent",
+      "expected": [],
+      "observed": [],
+      "pass": true
+    }
+  ]
+}

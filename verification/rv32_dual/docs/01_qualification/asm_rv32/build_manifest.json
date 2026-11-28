@@ -1,0 +1,25 @@
+{
+  "label": "AI-generated qualification manifest; review pending",
+  "model_id": "asm_rv32",
+  "sources": [
+    {
+      "path": "models/asm_rv32/asm_rv32.py",
+      "sha256": "d4210c10a33c6fe6954fe8222bc841101ac82277a88ac279f048fcc5f899deb8"
+    },
+    {
+      "path": "models/asm_rv32/kat_encodings.json",
+      "sha256": "553233c91054c62460595651f72ff0d3b91c4e2a7a492592b9d62867e52e268c"
+    },
+    {
+      "path": "models/asm_rv32/kat_negative.json",
+      "sha256": "c52c48235d83e38cbc1207204cd5351a6e3e8c4ffdf792d06881e90f14a2ed32"
+    },
+    {
+      "path": "models/qual/qual_asm_rv32.py",
+      "sha256": "b1d9cf4d621abe31363c38e96e11aa2acdb0b674fa6a51178bfd7eab1f003813"
+    }
+  ],
+  "python": "3.12.10",
+  "semantics": "RV32 subset of plan 5.2 (RV32IMAFC, Zba/Zbb/Zbc/Zbs, Zbkb/Zbkc/Zbkx, Zkne/Zknd/Zknh RV32 forms, Zicond, Zcb, Zicbom, Zicsr, Zifencei, mret/sret/wfi/sfence.vma, dret); little-endian; no automatic compression; numeric branch/jump operand is a PC-relative offset; strict range checks; RV64/D mnemonics rejected (use .word).",
+  "correlated_error_note": "The assembler tables and the KAT bit strings were written by the same author from the same ISA encoding tables; a shared misremembered field value would pass both. Mitigations: 25 anchor vectors cross-checked against widely published constants, independent field-by-field bit strings, model-mutation detection. Residual risk until the human review compares the KAT with the ISA manual."
+}

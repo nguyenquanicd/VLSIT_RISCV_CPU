@@ -1,0 +1,12 @@
+{
+  "checker_id": "chk_axi_mmio_sb",
+  "kind": "boundary",
+  "cases": [
+    {
+      "name": "memory-port rules ignore MMIO records",
+      "expected": [],
+      "observed": [],
+      "pass": true
+    }
+  ]
+}

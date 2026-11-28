@@ -1,0 +1,42 @@
+{
+  "model_id": "chk_mem_oracle",
+  "kind": "fault_detection",
+  "cases": [
+    {
+      "name": "lost AMO increment (127 of 128)",
+      "expected": "detected",
+      "observed": "detected: counter final 0x0000007f expected 0x00000080",
+      "pass": true
+    },
+    {
+      "name": "stale final value not in legal set",
+      "expected": "detected",
+      "observed": "detected: final 2 not legal",
+      "pass": true
+    },
+    {
+      "name": "byte order swapped in image",
+      "expected": "detected",
+      "observed": "detected: word 0x00000080 = 0x44332211 expected 0x11223344",
+      "pass": true
+    },
+    {
+      "name": "word missing from image",
+      "expected": "detected",
+      "observed": "detected: word 0x00000084 missing from observed image",
+      "pass": true
+    },
+    {
+      "name": "LR/SC: success counted without store",
+      "expected": "detected",
+      "observed": "detected: counter final 0x00000009 expected 0x0000000a",
+      "pass": true
+    },
+    {
+      "name": "wrong AMO old value used (amomin unsigned)",
+      "expected": "detected",
+      "observed": "detected: signed min returned 0xFFFFFFFF, unsigned would be 1",
+      "pass": true
+    }
+  ]
+}

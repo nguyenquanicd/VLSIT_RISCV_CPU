@@ -1,0 +1,24 @@
+{
+  "model_id": "chk_mem_oracle",
+  "kind": "boundary",
+  "cases": [
+    {
+      "name": "AMOADD 32-bit wrap",
+      "expected": "0x0",
+      "observed": "0x0",
+      "pass": true
+    },
+    {
+      "name": "counter wraps modulo 2^32",
+      "expected": [],
+      "observed": [],
+      "pass": true
+    },
+    {
+      "name": "8-byte image record splits into two words",
+      "expected": [],
+      "observed": [],
+      "pass": true
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "model_id": "chk_fault_oracle",
+  "kind": "fault_detection",
+  "cases": [
+    {
+      "name": "payload overwritten by second error",
+      "expected": "detected",
+      "observed": "detected: cpucl_fault_lo 0x80005670 expected 0x80001230",
+      "pass": true
+    },
+    {
+      "name": "multiple flag missing",
+      "expected": "detected",
+      "observed": "detected: cpucl_fault_sts 0x00000015 expected 0x00000017",
+      "pass": true
+    },
+    {
+      "name": "hart_valid set for LLC source",
+      "expected": "detected",
+      "observed": "detected: cpucl_fault_sts 0x0000001f expected 0x00000017",
+      "pass": true
+    },
+    {
+      "name": "raw BRESP of second error recorded",
+      "expected": "detected",
+      "observed": "detected: cpucl_fault_info 0x00000032 expected 0x00000022",
+      "pass": true
+    },
+    {
+      "name": "o_int_fault dropped",
+      "expected": "detected",
+      "observed": "detected: o_int_fault 0 expected 1",
+      "pass": true
+    },
+    {
+      "name": "byte address not line-aligned",
+      "expected": "detected",
+      "observed": "detected: cpucl_fault_lo 0x80001234 expected 0x80001230",
+      "pass": true
+    }
+  ]
+}

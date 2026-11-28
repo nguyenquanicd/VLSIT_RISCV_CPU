@@ -1,0 +1,18 @@
+{
+  "model_id": "chk_csr_model",
+  "kind": "negative",
+  "cases": [
+    {
+      "name": "LLC window not modelled (Q-G0-04)",
+      "expected": "rejected",
+      "observed": "NotImplementedError: LLC service window not modelled (Q-G0-04)",
+      "pass": true
+    },
+    {
+      "name": "outside the 24-KiB aperture is unspecified",
+      "expected": "rejected",
+      "observed": "ValueError: address 0x6000 outside the 24-KiB aperture: behaviour unspecified",
+      "pass": true
+    }
+  ]
+}

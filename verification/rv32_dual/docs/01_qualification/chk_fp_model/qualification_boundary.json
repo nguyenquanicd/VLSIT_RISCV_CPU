@@ -1,0 +1,60 @@
+{
+  "model_id": "chk_fp_model",
+  "kind": "boundary",
+  "cases": [
+    {
+      "name": "host binary32 cross-check, RNE fmul/fadd, 3571 vectors incl. subnormal/overflow edges",
+      "expected": "0x0",
+      "observed": "0x0",
+      "pass": true
+    },
+    {
+      "name": "fadd.s 0x7f7fffff,0x73800000 rne",
+      "expected": [
+        "0x7f800000",
+        "0x5"
+      ],
+      "observed": [
+        "0x7f800000",
+        "0x5"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fadd.s 0x7f7fffff,0x73000000 rne",
+      "expected": [
+        "0x7f800000",
+        "0x5"
+      ],
+      "observed": [
+        "0x7f800000",
+        "0x5"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fadd.s 0x7f7fffff,0x72800000 rne",
+      "expected": [
+        "0x7f7fffff",
+        "0x1"
+      ],
+      "observed": [
+        "0x7f7fffff",
+        "0x1"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fmul.s 0x00800000,0x3f7fffff rne",
+      "expected": [
+        "0x800000",
+        "0x3"
+      ],
+      "observed": [
+        "0x800000",
+        "0x3"
+      ],
+      "pass": true
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+ "test": "t_rv32d_mmio_error",
+ "seed": 1,
+ "configuration": "CFG-RV32-2-P0",
+ "slots": {
+  "0:after": "0x80080004",
+  "0:sentinel": "0x80080000"
+ },
+ "trap_base": "0x80090000",
+ "sig_base": "0x80080000",
+ "checks": [
+  {
+   "id": "CK-MER-01",
+   "req": "REQ-ERR-001",
+   "kind": "traps",
+   "params": {
+    "hart": 0,
+    "subset": true,
+    "expected": [
+     {
+      "kind": "exception",
+      "code": 5,
+      "epc": 2147484376,
+      "tval": 268437760
+     }
+    ]
+   }
+  },
+  {
+   "id": "CK-MER-02",
+   "req": "REQ-ERR-001",
+   "kind": "trap_cause",
+   "params": {
+    "hart": 0,
+    "cause": 7,
+    "present": true
+   }
+  },
+  {
+   "id": "CK-MER-03",
+   "req": "REQ-ERR-001",
+   "kind": "slot",
+   "params": {
+    "addr": 2148007936,
+    "expect": 1583242846
+   }
+  },
+  {
+   "id": "CK-MER-04",
+   "req": "PROTO-AXI4-A6",
+   "kind": "axi_mmio",
+   "params": {
+    "rules": [
+     {
+      "kind": "structural",
+      "window": [
+       null,
+       null
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "CK-MER-05",
+   "req": "REQ-ERR-001",
+   "kind": "slot",
+   "params": {
+    "addr": 2148007940,
+    "expect": 16962
+   }
+  }
+ ],
+ "blocked_checks": [],
+ "extra": {}
+}

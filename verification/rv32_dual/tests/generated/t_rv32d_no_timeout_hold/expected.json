@@ -1,0 +1,88 @@
+{
+ "test": "t_rv32d_no_timeout_hold",
+ "seed": 1,
+ "configuration": "CFG-RV32-2-P0",
+ "slots": {
+  "0:hz": "0x80080000",
+  "1:hy": "0x80081004",
+  "1:work": "0x80081000"
+ },
+ "trap_base": "0x80090000",
+ "sig_base": "0x80080000",
+ "checks": [
+  {
+   "id": "CK-HLD-01",
+   "req": "REQ-MEM-013",
+   "kind": "ckpt_order",
+   "params": {
+    "first": 129,
+    "second": 130,
+    "min_gap": 100000
+   }
+  },
+  {
+   "id": "CK-HLD-01b",
+   "req": "REQ-MEM-013",
+   "kind": "bfm_event",
+   "params": {
+    "port": "mem",
+    "event": "hold_r",
+    "min": 1
+   }
+  },
+  {
+   "id": "CK-HLD-02",
+   "req": "REQ-MEM-013",
+   "kind": "slot",
+   "params": {
+    "addr": 2148012032,
+    "expect": 1000
+   }
+  },
+  {
+   "id": "CK-HLD-03",
+   "req": "PROTO-AXI4-A6",
+   "kind": "slot",
+   "params": {
+    "addr": 2148012036,
+    "expect": 1515847682
+   }
+  },
+  {
+   "id": "CK-HLD-04",
+   "req": "REQ-ERR-001",
+   "kind": "slot",
+   "params": {
+    "addr": 2148007936,
+    "expect": 1515847681
+   }
+  },
+  {
+   "id": "CK-HLD-05",
+   "req": "PROTO-AXI4-A3.2",
+   "kind": "sva",
+   "params": {
+    "id": "a_axi_mem_stable",
+    "need_cover": false
+   }
+  },
+  {
+   "id": "CK-HLD-06",
+   "req": "PROTO-AXI4-A6",
+   "kind": "axi_mem",
+   "params": {
+    "rules": [
+     {
+      "kind": "structural",
+      "window": [
+       null,
+       null
+      ]
+     }
+    ]
+   }
+  }
+ ],
+ "blocked_checks": [],
+ "extra": {}
+}

@@ -1,0 +1,50 @@
+{
+  "checker_id": "chk_axi_mem_sb",
+  "kind": "known_answer",
+  "cases": [
+    {
+      "name": "line write, absence, read presence and structure in a checkpoint window",
+      "expected": [],
+      "observed": [],
+      "pass": true
+    },
+    {
+      "name": "transactions rebuilt (2 writes, 1 read, no structural error)",
+      "expected": [
+        "0x2",
+        "0x1",
+        []
+      ],
+      "observed": [
+        "0x2",
+        "0x1",
+        []
+      ],
+      "pass": true
+    },
+    {
+      "name": "checkpoints extracted from MMIO writes",
+      "expected": [
+        [
+          "0x11",
+          "0xa"
+        ],
+        [
+          "0x12",
+          "0x32"
+        ]
+      ],
+      "observed": [
+        [
+          "0x11",
+          "0xa"
+        ],
+        [
+          "0x12",
+          "0x32"
+        ]
+      ],
+      "pass": true
+    }
+  ]
+}

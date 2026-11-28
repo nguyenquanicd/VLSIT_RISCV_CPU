@@ -1,0 +1,174 @@
+{
+ "test": "t_rv32d_coh_cmo_amo_stress",
+ "seed": 1,
+ "configuration": "CFG-RV32-2-P0",
+ "slots": {
+  "0:patch": "0x80080000",
+  "1:sh_seen": "0x80081000",
+  "1:x_seen": "0x80081004"
+ },
+ "trap_base": "0x80090000",
+ "sig_base": "0x80080000",
+ "checks": [
+  {
+   "id": "CK-STR-01",
+   "req": "REQ-MEM-006",
+   "kind": "mem_word",
+   "params": {
+    "addr": 2147746048,
+    "expect": 64
+   }
+  },
+  {
+   "id": "CK-STR-02",
+   "req": "REQ-MEM-015",
+   "kind": "axi_mem",
+   "params": {
+    "rules": [
+     {
+      "kind": "write_line",
+      "addr": 2147745792,
+      "window": [
+       17,
+       18
+      ],
+      "beats": 2,
+      "strobe_full": true
+     },
+     {
+      "kind": "write_line",
+      "addr": 2147745856,
+      "window": [
+       17,
+       18
+      ],
+      "beats": 2,
+      "strobe_full": true
+     }
+    ]
+   }
+  },
+  {
+   "id": "CK-STR-03",
+   "req": "REQ-MEM-015",
+   "kind": "axi_mem",
+   "params": {
+    "rules": [
+     {
+      "kind": "no_write",
+      "lo": 2147745920,
+      "hi": 2147745935,
+      "window": [
+       19,
+       20
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "CK-STR-04",
+   "req": "REQ-MEM-018",
+   "kind": "slot",
+   "params": {
+    "addr": 2148007936,
+    "expect": 85
+   }
+  },
+  {
+   "id": "CK-STR-04b",
+   "req": "REQ-MEM-018",
+   "kind": "axi_mem",
+   "params": {
+    "rules": [
+     {
+      "kind": "no_write",
+      "lo": 2147483648,
+      "hi": 3221225471,
+      "window": [
+       21,
+       22
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "CK-STR-05",
+   "req": "REQ-MEM-020",
+   "kind": "tohost",
+   "params": {
+    "code": 1
+   }
+  },
+  {
+   "id": "CK-STR-06",
+   "req": "REQ-PMU-008",
+   "kind": "pmu",
+   "params": {
+    "config": {
+     "0": [
+      771,
+      5,
+      1
+     ],
+     "1": [
+      772,
+      5,
+      1
+     ],
+     "2": [
+      775,
+      5,
+      1
+     ]
+    },
+    "occurrences": [
+     {
+      "cycle": 1,
+      "event_id": 771,
+      "hart": null,
+      "count": 1
+     },
+     {
+      "cycle": 2,
+      "event_id": 772,
+      "hart": null,
+      "count": 1
+     },
+     {
+      "cycle": 3,
+      "event_id": 775,
+      "hart": null,
+      "count": 1
+     }
+    ]
+   }
+  },
+  {
+   "id": "CK-STR-07",
+   "req": "PROTO-AXI4-A3.2",
+   "kind": "sva",
+   "params": {
+    "id": "a_axi_mem_stable"
+   }
+  },
+  {
+   "id": "CK-STR-08",
+   "req": "REQ-MEM-001",
+   "kind": "slot",
+   "params": {
+    "addr": 2148012036,
+    "expect": 42405
+   }
+  }
+ ],
+ "blocked_checks": [
+  {
+   "id": "SVA-104/105",
+   "req": "REQ-MEM-019",
+   "reason": "sva_internal_bind blocked by Q-G0-13 (observation-point table not in the RV32 HDS)"
+  }
+ ],
+ "extra": {}
+}

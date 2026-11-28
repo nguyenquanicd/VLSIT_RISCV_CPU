@@ -1,0 +1,75 @@
+{
+ "test": "t_rv32d_axil_csr_windows",
+ "seed": 1,
+ "configuration": "CFG-RV32-2-P0",
+ "slots": {},
+ "trap_base": "0x80090000",
+ "sig_base": "0x80080000",
+ "checks": [
+  {
+   "id": "CK-AXL-01",
+   "req": "REQ-IF-008",
+   "kind": "axil",
+   "params": {
+    "csr_model": true
+   }
+  },
+  {
+   "id": "CK-AXL-02",
+   "req": "REQ-IF-007",
+   "kind": "axil_resp",
+   "params": {
+    "addr": 6,
+    "resp": "SLVERR",
+    "count": 2
+   }
+  },
+  {
+   "id": "CK-AXL-03",
+   "req": "REQ-IF-007",
+   "kind": "axil_reads_eq",
+   "params": {
+    "which": "last",
+    "values": {
+     "4": 3735927722
+    }
+   }
+  },
+  {
+   "id": "CK-AXL-04",
+   "req": "PROTO-AXI4L-B1",
+   "kind": "axil",
+   "params": {
+    "csr_model": false
+   }
+  },
+  {
+   "id": "CK-AXL-05",
+   "req": "REQ-IF-005",
+   "kind": "sva",
+   "params": {
+    "id": "a_axil_stable"
+   }
+  },
+  {
+   "id": "CK-AXL-06",
+   "req": "REQ-ERR-002",
+   "kind": "axil_reads_eq",
+   "params": {
+    "which": "last",
+    "values": {
+     "16384": 0,
+     "20": 0
+    }
+   }
+  }
+ ],
+ "blocked_checks": [
+  {
+   "id": "CK-AXL-07",
+   "req": "REQ-IF-010",
+   "reason": "LLC service window field semantics: Q-G0-04 (register table not yet in REF-001 Section 11)"
+  }
+ ],
+ "extra": {}
+}

@@ -1,0 +1,137 @@
+{
+ "test": "t_rv32d_cbo_fault_llc",
+ "seed": 1,
+ "configuration": "CFG-RV32-2-P0",
+ "slots": {
+  "0:marker": "0x80080000"
+ },
+ "trap_base": "0x80090000",
+ "sig_base": "0x80080000",
+ "checks": [
+  {
+   "id": "CK-CBF-01",
+   "req": "REQ-MEM-017",
+   "kind": "traps",
+   "params": {
+    "hart": 0,
+    "subset": true,
+    "expected": [
+     {
+      "kind": "exception",
+      "code": 7,
+      "epc": 2147484428,
+      "tval": 2147745799
+     },
+     {
+      "kind": "exception",
+      "code": 7,
+      "epc": 2147484528,
+      "tval": 2147745792
+     }
+    ]
+   }
+  },
+  {
+   "id": "CK-CBF-02",
+   "req": "REQ-MEM-017",
+   "kind": "traps",
+   "params": {
+    "hart": 0,
+    "subset": true,
+    "expected": [
+     {
+      "kind": "exception",
+      "code": 7,
+      "epc": 2147484428,
+      "tval": 2147745799
+     },
+     {
+      "kind": "exception",
+      "code": 7,
+      "epc": 2147484528,
+      "tval": 2147745792
+     }
+    ]
+   }
+  },
+  {
+   "id": "CK-CBF-03",
+   "req": "REQ-MEM-017",
+   "kind": "slot",
+   "params": {
+    "addr": 2148007936,
+    "expect": 0
+   }
+  },
+  {
+   "id": "CK-CBF-04",
+   "req": "REQ-MEM-016",
+   "kind": "axi_mem",
+   "params": {
+    "rules": [
+     {
+      "kind": "write_line",
+      "addr": 2147745792,
+      "window": [
+       50,
+       51
+      ],
+      "beats": 2,
+      "strobe_full": true,
+      "resp": 0,
+      "data": "78563412010000fa020000fa030000fa"
+     }
+    ]
+   }
+  },
+  {
+   "id": "CK-CBF-05",
+   "req": "REQ-ERR-001",
+   "kind": "axi_mem",
+   "params": {
+    "rules": [
+     {
+      "kind": "write_line",
+      "addr": 2147745792,
+      "window": [
+       49,
+       50
+      ],
+      "count": 1,
+      "resp": 2
+     }
+    ]
+   }
+  },
+  {
+   "id": "CK-CBF-06",
+   "req": "REQ-XL-005",
+   "kind": "traps",
+   "params": {
+    "hart": 1,
+    "subset": true,
+    "expected": [
+     {
+      "kind": "exception",
+      "code": 7,
+      "epc": 2147484816,
+      "tval": 2147745859,
+      "from": "S",
+      "medeleg": 128
+     }
+    ]
+   }
+  },
+  {
+   "id": "CK-CBF-07",
+   "req": "REQ-MEM-016",
+   "kind": "mem_word",
+   "params": {
+    "addr": 2147745796,
+    "expect": 2596069104
+   }
+  }
+ ],
+ "blocked_checks": [],
+ "extra": {}
+}

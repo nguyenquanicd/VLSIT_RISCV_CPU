@@ -1,0 +1,108 @@
+{
+  "model_id": "chk_region_table",
+  "kind": "fault_detection",
+  "cases": [
+    {
+      "name": "rule 1: PARA_ADDR_REGION_NUM = 0",
+      "expected": "detected",
+      "observed": "detected: rule 1: PARA_ADDR_REGION_NUM 0 outside 1..16",
+      "pass": true
+    },
+    {
+      "name": "rule 1: PARA_ADDR_REGION_NUM = 17",
+      "expected": "detected",
+      "observed": "detected: rule 1: PARA_ADDR_REGION_NUM 17 outside 1..16",
+      "pass": true
+    },
+    {
+      "name": "rule 2: base not 16-byte aligned",
+      "expected": "detected",
+      "observed": "detected: rule 2: entry 1 base/length not 16-byte aligned or length zero",
+      "pass": true
+    },
+    {
+      "name": "rule 2: zero length",
+      "expected": "detected",
+      "observed": "detected: rule 2: entry 2 base/length not 16-byte aligned or length zero",
+      "pass": true
+    },
+    {
+      "name": "rule 2: length not a multiple of 16",
+      "expected": "detected",
+      "observed": "detected: rule 2: entry 2 base/length not 16-byte aligned or length zero",
+      "pass": true
+    },
+    {
+      "name": "rule 2: base[63:56] nonzero",
+      "expected": "detected",
+      "observed": "detected: rule 2: entry 3 base[63:56] not zero",
+      "pass": true
+    },
+    {
+      "name": "rule 3: TYPE[31:2] nonzero",
+      "expected": "detected",
+      "observed": "detected: rule 3: entry 1 TYPE[31:2] = 0x1 not zero",
+      "pass": true
+    },
+    {
+      "name": "rule 3: class 2'b11 reserved",
+      "expected": "detected",
+      "observed": "detected: rule 3: entry 3 class 2'b11 is reserved",
+      "pass": true
+    },
+    {
+      "name": "rule 4: entry 3 overlaps entry 0",
+      "expected": "detected",
+      "observed": "detected: rule 4: entries 3 and 0 overlap",
+      "pass": true
+    },
+    {
+      "name": "rule 5: cacheable entry not at index 0",
+      "expected": "detected",
+      "observed": "detected: rule 5: exactly one cacheable (class 00) entry is required and it must be entry 0 (found [3])",
+      "pass": true
+    },
+    {
+      "name": "rule 5: second cacheable entry",
+      "expected": "detected",
+      "observed": "detected: rule 5: exactly one cacheable (class 00) entry is required and it must be entry 0 (found [0, 3])",
+      "pass": true
+    },
+    {
+      "name": "rule 5: no cacheable entry",
+      "expected": "detected",
+      "observed": "detected: rule 5: exactly one cacheable (class 00) entry is required and it must be entry 0 (found [])",
+      "pass": true
+    },
+    {
+      "name": "rule 5: cacheable length not a power of two",
+      "expected": "detected",
+      "observed": "detected: rule 5: cacheable entry 0 length 0x30000000 is not a power of two",
+      "pass": true
+    },
+    {
+      "name": "rule 5: cacheable base not aligned to its length",
+      "expected": "detected",
+      "observed": "detected: rule 5: cacheable entry 0 base 0x90000000 not aligned to its length 0x20000000",
+      "pass": true
+    },
+    {
+      "name": "XL-011: entry 4 ends at 2^34 + 16 (Q-G0-09)",
+      "expected": "detected",
+      "observed": "detected: XL-011: entry 4 base + length 0x400000010 exceeds 2^34",
+      "pass": true
+    },
+    {
+      "name": "XL-011: static execute region beyond 2^34",
+      "expected": "detected",
+      "observed": "detected: XL-011: static execute region 3 exceeds 2^34",
+      "pass": true
+    },
+    {
+      "name": "SV form loses BASE_HI of entry 4",
+      "expected": "detected",
+      "observed": "detected: SV form differs from 14.4.20",
+      "pass": true
+    }
+  ]
+}

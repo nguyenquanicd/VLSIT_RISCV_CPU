@@ -1,0 +1,4 @@
+CHECK: 34 tests, identical
+exit=0
+CHECK: identical
+exit=0

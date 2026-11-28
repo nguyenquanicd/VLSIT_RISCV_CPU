@@ -1,0 +1,15 @@
+{
+  "label": "AI-generated qualification manifest; review pending",
+  "checker_id": "cov_collect",
+  "sources": [
+    {
+      "path": "env/coverage/cov_collect.py",
+      "sha256": "f1693b79c3608bc49ee704174b5963e97d5530403c28ba0b75ed0e163145b4a6"
+    },
+    {
+      "path": "env/qual/qual_env.py",
+      "sha256": "35ba890359fca3406fcc14f956d22a0f7af6c5138d4463c7a93c776ae259c691"
+    }
+  ],
+  "correlated_error_note": "Synthetic logs and the checker were written by the same AI author from models/README.md; faults injected are hand-chosen defect classes, not an exhaustive mutation set."
+}

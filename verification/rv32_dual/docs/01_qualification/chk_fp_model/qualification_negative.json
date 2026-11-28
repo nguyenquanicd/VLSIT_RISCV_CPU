@@ -1,0 +1,30 @@
+{
+  "model_id": "chk_fp_model",
+  "kind": "negative",
+  "cases": [
+    {
+      "name": "bad rounding mode",
+      "expected": "rejected",
+      "observed": "ValueError: bad rounding mode 'dyn'",
+      "pass": true
+    },
+    {
+      "name": "unsupported op fadd.d",
+      "expected": "rejected",
+      "observed": "ValueError: unsupported op 'fadd.d'",
+      "pass": true
+    },
+    {
+      "name": "sNaN operand to fadd -> canonical NaN, NV",
+      "expected": [
+        "0x7fc00000",
+        "0x10"
+      ],
+      "observed": [
+        "0x7fc00000",
+        "0x10"
+      ],
+      "pass": true
+    }
+  ]
+}

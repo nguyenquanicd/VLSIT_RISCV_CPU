@@ -1,0 +1,18 @@
+{
+  "checker_id": "chk_sig",
+  "kind": "boundary",
+  "cases": [
+    {
+      "name": "masked compare",
+      "expected": [],
+      "observed": [],
+      "pass": true
+    },
+    {
+      "name": "allowed-set compare",
+      "expected": [],
+      "observed": [],
+      "pass": true
+    }
+  ]
+}

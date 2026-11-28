@@ -1,0 +1,42 @@
+{
+  "model_id": "chk_region_table",
+  "kind": "boundary",
+  "cases": [
+    {
+      "name": "entry ending exactly at 2^34 accepted",
+      "expected": [],
+      "observed": [],
+      "pass": true
+    },
+    {
+      "name": "REF-001 default table (NUM=1, cacheable 0x80000000/1 GiB) accepted",
+      "expected": [],
+      "observed": [],
+      "pass": true
+    },
+    {
+      "name": "entries above PARA_ADDR_REGION_NUM are ignored",
+      "expected": [],
+      "observed": [],
+      "pass": true
+    },
+    {
+      "name": "inactive entry is not used by classify",
+      "expected": [
+        "error",
+        "unmapped"
+      ],
+      "observed": [
+        "error",
+        "unmapped"
+      ],
+      "pass": true
+    },
+    {
+      "name": "NUM=16 accepted when 16 valid entries exist",
+      "expected": [],
+      "observed": [],
+      "pass": true
+    }
+  ]
+}

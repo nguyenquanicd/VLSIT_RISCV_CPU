@@ -1,0 +1,42 @@
+{
+  "model_id": "chk_csr_model",
+  "kind": "fault_detection",
+  "cases": [
+    {
+      "name": "reserved offset answered OKAY",
+      "expected": "detected",
+      "observed": "detected: #0 read 0x0014 resp OKAY expected DECERR",
+      "pass": true
+    },
+    {
+      "name": "reserved bits of pmu_evt read nonzero",
+      "expected": "detected",
+      "observed": "detected: #1 read 0x1000 data 0xffffffff expected 0x000fffff",
+      "pass": true
+    },
+    {
+      "name": "WSTRB ignored",
+      "expected": "detected",
+      "observed": "detected: #1 read 0x0004 data 0xffffffff expected 0x000000ff",
+      "pass": true
+    },
+    {
+      "name": "misaligned access answered OKAY",
+      "expected": "detected",
+      "observed": "detected: #0 write 0x0006 resp OKAY expected SLVERR",
+      "pass": true
+    },
+    {
+      "name": "RO register modified by write",
+      "expected": "detected",
+      "observed": "detected: #1 read 0x4008 data 0x00000001 expected 0x00000000",
+      "pass": true
+    },
+    {
+      "name": "reset value wrong",
+      "expected": "detected",
+      "observed": "detected: #0 read 0x1004 data 0x00080000 expected 0x00000000",
+      "pass": true
+    }
+  ]
+}

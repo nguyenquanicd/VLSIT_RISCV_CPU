@@ -1,0 +1,72 @@
+{
+  "model_id": "chk_csr_model",
+  "label": "AI-generated qualification record; not human-reviewed",
+  "build_manifest_sha256": "c5f599ae701fe57bbcd365ab1c0bdcde5a6dbab08f499fc78d8c3e5bd6ff5d15",
+  "review": {
+    "decision": "pending",
+    "approver": "pending",
+    "date": null
+  },
+  "tests": [
+    {
+      "kind": "known_answer",
+      "status": "pass",
+      "command": "python scripts/run_model_qualification.py --out docs/01_qualification --force",
+      "exit_code": 0,
+      "expected": "match",
+      "observed": "14/14 cases passed",
+      "evidence": {
+        "path": "docs/01_qualification/chk_csr_model/qualification_known_answer.json",
+        "sha256": "9cd952bad2329d3470a79a4376d2ad2d32f89f92979b7dd956f56d0578c68efc"
+      }
+    },
+    {
+      "kind": "boundary",
+      "status": "pass",
+      "command": "python scripts/run_model_qualification.py --out docs/01_qualification --force",
+      "exit_code": 0,
+      "expected": "match",
+      "observed": "3/3 cases passed",
+      "evidence": {
+        "path": "docs/01_qualification/chk_csr_model/qualification_boundary.json",
+        "sha256": "6f35ecd08951dd3357d3ebc79fd6660e4c000a487e0e7d6f508ab4fa41cb6260"
+      }
+    },
+    {
+      "kind": "negative",
+      "status": "pass",
+      "command": "python scripts/run_model_qualification.py --out docs/01_qualification --force",
+      "exit_code": 0,
+      "expected": "handled",
+      "observed": "2/2 cases passed",
+      "evidence": {
+        "path": "docs/01_qualification/chk_csr_model/qualification_negative.json",
+        "sha256": "13aa15d3bf699586f545ee72fef414faa1cad3ef7ebda42a4295f43061e7b60b"
+      }
+    },
+    {
+      "kind": "reset",
+      "status": "pass",
+      "command": "python scripts/run_model_qualification.py --out docs/01_qualification --force",
+      "exit_code": 0,
+      "expected": "match",
+      "observed": "1/1 cases passed",
+      "evidence": {
+        "path": "docs/01_qualification/chk_csr_model/qualification_reset.json",
+        "sha256": "ecb8452ace27e1ba899d256561e57b13e9e3e3344c5886224f8ae5a6666b5df6"
+      }
+    },
+    {
+      "kind": "fault_detection",
+      "status": "pass",
+      "command": "python scripts/run_model_qualification.py --out docs/01_qualification --force",
+      "exit_code": 0,
+      "expected": "detected",
+      "observed": "6/6 cases detected",
+      "evidence": {
+        "path": "docs/01_qualification/chk_csr_model/qualification_fault_detection.json",
+        "sha256": "ff18bd2ae905eec0ac9c953206043418d54e56be12242e2c799c0f8a30f5402a"
+      }
+    }
+  ]
+}

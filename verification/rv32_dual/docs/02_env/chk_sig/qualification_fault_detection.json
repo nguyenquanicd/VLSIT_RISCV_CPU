@@ -1,0 +1,36 @@
+{
+  "checker_id": "chk_sig",
+  "kind": "fault_detection",
+  "cases": [
+    {
+      "name": "slot value wrong",
+      "expected": "detected",
+      "observed": "detected: slot 0x80080000 = 0x00000007 expected 0x00000008 (mask 0xffffffff)",
+      "pass": true
+    },
+    {
+      "name": "slot not published",
+      "expected": "detected",
+      "observed": "detected: slot 0x80080100 not present in the memory dump (signature not published)",
+      "pass": true
+    },
+    {
+      "name": "value outside allowed set",
+      "expected": "detected",
+      "observed": "detected: slot 0x80080000 = 0x00000007 not in allowed ['0x1', '0x2']",
+      "pass": true
+    },
+    {
+      "name": "trap cause wrong vs oracle",
+      "expected": "detected",
+      "observed": "detected: hart 0 trap #0: cause 7 expected 5",
+      "pass": true
+    },
+    {
+      "name": "trap epc wrong vs oracle",
+      "expected": "detected",
+      "observed": "detected: hart 0 trap #0: epc 2147483904 expected 2147483908",
+      "pass": true
+    }
+  ]
+}

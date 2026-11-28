@@ -1,0 +1,48 @@
+{
+  "model_id": "chk_trap_oracle",
+  "kind": "fault_detection",
+  "cases": [
+    {
+      "name": "wrong cause (5 instead of 7)",
+      "expected": "detected",
+      "observed": "detected: hart 0 trap #0: cause 5 expected 7",
+      "pass": true
+    },
+    {
+      "name": "epc points to next instruction",
+      "expected": "detected",
+      "observed": "detected: hart 0 trap #0: epc 2147483908 expected 2147483904",
+      "pass": true
+    },
+    {
+      "name": "tval aligned instead of original EA",
+      "expected": "detected",
+      "observed": "detected: hart 0 trap #0: tval 2415919104 expected 2415919111",
+      "pass": true
+    },
+    {
+      "name": "trap taken in S instead of M",
+      "expected": "detected",
+      "observed": "detected: hart 0 trap #0: level 'S' expected 'M'",
+      "pass": true
+    },
+    {
+      "name": "missing trap on hart 1",
+      "expected": "detected",
+      "observed": "detected: hart 1: missing trap #0 (cause 0x18)",
+      "pass": true
+    },
+    {
+      "name": "extra trap (younger instruction faulted too)",
+      "expected": "detected",
+      "observed": "detected: hart 0: unexpected trap #1 (cause 0x7)",
+      "pass": true
+    },
+    {
+      "name": "FENCE.I tval not the aligned line base",
+      "expected": "detected",
+      "observed": "detected: hart 1 trap #0: tval 2147488308 expected 2147488304",
+      "pass": true
+    }
+  ]
+}

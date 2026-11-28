@@ -1,0 +1,162 @@
+{
+ "test": "t_rv32d_reset_inflight",
+ "seed": 1,
+ "configuration": "CFG-RV32-2-P0",
+ "slots": {
+  "0:hartid": "0x80080000",
+  "0:keep": "0x80080004",
+  "1:hartid": "0x80081000"
+ },
+ "trap_base": "0x80090000",
+ "sig_base": "0x80080000",
+ "checks": [
+  {
+   "id": "CK-RST-01",
+   "req": "REQ-RST-001",
+   "kind": "stale",
+   "params": {
+    "port": "mem",
+    "need_reset": true
+   }
+  },
+  {
+   "id": "CK-RST-01b",
+   "req": "REQ-RST-001",
+   "kind": "stale",
+   "params": {
+    "port": "mmio",
+    "need_reset": true
+   }
+  },
+  {
+   "id": "CK-RST-02",
+   "req": "REQ-RST-001",
+   "kind": "axil_reads_eq",
+   "params": {
+    "which": "last",
+    "values": {
+     "0": 0,
+     "4": 0,
+     "8": 0,
+     "12": 0,
+     "16": 0,
+     "4096": 0,
+     "4100": 0,
+     "4104": 0,
+     "4108": 0,
+     "4112": 0,
+     "4116": 0,
+     "4120": 0,
+     "4124": 0,
+     "4128": 0,
+     "4132": 0,
+     "4136": 0,
+     "4140": 0,
+     "4144": 0,
+     "4148": 0,
+     "4152": 0,
+     "4156": 0,
+     "8192": 0,
+     "8196": 0,
+     "8200": 0,
+     "8204": 0,
+     "8208": 0,
+     "8212": 0,
+     "8216": 0,
+     "8220": 0,
+     "8224": 0,
+     "8228": 0,
+     "8232": 0,
+     "8236": 0,
+     "8240": 0,
+     "8244": 0,
+     "8248": 0,
+     "8252": 0,
+     "12288": 0,
+     "12292": 0,
+     "12296": 0,
+     "12300": 0,
+     "12304": 0,
+     "12308": 0,
+     "12312": 0,
+     "12316": 0,
+     "12320": 0,
+     "12324": 0,
+     "12328": 0,
+     "12332": 0,
+     "12336": 0,
+     "12340": 0,
+     "12344": 0,
+     "12348": 0,
+     "16384": 0,
+     "16388": 0,
+     "16392": 0,
+     "16396": 0
+    }
+   }
+  },
+  {
+   "id": "CK-RST-03",
+   "req": "REQ-SYS-003",
+   "kind": "slot",
+   "params": {
+    "addr": 2148012032,
+    "expect": 1
+   }
+  },
+  {
+   "id": "CK-RST-03b",
+   "req": "REQ-SYS-003",
+   "kind": "slot",
+   "params": {
+    "addr": 2148007936,
+    "expect": 0
+   }
+  },
+  {
+   "id": "CK-RST-04",
+   "req": "REQ-RST-001",
+   "kind": "slot",
+   "params": {
+    "addr": 2148007940,
+    "expect": 3237998097
+   }
+  },
+  {
+   "id": "CK-RST-05",
+   "req": "REQ-MEM-013",
+   "kind": "bfm_event",
+   "params": {
+    "port": "mem",
+    "event": "reset_drop",
+    "min": 1
+   }
+  },
+  {
+   "id": "CK-RST-06",
+   "req": "REQ-RST-001",
+   "kind": "sva",
+   "params": {
+    "id": "a_rst_outputs"
+   }
+  },
+  {
+   "id": "CK-RST-07",
+   "req": "REQ-IF-005",
+   "kind": "sva",
+   "params": {
+    "id": "a_axi_reset_valid_low"
+   }
+  },
+  {
+   "id": "CK-RST-08",
+   "req": "REQ-SYS-003",
+   "kind": "tohost",
+   "params": {
+    "code": 1
+   }
+  }
+ ],
+ "blocked_checks": [],
+ "extra": {}
+}

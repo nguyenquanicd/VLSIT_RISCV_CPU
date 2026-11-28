@@ -1,0 +1,42 @@
+{
+  "model_id": "chk_pmu_model",
+  "kind": "fault_detection",
+  "cases": [
+    {
+      "name": "count off by one",
+      "expected": "detected",
+      "observed": "detected: counter 0 snapshot hi:lo 0x00000000_00000004 expected 0x00000000_00000003",
+      "pass": true
+    },
+    {
+      "name": "aggregate misses hart 1",
+      "expected": "detected",
+      "observed": "detected: counter 2 snapshot hi:lo 0x00000000_00000003 expected 0x00000000_00000008",
+      "pass": true
+    },
+    {
+      "name": "absent hart 2 counted",
+      "expected": "detected",
+      "observed": "detected: counter 3 snapshot hi:lo 0x00000000_00000003 expected 0x00000000_00000000",
+      "pass": true
+    },
+    {
+      "name": "SPM selector counted",
+      "expected": "detected",
+      "observed": "detected: counter 10 snapshot hi:lo 0x00000000_00000001 expected 0x00000000_00000000",
+      "pass": true
+    },
+    {
+      "name": "high word nonzero",
+      "expected": "detected",
+      "observed": "detected: counter 1 snapshot hi:lo 0x00000001_00000005 expected 0x00000000_00000005",
+      "pass": true
+    },
+    {
+      "name": "CCU tap counted once per cycle",
+      "expected": "detected",
+      "observed": "detected: counter 8 snapshot hi:lo 0x00000000_00000002 expected 0x00000000_00000006",
+      "pass": true
+    }
+  ]
+}

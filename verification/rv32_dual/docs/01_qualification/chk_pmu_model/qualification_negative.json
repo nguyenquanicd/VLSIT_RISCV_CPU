@@ -1,0 +1,18 @@
+{
+  "model_id": "chk_pmu_model",
+  "kind": "negative",
+  "cases": [
+    {
+      "name": "CCU tap above 4 per cycle flagged as an input error",
+      "expected": true,
+      "observed": true,
+      "pass": true
+    },
+    {
+      "name": "per-hart indicator above 1 per cycle flagged",
+      "expected": true,
+      "observed": true,
+      "pass": true
+    }
+  ]
+}

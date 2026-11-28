@@ -1,0 +1,24 @@
+{
+  "model_id": "chk_litmus_oracle",
+  "kind": "boundary",
+  "cases": [
+    {
+      "name": "fenced SB equals the sequentially consistent set (3 outcomes)",
+      "expected": "0x3",
+      "observed": "0x3",
+      "pass": true
+    },
+    {
+      "name": "unfenced MP allows the reordered outcome r0=1,r1=0",
+      "expected": [],
+      "observed": [],
+      "pass": true
+    },
+    {
+      "name": "table and enumeration agree for every outcome of every case",
+      "expected": "0x0",
+      "observed": "0x0",
+      "pass": true
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "checker_id": "chk_axi_mem_sb",
+  "kind": "negative",
+  "cases": [
+    {
+      "name": "missing checkpoint reported",
+      "expected": true,
+      "observed": true,
+      "pass": true
+    },
+    {
+      "name": "unknown rule kind reported",
+      "expected": true,
+      "observed": true,
+      "pass": true
+    }
+  ]
+}

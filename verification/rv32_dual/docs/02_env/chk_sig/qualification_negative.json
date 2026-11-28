@@ -1,0 +1,12 @@
+{
+  "checker_id": "chk_sig",
+  "kind": "negative",
+  "cases": [
+    {
+      "name": "unpublished trap area -> None",
+      "expected": null,
+      "observed": null,
+      "pass": true
+    }
+  ]
+}

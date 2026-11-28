@@ -1,0 +1,17 @@
+{
+  "label": "AI-generated qualification manifest; review pending",
+  "model_id": "chk_fp_model",
+  "sources": [
+    {
+      "path": "models/chk_fp_model.py",
+      "sha256": "202070428d1a55c449c597ea8439c506b2fa3d8e0cd1c70cd3994d2346d03a86"
+    },
+    {
+      "path": "models/qual/qual_chk_fp_model.py",
+      "sha256": "ddece1a9b826e3cd34ed27bc6c268abc1b73971930479f7442bbc36a3a86bff1"
+    }
+  ],
+  "python": "3.12.10",
+  "semantics": "IEEE 754 binary32 with exact rational arithmetic; RNE/RTZ/RDN/RUP/RMM; tininess after rounding; canonical NaN 0x7fc00000; RISC-V FMIN/FMAX, FCVT saturation and NV rules; fflags NV DZ OF UF NX.",
+  "correlated_error_note": "Expected values in the KAT were derived by the same author; RNE add/mul are cross-checked against the host IEEE binary32 conversion (independent implementation); directed rounding modes and flags rely on the KAT only."
+}

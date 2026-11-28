@@ -1,0 +1,18 @@
+{
+  "model_id": "chk_mem_oracle",
+  "kind": "reset",
+  "cases": [
+    {
+      "name": "REQ-RST-001: backing memory unchanged across cluster reset",
+      "expected": "0xcafef00d",
+      "observed": "0xcafef00d",
+      "pass": true
+    },
+    {
+      "name": "unwritten memory reads 0 in a fresh model",
+      "expected": "0x0",
+      "observed": "0x0",
+      "pass": true
+    }
+  ]
+}

@@ -1,0 +1,330 @@
+{
+  "model_id": "asm_rv32",
+  "kind": "negative",
+  "cases": [
+    {
+      "name": "addi a0, a1, 2048 (I-immediate above +2047 (RV32I I-format 12-bit signed))",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: 12-bit signed immediate out of range",
+      "pass": true
+    },
+    {
+      "name": "addi a0, a1, -2049 (I-immediate below -2048)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: 12-bit signed immediate out of range",
+      "pass": true
+    },
+    {
+      "name": "slli a0, a1, 32 (RV32 shamt is 5 bits)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: shift amount out of range 0..31",
+      "pass": true
+    },
+    {
+      "name": "rori a0, a1, 32 (RV32 rori shamt is 5 bits)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: shift amount out of range 0..31",
+      "pass": true
+    },
+    {
+      "name": "lw a0, 2048(a1) (load offset out of 12-bit range)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: load offset out of range",
+      "pass": true
+    },
+    {
+      "name": "sw a0, -2049(a1) (store offset out of 12-bit range)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: store offset out of range",
+      "pass": true
+    },
+    {
+      "name": "beq a0, a1, 3 (branch offset must be even (B-format imm[0]=0))",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: branch offset odd or out of range",
+      "pass": true
+    },
+    {
+      "name": "beq a0, a1, 4096 (branch offset above +4094)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: branch offset odd or out of range",
+      "pass": true
+    },
+    {
+      "name": "jal ra, 1048576 (jal offset above +1048574)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: jal offset odd or out of range",
+      "pass": true
+    },
+    {
+      "name": "lui a0, 0x100000 (U-immediate wider than 20 bits)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: 20-bit upper immediate out of range 0..0xFFFFF",
+      "pass": true
+    },
+    {
+      "name": "lui a0, -1 (negative U-immediate rejected (strict 0..0xFFFFF))",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: 20-bit upper immediate out of range 0..0xFFFFF",
+      "pass": true
+    },
+    {
+      "name": "csrrwi a0, mie, 32 (CSR zimm is 5 bits)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: CSR immediate out of range 0..31",
+      "pass": true
+    },
+    {
+      "name": "csrrw a0, 4096, a1 (CSR number is 12 bits)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: CSR number out of range 0..4095",
+      "pass": true
+    },
+    {
+      "name": "addw a0, a1, a2 (RV64-only mnemonic (REQ-XL-003))",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: unknown or unsupported mnemonic 'addw'",
+      "pass": true
+    },
+    {
+      "name": "ld a0, 0(a1) (RV64-only mnemonic (REQ-XL-003))",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: unknown or unsupported mnemonic 'ld'",
+      "pass": true
+    },
+    {
+      "name": "amoadd.d a0, a2, (a1) (RV64-only AMO (REQ-XL-003))",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: unknown or unsupported mnemonic 'amoadd.d'",
+      "pass": true
+    },
+    {
+      "name": "fadd.d fa0, fa1, fa2 (D extension not supported (REQ-XL-004))",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: unknown or unsupported mnemonic 'fadd.d'",
+      "pass": true
+    },
+    {
+      "name": "fld fa0, 0(a1) (D extension not supported (REQ-XL-004))",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: unknown or unsupported mnemonic 'fld'",
+      "pass": true
+    },
+    {
+      "name": "amoadd.w a0, a2, 4(a1) (AMO address has no offset)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: AMO/LR/SC address must be (rs1) with offset 0",
+      "pass": true
+    },
+    {
+      "name": "amoadd.w.xx a0, a2, (a1) (bad AMO ordering suffix)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: unknown or unsupported mnemonic 'amoadd.w.xx'",
+      "pass": true
+    },
+    {
+      "name": "cbo.clean 4(a1) (cbo offset must be 0)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: cbo.* offset must be 0",
+      "pass": true
+    },
+    {
+      "name": "fadd.s fa0, fa1, fa2, xyz (bad rounding mode)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: bad rounding mode 'xyz'",
+      "pass": true
+    },
+    {
+      "name": "add a0, a1, x32 (register x32 does not exist)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: bad integer register 'x32'",
+      "pass": true
+    },
+    {
+      "name": "add a0, a1 (missing operand)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: 'add' needs 3 operand(s), got 2",
+      "pass": true
+    },
+    {
+      "name": "aes32esi a0, a1, a2, 4 (byte select is 2 bits)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: aes32 byte select out of range 0..3",
+      "pass": true
+    },
+    {
+      "name": "j undefined_label (undefined symbol)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: undefined symbol 'undefined_label'",
+      "pass": true
+    },
+    {
+      "name": "lab: | lab: | nop (duplicate label)",
+      "expected": "rejected",
+      "observed": "AsmError: line 2: duplicate symbol 'lab'",
+      "pass": true
+    },
+    {
+      "name": "li a0, lab | lab: nop (li needs a constant known in pass 1)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: 'lab' must be a constant known in pass 1",
+      "pass": true
+    },
+    {
+      "name": ".word 0x100000000 (.word value wider than 32 bits)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: .word value out of range",
+      "pass": true
+    },
+    {
+      "name": ".foo 1 (unknown directive)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: unknown directive '.foo'",
+      "pass": true
+    },
+    {
+      "name": "c.lw a0, 2(a1) (c.lw offset must be a multiple of 4)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: c.lw/c.sw offset must be 0..124, multiple of 4",
+      "pass": true
+    },
+    {
+      "name": "c.lw a0, 128(a1) (c.lw offset above 124)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: c.lw/c.sw offset must be 0..124, multiple of 4",
+      "pass": true
+    },
+    {
+      "name": "c.lw t0, 0(a1) (compressed register must be x8-x15)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: register 't0' is not one of x8-x15/f8-f15 (compressed)",
+      "pass": true
+    },
+    {
+      "name": "c.addi a0, 0 (c.addi nzimm=0 is a HINT, rejected)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: c.addi immediate must be nonzero",
+      "pass": true
+    },
+    {
+      "name": "c.addi a0, 32 (c.addi immediate above +31)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: 6-bit signed immediate out of range",
+      "pass": true
+    },
+    {
+      "name": "c.li x0, 1 (c.li rd=x0 is a HINT, rejected)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: c.li rd must not be x0",
+      "pass": true
+    },
+    {
+      "name": "c.addi16sp sp, 0 (c.addi16sp nzimm=0 reserved)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: c.addi16sp immediate must be nonzero multiple of 16 in -512..496",
+      "pass": true
+    },
+    {
+      "name": "c.addi16sp sp, 8 (c.addi16sp immediate must be a multiple of 16)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: c.addi16sp immediate must be nonzero multiple of 16 in -512..496",
+      "pass": true
+    },
+    {
+      "name": "c.addi4spn a0, sp, 0 (c.addi4spn nzuimm=0 reserved)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: c.addi4spn immediate must be 4..1020, multiple of 4",
+      "pass": true
+    },
+    {
+      "name": "c.lui sp, 1 (c.lui rd=sp encodes c.addi16sp)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: c.lui rd must not be x0 or sp",
+      "pass": true
+    },
+    {
+      "name": "c.lui a0, 0 (c.lui nzimm=0 reserved)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: c.lui immediate must be nonzero in -32..31",
+      "pass": true
+    },
+    {
+      "name": "c.srli a0, 0 (shamt 0 is a HINT, rejected)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: shift amount must be 1..31 on RV32",
+      "pass": true
+    },
+    {
+      "name": "c.srli a0, 32 (RV32 c.srli shamt[5] must be 0)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: shift amount must be 1..31 on RV32",
+      "pass": true
+    },
+    {
+      "name": "c.slli a0, 32 (RV32 c.slli shamt[5] must be 0)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: shift amount must be 1..31 on RV32",
+      "pass": true
+    },
+    {
+      "name": "c.j 1 (c.j offset must be even)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: c.j/c.jal offset odd or out of range",
+      "pass": true
+    },
+    {
+      "name": "c.j 2048 (c.j offset above +2046)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: c.j/c.jal offset odd or out of range",
+      "pass": true
+    },
+    {
+      "name": "c.beqz a0, 256 (c.beqz offset above +254)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: c.beqz/c.bnez offset odd or out of range",
+      "pass": true
+    },
+    {
+      "name": "c.jr x0 (c.jr rs1=x0 reserved)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: c.jr rs1 must not be x0",
+      "pass": true
+    },
+    {
+      "name": "c.mv a0, x0 (c.mv rs2=x0 encodes c.jr)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: c.mv registers must not be x0",
+      "pass": true
+    },
+    {
+      "name": "c.lwsp x0, 0(sp) (c.lwsp rd=x0 reserved)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: c.lwsp rd must not be x0",
+      "pass": true
+    },
+    {
+      "name": "c.lwsp a0, 0(a1) (c.lwsp base must be sp)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: base register must be sp",
+      "pass": true
+    },
+    {
+      "name": "c.lbu a0, 4(a1) (c.lbu offset is 2 bits)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: c.lbu/c.sb offset must be 0..3",
+      "pass": true
+    },
+    {
+      "name": "c.lh a0, 1(a1) (c.lh offset must be 0 or 2)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: c.lhu/c.lh/c.sh offset must be 0 or 2",
+      "pass": true
+    },
+    {
+      "name": "c.ld a0, 0(a1) (RV64-only compressed mnemonic)",
+      "expected": "rejected",
+      "observed": "AsmError: line 1: unknown or unsupported compressed mnemonic 'c.ld'",
+      "pass": true
+    }
+  ]
+}

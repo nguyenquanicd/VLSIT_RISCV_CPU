@@ -1,0 +1,69 @@
+{
+  "checker_id": "chk_axi_mmio_sb",
+  "label": "AI-generated qualification record; not human-reviewed",
+  "build_manifest_sha256": "e38167d176f72f377db9c30db1cbd07d4399a9f49a0ea2d9d8388a413b6350ac",
+  "review": {
+    "decision": "pending",
+    "approver": "pending",
+    "date": null
+  },
+  "tests": [
+    {
+      "kind": "fault_detection",
+      "status": "pass",
+      "command": "python scripts/run_env_qualification.py --force",
+      "exit_code": 0,
+      "expected": "detected",
+      "observed": "5/5",
+      "evidence": {
+        "path": "docs/02_env/chk_axi_mmio_sb/qualification_fault_detection.json",
+        "sha256": "4e1cc7164337c91a22297a4dc89bf0aeef22dc033abfd67fd868ae67184a4339"
+      }
+    },
+    {
+      "kind": "known_answer",
+      "status": "pass",
+      "command": "python scripts/run_env_qualification.py --force",
+      "exit_code": 0,
+      "expected": "match",
+      "observed": "1/1",
+      "evidence": {
+        "path": "docs/02_env/chk_axi_mmio_sb/qualification_known_answer.json",
+        "sha256": "b201459a5ab409380e1280da2474543ed5f87a439d3e93501a2d3da5eade4eb1"
+      }
+    },
+    {
+      "kind": "boundary",
+      "status": "pass",
+      "command": "python scripts/run_env_qualification.py --force",
+      "exit_code": 0,
+      "expected": "match",
+      "observed": "1/1",
+      "evidence": {
+        "path": "docs/02_env/chk_axi_mmio_sb/qualification_boundary.json",
+        "sha256": "c4a03edde03a24813e88cc7ff404ed537017c4751722948ee1a7c4bf3a7eb027"
+      }
+    },
+    {
+      "kind": "negative",
+      "status": "pass",
+      "command": "python scripts/run_env_qualification.py --force",
+      "exit_code": 0,
+      "expected": "match",
+      "observed": "1/1",
+      "evidence": {
+        "path": "docs/02_env/chk_axi_mmio_sb/qualification_negative.json",
+        "sha256": "db15f9bf85776e47b84ada2a352a325d467fd03a26da22cb3eb9866a2685d32e"
+      }
+    },
+    {
+      "kind": "reset",
+      "status": "not_applicable",
+      "command": "python scripts/run_env_qualification.py --force",
+      "exit_code": null,
+      "expected": "n/a",
+      "observed": "same engine as chk_axi_mem_sb",
+      "evidence": null
+    }
+  ]
+}

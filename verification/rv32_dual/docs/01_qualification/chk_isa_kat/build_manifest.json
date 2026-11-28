@@ -1,0 +1,17 @@
+{
+  "label": "AI-generated qualification manifest; review pending",
+  "model_id": "chk_isa_kat",
+  "sources": [
+    {
+      "path": "models/chk_isa_kat.py",
+      "sha256": "384fbbaecc9854d87bc3f517d837079b33e41fb721043027baf1929bfe7fccef"
+    },
+    {
+      "path": "models/qual/qual_chk_isa_kat.py",
+      "sha256": "f310fff1a64d454081d3e67a28b58f3c8872fe4c45368dc21616c0ac7a155b4e"
+    }
+  ],
+  "python": "3.12.10",
+  "semantics": "32-bit two's complement; RV32 M division edge cases; B/Zbc/Zbs; Zbkb/Zbkx; Zkne/Zknd aes32*; Zknh sha256*/sha512*32; Zicond.",
+  "correlated_error_note": "sha512 RV32 halves are checked against FIPS 180-4 64-bit functions and the AES S-box against FIPS 197 published values (independent); other KATs share the author with the model."
+}

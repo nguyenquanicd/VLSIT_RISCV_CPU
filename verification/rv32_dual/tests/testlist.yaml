@@ -1,0 +1,732 @@
+# AI-GENERATED (Claude Opus 5.5, 2026-11-28) regression testlist - the single source of regression scope (R-215).
+# Order = functional verification matrix order of vlsit_verify_plan.py matrix (R-246): widest combined test first.
+# Tiers and timeouts follow plan Section 6.2 (R-217). One concurrent job (env/resource_budget.json).
+# status: ready = source and generated inputs exist; blocked = waiting for the named question/dependency.
+# The region table is bound from REF-001 rev 0.40 14.4.20 (Q-G3-01 answered); simulation still waits for disk space.
+tiers:
+  smoke:   {timeout_s: 1800,  cycle_budget: 2000000,  pass_criteria: "All selected tests pass, every planned check executed, no vacuous assertion among the boundary set."}
+  nightly: {timeout_s: 7200,  cycle_budget: 20000000, pass_criteria: "All selected tests pass; every failure triaged (R-218); coverage merged by bin identity."}
+  full:    {timeout_s: 21600, cycle_budget: 60000000, pass_criteria: "Clean regression, no flaky test (R-220), coverage and mutation targets of plan Section 9 reported."}
+tests:
+  - id: t_rv32d_coh_cmo_amo_stress
+    order: 1
+    level: block
+    vplan_req: [PROTO-RISCV-ZICBOM, REQ-MEM-006, REQ-MEM-015, REQ-MEM-018, REQ-MEM-019, REQ-MEM-020, REQ-PMU-008, REQ-XL-009, REQ-XL-012]
+    testbench: "tb_top"
+    test: tests/t_rv32d_coh_cmo_amo_stress.py
+    test_type: combined
+    combines: [mesi_coherence, cbo_maintenance, fence_i, atomics, same_line_lock, pmu_counting, hpdcache_word32]
+    interaction: "Hart 0 runs CBO.CLEAN/FLUSH/INVAL and FENCE.I on private lines while hart 1 runs AMOADD.W and a load loop on one shared line; CMO, FENCE.I scan, cached AMO permission and same-line probes share the CCU contexts, directory banks and HPDcache RTAB fence; exposes the DEC-046/DEC-047 class of deadlock, lost directory update and lost AMO increment"
+    configuration: "CFG-RV32-2-P0"
+    seeds: [1]
+    timeout_s: 7200
+    cycle_budget: 20000000
+    tier: nightly
+    priority: high
+    owner: dv_owner_tbd
+    status: ready
+    expected: pass
+    evidence: ""
+  - id: t_rv32d_cbo_fault_llc
+    order: 2
+    level: block
+    vplan_req: [PROTO-AXI4-A3.2, REQ-MEM-012, REQ-MEM-016, REQ-MEM-017, REQ-XL-005]
+    testbench: "tb_top"
+    test: tests/t_rv32d_cbo_fault_llc.py
+    test_type: fault_injection
+    combines: [cbo_precise_fault, cbo_maintenance, mesi_coherence, sv32_mmu, axi_protocol]
+    interaction: "The memory BFM returns SLVERR or DECERR to the LLC-to-memory writeback of CBO.CLEAN/FLUSH (M and S modes, Sv32-mapped effective address); retirement hold, ABORT, trap state and the preserved dirty line share the CMO controller context; exposes retirement on acceptance, wrong tval/epc, lost dirty data and double issue"
+    configuration: "CFG-RV32-2-P0"
+    seeds: [1]
+    timeout_s: 7200
+    cycle_budget: 20000000
+    tier: nightly
+    priority: high
+    owner: dv_owner_tbd
+    status: ready
+    expected: pass
+    evidence: ""
+  - id: t_rv32d_mesi_dirty_owner
+    order: 3
+    level: block
+    vplan_req: [REQ-MEM-001, REQ-MEM-005, REQ-MEM-012, REQ-PMU-007, REQ-XL-006, REQ-XL-007, REQ-XL-009, REQ-XL-012]
+    testbench: "tb_top"
+    test: tests/t_rv32d_mesi_dirty_owner.py
+    test_type: combined
+    combines: [mesi_coherence, hpdcache_word32, line_addr_adapter, pmu_counting, axi_addr_width]
+    interaction: "Hart 0 dirties a line above 0x8000_0000, hart 1 reads it, then both ping-pong stores; owner writeback, directory update, 32-bit HPDcache word merge and 30-to-52-bit line adaptation are exercised on one line; exposes stale read, lost word and line-address truncation"
+    configuration: "CFG-RV32-2-P0"
+    seeds: [1]
+    timeout_s: 7200
+    cycle_budget: 20000000
+    tier: nightly
+    priority: high
+    owner: dv_owner_tbd
+    status: ready
+    expected: pass
+    evidence: ""
+  - id: t_rv32d_reset_inflight
+    order: 4
+    level: block
+    vplan_req: [REQ-IF-001, REQ-IF-005, REQ-MEM-013, REQ-RST-001, REQ-SYS-003]
+    testbench: "tb_top"
+    test: tests/t_rv32d_reset_inflight.py
+    test_type: combined
+    combines: [reset_recovery, no_ack_timeout, axil_csr, boot_fanout, axi_protocol]
+    interaction: "Reset is asserted while memory and AXI4-Lite responses are outstanding; BFMs reset together (DEC-041); the stale-response monitor, CSR reset values and the reboot share reset sequencing; exposes stale response delivery, unreset CSR/PMU/fault state and boot failure"
+    configuration: "CFG-RV32-2-P0"
+    seeds: [1]
+    timeout_s: 7200
+    cycle_budget: 20000000
+    tier: nightly
+    priority: high
+    owner: dv_owner_tbd
+    status: ready
+    expected: pass
+    evidence: ""
+  - id: t_rv32d_cbo_matrix
+    order: 5
+    level: block
+    vplan_req: [REQ-MEM-005, REQ-MEM-015, REQ-MEM-016, REQ-PMU-007, REQ-XL-012]
+    testbench: "tb_top"
+    test: tests/t_rv32d_cbo_matrix.py
+    test_type: combined
+    combines: [cbo_maintenance, mesi_coherence, hpdcache_word32, pmu_counting]
+    interaction: "CLEAN/FLUSH/INVAL are issued across L1 state (I/S/E/M on either hart) x LLC state (miss/clean/dirty); the CMO controller, directory holders and LLC per-line service act on one line; exposes missing holder, CMO refill, early invalidation and wrong M-to-E"
+    configuration: "CFG-RV32-2-P0"
+    seeds: [1]
+    timeout_s: 7200
+    cycle_budget: 20000000
+    tier: nightly
+    priority: high
+    owner: dv_owner_tbd
+    status: ready
+    expected: pass
+    evidence: ""
+  - id: t_rv32d_counters_pmu
+    order: 6
+    level: block
+    vplan_req: [REQ-IF-007, REQ-PMU-003, REQ-PMU-007, REQ-XL-013]
+    testbench: "tb_top"
+    test: tests/t_rv32d_counters_pmu.py
+    test_type: combined
+    combines: [counters_rv32, pmu_counting, pmu_snapshot, axil_csr]
+    interaction: "mcycle/minstret are preset near 0xFFFF_FFFF and read with the hi-lo-hi sequence across the carry while the cluster PMU counts exceptions and exception returns; the RV32 CSR pairs, the per-hart event vector and the snapshot path are exercised together; exposes torn 64-bit reads and missing event wiring"
+    configuration: "CFG-RV32-2-P0"
+    seeds: [1]
+    timeout_s: 7200
+    cycle_budget: 20000000
+    tier: nightly
+    priority: high
+    owner: dv_owner_tbd
+    status: ready
+    expected: pass
+    evidence: ""
+  - id: t_rv32d_fatal_llc_eviction
+    order: 7
+    level: block
+    vplan_req: [PROTO-AXI4-A6, REQ-ERR-003, REQ-IF-008, REQ-RST-001]
+    testbench: "tb_top"
+    test: tests/t_rv32d_fatal_llc_eviction.py
+    test_type: fault_injection
+    combines: [fatal_fault_record, axil_csr, reset_recovery, axi_protocol]
+    interaction: "A footprint sweep forces dirty LLC evictions; the memory BFM returns SLVERR then DECERR on later evictions; fault capture, o_int_fault level, W1C diagnostics and reset share the first-fatal record; exposes overwrite of the first record, wrong source/hart attribution and a clearable fatal level"
+    configuration: "CFG-RV32-2-P0"
+    seeds: [1]
+    timeout_s: 7200
+    cycle_budget: 20000000
+    tier: nightly
+    priority: high
+    owner: dv_owner_tbd
+    status: ready
+    expected: pass
+    evidence: ""
+  - id: t_rv32d_fencei_smc
+    order: 8
+    level: block
+    vplan_req: [PROTO-RISCV-ZIFENCEI, REQ-IRQ-001, REQ-MEM-007, REQ-MEM-018, REQ-XL-012]
+    testbench: "tb_top"
+    test: tests/t_rv32d_fencei_smc.py
+    test_type: combined
+    combines: [fence_i, irq_routing, mesi_coherence, hpdcache_word32]
+    interaction: "Hart 0 writes new code (dirty D-cache line) and executes FENCE.I; the testbench then raises MSIP of hart 1 only, which executes its own FENCE.I; the I-cache, D-cache clean-to-LLC scan and per-hart interrupt routing interact on the code line; exposes stale fetch, LLC-to-DRAM writeback and broadcast FENCE.I"
+    configuration: "CFG-RV32-2-P0"
+    seeds: [1]
+    timeout_s: 7200
+    cycle_budget: 20000000
+    tier: nightly
+    priority: high
+    owner: dv_owner_tbd
+    status: ready
+    expected: pass
+    evidence: ""
+  - id: t_rv32d_hpdcache_word32_lanes
+    order: 9
+    level: block
+    vplan_req: [REQ-MEM-001, REQ-MEM-015, REQ-XL-004, REQ-XL-012]
+    testbench: "tb_top"
+    test: tests/t_rv32d_hpdcache_word32_lanes.py
+    test_type: combined
+    combines: [hpdcache_word32, cbo_maintenance, mesi_coherence, fp_single]
+    interaction: "Byte/half/word integer stores and FSW at every offset of 16-byte lines, transferred between harts and cleaned to memory; the 32-bit HPDcache word, 4 data ways per RAM word and the 64-bit memory beat assembly share one line; exposes lane swap, wrong strobe and word-merge loss"
+    configuration: "CFG-RV32-2-P0"
+    seeds: [1]
+    timeout_s: 7200
+    cycle_budget: 20000000
+    tier: nightly
+    priority: high
+    owner: dv_owner_tbd
+    status: ready
+    expected: pass
+    evidence: ""
+  - id: t_rv32d_mesi_random_litmus
+    order: 10
+    level: block
+    vplan_req: [PROTO-AXI4-A3.4, REQ-IF-009, REQ-MEM-001, REQ-MEM-006, REQ-MEM-008, REQ-MEM-020, REQ-XL-009]
+    testbench: "tb_top"
+    test: tests/t_rv32d_mesi_random_litmus.py
+    test_type: constrained_random
+    combines: [mesi_coherence, same_line_lock, atomics, axi_protocol]
+    interaction: "Seeded random loads/stores/AMO*.W/LR.W/SC.W from both harts over 8 lines (same-word, false sharing, cross-line) with random memory BFM READY/response delays; coherence, line locks and AXI backpressure interact; exposes stale data, lost update, SC success after intervening write and protocol violation"
+    configuration: "CFG-RV32-2-P0"
+    seeds: [1, 2, 3, 4, 5]   # nightly; full tier uses 50 seeds for constrained-random tests
+    timeout_s: 21600
+    cycle_budget: 60000000
+    tier: full
+    priority: high
+    owner: dv_owner_tbd
+    status: ready
+    expected: pass
+    evidence: ""
+  - id: t_rv32d_mmio_axi
+    order: 11
+    level: block
+    vplan_req: [REQ-IF-002, REQ-IF-005, REQ-IF-011, REQ-XL-006]
+    testbench: "tb_top"
+    test: tests/t_rv32d_mmio_axi.py
+    test_type: combined
+    combines: [mmio_access, axi_protocol, axi_addr_width, region_table]
+    interaction: "Both harts issue 1/2/4-byte MMIO loads/stores and FSW/FLW while the MMIO BFM applies random READY/response delays; route class, MMIO mux and ID extension interact; exposes misrouting, payload instability and response misassociation"
+    configuration: "CFG-RV32-2-P0"
+    seeds: [1]
+    timeout_s: 7200
+    cycle_budget: 20000000
+    tier: nightly
+    priority: high
+    owner: dv_owner_tbd
+    status: ready
+    expected: pass
+    evidence: ""
+  - id: t_rv32d_region_routing
+    order: 12
+    level: block
+    vplan_req: [REQ-ERR-002, REQ-IF-009, REQ-IF-011, REQ-XL-006, REQ-XL-011]
+    testbench: "tb_top"
+    test: tests/t_rv32d_region_routing.py
+    test_type: combined
+    combines: [region_table, atomics, mmio_access, axi_addr_width]
+    interaction: "Accesses to cacheable, normal-uncached, MMIO, unmapped and boundary-crossing addresses and an AMO to MMIO; the shared region table drives both PMA and router; exposes PMA/router mismatch and external traffic for rejected accesses"
+    configuration: "CFG-RV32-2-P0"
+    seeds: [1]
+    timeout_s: 7200
+    cycle_budget: 20000000
+    tier: nightly
+    priority: high
+    owner: dv_owner_tbd
+    status: ready
+    expected: pass
+    evidence: ""
+  - id: t_rv32d_smoke
+    order: 13
+    level: block
+    vplan_req: [REQ-IF-005, REQ-MEM-001, REQ-PERF-006, REQ-PERF-007, REQ-SYS-003, REQ-XL-014]
+    testbench: "tb_top"
+    test: tests/t_rv32d_smoke.py
+    test_type: combined
+    combines: [boot_fanout, mesi_coherence, timing_profiles, axi_protocol]
+    interaction: "Both harts boot, run cached loads/stores and one cross-hart transfer and end with a CBO.FLUSH signature, on timing profiles 0, 1 and 2; profile cuts and coherence share the AXI paths; exposes payload/order loss through profile cuts"
+    configuration: "CFG-RV32-2-P0;CFG-RV32-2-P1;CFG-RV32-2-P2"
+    seeds: [1]
+    timeout_s: 1800
+    cycle_budget: 2000000
+    tier: smoke
+    priority: high
+    owner: dv_owner_tbd
+    status: ready
+    expected: pass
+    evidence: ""
+  - id: t_rv32d_pa34_alias
+    order: 14
+    level: block
+    vplan_req: [REQ-XL-005, REQ-XL-006, REQ-XL-007, REQ-XL-011]
+    testbench: "tb_top"
+    test: tests/t_rv32d_pa34_alias.py
+    test_type: combined
+    combines: [line_addr_adapter, sv32_mmu, region_table, axi_addr_width]
+    interaction: "Sv32 maps virtual pages to physical lines that differ only in PA bits 33:30; line-address adaptation, PMA and router decode act on the same PAs; exposes aliasing from truncated upper bits"
+    configuration: "CFG-RV32-2-P0"
+    seeds: [1]
+    timeout_s: 7200
+    cycle_budget: 20000000
+    tier: nightly
+    priority: medium
+    owner: dv_owner_tbd
+    status: ready
+    expected: pass
+    evidence: ""
+  - id: t_rv32d_atomics_uncached
+    order: 15
+    level: block
+    vplan_req: [PROTO-AXI4-A3.4, PROTO-AXI4-A7.2, PROTO-AXI5-E1.1, REQ-IF-003, REQ-IF-009]
+    testbench: "tb_top"
+    test: tests/t_rv32d_atomics_uncached.py
+    test_type: combined
+    combines: [atomics, region_table, axi_protocol]
+    interaction: "Uncached LR.W/SC.W and AMO*.W to a normal-uncached region with an exclusive monitor and an E1.1 atomic service in the memory BFM; exclusive signalling, AWATOP and ID/response association share the memory port; exposes lost atomicity and wrong old value"
+    configuration: "CFG-RV32-2-P0"
+    seeds: [1]
+    timeout_s: 7200
+    cycle_budget: 20000000
+    tier: nightly
+    priority: high
+    owner: dv_owner_tbd
+    status: ready
+    expected: pass
+    evidence: ""
+  - id: t_rv32d_axil_csr_windows
+    order: 16
+    level: block
+    vplan_req: [PROTO-AXI4L-B1, REQ-ERR-002, REQ-IF-001, REQ-IF-005, REQ-IF-007, REQ-IF-008, REQ-IF-010]
+    testbench: "tb_top"
+    test: tests/t_rv32d_axil_csr_windows.py
+    test_type: combined
+    combines: [axil_csr, llc_service, axi_protocol]
+    interaction: "AXI4-Lite accesses to every CSR group, the LLC window boundary, reserved and misaligned offsets with AW/W in either order, partial and zero strobes and B/R backpressure; the decoder, generated CSR queues and LLC bridge share the subordinate port; exposes wrong response code, side effects on error and lost responses"
+    configuration: "CFG-RV32-2-P0"
+    seeds: [1]
+    timeout_s: 7200
+    cycle_budget: 20000000
+    tier: nightly
+    priority: high
+    owner: dv_owner_tbd
+    status: ready
+    expected: pass
+    evidence: ""
+  - id: t_rv32d_boot_identity
+    order: 17
+    level: block
+    vplan_req: [REQ-SYS-001, REQ-XL-002, REQ-XL-003, REQ-XL-008]
+    testbench: "tb_top"
+    test: tests/t_rv32d_boot_identity.py
+    test_type: combined
+    combines: [boot_fanout, rv32_isa_mode, axi_addr_width]
+    interaction: "Both harts start at one boot address, read mhartid/misa and branch to per-hart code; boot fanout, hart identity and RV32 CSR views are checked together; exposes shared hart IDs and wrong boot fanout"
+    configuration: "CFG-RV32-2-P0"
+    seeds: [1]
+    timeout_s: 1800
+    cycle_budget: 2000000
+    tier: smoke
+    priority: high
+    owner: dv_owner_tbd
+    status: ready
+    expected: pass
+    evidence: ""
+  - id: t_rv32d_cbo_fault_owner
+    order: 18
+    level: block
+    vplan_req: [REQ-MEM-016, REQ-MEM-017]
+    testbench: "tb_top"
+    test: tests/t_rv32d_cbo_fault_owner.py
+    test_type: fault_injection
+    combines: [cbo_precise_fault, mesi_coherence, cbo_maintenance]
+    interaction: "CBO.CLEAN on a line held M by the peer hart with an error on the owner L1-to-LLC writeback; owner retention and the CBO trap share the CCU context; exposes lost M data and missing ABORT before trap"
+    configuration: "CFG-RV32-2-P0"
+    seeds: [1]
+    timeout_s: 7200
+    cycle_budget: 20000000
+    tier: nightly
+    priority: high
+    owner: dv_owner_tbd
+    status: blocked   # Q-G0-05 / DEP-DV-01
+    expected: pass
+    evidence: ""
+  - id: t_rv32d_irq_wfi_coherence
+    order: 19
+    level: block
+    vplan_req: [REQ-CLK-002, REQ-IRQ-001, REQ-IRQ-003, REQ-MEM-012]
+    testbench: "tb_top"
+    test: tests/t_rv32d_irq_wfi_coherence.py
+    test_type: combined
+    combines: [irq_routing, wfi_probe, mesi_coherence]
+    interaction: "Hart 0 dirties a line and enters WFI; hart 1 reads the line (probe served while hart 0 is in WFI); the testbench then raises MEIP[0]; interrupt wake-up and probe service share hart 0's cache endpoint; exposes a hang on a sleeping owner and misrouted interrupt"
+    configuration: "CFG-RV32-2-P0"
+    seeds: [1]
+    timeout_s: 7200
+    cycle_budget: 20000000
+    tier: nightly
+    priority: high
+    owner: dv_owner_tbd
+    status: ready
+    expected: pass
+    evidence: ""
+  - id: t_rv32d_mmio_error
+    order: 20
+    level: block
+    vplan_req: [PROTO-AXI4-A6, REQ-ERR-001]
+    testbench: "tb_top"
+    test: tests/t_rv32d_mmio_error.py
+    test_type: fault_injection
+    combines: [mmio_access, region_table, axi_protocol]
+    interaction: "The MMIO BFM returns SLVERR/DECERR on R and B; error propagation and trap state share the hart LSU path; exposes fabricated data or lost error"
+    configuration: "CFG-RV32-2-P0"
+    seeds: [1]
+    timeout_s: 7200
+    cycle_budget: 20000000
+    tier: nightly
+    priority: high
+    owner: dv_owner_tbd
+    status: ready
+    expected: pass
+    evidence: ""
+  - id: t_rv32d_no_timeout_hold
+    order: 21
+    level: block
+    vplan_req: [PROTO-AXI4-A3.2, PROTO-AXI4-A6, REQ-ERR-001, REQ-MEM-001, REQ-MEM-013]
+    testbench: "tb_top"
+    test: tests/t_rv32d_no_timeout_hold.py
+    test_type: combined
+    combines: [no_ack_timeout, mesi_coherence, axi_protocol]
+    interaction: "The memory BFM withholds the R response of hart 0's LLC-miss refill for 200k cycles while hart 1 runs L1-hit and other-line work answered out of order by ID; the held transaction context and independent traffic share the LLC and AXI ID space; exposes fabricated timeout, blocked independent progress and response misassociation"
+    configuration: "CFG-RV32-2-P0"
+    seeds: [1]
+    timeout_s: 7200
+    cycle_budget: 20000000
+    tier: nightly
+    priority: high
+    owner: dv_owner_tbd
+    status: ready
+    expected: pass
+    evidence: ""
+  - id: t_rv32d_pmu_scope_snapshot
+    order: 22
+    level: block
+    vplan_req: [REQ-IF-008, REQ-PMU-003, REQ-PMU-004, REQ-PMU-005, REQ-PMU-006, REQ-PMU-007, REQ-PMU-008]
+    testbench: "tb_top"
+    test: tests/t_rv32d_pmu_scope_snapshot.py
+    test_type: combined
+    combines: [pmu_counting, pmu_snapshot, axil_csr]
+    interaction: "Counters programmed with scopes 0-7 and catalog, reserved and SPM IDs while both harts raise known event counts; snapshot requested during live counting with sticky-done W1C rearm; selector, aggregation and snapshot share the PMU bank; exposes absent-hart counting, wrong aggregate and torn snapshot"
+    configuration: "CFG-RV32-2-P0"
+    seeds: [1]
+    timeout_s: 7200
+    cycle_budget: 20000000
+    tier: nightly
+    priority: high
+    owner: dv_owner_tbd
+    status: ready
+    expected: pass
+    evidence: ""
+  - id: t_rv32d_sv32_mmu
+    order: 23
+    level: block
+    vplan_req: [REQ-MEM-001, REQ-XL-005, REQ-XL-006]
+    testbench: "tb_top"
+    test: tests/t_rv32d_sv32_mmu.py
+    test_type: combined
+    combines: [sv32_mmu, mesi_coherence, axi_addr_width]
+    interaction: "S/U-mode programs on Sv32 4 KiB and 4 MiB pages; hart 1 rewrites a PTE and hart 0 executes SFENCE.VMA; the page-table walk reads through the coherent D-cache path; exposes stale PTE, wrong fault cause and PA truncation"
+    configuration: "CFG-RV32-2-P0"
+    seeds: [1]
+    timeout_s: 7200
+    cycle_budget: 20000000
+    tier: nightly
+    priority: high
+    owner: dv_owner_tbd
+    status: ready
+    expected: pass
+    evidence: ""
+  - id: t_rv32d_debug_halt
+    order: 24
+    level: block
+    vplan_req: [REQ-CLK-002, REQ-DBG-001, REQ-XL-002]
+    testbench: "tb_top"
+    test: tests/t_rv32d_debug_halt.py
+    test_type: combined
+    combines: [debug, wfi_probe, mesi_coherence]
+    interaction: "i_hart_debug_req of one hart while that hart owns a dirty line and the peer reads it; debug entry, debug-halt probe service and the peer's miss interact; exposes cross-hart debug effect and hang on a halted owner"
+    configuration: "CFG-RV32-2-P0"
+    seeds: [1]
+    timeout_s: 7200
+    cycle_budget: 20000000
+    tier: nightly
+    priority: medium
+    owner: dv_owner_tbd
+    status: ready
+    expected: pass
+    evidence: ""
+  - id: t_rv32d_fatal_l1_eviction
+    order: 25
+    level: block
+    vplan_req: [REQ-ERR-003, REQ-MEM-008]
+    testbench: "tb_top"
+    test: tests/t_rv32d_fatal_l1_eviction.py
+    test_type: fault_injection
+    combines: [fatal_fault_record, mesi_coherence, axil_csr]
+    interaction: "Ordinary L1 dirty eviction with an error on its writeback; first-fatal capture with exact hart and cache retention share the record; exposes wrong hart attribution"
+    configuration: "CFG-RV32-2-P0"
+    seeds: [1]
+    timeout_s: 7200
+    cycle_budget: 20000000
+    tier: nightly
+    priority: medium
+    owner: dv_owner_tbd
+    status: blocked   # Q-G0-05 / DEP-DV-01
+    expected: pass
+    evidence: ""
+  - id: t_rv32d_llc_service_bist
+    order: 26
+    level: block
+    vplan_req: [REQ-IF-010, REQ-MEM-003, REQ-MEM-004, REQ-RST-001]
+    testbench: "tb_top"
+    test: tests/t_rv32d_llc_service_bist.py
+    test_type: combined
+    combines: [llc_service, axil_csr, reset_recovery]
+    interaction: "After reset software polls the native LLC BIST-ready status, attempts SPM enable and requests an LLC flush through the service window; bridge, LLC configuration and reset sequencing interact; exposes memory use before BIST ready and accepted SPM writes"
+    configuration: "CFG-RV32-2-P0"
+    seeds: [1]
+    timeout_s: 7200
+    cycle_budget: 20000000
+    tier: nightly
+    priority: medium
+    owner: dv_owner_tbd
+    status: blocked   # Q-G0-04
+    expected: pass
+    evidence: ""
+  - id: t_rv32d_fencei_fault
+    order: 27
+    level: block
+    vplan_req: [REQ-MEM-012, REQ-MEM-018]
+    testbench: "tb_top"
+    test: tests/t_rv32d_fencei_fault.py
+    test_type: fault_injection
+    combines: [fence_i, mesi_coherence]
+    interaction: "FENCE.I with an error on a dirty line L1-to-LLC transfer; the scan, ABORT and cause-24 trap share the CCU context; exposes local fetch invalidation on error and wrong tval"
+    configuration: "CFG-RV32-2-P0"
+    seeds: [1]
+    timeout_s: 7200
+    cycle_budget: 20000000
+    tier: nightly
+    priority: high
+    owner: dv_owner_tbd
+    status: blocked   # Q-G0-05 / DEP-DV-01
+    expected: pass
+    evidence: ""
+  - id: t_rv32d_fp32_divsqrt
+    order: 28
+    level: block
+    vplan_req: [REQ-PMU-008, REQ-XL-004]
+    testbench: "tb_top"
+    test: tests/t_rv32d_fp32_divsqrt.py
+    test_type: combined
+    combines: [fp_single, pmu_counting]
+    interaction: "Both harts run FDIV.S/FSQRT.S/FMA corner cases with static and dynamic rounding while PMU counter 0x0015 counts committed FP operations per hart and in aggregate; FPU result/fflags and the per-hart event vector are observed together; exposes DEC-106 NaN-boxing regressions and wrong per-hart attribution"
+    configuration: "CFG-RV32-2-P0"
+    seeds: [1]
+    timeout_s: 7200
+    cycle_budget: 20000000
+    tier: nightly
+    priority: high
+    owner: dv_owner_tbd
+    status: ready
+    expected: pass
+    evidence: ""
+  - id: t_rv32d_isa_rv32_traps
+    order: 29
+    level: block
+    vplan_req: [REQ-XL-003, REQ-XL-004]
+    testbench: "tb_top"
+    test: tests/t_rv32d_isa_rv32_traps.py
+    test_type: combined
+    combines: [rv32_isa_mode, fp_single]
+    interaction: "RV64-only and D-extension encodings executed in M mode with the trap handler recording mcause/mtval; the decoder and FPU decode share the illegal-instruction path; exposes RV64/D instructions accepted in the RV32 profile"
+    configuration: "CFG-RV32-2-P0"
+    seeds: [1]
+    timeout_s: 7200
+    cycle_budget: 20000000
+    tier: nightly
+    priority: high
+    owner: dv_owner_tbd
+    status: ready
+    expected: pass
+    evidence: ""
+  - id: t_rv32d_isa_ext_kat
+    order: 30
+    level: block
+    vplan_req: [REQ-XL-003, REQ-XL-013]
+    testbench: "tb_top"
+    test: tests/t_rv32d_isa_ext_kat.py
+    test_type: combined
+    combines: [rv32_isa_mode, counters_rv32]
+    interaction: "Known-answer vectors for RV32 B (Zba/Zbb/Zbc/Zbs), Zcb, Zicond and Zkn (aes32*, sha256*, sha512*32 forms) with minstret deltas per block; the decoder and commit counting interact; exposes wrong RV32 form and miscounted retirement"
+    configuration: "CFG-RV32-2-P0"
+    seeds: [1]
+    timeout_s: 7200
+    cycle_budget: 20000000
+    tier: nightly
+    priority: medium
+    owner: dv_owner_tbd
+    status: ready
+    expected: pass
+    evidence: ""
+  - id: t_rv32d_fv_axil
+    order: 31
+    level: block
+    vplan_req: [PROTO-AXI4L-B1, REQ-IF-001, REQ-IF-007, REQ-IF-008, REQ-IF-010]
+    testbench: "formal (tests/formal)"
+    test: tests/t_rv32d_fv_axil.py
+    test_type: formal
+    combines: []
+    interaction: ""
+    configuration: "CFG-RV32-2-P0"
+    seeds: [1]
+    timeout_s: 21600
+    cycle_budget: 60000000
+    tier: full
+    priority: medium
+    owner: dv_owner_tbd
+    status: ready
+    expected: pass
+    evidence: ""
+  - id: t_rv32d_fv_pmu
+    order: 32
+    level: block
+    vplan_req: [REQ-PMU-002, REQ-PMU-003, REQ-PMU-004]
+    testbench: "formal (tests/formal)"
+    test: tests/t_rv32d_fv_pmu.py
+    test_type: formal
+    combines: []
+    interaction: ""
+    configuration: "CFG-RV32-2-P0"
+    seeds: [1]
+    timeout_s: 21600
+    cycle_budget: 60000000
+    tier: full
+    priority: medium
+    owner: dv_owner_tbd
+    status: ready
+    expected: pass
+    evidence: ""
+  - id: t_rv32d_elab_lint_matrix
+    order: 33
+    level: block
+    vplan_req: [REQ-XL-014]
+    testbench: "static script"
+    test: tests/t_rv32d_elab_lint_matrix.py
+    test_type: compliance
+    combines: []
+    interaction: ""
+    configuration: "CFG-RV32-2-P0;CFG-RV32-2-P1;CFG-RV32-2-P2;CFG-RV32-4-P0;CFG-RV32-4-P1;CFG-RV32-4-P2"
+    seeds: [1]
+    timeout_s: 1800
+    cycle_budget: 2000000
+    tier: smoke
+    priority: high
+    owner: dv_owner_tbd
+    status: ready
+    expected: pass
+    evidence: ""
+  - id: t_rv32d_elab_port_audit
+    order: 34
+    level: block
+    vplan_req: [REQ-IF-003, REQ-IF-006, REQ-SYS-001, REQ-SYS-004, REQ-XL-001, REQ-XL-010, REQ-XL-011]
+    testbench: "static script"
+    test: tests/t_rv32d_elab_port_audit.py
+    test_type: compliance
+    combines: []
+    interaction: ""
+    configuration: "CFG-RV32-2-P0"
+    seeds: [1]
+    timeout_s: 1800
+    cycle_budget: 2000000
+    tier: smoke
+    priority: high
+    owner: dv_owner_tbd
+    status: ready
+    expected: pass
+    evidence: ""
+  - id: t_rv32d_irq_matrix
+    order: 35
+    level: block
+    vplan_req: [REQ-IRQ-001, REQ-IRQ-002, REQ-IRQ-003, REQ-XL-002]
+    testbench: "tb_top"
+    test: tests/t_rv32d_irq_matrix.py
+    test_type: directed
+    combines: []
+    interaction: ""
+    configuration: "CFG-RV32-2-P0"
+    seeds: [1]
+    timeout_s: 7200
+    cycle_budget: 20000000
+    tier: nightly
+    priority: high
+    owner: dv_owner_tbd
+    status: ready
+    expected: pass
+    evidence: ""
+  - id: t_rv32d_boot_addr_hi_nonzero
+    order: 36
+    level: block
+    vplan_req: [REQ-XL-008]
+    testbench: "tb_top"
+    test: tests/t_rv32d_boot_addr_hi_nonzero.py
+    test_type: directed
+    combines: []
+    interaction: ""
+    configuration: "CFG-RV32-2-P0"
+    seeds: [1]
+    timeout_s: 7200
+    cycle_budget: 20000000
+    tier: nightly
+    priority: medium
+    owner: dv_owner_tbd
+    status: ready
+    expected: pass
+    evidence: ""
+  - id: t_rv32d_fv_addr_decode
+    order: 37
+    level: block
+    vplan_req: [REQ-IF-011, REQ-XL-011]
+    testbench: "formal (tests/formal)"
+    test: tests/t_rv32d_fv_addr_decode.py
+    test_type: formal
+    combines: []
+    interaction: ""
+    configuration: "CFG-RV32-2-P0"
+    seeds: [1]
+    timeout_s: 21600
+    cycle_budget: 60000000
+    tier: full
+    priority: medium
+    owner: dv_owner_tbd
+    status: ready
+    expected: pass
+    evidence: ""
+  - id: t_rv32d_process_audit
+    order: 38
+    level: block
+    vplan_req: [REQ-VER-001, REQ-VER-002]
+    testbench: "static script"
+    test: tests/t_rv32d_process_audit.py
+    test_type: regression
+    combines: []
+    interaction: ""
+    configuration: "CFG-RV32-2-P0"
+    seeds: [1]
+    timeout_s: 21600
+    cycle_budget: 60000000
+    tier: full
+    priority: medium
+    owner: dv_owner_tbd
+    status: ready
+    expected: pass
+    evidence: ""

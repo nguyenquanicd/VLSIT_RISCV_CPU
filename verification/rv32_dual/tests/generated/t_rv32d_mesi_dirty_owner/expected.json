@@ -1,0 +1,137 @@
+{
+ "test": "t_rv32d_mesi_dirty_owner",
+ "seed": 1,
+ "configuration": "CFG-RV32-2-P0",
+ "slots": {
+  "1:w1": "0x80081000",
+  "1:w2": "0x80081004",
+  "1:w3": "0x80081008"
+ },
+ "trap_base": "0x80090000",
+ "sig_base": "0x80080000",
+ "checks": [
+  {
+   "id": "CK-DOW-01",
+   "req": "REQ-MEM-001",
+   "kind": "slot",
+   "params": {
+    "addr": 2148012036,
+    "expect": 1146447479
+   }
+  },
+  {
+   "id": "CK-DOW-01b",
+   "req": "REQ-MEM-001",
+   "kind": "slot",
+   "params": {
+    "addr": 2148012032,
+    "expect": 573767697
+   }
+  },
+  {
+   "id": "CK-DOW-02",
+   "req": "REQ-MEM-001",
+   "kind": "axi_mem",
+   "params": {
+    "rules": [
+     {
+      "kind": "write_line",
+      "addr": 2147749888,
+      "window": [
+       66,
+       67
+      ],
+      "data": "080000001100332277665544bbaa9988"
+     }
+    ]
+   }
+  },
+  {
+   "id": "CK-DOW-03",
+   "req": "REQ-PMU-008",
+   "kind": "pmu",
+   "params": {
+    "config": {
+     "0": [
+      771,
+      5,
+      1
+     ],
+     "1": [
+      772,
+      5,
+      1
+     ],
+     "2": [
+      775,
+      5,
+      1
+     ]
+    },
+    "occurrences": [
+     {
+      "cycle": 1,
+      "event_id": 771,
+      "hart": null,
+      "count": 1
+     },
+     {
+      "cycle": 1,
+      "event_id": 772,
+      "hart": null,
+      "count": 1
+     },
+     {
+      "cycle": 1,
+      "event_id": 775,
+      "hart": null,
+      "count": 1
+     }
+    ]
+   }
+  },
+  {
+   "id": "CK-DOW-04",
+   "req": "REQ-XL-006",
+   "kind": "sva",
+   "params": {
+    "id": "a_axi_addr_hi_zero"
+   }
+  },
+  {
+   "id": "CK-DOW-05",
+   "req": "REQ-XL-012",
+   "kind": "axi_mem",
+   "params": {
+    "rules": [
+     {
+      "kind": "write_line",
+      "addr": 2147749888,
+      "window": [
+       66,
+       67
+      ],
+      "beats": 2,
+      "strobe_full": true
+     }
+    ]
+   }
+  },
+  {
+   "id": "CK-DOW-07",
+   "req": "REQ-MEM-001",
+   "kind": "tohost",
+   "params": {
+    "code": 1
+   }
+  }
+ ],
+ "blocked_checks": [
+  {
+   "id": "CK-DOW-06",
+   "req": "REQ-XL-007",
+   "reason": "SVA-101 binding blocked by Q-G0-13 (observation-point table not in the RV32 HDS)"
+  }
+ ],
+ "extra": {}
+}

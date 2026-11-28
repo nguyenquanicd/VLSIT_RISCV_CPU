@@ -1,0 +1,555 @@
+{
+ "test": "t_rv32d_mesi_random_litmus",
+ "seed": 1,
+ "configuration": "CFG-RV32-2-P0",
+ "slots": {
+  "0:amo_total": "0x80080084",
+  "0:fx25": "0x80080040",
+  "0:fx26": "0x80080048",
+  "0:fx27": "0x80080050",
+  "0:fx28": "0x80080058",
+  "0:fx29": "0x80080060",
+  "0:fx30": "0x80080068",
+  "0:fx31": "0x80080070",
+  "0:fx32": "0x80080078",
+  "0:fy25": "0x80080044",
+  "0:fy26": "0x8008004c",
+  "0:fy27": "0x80080054",
+  "0:fy28": "0x8008005c",
+  "0:fy29": "0x80080064",
+  "0:fy30": "0x8008006c",
+  "0:fy31": "0x80080074",
+  "0:fy32": "0x8008007c",
+  "0:lrsc_total": "0x80080088",
+  "0:r0_10": "0x80080004",
+  "0:r0_11": "0x80080008",
+  "0:r0_12": "0x8008000c",
+  "0:r0_13": "0x80080010",
+  "0:r0_14": "0x80080014",
+  "0:r0_15": "0x80080018",
+  "0:r0_16": "0x8008001c",
+  "0:r0_17": "0x80080020",
+  "0:r0_18": "0x80080024",
+  "0:r0_19": "0x80080028",
+  "0:r0_20": "0x8008002c",
+  "0:r0_21": "0x80080030",
+  "0:r0_22": "0x80080034",
+  "0:r0_23": "0x80080038",
+  "0:r0_24": "0x8008003c",
+  "0:r0_9": "0x80080000",
+  "0:sc_ok": "0x80080080",
+  "1:r0_1": "0x80081000",
+  "1:r0_2": "0x80081008",
+  "1:r0_3": "0x80081010",
+  "1:r0_4": "0x80081018",
+  "1:r0_5": "0x80081020",
+  "1:r0_6": "0x80081028",
+  "1:r0_7": "0x80081030",
+  "1:r0_8": "0x80081038",
+  "1:r1_1": "0x80081004",
+  "1:r1_10": "0x80081044",
+  "1:r1_11": "0x80081048",
+  "1:r1_12": "0x8008104c",
+  "1:r1_13": "0x80081050",
+  "1:r1_14": "0x80081054",
+  "1:r1_15": "0x80081058",
+  "1:r1_16": "0x8008105c",
+  "1:r1_17": "0x80081060",
+  "1:r1_18": "0x80081064",
+  "1:r1_19": "0x80081068",
+  "1:r1_2": "0x8008100c",
+  "1:r1_20": "0x8008106c",
+  "1:r1_21": "0x80081070",
+  "1:r1_22": "0x80081074",
+  "1:r1_23": "0x80081078",
+  "1:r1_24": "0x8008107c",
+  "1:r1_3": "0x80081014",
+  "1:r1_4": "0x8008101c",
+  "1:r1_5": "0x80081024",
+  "1:r1_6": "0x8008102c",
+  "1:r1_7": "0x80081034",
+  "1:r1_8": "0x8008103c",
+  "1:r1_9": "0x80081040",
+  "1:sc_ok": "0x80081080"
+ },
+ "trap_base": "0x80090000",
+ "sig_base": "0x80080000",
+ "checks": [
+  {
+   "id": "CK-RND-02",
+   "req": "REQ-MEM-008",
+   "kind": "litmus",
+   "params": {
+    "pattern": "MP",
+    "fenced": false,
+    "regs": {
+     "r0": 2148012032,
+     "r1": 2148012036
+    }
+   }
+  },
+  {
+   "id": "CK-RND-02_2",
+   "req": "REQ-MEM-008",
+   "kind": "litmus",
+   "params": {
+    "pattern": "MP",
+    "fenced": false,
+    "regs": {
+     "r0": 2148012040,
+     "r1": 2148012044
+    }
+   }
+  },
+  {
+   "id": "CK-RND-02_3",
+   "req": "REQ-MEM-008",
+   "kind": "litmus",
+   "params": {
+    "pattern": "MP",
+    "fenced": false,
+    "regs": {
+     "r0": 2148012048,
+     "r1": 2148012052
+    }
+   }
+  },
+  {
+   "id": "CK-RND-02_4",
+   "req": "REQ-MEM-008",
+   "kind": "litmus",
+   "params": {
+    "pattern": "MP",
+    "fenced": false,
+    "regs": {
+     "r0": 2148012056,
+     "r1": 2148012060
+    }
+   }
+  },
+  {
+   "id": "CK-RND-02_5",
+   "req": "REQ-MEM-008",
+   "kind": "litmus",
+   "params": {
+    "pattern": "MP",
+    "fenced": true,
+    "regs": {
+     "r0": 2148012064,
+     "r1": 2148012068
+    }
+   }
+  },
+  {
+   "id": "CK-RND-02_6",
+   "req": "REQ-MEM-008",
+   "kind": "litmus",
+   "params": {
+    "pattern": "MP",
+    "fenced": true,
+    "regs": {
+     "r0": 2148012072,
+     "r1": 2148012076
+    }
+   }
+  },
+  {
+   "id": "CK-RND-02_7",
+   "req": "REQ-MEM-008",
+   "kind": "litmus",
+   "params": {
+    "pattern": "MP",
+    "fenced": true,
+    "regs": {
+     "r0": 2148012080,
+     "r1": 2148012084
+    }
+   }
+  },
+  {
+   "id": "CK-RND-02_8",
+   "req": "REQ-MEM-008",
+   "kind": "litmus",
+   "params": {
+    "pattern": "MP",
+    "fenced": true,
+    "regs": {
+     "r0": 2148012088,
+     "r1": 2148012092
+    }
+   }
+  },
+  {
+   "id": "CK-RND-02_9",
+   "req": "REQ-MEM-008",
+   "kind": "litmus",
+   "params": {
+    "pattern": "SB",
+    "fenced": false,
+    "regs": {
+     "r0": 2148007936,
+     "r1": 2148012096
+    }
+   }
+  },
+  {
+   "id": "CK-RND-02_10",
+   "req": "REQ-MEM-008",
+   "kind": "litmus",
+   "params": {
+    "pattern": "SB",
+    "fenced": false,
+    "regs": {
+     "r0": 2148007940,
+     "r1": 2148012100
+    }
+   }
+  },
+  {
+   "id": "CK-RND-02_11",
+   "req": "REQ-MEM-008",
+   "kind": "litmus",
+   "params": {
+    "pattern": "SB",
+    "fenced": false,
+    "regs": {
+     "r0": 2148007944,
+     "r1": 2148012104
+    }
+   }
+  },
+  {
+   "id": "CK-RND-02_12",
+   "req": "REQ-MEM-008",
+   "kind": "litmus",
+   "params": {
+    "pattern": "SB",
+    "fenced": false,
+    "regs": {
+     "r0": 2148007948,
+     "r1": 2148012108
+    }
+   }
+  },
+  {
+   "id": "CK-RND-02_13",
+   "req": "REQ-MEM-008",
+   "kind": "litmus",
+   "params": {
+    "pattern": "SB",
+    "fenced": true,
+    "regs": {
+     "r0": 2148007952,
+     "r1": 2148012112
+    }
+   }
+  },
+  {
+   "id": "CK-RND-02_14",
+   "req": "REQ-MEM-008",
+   "kind": "litmus",
+   "params": {
+    "pattern": "SB",
+    "fenced": true,
+    "regs": {
+     "r0": 2148007956,
+     "r1": 2148012116
+    }
+   }
+  },
+  {
+   "id": "CK-RND-02_15",
+   "req": "REQ-MEM-008",
+   "kind": "litmus",
+   "params": {
+    "pattern": "SB",
+    "fenced": true,
+    "regs": {
+     "r0": 2148007960,
+     "r1": 2148012120
+    }
+   }
+  },
+  {
+   "id": "CK-RND-02_16",
+   "req": "REQ-MEM-008",
+   "kind": "litmus",
+   "params": {
+    "pattern": "SB",
+    "fenced": true,
+    "regs": {
+     "r0": 2148007964,
+     "r1": 2148012124
+    }
+   }
+  },
+  {
+   "id": "CK-RND-02_17",
+   "req": "REQ-MEM-008",
+   "kind": "litmus",
+   "params": {
+    "pattern": "LB",
+    "fenced": false,
+    "regs": {
+     "r0": 2148007968,
+     "r1": 2148012128
+    }
+   }
+  },
+  {
+   "id": "CK-RND-02_18",
+   "req": "REQ-MEM-008",
+   "kind": "litmus",
+   "params": {
+    "pattern": "LB",
+    "fenced": false,
+    "regs": {
+     "r0": 2148007972,
+     "r1": 2148012132
+    }
+   }
+  },
+  {
+   "id": "CK-RND-02_19",
+   "req": "REQ-MEM-008",
+   "kind": "litmus",
+   "params": {
+    "pattern": "LB",
+    "fenced": false,
+    "regs": {
+     "r0": 2148007976,
+     "r1": 2148012136
+    }
+   }
+  },
+  {
+   "id": "CK-RND-02_20",
+   "req": "REQ-MEM-008",
+   "kind": "litmus",
+   "params": {
+    "pattern": "LB",
+    "fenced": false,
+    "regs": {
+     "r0": 2148007980,
+     "r1": 2148012140
+    }
+   }
+  },
+  {
+   "id": "CK-RND-02_21",
+   "req": "REQ-MEM-008",
+   "kind": "litmus",
+   "params": {
+    "pattern": "LB",
+    "fenced": true,
+    "regs": {
+     "r0": 2148007984,
+     "r1": 2148012144
+    }
+   }
+  },
+  {
+   "id": "CK-RND-02_22",
+   "req": "REQ-MEM-008",
+   "kind": "litmus",
+   "params": {
+    "pattern": "LB",
+    "fenced": true,
+    "regs": {
+     "r0": 2148007988,
+     "r1": 2148012148
+    }
+   }
+  },
+  {
+   "id": "CK-RND-02_23",
+   "req": "REQ-MEM-008",
+   "kind": "litmus",
+   "params": {
+    "pattern": "LB",
+    "fenced": true,
+    "regs": {
+     "r0": 2148007992,
+     "r1": 2148012152
+    }
+   }
+  },
+  {
+   "id": "CK-RND-02_24",
+   "req": "REQ-MEM-008",
+   "kind": "litmus",
+   "params": {
+    "pattern": "LB",
+    "fenced": true,
+    "regs": {
+     "r0": 2148007996,
+     "r1": 2148012156
+    }
+   }
+  },
+  {
+   "id": "CK-RND-02_25",
+   "req": "REQ-MEM-008",
+   "kind": "litmus",
+   "params": {
+    "pattern": "2+2W",
+    "fenced": false,
+    "regs": {
+     "fx": 2148008000,
+     "fy": 2148008004
+    }
+   }
+  },
+  {
+   "id": "CK-RND-02_26",
+   "req": "REQ-MEM-008",
+   "kind": "litmus",
+   "params": {
+    "pattern": "2+2W",
+    "fenced": false,
+    "regs": {
+     "fx": 2148008008,
+     "fy": 2148008012
+    }
+   }
+  },
+  {
+   "id": "CK-RND-02_27",
+   "req": "REQ-MEM-008",
+   "kind": "litmus",
+   "params": {
+    "pattern": "2+2W",
+    "fenced": false,
+    "regs": {
+     "fx": 2148008016,
+     "fy": 2148008020
+    }
+   }
+  },
+  {
+   "id": "CK-RND-02_28",
+   "req": "REQ-MEM-008",
+   "kind": "litmus",
+   "params": {
+    "pattern": "2+2W",
+    "fenced": false,
+    "regs": {
+     "fx": 2148008024,
+     "fy": 2148008028
+    }
+   }
+  },
+  {
+   "id": "CK-RND-02_29",
+   "req": "REQ-MEM-008",
+   "kind": "litmus",
+   "params": {
+    "pattern": "2+2W",
+    "fenced": true,
+    "regs": {
+     "fx": 2148008032,
+     "fy": 2148008036
+    }
+   }
+  },
+  {
+   "id": "CK-RND-02_30",
+   "req": "REQ-MEM-008",
+   "kind": "litmus",
+   "params": {
+    "pattern": "2+2W",
+    "fenced": true,
+    "regs": {
+     "fx": 2148008040,
+     "fy": 2148008044
+    }
+   }
+  },
+  {
+   "id": "CK-RND-02_31",
+   "req": "REQ-MEM-008",
+   "kind": "litmus",
+   "params": {
+    "pattern": "2+2W",
+    "fenced": true,
+    "regs": {
+     "fx": 2148008048,
+     "fy": 2148008052
+    }
+   }
+  },
+  {
+   "id": "CK-RND-02_32",
+   "req": "REQ-MEM-008",
+   "kind": "litmus",
+   "params": {
+    "pattern": "2+2W",
+    "fenced": true,
+    "regs": {
+     "fx": 2148008056,
+     "fy": 2148008060
+    }
+   }
+  },
+  {
+   "id": "CK-RND-01",
+   "req": "REQ-MEM-001",
+   "kind": "slot_sum",
+   "params": {
+    "addrs": [
+     2148008064,
+     2148012160
+    ],
+    "equals_addr": 2148008072
+   }
+  },
+  {
+   "id": "CK-RND-03",
+   "req": "REQ-MEM-006",
+   "kind": "slot",
+   "params": {
+    "addr": 2148008068,
+    "expect": 158
+   }
+  },
+  {
+   "id": "CK-RND-04",
+   "req": "REQ-IF-009",
+   "kind": "slot_sum",
+   "params": {
+    "addrs": [
+     2148008064,
+     2148012160
+    ],
+    "equals_addr": 2148008072
+   }
+  },
+  {
+   "id": "CK-RND-05",
+   "req": "PROTO-AXI4-A3.2",
+   "kind": "sva",
+   "params": {
+    "id": "a_axi_mem_stable"
+   }
+  },
+  {
+   "id": "CK-RND-06",
+   "req": "REQ-MEM-020",
+   "kind": "tohost",
+   "params": {
+    "code": 1
+   }
+  },
+  {
+   "id": "CK-RND-07",
+   "req": "PROTO-AXI4-A3.4",
+   "kind": "sva",
+   "params": {
+    "id": "a_axi_burst_legal",
+    "need_cover": false
+   }
+  }
+ ],
+ "blocked_checks": [],
+ "extra": {}
+}

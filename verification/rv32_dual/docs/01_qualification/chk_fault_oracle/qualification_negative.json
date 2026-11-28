@@ -1,0 +1,34 @@
+{
+  "model_id": "chk_fault_oracle",
+  "kind": "negative",
+  "cases": [
+    {
+      "name": "OKAY response is not a fatal event",
+      "expected": "rejected",
+      "observed": "ValueError: fatal record needs a non-OKAY BRESP (SLVERR=2/DECERR=3)",
+      "pass": true
+    },
+    {
+      "name": "no event: all registers zero, level low",
+      "expected": [
+        {
+          "cpucl_fault_sts": "0x0",
+          "cpucl_fault_info": "0x0",
+          "cpucl_fault_lo": "0x0",
+          "cpucl_fault_hi": "0x0"
+        },
+        false
+      ],
+      "observed": [
+        {
+          "cpucl_fault_sts": "0x0",
+          "cpucl_fault_info": "0x0",
+          "cpucl_fault_lo": "0x0",
+          "cpucl_fault_hi": "0x0"
+        },
+        false
+      ],
+      "pass": true
+    }
+  ]
+}

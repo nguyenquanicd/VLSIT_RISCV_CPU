@@ -1,0 +1,42 @@
+{
+  "model_id": "chk_isa_kat",
+  "kind": "boundary",
+  "cases": [
+    {
+      "name": "sha512 RV32 halves vs FIPS 180-4 64-bit Sigma/sigma, 505 values x 4 functions",
+      "expected": "0x0",
+      "observed": "0x0",
+      "pass": true
+    },
+    {
+      "name": "unzip(zip(x)) == x over 202 values",
+      "expected": "0x0",
+      "observed": "0x0",
+      "pass": true
+    },
+    {
+      "name": "inverse S-box inverts S-box for all 256 bytes",
+      "expected": "0x0",
+      "observed": "0x0",
+      "pass": true
+    },
+    {
+      "name": "aes32dsi(aes32esi(x)) == x for all bytes, bs=0",
+      "expected": "0x0",
+      "observed": "0x0",
+      "pass": true
+    },
+    {
+      "name": "rori by 0 is identity",
+      "expected": "0xdeadbeef",
+      "observed": "0xdeadbeef",
+      "pass": true
+    },
+    {
+      "name": "sll uses rs2[4:0] only",
+      "expected": "0x2",
+      "observed": "0x2",
+      "pass": true
+    }
+  ]
+}

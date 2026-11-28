@@ -1,0 +1,278 @@
+{
+  "date": "2026-11-28",
+  "command": "python scripts/run_model_qualification.py --out docs/01_qualification --force",
+  "suites": [
+    {
+      "id": "asm_rv32",
+      "kind": "model",
+      "counts": {
+        "known_answer": [
+          246,
+          246
+        ],
+        "boundary": [
+          19,
+          19
+        ],
+        "negative": [
+          54,
+          54
+        ],
+        "reset": [
+          0,
+          0
+        ],
+        "fault_detection": [
+          8,
+          8
+        ]
+      },
+      "result": "pass"
+    },
+    {
+      "id": "chk_fp_model",
+      "kind": "model",
+      "counts": {
+        "known_answer": [
+          63,
+          63
+        ],
+        "boundary": [
+          5,
+          5
+        ],
+        "negative": [
+          3,
+          3
+        ],
+        "reset": [
+          0,
+          0
+        ],
+        "fault_detection": [
+          7,
+          7
+        ]
+      },
+      "result": "pass"
+    },
+    {
+      "id": "chk_isa_kat",
+      "kind": "model",
+      "counts": {
+        "known_answer": [
+          73,
+          73
+        ],
+        "boundary": [
+          6,
+          6
+        ],
+        "negative": [
+          3,
+          3
+        ],
+        "reset": [
+          0,
+          0
+        ],
+        "fault_detection": [
+          6,
+          6
+        ]
+      },
+      "result": "pass"
+    },
+    {
+      "id": "chk_trap_oracle",
+      "kind": "model",
+      "counts": {
+        "known_answer": [
+          10,
+          10
+        ],
+        "boundary": [
+          3,
+          3
+        ],
+        "negative": [
+          2,
+          2
+        ],
+        "reset": [
+          0,
+          0
+        ],
+        "fault_detection": [
+          7,
+          7
+        ]
+      },
+      "result": "pass"
+    },
+    {
+      "id": "chk_mem_oracle",
+      "kind": "model",
+      "counts": {
+        "known_answer": [
+          18,
+          18
+        ],
+        "boundary": [
+          3,
+          3
+        ],
+        "negative": [
+          3,
+          3
+        ],
+        "reset": [
+          2,
+          2
+        ],
+        "fault_detection": [
+          6,
+          6
+        ]
+      },
+      "result": "pass"
+    },
+    {
+      "id": "chk_litmus_oracle",
+      "kind": "model",
+      "counts": {
+        "known_answer": [
+          8,
+          8
+        ],
+        "boundary": [
+          3,
+          3
+        ],
+        "negative": [
+          2,
+          2
+        ],
+        "reset": [
+          0,
+          0
+        ],
+        "fault_detection": [
+          5,
+          5
+        ]
+      },
+      "result": "pass"
+    },
+    {
+      "id": "chk_pmu_model",
+      "kind": "model",
+      "counts": {
+        "known_answer": [
+          9,
+          9
+        ],
+        "boundary": [
+          3,
+          3
+        ],
+        "negative": [
+          2,
+          2
+        ],
+        "reset": [
+          1,
+          1
+        ],
+        "fault_detection": [
+          6,
+          6
+        ]
+      },
+      "result": "pass"
+    },
+    {
+      "id": "chk_fault_oracle",
+      "kind": "model",
+      "counts": {
+        "known_answer": [
+          6,
+          6
+        ],
+        "boundary": [
+          2,
+          2
+        ],
+        "negative": [
+          2,
+          2
+        ],
+        "reset": [
+          1,
+          1
+        ],
+        "fault_detection": [
+          6,
+          6
+        ]
+      },
+      "result": "pass"
+    },
+    {
+      "id": "chk_region_table",
+      "kind": "checker",
+      "counts": {
+        "known_answer": [
+          13,
+          13
+        ],
+        "fault_detection": [
+          17,
+          17
+        ],
+        "boundary": [
+          5,
+          5
+        ],
+        "negative": [
+          0,
+          0
+        ],
+        "reset": [
+          0,
+          0
+        ]
+      },
+      "result": "pass"
+    },
+    {
+      "id": "chk_csr_model",
+      "kind": "model",
+      "counts": {
+        "known_answer": [
+          14,
+          14
+        ],
+        "boundary": [
+          3,
+          3
+        ],
+        "negative": [
+          2,
+          2
+        ],
+        "reset": [
+          1,
+          1
+        ],
+        "fault_detection": [
+          6,
+          6
+        ]
+      },
+      "result": "pass"
+    }
+  ],
+  "overall": "pass",
+  "review": "pending (no human review recorded)"
+}

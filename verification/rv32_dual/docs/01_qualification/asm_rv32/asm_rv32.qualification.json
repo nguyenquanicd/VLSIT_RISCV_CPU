@@ -1,0 +1,69 @@
+{
+  "model_id": "asm_rv32",
+  "label": "AI-generated qualification record; not human-reviewed",
+  "build_manifest_sha256": "d9b28df85989252729854973859f1985e2e15e8de5c9cb53dc51b877ddcb78dc",
+  "review": {
+    "decision": "pending",
+    "approver": "pending",
+    "date": null
+  },
+  "tests": [
+    {
+      "kind": "known_answer",
+      "status": "pass",
+      "command": "python scripts/run_model_qualification.py --out docs/01_qualification --force",
+      "exit_code": 0,
+      "expected": "match",
+      "observed": "246/246 cases passed",
+      "evidence": {
+        "path": "docs/01_qualification/asm_rv32/qualification_known_answer.json",
+        "sha256": "15094dd8532f74fe17875aab3edeb09d36c1c1cbd7bf6e3dcf116c9edcdd750c"
+      }
+    },
+    {
+      "kind": "boundary",
+      "status": "pass",
+      "command": "python scripts/run_model_qualification.py --out docs/01_qualification --force",
+      "exit_code": 0,
+      "expected": "match",
+      "observed": "19/19 cases passed",
+      "evidence": {
+        "path": "docs/01_qualification/asm_rv32/qualification_boundary.json",
+        "sha256": "193d60a4f78a9ae6e786037e000eabb1307cdb1478179cc00ac83ba916210e22"
+      }
+    },
+    {
+      "kind": "negative",
+      "status": "pass",
+      "command": "python scripts/run_model_qualification.py --out docs/01_qualification --force",
+      "exit_code": 0,
+      "expected": "handled",
+      "observed": "54/54 cases passed",
+      "evidence": {
+        "path": "docs/01_qualification/asm_rv32/qualification_negative.json",
+        "sha256": "c59d33985f2966738b4ed9c9435732204f291fa05192e0a2f8ddac97c3e9d756"
+      }
+    },
+    {
+      "kind": "reset",
+      "status": "not_applicable",
+      "command": "python scripts/run_model_qualification.py --out docs/01_qualification --force",
+      "exit_code": null,
+      "expected": "n/a",
+      "observed": "stateless tool: each assemble_text call starts from an empty image and symbol table",
+      "evidence": null
+    },
+    {
+      "kind": "fault_detection",
+      "status": "pass",
+      "command": "python scripts/run_model_qualification.py --out docs/01_qualification --force",
+      "exit_code": 0,
+      "expected": "detected",
+      "observed": "8/8 cases detected",
+      "evidence": {
+        "path": "docs/01_qualification/asm_rv32/qualification_fault_detection.json",
+        "sha256": "00e5bcdf736ff30dc78d7f4cfd0de46a504d3d38be0af35aa391033dd58b0439"
+      }
+    }
+  ]
+}

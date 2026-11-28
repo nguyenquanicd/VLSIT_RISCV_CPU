@@ -1,0 +1,36 @@
+{
+  "checker_id": "cov_collect",
+  "kind": "fault_detection",
+  "cases": [
+    {
+      "name": "failed check credited",
+      "expected": "detected",
+      "observed": "detected: rejected: bin not credited",
+      "pass": true
+    },
+    {
+      "name": "run on a configuration outside the row credited",
+      "expected": "detected",
+      "observed": "detected: rejected: bin not credited",
+      "pass": true
+    },
+    {
+      "name": "blocked bin credited",
+      "expected": "detected",
+      "observed": "detected: rejected: bin not credited",
+      "pass": true
+    },
+    {
+      "name": "other test's pass credited to this bin",
+      "expected": "detected",
+      "observed": "detected: rejected: bin not credited",
+      "pass": true
+    },
+    {
+      "name": "not_run check credited",
+      "expected": "detected",
+      "observed": "detected: rejected: bin not credited",
+      "pass": true
+    }
+  ]
+}

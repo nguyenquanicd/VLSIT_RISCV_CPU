@@ -1,0 +1,36 @@
+{
+  "checker_id": "chk_axil_sb",
+  "kind": "fault_detection",
+  "cases": [
+    {
+      "name": "orphan B",
+      "expected": "detected",
+      "observed": "detected: 1 B response(s) without a request",
+      "pass": true
+    },
+    {
+      "name": "missing R for an accepted AR",
+      "expected": "detected",
+      "observed": "detected: 1 R responses for 2 read requests",
+      "pass": true
+    },
+    {
+      "name": "AW without W at end of run",
+      "expected": "detected",
+      "observed": "detected: AW count 2 != W count 1 at end of run",
+      "pass": true
+    },
+    {
+      "name": "EXOKAY on AXI4-Lite",
+      "expected": "detected",
+      "observed": "detected: illegal AXI4-Lite response EXOKAY at cycle 6",
+      "pass": true
+    },
+    {
+      "name": "duplicate B",
+      "expected": "detected",
+      "observed": "detected: 2 B responses for 1 write requests",
+      "pass": true
+    }
+  ]
+}

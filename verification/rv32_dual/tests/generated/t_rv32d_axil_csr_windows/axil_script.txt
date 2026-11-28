@@ -1,0 +1,30 @@
+WAITCK 120
+W 4 deadbeef f 0
+R 4
+W 4 aa 1 2
+R 4
+W 4 bb00 2 -2
+R 4
+W 4 ffffffff 0 1
+R 4
+W 6 1 f 0
+R 6
+R 4
+W 14 ffffffff f 0
+R 14
+W 1040 ffffffff f 0
+R 1040
+W 2040 ffffffff f 0
+R 2040
+W 3040 ffffffff f 0
+R 3040
+W 4010 ffffffff f 0
+R 4010
+W 4ffc ffffffff f 0
+R 4ffc
+W 4000 ffffffff f 0
+R 4000
+W 103c d0303 f 0
+R 103c
+R 303c
+END

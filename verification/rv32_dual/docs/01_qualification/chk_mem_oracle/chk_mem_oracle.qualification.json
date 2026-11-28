@@ -1,0 +1,72 @@
+{
+  "model_id": "chk_mem_oracle",
+  "label": "AI-generated qualification record; not human-reviewed",
+  "build_manifest_sha256": "c6591320669c1b2713690882dac60f9d4abf2d63ed5bdf06e81565dc2c697c94",
+  "review": {
+    "decision": "pending",
+    "approver": "pending",
+    "date": null
+  },
+  "tests": [
+    {
+      "kind": "known_answer",
+      "status": "pass",
+      "command": "python scripts/run_model_qualification.py --out docs/01_qualification --force",
+      "exit_code": 0,
+      "expected": "match",
+      "observed": "18/18 cases passed",
+      "evidence": {
+        "path": "docs/01_qualification/chk_mem_oracle/qualification_known_answer.json",
+        "sha256": "ade2b715d8c619bea4ccfc22ad91f7cf67933f0944ec3ee1d0650f82fc238592"
+      }
+    },
+    {
+      "kind": "boundary",
+      "status": "pass",
+      "command": "python scripts/run_model_qualification.py --out docs/01_qualification --force",
+      "exit_code": 0,
+      "expected": "match",
+      "observed": "3/3 cases passed",
+      "evidence": {
+        "path": "docs/01_qualification/chk_mem_oracle/qualification_boundary.json",
+        "sha256": "71ac1d8345f8ed7b9a56cd57a5105c5a93eeda008cfb0ce310445814ae26985f"
+      }
+    },
+    {
+      "kind": "negative",
+      "status": "pass",
+      "command": "python scripts/run_model_qualification.py --out docs/01_qualification --force",
+      "exit_code": 0,
+      "expected": "handled",
+      "observed": "3/3 cases passed",
+      "evidence": {
+        "path": "docs/01_qualification/chk_mem_oracle/qualification_negative.json",
+        "sha256": "93d0cd099a1855d44c3bb81b9c1f68518ae9e8118c0434d85f4bfe462bb302c6"
+      }
+    },
+    {
+      "kind": "reset",
+      "status": "pass",
+      "command": "python scripts/run_model_qualification.py --out docs/01_qualification --force",
+      "exit_code": 0,
+      "expected": "match",
+      "observed": "2/2 cases passed",
+      "evidence": {
+        "path": "docs/01_qualification/chk_mem_oracle/qualification_reset.json",
+        "sha256": "e58177fa0cc9c8558448726d58fbf0593af8d0ec42e0abe163a943c1ec9133d5"
+      }
+    },
+    {
+      "kind": "fault_detection",
+      "status": "pass",
+      "command": "python scripts/run_model_qualification.py --out docs/01_qualification --force",
+      "exit_code": 0,
+      "expected": "detected",
+      "observed": "6/6 cases detected",
+      "evidence": {
+        "path": "docs/01_qualification/chk_mem_oracle/qualification_fault_detection.json",
+        "sha256": "55311bd267d2f8cfe08a6d4f13f8ee9ccec3c80a51019ba65cde07963108e0ad"
+      }
+    }
+  ]
+}

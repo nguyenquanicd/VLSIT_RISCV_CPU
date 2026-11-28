@@ -1,0 +1,12 @@
+{
+  "checker_id": "chk_axi_mmio_sb",
+  "kind": "known_answer",
+  "cases": [
+    {
+      "name": "MMIO word store at byte lane 4 with data on the upper half",
+      "expected": [],
+      "observed": [],
+      "pass": true
+    }
+  ]
+}

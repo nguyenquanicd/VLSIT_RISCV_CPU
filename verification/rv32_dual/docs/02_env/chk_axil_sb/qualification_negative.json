@@ -1,0 +1,12 @@
+{
+  "checker_id": "chk_axil_sb",
+  "kind": "negative",
+  "cases": [
+    {
+      "name": "non-axil records ignored",
+      "expected": [],
+      "observed": [],
+      "pass": true
+    }
+  ]
+}

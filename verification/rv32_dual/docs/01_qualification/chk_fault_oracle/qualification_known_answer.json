@@ -1,0 +1,80 @@
+{
+  "model_id": "chk_fault_oracle",
+  "kind": "known_answer",
+  "cases": [
+    {
+      "name": "first LLC SLVERR: sts/info/lo/hi",
+      "expected": {
+        "cpucl_fault_sts": "0x15",
+        "cpucl_fault_info": "0x22",
+        "cpucl_fault_lo": "0x80001230",
+        "cpucl_fault_hi": "0x0"
+      },
+      "observed": {
+        "cpucl_fault_sts": "0x15",
+        "cpucl_fault_info": "0x22",
+        "cpucl_fault_lo": "0x80001230",
+        "cpucl_fault_hi": "0x0"
+      },
+      "pass": true
+    },
+    {
+      "name": "o_int_fault level after first event",
+      "expected": true,
+      "observed": true,
+      "pass": true
+    },
+    {
+      "name": "second event sets multiple, payload unchanged",
+      "expected": {
+        "cpucl_fault_sts": "0x17",
+        "cpucl_fault_info": "0x22",
+        "cpucl_fault_lo": "0x80001230",
+        "cpucl_fault_hi": "0x0"
+      },
+      "observed": {
+        "cpucl_fault_sts": "0x17",
+        "cpucl_fault_info": "0x22",
+        "cpucl_fault_lo": "0x80001230",
+        "cpucl_fault_hi": "0x0"
+      },
+      "pass": true
+    },
+    {
+      "name": "L1 hart 1 DECERR: hart_valid and hart field (DEC-040)",
+      "expected": {
+        "cpucl_fault_sts": "0x1d",
+        "cpucl_fault_info": "0x131",
+        "cpucl_fault_lo": "0x80002000",
+        "cpucl_fault_hi": "0x0"
+      },
+      "observed": {
+        "cpucl_fault_sts": "0x1d",
+        "cpucl_fault_info": "0x131",
+        "cpucl_fault_lo": "0x80002000",
+        "cpucl_fault_hi": "0x0"
+      },
+      "pass": true
+    },
+    {
+      "name": "simultaneous: lowest L1 hart wins, multiple set (DEC-039)",
+      "expected": [
+        "0x1f",
+        "0x31",
+        "0x80005000"
+      ],
+      "observed": [
+        "0x1f",
+        "0x31",
+        "0x80005000"
+      ],
+      "pass": true
+    },
+    {
+      "name": "control for fault injection: correct readout has no error",
+      "expected": [],
+      "observed": [],
+      "pass": true
+    }
+  ]
+}

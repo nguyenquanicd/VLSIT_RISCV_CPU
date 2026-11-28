@@ -1,0 +1,12 @@
+{
+  "checker_id": "cov_collect",
+  "kind": "negative",
+  "cases": [
+    {
+      "name": "no runs -> zero hits",
+      "expected": "0x0",
+      "observed": "0x0",
+      "pass": true
+    }
+  ]
+}

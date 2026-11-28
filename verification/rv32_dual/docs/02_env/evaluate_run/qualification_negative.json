@@ -1,0 +1,18 @@
+{
+  "checker_id": "evaluate_run",
+  "kind": "negative",
+  "cases": [
+    {
+      "name": "missing log -> check not_run and verdict FAIL (never pass)",
+      "expected": [
+        "FAIL",
+        "not_run"
+      ],
+      "observed": [
+        "FAIL",
+        "not_run"
+      ],
+      "pass": true
+    }
+  ]
+}

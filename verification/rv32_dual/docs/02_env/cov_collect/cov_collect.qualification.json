@@ -1,0 +1,69 @@
+{
+  "checker_id": "cov_collect",
+  "label": "AI-generated qualification record; not human-reviewed",
+  "build_manifest_sha256": "fae89052373d694666ec7f5f22ed55960c30644477c2913fee87c39830a243e0",
+  "review": {
+    "decision": "pending",
+    "approver": "pending",
+    "date": null
+  },
+  "tests": [
+    {
+      "kind": "fault_detection",
+      "status": "pass",
+      "command": "python scripts/run_env_qualification.py --force",
+      "exit_code": 0,
+      "expected": "detected",
+      "observed": "5/5",
+      "evidence": {
+        "path": "docs/02_env/cov_collect/qualification_fault_detection.json",
+        "sha256": "a966253aa32a002c546fa253af7e6d1d4c02dbf8d8661d76200a756fde080b8d"
+      }
+    },
+    {
+      "kind": "known_answer",
+      "status": "pass",
+      "command": "python scripts/run_env_qualification.py --force",
+      "exit_code": 0,
+      "expected": "match",
+      "observed": "3/3",
+      "evidence": {
+        "path": "docs/02_env/cov_collect/qualification_known_answer.json",
+        "sha256": "796867985ccf0bf9769cab9d7345402be8494c1caa4d0f191c3a35649405fb38"
+      }
+    },
+    {
+      "kind": "boundary",
+      "status": "pass",
+      "command": "python scripts/run_env_qualification.py --force",
+      "exit_code": 0,
+      "expected": "match",
+      "observed": "1/1",
+      "evidence": {
+        "path": "docs/02_env/cov_collect/qualification_boundary.json",
+        "sha256": "65790a62a755fd326ed733e604039a130f7b6a771458110bec4fdc937fac9220"
+      }
+    },
+    {
+      "kind": "negative",
+      "status": "pass",
+      "command": "python scripts/run_env_qualification.py --force",
+      "exit_code": 0,
+      "expected": "match",
+      "observed": "1/1",
+      "evidence": {
+        "path": "docs/02_env/cov_collect/qualification_negative.json",
+        "sha256": "472e02d1dff0031fa94fa6c29496700ffa8c2432ea593a21ba5c4247c27d7134"
+      }
+    },
+    {
+      "kind": "reset",
+      "status": "not_applicable",
+      "command": "python scripts/run_env_qualification.py --force",
+      "exit_code": null,
+      "expected": "n/a",
+      "observed": "stateless merge",
+      "evidence": null
+    }
+  ]
+}

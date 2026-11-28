@@ -1,0 +1,17 @@
+{
+  "label": "AI-generated qualification manifest; review pending",
+  "model_id": "chk_litmus_oracle",
+  "sources": [
+    {
+      "path": "models/chk_litmus_oracle.py",
+      "sha256": "ed05ba75d5c92ecdeda8689c5d5d5bc393629a7e6567bb93b0411b668d2e92d0"
+    },
+    {
+      "path": "models/qual/qual_chk_litmus_oracle.py",
+      "sha256": "bb784d2d7f05f822821b72dacada14f2cd3565e37541ac32d42e258c30f376e3"
+    }
+  ],
+  "python": "3.12.10",
+  "semantics": "RVWMO for MP/SB/LB/2+2W with and without fence rw,rw; no dependencies, no AMOs, no store forwarding races.",
+  "correlated_error_note": "Two derivations (operational enumeration and published verdict table) by the same author; they agree on all 32 outcomes."
+}

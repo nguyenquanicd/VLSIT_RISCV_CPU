@@ -1,0 +1,560 @@
+{
+ "source": "REF-001 rev 0.39 Section 6.2",
+ "ports": [
+  {
+   "name": "i_clk_cluster",
+   "dir": "input",
+   "width": ""
+  },
+  {
+   "name": "i_rst_n_cluster",
+   "dir": "input",
+   "width": ""
+  },
+  {
+   "name": "i_boot_addr",
+   "dir": "input",
+   "width": "[63:0]"
+  },
+  {
+   "name": "i_int_msip",
+   "dir": "input",
+   "width": "[PARA_CPU_NUM-1:0]"
+  },
+  {
+   "name": "i_int_mtip",
+   "dir": "input",
+   "width": "[PARA_CPU_NUM-1:0]"
+  },
+  {
+   "name": "i_int_meip",
+   "dir": "input",
+   "width": "[PARA_CPU_NUM-1:0]"
+  },
+  {
+   "name": "i_int_ssip",
+   "dir": "input",
+   "width": "[PARA_CPU_NUM-1:0]"
+  },
+  {
+   "name": "i_int_stip",
+   "dir": "input",
+   "width": "[PARA_CPU_NUM-1:0]"
+  },
+  {
+   "name": "i_int_seip",
+   "dir": "input",
+   "width": "[PARA_CPU_NUM-1:0]"
+  },
+  {
+   "name": "i_hart_debug_req",
+   "dir": "input",
+   "width": "[PARA_CPU_NUM-1:0]"
+  },
+  {
+   "name": "o_hart_debug_mode",
+   "dir": "output",
+   "width": "[PARA_CPU_NUM-1:0]"
+  },
+  {
+   "name": "o_int_pmu",
+   "dir": "output",
+   "width": ""
+  },
+  {
+   "name": "o_int_fault",
+   "dir": "output",
+   "width": ""
+  },
+  {
+   "name": "i_axil_awaddr",
+   "dir": "input",
+   "width": "[31:0]"
+  },
+  {
+   "name": "i_axil_awprot",
+   "dir": "input",
+   "width": "[2:0]"
+  },
+  {
+   "name": "i_axil_awvalid",
+   "dir": "input",
+   "width": ""
+  },
+  {
+   "name": "o_axil_awready",
+   "dir": "output",
+   "width": ""
+  },
+  {
+   "name": "i_axil_wdata",
+   "dir": "input",
+   "width": "[31:0]"
+  },
+  {
+   "name": "i_axil_wstrb",
+   "dir": "input",
+   "width": "[3:0]"
+  },
+  {
+   "name": "i_axil_wvalid",
+   "dir": "input",
+   "width": ""
+  },
+  {
+   "name": "o_axil_wready",
+   "dir": "output",
+   "width": ""
+  },
+  {
+   "name": "o_axil_bresp",
+   "dir": "output",
+   "width": "[1:0]"
+  },
+  {
+   "name": "o_axil_bvalid",
+   "dir": "output",
+   "width": ""
+  },
+  {
+   "name": "i_axil_bready",
+   "dir": "input",
+   "width": ""
+  },
+  {
+   "name": "i_axil_araddr",
+   "dir": "input",
+   "width": "[31:0]"
+  },
+  {
+   "name": "i_axil_arprot",
+   "dir": "input",
+   "width": "[2:0]"
+  },
+  {
+   "name": "i_axil_arvalid",
+   "dir": "input",
+   "width": ""
+  },
+  {
+   "name": "o_axil_arready",
+   "dir": "output",
+   "width": ""
+  },
+  {
+   "name": "o_axil_rdata",
+   "dir": "output",
+   "width": "[31:0]"
+  },
+  {
+   "name": "o_axil_rresp",
+   "dir": "output",
+   "width": "[1:0]"
+  },
+  {
+   "name": "o_axil_rvalid",
+   "dir": "output",
+   "width": ""
+  },
+  {
+   "name": "i_axil_rready",
+   "dir": "input",
+   "width": ""
+  },
+  {
+   "name": "o_axi_mmio_awid",
+   "dir": "output",
+   "width": "[5:0]"
+  },
+  {
+   "name": "o_axi_mmio_awaddr",
+   "dir": "output",
+   "width": "[63:0]"
+  },
+  {
+   "name": "o_axi_mmio_awlen",
+   "dir": "output",
+   "width": "[7:0]"
+  },
+  {
+   "name": "o_axi_mmio_awsize",
+   "dir": "output",
+   "width": "[2:0]"
+  },
+  {
+   "name": "o_axi_mmio_awburst",
+   "dir": "output",
+   "width": "[1:0]"
+  },
+  {
+   "name": "o_axi_mmio_awlock",
+   "dir": "output",
+   "width": ""
+  },
+  {
+   "name": "o_axi_mmio_awcache",
+   "dir": "output",
+   "width": "[3:0]"
+  },
+  {
+   "name": "o_axi_mmio_awprot",
+   "dir": "output",
+   "width": "[2:0]"
+  },
+  {
+   "name": "o_axi_mmio_awqos",
+   "dir": "output",
+   "width": "[3:0]"
+  },
+  {
+   "name": "o_axi_mmio_awregion",
+   "dir": "output",
+   "width": "[3:0]"
+  },
+  {
+   "name": "o_axi_mmio_awvalid",
+   "dir": "output",
+   "width": ""
+  },
+  {
+   "name": "i_axi_mmio_awready",
+   "dir": "input",
+   "width": ""
+  },
+  {
+   "name": "o_axi_mmio_wdata",
+   "dir": "output",
+   "width": "[63:0]"
+  },
+  {
+   "name": "o_axi_mmio_wstrb",
+   "dir": "output",
+   "width": "[7:0]"
+  },
+  {
+   "name": "o_axi_mmio_wlast",
+   "dir": "output",
+   "width": ""
+  },
+  {
+   "name": "o_axi_mmio_wvalid",
+   "dir": "output",
+   "width": ""
+  },
+  {
+   "name": "i_axi_mmio_wready",
+   "dir": "input",
+   "width": ""
+  },
+  {
+   "name": "i_axi_mmio_bid",
+   "dir": "input",
+   "width": "[5:0]"
+  },
+  {
+   "name": "i_axi_mmio_bresp",
+   "dir": "input",
+   "width": "[1:0]"
+  },
+  {
+   "name": "i_axi_mmio_bvalid",
+   "dir": "input",
+   "width": ""
+  },
+  {
+   "name": "o_axi_mmio_bready",
+   "dir": "output",
+   "width": ""
+  },
+  {
+   "name": "o_axi_mmio_arid",
+   "dir": "output",
+   "width": "[5:0]"
+  },
+  {
+   "name": "o_axi_mmio_araddr",
+   "dir": "output",
+   "width": "[63:0]"
+  },
+  {
+   "name": "o_axi_mmio_arlen",
+   "dir": "output",
+   "width": "[7:0]"
+  },
+  {
+   "name": "o_axi_mmio_arsize",
+   "dir": "output",
+   "width": "[2:0]"
+  },
+  {
+   "name": "o_axi_mmio_arburst",
+   "dir": "output",
+   "width": "[1:0]"
+  },
+  {
+   "name": "o_axi_mmio_arlock",
+   "dir": "output",
+   "width": ""
+  },
+  {
+   "name": "o_axi_mmio_arcache",
+   "dir": "output",
+   "width": "[3:0]"
+  },
+  {
+   "name": "o_axi_mmio_arprot",
+   "dir": "output",
+   "width": "[2:0]"
+  },
+  {
+   "name": "o_axi_mmio_arqos",
+   "dir": "output",
+   "width": "[3:0]"
+  },
+  {
+   "name": "o_axi_mmio_arregion",
+   "dir": "output",
+   "width": "[3:0]"
+  },
+  {
+   "name": "o_axi_mmio_arvalid",
+   "dir": "output",
+   "width": ""
+  },
+  {
+   "name": "i_axi_mmio_arready",
+   "dir": "input",
+   "width": ""
+  },
+  {
+   "name": "i_axi_mmio_rid",
+   "dir": "input",
+   "width": "[5:0]"
+  },
+  {
+   "name": "i_axi_mmio_rdata",
+   "dir": "input",
+   "width": "[63:0]"
+  },
+  {
+   "name": "i_axi_mmio_rresp",
+   "dir": "input",
+   "width": "[1:0]"
+  },
+  {
+   "name": "i_axi_mmio_rlast",
+   "dir": "input",
+   "width": ""
+  },
+  {
+   "name": "i_axi_mmio_rvalid",
+   "dir": "input",
+   "width": ""
+  },
+  {
+   "name": "o_axi_mmio_rready",
+   "dir": "output",
+   "width": ""
+  },
+  {
+   "name": "o_axi_mem_awid",
+   "dir": "output",
+   "width": "[6:0]"
+  },
+  {
+   "name": "o_axi_mem_awatop",
+   "dir": "output",
+   "width": "[5:0]"
+  },
+  {
+   "name": "o_axi_mem_awaddr",
+   "dir": "output",
+   "width": "[63:0]"
+  },
+  {
+   "name": "o_axi_mem_awlen",
+   "dir": "output",
+   "width": "[7:0]"
+  },
+  {
+   "name": "o_axi_mem_awsize",
+   "dir": "output",
+   "width": "[2:0]"
+  },
+  {
+   "name": "o_axi_mem_awburst",
+   "dir": "output",
+   "width": "[1:0]"
+  },
+  {
+   "name": "o_axi_mem_awlock",
+   "dir": "output",
+   "width": ""
+  },
+  {
+   "name": "o_axi_mem_awcache",
+   "dir": "output",
+   "width": "[3:0]"
+  },
+  {
+   "name": "o_axi_mem_awprot",
+   "dir": "output",
+   "width": "[2:0]"
+  },
+  {
+   "name": "o_axi_mem_awqos",
+   "dir": "output",
+   "width": "[3:0]"
+  },
+  {
+   "name": "o_axi_mem_awregion",
+   "dir": "output",
+   "width": "[3:0]"
+  },
+  {
+   "name": "o_axi_mem_awvalid",
+   "dir": "output",
+   "width": ""
+  },
+  {
+   "name": "i_axi_mem_awready",
+   "dir": "input",
+   "width": ""
+  },
+  {
+   "name": "o_axi_mem_wdata",
+   "dir": "output",
+   "width": "[PARA_AXI_MEM_DATA_W-1:0]"
+  },
+  {
+   "name": "o_axi_mem_wstrb",
+   "dir": "output",
+   "width": "[PARA_AXI_MEM_DATA_W/8-1:0]"
+  },
+  {
+   "name": "o_axi_mem_wlast",
+   "dir": "output",
+   "width": ""
+  },
+  {
+   "name": "o_axi_mem_wvalid",
+   "dir": "output",
+   "width": ""
+  },
+  {
+   "name": "i_axi_mem_wready",
+   "dir": "input",
+   "width": ""
+  },
+  {
+   "name": "i_axi_mem_bid",
+   "dir": "input",
+   "width": "[6:0]"
+  },
+  {
+   "name": "i_axi_mem_bresp",
+   "dir": "input",
+   "width": "[1:0]"
+  },
+  {
+   "name": "i_axi_mem_bvalid",
+   "dir": "input",
+   "width": ""
+  },
+  {
+   "name": "o_axi_mem_bready",
+   "dir": "output",
+   "width": ""
+  },
+  {
+   "name": "o_axi_mem_arid",
+   "dir": "output",
+   "width": "[6:0]"
+  },
+  {
+   "name": "o_axi_mem_araddr",
+   "dir": "output",
+   "width": "[63:0]"
+  },
+  {
+   "name": "o_axi_mem_arlen",
+   "dir": "output",
+   "width": "[7:0]"
+  },
+  {
+   "name": "o_axi_mem_arsize",
+   "dir": "output",
+   "width": "[2:0]"
+  },
+  {
+   "name": "o_axi_mem_arburst",
+   "dir": "output",
+   "width": "[1:0]"
+  },
+  {
+   "name": "o_axi_mem_arlock",
+   "dir": "output",
+   "width": ""
+  },
+  {
+   "name": "o_axi_mem_arcache",
+   "dir": "output",
+   "width": "[3:0]"
+  },
+  {
+   "name": "o_axi_mem_arprot",
+   "dir": "output",
+   "width": "[2:0]"
+  },
+  {
+   "name": "o_axi_mem_arqos",
+   "dir": "output",
+   "width": "[3:0]"
+  },
+  {
+   "name": "o_axi_mem_arregion",
+   "dir": "output",
+   "width": "[3:0]"
+  },
+  {
+   "name": "o_axi_mem_arvalid",
+   "dir": "output",
+   "width": ""
+  },
+  {
+   "name": "i_axi_mem_arready",
+   "dir": "input",
+   "width": ""
+  },
+  {
+   "name": "i_axi_mem_rid",
+   "dir": "input",
+   "width": "[6:0]"
+  },
+  {
+   "name": "i_axi_mem_rdata",
+   "dir": "input",
+   "width": "[PARA_AXI_MEM_DATA_W-1:0]"
+  },
+  {
+   "name": "i_axi_mem_rresp",
+   "dir": "input",
+   "width": "[1:0]"
+  },
+  {
+   "name": "i_axi_mem_rlast",
+   "dir": "input",
+   "width": ""
+  },
+  {
+   "name": "i_axi_mem_rvalid",
+   "dir": "input",
+   "width": ""
+  },
+  {
+   "name": "o_axi_mem_rready",
+   "dir": "output",
+   "width": ""
+  }
+ ]
+}

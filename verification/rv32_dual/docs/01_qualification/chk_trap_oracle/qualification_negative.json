@@ -1,0 +1,18 @@
+{
+  "model_id": "chk_trap_oracle",
+  "kind": "negative",
+  "cases": [
+    {
+      "name": "unknown trap kind",
+      "expected": "rejected",
+      "observed": "ValueError: fault",
+      "pass": true
+    },
+    {
+      "name": "no traps expected, none observed",
+      "expected": [],
+      "observed": [],
+      "pass": true
+    }
+  ]
+}

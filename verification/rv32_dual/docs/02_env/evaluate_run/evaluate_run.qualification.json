@@ -1,0 +1,69 @@
+{
+  "checker_id": "evaluate_run",
+  "label": "AI-generated qualification record; not human-reviewed",
+  "build_manifest_sha256": "87fc37ded957de2bb5f2b9a293ae571311867c21f1e525c309af204cda8becfc",
+  "review": {
+    "decision": "pending",
+    "approver": "pending",
+    "date": null
+  },
+  "tests": [
+    {
+      "kind": "fault_detection",
+      "status": "pass",
+      "command": "python scripts/run_env_qualification.py --force",
+      "exit_code": 0,
+      "expected": "detected",
+      "observed": "6/6",
+      "evidence": {
+        "path": "docs/02_env/evaluate_run/qualification_fault_detection.json",
+        "sha256": "e12cefb12c9754708296c0b398ac59161ab30d75a560e12dc2d18682981b6946"
+      }
+    },
+    {
+      "kind": "known_answer",
+      "status": "pass",
+      "command": "python scripts/run_env_qualification.py --force",
+      "exit_code": 0,
+      "expected": "match",
+      "observed": "1/1",
+      "evidence": {
+        "path": "docs/02_env/evaluate_run/qualification_known_answer.json",
+        "sha256": "77473ef673a7643a2aa561b5a7d9e1c3f9b6a3d0d831c5d3f5b5596099c46f96"
+      }
+    },
+    {
+      "kind": "boundary",
+      "status": "pass",
+      "command": "python scripts/run_env_qualification.py --force",
+      "exit_code": 0,
+      "expected": "match",
+      "observed": "1/1",
+      "evidence": {
+        "path": "docs/02_env/evaluate_run/qualification_boundary.json",
+        "sha256": "5dc7c1f0ff10078abb3d6663d2d7f7d6d46461e0361ec107d47a51a785be2965"
+      }
+    },
+    {
+      "kind": "negative",
+      "status": "pass",
+      "command": "python scripts/run_env_qualification.py --force",
+      "exit_code": 0,
+      "expected": "match",
+      "observed": "1/1",
+      "evidence": {
+        "path": "docs/02_env/evaluate_run/qualification_negative.json",
+        "sha256": "e0b65462fd68aa59708d652b9be7ae6cbbfe321197cbc0f84126499bd29b3792"
+      }
+    },
+    {
+      "kind": "reset",
+      "status": "not_applicable",
+      "command": "python scripts/run_env_qualification.py --force",
+      "exit_code": null,
+      "expected": "n/a",
+      "observed": "each evaluation starts from the run directory only",
+      "evidence": null
+    }
+  ]
+}

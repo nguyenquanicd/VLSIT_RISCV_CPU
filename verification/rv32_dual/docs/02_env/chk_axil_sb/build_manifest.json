@@ -1,0 +1,15 @@
+{
+  "label": "AI-generated qualification manifest; review pending",
+  "checker_id": "chk_axil_sb",
+  "sources": [
+    {
+      "path": "env/scoreboards/chk_axil_sb.py",
+      "sha256": "398778ec4a94cd3a73bfeb413533dcd05b2d4a7b3c8a47a9c3304507d3b2515f"
+    },
+    {
+      "path": "env/qual/qual_env.py",
+      "sha256": "35ba890359fca3406fcc14f956d22a0f7af6c5138d4463c7a93c776ae259c691"
+    }
+  ],
+  "correlated_error_note": "Synthetic logs and the checker were written by the same AI author from models/README.md; faults injected are hand-chosen defect classes, not an exhaustive mutation set."
+}

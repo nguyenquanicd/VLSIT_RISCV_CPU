@@ -1,0 +1,237 @@
+{
+ "test": "t_rv32d_isa_rv32_traps",
+ "seed": 1,
+ "configuration": "CFG-RV32-2-P0",
+ "slots": {
+  "0:cflw": "0x80080004",
+  "0:cfsw": "0x80080008",
+  "0:misa": "0x80080000"
+ },
+ "trap_base": "0x80090000",
+ "sig_base": "0x80080000",
+ "checks": [
+  {
+   "id": "CK-I32-01",
+   "req": "REQ-XL-003",
+   "kind": "traps",
+   "params": {
+    "hart": 0,
+    "subset": true,
+    "expected": [
+     {
+      "kind": "exception",
+      "code": 2,
+      "epc": 2147484372,
+      "tval": null
+     },
+     {
+      "kind": "exception",
+      "code": 2,
+      "epc": 2147484376,
+      "tval": null
+     },
+     {
+      "kind": "exception",
+      "code": 2,
+      "epc": 2147484380,
+      "tval": null
+     },
+     {
+      "kind": "exception",
+      "code": 2,
+      "epc": 2147484384,
+      "tval": null
+     },
+     {
+      "kind": "exception",
+      "code": 2,
+      "epc": 2147484388,
+      "tval": null
+     },
+     {
+      "kind": "exception",
+      "code": 2,
+      "epc": 2147484392,
+      "tval": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "CK-I32-02",
+   "req": "REQ-XL-003",
+   "kind": "traps",
+   "params": {
+    "hart": 0,
+    "subset": true,
+    "expected": [
+     {
+      "kind": "exception",
+      "code": 2,
+      "epc": 2147484396,
+      "tval": null
+     },
+     {
+      "kind": "exception",
+      "code": 2,
+      "epc": 2147484400,
+      "tval": null
+     },
+     {
+      "kind": "exception",
+      "code": 2,
+      "epc": 2147484404,
+      "tval": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "CK-I32-03",
+   "req": "REQ-XL-004",
+   "kind": "traps",
+   "params": {
+    "hart": 0,
+    "subset": true,
+    "expected": [
+     {
+      "kind": "exception",
+      "code": 2,
+      "epc": 2147484408,
+      "tval": null
+     },
+     {
+      "kind": "exception",
+      "code": 2,
+      "epc": 2147484412,
+      "tval": null
+     },
+     {
+      "kind": "exception",
+      "code": 2,
+      "epc": 2147484416,
+      "tval": null
+     },
+     {
+      "kind": "exception",
+      "code": 2,
+      "epc": 2147484420,
+      "tval": null
+     }
+    ]
+   }
+  },
+  {
+   "id": "CK-I32-04",
+   "req": "REQ-XL-003",
+   "kind": "traps",
+   "params": {
+    "hart": 0,
+    "subset": true,
+    "expected": [
+     {
+      "kind": "exception",
+      "code": 2,
+      "epc": 2147484372,
+      "tval": 12944699
+     },
+     {
+      "kind": "exception",
+      "code": 2,
+      "epc": 2147484376,
+      "tval": 1086686523
+     },
+     {
+      "kind": "exception",
+      "code": 2,
+      "epc": 2147484380,
+      "tval": 1414427
+     },
+     {
+      "kind": "exception",
+      "code": 2,
+      "epc": 2147484384,
+      "tval": 374019
+     },
+     {
+      "kind": "exception",
+      "code": 2,
+      "epc": 2147484388,
+      "tval": 10858531
+     },
+     {
+      "kind": "exception",
+      "code": 2,
+      "epc": 2147484392,
+      "tval": 386307
+     },
+     {
+      "kind": "exception",
+      "code": 2,
+      "epc": 2147484396,
+      "tval": 12956975
+     },
+     {
+      "kind": "exception",
+      "code": 2,
+      "epc": 2147484400,
+      "tval": 268809519
+     },
+     {
+      "kind": "exception",
+      "code": 2,
+      "epc": 2147484404,
+      "tval": 415610159
+     },
+     {
+      "kind": "exception",
+      "code": 2,
+      "epc": 2147484408,
+      "tval": 46527827
+     },
+     {
+      "kind": "exception",
+      "code": 2,
+      "epc": 2147484412,
+      "tval": 374023
+     },
+     {
+      "kind": "exception",
+      "code": 2,
+      "epc": 2147484416,
+      "tval": 10858535
+     },
+     {
+      "kind": "exception",
+      "code": 2,
+      "epc": 2147484420,
+      "tval": 1107658067
+     }
+    ]
+   }
+  },
+  {
+   "id": "CK-I32-05",
+   "req": "REQ-XL-003",
+   "kind": "slot",
+   "params": {
+    "addr": 2148007936,
+    "expect": 1075056933,
+    "mask": 3222540589
+   }
+  },
+  {
+   "id": "CK-I32-06",
+   "req": "REQ-XL-004",
+   "kind": "slots",
+   "params": {
+    "values": {
+     "2148007940": 1078530011,
+     "2148007944": 1078530011
+    }
+   }
+  }
+ ],
+ "blocked_checks": [],
+ "extra": {}
+}

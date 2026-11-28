@@ -1,0 +1,30 @@
+# AI-GENERATED (Claude Opus 5.5, 2026-11-28). t_rv32d_fv_pmu (question_log Q-G0-10 A).
+# RTL paths are the "Source:" lines of REF-001 Sections 14.4.8/14.4.11/14.4.12 (execution phase only).
+# Run from verification/rv32_dual/tests/formal when disk allows:  sby -f fv_pmu.sby
+# (creates fv_pmu_<task>/ work directories). Not run yet: disk below the approved threshold.
+[tasks]
+prove_w64
+prove_w32
+cover_w64
+
+[options]
+prove_w64: mode prove
+prove_w32: mode prove
+cover_w64: mode cover
+depth 24
+
+[engines]
+smtbmc boolector
+
+[script]
+prove_w32: read -define FV_W=32
+read -formal m_vlsit_pmu_counter_bank.sv m_vlsit_pmu_irq.sv m_vlsit_pmu_snapshot.sv
+read -formal -sv fv_pmu_props.sv fv_tops.sv
+prep -top fv_top_pmu
+
+[files]
+../../../../rtl/common/vlsit/pmu/m_vlsit_pmu_counter_bank.sv
+../../../../rtl/common/vlsit/pmu/m_vlsit_pmu_irq.sv
+../../../../rtl/common/vlsit/pmu/m_vlsit_pmu_snapshot.sv
+../../env/assertions/fv_pmu_props.sv
+../../env/assertions/fv_tops.sv

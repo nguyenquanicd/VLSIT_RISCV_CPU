@@ -1,0 +1,21 @@
+{
+  "label": "AI-generated qualification manifest; review pending",
+  "model_id": "chk_region_table",
+  "sources": [
+    {
+      "path": "models/chk_region_table.py",
+      "sha256": "b9eafb4e35cc6b5a496de4248457b0155ebf3ccb7aff73a93305288b68619c00"
+    },
+    {
+      "path": "models/configs/region_table_campaign.json",
+      "sha256": "672fdccdd8fa00779701400797291e0ae8aeb526604c995b18e61d03e27efc12"
+    },
+    {
+      "path": "models/qual/qual_chk_region_table.py",
+      "sha256": "f1f4fa0987f18112d4b4861b33a55c94c1d60006e310f18d4848be7bb8d9e6a7"
+    }
+  ],
+  "python": "3.12.10",
+  "semantics": "REF-001 rev 0.40 14.4.20 validity rules 1-5 (NUM 1..16; 16-byte aligned nonzero length, base[63:56]=0, end <= 2^56; TYPE[31:2]=0, class 11 reserved; no overlap; exactly one cacheable entry at index 0 with power-of-two length and length-aligned base) plus the RV32 bound base+length <= 2^34 (Q-G0-09 C); classify() full-window, MMIO atomic error; sv_params() emits the 14.4.20 elaboration form.",
+  "correlated_error_note": "Uses the campaign table transcribed from REF-001 rev 0.40 14.4.20; the SV-form KAT compares against the elaboration text copied from the same section (independent of the transcription)."
+}

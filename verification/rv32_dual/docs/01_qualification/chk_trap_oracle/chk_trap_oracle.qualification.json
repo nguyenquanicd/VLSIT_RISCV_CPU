@@ -1,0 +1,69 @@
+{
+  "model_id": "chk_trap_oracle",
+  "label": "AI-generated qualification record; not human-reviewed",
+  "build_manifest_sha256": "8501b6d699bb1bb887bd55d351327fce2a929dcace4fc1e6dffa050163273645",
+  "review": {
+    "decision": "pending",
+    "approver": "pending",
+    "date": null
+  },
+  "tests": [
+    {
+      "kind": "known_answer",
+      "status": "pass",
+      "command": "python scripts/run_model_qualification.py --out docs/01_qualification --force",
+      "exit_code": 0,
+      "expected": "match",
+      "observed": "10/10 cases passed",
+      "evidence": {
+        "path": "docs/01_qualification/chk_trap_oracle/qualification_known_answer.json",
+        "sha256": "85e17b2b2cfe4a8359b9af9544a608fc426a7947fdd88d69349a1ee0b2b12b78"
+      }
+    },
+    {
+      "kind": "boundary",
+      "status": "pass",
+      "command": "python scripts/run_model_qualification.py --out docs/01_qualification --force",
+      "exit_code": 0,
+      "expected": "match",
+      "observed": "3/3 cases passed",
+      "evidence": {
+        "path": "docs/01_qualification/chk_trap_oracle/qualification_boundary.json",
+        "sha256": "942765c745c30b4d811678fd13145002c6fc6b57f4f53d4ebd4c9f49dacdb18c"
+      }
+    },
+    {
+      "kind": "negative",
+      "status": "pass",
+      "command": "python scripts/run_model_qualification.py --out docs/01_qualification --force",
+      "exit_code": 0,
+      "expected": "handled",
+      "observed": "2/2 cases passed",
+      "evidence": {
+        "path": "docs/01_qualification/chk_trap_oracle/qualification_negative.json",
+        "sha256": "30706d422bab9531780e348bbd228910d9eee677412c18d3abdf90a690d6bebe"
+      }
+    },
+    {
+      "kind": "reset",
+      "status": "not_applicable",
+      "command": "python scripts/run_model_qualification.py --out docs/01_qualification --force",
+      "exit_code": null,
+      "expected": "n/a",
+      "observed": "stateless comparison; trap records of a run after reset form a new list",
+      "evidence": null
+    },
+    {
+      "kind": "fault_detection",
+      "status": "pass",
+      "command": "python scripts/run_model_qualification.py --out docs/01_qualification --force",
+      "exit_code": 0,
+      "expected": "detected",
+      "observed": "7/7 cases detected",
+      "evidence": {
+        "path": "docs/01_qualification/chk_trap_oracle/qualification_fault_detection.json",
+        "sha256": "ed44e311cd31448dfa6c1664d9f6f242fa04b52cfd57e6db07133bf24990a6bf"
+      }
+    }
+  ]
+}

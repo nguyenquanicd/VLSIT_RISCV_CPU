@@ -1,0 +1,19 @@
+{
+  "label": "AI-generated qualification manifest; review pending",
+  "checker_id": "chk_axi_mmio_sb",
+  "sources": [
+    {
+      "path": "env/scoreboards/axi_sb_core.py",
+      "sha256": "b6c4899124e01db43a3cefa6e65098244e47412890e82341eaa5f7be5c9d7d2b"
+    },
+    {
+      "path": "env/scoreboards/chk_axi_mmio_sb.py",
+      "sha256": "87dbd867a8edfcf57d10a681473bac8c71972e1f6c164162f9e20125048dc052"
+    },
+    {
+      "path": "env/qual/qual_env.py",
+      "sha256": "35ba890359fca3406fcc14f956d22a0f7af6c5138d4463c7a93c776ae259c691"
+    }
+  ],
+  "correlated_error_note": "Synthetic logs and the checker were written by the same AI author from models/README.md; faults injected are hand-chosen defect classes, not an exhaustive mutation set."
+}

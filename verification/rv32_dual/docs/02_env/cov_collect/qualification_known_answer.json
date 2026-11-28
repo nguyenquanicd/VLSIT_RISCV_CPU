@@ -1,0 +1,32 @@
+{
+  "checker_id": "cov_collect",
+  "kind": "known_answer",
+  "cases": [
+    {
+      "name": "two bins hit on P0, catalog of 3 non-blocked (bin,config) pairs, 1 blocked",
+      "expected": [
+        "0x2",
+        "0x3",
+        "0x1"
+      ],
+      "observed": [
+        "0x2",
+        "0x3",
+        "0x1"
+      ],
+      "pass": true
+    },
+    {
+      "name": "union across configurations",
+      "expected": "0x3",
+      "observed": "0x3",
+      "pass": true
+    },
+    {
+      "name": "vplan bin catalog loads (non-empty)",
+      "expected": true,
+      "observed": true,
+      "pass": true
+    }
+  ]
+}

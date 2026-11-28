@@ -1,0 +1,12 @@
+{
+  "checker_id": "chk_axil_sb",
+  "kind": "known_answer",
+  "cases": [
+    {
+      "name": "one B per write, one R per read, legal codes",
+      "expected": [],
+      "observed": [],
+      "pass": true
+    }
+  ]
+}

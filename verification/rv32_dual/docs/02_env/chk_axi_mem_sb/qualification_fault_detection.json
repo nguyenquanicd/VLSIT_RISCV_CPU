@@ -1,0 +1,60 @@
+{
+  "checker_id": "chk_axi_mem_sb",
+  "kind": "fault_detection",
+  "cases": [
+    {
+      "name": "3 beats instead of 2 (REQ-XL-012)",
+      "expected": "detected",
+      "observed": "detected: line 0x80001000 written with 3 beats, expected 2 (REQ-XL-012)",
+      "pass": true
+    },
+    {
+      "name": "data byte flipped",
+      "expected": "detected",
+      "observed": "detected: line 0x80001000 data 10111111222222223333333344444444 expected 11111111222222223333333344444444",
+      "pass": true
+    },
+    {
+      "name": "partial strobe on line writeback",
+      "expected": "detected",
+      "observed": "detected: line 0x80001000 written with partial strobes",
+      "pass": true
+    },
+    {
+      "name": "B with an unknown ID",
+      "expected": "detected",
+      "observed": "detected: mem B id 9 cycle 99 has no outstanding write (ID association, A5)",
+      "pass": true
+    },
+    {
+      "name": "write to a line that must not be written",
+      "expected": "detected",
+      "observed": "detected: no_write: 1 transaction(s) to 0x80002000-0x8000200f in window [17, 18] (first addr 0x80002000)",
+      "pass": true
+    },
+    {
+      "name": "address bit 34 set (REQ-XL-006)",
+      "expected": "detected",
+      "observed": "detected: mem addr 0x400000000 has bits 63:34 set (REQ-XL-006)",
+      "pass": true
+    },
+    {
+      "name": "WLAST on the first beat",
+      "expected": "detected",
+      "observed": "detected: line 0x80001000 written with 1 beats, expected 2 (REQ-XL-012)",
+      "pass": true
+    },
+    {
+      "name": "expected read missing",
+      "expected": "detected",
+      "observed": "detected: no read of 0x80003000-0x8000300f in window [17, 18]",
+      "pass": true
+    },
+    {
+      "name": "error response where OKAY expected",
+      "expected": "detected",
+      "observed": "detected: line 0x80001000 B resp 2 expected 0",
+      "pass": true
+    }
+  ]
+}

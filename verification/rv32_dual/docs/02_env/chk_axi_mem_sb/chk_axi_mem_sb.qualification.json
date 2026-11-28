@@ -1,0 +1,69 @@
+{
+  "checker_id": "chk_axi_mem_sb",
+  "label": "AI-generated qualification record; not human-reviewed",
+  "build_manifest_sha256": "ba609fe7775a4a6ba465b4411debbb8db5109ddfc2c5b9903db2f13c131294bf",
+  "review": {
+    "decision": "pending",
+    "approver": "pending",
+    "date": null
+  },
+  "tests": [
+    {
+      "kind": "fault_detection",
+      "status": "pass",
+      "command": "python scripts/run_env_qualification.py --force",
+      "exit_code": 0,
+      "expected": "detected",
+      "observed": "9/9",
+      "evidence": {
+        "path": "docs/02_env/chk_axi_mem_sb/qualification_fault_detection.json",
+        "sha256": "b0847a2a8016b4bdb4d0e93daacc12c3bedb83737313764bb9a64948cda36dce"
+      }
+    },
+    {
+      "kind": "known_answer",
+      "status": "pass",
+      "command": "python scripts/run_env_qualification.py --force",
+      "exit_code": 0,
+      "expected": "match",
+      "observed": "3/3",
+      "evidence": {
+        "path": "docs/02_env/chk_axi_mem_sb/qualification_known_answer.json",
+        "sha256": "40e000505bced998429b46ad16868146b534d67607c63446f7e81b6f6d1279f2"
+      }
+    },
+    {
+      "kind": "boundary",
+      "status": "pass",
+      "command": "python scripts/run_env_qualification.py --force",
+      "exit_code": 0,
+      "expected": "match",
+      "observed": "3/3",
+      "evidence": {
+        "path": "docs/02_env/chk_axi_mem_sb/qualification_boundary.json",
+        "sha256": "ee55d6059d202b02d4339340bf18b7f04f02c7d98a6f5f1d6da98bcaa3905bc2"
+      }
+    },
+    {
+      "kind": "negative",
+      "status": "pass",
+      "command": "python scripts/run_env_qualification.py --force",
+      "exit_code": 0,
+      "expected": "match",
+      "observed": "2/2",
+      "evidence": {
+        "path": "docs/02_env/chk_axi_mem_sb/qualification_negative.json",
+        "sha256": "f5a9dd07651550f271cc74bb944ac678835f46812c26ae2a9762e077d2158934"
+      }
+    },
+    {
+      "kind": "reset",
+      "status": "not_applicable",
+      "command": "python scripts/run_env_qualification.py --force",
+      "exit_code": null,
+      "expected": "n/a",
+      "observed": "stateless per call; RST records covered under boundary",
+      "evidence": null
+    }
+  ]
+}

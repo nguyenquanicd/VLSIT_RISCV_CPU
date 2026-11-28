@@ -1,0 +1,78 @@
+{
+  "model_id": "chk_trap_oracle",
+  "kind": "known_answer",
+  "cases": [
+    {
+      "name": "REF-001 10.2.3 CBO.CLEAN example: cause 7, epc 0x80201040, tval 0x90000007",
+      "expected": {
+        "hart": "0x1",
+        "level": "M",
+        "cause": "0x7",
+        "epc": "0x80201040",
+        "tval": "0x90000007"
+      },
+      "observed": {
+        "hart": "0x1",
+        "level": "M",
+        "cause": "0x7",
+        "epc": "0x80201040",
+        "tval": "0x90000007"
+      },
+      "pass": true
+    },
+    {
+      "name": "illegal instruction cause 2",
+      "expected": "0x2",
+      "observed": "0x2",
+      "pass": true
+    },
+    {
+      "name": "FENCE.I maintenance cause 24 (REQ-MEM-018)",
+      "expected": "0x18",
+      "observed": "0x18",
+      "pass": true
+    },
+    {
+      "name": "RV32 machine external interrupt mcause",
+      "expected": "0x8000000b",
+      "observed": "0x8000000b",
+      "pass": true
+    },
+    {
+      "name": "RV32 machine software interrupt mcause",
+      "expected": "0x80000003",
+      "observed": "0x80000003",
+      "pass": true
+    },
+    {
+      "name": "store page fault cause 15 (Q-G0-08)",
+      "expected": "0xf",
+      "observed": "0xf",
+      "pass": true
+    },
+    {
+      "name": "load access fault cause 5 (Q-G0-06)",
+      "expected": "0x5",
+      "observed": "0x5",
+      "pass": true
+    },
+    {
+      "name": "U ecall delegated by medeleg bit 8 -> S",
+      "expected": "S",
+      "observed": "S",
+      "pass": true
+    },
+    {
+      "name": "SEI delegated by mideleg bit 9 from S -> S",
+      "expected": "S",
+      "observed": "S",
+      "pass": true
+    },
+    {
+      "name": "two-hart compare, matching records",
+      "expected": [],
+      "observed": [],
+      "pass": true
+    }
+  ]
+}

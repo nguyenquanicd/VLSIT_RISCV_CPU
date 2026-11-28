@@ -1,0 +1,54 @@
+{
+  "model_id": "asm_rv32",
+  "kind": "fault_detection",
+  "cases": [
+    {
+      "name": "model mutation R_OPS['sub'] funct7 0x20->0x00",
+      "expected": "detected",
+      "observed": "detected: 1 KAT vector(s) failed",
+      "pass": true
+    },
+    {
+      "name": "model mutation I_ALU['xori'] funct3 4->6",
+      "expected": "detected",
+      "observed": "detected: 1 KAT vector(s) failed",
+      "pass": true
+    },
+    {
+      "name": "model mutation AMO_OPS['amoadd.w'] funct5 0x00->0x01",
+      "expected": "detected",
+      "observed": "detected: 2 KAT vector(s) failed",
+      "pass": true
+    },
+    {
+      "name": "model mutation FP_R['fdiv.s'] funct7 0x0C->0x08",
+      "expected": "detected",
+      "observed": "detected: 5 KAT vector(s) failed",
+      "pass": true
+    },
+    {
+      "name": "model mutation UNARY_IMM['rev8'] imm 0x698->0x688",
+      "expected": "detected",
+      "observed": "detected: 1 KAT vector(s) failed",
+      "pass": true
+    },
+    {
+      "name": "model mutation CBO['cbo.clean'] imm 1->2",
+      "expected": "detected",
+      "observed": "detected: 1 KAT vector(s) failed",
+      "pass": true
+    },
+    {
+      "name": "model mutation CB_ALU['c.xor'] 1->2",
+      "expected": "detected",
+      "observed": "detected: 1 KAT vector(s) failed",
+      "pass": true
+    },
+    {
+      "name": "model mutation btype offset bit 11 dropped",
+      "expected": "detected",
+      "observed": "detected: 2 KAT vector(s) failed",
+      "pass": true
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "model_id": "chk_fault_oracle",
+  "kind": "reset",
+  "cases": [
+    {
+      "name": "reset clears record and o_int_fault (REQ-RST-001)",
+      "expected": [
+        {
+          "cpucl_fault_sts": "0x0",
+          "cpucl_fault_info": "0x0",
+          "cpucl_fault_lo": "0x0",
+          "cpucl_fault_hi": "0x0"
+        },
+        false
+      ],
+      "observed": [
+        {
+          "cpucl_fault_sts": "0x0",
+          "cpucl_fault_info": "0x0",
+          "cpucl_fault_lo": "0x0",
+          "cpucl_fault_hi": "0x0"
+        },
+        false
+      ],
+      "pass": true
+    }
+  ]
+}

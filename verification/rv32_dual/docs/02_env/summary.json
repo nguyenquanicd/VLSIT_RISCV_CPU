@@ -1,0 +1,158 @@
+{
+  "date": "2026-11-28",
+  "command": "python scripts/run_env_qualification.py --force",
+  "suites": [
+    {
+      "id": "chk_axi_mem_sb",
+      "counts": {
+        "fault_detection": [
+          9,
+          9
+        ],
+        "known_answer": [
+          3,
+          3
+        ],
+        "boundary": [
+          3,
+          3
+        ],
+        "negative": [
+          2,
+          2
+        ],
+        "reset": [
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": "chk_axi_mmio_sb",
+      "counts": {
+        "fault_detection": [
+          5,
+          5
+        ],
+        "known_answer": [
+          1,
+          1
+        ],
+        "boundary": [
+          1,
+          1
+        ],
+        "negative": [
+          1,
+          1
+        ],
+        "reset": [
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": "chk_axil_sb",
+      "counts": {
+        "fault_detection": [
+          5,
+          5
+        ],
+        "known_answer": [
+          1,
+          1
+        ],
+        "boundary": [
+          1,
+          1
+        ],
+        "negative": [
+          1,
+          1
+        ],
+        "reset": [
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": "chk_sig",
+      "counts": {
+        "fault_detection": [
+          5,
+          5
+        ],
+        "known_answer": [
+          3,
+          3
+        ],
+        "boundary": [
+          2,
+          2
+        ],
+        "negative": [
+          1,
+          1
+        ],
+        "reset": [
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": "cov_collect",
+      "counts": {
+        "fault_detection": [
+          5,
+          5
+        ],
+        "known_answer": [
+          3,
+          3
+        ],
+        "boundary": [
+          1,
+          1
+        ],
+        "negative": [
+          1,
+          1
+        ],
+        "reset": [
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "id": "evaluate_run",
+      "counts": {
+        "fault_detection": [
+          6,
+          6
+        ],
+        "known_answer": [
+          1,
+          1
+        ],
+        "boundary": [
+          1,
+          1
+        ],
+        "negative": [
+          1,
+          1
+        ],
+        "reset": [
+          0,
+          0
+        ]
+      }
+    }
+  ],
+  "overall": "pass",
+  "review": "pending"
+}

@@ -1,0 +1,24 @@
+{
+  "model_id": "chk_isa_kat",
+  "kind": "negative",
+  "cases": [
+    {
+      "name": "unsupported op 'addw' (RV64-only)",
+      "expected": "rejected",
+      "observed": "ValueError: unsupported op 'addw'",
+      "pass": true
+    },
+    {
+      "name": "aes32 bs=4",
+      "expected": "rejected",
+      "observed": "ValueError: bs out of range",
+      "pass": true
+    },
+    {
+      "name": "rori shamt 32",
+      "expected": "rejected",
+      "observed": "ValueError: shamt out of range",
+      "pass": true
+    }
+  ]
+}

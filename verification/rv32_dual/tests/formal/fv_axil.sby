@@ -1,0 +1,26 @@
+# AI-GENERATED (Claude Opus 5.5, 2026-11-28). t_rv32d_fv_axil.
+# Environment assumptions (reviewed with the test): AXI4-Lite compliant manager (stable request while stalled),
+# at most one outstanding read and one outstanding write, component default aperture base 0 (PARA_AXIL_BASE_ADDR = 0).
+# RTL paths: "Source:" lines of REF-001 Sections 14.4.4 and 14.4.18. Not run yet: disk below threshold.
+[tasks]
+prove
+cover
+
+[options]
+prove: mode prove
+cover: mode cover
+depth 24
+
+[engines]
+smtbmc boolector
+
+[script]
+read -formal m_vlsit_riscv_axil_decode.sv m_vlsit_axil_reg_bridge.sv
+read -formal -sv fv_axil_props.sv fv_tops.sv
+prep -top fv_top_axil
+
+[files]
+../../../../rtl/common/vlsit/control/m_vlsit_riscv_axil_decode.sv
+../../../../rtl/common/vlsit/control/m_vlsit_axil_reg_bridge.sv
+../../env/assertions/fv_axil_props.sv
+../../env/assertions/fv_tops.sv

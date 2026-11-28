@@ -1,0 +1,69 @@
+{
+  "checker_id": "chk_sig",
+  "label": "AI-generated qualification record; not human-reviewed",
+  "build_manifest_sha256": "b0ae3d1a2eaed9759aff821ed638c825942cc4286f88a4cebcebe8c6ed3a1a41",
+  "review": {
+    "decision": "pending",
+    "approver": "pending",
+    "date": null
+  },
+  "tests": [
+    {
+      "kind": "fault_detection",
+      "status": "pass",
+      "command": "python scripts/run_env_qualification.py --force",
+      "exit_code": 0,
+      "expected": "detected",
+      "observed": "5/5",
+      "evidence": {
+        "path": "docs/02_env/chk_sig/qualification_fault_detection.json",
+        "sha256": "dc19bc10f2cdac26fb3d9a391f2da258cbbb117f65822e085f52e72d8321884b"
+      }
+    },
+    {
+      "kind": "known_answer",
+      "status": "pass",
+      "command": "python scripts/run_env_qualification.py --force",
+      "exit_code": 0,
+      "expected": "match",
+      "observed": "3/3",
+      "evidence": {
+        "path": "docs/02_env/chk_sig/qualification_known_answer.json",
+        "sha256": "eb4ee1541928ab1a2076ac0a64f9ef136b7476a053753b720fa45911af7512c5"
+      }
+    },
+    {
+      "kind": "boundary",
+      "status": "pass",
+      "command": "python scripts/run_env_qualification.py --force",
+      "exit_code": 0,
+      "expected": "match",
+      "observed": "2/2",
+      "evidence": {
+        "path": "docs/02_env/chk_sig/qualification_boundary.json",
+        "sha256": "3ae4b61745407209d570cdd7da8d10bd6695ce7c9039658f722c3ac07839009a"
+      }
+    },
+    {
+      "kind": "negative",
+      "status": "pass",
+      "command": "python scripts/run_env_qualification.py --force",
+      "exit_code": 0,
+      "expected": "match",
+      "observed": "1/1",
+      "evidence": {
+        "path": "docs/02_env/chk_sig/qualification_negative.json",
+        "sha256": "46ab51513e6d041d439434b26f99c333433a0a41982da0cf2b00f9cd9fbd3c26"
+      }
+    },
+    {
+      "kind": "reset",
+      "status": "not_applicable",
+      "command": "python scripts/run_env_qualification.py --force",
+      "exit_code": null,
+      "expected": "n/a",
+      "observed": "decoder is stateless",
+      "evidence": null
+    }
+  ]
+}

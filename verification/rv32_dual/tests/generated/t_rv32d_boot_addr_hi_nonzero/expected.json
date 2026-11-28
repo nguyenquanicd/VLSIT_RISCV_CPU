@@ -1,0 +1,69 @@
+{
+ "test": "t_rv32d_boot_addr_hi_nonzero",
+ "seed": 1,
+ "configuration": "CFG-RV32-2-P0",
+ "slots": {
+  "0:hid": "0x80080000",
+  "1:hid": "0x80081000"
+ },
+ "trap_base": "0x80090000",
+ "sig_base": "0x80080000",
+ "checks": [
+  {
+   "id": "CK-BHN-01",
+   "req": "REQ-XL-008",
+   "kind": "sva",
+   "params": {
+    "id": "a_boot_hi_zero",
+    "expect": "fire"
+   }
+  },
+  {
+   "id": "CK-BHN-02",
+   "req": "REQ-XL-008",
+   "kind": "axi_mem",
+   "params": {
+    "rules": [
+     {
+      "kind": "read_present",
+      "lo": 2147483648,
+      "hi": 2147483663,
+      "window": [
+       null,
+       null
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "id": "CK-BHN-03",
+   "req": "REQ-XL-006",
+   "kind": "sva",
+   "params": {
+    "id": "a_axi_addr_hi_zero"
+   }
+  },
+  {
+   "id": "CK-BHN-04",
+   "req": "REQ-SYS-003",
+   "kind": "tohost",
+   "params": {
+    "code": 1
+   }
+  },
+  {
+   "id": "CK-BHN-05",
+   "req": "REQ-XL-002",
+   "kind": "slots",
+   "params": {
+    "values": {
+     "2148007936": 0,
+     "2148012032": 1
+    }
+   }
+  }
+ ],
+ "blocked_checks": [],
+ "extra": {}
+}

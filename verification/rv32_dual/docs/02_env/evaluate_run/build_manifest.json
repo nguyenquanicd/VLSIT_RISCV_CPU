@@ -1,0 +1,15 @@
+{
+  "label": "AI-generated qualification manifest; review pending",
+  "checker_id": "evaluate_run",
+  "sources": [
+    {
+      "path": "scripts/evaluate_run.py",
+      "sha256": "64f163227126867ba4ad4da0874ace59668d4a799ce7d6e44fb6c9c8159e4b4d"
+    },
+    {
+      "path": "env/qual/qual_env.py",
+      "sha256": "35ba890359fca3406fcc14f956d22a0f7af6c5138d4463c7a93c776ae259c691"
+    }
+  ],
+  "correlated_error_note": "Synthetic logs and the checker were written by the same AI author from models/README.md; faults injected are hand-chosen defect classes, not an exhaustive mutation set."
+}

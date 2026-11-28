@@ -1,0 +1,30 @@
+{
+  "model_id": "chk_fault_oracle",
+  "kind": "boundary",
+  "cases": [
+    {
+      "name": "PA above 4 GiB: lo = PA[31:0] line base, hi[1:0] = PA[33:32] (Q-G0-12)",
+      "expected": [
+        "0xc0000010",
+        "0x3"
+      ],
+      "observed": [
+        "0xc0000010",
+        "0x3"
+      ],
+      "pass": true
+    },
+    {
+      "name": "cpucl_coh W1C does not clear the record or the level",
+      "expected": [
+        true,
+        "0x15"
+      ],
+      "observed": [
+        true,
+        "0x15"
+      ],
+      "pass": true
+    }
+  ]
+}

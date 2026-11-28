@@ -1,0 +1,106 @@
+{
+ "test": "t_rv32d_sv32_mmu",
+ "seed": 1,
+ "configuration": "CFG-RV32-2-P0",
+ "slots": {
+  "0:mega": "0x80080004",
+  "0:pte_c": "0x80080010",
+  "0:pte_d": "0x80080014",
+  "0:satp": "0x80080008",
+  "0:va_a": "0x80080000",
+  "0:va_a2": "0x8008000c"
+ },
+ "trap_base": "0x80090000",
+ "sig_base": "0x80080000",
+ "checks": [
+  {
+   "id": "CK-SV-01",
+   "req": "REQ-XL-005",
+   "kind": "slots",
+   "params": {
+    "values": {
+     "2148007936": 2863267841,
+     "2148007940": 1296385857
+    }
+   }
+  },
+  {
+   "id": "CK-SV-02",
+   "req": "REQ-XL-005",
+   "kind": "traps",
+   "params": {
+    "hart": 0,
+    "subset": true,
+    "expected": [
+     {
+      "kind": "exception",
+      "code": 15,
+      "epc": 2147484704,
+      "tval": 4202496
+     },
+     {
+      "kind": "exception",
+      "code": 13,
+      "epc": 2147484712,
+      "tval": 4206592
+     },
+     {
+      "kind": "exception",
+      "code": 15,
+      "epc": 2147484720,
+      "tval": 4210688
+     }
+    ]
+   }
+  },
+  {
+   "id": "CK-SV-03",
+   "req": "REQ-XL-005",
+   "kind": "slot",
+   "params": {
+    "addr": 2148007948,
+    "expect": 2728525829
+   }
+  },
+  {
+   "id": "CK-SV-04",
+   "req": "REQ-XL-005",
+   "kind": "slot",
+   "params": {
+    "addr": 2148007944,
+    "expect": 2147483648,
+    "mask": 2147483648
+   }
+  },
+  {
+   "id": "CK-SV-05",
+   "req": "REQ-XL-005",
+   "kind": "slot",
+   "params": {
+    "addr": 2148007952,
+    "expect": 0,
+    "mask": 64
+   }
+  },
+  {
+   "id": "CK-SV-05b",
+   "req": "REQ-XL-005",
+   "kind": "slot",
+   "params": {
+    "addr": 2148007956,
+    "expect": 0,
+    "mask": 128
+   }
+  },
+  {
+   "id": "CK-SV-06",
+   "req": "REQ-XL-006",
+   "kind": "sva",
+   "params": {
+    "id": "a_axi_addr_hi_zero"
+   }
+  }
+ ],
+ "blocked_checks": [],
+ "extra": {}
+}

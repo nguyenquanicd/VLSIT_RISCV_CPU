@@ -1,0 +1,17 @@
+{
+  "label": "AI-generated qualification manifest; review pending",
+  "model_id": "chk_trap_oracle",
+  "sources": [
+    {
+      "path": "models/chk_trap_oracle.py",
+      "sha256": "e1cdb3a09525d6dedce963fec8c3d3e0e6d608445e17d9217bf68422b7a2b375"
+    },
+    {
+      "path": "models/qual/qual_chk_trap_oracle.py",
+      "sha256": "e472ef12acf00692cf28e0ddd457c5050224849cdfe7194fda0d95f6606ab6f2"
+    }
+  ],
+  "python": "3.12.10",
+  "semantics": "XLEN=32 mcause encoding (interrupt bit 31); exception codes incl. custom 24 (REQ-MEM-018); delegation only from S/U.",
+  "correlated_error_note": "Cause codes and delegation rules come from the same author's reading of the Privileged ISA; the REF-001 10.2.3 example is an independent anchor."
+}

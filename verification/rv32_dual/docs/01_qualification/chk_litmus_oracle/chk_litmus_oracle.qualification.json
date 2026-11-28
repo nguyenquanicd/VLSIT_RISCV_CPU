@@ -1,0 +1,69 @@
+{
+  "model_id": "chk_litmus_oracle",
+  "label": "AI-generated qualification record; not human-reviewed",
+  "build_manifest_sha256": "000b1a8470501a19af51028fed2dcbc85df4f308cffabb0468fcbed7a714750c",
+  "review": {
+    "decision": "pending",
+    "approver": "pending",
+    "date": null
+  },
+  "tests": [
+    {
+      "kind": "known_answer",
+      "status": "pass",
+      "command": "python scripts/run_model_qualification.py --out docs/01_qualification --force",
+      "exit_code": 0,
+      "expected": "match",
+      "observed": "8/8 cases passed",
+      "evidence": {
+        "path": "docs/01_qualification/chk_litmus_oracle/qualification_known_answer.json",
+        "sha256": "2e27f1030e6973c59af9da478acad2d29b4a597e694bfef06f1f56fa15f9e507"
+      }
+    },
+    {
+      "kind": "boundary",
+      "status": "pass",
+      "command": "python scripts/run_model_qualification.py --out docs/01_qualification --force",
+      "exit_code": 0,
+      "expected": "match",
+      "observed": "3/3 cases passed",
+      "evidence": {
+        "path": "docs/01_qualification/chk_litmus_oracle/qualification_boundary.json",
+        "sha256": "2220926371c5f2224b4528a855465eccfac2cf520109c31ebf14988e64baee0c"
+      }
+    },
+    {
+      "kind": "negative",
+      "status": "pass",
+      "command": "python scripts/run_model_qualification.py --out docs/01_qualification --force",
+      "exit_code": 0,
+      "expected": "handled",
+      "observed": "2/2 cases passed",
+      "evidence": {
+        "path": "docs/01_qualification/chk_litmus_oracle/qualification_negative.json",
+        "sha256": "d88ccefda87839a105a1d71742974f473f5c9054e640e50c69812ea77692815a"
+      }
+    },
+    {
+      "kind": "reset",
+      "status": "not_applicable",
+      "command": "python scripts/run_model_qualification.py --out docs/01_qualification --force",
+      "exit_code": null,
+      "expected": "n/a",
+      "observed": "stateless enumeration",
+      "evidence": null
+    },
+    {
+      "kind": "fault_detection",
+      "status": "pass",
+      "command": "python scripts/run_model_qualification.py --out docs/01_qualification --force",
+      "exit_code": 0,
+      "expected": "detected",
+      "observed": "5/5 cases detected",
+      "evidence": {
+        "path": "docs/01_qualification/chk_litmus_oracle/qualification_fault_detection.json",
+        "sha256": "eb206b1f18d059d7241de6f283507efea2eb295e6e8778c6da5d58b28b61d6aa"
+      }
+    }
+  ]
+}

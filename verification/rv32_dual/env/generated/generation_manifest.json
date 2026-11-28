@@ -1,0 +1,49 @@
+{
+ "generator": "scripts/generators/gen_env.py",
+ "generator_sha256": "e456fb8ac5cf1713c964c6172810bf7855689afbcedb237ef72c1e8ca6437307",
+ "inputs": [
+  {
+   "path": "doc/specification/VLSIT_RISCV_DUAL_QUAD_CPU_CLUSTER_HDS.md",
+   "sha256": "1a3cade56c5819a01743d86ddfd2d4c6d944f0817ec19a450eac986c732364bc"
+  },
+  {
+   "path": "verification/rv32_dual/models/asm_rv32/asm_rv32.py",
+   "sha256": "d4210c10a33c6fe6954fe8222bc841101ac82277a88ac279f048fcc5f899deb8"
+  }
+ ],
+ "command": "python scripts/generators/gen_env.py --force",
+ "outputs": [
+  {
+   "path": "env/generated/debug_rom.S",
+   "sha256": "dbc5e8f656509e94caa0d8bd2db99e5f7507cb3ead97f4098a2a4908d1c83742"
+  },
+  {
+   "path": "env/generated/debug_rom.memh",
+   "sha256": "ceac21143579466c1c2e53ca42f7d72cfc04864682a634a4cfa501ea7b986aa2"
+  },
+  {
+   "path": "tb/generated/dut_port_connect.svh",
+   "sha256": "7913c7e2254f7818f2e5a0bd556e5d67f6719c42ca0feab43e720d80e6e5af5f"
+  },
+  {
+   "path": "tb/generated/dut_ports.json",
+   "sha256": "a334aabb6a9f16248f9725a030e0ccb0f0f7a71bf0a91533ed1c0544a24e4515"
+  },
+  {
+   "path": "tb/generated/dut_signals.svh",
+   "sha256": "975e35e80756718135adf37701814d00c32a60d9285e4c37573d724f534ba4eb"
+  },
+  {
+   "path": "tb/generated/fv_component_stubs.sv",
+   "sha256": "d0b3f502e819a3aeec25b45da30142a7b5ca0d0cd65b8019870eb97b89ddefa6"
+  },
+  {
+   "path": "tb/generated/m_vlsit_riscv_cluster_axi_top_stub.sv",
+   "sha256": "8d209cc1c88fa5b2bb165c615ddcbfd6e386c0dd12037a712328b9ba1b0fcaf6"
+  },
+  {
+   "path": "tb/generated/region_params.svh",
+   "sha256": "713a3eb053cdc7cdc42a54e8f4720f92886a36c27bc5aae8ffacbb771047ba07"
+  }
+ ]
+}

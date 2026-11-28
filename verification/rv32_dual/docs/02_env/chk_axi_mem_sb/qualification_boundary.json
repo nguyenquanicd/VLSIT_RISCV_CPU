@@ -1,0 +1,24 @@
+{
+  "checker_id": "chk_axi_mem_sb",
+  "kind": "boundary",
+  "cases": [
+    {
+      "name": "write outside the window is ignored by no_write",
+      "expected": [],
+      "observed": [],
+      "pass": true
+    },
+    {
+      "name": "open window [None, None] covers the whole run",
+      "expected": [],
+      "observed": [],
+      "pass": true
+    },
+    {
+      "name": "reset record clears outstanding state",
+      "expected": [],
+      "observed": [],
+      "pass": true
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "checker_id": "evaluate_run",
+  "kind": "known_answer",
+  "cases": [
+    {
+      "name": "consistent synthetic smoke run -> PASS with 6 executed checks",
+      "expected": [
+        "0x0",
+        "PASS",
+        "0x6"
+      ],
+      "observed": [
+        "0x0",
+        "PASS",
+        "0x6"
+      ],
+      "pass": true
+    }
+  ]
+}

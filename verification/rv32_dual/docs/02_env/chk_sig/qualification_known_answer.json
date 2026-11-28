@@ -1,0 +1,40 @@
+{
+  "checker_id": "chk_sig",
+  "kind": "known_answer",
+  "cases": [
+    {
+      "name": "slot decode",
+      "expected": "0x12345678",
+      "observed": "0x12345678",
+      "pass": true
+    },
+    {
+      "name": "trap record decode",
+      "expected": [
+        {
+          "hart": "0x0",
+          "level": "M",
+          "mcause": "0x7",
+          "mepc": "0x80000100",
+          "mtval": "0x90000007"
+        }
+      ],
+      "observed": [
+        {
+          "hart": "0x0",
+          "level": "M",
+          "mcause": "0x7",
+          "mepc": "0x80000100",
+          "mtval": "0x90000007"
+        }
+      ],
+      "pass": true
+    },
+    {
+      "name": "slot compare match",
+      "expected": [],
+      "observed": [],
+      "pass": true
+    }
+  ]
+}

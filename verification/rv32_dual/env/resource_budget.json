@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "status": "pending_review",
+  "campaign_id": "rv32_dual_cfg_rv32_2",
+  "measured_at": "2026-11-27T19:30:15+07:00",
+  "host": {
+    "os": "Windows 11 Home Single Language 10.0.26300",
+    "ram_total_bytes": 16353058816,
+    "ram_available_bytes": 1202590105,
+    "ram_status": "measured",
+    "ram_measurement_reason": "Available RAM is low because other Claude sessions run simulations on the same host at measurement time.",
+    "disk_path_or_volume": "C:",
+    "disk_free_bytes": 2072321474,
+    "disk_free_history": "0.84 GiB at 2026-11-27T19:30:15+07:00; 1.93 GiB at 2026-11-27T19:52:37+07:00 after the user-approved deletion of verification/rv32_profile/build and verification/coherence_fix/build (regenerable build outputs, untracked)",
+    "disk_status": "measured",
+    "disk_measurement_reason": "",
+    "measurement_method": "PowerShell Get-CimInstance Win32_OperatingSystem (TotalVisibleMemorySize, FreePhysicalMemory) and Get-PSDrive C"
+  },
+  "limits": {
+    "reserved_host_ram_bytes": 4294967296,
+    "simulation_ram_budget_bytes": null,
+    "simulation_ram_budget_reason": "Peak RAM of one CFG-RV32-2 build/simulation not yet measured in this workspace; first run is a bounded serial pilot.",
+    "max_concurrent_jobs": 1,
+    "disk_stop_free_bytes": 2147483648,
+    "expected_max_run_output_bytes": null,
+    "output_estimation_method": "Not measured in this workspace. Reference only (legacy verification/rv32_profile, not a measurement of this campaign): one 2-hart Verilator build folder held several hundred MB. A bounded pilot must measure it before the campaign.",
+    "admission_note": "Free disk (1.93 GiB at the last measurement) is still below the proposed 2 GiB stop threshold: no build or simulation may start until more space is available or the threshold is reviewed, and the budget is re-measured."
+  },
+  "waveform_policy": {
+    "default_capture": "only_when_required_by_test_or_review",
+    "planned_signal_scope": "Cluster TOP ports (AXI memory, AXI MMIO, AXI4-Lite) and testbench checkpoint signals; deeper scopes only for diagnosis",
+    "planned_time_windows": "Per test: reset release to test end, bounded by the test timeout; one waveform per priority test (R-283)",
+    "failure_diagnostic": "rerun_same_configuration_and_seed_with_targeted_capture"
+  },
+  "compression": {
+    "method": "none selected (zip available through PowerShell Compress-Archive; round-trip hash required before use)",
+    "round_trip_hash_required": true
+  },
+  "review": {
+    "reviewer": "Project owner (user)",
+    "decision": "partially approved: disk stop threshold 2 GiB approved on 2026-11-27; RAM budget, concurrency and output estimate pending the bounded pilot",
+    "record": "docs/00_plan/question_log.md, section \"G0 confirmations\""
+  }
+}

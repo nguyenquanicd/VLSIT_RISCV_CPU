@@ -1,0 +1,17 @@
+{
+  "label": "AI-generated qualification manifest; review pending",
+  "model_id": "chk_mem_oracle",
+  "sources": [
+    {
+      "path": "models/chk_mem_oracle.py",
+      "sha256": "9a64574c8ce152423d1e2300156c273024566292fafbc3059fb8efc36edfdfcb"
+    },
+    {
+      "path": "models/qual/qual_chk_mem_oracle.py",
+      "sha256": "671bcadd85ef24c48ce90b47d42e41ed1de8dc0b98ae53fe97706851c8c30d06"
+    }
+  ],
+  "python": "3.12.10",
+  "semantics": "Sparse little-endian byte memory; A-extension AMO*.W results; coherence final-value sets; reset keeps backing memory.",
+  "correlated_error_note": "Shares no code with gen_prog (not yet written); when the generator is written, the parts shared with this oracle must be listed and a hand-computed KAT added (plan 5.6)."
+}

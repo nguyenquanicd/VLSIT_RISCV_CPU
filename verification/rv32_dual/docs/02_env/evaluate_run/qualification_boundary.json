@@ -1,0 +1,26 @@
+{
+  "checker_id": "evaluate_run",
+  "kind": "boundary",
+  "cases": [
+    {
+      "name": "every check status is pass",
+      "expected": [
+        "pass",
+        "pass",
+        "pass",
+        "pass",
+        "pass",
+        "pass"
+      ],
+      "observed": [
+        "pass",
+        "pass",
+        "pass",
+        "pass",
+        "pass",
+        "pass"
+      ],
+      "pass": true
+    }
+  ]
+}

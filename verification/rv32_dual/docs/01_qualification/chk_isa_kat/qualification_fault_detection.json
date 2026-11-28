@@ -1,0 +1,42 @@
+{
+  "model_id": "chk_isa_kat",
+  "kind": "fault_detection",
+  "cases": [
+    {
+      "name": "clmul result bit flip",
+      "expected": "detected",
+      "observed": "detected: clmul rs1=0x00000003 rs2=0x00000003 imm=0 rd 0x00000004 expected 0x00000005",
+      "pass": true
+    },
+    {
+      "name": "rev8 byte order not reversed",
+      "expected": "detected",
+      "observed": "detected: rev8 rs1=0x11223344 rs2=0x00000000 imm=0 rd 0x11223344 expected 0x44332211",
+      "pass": true
+    },
+    {
+      "name": "aes32esmi without MixColumn",
+      "expected": "detected",
+      "observed": "detected: aes32esmi rs1=0x00000000 rs2=0x00000000 imm=0 rd 0x00000063 expected 0xa56363c6",
+      "pass": true
+    },
+    {
+      "name": "div by zero returns 0",
+      "expected": "detected",
+      "observed": "detected: div rs1=0x00000007 rs2=0x00000000 imm=0 rd 0x00000000 expected 0xffffffff",
+      "pass": true
+    },
+    {
+      "name": "sha512sig0h computed as sig0l",
+      "expected": "detected",
+      "observed": "detected: sha512sig0h rs1=0x00000001 rs2=0x00000001 imm=0 rd 0x83000000 expected 0x81000000",
+      "pass": true
+    },
+    {
+      "name": "czero.eqz inverted",
+      "expected": "detected",
+      "observed": "detected: czero.eqz rs1=0x00000005 rs2=0x00000000 imm=0 rd 0x00000005 expected 0x00000000",
+      "pass": true
+    }
+  ]
+}

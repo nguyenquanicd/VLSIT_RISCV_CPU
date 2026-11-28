@@ -1,0 +1,18 @@
+{
+  "model_id": "chk_litmus_oracle",
+  "kind": "negative",
+  "cases": [
+    {
+      "name": "unknown pattern",
+      "expected": "rejected",
+      "observed": "KeyError: 'IRIW'",
+      "pass": true
+    },
+    {
+      "name": "outcome with an impossible value is rejected",
+      "expected": true,
+      "observed": true,
+      "pass": true
+    }
+  ]
+}

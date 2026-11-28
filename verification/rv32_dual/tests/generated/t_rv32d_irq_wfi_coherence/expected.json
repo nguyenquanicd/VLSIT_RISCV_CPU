@@ -1,0 +1,72 @@
+{
+ "test": "t_rv32d_irq_wfi_coherence",
+ "seed": 1,
+ "configuration": "CFG-RV32-2-P0",
+ "slots": {
+  "0:after_wake": "0x80080000",
+  "1:peer": "0x80081000"
+ },
+ "trap_base": "0x80090000",
+ "sig_base": "0x80080000",
+ "checks": [
+  {
+   "id": "CK-WFI-01",
+   "req": "REQ-CLK-002",
+   "kind": "slot",
+   "params": {
+    "addr": 2148012032,
+    "expect": 249622541
+   }
+  },
+  {
+   "id": "CK-WFI-02",
+   "req": "REQ-IRQ-003",
+   "kind": "trap_cause",
+   "params": {
+    "hart": 0,
+    "cause": 2147483659,
+    "present": true
+   }
+  },
+  {
+   "id": "CK-WFI-03",
+   "req": "REQ-IRQ-001",
+   "kind": "trap_cause",
+   "params": {
+    "hart": 1,
+    "cause": 2147483659,
+    "present": false
+   }
+  },
+  {
+   "id": "CK-WFI-04",
+   "req": "REQ-CLK-002",
+   "kind": "slot",
+   "params": {
+    "addr": 2148007936,
+    "expect": 249622541
+   }
+  },
+  {
+   "id": "CK-WFI-05",
+   "req": "REQ-IRQ-001",
+   "kind": "pin",
+   "params": {
+    "name": "i_int_meip",
+    "index": 0,
+    "rule": "final",
+    "value": 0
+   }
+  },
+  {
+   "id": "CK-WFI-06",
+   "req": "REQ-CLK-002",
+   "kind": "tohost",
+   "params": {
+    "code": 1
+   }
+  }
+ ],
+ "blocked_checks": [],
+ "extra": {}
+}

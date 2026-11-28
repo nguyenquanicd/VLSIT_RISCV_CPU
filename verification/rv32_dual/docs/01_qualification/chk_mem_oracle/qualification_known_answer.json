@@ -1,0 +1,124 @@
+{
+  "model_id": "chk_mem_oracle",
+  "kind": "known_answer",
+  "cases": [
+    {
+      "name": "little-endian: byte 0 of 0x11223344",
+      "expected": "0x44",
+      "observed": "0x44",
+      "pass": true
+    },
+    {
+      "name": "little-endian: half at +2",
+      "expected": "0x1122",
+      "observed": "0x1122",
+      "pass": true
+    },
+    {
+      "name": "strobed store keeps unstrobed bytes",
+      "expected": "0x11bb33dd",
+      "observed": "0x11bb33dd",
+      "pass": true
+    },
+    {
+      "name": "amoswap.w(old=0x1, rs2=0x2)",
+      "expected": "0x2",
+      "observed": "0x2",
+      "pass": true
+    },
+    {
+      "name": "amoadd.w(old=0xffffffff, rs2=0x2)",
+      "expected": "0x1",
+      "observed": "0x1",
+      "pass": true
+    },
+    {
+      "name": "amoxor.w(old=0xf0, rs2=0xff)",
+      "expected": "0xf",
+      "observed": "0xf",
+      "pass": true
+    },
+    {
+      "name": "amoand.w(old=0xf0, rs2=0x3c)",
+      "expected": "0x30",
+      "observed": "0x30",
+      "pass": true
+    },
+    {
+      "name": "amoor.w(old=0xf0, rs2=0xf)",
+      "expected": "0xff",
+      "observed": "0xff",
+      "pass": true
+    },
+    {
+      "name": "amomin.w(old=0xffffffff, rs2=0x1)",
+      "expected": "0xffffffff",
+      "observed": "0xffffffff",
+      "pass": true
+    },
+    {
+      "name": "amomax.w(old=0xffffffff, rs2=0x1)",
+      "expected": "0x1",
+      "observed": "0x1",
+      "pass": true
+    },
+    {
+      "name": "amominu.w(old=0xffffffff, rs2=0x1)",
+      "expected": "0x1",
+      "observed": "0x1",
+      "pass": true
+    },
+    {
+      "name": "amomaxu.w(old=0xffffffff, rs2=0x1)",
+      "expected": "0xffffffff",
+      "observed": "0xffffffff",
+      "pass": true
+    },
+    {
+      "name": "Memory.amo returns old value",
+      "expected": "0x0",
+      "observed": "0x0",
+      "pass": true
+    },
+    {
+      "name": "Memory.amo writes result",
+      "expected": "0x5",
+      "observed": "0x5",
+      "pass": true
+    },
+    {
+      "name": "legal finals: last store of each hart",
+      "expected": [
+        "3",
+        "7"
+      ],
+      "observed": [
+        "3",
+        "7"
+      ],
+      "pass": true
+    },
+    {
+      "name": "legal finals: no store -> init",
+      "expected": [
+        "9"
+      ],
+      "observed": [
+        "9"
+      ],
+      "pass": true
+    },
+    {
+      "name": "AMOADD counter exact (64 + 64 increments)",
+      "expected": [],
+      "observed": [],
+      "pass": true
+    },
+    {
+      "name": "image compare match",
+      "expected": [],
+      "observed": [],
+      "pass": true
+    }
+  ]
+}

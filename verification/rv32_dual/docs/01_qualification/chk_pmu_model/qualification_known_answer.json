@@ -1,0 +1,118 @@
+{
+  "model_id": "chk_pmu_model",
+  "kind": "known_answer",
+  "cases": [
+    {
+      "name": "Event_Map catalog size (22 CVA6 + 16 HPDcache + 28 LLC + 12 CCU)",
+      "expected": "0x4e",
+      "observed": "0x4e",
+      "pass": true
+    },
+    {
+      "name": "0x0007 is a per-hart event",
+      "expected": "hart",
+      "observed": "hart",
+      "pass": true
+    },
+    {
+      "name": "0x0303 is a cluster occurrence tap with cap 4",
+      "expected": [
+        "cluster",
+        "occurrence",
+        "0x4"
+      ],
+      "observed": [
+        "cluster",
+        "occurrence",
+        "0x4"
+      ],
+      "pass": true
+    },
+    {
+      "name": "0x0308 is a cycle indicator",
+      "expected": "cycle",
+      "observed": "cycle",
+      "pass": true
+    },
+    {
+      "name": "SPM selectors disabled",
+      "expected": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "observed": [
+        true,
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "pass": true
+    },
+    {
+      "name": "scopes 0,1,4,2,3,5,6,7 for 0x0007; CCU 0x0303 scope 5/0; SPM; unknown; disabled",
+      "expected": [
+        "0x3",
+        "0x5",
+        "0x8",
+        "0x0",
+        "0x0",
+        "0x0",
+        "0x0",
+        "0x0",
+        "0x6",
+        "0x0",
+        "0x0",
+        "0x0",
+        "0x0"
+      ],
+      "observed": [
+        "0x3",
+        "0x5",
+        "0x8",
+        "0x0",
+        "0x0",
+        "0x0",
+        "0x0",
+        "0x0",
+        "0x6",
+        "0x0",
+        "0x0",
+        "0x0",
+        "0x0"
+      ],
+      "pass": true
+    },
+    {
+      "name": "no input-cap violation in the scenario",
+      "expected": [],
+      "observed": [],
+      "pass": true
+    },
+    {
+      "name": "pmu_evt decode [15:0]/[18:16]/[19]",
+      "expected": {
+        "event_id": "0x303",
+        "scope": "0x5",
+        "en": true
+      },
+      "observed": {
+        "event_id": "0x303",
+        "scope": "0x5",
+        "en": true
+      },
+      "pass": true
+    },
+    {
+      "name": "control for fault injection: correct snapshot has no error",
+      "expected": [],
+      "observed": [],
+      "pass": true
+    }
+  ]
+}

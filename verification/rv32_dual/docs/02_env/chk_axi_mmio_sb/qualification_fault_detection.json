@@ -1,0 +1,36 @@
+{
+  "checker_id": "chk_axi_mmio_sb",
+  "kind": "fault_detection",
+  "cases": [
+    {
+      "name": "wrong MMIO store data",
+      "expected": "detected",
+      "observed": "detected: write data 0x12345679 expected 0x12345678",
+      "pass": true
+    },
+    {
+      "name": "MMIO address leaked to the memory port",
+      "expected": "detected",
+      "observed": "detected: no_write: 1 transaction(s) to 0x10000000-0x1fffffff in window [None, None] (first addr 0x10000804)",
+      "pass": true
+    },
+    {
+      "name": "MMIO R without request",
+      "expected": "detected",
+      "observed": "detected: mmio R id 3 cycle 50 has no outstanding read (ID association, A5)",
+      "pass": true
+    },
+    {
+      "name": "store outside its checkpoint window",
+      "expected": "detected",
+      "observed": "detected: no write to 0x10000804-0x10000807 in window [192, 194]",
+      "pass": true
+    },
+    {
+      "name": "B response lost (incomplete write)",
+      "expected": "detected",
+      "observed": "detected: 1 write(s) without B response at end of run",
+      "pass": true
+    }
+  ]
+}

@@ -1,0 +1,696 @@
+{
+  "model_id": "chk_fp_model",
+  "kind": "known_answer",
+  "cases": [
+    {
+      "name": "fdiv.s rne RV32 HDS 14.5 FDIV.S 7.0/2.0",
+      "expected": [
+        "0x40600000",
+        "0x0"
+      ],
+      "observed": [
+        "0x40600000",
+        "0x0"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fadd.s rne IEEE exact sum",
+      "expected": [
+        "0x40400000",
+        "0x0"
+      ],
+      "observed": [
+        "0x40400000",
+        "0x0"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fadd.s rne 0.1f+0.2f",
+      "expected": [
+        "0x3e99999a",
+        "0x1"
+      ],
+      "observed": [
+        "0x3e99999a",
+        "0x1"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fsqrt.s rne exact sqrt",
+      "expected": [
+        "0x40000000",
+        "0x0"
+      ],
+      "observed": [
+        "0x40000000",
+        "0x0"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fsqrt.s rne sqrt(2) RNE",
+      "expected": [
+        "0x3fb504f3",
+        "0x1"
+      ],
+      "observed": [
+        "0x3fb504f3",
+        "0x1"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fdiv.s rne 1/3 RNE",
+      "expected": [
+        "0x3eaaaaab",
+        "0x1"
+      ],
+      "observed": [
+        "0x3eaaaaab",
+        "0x1"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fdiv.s rtz 1/3 RTZ",
+      "expected": [
+        "0x3eaaaaaa",
+        "0x1"
+      ],
+      "observed": [
+        "0x3eaaaaaa",
+        "0x1"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fdiv.s rup 1/3 RUP",
+      "expected": [
+        "0x3eaaaaab",
+        "0x1"
+      ],
+      "observed": [
+        "0x3eaaaaab",
+        "0x1"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fdiv.s rdn -1/3 RDN",
+      "expected": [
+        "0xbeaaaaab",
+        "0x1"
+      ],
+      "observed": [
+        "0xbeaaaaab",
+        "0x1"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fdiv.s rne 0/0 -> canonical NaN, NV (RV32 HDS 14.5)",
+      "expected": [
+        "0x7fc00000",
+        "0x10"
+      ],
+      "observed": [
+        "0x7fc00000",
+        "0x10"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fdiv.s rne 1/0 -> +inf, DZ",
+      "expected": [
+        "0x7f800000",
+        "0x8"
+      ],
+      "observed": [
+        "0x7f800000",
+        "0x8"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fdiv.s rne 1/-0 -> -inf, DZ",
+      "expected": [
+        "0xff800000",
+        "0x8"
+      ],
+      "observed": [
+        "0xff800000",
+        "0x8"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fsqrt.s rne sqrt(-1) -> canonical NaN, NV",
+      "expected": [
+        "0x7fc00000",
+        "0x10"
+      ],
+      "observed": [
+        "0x7fc00000",
+        "0x10"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fsqrt.s rne sqrt(-0) = -0",
+      "expected": [
+        "0x80000000",
+        "0x0"
+      ],
+      "observed": [
+        "0x80000000",
+        "0x0"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fmul.s rne overflow RNE -> inf",
+      "expected": [
+        "0x7f800000",
+        "0x5"
+      ],
+      "observed": [
+        "0x7f800000",
+        "0x5"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fmul.s rtz overflow RTZ -> max finite",
+      "expected": [
+        "0x7f7fffff",
+        "0x5"
+      ],
+      "observed": [
+        "0x7f7fffff",
+        "0x5"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fmul.s rne exact subnormal: no UF",
+      "expected": [
+        "0x400000",
+        "0x0"
+      ],
+      "observed": [
+        "0x400000",
+        "0x0"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fmul.s rne inexact tiny: UF|NX (tie to even)",
+      "expected": [
+        "0x400000",
+        "0x3"
+      ],
+      "observed": [
+        "0x400000",
+        "0x3"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fmul.s rne min subnormal/2 -> +0 (tie to even)",
+      "expected": [
+        "0x0",
+        "0x3"
+      ],
+      "observed": [
+        "0x0",
+        "0x3"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fmul.s rup min subnormal/2 RUP -> min subnormal",
+      "expected": [
+        "0x1",
+        "0x3"
+      ],
+      "observed": [
+        "0x1",
+        "0x3"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fadd.s rne x + -x = +0",
+      "expected": [
+        "0x0",
+        "0x0"
+      ],
+      "observed": [
+        "0x0",
+        "0x0"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fadd.s rdn x + -x = -0 in RDN",
+      "expected": [
+        "0x80000000",
+        "0x0"
+      ],
+      "observed": [
+        "0x80000000",
+        "0x0"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fadd.s rne inf - inf",
+      "expected": [
+        "0x7fc00000",
+        "0x10"
+      ],
+      "observed": [
+        "0x7fc00000",
+        "0x10"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fmadd.s rne fmadd exact",
+      "expected": [
+        "0x40e00000",
+        "0x0"
+      ],
+      "observed": [
+        "0x40e00000",
+        "0x0"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fmsub.s rne fmsub",
+      "expected": [
+        "0x40a00000",
+        "0x0"
+      ],
+      "observed": [
+        "0x40a00000",
+        "0x0"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fnmadd.s rne fnmadd = -(a*b)-c",
+      "expected": [
+        "0xc0e00000",
+        "0x0"
+      ],
+      "observed": [
+        "0xc0e00000",
+        "0x0"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fnmsub.s rne fnmsub = -(a*b)+c",
+      "expected": [
+        "0xc0a00000",
+        "0x0"
+      ],
+      "observed": [
+        "0xc0a00000",
+        "0x0"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fmadd.s rne inf*0 + qNaN raises NV",
+      "expected": [
+        "0x7fc00000",
+        "0x10"
+      ],
+      "observed": [
+        "0x7fc00000",
+        "0x10"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fcvt.w.s rtz FCVT.W.S 3.75 RTZ (RV32 HDS 15.5 note)",
+      "expected": [
+        "0x3",
+        "0x1"
+      ],
+      "observed": [
+        "0x3",
+        "0x1"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fcvt.w.s rne FCVT.W.S 3.75 RNE",
+      "expected": [
+        "0x4",
+        "0x1"
+      ],
+      "observed": [
+        "0x4",
+        "0x1"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fcvt.w.s rne -2.5 RNE -> -2",
+      "expected": [
+        "0xfffffffe",
+        "0x1"
+      ],
+      "observed": [
+        "0xfffffffe",
+        "0x1"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fcvt.w.s rmm -2.5 RMM -> -3",
+      "expected": [
+        "0xfffffffd",
+        "0x1"
+      ],
+      "observed": [
+        "0xfffffffd",
+        "0x1"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fcvt.w.s rne NaN -> 2^31-1",
+      "expected": [
+        "0x7fffffff",
+        "0x10"
+      ],
+      "observed": [
+        "0x7fffffff",
+        "0x10"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fcvt.w.s rne 2^31 saturates",
+      "expected": [
+        "0x7fffffff",
+        "0x10"
+      ],
+      "observed": [
+        "0x7fffffff",
+        "0x10"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fcvt.w.s rne -2^31 exact",
+      "expected": [
+        "0x80000000",
+        "0x0"
+      ],
+      "observed": [
+        "0x80000000",
+        "0x0"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fcvt.wu.s rne -1.0 to unsigned -> 0, NV",
+      "expected": [
+        "0x0",
+        "0x10"
+      ],
+      "observed": [
+        "0x0",
+        "0x10"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fcvt.wu.s rtz -0.25 RTZ unsigned -> 0, NX only",
+      "expected": [
+        "0x0",
+        "0x1"
+      ],
+      "observed": [
+        "0x0",
+        "0x1"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fcvt.s.w rne int -1 -> -1.0",
+      "expected": [
+        "0xbf800000",
+        "0x0"
+      ],
+      "observed": [
+        "0xbf800000",
+        "0x0"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fcvt.s.wu rne 2^32-1 -> 2^32 RNE",
+      "expected": [
+        "0x4f800000",
+        "0x1"
+      ],
+      "observed": [
+        "0x4f800000",
+        "0x1"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fcvt.s.wu rtz 2^32-1 RTZ",
+      "expected": [
+        "0x4f7fffff",
+        "0x1"
+      ],
+      "observed": [
+        "0x4f7fffff",
+        "0x1"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fmin.s rne fmin(-0,+0) = -0",
+      "expected": [
+        "0x80000000",
+        "0x0"
+      ],
+      "observed": [
+        "0x80000000",
+        "0x0"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fmax.s rne fmax(-0,+0) = +0",
+      "expected": [
+        "0x0",
+        "0x0"
+      ],
+      "observed": [
+        "0x0",
+        "0x0"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fmax.s rne fmax(qNaN,1) = 1, no flag",
+      "expected": [
+        "0x3f800000",
+        "0x0"
+      ],
+      "observed": [
+        "0x3f800000",
+        "0x0"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fmin.s rne fmin(sNaN,1) = 1, NV",
+      "expected": [
+        "0x3f800000",
+        "0x10"
+      ],
+      "observed": [
+        "0x3f800000",
+        "0x10"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fmin.s rne both NaN -> canonical",
+      "expected": [
+        "0x7fc00000",
+        "0x0"
+      ],
+      "observed": [
+        "0x7fc00000",
+        "0x0"
+      ],
+      "pass": true
+    },
+    {
+      "name": "feq.s rne feq qNaN no flag",
+      "expected": [
+        "0x0",
+        "0x0"
+      ],
+      "observed": [
+        "0x0",
+        "0x0"
+      ],
+      "pass": true
+    },
+    {
+      "name": "feq.s rne feq sNaN NV",
+      "expected": [
+        "0x0",
+        "0x10"
+      ],
+      "observed": [
+        "0x0",
+        "0x10"
+      ],
+      "pass": true
+    },
+    {
+      "name": "flt.s rne flt qNaN NV",
+      "expected": [
+        "0x0",
+        "0x10"
+      ],
+      "observed": [
+        "0x0",
+        "0x10"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fle.s rne -0 <= +0",
+      "expected": [
+        "0x1",
+        "0x0"
+      ],
+      "observed": [
+        "0x1",
+        "0x0"
+      ],
+      "pass": true
+    },
+    {
+      "name": "flt.s rne -0 < +0 is false",
+      "expected": [
+        "0x0",
+        "0x0"
+      ],
+      "observed": [
+        "0x0",
+        "0x0"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fsgnjn.s rne fneg",
+      "expected": [
+        "0xbf800000",
+        "0x0"
+      ],
+      "observed": [
+        "0xbf800000",
+        "0x0"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fsgnjx.s rne fsgnjx",
+      "expected": [
+        "0x40000000",
+        "0x0"
+      ],
+      "observed": [
+        "0x40000000",
+        "0x0"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fclass 0xff800000",
+      "expected": "0x1",
+      "observed": "0x1",
+      "pass": true
+    },
+    {
+      "name": "fclass 0xbf800000",
+      "expected": "0x2",
+      "observed": "0x2",
+      "pass": true
+    },
+    {
+      "name": "fclass 0x80000001",
+      "expected": "0x4",
+      "observed": "0x4",
+      "pass": true
+    },
+    {
+      "name": "fclass 0x80000000",
+      "expected": "0x8",
+      "observed": "0x8",
+      "pass": true
+    },
+    {
+      "name": "fclass 0x00000000",
+      "expected": "0x10",
+      "observed": "0x10",
+      "pass": true
+    },
+    {
+      "name": "fclass 0x00000001",
+      "expected": "0x20",
+      "observed": "0x20",
+      "pass": true
+    },
+    {
+      "name": "fclass 0x3f800000",
+      "expected": "0x40",
+      "observed": "0x40",
+      "pass": true
+    },
+    {
+      "name": "fclass 0x7f800000",
+      "expected": "0x80",
+      "observed": "0x80",
+      "pass": true
+    },
+    {
+      "name": "fclass 0x7f800001",
+      "expected": "0x100",
+      "observed": "0x100",
+      "pass": true
+    },
+    {
+      "name": "fclass 0x7fc00000",
+      "expected": "0x200",
+      "observed": "0x200",
+      "pass": true
+    },
+    {
+      "name": "control for fault injection: correct record has no error",
+      "expected": [],
+      "observed": [],
+      "pass": true
+    }
+  ]
+}

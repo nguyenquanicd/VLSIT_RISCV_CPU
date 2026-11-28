@@ -1,0 +1,12 @@
+{
+  "checker_id": "cov_collect",
+  "kind": "boundary",
+  "cases": [
+    {
+      "name": "repeated identical run counted once (set union, R-202)",
+      "expected": "0x2",
+      "observed": "0x2",
+      "pass": true
+    }
+  ]
+}

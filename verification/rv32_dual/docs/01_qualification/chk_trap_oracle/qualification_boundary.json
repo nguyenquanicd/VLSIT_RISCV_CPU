@@ -1,0 +1,24 @@
+{
+  "model_id": "chk_trap_oracle",
+  "kind": "boundary",
+  "cases": [
+    {
+      "name": "trap from M is never delegated even with medeleg set",
+      "expected": "M",
+      "observed": "M",
+      "pass": true
+    },
+    {
+      "name": "undelegated trap from U goes to M",
+      "expected": "M",
+      "observed": "M",
+      "pass": true
+    },
+    {
+      "name": "tval None is not compared",
+      "expected": [],
+      "observed": [],
+      "pass": true
+    }
+  ]
+}

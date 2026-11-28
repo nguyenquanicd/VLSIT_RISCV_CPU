@@ -1,0 +1,72 @@
+{
+  "model_id": "chk_pmu_model",
+  "label": "AI-generated qualification record; not human-reviewed",
+  "build_manifest_sha256": "32f162b8264728939f54207d033ec4827806ff0fdbfb06cd9f6651b16cd3c42f",
+  "review": {
+    "decision": "pending",
+    "approver": "pending",
+    "date": null
+  },
+  "tests": [
+    {
+      "kind": "known_answer",
+      "status": "pass",
+      "command": "python scripts/run_model_qualification.py --out docs/01_qualification --force",
+      "exit_code": 0,
+      "expected": "match",
+      "observed": "9/9 cases passed",
+      "evidence": {
+        "path": "docs/01_qualification/chk_pmu_model/qualification_known_answer.json",
+        "sha256": "f8fea9fa737192cf5e3c4be9af49bc3b2c6e90205b7ff5058f2672fa98b73993"
+      }
+    },
+    {
+      "kind": "boundary",
+      "status": "pass",
+      "command": "python scripts/run_model_qualification.py --out docs/01_qualification --force",
+      "exit_code": 0,
+      "expected": "match",
+      "observed": "3/3 cases passed",
+      "evidence": {
+        "path": "docs/01_qualification/chk_pmu_model/qualification_boundary.json",
+        "sha256": "d1cb260eb4770e2d88a6e28250af04b12ea77204b15842e958faaa8c7b7aafed"
+      }
+    },
+    {
+      "kind": "negative",
+      "status": "pass",
+      "command": "python scripts/run_model_qualification.py --out docs/01_qualification --force",
+      "exit_code": 0,
+      "expected": "handled",
+      "observed": "2/2 cases passed",
+      "evidence": {
+        "path": "docs/01_qualification/chk_pmu_model/qualification_negative.json",
+        "sha256": "1f5dc2abc02c2ccbecf676a42dc51f38b27eef27421a4cac2da5cbce84c5ae83"
+      }
+    },
+    {
+      "kind": "reset",
+      "status": "pass",
+      "command": "python scripts/run_model_qualification.py --out docs/01_qualification --force",
+      "exit_code": 0,
+      "expected": "match",
+      "observed": "1/1 cases passed",
+      "evidence": {
+        "path": "docs/01_qualification/chk_pmu_model/qualification_reset.json",
+        "sha256": "e6a1946a7e8c4daf58d9b28b60a7941bf535f0eaf59b0fac64de97330960e1bb"
+      }
+    },
+    {
+      "kind": "fault_detection",
+      "status": "pass",
+      "command": "python scripts/run_model_qualification.py --out docs/01_qualification --force",
+      "exit_code": 0,
+      "expected": "detected",
+      "observed": "6/6 cases detected",
+      "evidence": {
+        "path": "docs/01_qualification/chk_pmu_model/qualification_fault_detection.json",
+        "sha256": "af4b3525dfcae1542e16e69cdae412ba2de98189b97cd8fa9aa1faab9be00e82"
+      }
+    }
+  ]
+}

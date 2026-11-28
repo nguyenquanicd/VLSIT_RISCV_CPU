@@ -1,0 +1,17 @@
+{
+  "label": "AI-generated qualification manifest; review pending",
+  "model_id": "chk_fault_oracle",
+  "sources": [
+    {
+      "path": "models/chk_fault_oracle.py",
+      "sha256": "16f2dc48b69193a88f25626c63ae7ae730d138299735e3809ef0e4823a45c9d4"
+    },
+    {
+      "path": "models/qual/qual_chk_fault_oracle.py",
+      "sha256": "ba126604bc036104b51143aa5b3351c4a21b1eb6f4cfce271d6f577c1ecf0eea"
+    }
+  ],
+  "python": "3.12.10",
+  "semantics": "First-fatal record per DEC-039/040; addr_valid/resp_valid = valid (REQ-ERR-003); lo/hi per Q-G0-12; reset-only clear.",
+  "correlated_error_note": "Same author as the plan; DEC-039/040 and workbook field layout are the only inputs."
+}

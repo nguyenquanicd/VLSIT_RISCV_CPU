@@ -1,0 +1,96 @@
+{
+ "test": "t_rv32d_fatal_llc_eviction",
+ "seed": 1,
+ "configuration": "CFG-RV32-2-P0",
+ "slots": {},
+ "trap_base": "0x80090000",
+ "sig_base": "0x80080000",
+ "checks": [
+  {
+   "id": "CK-FAT-01",
+   "req": "REQ-ERR-003",
+   "kind": "pin",
+   "params": {
+    "name": "o_int_fault",
+    "rule": "rises"
+   }
+  },
+  {
+   "id": "CK-FAT-01b",
+   "req": "REQ-ERR-003",
+   "kind": "sva",
+   "params": {
+    "id": "a_fault_sticky"
+   }
+  },
+  {
+   "id": "CK-FAT-02",
+   "req": "REQ-ERR-003",
+   "kind": "fault",
+   "params": {
+    "which": "first",
+    "min_events": 2
+   }
+  },
+  {
+   "id": "CK-FAT-03",
+   "req": "REQ-ERR-003",
+   "kind": "fault",
+   "params": {
+    "which": "second_block",
+    "min_events": 2
+   }
+  },
+  {
+   "id": "CK-FAT-04",
+   "req": "REQ-ERR-003",
+   "kind": "axil_reads_stable",
+   "params": {
+    "addrs": [
+     16384,
+     16388,
+     16392,
+     16396
+    ],
+    "between": [
+     112,
+     114
+    ]
+   }
+  },
+  {
+   "id": "CK-FAT-05",
+   "req": "REQ-RST-001",
+   "kind": "axil_reads_eq",
+   "params": {
+    "which": "last",
+    "values": {
+     "16384": 0,
+     "16388": 0,
+     "16392": 0,
+     "16396": 0
+    }
+   }
+  },
+  {
+   "id": "CK-FAT-05b",
+   "req": "REQ-RST-001",
+   "kind": "pin",
+   "params": {
+    "name": "o_int_fault",
+    "rule": "final",
+    "value": 0
+   }
+  },
+  {
+   "id": "CK-FAT-06",
+   "req": "REQ-ERR-003",
+   "kind": "no_retry_after_err",
+   "params": {
+    "port": "mem"
+   }
+  }
+ ],
+ "blocked_checks": [],
+ "extra": {}
+}

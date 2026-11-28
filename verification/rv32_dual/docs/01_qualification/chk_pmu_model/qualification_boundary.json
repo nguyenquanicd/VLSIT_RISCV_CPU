@@ -1,0 +1,24 @@
+{
+  "model_id": "chk_pmu_model",
+  "kind": "boundary",
+  "cases": [
+    {
+      "name": "32-bit counter wraps modulo 2^32 (REQ-PMU-002)",
+      "expected": "0x0",
+      "observed": "0x0",
+      "pass": true
+    },
+    {
+      "name": "64-bit counter carries into the high word",
+      "expected": "0x100000000",
+      "observed": "0x100000000",
+      "pass": true
+    },
+    {
+      "name": "W=32 snapshot: high word must read zero",
+      "expected": [],
+      "observed": [],
+      "pass": true
+    }
+  ]
+}

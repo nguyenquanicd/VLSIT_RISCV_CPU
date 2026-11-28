@@ -1,0 +1,42 @@
+{
+  "checker_id": "evaluate_run",
+  "kind": "fault_detection",
+  "cases": [
+    {
+      "name": "assertion failure",
+      "expected": "detected",
+      "observed": "detected: verdict FAIL",
+      "pass": true
+    },
+    {
+      "name": "vacuous assertion (0 covers)",
+      "expected": "detected",
+      "observed": "detected: verdict FAIL",
+      "pass": true
+    },
+    {
+      "name": "wrong signature value",
+      "expected": "detected",
+      "observed": "detected: verdict FAIL",
+      "pass": true
+    },
+    {
+      "name": "watchdog expired",
+      "expected": "detected",
+      "observed": "detected: verdict FAIL",
+      "pass": true
+    },
+    {
+      "name": "hart reported fail code",
+      "expected": "detected",
+      "observed": "detected: verdict FAIL",
+      "pass": true
+    },
+    {
+      "name": "boot fetch missing",
+      "expected": "detected",
+      "observed": "detected: verdict FAIL",
+      "pass": true
+    }
+  ]
+}

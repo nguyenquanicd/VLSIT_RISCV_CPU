@@ -1,0 +1,21 @@
+{
+  "label": "Campaign address-region parameter set, REF-001 rev 0.40 Section 14.4.20 'Example parameter set (CFG-RV32-2 verification campaign, confirmed by the owner 2026-11-28)'; question_log Q-G0-03 and Q-G3-01 follow-up; AI-transcribed, human review pending",
+  "source": "REF-001 rev 0.40 Section 14.4.20 (TOP address-region parameters, class encoding, validity rules 1-5, cluster-profile bound); RV32 HDS REQ-XL-011",
+  "class_encoding": {"cacheable": 0, "normal_uncached": 1, "mmio": 2, "reserved": 3},
+  "num": 5,
+  "entries": [
+    {"index": 0, "class": "cacheable", "type_word": "0x0", "base": "0x80000000", "size": "0x40000000", "use": "program and data"},
+    {"index": 1, "class": "mmio", "type_word": "0x2", "base": "0x10000000", "size": "0x10000000", "use": "test control, IRQ control"},
+    {"index": 2, "class": "mmio", "type_word": "0x2", "base": "0x00000000", "size": "0x00001000", "use": "debug ROM at 0x800/0x808"},
+    {"index": 3, "class": "normal_uncached", "type_word": "0x1", "base": "0x40000000", "size": "0x10000000", "use": "uncached RAM"},
+    {"index": 4, "class": "normal_uncached", "type_word": "0x1", "base": "0x3C0000000", "size": "0x40000000", "use": "high-address uncached RAM, ends at 2^34"}
+  ],
+  "static_execute_regions": {
+    "source": "RV32 HDS rev 0.4 Section 8.2 ExecuteRegionAddrBase/Length (not overridden by the region table)",
+    "regions": [
+      {"base": "0x80000000", "size": "0x40000000"},
+      {"base": "0x00010000", "size": "0x00010000"},
+      {"base": "0x00000000", "size": "0x00001000"}
+    ]
+  }
+}

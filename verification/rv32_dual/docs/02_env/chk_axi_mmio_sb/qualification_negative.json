@@ -1,0 +1,12 @@
+{
+  "checker_id": "chk_axi_mmio_sb",
+  "kind": "negative",
+  "cases": [
+    {
+      "name": "absent write reported",
+      "expected": true,
+      "observed": true,
+      "pass": true
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "label": "AI-generated qualification manifest; review pending",
+  "model_id": "chk_csr_model",
+  "sources": [
+    {
+      "path": "models/chk_csr_model.py",
+      "sha256": "afa283da4e50ebe669a1b638f58d839c99b24b3c8e2787739dfe2a11c6597f5b"
+    },
+    {
+      "path": "models/common/xlsx_min.py",
+      "sha256": "ba03cc68da030cceaee547781e90a5a9b4bb6be3fc3e2c1b9ec72755e56741fd"
+    },
+    {
+      "path": "models/qual/qual_chk_csr_model.py",
+      "sha256": "62893b347505efe8e2d6e9e168a33cbb96b4c743859a0cb13925b451ee8072c0"
+    },
+    {
+      "path": "doc/specification/VLSIT_RISCV_CPU_Cluster_CSR.xlsx",
+      "sha256": "59872e8809ee51a0a380b4642ec94230ba6ed097c4a62d38f2366e01e60ccec1"
+    }
+  ],
+  "python": "3.12.10",
+  "semantics": "Workbook AXIL_QUEUED/Address_Map; OKAY/SLVERR/DECERR per REF-001 11.4; WSTRB; RO ignored; W1C; wo reads 0; 16 counters; LLC window not modelled (Q-G0-04); outside the aperture unspecified.",
+  "correlated_error_note": "Shares common/xlsx_min.py with chk_pmu_model; register count and reset values are re-derived from the workbook rows."
+}

@@ -1,0 +1,40 @@
+{
+  "model_id": "chk_pmu_model",
+  "kind": "reset",
+  "cases": [
+    {
+      "name": "after reset (no events) every counter expects 0 (REQ-RST-001)",
+      "expected": [
+        "0x0",
+        "0x0",
+        "0x0",
+        "0x0",
+        "0x0",
+        "0x0",
+        "0x0",
+        "0x0",
+        "0x0",
+        "0x0",
+        "0x0",
+        "0x0",
+        "0x0"
+      ],
+      "observed": [
+        "0x0",
+        "0x0",
+        "0x0",
+        "0x0",
+        "0x0",
+        "0x0",
+        "0x0",
+        "0x0",
+        "0x0",
+        "0x0",
+        "0x0",
+        "0x0",
+        "0x0"
+      ],
+      "pass": true
+    }
+  ]
+}

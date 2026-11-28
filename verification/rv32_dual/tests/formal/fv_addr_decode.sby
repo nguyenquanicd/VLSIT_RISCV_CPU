@@ -1,0 +1,18 @@
+# AI-GENERATED (Claude Opus 5.5, 2026-11-28). t_rv32d_fv_addr_decode.
+# Campaign table bound with the REF-001 rev 0.40 14.4.20 parameter names (Q-G3-01 answered); the decoder is
+# assumed to take the same parameter set (fv_tops.sv). Not run yet: disk below the approved threshold.
+[options]
+mode prove
+
+[engines]
+smtbmc boolector
+
+[script]
+read -formal m_vlsit_riscv_addr_decode.sv
+read -formal -sv fv_addr_decode_props.sv fv_tops.sv
+prep -top fv_top_addr_decode
+
+[files]
+../../../../rtl/common/vlsit/address_map/m_vlsit_riscv_addr_decode.sv
+../../env/assertions/fv_addr_decode_props.sv
+../../env/assertions/fv_tops.sv

@@ -1,0 +1,8 @@
+chk_axi_mem_sb   KAT 3/3  boundary 3/3  negative 2/2  reset n/a  faults detected 9/9
+chk_axi_mmio_sb  KAT 1/1  boundary 1/1  negative 1/1  reset n/a  faults detected 5/5
+chk_axil_sb      KAT 1/1  boundary 1/1  negative 1/1  reset n/a  faults detected 5/5
+chk_sig          KAT 3/3  boundary 2/2  negative 1/1  reset n/a  faults detected 5/5
+cov_collect      KAT 3/3  boundary 1/1  negative 1/1  reset n/a  faults detected 5/5
+evaluate_run     KAT 1/1  boundary 1/1  negative 1/1  reset n/a  faults detected 6/6
+OVERALL: PASS (6 suites)
+exit=0

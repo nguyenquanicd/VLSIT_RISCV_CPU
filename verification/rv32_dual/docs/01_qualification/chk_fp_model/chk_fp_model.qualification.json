@@ -1,0 +1,69 @@
+{
+  "model_id": "chk_fp_model",
+  "label": "AI-generated qualification record; not human-reviewed",
+  "build_manifest_sha256": "38887585f2867e448b7d5d8c3d626938b09bece54ee0471fea1c2ad01e226c4d",
+  "review": {
+    "decision": "pending",
+    "approver": "pending",
+    "date": null
+  },
+  "tests": [
+    {
+      "kind": "known_answer",
+      "status": "pass",
+      "command": "python scripts/run_model_qualification.py --out docs/01_qualification --force",
+      "exit_code": 0,
+      "expected": "match",
+      "observed": "63/63 cases passed",
+      "evidence": {
+        "path": "docs/01_qualification/chk_fp_model/qualification_known_answer.json",
+        "sha256": "7ba4ae573fa8ea0bd14be14142c66e5ebb1f25427aa4f689a6657c7c095471d3"
+      }
+    },
+    {
+      "kind": "boundary",
+      "status": "pass",
+      "command": "python scripts/run_model_qualification.py --out docs/01_qualification --force",
+      "exit_code": 0,
+      "expected": "match",
+      "observed": "5/5 cases passed",
+      "evidence": {
+        "path": "docs/01_qualification/chk_fp_model/qualification_boundary.json",
+        "sha256": "4a18eec69fffe16163c0801c04e75b12d999e67c1cb00c79c4ab7ffac0b79a90"
+      }
+    },
+    {
+      "kind": "negative",
+      "status": "pass",
+      "command": "python scripts/run_model_qualification.py --out docs/01_qualification --force",
+      "exit_code": 0,
+      "expected": "handled",
+      "observed": "3/3 cases passed",
+      "evidence": {
+        "path": "docs/01_qualification/chk_fp_model/qualification_negative.json",
+        "sha256": "b0bb59df13e3b9c11014620d550aa82002eca2d99b1276836e4bb4ad6293fcf2"
+      }
+    },
+    {
+      "kind": "reset",
+      "status": "not_applicable",
+      "command": "python scripts/run_model_qualification.py --out docs/01_qualification --force",
+      "exit_code": null,
+      "expected": "n/a",
+      "observed": "stateless functional model; fcsr state is held by the program and checked per record",
+      "evidence": null
+    },
+    {
+      "kind": "fault_detection",
+      "status": "pass",
+      "command": "python scripts/run_model_qualification.py --out docs/01_qualification --force",
+      "exit_code": 0,
+      "expected": "detected",
+      "observed": "7/7 cases detected",
+      "evidence": {
+        "path": "docs/01_qualification/chk_fp_model/qualification_fault_detection.json",
+        "sha256": "701c29e0ee912cc53f28862079432f01864d76fe74c5fa33b1112e7ba4310ac4"
+      }
+    }
+  ]
+}

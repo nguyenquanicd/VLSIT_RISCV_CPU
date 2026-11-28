@@ -1,0 +1,2370 @@
+{
+  "model_id": "asm_rv32",
+  "kind": "known_answer",
+  "cases": [
+    {
+      "name": "lui a0, 0x12345 [U-I]",
+      "expected": [
+        "0x12345537"
+      ],
+      "observed": [
+        "0x12345537"
+      ],
+      "pass": true
+    },
+    {
+      "name": "auipc a0, 0x80000 [U-I]",
+      "expected": [
+        "0x80000517"
+      ],
+      "observed": [
+        "0x80000517"
+      ],
+      "pass": true
+    },
+    {
+      "name": "jal ra, 8 [U-I]",
+      "expected": [
+        "0x8000ef"
+      ],
+      "observed": [
+        "0x8000ef"
+      ],
+      "pass": true
+    },
+    {
+      "name": "jalr ra, 4(a1) [U-I]",
+      "expected": [
+        "0x4580e7"
+      ],
+      "observed": [
+        "0x4580e7"
+      ],
+      "pass": true
+    },
+    {
+      "name": "beq a0, a1, 16 [U-I]",
+      "expected": [
+        "0xb50863"
+      ],
+      "observed": [
+        "0xb50863"
+      ],
+      "pass": true
+    },
+    {
+      "name": "bne a0, a1, -4 [U-I]",
+      "expected": [
+        "0xfeb51ee3"
+      ],
+      "observed": [
+        "0xfeb51ee3"
+      ],
+      "pass": true
+    },
+    {
+      "name": "blt a0, a1, 16 [U-I]",
+      "expected": [
+        "0xb54863"
+      ],
+      "observed": [
+        "0xb54863"
+      ],
+      "pass": true
+    },
+    {
+      "name": "bge a0, a1, 16 [U-I]",
+      "expected": [
+        "0xb55863"
+      ],
+      "observed": [
+        "0xb55863"
+      ],
+      "pass": true
+    },
+    {
+      "name": "bltu a0, a1, 16 [U-I]",
+      "expected": [
+        "0xb56863"
+      ],
+      "observed": [
+        "0xb56863"
+      ],
+      "pass": true
+    },
+    {
+      "name": "bgeu a0, a1, 16 [U-I]",
+      "expected": [
+        "0xb57863"
+      ],
+      "observed": [
+        "0xb57863"
+      ],
+      "pass": true
+    },
+    {
+      "name": "lb a0, -1(a1) [U-I]",
+      "expected": [
+        "0xfff58503"
+      ],
+      "observed": [
+        "0xfff58503"
+      ],
+      "pass": true
+    },
+    {
+      "name": "lh a0, 2(a1) [U-I]",
+      "expected": [
+        "0x259503"
+      ],
+      "observed": [
+        "0x259503"
+      ],
+      "pass": true
+    },
+    {
+      "name": "lw a0, 0(a1) [U-I]",
+      "expected": [
+        "0x5a503"
+      ],
+      "observed": [
+        "0x5a503"
+      ],
+      "pass": true
+    },
+    {
+      "name": "anchor consistency: lw a0, 0(a1)",
+      "expected": "0x5a503",
+      "observed": "0x5a503",
+      "pass": true
+    },
+    {
+      "name": "lbu a0, 0(a1) [U-I]",
+      "expected": [
+        "0x5c503"
+      ],
+      "observed": [
+        "0x5c503"
+      ],
+      "pass": true
+    },
+    {
+      "name": "lhu a0, 0(a1) [U-I]",
+      "expected": [
+        "0x5d503"
+      ],
+      "observed": [
+        "0x5d503"
+      ],
+      "pass": true
+    },
+    {
+      "name": "sb a0, -1(a1) [U-I]",
+      "expected": [
+        "0xfea58fa3"
+      ],
+      "observed": [
+        "0xfea58fa3"
+      ],
+      "pass": true
+    },
+    {
+      "name": "sh a0, 2(a1) [U-I]",
+      "expected": [
+        "0xa59123"
+      ],
+      "observed": [
+        "0xa59123"
+      ],
+      "pass": true
+    },
+    {
+      "name": "sw a0, 2047(a1) [U-I]",
+      "expected": [
+        "0x7ea5afa3"
+      ],
+      "observed": [
+        "0x7ea5afa3"
+      ],
+      "pass": true
+    },
+    {
+      "name": "addi a0, a1, -2048 [U-I]",
+      "expected": [
+        "0x80058513"
+      ],
+      "observed": [
+        "0x80058513"
+      ],
+      "pass": true
+    },
+    {
+      "name": "addi a0, a0, 1 [U-I]",
+      "expected": [
+        "0x150513"
+      ],
+      "observed": [
+        "0x150513"
+      ],
+      "pass": true
+    },
+    {
+      "name": "anchor consistency: addi a0, a0, 1",
+      "expected": "0x150513",
+      "observed": "0x150513",
+      "pass": true
+    },
+    {
+      "name": "slti a0, a1, 5 [U-I]",
+      "expected": [
+        "0x55a513"
+      ],
+      "observed": [
+        "0x55a513"
+      ],
+      "pass": true
+    },
+    {
+      "name": "sltiu a0, a1, 5 [U-I]",
+      "expected": [
+        "0x55b513"
+      ],
+      "observed": [
+        "0x55b513"
+      ],
+      "pass": true
+    },
+    {
+      "name": "xori a0, a1, 5 [U-I]",
+      "expected": [
+        "0x55c513"
+      ],
+      "observed": [
+        "0x55c513"
+      ],
+      "pass": true
+    },
+    {
+      "name": "ori a0, a1, 5 [U-I]",
+      "expected": [
+        "0x55e513"
+      ],
+      "observed": [
+        "0x55e513"
+      ],
+      "pass": true
+    },
+    {
+      "name": "andi a0, a1, 5 [U-I]",
+      "expected": [
+        "0x55f513"
+      ],
+      "observed": [
+        "0x55f513"
+      ],
+      "pass": true
+    },
+    {
+      "name": "slli a0, a1, 31 [U-I]",
+      "expected": [
+        "0x1f59513"
+      ],
+      "observed": [
+        "0x1f59513"
+      ],
+      "pass": true
+    },
+    {
+      "name": "srli a0, a1, 31 [U-I]",
+      "expected": [
+        "0x1f5d513"
+      ],
+      "observed": [
+        "0x1f5d513"
+      ],
+      "pass": true
+    },
+    {
+      "name": "srai a0, a1, 31 [U-I]",
+      "expected": [
+        "0x41f5d513"
+      ],
+      "observed": [
+        "0x41f5d513"
+      ],
+      "pass": true
+    },
+    {
+      "name": "add a0, a1, a2 [U-I]",
+      "expected": [
+        "0xc58533"
+      ],
+      "observed": [
+        "0xc58533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "anchor consistency: add a0, a1, a2",
+      "expected": "0xc58533",
+      "observed": "0xc58533",
+      "pass": true
+    },
+    {
+      "name": "sub a0, a1, a2 [U-I]",
+      "expected": [
+        "0x40c58533"
+      ],
+      "observed": [
+        "0x40c58533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "sll a0, a1, a2 [U-I]",
+      "expected": [
+        "0xc59533"
+      ],
+      "observed": [
+        "0xc59533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "slt a0, a1, a2 [U-I]",
+      "expected": [
+        "0xc5a533"
+      ],
+      "observed": [
+        "0xc5a533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "sltu a0, a1, a2 [U-I]",
+      "expected": [
+        "0xc5b533"
+      ],
+      "observed": [
+        "0xc5b533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "xor a0, a1, a2 [U-I]",
+      "expected": [
+        "0xc5c533"
+      ],
+      "observed": [
+        "0xc5c533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "srl a0, a1, a2 [U-I]",
+      "expected": [
+        "0xc5d533"
+      ],
+      "observed": [
+        "0xc5d533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "sra a0, a1, a2 [U-I]",
+      "expected": [
+        "0x40c5d533"
+      ],
+      "observed": [
+        "0x40c5d533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "or a0, a1, a2 [U-I]",
+      "expected": [
+        "0xc5e533"
+      ],
+      "observed": [
+        "0xc5e533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "and a0, a1, a2 [U-I]",
+      "expected": [
+        "0xc5f533"
+      ],
+      "observed": [
+        "0xc5f533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fence [U-I]",
+      "expected": [
+        "0xff0000f"
+      ],
+      "observed": [
+        "0xff0000f"
+      ],
+      "pass": true
+    },
+    {
+      "name": "anchor consistency: fence",
+      "expected": "0xff0000f",
+      "observed": "0xff0000f",
+      "pass": true
+    },
+    {
+      "name": "fence rw, rw [U-I]",
+      "expected": [
+        "0x330000f"
+      ],
+      "observed": [
+        "0x330000f"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fence.i [U-ZIFENCEI]",
+      "expected": [
+        "0x100f"
+      ],
+      "observed": [
+        "0x100f"
+      ],
+      "pass": true
+    },
+    {
+      "name": "anchor consistency: fence.i",
+      "expected": "0x100f",
+      "observed": "0x100f",
+      "pass": true
+    },
+    {
+      "name": "ecall [U-I]",
+      "expected": [
+        "0x73"
+      ],
+      "observed": [
+        "0x73"
+      ],
+      "pass": true
+    },
+    {
+      "name": "anchor consistency: ecall",
+      "expected": "0x73",
+      "observed": "0x73",
+      "pass": true
+    },
+    {
+      "name": "ebreak [U-I]",
+      "expected": [
+        "0x100073"
+      ],
+      "observed": [
+        "0x100073"
+      ],
+      "pass": true
+    },
+    {
+      "name": "anchor consistency: ebreak",
+      "expected": "0x100073",
+      "observed": "0x100073",
+      "pass": true
+    },
+    {
+      "name": "nop [U-I]",
+      "expected": [
+        "0x13"
+      ],
+      "observed": [
+        "0x13"
+      ],
+      "pass": true
+    },
+    {
+      "name": "anchor consistency: nop",
+      "expected": "0x13",
+      "observed": "0x13",
+      "pass": true
+    },
+    {
+      "name": "ret [U-I]",
+      "expected": [
+        "0x8067"
+      ],
+      "observed": [
+        "0x8067"
+      ],
+      "pass": true
+    },
+    {
+      "name": "anchor consistency: ret",
+      "expected": "0x8067",
+      "observed": "0x8067",
+      "pass": true
+    },
+    {
+      "name": "csrrw a0, mscratch, a1 [U-ZICSR]",
+      "expected": [
+        "0x34059573"
+      ],
+      "observed": [
+        "0x34059573"
+      ],
+      "pass": true
+    },
+    {
+      "name": "csrrs a0, mhartid, x0 [U-ZICSR]",
+      "expected": [
+        "0xf1402573"
+      ],
+      "observed": [
+        "0xf1402573"
+      ],
+      "pass": true
+    },
+    {
+      "name": "anchor consistency: csrrs a0, mhartid, x0",
+      "expected": "0xf1402573",
+      "observed": "0xf1402573",
+      "pass": true
+    },
+    {
+      "name": "csrrc a0, mstatus, a1 [U-ZICSR]",
+      "expected": [
+        "0x3005b573"
+      ],
+      "observed": [
+        "0x3005b573"
+      ],
+      "pass": true
+    },
+    {
+      "name": "csrrwi a0, mie, 5 [U-ZICSR]",
+      "expected": [
+        "0x3042d573"
+      ],
+      "observed": [
+        "0x3042d573"
+      ],
+      "pass": true
+    },
+    {
+      "name": "csrrsi a0, mie, 31 [U-ZICSR]",
+      "expected": [
+        "0x304fe573"
+      ],
+      "observed": [
+        "0x304fe573"
+      ],
+      "pass": true
+    },
+    {
+      "name": "csrrci a0, mie, 31 [U-ZICSR]",
+      "expected": [
+        "0x304ff573"
+      ],
+      "observed": [
+        "0x304ff573"
+      ],
+      "pass": true
+    },
+    {
+      "name": "csrr a0, minstreth [U-ZICSR]",
+      "expected": [
+        "0xb8202573"
+      ],
+      "observed": [
+        "0xb8202573"
+      ],
+      "pass": true
+    },
+    {
+      "name": "mret [P-SYS]",
+      "expected": [
+        "0x30200073"
+      ],
+      "observed": [
+        "0x30200073"
+      ],
+      "pass": true
+    },
+    {
+      "name": "anchor consistency: mret",
+      "expected": "0x30200073",
+      "observed": "0x30200073",
+      "pass": true
+    },
+    {
+      "name": "sret [P-SYS]",
+      "expected": [
+        "0x10200073"
+      ],
+      "observed": [
+        "0x10200073"
+      ],
+      "pass": true
+    },
+    {
+      "name": "anchor consistency: sret",
+      "expected": "0x10200073",
+      "observed": "0x10200073",
+      "pass": true
+    },
+    {
+      "name": "wfi [P-SYS]",
+      "expected": [
+        "0x10500073"
+      ],
+      "observed": [
+        "0x10500073"
+      ],
+      "pass": true
+    },
+    {
+      "name": "anchor consistency: wfi",
+      "expected": "0x10500073",
+      "observed": "0x10500073",
+      "pass": true
+    },
+    {
+      "name": "sfence.vma a0, a1 [P-SYS]",
+      "expected": [
+        "0x12b50073"
+      ],
+      "observed": [
+        "0x12b50073"
+      ],
+      "pass": true
+    },
+    {
+      "name": "dret [D-DRET]",
+      "expected": [
+        "0x7b200073"
+      ],
+      "observed": [
+        "0x7b200073"
+      ],
+      "pass": true
+    },
+    {
+      "name": "anchor consistency: dret",
+      "expected": "0x7b200073",
+      "observed": "0x7b200073",
+      "pass": true
+    },
+    {
+      "name": "mul a0, a1, a2 [U-M]",
+      "expected": [
+        "0x2c58533"
+      ],
+      "observed": [
+        "0x2c58533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "anchor consistency: mul a0, a1, a2",
+      "expected": "0x2c58533",
+      "observed": "0x2c58533",
+      "pass": true
+    },
+    {
+      "name": "mulh a0, a1, a2 [U-M]",
+      "expected": [
+        "0x2c59533"
+      ],
+      "observed": [
+        "0x2c59533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "mulhsu a0, a1, a2 [U-M]",
+      "expected": [
+        "0x2c5a533"
+      ],
+      "observed": [
+        "0x2c5a533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "mulhu a0, a1, a2 [U-M]",
+      "expected": [
+        "0x2c5b533"
+      ],
+      "observed": [
+        "0x2c5b533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "div a0, a1, a2 [U-M]",
+      "expected": [
+        "0x2c5c533"
+      ],
+      "observed": [
+        "0x2c5c533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "divu a0, a1, a2 [U-M]",
+      "expected": [
+        "0x2c5d533"
+      ],
+      "observed": [
+        "0x2c5d533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "rem a0, a1, a2 [U-M]",
+      "expected": [
+        "0x2c5e533"
+      ],
+      "observed": [
+        "0x2c5e533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "remu a0, a1, a2 [U-M]",
+      "expected": [
+        "0x2c5f533"
+      ],
+      "observed": [
+        "0x2c5f533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "lr.w a0, (a1) [U-A]",
+      "expected": [
+        "0x1005a52f"
+      ],
+      "observed": [
+        "0x1005a52f"
+      ],
+      "pass": true
+    },
+    {
+      "name": "anchor consistency: lr.w a0, (a1)",
+      "expected": "0x1005a52f",
+      "observed": "0x1005a52f",
+      "pass": true
+    },
+    {
+      "name": "lr.w.aq a0, (a1) [U-A]",
+      "expected": [
+        "0x1405a52f"
+      ],
+      "observed": [
+        "0x1405a52f"
+      ],
+      "pass": true
+    },
+    {
+      "name": "sc.w a0, a2, (a1) [U-A]",
+      "expected": [
+        "0x18c5a52f"
+      ],
+      "observed": [
+        "0x18c5a52f"
+      ],
+      "pass": true
+    },
+    {
+      "name": "amoswap.w a0, a2, (a1) [U-A]",
+      "expected": [
+        "0x8c5a52f"
+      ],
+      "observed": [
+        "0x8c5a52f"
+      ],
+      "pass": true
+    },
+    {
+      "name": "amoadd.w a0, a2, (a1) [U-A]",
+      "expected": [
+        "0xc5a52f"
+      ],
+      "observed": [
+        "0xc5a52f"
+      ],
+      "pass": true
+    },
+    {
+      "name": "anchor consistency: amoadd.w a0, a2, (a1)",
+      "expected": "0xc5a52f",
+      "observed": "0xc5a52f",
+      "pass": true
+    },
+    {
+      "name": "amoadd.w.aqrl a0, a2, (a1) [U-A]",
+      "expected": [
+        "0x6c5a52f"
+      ],
+      "observed": [
+        "0x6c5a52f"
+      ],
+      "pass": true
+    },
+    {
+      "name": "amoxor.w a0, a2, (a1) [U-A]",
+      "expected": [
+        "0x20c5a52f"
+      ],
+      "observed": [
+        "0x20c5a52f"
+      ],
+      "pass": true
+    },
+    {
+      "name": "amoand.w a0, a2, (a1) [U-A]",
+      "expected": [
+        "0x60c5a52f"
+      ],
+      "observed": [
+        "0x60c5a52f"
+      ],
+      "pass": true
+    },
+    {
+      "name": "amoor.w a0, a2, (a1) [U-A]",
+      "expected": [
+        "0x40c5a52f"
+      ],
+      "observed": [
+        "0x40c5a52f"
+      ],
+      "pass": true
+    },
+    {
+      "name": "amomin.w a0, a2, (a1) [U-A]",
+      "expected": [
+        "0x80c5a52f"
+      ],
+      "observed": [
+        "0x80c5a52f"
+      ],
+      "pass": true
+    },
+    {
+      "name": "amomax.w a0, a2, (a1) [U-A]",
+      "expected": [
+        "0xa0c5a52f"
+      ],
+      "observed": [
+        "0xa0c5a52f"
+      ],
+      "pass": true
+    },
+    {
+      "name": "amominu.w a0, a2, (a1) [U-A]",
+      "expected": [
+        "0xc0c5a52f"
+      ],
+      "observed": [
+        "0xc0c5a52f"
+      ],
+      "pass": true
+    },
+    {
+      "name": "amomaxu.w a0, a2, (a1) [U-A]",
+      "expected": [
+        "0xe0c5a52f"
+      ],
+      "observed": [
+        "0xe0c5a52f"
+      ],
+      "pass": true
+    },
+    {
+      "name": "flw fa0, 4(a1) [U-F]",
+      "expected": [
+        "0x45a507"
+      ],
+      "observed": [
+        "0x45a507"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fsw fa0, 4(a1) [U-F]",
+      "expected": [
+        "0xa5a227"
+      ],
+      "observed": [
+        "0xa5a227"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fmadd.s fa0, fa1, fa2, fa3 [U-F]",
+      "expected": [
+        "0x68c5f543"
+      ],
+      "observed": [
+        "0x68c5f543"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fmadd.s fa0, fa1, fa2, fa3, rne [U-F]",
+      "expected": [
+        "0x68c58543"
+      ],
+      "observed": [
+        "0x68c58543"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fmsub.s fa0, fa1, fa2, fa3 [U-F]",
+      "expected": [
+        "0x68c5f547"
+      ],
+      "observed": [
+        "0x68c5f547"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fnmsub.s fa0, fa1, fa2, fa3 [U-F]",
+      "expected": [
+        "0x68c5f54b"
+      ],
+      "observed": [
+        "0x68c5f54b"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fnmadd.s fa0, fa1, fa2, fa3 [U-F]",
+      "expected": [
+        "0x68c5f54f"
+      ],
+      "observed": [
+        "0x68c5f54f"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fadd.s fa0, fa1, fa2 [U-F]",
+      "expected": [
+        "0xc5f553"
+      ],
+      "observed": [
+        "0xc5f553"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fsub.s fa0, fa1, fa2 [U-F]",
+      "expected": [
+        "0x8c5f553"
+      ],
+      "observed": [
+        "0x8c5f553"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fmul.s fa0, fa1, fa2 [U-F]",
+      "expected": [
+        "0x10c5f553"
+      ],
+      "observed": [
+        "0x10c5f553"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fdiv.s fa0, fa1, fa2 [U-F]",
+      "expected": [
+        "0x18c5f553"
+      ],
+      "observed": [
+        "0x18c5f553"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fdiv.s fa0, fa1, fa2, rtz [U-F]",
+      "expected": [
+        "0x18c59553"
+      ],
+      "observed": [
+        "0x18c59553"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fdiv.s fa0, fa1, fa2, rdn [U-F]",
+      "expected": [
+        "0x18c5a553"
+      ],
+      "observed": [
+        "0x18c5a553"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fdiv.s fa0, fa1, fa2, rup [U-F]",
+      "expected": [
+        "0x18c5b553"
+      ],
+      "observed": [
+        "0x18c5b553"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fdiv.s fa0, fa1, fa2, rmm [U-F]",
+      "expected": [
+        "0x18c5c553"
+      ],
+      "observed": [
+        "0x18c5c553"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fsqrt.s fa0, fa1 [U-F]",
+      "expected": [
+        "0x5805f553"
+      ],
+      "observed": [
+        "0x5805f553"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fsgnj.s fa0, fa1, fa2 [U-F]",
+      "expected": [
+        "0x20c58553"
+      ],
+      "observed": [
+        "0x20c58553"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fsgnjn.s fa0, fa1, fa2 [U-F]",
+      "expected": [
+        "0x20c59553"
+      ],
+      "observed": [
+        "0x20c59553"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fsgnjx.s fa0, fa1, fa2 [U-F]",
+      "expected": [
+        "0x20c5a553"
+      ],
+      "observed": [
+        "0x20c5a553"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fmin.s fa0, fa1, fa2 [U-F]",
+      "expected": [
+        "0x28c58553"
+      ],
+      "observed": [
+        "0x28c58553"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fmax.s fa0, fa1, fa2 [U-F]",
+      "expected": [
+        "0x28c59553"
+      ],
+      "observed": [
+        "0x28c59553"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fcvt.w.s a0, fa1 [U-F]",
+      "expected": [
+        "0xc005f553"
+      ],
+      "observed": [
+        "0xc005f553"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fcvt.w.s a0, fa1, rtz [U-F]",
+      "expected": [
+        "0xc0059553"
+      ],
+      "observed": [
+        "0xc0059553"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fcvt.wu.s a0, fa1 [U-F]",
+      "expected": [
+        "0xc015f553"
+      ],
+      "observed": [
+        "0xc015f553"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fmv.x.w a0, fa1 [U-F]",
+      "expected": [
+        "0xe0058553"
+      ],
+      "observed": [
+        "0xe0058553"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fclass.s a0, fa1 [U-F]",
+      "expected": [
+        "0xe0059553"
+      ],
+      "observed": [
+        "0xe0059553"
+      ],
+      "pass": true
+    },
+    {
+      "name": "feq.s a0, fa1, fa2 [U-F]",
+      "expected": [
+        "0xa0c5a553"
+      ],
+      "observed": [
+        "0xa0c5a553"
+      ],
+      "pass": true
+    },
+    {
+      "name": "flt.s a0, fa1, fa2 [U-F]",
+      "expected": [
+        "0xa0c59553"
+      ],
+      "observed": [
+        "0xa0c59553"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fle.s a0, fa1, fa2 [U-F]",
+      "expected": [
+        "0xa0c58553"
+      ],
+      "observed": [
+        "0xa0c58553"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fcvt.s.w fa0, a1 [U-F]",
+      "expected": [
+        "0xd005f553"
+      ],
+      "observed": [
+        "0xd005f553"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fcvt.s.wu fa0, a1 [U-F]",
+      "expected": [
+        "0xd015f553"
+      ],
+      "observed": [
+        "0xd015f553"
+      ],
+      "pass": true
+    },
+    {
+      "name": "fmv.w.x fa0, a1 [U-F]",
+      "expected": [
+        "0xf0058553"
+      ],
+      "observed": [
+        "0xf0058553"
+      ],
+      "pass": true
+    },
+    {
+      "name": "sh1add a0, a1, a2 [U-B]",
+      "expected": [
+        "0x20c5a533"
+      ],
+      "observed": [
+        "0x20c5a533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "sh2add a0, a1, a2 [U-B]",
+      "expected": [
+        "0x20c5c533"
+      ],
+      "observed": [
+        "0x20c5c533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "sh3add a0, a1, a2 [U-B]",
+      "expected": [
+        "0x20c5e533"
+      ],
+      "observed": [
+        "0x20c5e533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "andn a0, a1, a2 [U-B]",
+      "expected": [
+        "0x40c5f533"
+      ],
+      "observed": [
+        "0x40c5f533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "orn a0, a1, a2 [U-B]",
+      "expected": [
+        "0x40c5e533"
+      ],
+      "observed": [
+        "0x40c5e533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "xnor a0, a1, a2 [U-B]",
+      "expected": [
+        "0x40c5c533"
+      ],
+      "observed": [
+        "0x40c5c533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "clz a0, a1 [U-B]",
+      "expected": [
+        "0x60059513"
+      ],
+      "observed": [
+        "0x60059513"
+      ],
+      "pass": true
+    },
+    {
+      "name": "ctz a0, a1 [U-B]",
+      "expected": [
+        "0x60159513"
+      ],
+      "observed": [
+        "0x60159513"
+      ],
+      "pass": true
+    },
+    {
+      "name": "cpop a0, a1 [U-B]",
+      "expected": [
+        "0x60259513"
+      ],
+      "observed": [
+        "0x60259513"
+      ],
+      "pass": true
+    },
+    {
+      "name": "sext.b a0, a1 [U-B]",
+      "expected": [
+        "0x60459513"
+      ],
+      "observed": [
+        "0x60459513"
+      ],
+      "pass": true
+    },
+    {
+      "name": "sext.h a0, a1 [U-B]",
+      "expected": [
+        "0x60559513"
+      ],
+      "observed": [
+        "0x60559513"
+      ],
+      "pass": true
+    },
+    {
+      "name": "max a0, a1, a2 [U-B]",
+      "expected": [
+        "0xac5e533"
+      ],
+      "observed": [
+        "0xac5e533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "maxu a0, a1, a2 [U-B]",
+      "expected": [
+        "0xac5f533"
+      ],
+      "observed": [
+        "0xac5f533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "min a0, a1, a2 [U-B]",
+      "expected": [
+        "0xac5c533"
+      ],
+      "observed": [
+        "0xac5c533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "minu a0, a1, a2 [U-B]",
+      "expected": [
+        "0xac5d533"
+      ],
+      "observed": [
+        "0xac5d533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "zext.h a0, a1 [U-B]",
+      "expected": [
+        "0x805c533"
+      ],
+      "observed": [
+        "0x805c533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "rol a0, a1, a2 [U-B]",
+      "expected": [
+        "0x60c59533"
+      ],
+      "observed": [
+        "0x60c59533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "ror a0, a1, a2 [U-B]",
+      "expected": [
+        "0x60c5d533"
+      ],
+      "observed": [
+        "0x60c5d533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "rori a0, a1, 7 [U-B]",
+      "expected": [
+        "0x6075d513"
+      ],
+      "observed": [
+        "0x6075d513"
+      ],
+      "pass": true
+    },
+    {
+      "name": "orc.b a0, a1 [U-B]",
+      "expected": [
+        "0x2875d513"
+      ],
+      "observed": [
+        "0x2875d513"
+      ],
+      "pass": true
+    },
+    {
+      "name": "rev8 a0, a1 [U-B]",
+      "expected": [
+        "0x6985d513"
+      ],
+      "observed": [
+        "0x6985d513"
+      ],
+      "pass": true
+    },
+    {
+      "name": "clmul a0, a1, a2 [U-B]",
+      "expected": [
+        "0xac59533"
+      ],
+      "observed": [
+        "0xac59533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "clmulr a0, a1, a2 [U-B]",
+      "expected": [
+        "0xac5a533"
+      ],
+      "observed": [
+        "0xac5a533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "clmulh a0, a1, a2 [U-B]",
+      "expected": [
+        "0xac5b533"
+      ],
+      "observed": [
+        "0xac5b533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "bclr a0, a1, a2 [U-B]",
+      "expected": [
+        "0x48c59533"
+      ],
+      "observed": [
+        "0x48c59533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "bclri a0, a1, 3 [U-B]",
+      "expected": [
+        "0x48359513"
+      ],
+      "observed": [
+        "0x48359513"
+      ],
+      "pass": true
+    },
+    {
+      "name": "bext a0, a1, a2 [U-B]",
+      "expected": [
+        "0x48c5d533"
+      ],
+      "observed": [
+        "0x48c5d533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "bexti a0, a1, 3 [U-B]",
+      "expected": [
+        "0x4835d513"
+      ],
+      "observed": [
+        "0x4835d513"
+      ],
+      "pass": true
+    },
+    {
+      "name": "binv a0, a1, a2 [U-B]",
+      "expected": [
+        "0x68c59533"
+      ],
+      "observed": [
+        "0x68c59533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "binvi a0, a1, 3 [U-B]",
+      "expected": [
+        "0x68359513"
+      ],
+      "observed": [
+        "0x68359513"
+      ],
+      "pass": true
+    },
+    {
+      "name": "bset a0, a1, a2 [U-B]",
+      "expected": [
+        "0x28c59533"
+      ],
+      "observed": [
+        "0x28c59533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "bseti a0, a1, 3 [U-B]",
+      "expected": [
+        "0x28359513"
+      ],
+      "observed": [
+        "0x28359513"
+      ],
+      "pass": true
+    },
+    {
+      "name": "pack a0, a1, a2 [U-K]",
+      "expected": [
+        "0x8c5c533"
+      ],
+      "observed": [
+        "0x8c5c533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "packh a0, a1, a2 [U-K]",
+      "expected": [
+        "0x8c5f533"
+      ],
+      "observed": [
+        "0x8c5f533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "brev8 a0, a1 [U-K]",
+      "expected": [
+        "0x6875d513"
+      ],
+      "observed": [
+        "0x6875d513"
+      ],
+      "pass": true
+    },
+    {
+      "name": "zip a0, a1 [U-K]",
+      "expected": [
+        "0x8f59513"
+      ],
+      "observed": [
+        "0x8f59513"
+      ],
+      "pass": true
+    },
+    {
+      "name": "unzip a0, a1 [U-K]",
+      "expected": [
+        "0x8f5d513"
+      ],
+      "observed": [
+        "0x8f5d513"
+      ],
+      "pass": true
+    },
+    {
+      "name": "xperm4 a0, a1, a2 [U-K]",
+      "expected": [
+        "0x28c5a533"
+      ],
+      "observed": [
+        "0x28c5a533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "xperm8 a0, a1, a2 [U-K]",
+      "expected": [
+        "0x28c5c533"
+      ],
+      "observed": [
+        "0x28c5c533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "aes32esi a0, a1, a2, 1 [U-K]",
+      "expected": [
+        "0x62c58533"
+      ],
+      "observed": [
+        "0x62c58533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "aes32esmi a0, a1, a2, 3 [U-K]",
+      "expected": [
+        "0xe6c58533"
+      ],
+      "observed": [
+        "0xe6c58533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "aes32dsi a0, a1, a2, 0 [U-K]",
+      "expected": [
+        "0x2ac58533"
+      ],
+      "observed": [
+        "0x2ac58533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "aes32dsmi a0, a1, a2, 2 [U-K]",
+      "expected": [
+        "0xaec58533"
+      ],
+      "observed": [
+        "0xaec58533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "sha256sum0 a0, a1 [U-K]",
+      "expected": [
+        "0x10059513"
+      ],
+      "observed": [
+        "0x10059513"
+      ],
+      "pass": true
+    },
+    {
+      "name": "sha256sum1 a0, a1 [U-K]",
+      "expected": [
+        "0x10159513"
+      ],
+      "observed": [
+        "0x10159513"
+      ],
+      "pass": true
+    },
+    {
+      "name": "sha256sig0 a0, a1 [U-K]",
+      "expected": [
+        "0x10259513"
+      ],
+      "observed": [
+        "0x10259513"
+      ],
+      "pass": true
+    },
+    {
+      "name": "sha256sig1 a0, a1 [U-K]",
+      "expected": [
+        "0x10359513"
+      ],
+      "observed": [
+        "0x10359513"
+      ],
+      "pass": true
+    },
+    {
+      "name": "sha512sum0r a0, a1, a2 [U-K]",
+      "expected": [
+        "0x50c58533"
+      ],
+      "observed": [
+        "0x50c58533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "sha512sum1r a0, a1, a2 [U-K]",
+      "expected": [
+        "0x52c58533"
+      ],
+      "observed": [
+        "0x52c58533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "sha512sig0l a0, a1, a2 [U-K]",
+      "expected": [
+        "0x54c58533"
+      ],
+      "observed": [
+        "0x54c58533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "sha512sig1l a0, a1, a2 [U-K]",
+      "expected": [
+        "0x56c58533"
+      ],
+      "observed": [
+        "0x56c58533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "sha512sig0h a0, a1, a2 [U-K]",
+      "expected": [
+        "0x5cc58533"
+      ],
+      "observed": [
+        "0x5cc58533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "sha512sig1h a0, a1, a2 [U-K]",
+      "expected": [
+        "0x5ec58533"
+      ],
+      "observed": [
+        "0x5ec58533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "czero.eqz a0, a1, a2 [U-ZICOND]",
+      "expected": [
+        "0xec5d533"
+      ],
+      "observed": [
+        "0xec5d533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "czero.nez a0, a1, a2 [U-ZICOND]",
+      "expected": [
+        "0xec5f533"
+      ],
+      "observed": [
+        "0xec5f533"
+      ],
+      "pass": true
+    },
+    {
+      "name": "cbo.clean (a1) [U-ZICBOM]",
+      "expected": [
+        "0x15a00f"
+      ],
+      "observed": [
+        "0x15a00f"
+      ],
+      "pass": true
+    },
+    {
+      "name": "cbo.flush 0(a1) [U-ZICBOM]",
+      "expected": [
+        "0x25a00f"
+      ],
+      "observed": [
+        "0x25a00f"
+      ],
+      "pass": true
+    },
+    {
+      "name": "cbo.inval (a1) [U-ZICBOM]",
+      "expected": [
+        "0x5a00f"
+      ],
+      "observed": [
+        "0x5a00f"
+      ],
+      "pass": true
+    },
+    {
+      "name": "c.addi4spn a0, sp, 4 [U-C]",
+      "expected": [
+        "0x48"
+      ],
+      "observed": [
+        "0x48"
+      ],
+      "pass": true
+    },
+    {
+      "name": "c.lw a0, 0(a1) [U-C]",
+      "expected": [
+        "0x4188"
+      ],
+      "observed": [
+        "0x4188"
+      ],
+      "pass": true
+    },
+    {
+      "name": "anchor consistency: c.lw a0, 0(a1)",
+      "expected": "0x4188",
+      "observed": "0x4188",
+      "pass": true
+    },
+    {
+      "name": "c.lw a0, 4(a1) [U-C]",
+      "expected": [
+        "0x41c8"
+      ],
+      "observed": [
+        "0x41c8"
+      ],
+      "pass": true
+    },
+    {
+      "name": "c.lw a0, 124(a1) [U-C]",
+      "expected": [
+        "0x5de8"
+      ],
+      "observed": [
+        "0x5de8"
+      ],
+      "pass": true
+    },
+    {
+      "name": "c.sw a0, 8(a1) [U-C]",
+      "expected": [
+        "0xc588"
+      ],
+      "observed": [
+        "0xc588"
+      ],
+      "pass": true
+    },
+    {
+      "name": "c.flw fa0, 0(a1) [U-C]",
+      "expected": [
+        "0x6188"
+      ],
+      "observed": [
+        "0x6188"
+      ],
+      "pass": true
+    },
+    {
+      "name": "c.fsw fa0, 0(a1) [U-C]",
+      "expected": [
+        "0xe188"
+      ],
+      "observed": [
+        "0xe188"
+      ],
+      "pass": true
+    },
+    {
+      "name": "c.nop [U-C]",
+      "expected": [
+        "0x1"
+      ],
+      "observed": [
+        "0x1"
+      ],
+      "pass": true
+    },
+    {
+      "name": "anchor consistency: c.nop",
+      "expected": "0x1",
+      "observed": "0x1",
+      "pass": true
+    },
+    {
+      "name": "c.addi a0, -1 [U-C]",
+      "expected": [
+        "0x157d"
+      ],
+      "observed": [
+        "0x157d"
+      ],
+      "pass": true
+    },
+    {
+      "name": "c.addi a0, 1 [U-C]",
+      "expected": [
+        "0x505"
+      ],
+      "observed": [
+        "0x505"
+      ],
+      "pass": true
+    },
+    {
+      "name": "anchor consistency: c.addi a0, 1",
+      "expected": "0x505",
+      "observed": "0x505",
+      "pass": true
+    },
+    {
+      "name": "c.jal 2 [U-C]",
+      "expected": [
+        "0x2009"
+      ],
+      "observed": [
+        "0x2009"
+      ],
+      "pass": true
+    },
+    {
+      "name": "c.li a0, 31 [U-C]",
+      "expected": [
+        "0x457d"
+      ],
+      "observed": [
+        "0x457d"
+      ],
+      "pass": true
+    },
+    {
+      "name": "c.li a0, 0 [U-C]",
+      "expected": [
+        "0x4501"
+      ],
+      "observed": [
+        "0x4501"
+      ],
+      "pass": true
+    },
+    {
+      "name": "anchor consistency: c.li a0, 0",
+      "expected": "0x4501",
+      "observed": "0x4501",
+      "pass": true
+    },
+    {
+      "name": "c.addi16sp sp, -512 [U-C]",
+      "expected": [
+        "0x7101"
+      ],
+      "observed": [
+        "0x7101"
+      ],
+      "pass": true
+    },
+    {
+      "name": "c.addi16sp sp, 16 [U-C]",
+      "expected": [
+        "0x6141"
+      ],
+      "observed": [
+        "0x6141"
+      ],
+      "pass": true
+    },
+    {
+      "name": "c.lui a0, 1 [U-C]",
+      "expected": [
+        "0x6505"
+      ],
+      "observed": [
+        "0x6505"
+      ],
+      "pass": true
+    },
+    {
+      "name": "c.lui a0, -1 [U-C]",
+      "expected": [
+        "0x757d"
+      ],
+      "observed": [
+        "0x757d"
+      ],
+      "pass": true
+    },
+    {
+      "name": "c.srli a0, 1 [U-C]",
+      "expected": [
+        "0x8105"
+      ],
+      "observed": [
+        "0x8105"
+      ],
+      "pass": true
+    },
+    {
+      "name": "c.srai a0, 31 [U-C]",
+      "expected": [
+        "0x857d"
+      ],
+      "observed": [
+        "0x857d"
+      ],
+      "pass": true
+    },
+    {
+      "name": "c.andi a0, -32 [U-C]",
+      "expected": [
+        "0x9901"
+      ],
+      "observed": [
+        "0x9901"
+      ],
+      "pass": true
+    },
+    {
+      "name": "c.sub a0, a1 [U-C]",
+      "expected": [
+        "0x8d0d"
+      ],
+      "observed": [
+        "0x8d0d"
+      ],
+      "pass": true
+    },
+    {
+      "name": "c.xor a0, a1 [U-C]",
+      "expected": [
+        "0x8d2d"
+      ],
+      "observed": [
+        "0x8d2d"
+      ],
+      "pass": true
+    },
+    {
+      "name": "c.or a0, a1 [U-C]",
+      "expected": [
+        "0x8d4d"
+      ],
+      "observed": [
+        "0x8d4d"
+      ],
+      "pass": true
+    },
+    {
+      "name": "c.and a0, a1 [U-C]",
+      "expected": [
+        "0x8d6d"
+      ],
+      "observed": [
+        "0x8d6d"
+      ],
+      "pass": true
+    },
+    {
+      "name": "c.j -2 [U-C]",
+      "expected": [
+        "0xbffd"
+      ],
+      "observed": [
+        "0xbffd"
+      ],
+      "pass": true
+    },
+    {
+      "name": "c.beqz a0, 8 [U-C]",
+      "expected": [
+        "0xc501"
+      ],
+      "observed": [
+        "0xc501"
+      ],
+      "pass": true
+    },
+    {
+      "name": "c.bnez a0, -2 [U-C]",
+      "expected": [
+        "0xfd7d"
+      ],
+      "observed": [
+        "0xfd7d"
+      ],
+      "pass": true
+    },
+    {
+      "name": "c.slli a0, 3 [U-C]",
+      "expected": [
+        "0x50e"
+      ],
+      "observed": [
+        "0x50e"
+      ],
+      "pass": true
+    },
+    {
+      "name": "c.lwsp a0, 4(sp) [U-C]",
+      "expected": [
+        "0x4512"
+      ],
+      "observed": [
+        "0x4512"
+      ],
+      "pass": true
+    },
+    {
+      "name": "c.lwsp a0, 252(sp) [U-C]",
+      "expected": [
+        "0x557e"
+      ],
+      "observed": [
+        "0x557e"
+      ],
+      "pass": true
+    },
+    {
+      "name": "c.flwsp fa0, 0(sp) [U-C]",
+      "expected": [
+        "0x6502"
+      ],
+      "observed": [
+        "0x6502"
+      ],
+      "pass": true
+    },
+    {
+      "name": "c.jr a0 [U-C]",
+      "expected": [
+        "0x8502"
+      ],
+      "observed": [
+        "0x8502"
+      ],
+      "pass": true
+    },
+    {
+      "name": "c.jr ra [U-C]",
+      "expected": [
+        "0x8082"
+      ],
+      "observed": [
+        "0x8082"
+      ],
+      "pass": true
+    },
+    {
+      "name": "anchor consistency: c.jr ra",
+      "expected": "0x8082",
+      "observed": "0x8082",
+      "pass": true
+    },
+    {
+      "name": "c.mv a0, a1 [U-C]",
+      "expected": [
+        "0x852e"
+      ],
+      "observed": [
+        "0x852e"
+      ],
+      "pass": true
+    },
+    {
+      "name": "anchor consistency: c.mv a0, a1",
+      "expected": "0x852e",
+      "observed": "0x852e",
+      "pass": true
+    },
+    {
+      "name": "c.ebreak [U-C]",
+      "expected": [
+        "0x9002"
+      ],
+      "observed": [
+        "0x9002"
+      ],
+      "pass": true
+    },
+    {
+      "name": "anchor consistency: c.ebreak",
+      "expected": "0x9002",
+      "observed": "0x9002",
+      "pass": true
+    },
+    {
+      "name": "c.jalr a0 [U-C]",
+      "expected": [
+        "0x9502"
+      ],
+      "observed": [
+        "0x9502"
+      ],
+      "pass": true
+    },
+    {
+      "name": "c.add a0, a1 [U-C]",
+      "expected": [
+        "0x952e"
+      ],
+      "observed": [
+        "0x952e"
+      ],
+      "pass": true
+    },
+    {
+      "name": "anchor consistency: c.add a0, a1",
+      "expected": "0x952e",
+      "observed": "0x952e",
+      "pass": true
+    },
+    {
+      "name": "c.swsp a0, 8(sp) [U-C]",
+      "expected": [
+        "0xc42a"
+      ],
+      "observed": [
+        "0xc42a"
+      ],
+      "pass": true
+    },
+    {
+      "name": "c.fswsp fa0, 0(sp) [U-C]",
+      "expected": [
+        "0xe02a"
+      ],
+      "observed": [
+        "0xe02a"
+      ],
+      "pass": true
+    },
+    {
+      "name": "c.lbu a0, 3(a1) [U-ZCB]",
+      "expected": [
+        "0x81e8"
+      ],
+      "observed": [
+        "0x81e8"
+      ],
+      "pass": true
+    },
+    {
+      "name": "c.lhu a0, 2(a1) [U-ZCB]",
+      "expected": [
+        "0x85a8"
+      ],
+      "observed": [
+        "0x85a8"
+      ],
+      "pass": true
+    },
+    {
+      "name": "c.lh a0, 2(a1) [U-ZCB]",
+      "expected": [
+        "0x85e8"
+      ],
+      "observed": [
+        "0x85e8"
+      ],
+      "pass": true
+    },
+    {
+      "name": "c.sb a0, 1(a1) [U-ZCB]",
+      "expected": [
+        "0x89c8"
+      ],
+      "observed": [
+        "0x89c8"
+      ],
+      "pass": true
+    },
+    {
+      "name": "c.sh a0, 2(a1) [U-ZCB]",
+      "expected": [
+        "0x8da8"
+      ],
+      "observed": [
+        "0x8da8"
+      ],
+      "pass": true
+    },
+    {
+      "name": "c.zext.b a0 [U-ZCB]",
+      "expected": [
+        "0x9d61"
+      ],
+      "observed": [
+        "0x9d61"
+      ],
+      "pass": true
+    },
+    {
+      "name": "c.sext.b a0 [U-ZCB]",
+      "expected": [
+        "0x9d65"
+      ],
+      "observed": [
+        "0x9d65"
+      ],
+      "pass": true
+    },
+    {
+      "name": "c.zext.h a0 [U-ZCB]",
+      "expected": [
+        "0x9d69"
+      ],
+      "observed": [
+        "0x9d69"
+      ],
+      "pass": true
+    },
+    {
+      "name": "c.sext.h a0 [U-ZCB]",
+      "expected": [
+        "0x9d6d"
+      ],
+      "observed": [
+        "0x9d6d"
+      ],
+      "pass": true
+    },
+    {
+      "name": "c.not a0 [U-ZCB]",
+      "expected": [
+        "0x9d75"
+      ],
+      "observed": [
+        "0x9d75"
+      ],
+      "pass": true
+    },
+    {
+      "name": "c.mul a0, a1 [U-ZCB]",
+      "expected": [
+        "0x9d4d"
+      ],
+      "observed": [
+        "0x9d4d"
+      ],
+      "pass": true
+    },
+    {
+      "name": "pseudo li a0, 0x12345678",
+      "expected": [
+        "0x12345537",
+        "0x67850513"
+      ],
+      "observed": [
+        "0x12345537",
+        "0x67850513"
+      ],
+      "pass": true
+    },
+    {
+      "name": "pseudo li a0, 0x80000800",
+      "expected": [
+        "0x80001537",
+        "0x80050513"
+      ],
+      "observed": [
+        "0x80001537",
+        "0x80050513"
+      ],
+      "pass": true
+    },
+    {
+      "name": "pseudo li a0, -1",
+      "expected": [
+        "0xfff00513"
+      ],
+      "observed": [
+        "0xfff00513"
+      ],
+      "pass": true
+    }
+  ]
+}

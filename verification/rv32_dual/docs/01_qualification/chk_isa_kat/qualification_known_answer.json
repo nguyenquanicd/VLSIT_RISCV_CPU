@@ -1,0 +1,444 @@
+{
+  "model_id": "chk_isa_kat",
+  "kind": "known_answer",
+  "cases": [
+    {
+      "name": "FIPS-197 S-box[0x00]",
+      "expected": "0x63",
+      "observed": "0x63",
+      "pass": true
+    },
+    {
+      "name": "FIPS-197 S-box[0x01]",
+      "expected": "0x7c",
+      "observed": "0x7c",
+      "pass": true
+    },
+    {
+      "name": "FIPS-197 S-box[0x53]",
+      "expected": "0xed",
+      "observed": "0xed",
+      "pass": true
+    },
+    {
+      "name": "FIPS-197 S-box[0xff]",
+      "expected": "0x16",
+      "observed": "0x16",
+      "pass": true
+    },
+    {
+      "name": "FIPS-197 S-box[0x10]",
+      "expected": "0xca",
+      "observed": "0xca",
+      "pass": true
+    },
+    {
+      "name": "FIPS-197 inverse S-box[0x63]",
+      "expected": "0x0",
+      "observed": "0x0",
+      "pass": true
+    },
+    {
+      "name": "FIPS-197 xtime: {57}*{83} = {c1}",
+      "expected": "0xc1",
+      "observed": "0xc1",
+      "pass": true
+    },
+    {
+      "name": "aes32esi(0x0,0x53,0)",
+      "expected": "0xed",
+      "observed": "0xed",
+      "pass": true
+    },
+    {
+      "name": "aes32esi(0x11111111,0x53000000,3)",
+      "expected": "0xfc111111",
+      "observed": "0xfc111111",
+      "pass": true
+    },
+    {
+      "name": "aes32esmi(0x0,0x0,0)",
+      "expected": "0xa56363c6",
+      "observed": "0xa56363c6",
+      "pass": true
+    },
+    {
+      "name": "aes32dsi(0x0,0x63,0)",
+      "expected": "0x0",
+      "observed": "0x0",
+      "pass": true
+    },
+    {
+      "name": "aes32dsmi(0x0,0x63,0)",
+      "expected": "0x0",
+      "observed": "0x0",
+      "pass": true
+    },
+    {
+      "name": "aes32dsi(0x0,0x0,0)",
+      "expected": "0x52",
+      "observed": "0x52",
+      "pass": true
+    },
+    {
+      "name": "clz(0x0,0x0,0)",
+      "expected": "0x20",
+      "observed": "0x20",
+      "pass": true
+    },
+    {
+      "name": "clz(0x1,0x0,0)",
+      "expected": "0x1f",
+      "observed": "0x1f",
+      "pass": true
+    },
+    {
+      "name": "ctz(0x80000000,0x0,0)",
+      "expected": "0x1f",
+      "observed": "0x1f",
+      "pass": true
+    },
+    {
+      "name": "ctz(0x0,0x0,0)",
+      "expected": "0x20",
+      "observed": "0x20",
+      "pass": true
+    },
+    {
+      "name": "cpop(0xffffffff,0x0,0)",
+      "expected": "0x20",
+      "observed": "0x20",
+      "pass": true
+    },
+    {
+      "name": "rev8(0x11223344,0x0,0)",
+      "expected": "0x44332211",
+      "observed": "0x44332211",
+      "pass": true
+    },
+    {
+      "name": "orc.b(0x100001,0x0,0)",
+      "expected": "0xff00ff",
+      "observed": "0xff00ff",
+      "pass": true
+    },
+    {
+      "name": "sext.b(0x80,0x0,0)",
+      "expected": "0xffffff80",
+      "observed": "0xffffff80",
+      "pass": true
+    },
+    {
+      "name": "sext.h(0x7fff,0x0,0)",
+      "expected": "0x7fff",
+      "observed": "0x7fff",
+      "pass": true
+    },
+    {
+      "name": "zext.h(0xffff8000,0x0,0)",
+      "expected": "0x8000",
+      "observed": "0x8000",
+      "pass": true
+    },
+    {
+      "name": "rol(0x80000001,0x1,0)",
+      "expected": "0x3",
+      "observed": "0x3",
+      "pass": true
+    },
+    {
+      "name": "ror(0x3,0x1,0)",
+      "expected": "0x80000001",
+      "observed": "0x80000001",
+      "pass": true
+    },
+    {
+      "name": "rori(0x12345678,0x0,8)",
+      "expected": "0x78123456",
+      "observed": "0x78123456",
+      "pass": true
+    },
+    {
+      "name": "max(0xffffffff,0x1,0)",
+      "expected": "0x1",
+      "observed": "0x1",
+      "pass": true
+    },
+    {
+      "name": "maxu(0xffffffff,0x1,0)",
+      "expected": "0xffffffff",
+      "observed": "0xffffffff",
+      "pass": true
+    },
+    {
+      "name": "min(0xffffffff,0x1,0)",
+      "expected": "0xffffffff",
+      "observed": "0xffffffff",
+      "pass": true
+    },
+    {
+      "name": "minu(0xffffffff,0x1,0)",
+      "expected": "0x1",
+      "observed": "0x1",
+      "pass": true
+    },
+    {
+      "name": "andn(0xff,0xf,0)",
+      "expected": "0xf0",
+      "observed": "0xf0",
+      "pass": true
+    },
+    {
+      "name": "orn(0x0,0xfffffff0,0)",
+      "expected": "0xf",
+      "observed": "0xf",
+      "pass": true
+    },
+    {
+      "name": "xnor(0xf0f0f0f0,0xffff0000,0)",
+      "expected": "0xf0f00f0f",
+      "observed": "0xf0f00f0f",
+      "pass": true
+    },
+    {
+      "name": "sh1add(0x3,0x1,0)",
+      "expected": "0x7",
+      "observed": "0x7",
+      "pass": true
+    },
+    {
+      "name": "sh2add(0x3,0x1,0)",
+      "expected": "0xd",
+      "observed": "0xd",
+      "pass": true
+    },
+    {
+      "name": "sh3add(0x3,0x1,0)",
+      "expected": "0x19",
+      "observed": "0x19",
+      "pass": true
+    },
+    {
+      "name": "clmul(0x3,0x3,0)",
+      "expected": "0x5",
+      "observed": "0x5",
+      "pass": true
+    },
+    {
+      "name": "clmulh(0x80000000,0x2,0)",
+      "expected": "0x1",
+      "observed": "0x1",
+      "pass": true
+    },
+    {
+      "name": "clmul(0x80000000,0x2,0)",
+      "expected": "0x0",
+      "observed": "0x0",
+      "pass": true
+    },
+    {
+      "name": "clmulr(0x80000000,0x1,0)",
+      "expected": "0x1",
+      "observed": "0x1",
+      "pass": true
+    },
+    {
+      "name": "bset(0x0,0x1f,0)",
+      "expected": "0x80000000",
+      "observed": "0x80000000",
+      "pass": true
+    },
+    {
+      "name": "bclr(0xffffffff,0x0,0)",
+      "expected": "0xfffffffe",
+      "observed": "0xfffffffe",
+      "pass": true
+    },
+    {
+      "name": "binv(0x1,0x0,0)",
+      "expected": "0x0",
+      "observed": "0x0",
+      "pass": true
+    },
+    {
+      "name": "bext(0x10,0x4,0)",
+      "expected": "0x1",
+      "observed": "0x1",
+      "pass": true
+    },
+    {
+      "name": "bseti(0x0,0x0,5)",
+      "expected": "0x20",
+      "observed": "0x20",
+      "pass": true
+    },
+    {
+      "name": "bclri(0x20,0x0,5)",
+      "expected": "0x0",
+      "observed": "0x0",
+      "pass": true
+    },
+    {
+      "name": "binvi(0x0,0x0,31)",
+      "expected": "0x80000000",
+      "observed": "0x80000000",
+      "pass": true
+    },
+    {
+      "name": "bexti(0x80000000,0x0,31)",
+      "expected": "0x1",
+      "observed": "0x1",
+      "pass": true
+    },
+    {
+      "name": "pack(0x1234abcd,0x5678ef01,0)",
+      "expected": "0xef01abcd",
+      "observed": "0xef01abcd",
+      "pass": true
+    },
+    {
+      "name": "packh(0x1234abcd,0x5678ef01,0)",
+      "expected": "0x1cd",
+      "observed": "0x1cd",
+      "pass": true
+    },
+    {
+      "name": "brev8(0x1020380,0x0,0)",
+      "expected": "0x8040c001",
+      "observed": "0x8040c001",
+      "pass": true
+    },
+    {
+      "name": "zip(0xffff,0x0,0)",
+      "expected": "0x55555555",
+      "observed": "0x55555555",
+      "pass": true
+    },
+    {
+      "name": "unzip(0x55555555,0x0,0)",
+      "expected": "0xffff",
+      "observed": "0xffff",
+      "pass": true
+    },
+    {
+      "name": "xperm8(0x44332211,0x10203,0)",
+      "expected": "0x11223344",
+      "observed": "0x11223344",
+      "pass": true
+    },
+    {
+      "name": "xperm8(0x44332211,0x4040404,0)",
+      "expected": "0x0",
+      "observed": "0x0",
+      "pass": true
+    },
+    {
+      "name": "xperm4(0x76543210,0x1234567,0)",
+      "expected": "0x1234567",
+      "observed": "0x1234567",
+      "pass": true
+    },
+    {
+      "name": "czero.eqz(0x5,0x0,0)",
+      "expected": "0x0",
+      "observed": "0x0",
+      "pass": true
+    },
+    {
+      "name": "czero.eqz(0x5,0x1,0)",
+      "expected": "0x5",
+      "observed": "0x5",
+      "pass": true
+    },
+    {
+      "name": "czero.nez(0x5,0x1,0)",
+      "expected": "0x0",
+      "observed": "0x0",
+      "pass": true
+    },
+    {
+      "name": "czero.nez(0x5,0x0,0)",
+      "expected": "0x5",
+      "observed": "0x5",
+      "pass": true
+    },
+    {
+      "name": "div(0x7,0x0,0)",
+      "expected": "0xffffffff",
+      "observed": "0xffffffff",
+      "pass": true
+    },
+    {
+      "name": "div(0x80000000,0xffffffff,0)",
+      "expected": "0x80000000",
+      "observed": "0x80000000",
+      "pass": true
+    },
+    {
+      "name": "div(0xfffffff9,0x2,0)",
+      "expected": "0xfffffffd",
+      "observed": "0xfffffffd",
+      "pass": true
+    },
+    {
+      "name": "rem(0x80000000,0xffffffff,0)",
+      "expected": "0x0",
+      "observed": "0x0",
+      "pass": true
+    },
+    {
+      "name": "rem(0xfffffff9,0x2,0)",
+      "expected": "0xffffffff",
+      "observed": "0xffffffff",
+      "pass": true
+    },
+    {
+      "name": "rem(0x7,0x0,0)",
+      "expected": "0x7",
+      "observed": "0x7",
+      "pass": true
+    },
+    {
+      "name": "divu(0x7,0x0,0)",
+      "expected": "0xffffffff",
+      "observed": "0xffffffff",
+      "pass": true
+    },
+    {
+      "name": "remu(0x7,0x0,0)",
+      "expected": "0x7",
+      "observed": "0x7",
+      "pass": true
+    },
+    {
+      "name": "mulh(0xffffffff,0xffffffff,0)",
+      "expected": "0x0",
+      "observed": "0x0",
+      "pass": true
+    },
+    {
+      "name": "mulhu(0xffffffff,0xffffffff,0)",
+      "expected": "0xfffffffe",
+      "observed": "0xfffffffe",
+      "pass": true
+    },
+    {
+      "name": "mulhsu(0xffffffff,0xffffffff,0)",
+      "expected": "0xffffffff",
+      "observed": "0xffffffff",
+      "pass": true
+    },
+    {
+      "name": "sha256sig0(0x80000000,0x0,0)",
+      "expected": "0x11002000",
+      "observed": "0x11002000",
+      "pass": true
+    },
+    {
+      "name": "control for fault injection: correct record has no error",
+      "expected": [],
+      "observed": [],
+      "pass": true
+    }
+  ]
+}

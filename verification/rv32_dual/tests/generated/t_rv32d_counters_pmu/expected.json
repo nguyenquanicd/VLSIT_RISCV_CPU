@@ -1,0 +1,198 @@
+{
+ "test": "t_rv32d_counters_pmu",
+ "seed": 1,
+ "configuration": "CFG-RV32-2-P0",
+ "slots": {
+  "0:cyc_hi": "0x80080000",
+  "0:cyc_lo": "0x80080004",
+  "0:cych_rb": "0x8008000c",
+  "0:hpm3": "0x80080014",
+  "0:hpm3h": "0x80080010",
+  "0:insth_rb": "0x80080008"
+ },
+ "trap_base": "0x80090000",
+ "sig_base": "0x80080000",
+ "checks": [
+  {
+   "id": "CK-CNT-01",
+   "req": "REQ-XL-013",
+   "kind": "slot",
+   "params": {
+    "addr": 2148007936,
+    "expect": 1
+   }
+  },
+  {
+   "id": "CK-CNT-01b",
+   "req": "REQ-XL-013",
+   "kind": "slot",
+   "params": {
+    "addr": 2148007940,
+    "expect": 0,
+    "mask": 4294901760
+   }
+  },
+  {
+   "id": "CK-CNT-02",
+   "req": "REQ-XL-013",
+   "kind": "slots",
+   "params": {
+    "values": {
+     "2148007944": 305419896,
+     "2148007948": 2596069104
+    }
+   }
+  },
+  {
+   "id": "CK-CNT-03",
+   "req": "REQ-XL-013",
+   "kind": "slots_any",
+   "params": {
+    "values": {
+     "2148007952": [
+      10,
+      11
+     ],
+     "2148007956": null
+    }
+   }
+  },
+  {
+   "id": "CK-CNT-04",
+   "req": "REQ-PMU-007",
+   "kind": "pmu",
+   "params": {
+    "config": {
+     "0": [
+      7,
+      0,
+      1
+     ],
+     "1": [
+      7,
+      1,
+      1
+     ],
+     "2": [
+      8,
+      0,
+      1
+     ],
+     "3": [
+      8,
+      1,
+      1
+     ]
+    },
+    "occurrences": [
+     {
+      "cycle": 0,
+      "event_id": 7,
+      "hart": 0,
+      "count": 1
+     },
+     {
+      "cycle": 1,
+      "event_id": 7,
+      "hart": 0,
+      "count": 1
+     },
+     {
+      "cycle": 2,
+      "event_id": 7,
+      "hart": 0,
+      "count": 1
+     },
+     {
+      "cycle": 3,
+      "event_id": 7,
+      "hart": 0,
+      "count": 1
+     },
+     {
+      "cycle": 4,
+      "event_id": 7,
+      "hart": 0,
+      "count": 1
+     },
+     {
+      "cycle": 10,
+      "event_id": 7,
+      "hart": 1,
+      "count": 1
+     },
+     {
+      "cycle": 11,
+      "event_id": 7,
+      "hart": 1,
+      "count": 1
+     },
+     {
+      "cycle": 12,
+      "event_id": 7,
+      "hart": 1,
+      "count": 1
+     },
+     {
+      "cycle": 20,
+      "event_id": 8,
+      "hart": 0,
+      "count": 1
+     },
+     {
+      "cycle": 21,
+      "event_id": 8,
+      "hart": 0,
+      "count": 1
+     },
+     {
+      "cycle": 22,
+      "event_id": 8,
+      "hart": 0,
+      "count": 1
+     },
+     {
+      "cycle": 23,
+      "event_id": 8,
+      "hart": 0,
+      "count": 1
+     },
+     {
+      "cycle": 24,
+      "event_id": 8,
+      "hart": 0,
+      "count": 1
+     },
+     {
+      "cycle": 30,
+      "event_id": 8,
+      "hart": 1,
+      "count": 1
+     },
+     {
+      "cycle": 31,
+      "event_id": 8,
+      "hart": 1,
+      "count": 1
+     },
+     {
+      "cycle": 32,
+      "event_id": 8,
+      "hart": 1,
+      "count": 1
+     }
+    ]
+   }
+  },
+  {
+   "id": "CK-CNT-05",
+   "req": "REQ-PMU-003",
+   "kind": "axil",
+   "params": {
+    "csr_model": false
+   }
+  }
+ ],
+ "blocked_checks": [],
+ "extra": {}
+}

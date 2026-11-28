@@ -1,0 +1,62 @@
+{
+  "model_id": "chk_csr_model",
+  "kind": "boundary",
+  "cases": [
+    {
+      "name": "last mapped offset 0x400C OKAY; 0x4010 and 0x4FFC reserved",
+      "expected": [
+        [
+          "OKAY",
+          "0x0"
+        ],
+        [
+          "DECERR",
+          "0x0"
+        ],
+        [
+          "DECERR",
+          "0x0"
+        ]
+      ],
+      "observed": [
+        [
+          "OKAY",
+          "0x0"
+        ],
+        [
+          "DECERR",
+          "0x0"
+        ],
+        [
+          "DECERR",
+          "0x0"
+        ]
+      ],
+      "pass": true
+    },
+    {
+      "name": "pmu_count_hi[15] mapped at 0x303C",
+      "expected": "OKAY",
+      "observed": "OKAY",
+      "pass": true
+    },
+    {
+      "name": "reserved write returns DECERR without side effect",
+      "expected": [
+        "DECERR",
+        [
+          "DECERR",
+          "0x0"
+        ]
+      ],
+      "observed": [
+        "DECERR",
+        [
+          "DECERR",
+          "0x0"
+        ]
+      ],
+      "pass": true
+    }
+  ]
+}
